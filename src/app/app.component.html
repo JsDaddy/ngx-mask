@@ -1,0 +1,11 @@
+<h1>
+  {{title}}
+</h1>
+<div *ngFor="let mask of masks; let i=index" >
+  <label>{{mask}}</label>
+  <input type="text"  [mask]="mask" [(ngModel)]="someValue[i]"/>
+  {{someValue[i]}}
+</div>
+
+
+
