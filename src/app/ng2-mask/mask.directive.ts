@@ -40,7 +40,6 @@ export class MaskDirective {
   private _elementRef: ElementRef;
 
   public constructor(_elementRef: ElementRef) {
-    let a = 1;
     this._elementRef = _elementRef;
   }
 
@@ -51,21 +50,30 @@ export class MaskDirective {
       if (result.length === maskExpression.length) {
         break;
       }
-      while (['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[cursor]) &&
-      inputSymbol !== maskExpression[cursor - 1]) {
+      while (['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[cursor])) {
         result += maskExpression[cursor];
         cursor++;
+        // if (inputSymbol !== maskExpression[cursor - 1]) {
+        //   break;
+        // }
       }
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
       }
     }
+
+    if(result.length + 1  === maskExpression.length
+    && ['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[maskExpression.length - 1])) {
+      result += maskExpression[maskExpression.length - 1];
+    }
+
     return result;
   }
 
   private _checkSymbolMask(input: string, letter: string): boolean {
-    return letter === '0' && /\d/.test(input)
+    return input === letter
+      || letter === '0' && /\d/.test(input)
   }
 
 
