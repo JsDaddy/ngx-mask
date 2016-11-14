@@ -53,9 +53,6 @@ export class MaskDirective {
       while (['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[cursor])) {
         result += maskExpression[cursor];
         cursor++;
-        // if (inputSymbol !== maskExpression[cursor - 1]) {
-        //   break;
-        // }
       }
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
