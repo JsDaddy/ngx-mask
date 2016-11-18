@@ -1,31 +1,22 @@
-import {Directive, Input, Output, HostListener, ElementRef, EventEmitter} from '@angular/core';
+import { Directive, AfterViewInit, OnInit, Input, Output, HostListener, ElementRef, EventEmitter, NgZone } from '@angular/core';
+
+const resolvedPromise = Promise.resolve(null);
 
 @Directive({
   selector: '[mask]'
 })
-export class MaskDirective {
+export class MaskDirective implements OnInit {
 
   @HostListener('input')
   public onInput() {
     this._elementRef.nativeElement.value = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
+    this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
   }
 
-
-  /* what shoul we do with immediately set property in parent component???*/
-
-  // @Input()
-  // public set ngModel(val) {
-  //   console.log(val)
-  //   if (!val) {
-  //     return;
-  //   }
-  //   //this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
-  // };
-
-
-  /*try change this */
-  // @Output()
-  // public ngModelChange = new EventEmitter();
+  ngOnInit() {
+    resolvedPromise.then(() =>
+      this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression)));
+  }
 
   @Input('mask')
   public set maskExpression(value: string) {
@@ -35,12 +26,18 @@ export class MaskDirective {
     this._maskExpression = value;
   }
 
+  @Output()
+  public ngModelChange = new EventEmitter();
+
 
   private _maskExpression: string;
   private _elementRef: ElementRef;
+  private _zone: NgZone;
 
-  public constructor(_elementRef: ElementRef) {
+
+  public constructor(_elementRef: ElementRef, _zone: NgZone) {
     this._elementRef = _elementRef;
+    this._zone = _zone;
   }
 
   private _applyMask(inputValue: string, maskExpression: string): string {
@@ -60,8 +57,8 @@ export class MaskDirective {
       }
     }
 
-    if(result.length + 1  === maskExpression.length
-    && ['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[maskExpression.length - 1])) {
+    if (result.length + 1 === maskExpression.length
+      && ['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[maskExpression.length - 1])) {
       result += maskExpression[maskExpression.length - 1];
     }
 
@@ -72,6 +69,4 @@ export class MaskDirective {
     return input === letter
       || letter === '0' && /\d/.test(input)
   }
-
-
 }
