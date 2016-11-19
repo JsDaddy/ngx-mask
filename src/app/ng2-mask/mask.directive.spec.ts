@@ -121,8 +121,7 @@ describe('Directive: Mask', () => {
     equal( typeTest('(123) 456-ABCD1'), "(123) 456-ABCD");
   });
 
-  //TODO
-  xit('Masks with numbers, strings e special characters #2 ', () => {
+  it('Masks with numbers, strings e special characters #2 ', () => {
     component.mask = 'AAA 000-S0S';
     equal( typeTest("1"), "1");
     equal( typeTest('12'), "12");

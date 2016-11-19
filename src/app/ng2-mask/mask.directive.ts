@@ -68,5 +68,7 @@ export class MaskDirective implements OnInit {
   private _checkSymbolMask(input: string, letter: string): boolean {
     return input === letter
       || letter === '0' && /\d/.test(input)
+      || letter === 'A' && /[a-zA-Z0-9]/.test(input)
+      || letter === 'S' && /[a-zA-Z]/.test(input)
   }
 }
