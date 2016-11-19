@@ -1,11 +1,27 @@
-<h1>
-  {{title}}
-</h1>
-<div *ngFor="let mask of masks; let i=index" >
-  <label>{{mask}}</label>
-  <input type="text"  [mask]="mask" [(ngModel)]="someValue[i]"/>
-  {{someValue[i]}}
-</div>
+<div id="examples">
+  <div class="col">
+    <label>Date</label>
+    <input class="date" mask="00/00/0000">
+    <label>Hour</label>
+    <input class="time" mask="00:00:00">
+    <label>Date &amp; Hour</label>
+    <input class="date_time" mask="00/00/0000 00:00:00">
+    <label>Zip-Code</label>
+    <input class="cep" mask="00000-000">
+  </div>
+  <div class="col">
+    <label>Telephone</label>
+    <input class="phone" mask="0000-0000">
+    <label>Telephone with Code Area</label>
+    <input class="phone_with_ddd" mask="(00) 0000-0000">
+    <label>US Telephone</label>
+    <input class="phone_us" mask="(000) 000-0000">
+    <label>Mixed Type Mask</label>
+    <input class="mixed" mask="AAA 000-S0S">
+    <label>IP Address</label>
+    <input class="ip_address" mask="099.099.099.099">
 
+  </div>
+</div>
 
 
