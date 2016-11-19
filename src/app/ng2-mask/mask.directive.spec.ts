@@ -1,6 +1,4 @@
-/* tslint:disable:no-unused-variable */
-import {ElementRef} from '@angular/core'
-import {TestBed, async, inject} from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 import {MaskDirective} from './mask.directive';
 
 import {dispatchEvent} from '@angular/platform-browser/testing/browser_util'
@@ -21,7 +19,6 @@ describe('Directive: Mask', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [MaskDirective, TestMaskComponent],
-      // providers: [ElementRef]
     });
     fixture = TestBed.createComponent(TestMaskComponent);
     component = fixture.componentInstance;
@@ -102,8 +99,7 @@ describe('Directive: Mask', () => {
     equal( typeTest('(123) 4567'), "(123) 456-7");
   });
 
-  //TODO
-  xit('Masks with numbers, strings e special characters', () => {
+  it('Masks with numbers, strings e special characters', () => {
     component.mask = '(999) A99-SSSS';
     equal( typeTest("(1"), "(1");
     equal( typeTest('(12'), "(12");
@@ -119,6 +115,14 @@ describe('Directive: Mask', () => {
     equal( typeTest('(123) 456-ABCD'), "(123) 456-ABCD");
     equal( typeTest('(123) 456-ABCDE'), "(123) 456-ABCD");
     equal( typeTest('(123) 456-ABCD1'), "(123) 456-ABCD");
+  });
+  it('Masks with ip', () => {
+    component.mask = '099.099.099.099';
+    equal( typeTest("1.1.1.1"), "1.1.1.1");
+    equal( typeTest("12.1.12.1"), "12.1.12.1");
+    equal( typeTest("127.001.1.1"), "127.001.1.1");
+    equal( typeTest("192.168.1.78"), "192.168.1.78");
+
   });
 
   it('Masks with numbers, strings e special characters #2 ', () => {

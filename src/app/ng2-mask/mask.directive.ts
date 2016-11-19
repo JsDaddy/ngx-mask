@@ -1,4 +1,12 @@
-import { Directive, AfterViewInit, OnInit, Input, Output, HostListener, ElementRef, EventEmitter, NgZone } from '@angular/core';
+import {
+  Directive,
+  OnInit,
+  Input,
+  Output,
+  HostListener,
+  ElementRef,
+  EventEmitter,
+} from '@angular/core';
 
 const resolvedPromise = Promise.resolve(null);
 
@@ -32,43 +40,54 @@ export class MaskDirective implements OnInit {
 
   private _maskExpression: string;
   private _elementRef: ElementRef;
-  private _zone: NgZone;
+  private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
+  private _maskAwaliablePatterns: {[key: string]: RegExp} = {
+    '0': /\d/,
+    '9': /\d/,
+    'A': /[a-zA-Z0-9]/,
+    'S': /[a-zA-Z]/
+  }
 
 
-  public constructor(_elementRef: ElementRef, _zone: NgZone) {
+  public constructor(_elementRef: ElementRef) {
     this._elementRef = _elementRef;
-    this._zone = _zone;
   }
 
   private _applyMask(inputValue: string, maskExpression: string): string {
     let cursor = 0
     let result = '';
-    for (let inputSymbol of inputValue.split('')) {
+    let inputArray = inputValue.split('');
+    for (let i = 0, inputSymbol = inputArray[0];
+         i < inputArray.length;
+         i++, inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
-      while (['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[cursor])) {
-        result += maskExpression[cursor];
-        cursor++;
-      }
+
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
+      } else if (this._maskSpecialCharacters.includes(maskExpression[cursor])) {
+        result += maskExpression[cursor];
+        cursor++;
+        i--;
+      } else if (maskExpression[cursor] === '9') {
+        cursor++;
+        i--;
       }
     }
 
     if (result.length + 1 === maskExpression.length
-      && ['/', '(', ')', '.', ':', '-', ' ', '+'].includes(maskExpression[maskExpression.length - 1])) {
+      && this._maskSpecialCharacters.includes(maskExpression[maskExpression.length - 1])) {
       result += maskExpression[maskExpression.length - 1];
     }
 
     return result;
   }
 
-  private _checkSymbolMask(input: string, letter: string): boolean {
-    return input === letter
-      || letter === '0' && /\d/.test(input)
-      || letter === 'A' && /[a-zA-Z0-9]/.test(input)
-      || letter === 'S' && /[a-zA-Z]/.test(input)
+  private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
+    return inputSymbol === maskSymbol
+      || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol)
   }
+
 }

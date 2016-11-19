@@ -1,6 +1,6 @@
 # Ng2Mask
 
-### Lightweight native Angular2 mask module.
+##### Lightweight native Angular2 mask module.
 
 ##### Angular2 mask without dependencies (No jQuery).
 ...
