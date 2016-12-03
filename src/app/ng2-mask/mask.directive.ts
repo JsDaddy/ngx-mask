@@ -67,7 +67,7 @@ export class MaskDirective implements OnInit {
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
-      } else if (this._maskSpecialCharacters.includes(maskExpression[cursor])) {
+      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor])!==-1) {
         result += maskExpression[cursor];
         cursor++;
         i--;
@@ -78,7 +78,7 @@ export class MaskDirective implements OnInit {
     }
 
     if (result.length + 1 === maskExpression.length
-      && this._maskSpecialCharacters.includes(maskExpression[maskExpression.length - 1])) {
+      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1])!==-1) {
       result += maskExpression[maskExpression.length - 1];
     }
 

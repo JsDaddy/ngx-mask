@@ -5,21 +5,19 @@
     "experimentalDecorators": true,
     "lib": [
       "es6",
-      "dom",
-      "es2016.array.include"
+      "dom"
     ],
     "mapRoot": "./",
     "module": "es6",
     "moduleResolution": "node",
-    "outDir": "../dist/out-tsc",
+    "outDir": "../../../dist",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
-      "../node_modules/@types"
+      "../../../node_modules/@types"
     ]
   },
   "angularCompilerOptions": {
-    "genDir": "./aot",
     "skipMetadataEmit": true,
     "skipTemplateCodegen": true
   }
