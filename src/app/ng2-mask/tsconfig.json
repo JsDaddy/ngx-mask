@@ -10,7 +10,7 @@
     "mapRoot": "./",
     "module": "es6",
     "moduleResolution": "node",
-    "outDir": "../../../dist",
+    "outDir": "../../../build",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
