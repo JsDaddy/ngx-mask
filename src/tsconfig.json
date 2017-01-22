@@ -9,18 +9,19 @@
       "es2016.array.include"
     ],
     "mapRoot": "./",
-    "module": "es6",
+    "module": "es2015",
     "moduleResolution": "node",
-    "outDir": "../dist/out-tsc",
+    "outDir": "../dist",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
     ]
   },
+  "include":["app/ng2-mask/ng2-mask.module.ts"],
   "angularCompilerOptions": {
-    "genDir": "./aot",
-    "skipMetadataEmit": true,
+   // "genDir": "./aot",
+   // "skipMetadataEmit": true,
     "skipTemplateCodegen": true
   }
 }
