@@ -2,12 +2,11 @@
 
 ##### Lightweight native Angular2 mask module.
 
+![screen shot 2017-01-22 at 14 07 50](https://cloud.githubusercontent.com/assets/1526680/22182355/31d103ca-e0ac-11e6-9664-c7c0399ef69f.png)
+
 ##### Angular2 mask without dependencies (No jQuery).
 ...
 =======
-
-[![Chrome](https://raw.githubusercontent.com/alrra/browser-logos/master/chrome/chrome_64x64.png)](https://docs.angularjs.org/misc/faq/#what-browsers-does-angular-work-with-) [![Firefox](https://raw.githubusercontent.com/alrra/browser-logos/master/firefox/firefox_64x64.png)](https://docs.angularjs.org/misc/faq/#what-browsers-does-angular-work-with-) [![IE8+](https://raw.githubusercontent.com/alrra/browser-logos/master/internet-explorer/internet-explorer_64x64.png)](https://docs.angularjs.org/guide/ie) [![Opera](https://raw.githubusercontent.com/alrra/browser-logos/master/opera/opera_64x64.png)](https://docs.angularjs.org/misc/faq/#what-browsers-does-angular-work-with-) [![Safari](https://raw.githubusercontent.com/alrra/browser-logos/master/safari/safari_64x64.png)](https://docs.angularjs.org/misc/faq/#what-browsers-does-angular-work-with-)
-======
 
 ### How To Use
 
