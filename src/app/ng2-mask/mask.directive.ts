@@ -45,9 +45,9 @@ export class MaskDirective implements OnInit {
     '0': /\d/,
     '9': /\d/,
     'A': /[a-zA-Z0-9]/,
-    'S': /[a-zA-Z]/
+    'S': /[a-zA-Z]/,
+    'Ё': /[a-zA-Zа-яА-ЯёЁ]/
   }
-
 
   public constructor(_elementRef: ElementRef) {
     this._elementRef = _elementRef;
