@@ -14,11 +14,6 @@ export class AppComponent {
     this.form = this.fb.group({
       date: [null]
     });
-
-    this.form.get('date').valueChanges.subscribe((date: string) => {
-      console.log(date);
-    });
-
   }
 
 }

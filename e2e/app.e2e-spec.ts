@@ -11,4 +11,5 @@ describe('template App', () => {
     page.navigateTo();
     expect(page.getParagraphText()).toEqual('app works!');
   });
+
 });
