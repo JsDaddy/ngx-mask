@@ -1,12 +1,5 @@
-import {
-  Directive,
-  OnInit,
-  Input,
-  Output,
-  HostListener,
-  ElementRef,
-  EventEmitter,
-} from '@angular/core';
+import { Directive, OnInit, Input, Output, HostListener,
+  ElementRef, EventEmitter } from '@angular/core';
 
 const resolvedPromise = Promise.resolve(null);
 
@@ -15,28 +8,8 @@ const resolvedPromise = Promise.resolve(null);
 })
 export class MaskDirective implements OnInit {
 
-  @HostListener('input')
-  public onInput() {
-    this._elementRef.nativeElement.value = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
-    this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
-  }
-
-  ngOnInit() {
-    resolvedPromise.then(() =>
-      this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression)));
-  }
-
-  @Input('mask')
-  public set maskExpression(value: string) {
-    if (!value) {
-      return;
-    }
-    this._maskExpression = value;
-  }
-
   @Output()
   public ngModelChange = new EventEmitter();
-
 
   private _maskExpression: string;
   private _elementRef: ElementRef;
@@ -46,20 +19,37 @@ export class MaskDirective implements OnInit {
     '9': /\d/,
     'A': /[a-zA-Z0-9]/,
     'S': /[a-zA-Z]/
-  }
+  };
 
-
-  public constructor(_elementRef: ElementRef) {
+  constructor(_elementRef: ElementRef) {
     this._elementRef = _elementRef;
   }
 
+  ngOnInit() {
+    resolvedPromise.then(() =>
+      this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression)));
+  }
+
+  @HostListener('input')
+  public onInput() {
+    this._elementRef.nativeElement.value = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
+    this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
+  }
+
+  @Input('mask')
+  public set maskExpression(value: string) {
+    if (!value) { return; }
+    this._maskExpression = value;
+  }
+
   private _applyMask(inputValue: string, maskExpression: string): string {
-    let cursor = 0
+    let cursor = 0;
     let result = '';
-    let inputArray = inputValue.split('');
-    for (let i = 0, inputSymbol = inputArray[0];
-         i < inputArray.length;
-         i++, inputSymbol = inputArray[i]) {
+    const inputArray = inputValue.split('');
+
+    console.log(inputArray);
+
+    for (let i = 0, inputSymbol = inputArray[0]; i < inputArray.length;  i++, inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -67,7 +57,7 @@ export class MaskDirective implements OnInit {
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
-      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor])!==-1) {
+      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
         result += maskExpression[cursor];
         cursor++;
         i--;
@@ -78,7 +68,7 @@ export class MaskDirective implements OnInit {
     }
 
     if (result.length + 1 === maskExpression.length
-      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1])!==-1) {
+      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
       result += maskExpression[maskExpression.length - 1];
     }
 
@@ -87,7 +77,7 @@ export class MaskDirective implements OnInit {
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
     return inputSymbol === maskSymbol
-      || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol)
+      || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
   }
 
 }
