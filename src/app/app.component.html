@@ -1,8 +1,97 @@
+<style type="text/css">
+    * {
+      font-family: 'Lato', sans-serif;
+    }
+
+    h1 {
+      margin-bottom: 10px
+    }
+
+    h1 .jq-label {
+      font-size: 35px;
+      color: #CFCFCF;
+      display: block;
+    }
+
+    h1 .plugin-name {
+      font-size: 140px;
+      color: #6BBEC7;
+    }
+
+    span.subtitle {
+      margin-bottom: 20px;
+    }
+
+    div#examples div.col {
+      width: 246px;
+      float: left;
+    }
+
+    div#examples div.col.center {
+      text-align: center;
+    }
+
+    div#examples div.col.center.banner {
+      border: 1px solid #ccc;
+      padding: 15px;
+      margin-top: 24px;
+    }
+
+    pre {
+      overflow-x: auto;
+      white-space: pre;
+      word-wrap: normal;
+      font-size: 12px;
+    }
+  </style>
+
+
+<md-grid-list cols="1" rowHeight="140px">
+
+  <md-grid-tile>
+    <h1>
+      <span class="jq-label">Angular2</span>
+      <span class="plugin-name">Mask Plugin</span>
+    </h1>
+  </md-grid-tile>
+
+  <md-grid-tile>
+    <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
+  </md-grid-tile>
+
+  <md-grid-tile>
+    <md-toolbar color="primary">
+      <span>Examples</span>
+    </md-toolbar>
+  </md-grid-tile>
+
+</md-grid-list>
+
+<md-grid-list cols="5">
+
+  <md-grid-tile>
+    <md-select placeholder="Favorite food" name="food">
+      <md-option value="food.value">
+        asdsad
+      </md-option>
+    </md-select>
+  </md-grid-tile>
+
+  <md-grid-tile colspan="1">
+    <md-input-container>
+      <input mdInput placeholder="Date" mask="00/00/0000">
+    </md-input-container>
+  </md-grid-tile>
+
+</md-grid-list>
+
 <div id="examples">
   <div class="col">
 
-    <label>Date</label>
-    <input id="date" class="date" mask="00/00/0000">
+
+
+
+
     <label>Hour</label>
     <input class="time" mask="00:00:00">
     <label>Date &amp; Hour</label>
@@ -26,3 +115,21 @@
 </div>
 
 
+<br clear="all"/><br clear="all"/><br clear="all"/>
+  <div id="code-samples">
+    <h1>Documentation</h1>
+    <h2>Basic Usage Examples</h2>
+
+    <pre>
+      &lt;input class="date" mask="00/00/0000"&gt;
+      &lt;input class="time" mask="00:00:00"&gt;
+      &lt;input class="date_time" mask="00/00/0000 00:00:00"&gt;
+      &lt;input class="cep" mask="00000-000"&gt;
+      &lt;input class="phone" mask="0000-0000"&gt;
+      &lt;input class="phone_with_ddd" mask="(00) 0000-0000"&gt;
+      &lt;input class="phone_us" mask="(000) 000-0000"&gt;
+      &lt;input class="mixed" mask="AAA 000-S0S"&gt;
+      &lt;input class="ip_address" mask="099.099.099.099"&gt;
+    </pre>
+
+  </div>
