@@ -1,63 +1,66 @@
 <style type="text/css">
-    * {
-      font-family: 'Lato', sans-serif;
-    }
+  * {
+    font-family: 'Lato', sans-serif;
+  }
 
-    h1 {
-      margin-bottom: 10px
-    }
+  h1 {
+    margin-bottom: 10px
+  }
 
-    h1 .jq-label {
-      font-size: 35px;
-      color: #CFCFCF;
-      display: block;
-    }
+  h1 .jq-label {
+    font-size: 35px;
+    color: #CFCFCF;
+    display: block;
+  }
 
-    h1 .plugin-name {
-      font-size: 140px;
-      color: #6BBEC7;
-    }
+  h1 .plugin-name {
+    font-size: 140px;
+    color: #6BBEC7;
+  }
 
-    span.subtitle {
-      margin-bottom: 20px;
-    }
+  span.subtitle {
+    margin-bottom: 20px;
+  }
 
-    div#examples div.col {
-      width: 246px;
-      float: left;
-    }
+  div#examples div.col {
+    width: 246px;
+    float: left;
+  }
 
-    div#examples div.col.center {
-      text-align: center;
-    }
+  div#examples div.col.center {
+    text-align: center;
+  }
 
-    div#examples div.col.center.banner {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-top: 24px;
-    }
+  div#examples div.col.center.banner {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-top: 24px;
+  }
 
-    pre {
-      overflow-x: auto;
-      white-space: pre;
-      word-wrap: normal;
-      font-size: 12px;
-    }
-  </style>
+  pre {
+    overflow-x: auto;
+    white-space: pre;
+    word-wrap: normal;
+    font-size: 12px;
+  }
+</style>
 
+<div fxLayout="row" fxLayoutWrap fxLayout.xs="column">
 
-<md-grid-list cols="1" rowHeight="140px">
-
-  <md-grid-tile>
+  <div fxFlex="1 1 auto" fxFlexAlign="center">
     <h1>
       <span class="jq-label">Angular2</span>
       <span class="plugin-name">Mask Plugin</span>
     </h1>
-  </md-grid-tile>
+  </div>
 
-  <md-grid-tile>
+  <div fxFlex="1 1 auto">
     <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
-  </md-grid-tile>
+  </div>
+
+</div>
+
+<md-grid-list cols="1" rowHeight="140px">
 
   <md-grid-tile>
     <md-toolbar color="primary">
@@ -115,12 +118,12 @@
 </div>
 
 
-<br clear="all"/><br clear="all"/><br clear="all"/>
-  <div id="code-samples">
-    <h1>Documentation</h1>
-    <h2>Basic Usage Examples</h2>
+<br clear="all" /><br clear="all" /><br clear="all" />
+<div id="code-samples">
+  <h1>Documentation</h1>
+  <h2>Basic Usage Examples</h2>
 
-    <pre>
+  <pre>
       &lt;input class="date" mask="00/00/0000"&gt;
       &lt;input class="time" mask="00:00:00"&gt;
       &lt;input class="date_time" mask="00/00/0000 00:00:00"&gt;
@@ -132,4 +135,4 @@
       &lt;input class="ip_address" mask="099.099.099.099"&gt;
     </pre>
 
-  </div>
+</div>

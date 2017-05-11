@@ -45,6 +45,7 @@
     "@angular/animations": "^4.1.1",
     "@angular/cli": "1.0.3",
     "@angular/compiler-cli": "^4.0.0",
+    "@angular/flex-layout": "^2.0.0-beta.8",
     "@angular/material": "^2.0.0-beta.3",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
