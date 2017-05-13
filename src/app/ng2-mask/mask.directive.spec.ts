@@ -152,4 +152,10 @@ describe('Directive: Mask', () => {
     expect(component.ngModelValue).toBe('30/08/1992');
   });
 
+  it('FormControl or NgModel already defined should fill the masked input', () => {
+    component.mask = '00';
+    component.form.patchValue('00');
+    expect(component.form.value).toBe('00');
+  });
+
 });

@@ -1,0 +1,63 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$candy-app-primary: mat-palette($mat-cyan);
+$candy-app-accent:  mat-palette($mat-pink, A200, A100, A400);
+$candy-app-warn:    mat-palette($mat-red);
+
+$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+
+@include angular-material-theme($candy-app-theme);
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/** LOGO */
+
+* {
+  font-family: 'Lato', sans-serif;
+}
+
+h1 {
+  margin-bottom: -24px
+}
+
+h1 .jq-label {
+  font-size: 35px;
+  margin-bottom: -20px;
+  color: #CFCFCF;
+  display: block;
+}
+
+h1 .plugin-name {
+  font-size: 140px;
+  margin-left: -10px;
+
+  color: #00bcd4;
+}
+
+span.subtitle {
+  margin-bottom: 20px;
+  font-size: 14px;
+}

@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MdGridListModule, MdToolbarModule, MdIconModule, MdInputModule,
-  MdSelectModule } from '@angular/material';
+  MdSelectModule, MdListModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -26,6 +26,7 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
     BrowserModule,
     Ng2MaskModule,
     MdIconModule,
+    MdListModule,
     FormsModule,
     HttpModule
   ],

@@ -12,7 +12,7 @@ export class AppComponent {
 
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({
-      date: [null]
+      date: ['30/08/1991']
     });
   }
 
