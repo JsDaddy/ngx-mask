@@ -9,6 +9,29 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
 @include angular-material-theme($candy-app-theme);
 
+@mixin ngmask-input-theme($theme) {
+
+  $foreground: map-get($theme, foreground);
+
+  $input-placeholder-color: mat-color($foreground, hint-text);
+
+  md-input-container {
+
+    md-hint {
+      color: $input-placeholder-color;
+    }
+
+  }
+
+}
+
+md-input-container {
+  width: 100%;
+}
+
+@include ngmask-input-theme($candy-app-theme);
+
+
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
@@ -39,25 +62,35 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
   font-family: 'Lato', sans-serif;
 }
 
-h1 {
-  margin-bottom: -24px
+header {
+
+  h1 {
+    margin-bottom: -24px;
+
+    .plugin-name {
+      font-size: 140px;
+      margin-left: -10px;
+      color: #00bcd4;
+    }
+
+    .jq-label {
+      font-size: 35px;
+      margin-bottom: -20px;
+      color: #CFCFCF;
+      display: block;
+    }
+
+  }
+
+  span.subtitle {
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+
 }
 
-h1 .jq-label {
-  font-size: 35px;
-  margin-bottom: -20px;
-  color: #CFCFCF;
-  display: block;
-}
-
-h1 .plugin-name {
-  font-size: 140px;
-  margin-left: -10px;
-
-  color: #00bcd4;
-}
-
-span.subtitle {
-  margin-bottom: 20px;
-  font-size: 14px;
+.value-example {
+  padding: 20px;
+  // background: #e6e6e6;
+  text-align: center;
 }

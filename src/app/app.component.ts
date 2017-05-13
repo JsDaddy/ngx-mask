@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +8,17 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 })
 export class AppComponent {
 
-  form: FormGroup;
+  form: FormControl;
+  dateModel: string;
+
+  cpfFormControl: FormControl;
+  cpfModel: string;
 
   constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      date: ['30/08/1991']
-    });
+
+    this.form = new FormControl('30081991');
+    this.cpfFormControl = new FormControl('04787954778');
+
   }
 
 }

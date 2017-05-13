@@ -5,16 +5,18 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'test-mask',
-  template: '<input [mask]="mask" [formControl]="form" [(ngModel)]="ngModelValue">'
+  template: '<input [mask]="mask" [specialCharacters]="specialCharacters" [formControl]="form" [(ngModel)]="ngModelValue">'
 })
 class TestMaskComponent {
 
   mask: string;
   ngModelValue: string;
   form: FormControl;
+  specialCharacters: boolean;
 
   constructor() {
     this.form = new FormControl(null);
+    this.specialCharacters = true;
   }
 
 }
@@ -152,10 +154,12 @@ describe('Directive: Mask', () => {
     expect(component.ngModelValue).toBe('30/08/1992');
   });
 
-  it('FormControl or NgModel already defined should fill the masked input', () => {
-    component.mask = '00';
-    component.form.patchValue('00');
-    expect(component.form.value).toBe('00');
+  it('FormControl or NgModel should be filled without special characters', () => {
+    component.mask = '00-00-00';
+    component.specialCharacters = false;
+    equal('257898', '25-78-98');
+    expect(component.form.value).toBe('257898');
+    expect(component.ngModelValue).toBe('257898');
   });
 
 });

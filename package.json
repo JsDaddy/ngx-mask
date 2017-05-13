@@ -49,6 +49,7 @@
     "@angular/material": "^2.0.0-beta.3",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
+    "bootstrap": "^4.0.0-alpha.6",
     "codelyzer": "~2.0.0",
     "hammerjs": "^2.0.8",
     "jasmine-core": "~2.5.2",

@@ -14,6 +14,7 @@ const resolvedPromise = Promise.resolve(null);
 })
 export class MaskDirective implements OnInit, ControlValueAccessor {
 
+  private _modelWithSpecialCharacters: boolean;
   private _maskExpression: string;
   private _elementRef: ElementRef;
   private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
@@ -26,11 +27,16 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   constructor(_elementRef: ElementRef, private renderer: Renderer2) {
     this._elementRef = _elementRef;
+    this._modelWithSpecialCharacters = true;
   }
 
   ngOnInit() {
     resolvedPromise.then(() => {
-      this.OnChange(this._elementRef.nativeElement.value);
+      if (this._modelWithSpecialCharacters === true) {
+        this.OnChange(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
+      } else {
+        this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
+      }
     });
   }
 
@@ -38,15 +44,29 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @HostListener('input')
   public onInput() {
-    this._elementRef.nativeElement.value = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
-    this.OnChange(this._elementRef.nativeElement.value);
+    const maskedInput = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
+    this._elementRef.nativeElement.value = maskedInput;
+
+    if (this._modelWithSpecialCharacters === true) {
+      this.OnChange(maskedInput);
+    } else {
+      this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
+    }
   }
+
+
 
   @Input('mask')
   public set maskExpression(value: string) {
     if (!value) { return; }
     this._maskExpression = value;
   }
+
+  @Input('specialCharacters')
+  public set modelWithSpecialCharacters(value: boolean) {
+    this._modelWithSpecialCharacters = value;
+  }
+
 
   private _applyMask(inputValue: string, maskExpression: string): string {
     let cursor = 0;
@@ -79,13 +99,22 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     return result;
   }
 
+  private _removeMask(value: string): string {
+    if (!value) { return value; }
+    return value.replace(/(\/|\.|-)/gi, '');
+  }
+
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
     return inputSymbol === maskSymbol
       || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
   }
 
   private isValidValue() {
-    /** TODO(verificar se o valor é válido ou não) */
+    /**
+     * TODO(verificar se o valor é válido ou não)
+     *
+     * - Não pode ser um objeto...
+     * */
   }
 
   /** CONTROL VALUE ACESSOR IMPLEMENTATION */

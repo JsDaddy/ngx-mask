@@ -1,48 +1,145 @@
-<div style="width: 1020px; margin: 0 auto;">
+<div class="container">
 
-  <header>
-    <h1>
-      <span class="jq-label">Angular2</span>
-      <span class="plugin-name">Mask Plugin</span>
-    </h1>
-    <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
-  </header>
+  <div class="row">
+    <div class="col-12">
 
-  <md-grid-list cols="1" rowHeight="140px">
+      <header>
+        <h1>
+          <span class="jq-label">Angular2</span>
+          <span class="plugin-name">Mask Plugin</span>
+        </h1>
+        <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
+      </header>
 
-    <md-grid-tile>
-      <md-toolbar color="primary">
-        <span>Examples</span>
-      </md-toolbar>
-    </md-grid-tile>
+    </div>
+  </div>
 
-  </md-grid-list>
+  <div class="row">
+    <div class="col-12">
+
+      <md-grid-list cols="1" rowHeight="140px">
+
+        <md-grid-tile>
+          <md-toolbar color="primary">
+            <span>Examples</span>
+          </md-toolbar>
+        </md-grid-tile>
+
+      </md-grid-list>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Mask common case</h1>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
+        <md-hint><b>Mask:</b> 00/00/0000</md-hint>
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</span>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Others common cases</h1>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Hour" mask="00:00:00">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Phone" mask="(000) 000-0000">
+      </md-input-container>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Masks x special characters</h1>
+      <p>You could define if you want special characters propagate to the model or not with the attribute <b>specialCharacters</b>.</p>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="CPF" specialCharacters="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</span>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</span>
+      </div>
+    </div>
+
+  </div>
 
 
   <div fxLayout="row" fxLayoutWrap fxLayout.xs="column" fxLayoutGap="30px" fxLayoutAlign="start stretch" style="text-align: center;">
 
     <div fxFlex="1 auto auto">
 
-      <md-input-container hideRequiredMarker="false" >
-        <input mdInput placeholder="Date" mask="00/00/0000">
-        <md-error align="start"><b>Mask:</b> dd/mm/yyyy</md-error>
-      </md-input-container>
+
 
     </div>
 
     <div fxFlex="1 auto auto">
 
-      <md-input-container>
-        <input mdInput placeholder="Hour" mask="00:00:00">
-      </md-input-container>
+
 
     </div>
 
     <div fxFlex="1 auto auto">
 
-      <md-input-container>
-        <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
-      </md-input-container>
+
 
     </div>
 
