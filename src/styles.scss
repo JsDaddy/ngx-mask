@@ -25,10 +25,6 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
 }
 
-md-input-container {
-  width: 100%;
-}
-
 @include ngmask-input-theme($candy-app-theme);
 
 
@@ -53,6 +49,11 @@ md-input-container {
   direction: ltr;
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
+}
+
+
+md-input-container {
+  width: 100%;
 }
 
 
@@ -91,6 +92,20 @@ header {
 
 .value-example {
   padding: 20px;
-  // background: #e6e6e6;
   text-align: center;
 }
+
+
+@mixin ngmask-general-theme($theme) {
+
+  $foreground: map-get($theme, foreground);
+
+  $input-placeholder-color: mat-color($foreground, hint-text);
+
+  .value-example {
+    color: $input-placeholder-color;
+  }
+
+}
+
+@include ngmask-general-theme($candy-app-theme);
