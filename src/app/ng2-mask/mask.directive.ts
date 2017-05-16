@@ -112,8 +112,6 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   private isValidValue() {
     /**
      * TODO(verificar se o valor é válido ou não)
-     *
-     * - Não pode ser um objeto...
      * */
   }
 
