@@ -1,1 +1,2 @@
-export declare class Ng2MaskModule{}
+export declare class Ng2MaskModule {
+}

@@ -4,6 +4,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const resolvedPromise = Promise.resolve(null);
 
+/** TODO(custom special characters) */
+/** TODO(custom patterns) */
+/** TODO(cursor position) */
+
 @Directive({
   selector: '[mask]',
   providers: [{
@@ -16,45 +20,21 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   private _modelWithSpecialCharacters: boolean;
   private _maskExpression: string;
-  private _elementRef: ElementRef;
   private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
-  private _maskAwaliablePatterns: {[key: string]: RegExp} = {
+  private _maskAwaliablePatterns: { [key: string]: RegExp } = {
     '0': /\d/,
     '9': /\d/,
     'A': /[a-zA-Z0-9]/,
     'S': /[a-zA-Z]/
   };
 
-  constructor(_elementRef: ElementRef, private renderer: Renderer2) {
-    this._elementRef = _elementRef;
+  constructor(private el: ElementRef, private renderer: Renderer2) {
     this._modelWithSpecialCharacters = true;
   }
 
   ngOnInit() {
-    resolvedPromise.then(() => {
-      if (this._modelWithSpecialCharacters === true) {
-        this.OnChange(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
-      } else {
-        this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
-      }
-    });
+    resolvedPromise.then(() => this.applyValueChanges());
   }
-
-  private OnChange = (_: any) => { };
-
-  @HostListener('input')
-  public onInput() {
-    const maskedInput = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
-    this._elementRef.nativeElement.value = maskedInput;
-
-    if (this._modelWithSpecialCharacters === true) {
-      this.OnChange(maskedInput);
-    } else {
-      this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
-    }
-  }
-
-
 
   @Input('mask')
   public set maskExpression(value: string) {
@@ -67,13 +47,19 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     this._modelWithSpecialCharacters = value;
   }
 
+  @HostListener('input')
+  public onInput() {
+    this.applyValueChanges();
+  }
+
+  private OnChange = (_: any) => { };
 
   private _applyMask(inputValue: string, maskExpression: string): string {
     let cursor = 0;
     let result = '';
     const inputArray = inputValue.split('');
 
-    for (let i = 0, inputSymbol = inputArray[0]; i < inputArray.length;  i++, inputSymbol = inputArray[i]) {
+    for (let i = 0, inputSymbol = inputArray[0]; i < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -99,7 +85,8 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     return result;
   }
 
-  private _removeMask(value: string): string {
+  /** Remove mask from value, based on specialCharacters */
+  private removeMask(value: string): string {
     if (!value) { return value; }
     return value.replace(/(\/|\.|-)/gi, '');
   }
@@ -109,30 +96,41 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
       || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
   }
 
-  private isValidValue() {
-    /**
-     * TODO(verificar se o valor é válido ou não)
-     * */
+  /** It applies the mask in the input and updates the control's value. */
+  private applyValueChanges() {
+    const val = this.el.nativeElement.value;
+    const maskedInput = this._applyMask(val, this._maskExpression);
+
+    this.el.nativeElement.value = maskedInput;
+
+    if (this._modelWithSpecialCharacters === true) {
+      this.OnChange(maskedInput);
+    } else {
+      this.OnChange(this.removeMask(val));
+    }
   }
 
-  /** CONTROL VALUE ACESSOR IMPLEMENTATION */
+  /** It writes the value in the input */
   writeValue(obj: any): void {
     if (!obj) { return; }
-    this._elementRef.nativeElement.value = this._applyMask(obj, this._maskExpression);
+    this.el.nativeElement.value = this._applyMask(obj, this._maskExpression);
   }
 
+  /** It updates the value when changes occurr */
   registerOnChange(fn: any): void {
     this.OnChange = fn;
     return;
   }
 
-  registerOnTouched(fn: any): void { /* TODO */ }
+  /* TODO */
+  registerOnTouched(fn: any): void { }
 
+  /** It disables the input element */
   setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
-      this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
+      this.renderer.setAttribute(this.el.nativeElement, 'disabled', 'true');
     } else {
-      this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'false');
+      this.renderer.setAttribute(this.el.nativeElement, 'disabled', 'false');
     }
   }
 

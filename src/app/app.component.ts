@@ -1,6 +1,5 @@
 import { Component, ElementRef } from '@angular/core';
 import { FormControl, FormBuilder } from '@angular/forms';
-import * as highlightjs from 'highlight.js';
 
 @Component({
   selector: 'app-root',
@@ -15,14 +14,10 @@ export class AppComponent {
   cpfFormControl: FormControl;
   cpfModel: string;
 
-
-
   constructor(private fb: FormBuilder) {
 
     this.form = new FormControl('30081991');
     this.cpfFormControl = new FormControl('04787954778');
-
-    highlightjs.initHighlighting();
 
   }
 
