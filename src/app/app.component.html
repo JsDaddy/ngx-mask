@@ -1,27 +1,163 @@
-<div id="examples">
-  <div class="col">
-    <label>Date</label>
-    <input class="date" mask="00/00/0000">
-    <label>Hour</label>
-    <input class="time" mask="00:00:00">
-    <label>Date &amp; Hour</label>
-    <input class="date_time" mask="00/00/0000 00:00:00">
-    <label>Zip-Code</label>
-    <input class="cep" mask="00000-000">
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-12">
+
+      <header>
+        <h1>
+          <span class="jq-label">Angular2</span>
+          <span class="plugin-name">Mask Plugin</span>
+        </h1>
+        <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
+      </header>
+
+    </div>
   </div>
-  <div class="col">
-    <label>Telephone</label>
-    <input class="phone" mask="0000-0000">
-    <label>Telephone with Code Area</label>
-    <input class="phone_with_ddd" mask="(00) 0000-0000">
-    <label>US Telephone</label>
-    <input class="phone_us" mask="(000) 000-0000">
-    <label>Mixed Type Mask</label>
-    <input class="mixed" mask="AAA 000-S0S">
-    <label>IP Address</label>
-    <input class="ip_address" mask="099.099.099.099">
+
+  <div class="row">
+    <div class="col-12">
+
+      <md-grid-list cols="1" rowHeight="140px">
+
+        <md-grid-tile>
+          <md-toolbar color="primary">
+            <span>Examples</span>
+          </md-toolbar>
+        </md-grid-tile>
+
+      </md-grid-list>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Mask common case</h1>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
+        <md-hint><b>Mask:</b> 00/00/0000</md-hint>
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</span>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</span>
+      </div>
+    </div>
 
   </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Others common cases</h1>
+      <p>Other common cases that you could apply in your projects.</p>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Hour" mask="00:00:00">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="Phone" mask="(000) 000-0000">
+      </md-input-container>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+      <h1>Masks x special characters</h1>
+      <p>You could define if you want special characters propagate to the model or not with the attribute <b>specialCharacters</b>.</p>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-3">
+      <md-input-container>
+        <input mdInput placeholder="CPF" specialCharacters="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+      </md-input-container>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</span>
+      </div>
+    </div>
+
+    <div class="col-3">
+      <div class="value-example">
+        <span><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+
+      <md-grid-list cols="1" rowHeight="140px">
+
+        <md-grid-tile>
+          <md-toolbar color="primary">
+            <span>Documentation</span>
+          </md-toolbar>
+        </md-grid-tile>
+
+      </md-grid-list>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12">
+
+      <md-list>
+        <h1 md-subheader>DIRECTIVE</h1>
+        <h2 md-subheader>mask</h2>
+        <md-list-item> Pepper </md-list-item>
+        <md-divider></md-divider>
+        <md-list-item> Salt </md-list-item>
+        <md-list-item> Paprika </md-list-item>
+      </md-list>
+
+      <pre><code class="javascript">
+        let a = 'olá mundo';
+      </code></pre>
+
+    </div>
+  </div>
+
+
 </div>
-
-

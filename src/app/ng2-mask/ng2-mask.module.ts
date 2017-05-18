@@ -3,10 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports:[MaskDirective],
+  imports: [CommonModule],
+  exports: [MaskDirective],
   declarations: [MaskDirective]
 })
 export class Ng2MaskModule { }

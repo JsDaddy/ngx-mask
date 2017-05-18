@@ -1,30 +1,30 @@
 import {
-  Directive,
-  OnInit,
-  Input,
-  Output,
-  HostListener,
-  ElementRef,
-  EventEmitter,
+  Directive, ElementRef, forwardRef, HostListener, Input, OnInit, Renderer2
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-const resolvedPromise = Promise.resolve(null);
+const resolvedPromise: Promise<null> = Promise.resolve(null);
 
 @Directive({
-  selector: '[mask]'
+  selector: '[mask]',
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => MaskDirective),
+      multi: true
+    }
+  ]
 })
-export class MaskDirective implements OnInit {
-
-  @HostListener('input')
-  public onInput() {
-    this._elementRef.nativeElement.value = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
-    this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
-  }
-
-  ngOnInit() {
-    resolvedPromise.then(() =>
-      this.ngModelChange.emit(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression)));
-  }
+export class MaskDirective implements OnInit, ControlValueAccessor {
+  private _modelWithSpecialCharacters: boolean;
+  private _maskExpression: string;
+  private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
+  private _maskAwaliablePatterns: { [key: string]: RegExp } = {
+    '0': /\d/,
+    '9': /\d/,
+    'A': /[a-zA-Z0-9]/,
+    'S': /[a-zA-Z]/
+  };
 
   @Input('mask')
   public set maskExpression(value: string) {
@@ -34,32 +34,70 @@ export class MaskDirective implements OnInit {
     this._maskExpression = value;
   }
 
-  @Output()
-  public ngModelChange = new EventEmitter();
+  public constructor(
+    private _elementRef: ElementRef,
+    private renderer: Renderer2
+  ) {
+  }
 
+  @Input('specialCharacters')
+  public set modelWithSpecialCharacters(value: boolean) {
+    this._modelWithSpecialCharacters = value;
+  }
 
-  private _maskExpression: string;
-  private _elementRef: ElementRef;
-  private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
-  private _maskAwaliablePatterns: {[key: string]: RegExp} = {
-    '0': /\d/,
-    '9': /\d/,
-    'A': /[a-zA-Z0-9]/,
-    'S': /[a-zA-Z]/
+  @HostListener('input')
+  public onInput(): void {
+    const maskedInput: string = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
+    this._elementRef.nativeElement.value = maskedInput;
+    if (this._modelWithSpecialCharacters === true) {
+      return this.OnChange(maskedInput);
+    }
+    this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
   }
 
 
-  public constructor(_elementRef: ElementRef) {
-    this._elementRef = _elementRef;
+  public ngOnInit(): void {
+    this._modelWithSpecialCharacters = true;
+    resolvedPromise.then(() => {
+      if (this._modelWithSpecialCharacters === true) {
+        return this.OnChange(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
+      }
+      this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
+    });
   }
+
+  /** CONTROL VALUE ACESSOR IMPLEMENTATION */
+  public writeValue(obj: string): void {
+    if (!obj) { return; }
+    this._elementRef.nativeElement.value = this._applyMask(obj, this._maskExpression);
+  }
+
+  // tslint:disable-next-line
+  public registerOnChange(fn: (_: any) => void): void {
+    this.OnChange = fn;
+    return;
+  }
+
+  // tslint:disable-next-line
+  public registerOnTouched(fn: (_: any) => void): void { /* TODO */ }
+
+  public setDisabledState(isDisabled: boolean): void {
+    if (isDisabled) {
+      return this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
+    }
+    this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'false');
+  }
+
+  // tslint:disable-next-line
+  private OnChange(_: any): void { }
 
   private _applyMask(inputValue: string, maskExpression: string): string {
-    let cursor = 0
-    let result = '';
-    let inputArray = inputValue.split('');
-    for (let i = 0, inputSymbol = inputArray[0];
-         i < inputArray.length;
-         i++, inputSymbol = inputArray[i]) {
+    let cursor: number = 0;
+    let result: string = '';
+    const inputArray: string[] = inputValue.split('');
+    // tslint:disable-next-line
+    for (let i: number = 0, inputSymbol: string = inputArray[0]; i
+    < inputArray.length; i++, inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -67,7 +105,7 @@ export class MaskDirective implements OnInit {
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
-      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor])!==-1) {
+      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
         result += maskExpression[cursor];
         cursor++;
         i--;
@@ -76,18 +114,28 @@ export class MaskDirective implements OnInit {
         i--;
       }
     }
-
     if (result.length + 1 === maskExpression.length
-      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1])!==-1) {
+      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
       result += maskExpression[maskExpression.length - 1];
     }
-
     return result;
+  }
+
+  private _removeMask(value: string): string {
+    if (!value) { return value; }
+    return value.replace(/(\/|\.|-)/gi, '');
   }
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
     return inputSymbol === maskSymbol
-      || this._maskAwaliablePatterns[maskSymbol] && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol)
+      || this._maskAwaliablePatterns[maskSymbol]
+      && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
+  }
+
+  private isValidValue(): void {
+    /**
+     * TODO(verificar se o valor é válido ou não)
+     * */
   }
 
 }
