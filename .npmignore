@@ -6,3 +6,5 @@ angular-cli.json
 karma.conf.js
 protractor.conf.js
 tslint.json
+.idea
+.angular-cli.json

@@ -1,6 +1,6 @@
 {
   "name": "ng2-mask",
-  "version": "0.5.1",
+  "version": "1.0.1",
   "description": "awesome ng2 mask",
   "license": "MIT",
   "angular-cli": {},
@@ -19,32 +19,33 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "build:package": "./node_modules/.bin/ngc -p ./src/app/ng2-mask/tsconfig.json"
   },
-  "main": "ng2-mask.module.js",
-  "jsnext:main": "ng2-mask.module.js",
+  "main": "./build/ng2-mask.module.js",
+  "jsnext:main": "./build/ng2-mask.module.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/NepipenkoIgor/ng2-mask.git"
   },
   "dependencies": {
-    "@angular/common": "^4.0.0",
-    "@angular/compiler": "^4.0.0",
-    "@angular/core": "^4.0.0",
-    "@angular/forms": "^4.0.0",
-    "@angular/http": "^4.0.0",
-    "@angular/platform-browser": "^4.0.0",
-    "@angular/platform-browser-dynamic": "^4.0.0",
-    "@angular/router": "^4.0.0",
+    "@angular/common": "^4.1.2",
+    "@angular/compiler": "^4.1.2",
+    "@angular/core": "^4.1.2",
+    "@angular/forms": "^4.1.2",
+    "@angular/http": "^4.1.2",
+    "@angular/platform-browser": "^4.1.2",
+    "@angular/platform-browser-dynamic": "^4.1.2",
+    "@angular/router": "^4.1.2",
     "core-js": "^2.4.1",
     "rxjs": "^5.1.0",
-    "zone.js": "^0.8.4",
-    "ts-helpers": "^1.1.1"
+    "ts-helpers": "^1.1.1",
+    "zone.js": "^0.8.4"
   },
   "devDependencies": {
-    "@angular/animations": "^4.1.1",
+    "@angular/animations": "^4.1.2",
     "@angular/cli": "1.0.3",
-    "@angular/compiler-cli": "^4.0.0",
+    "@angular/compiler-cli": "^4.1.2",
     "@angular/material": "^2.0.0-beta.3",
     "@types/highlight.js": "^9.1.9",
     "@types/jasmine": "2.5.38",

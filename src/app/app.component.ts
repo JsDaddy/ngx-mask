@@ -1,5 +1,5 @@
-import { Component, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import * as highlightjs from 'highlight.js';
 
 @Component({
@@ -7,23 +7,22 @@ import * as highlightjs from 'highlight.js';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  form: FormControl;
-  dateModel: string;
+  public form: FormControl;
+  public dateModel: string;
 
-  cpfFormControl: FormControl;
-  cpfModel: string;
+  public cpfFormControl: FormControl;
+  public cpfModel: string;
 
 
+  public constructor() {
+    // highlightjs.initHighlighting();
+  }
 
-  constructor(private fb: FormBuilder) {
-
+  public ngOnInit(): void {
     this.form = new FormControl('30081991');
     this.cpfFormControl = new FormControl('04787954778');
-
-    highlightjs.initHighlighting();
-
   }
 
 }
