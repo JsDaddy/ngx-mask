@@ -1,6 +1,11 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdGridListModule, MdToolbarModule, MdIconModule, MdInputModule,
-  MdSelectModule, MdListModule } from '@angular/material';
+import {
+  MdGridListModule, MdIconModule, MdInputModule,
+  MdListModule, MdSelectModule,
+  MdToolbarModule
+}
+  from
+    '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
@@ -15,13 +20,13 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
     AppComponent
   ],
   imports: [
+    BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MdGridListModule,
     MdToolbarModule,
     MdSelectModule,
     MdInputModule,
-    BrowserModule,
     Ng2MaskModule,
     MdIconModule,
     MdListModule,
@@ -31,4 +36,5 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}

@@ -1,24 +1,24 @@
-import { Component, ElementRef } from '@angular/core';
-import { FormControl, FormBuilder } from '@angular/forms';
+import { Component, ElementRef, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
-  form: FormControl;
-  dateModel: string;
+  public form: FormControl;
+  public dateModel: string;
 
-  cpfFormControl: FormControl;
-  cpfModel: string;
+  public cpfFormControl: FormControl;
+  public cpfModel: string;
 
-  constructor(private fb: FormBuilder) {
+  public constructor() { }
 
+  public ngOnInit(): void {
     this.form = new FormControl('30081991');
     this.cpfFormControl = new FormControl('04787954778');
-
   }
 
 }

@@ -1,0 +1,1 @@
+export {Ng2MaskModule} from './build/ng2-mask.module'
