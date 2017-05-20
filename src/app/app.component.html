@@ -1,181 +1,222 @@
+<style>
+md-sidenav {
+  display: flex;
+  overflow: visible;
+}
 
-<div class="container">
+</style>
 
-  <div class="row">
-    <div class="col-12">
+<md-sidenav-container>
+    <md-sidenav mode="side" opened="true">
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
+      Jolly good!<br>
 
-      <header>
-        <h1>
-          <span class="jq-label">Angular2</span>
-          <span class="plugin-name">Mask Plugin</span>
-        </h1>
-        <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
-      </header>
+      Jolly good!<br>
+      Jolly good!<br>
 
-    </div>
-  </div>
+      Jolly good!<br>
+      Jolly good!<br>
 
-  <div class="row">
-    <div class="col-12">
+      Jolly good!<br>
 
-      <md-grid-list cols="1" rowHeight="140px">
+    </md-sidenav>
 
-        <md-grid-tile>
-          <md-toolbar color="primary">
-            <span>Examples</span>
-          </md-toolbar>
-        </md-grid-tile>
+    <div class="container">
 
-      </md-grid-list>
+      <div class="row">
+        <div class="col-12">
 
-    </div>
-  </div>
+          <header>
+            <h1>
+              <span class="jq-label">Angular2</span>
+              <span class="plugin-name">Mask Plugin</span>
+            </h1>
+            <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
+          </header>
 
-  <div class="row">
-    <div class="col-12">
+        </div>
+      </div>
 
-      <md-card>
-        <md-card-header>
-          <md-card-title>Mask common case</md-card-title>
-        </md-card-header>
-        <md-card-content>
-          <!--<md-input-container>
+      <div class="row">
+        <div class="col-12">
+
+          <md-grid-list cols="1" rowHeight="140px">
+
+            <md-grid-tile>
+              <md-toolbar color="primary">
+                <span>Examples</span>
+              </md-toolbar>
+            </md-grid-tile>
+
+          </md-grid-list>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+
+          <md-card>
+            <md-card-header>
+              <md-card-title>Mask common case</md-card-title>
+            </md-card-header>
+            <md-card-content>
+              <div class="row">
+                <div class="col-3">
+                  <p>Testando teste</p>
+                </div>
+                <div class="col-3">
+                  <p>Testando teste</p>
+                </div>
+                <div class="col-3">
+                  <p>Testando teste</p>
+                </div>
+                <div class="col-3">
+                  <p>Testando teste</p>
+                </div>
+              </div>
+            </md-card-content>
+            <md-card-actions>
+              <button md-button>LIKE</button>
+              <button md-button>SHARE</button>
+            </md-card-actions>
+          </md-card>
+
+        </div>
+      </div>
+
+      <div class="row">
+
+        <div class="col-3">
+          <md-input-container>
             <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
             <md-hint><b>Mask:</b> 00/00/0000</md-hint>
-          </md-input-container>-->
+          </md-input-container>
+        </div>
 
-          <p>Testando teste</p>
-        </md-card-content>
-        <md-card-actions>
-          <button md-button>LIKE</button>
-          <button md-button>SHARE</button>
-        </md-card-actions>
-      </md-card>
+        <div class="col-3">
+          <div class="value-example">
+            <span><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</span>
+          </div>
+        </div>
 
-    </div>
-  </div>
+        <div class="col-3">
+          <div class="value-example">
+            <span><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</span>
+          </div>
+        </div>
 
-  <div class="row">
-
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
-        <md-hint><b>Mask:</b> 00/00/0000</md-hint>
-      </md-input-container>
-    </div>
-
-    <div class="col-3">
-      <div class="value-example">
-        <span><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</span>
       </div>
-    </div>
 
-    <div class="col-3">
-      <div class="value-example">
-        <span><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</span>
+      <div class="row">
+        <div class="col-12">
+          <h1>Others common cases</h1>
+          <p>Other common cases that you could apply in your projects.</p>
+        </div>
       </div>
-    </div>
 
-  </div>
+      <div class="row">
 
-  <div class="row">
-    <div class="col-12">
-      <h1>Others common cases</h1>
-      <p>Other common cases that you could apply in your projects.</p>
-    </div>
-  </div>
+        <div class="col-3">
+          <md-input-container>
+            <input mdInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+          </md-input-container>
+        </div>
 
-  <div class="row">
+        <div class="col-3">
+          <md-input-container>
+            <input mdInput placeholder="Hour" mask="00:00:00">
+          </md-input-container>
+        </div>
 
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
-      </md-input-container>
-    </div>
+        <div class="col-3">
+          <md-input-container>
+            <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
+          </md-input-container>
+        </div>
 
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="Hour" mask="00:00:00">
-      </md-input-container>
-    </div>
+        <div class="col-3">
+          <md-input-container>
+            <input mdInput placeholder="Phone" mask="(000) 000-0000">
+          </md-input-container>
+        </div>
 
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
-      </md-input-container>
-    </div>
-
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="Phone" mask="(000) 000-0000">
-      </md-input-container>
-    </div>
-
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <h1>Masks x special characters</h1>
-      <p>You could define if you want special characters propagate to the model or not with the attribute <b>specialCharacters</b>.</p>
-    </div>
-  </div>
-
-  <div class="row">
-
-    <div class="col-3">
-      <md-input-container>
-        <input mdInput placeholder="CPF" [specialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
-      </md-input-container>
-    </div>
-
-    <div class="col-3">
-      <div class="value-example">
-        <span><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</span>
       </div>
-    </div>
 
-    <div class="col-3">
-      <div class="value-example">
-        <span><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</span>
+      <div class="row">
+        <div class="col-12">
+          <h1>Masks x special characters</h1>
+          <p>You could define if you want special characters propagate to the model or not with the attribute <b>specialCharacters</b>.</p>
+        </div>
       </div>
+
+      <div class="row">
+
+        <div class="col-3">
+          <md-input-container>
+            <input mdInput placeholder="CPF" [specialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+          </md-input-container>
+        </div>
+
+        <div class="col-3">
+          <div class="value-example">
+            <span><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</span>
+          </div>
+        </div>
+
+        <div class="col-3">
+          <div class="value-example">
+            <span><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+
+          <md-grid-list cols="1" rowHeight="140px">
+
+            <md-grid-tile>
+              <md-toolbar color="primary">
+                <span>Documentation</span>
+              </md-toolbar>
+            </md-grid-tile>
+
+          </md-grid-list>
+
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-12">
+
+          <md-list>
+            <h1 md-subheader>DIRECTIVE</h1>
+            <h2 md-subheader>mask</h2>
+            <md-list-item> Pepper </md-list-item>
+            <md-divider></md-divider>
+            <md-list-item> Salt </md-list-item>
+            <md-list-item> Paprika </md-list-item>
+          </md-list>
+
+          <pre><code class="javascript">
+            let a = 'olá mundo';
+          </code></pre>
+
+        </div>
+      </div>
+
     </div>
 
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-
-      <md-grid-list cols="1" rowHeight="140px">
-
-        <md-grid-tile>
-          <md-toolbar color="primary">
-            <span>Documentation</span>
-          </md-toolbar>
-        </md-grid-tile>
-
-      </md-grid-list>
-
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-
-      <md-list>
-        <h1 md-subheader>DIRECTIVE</h1>
-        <h2 md-subheader>mask</h2>
-        <md-list-item> Pepper </md-list-item>
-        <md-divider></md-divider>
-        <md-list-item> Salt </md-list-item>
-        <md-list-item> Paprika </md-list-item>
-      </md-list>
-
-      <pre><code class="javascript">
-        let a = 'olá mundo';
-      </code></pre>
-
-    </div>
-  </div>
-
-
-</div>
+  </md-sidenav-container>

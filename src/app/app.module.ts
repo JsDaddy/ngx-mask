@@ -1,8 +1,8 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdGridListModule, MdIconModule, MdInputModule,
-  MdListModule, MdSelectModule,
-  MdToolbarModule, MdCardModule
+  MdListModule, MdSelectModule, MdButtonModule,
+  MdToolbarModule, MdCardModule, MdSidenavModule
 }
   from
     '@angular/material';
@@ -24,8 +24,10 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MdGridListModule,
+    MdSidenavModule,
     MdToolbarModule,
     MdSelectModule,
+    MdButtonModule,
     MdInputModule,
     Ng2MaskModule,
     MdIconModule,
