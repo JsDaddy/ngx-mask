@@ -122,7 +122,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   /** Remove mask from value, based on specialCharacters */
   private _removeMask(value: string): string {
     if (!value) { return value; }
-    return value.replace(/(\/|\.|-)/gi, '');
+    return value.replace(/(\/|\.|-|\(|\)| : | |\+)/gi, '');
   }
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
