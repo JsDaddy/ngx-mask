@@ -8,6 +8,8 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
 /** TODO(custom special characters) */
 /** TODO(custom patterns) */
 /** TODO(cursor position) */
+/** TODO(create special characters object to specialCharacters directive) */
+/** TODO(clean value when mask is not right) */
 
 @Directive({
   selector: '[mask]',

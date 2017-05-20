@@ -13,7 +13,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
   $foreground: map-get($theme, foreground);
 
-  $input-placeholder-color: mat-color($foreground, hint-text);
+  $input-placeholder-color: mat-color($foreground, secondary-text);
 
   md-input-container {
 
@@ -26,6 +26,15 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 }
 
 @include ngmask-input-theme($candy-app-theme);
+
+md-card {
+
+  md-card-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+}
 
 
 @font-face {
@@ -89,23 +98,3 @@ header {
   }
 
 }
-
-.value-example {
-  padding: 20px;
-  text-align: center;
-}
-
-
-@mixin ngmask-general-theme($theme) {
-
-  $foreground: map-get($theme, foreground);
-
-  $input-placeholder-color: mat-color($foreground, hint-text);
-
-  .value-example {
-    color: $input-placeholder-color;
-  }
-
-}
-
-@include ngmask-general-theme($candy-app-theme);
