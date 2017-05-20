@@ -111,7 +111,7 @@
   "rules": {
     // TypeScript Specific
     "member-access": [
-      true,
+      false,
       "check-accessor",
       "check-constructor"
     ],
@@ -132,7 +132,7 @@
         ]
       }
     ],
-    "no-any": true,
+    "no-any": false,
     "no-empty-interface": true,
     "no-internal-module": true,
     "no-var-requires": false,
