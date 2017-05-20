@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import * as highlightjs from 'highlight.js';
 
 @Component({
   selector: 'app-root',
@@ -15,10 +14,7 @@ export class AppComponent implements OnInit {
   public cpfFormControl: FormControl;
   public cpfModel: string;
 
-
-  public constructor() {
-    // highlightjs.initHighlighting();
-  }
+  public constructor() { }
 
   public ngOnInit(): void {
     this.form = new FormControl('30081991');

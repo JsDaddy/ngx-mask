@@ -5,6 +5,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const resolvedPromise: Promise<null> = Promise.resolve(null);
 
+/** TODO(custom special characters) */
+/** TODO(custom patterns) */
+/** TODO(cursor position) */
+
 @Directive({
   selector: '[mask]',
   providers: [
@@ -26,6 +30,16 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     'S': /[a-zA-Z]/
   };
 
+  public constructor(
+    private _elementRef: ElementRef,
+    private renderer: Renderer2
+  ) { }
+
+  ngOnInit() {
+    this._modelWithSpecialCharacters = true;
+    resolvedPromise.then(() => this._applyValueChanges());
+  }
+
   @Input('mask')
   public set maskExpression(value: string) {
     if (!value) {
@@ -34,70 +48,50 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     this._maskExpression = value;
   }
 
-  public constructor(
-    private _elementRef: ElementRef,
-    private renderer: Renderer2
-  ) {
-  }
-
   @Input('specialCharacters')
   public set modelWithSpecialCharacters(value: boolean) {
     this._modelWithSpecialCharacters = value;
   }
 
   @HostListener('input')
-  public onInput(): void {
-    const maskedInput: string = this._applyMask(this._elementRef.nativeElement.value, this._maskExpression);
-    this._elementRef.nativeElement.value = maskedInput;
-    if (this._modelWithSpecialCharacters === true) {
-      return this.OnChange(maskedInput);
-    }
-    this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
+  public onInput() {
+    this._applyValueChanges();
   }
 
-
-  public ngOnInit(): void {
-    this._modelWithSpecialCharacters = true;
-    resolvedPromise.then(() => {
-      if (this._modelWithSpecialCharacters === true) {
-        return this.OnChange(this._applyMask(this._elementRef.nativeElement.value, this._maskExpression));
-      }
-      this.OnChange(this._removeMask(this._elementRef.nativeElement.value));
-    });
-  }
-
-  /** CONTROL VALUE ACESSOR IMPLEMENTATION */
-  public writeValue(obj: string): void {
+  /** It writes the value in the input */
+  public writeValue(obj: any): void {
     if (!obj) { return; }
     this._elementRef.nativeElement.value = this._applyMask(obj, this._maskExpression);
   }
 
-  // tslint:disable-next-line
-  public registerOnChange(fn: (_: any) => void): void {
+  /** It updates the value when changes occurr */
+  public registerOnChange(fn: any): void {
     this.OnChange = fn;
     return;
   }
 
-  // tslint:disable-next-line
-  public registerOnTouched(fn: (_: any) => void): void { /* TODO */ }
+  /* TODO */
+  public registerOnTouched(fn: any): void { }
 
+  /** It disables the input element */
   public setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
-      return this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
+      this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
+    } else {
+      this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'false');
     }
-    this.renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'false');
   }
 
-  // tslint:disable-next-line
-  private OnChange(_: any): void { }
+  private OnChange = (_: any) => { };
 
   private _applyMask(inputValue: string, maskExpression: string): string {
     let cursor: number = 0;
     let result: string = '';
     const inputArray: string[] = inputValue.split('');
+
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
-    < inputArray.length; i++, inputSymbol = inputArray[i]) {
+      < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -121,6 +115,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     return result;
   }
 
+  /** Remove mask from value, based on specialCharacters */
   private _removeMask(value: string): string {
     if (!value) { return value; }
     return value.replace(/(\/|\.|-)/gi, '');
@@ -132,10 +127,19 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
       && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
   }
 
-  private isValidValue(): void {
-    /**
-     * TODO(verificar se o valor é válido ou não)
-     * */
+
+  /** It applies the mask in the input and updates the control's value. */
+  private _applyValueChanges(): void {
+    const val: string = this._elementRef.nativeElement.value;
+    const maskedInput: string = this._applyMask(val, this._maskExpression);
+
+    this._elementRef.nativeElement.value = maskedInput;
+
+    if (this._modelWithSpecialCharacters === true) {
+      this.OnChange(maskedInput);
+    } else {
+      this.OnChange(this._removeMask(val));
+    }
   }
 
 }
