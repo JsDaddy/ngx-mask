@@ -1,61 +1,35 @@
-# Ng2Mask
-
-##### Lightweight native Angular2 mask module.
-
 ![screen shot 2017-01-22 at 14 07 50](https://cloud.githubusercontent.com/assets/1526680/22182355/31d103ca-e0ac-11e6-9664-c7c0399ef69f.png)
 
-##### Angular2 mask without dependencies (No jQuery).
-...
-=======
+## Installing
 
-### How To Use
+```bash
+$ npm install --save ng2-mask
+```
 
-**npm:**
-* Install the package:
+## Quickstart
 
-   ```shell
-   npm install ng2-mask
-   ```
-* Import ng2-mask Module:
+Import **ng2-mask** module in Angular app.
 
-   ```javascript
-   import {Ng2MaskModule} from 'ng2-mask'
-   ```
-* Import module dependency:
+```typescript
+import {Ng2MaskModule} from 'ng2-mask'
 
-   ```javascript
-      ...
-      imports: [
-      ...
-       Ng2MaskModule
-      ...
-      ]
-      ```
-   ```
+(...)
 
-* Use ng2-mask directive:
+@NgModule({
+  (...)
+  imports: [
+    Ng2MaskModule
+  ]
+  (...)
+})
+```
 
-   ```html
-   <input type='text' mask='0000-00-00' />
-   ```
-  
-  More examples will be soon available
-======================================
+Then, just define masks in inputs.
 
+```html
+<input type='text' mask='0000-00-00' />
+```
 
-### Common Patterns
+## Examples
 
-Comming soon...
-=======
-
-
-### Options
-
-Comming soon...
-=======
-
-
-### Examples
-
-Check the [DEMO](https://nepipenkoigor.github.io/ng2-mask/)
-=======
+Check the [demo](https://nepipenkoigor.github.io/ng2-mask/).

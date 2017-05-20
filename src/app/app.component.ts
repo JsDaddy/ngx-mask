@@ -14,11 +14,11 @@ export class AppComponent implements OnInit {
   public cpfFormControl: FormControl;
   public cpfModel: string;
 
-  public constructor() { }
-
-  public ngOnInit(): void {
+  public constructor() {
     this.form = new FormControl('30081991');
     this.cpfFormControl = new FormControl('04787954778');
   }
+
+  public ngOnInit(): void { }
 
 }

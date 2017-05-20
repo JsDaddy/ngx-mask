@@ -2,7 +2,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   MdGridListModule, MdIconModule, MdInputModule,
   MdListModule, MdSelectModule,
-  MdToolbarModule
+  MdToolbarModule, MdCardModule
 }
   from
     '@angular/material';
@@ -30,6 +30,7 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
     Ng2MaskModule,
     MdIconModule,
     MdListModule,
+    MdCardModule,
     FormsModule,
     HttpModule
   ],

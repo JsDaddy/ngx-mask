@@ -33,7 +33,25 @@
 
   <div class="row">
     <div class="col-12">
-      <h1>Mask common case</h1>
+
+      <md-card>
+        <md-card-header>
+          <md-card-title>Mask common case</md-card-title>
+        </md-card-header>
+        <md-card-content>
+          <!--<md-input-container>
+            <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
+            <md-hint><b>Mask:</b> 00/00/0000</md-hint>
+          </md-input-container>-->
+
+          <p>Testando teste</p>
+        </md-card-content>
+        <md-card-actions>
+          <button md-button>LIKE</button>
+          <button md-button>SHARE</button>
+        </md-card-actions>
+      </md-card>
+
     </div>
   </div>
 
@@ -106,7 +124,7 @@
 
     <div class="col-3">
       <md-input-container>
-        <input mdInput placeholder="CPF" specialCharacters="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+        <input mdInput placeholder="CPF" [specialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
       </md-input-container>
     </div>
 
