@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
   public form: FormControl;
   public dateModel: string;
@@ -18,7 +18,5 @@ export class AppComponent implements OnInit {
     this.form = new FormControl('30081991');
     this.cpfFormControl = new FormControl('04787954778');
   }
-
-  public ngOnInit(): void { }
 
 }

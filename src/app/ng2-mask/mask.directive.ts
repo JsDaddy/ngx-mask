@@ -36,7 +36,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     this.modelWithSpecialCharacters = true;
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     resolvedPromise.then(() => this._applyValueChanges());
   }
 
