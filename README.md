@@ -82,13 +82,14 @@ the boolean attribute `specialCharacters`.
 #### Usage
 
 ```html 
-<input type='text' specialCharacters="false" mask='789-874.98' />
+<input type='text' specialCharacters="false" mask="000-000.00" />
 ```
 
-Value in model:
+Then:
 
 ```
-value: 78987498
+Input value: 789-874.98
+Model value: 78987498
 ```
 
 ## Examples
