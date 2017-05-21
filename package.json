@@ -46,14 +46,13 @@
     "@angular/animations": "^4.1.2",
     "@angular/cli": "1.0.3",
     "@angular/compiler-cli": "^4.1.2",
-    "@angular/material": "^2.0.0-beta.3",
+    "@angular/material": "^2.0.0-beta.5",
     "@types/highlight.js": "^9.1.9",
     "@types/jasmine": "2.5.38",
     "@types/node": "~6.0.60",
     "bootstrap": "^4.0.0-alpha.6",
     "codelyzer": "~2.0.0",
     "hammerjs": "^2.0.8",
-    "highlight.js": "^9.11.0",
     "jasmine-core": "~2.5.2",
     "jasmine-spec-reporter": "~3.2.0",
     "karma": "~1.4.1",
@@ -67,6 +66,9 @@
     "ts-node": "~2.0.0",
     "tslint": "~4.5.0",
     "typescript": "~2.2.0",
-    "webdriver-manager": "10.2.5"
+    "webdriver-manager": "10.2.5",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.6",
+    "merge2": "^1.0.3"
   }
 }
