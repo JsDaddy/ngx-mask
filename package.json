@@ -66,9 +66,6 @@
     "ts-node": "^2.0.0",
     "tslint": "^4.5.0",
     "typescript": "^2.3.2",
-    "webdriver-manager": "10.2.5",
-    "gulp": "^3.9.1",
-    "gulp-typescript": "^3.1.6",
-    "merge2": "^1.0.3"
+    "webdriver-manager": "10.2.5"
   }
 }
