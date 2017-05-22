@@ -32,7 +32,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     'S': /[a-zA-Z]/
   };
 
-  public constructor(private _elementRef: ElementRef, private _renderer: Renderer2 ) {
+  public constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
     this.modelWithSpecialCharacters = true;
   }
 
@@ -63,18 +63,21 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   }
 
   /** It writes the value in the input */
-  public writeValue(obj: any): void {
-    if (!obj) { return; }
-    this._elementRef.nativeElement.value = this._applyMask(obj, this._maskExpression);
+  public writeValue(inputValue: string): void {
+    if (!inputValue) {
+      return;
+    }
+    this._elementRef.nativeElement.value = this._applyMask(inputValue, this._maskExpression);
   }
 
-  /** It updates the value when changes occurr */
+  // tslint:disable-next-line
   public registerOnChange(fn: any): void {
     this._onChange = fn;
     return;
   }
 
   /* TODO */
+  // tslint:disable-next-line
   public registerOnTouched(fn: any): void { }
 
   /** It disables the input element */
@@ -86,6 +89,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     }
   }
 
+  // tslint:disable-next-line
   private _onChange = (_: any) => { };
 
   private _applyMask(inputValue: string, maskExpression: string): string {
@@ -95,7 +99,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
-      < inputArray.length; i++ , inputSymbol = inputArray[i]) {
+    < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -121,7 +125,9 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   /** Remove mask from value, based on specialCharacters */
   private _removeMask(value: string): string {
-    if (!value) { return value; }
+    if (!value) {
+      return value;
+    }
     return value.replace(/(\/|\.|-|\(|\)| : | |\+)/gi, '');
   }
 
@@ -140,9 +146,9 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
     if (this.modelWithSpecialCharacters === true) {
       this._onChange(maskedInput);
-    } else {
-      this._onChange(this._removeMask(val));
+      return;
     }
+    this._onChange(this._removeMask(val));
   }
 
 }

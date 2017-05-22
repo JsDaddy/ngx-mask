@@ -1,12 +1,12 @@
-var gulp = require('gulp');
-var merge = require('merge2');
-var ts = require('gulp-typescript');
-var tsConfig = ts.createProject('src/app/ng2-mask/tsconfig.json');
+const gulp = require('gulp');
+const merge = require('merge2');
+const ts = require('gulp-typescript');
+const tsConfig = ts.createProject('src/app/ng2-mask/tsconfig.json');
 
 gulp.task("gen:release", () => {
 
   /** compiling typescript files */
-  var tsResult = gulp.src('src/app/ng2-mask/**/**.ts')
+  const tsResult = gulp.src('src/app/ng2-mask/**/**.ts')
     .pipe(tsConfig());
 
   return merge([ // Merge the two output streams, so this task is finished when the IO of both operations is done.
