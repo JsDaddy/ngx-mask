@@ -9,7 +9,7 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
 /** TODO(custom patterns) */
 /** TODO(cursor position) */
 /** TODO(create special characters object to specialCharacters directive) */
-/** TODO(clean value when mask is not right) */
+/** TODO(clean value when mask is not completely filled) */
 
 @Directive({
   selector: '[mask]',
@@ -23,6 +23,7 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
 })
 export class MaskDirective implements OnInit, ControlValueAccessor {
   private _modelWithSpecialCharacters: boolean;
+  private _clearIfNotMatch: boolean;
   private _maskExpression: string;
   private _maskSpecialCharacters: string[] = ['/', '(', ')', '.', ':', '-', ' ', '+'];
   private _maskAwaliablePatterns: { [key: string]: RegExp } = {
@@ -34,6 +35,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   public constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
     this.modelWithSpecialCharacters = true;
+    this._clearIfNotMatch = false;
   }
 
   public ngOnInit(): void {
@@ -57,9 +59,27 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     this._modelWithSpecialCharacters = value;
   }
 
+  @Input('clearIfNotMatch')
+  public get clearIfNotMatch(): boolean {
+    return this._clearIfNotMatch;
+  }
+
+  public set clearIfNotMatch(value: boolean) {
+    this._clearIfNotMatch = value;
+  }
+
   @HostListener('input')
   public onInput(): void {
     this._applyValueChanges();
+  }
+
+  @HostListener('blur')
+  public onBlur(): void {
+    if (this.clearIfNotMatch === true && this._maskExpression.length
+      !== this._elementRef.nativeElement.value.length) {
+      this._elementRef.nativeElement.value = '';
+      this._applyValueChanges();
+    }
   }
 
   /** It writes the value in the input */
@@ -128,7 +148,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     if (!value) {
       return value;
     }
-    return value.replace(/(\/|\.|-|\(|\)| : | |\+)/gi, '');
+    return value.replace(/(\/|\.|-|\(|\)|:| |\+)/gi, '');
   }
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
@@ -146,9 +166,9 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
     if (this.modelWithSpecialCharacters === true) {
       this._onChange(maskedInput);
-      return;
+    } else {
+      this._onChange(this._removeMask(maskedInput));
     }
-    this._onChange(this._removeMask(val));
   }
 
 }
