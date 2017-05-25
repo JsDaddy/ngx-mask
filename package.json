@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4202",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
