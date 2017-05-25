@@ -1,6 +1,8 @@
 import {
-  Directive, ElementRef, forwardRef, HostListener, Input, OnInit, Renderer2
+  Directive, ElementRef, forwardRef, HostListener, Inject, Input, OnInit,
+  Renderer2
 } from '@angular/core';
+import { DOCUMENT } from '@angular/platform-browser';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 const resolvedPromise: Promise<null> = Promise.resolve(null);
@@ -9,7 +11,6 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
 /** TODO(custom patterns) */
 /** TODO(cursor position) */
 /** TODO(create special characters object to specialCharacters directive) */
-/** TODO(clean value when mask is not completely filled) */
 
 @Directive({
   selector: '[mask]',
@@ -33,7 +34,8 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     'S': /[a-zA-Z]/
   };
 
-  public constructor(private _elementRef: ElementRef, private _renderer: Renderer2) {
+  public constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
+  @Inject(DOCUMENT) private document: any) {
     this.modelWithSpecialCharacters = true;
     this._clearIfNotMatch = false;
   }
@@ -75,11 +77,8 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @HostListener('blur')
   public onBlur(): void {
-    if (this.clearIfNotMatch === true && this._maskExpression.length
-      !== this._elementRef.nativeElement.value.length) {
-      this._elementRef.nativeElement.value = '';
-      this._applyValueChanges();
-    }
+    this._clearIfNotMatchFn();
+    this._applyValueChanges();
   }
 
   /** It writes the value in the input */
@@ -157,6 +156,13 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
       && this._maskAwaliablePatterns[maskSymbol].test(inputSymbol);
   }
 
+  private _clearIfNotMatchFn(): void {
+    if (this.clearIfNotMatch === true && this._maskExpression.length
+      !== this._elementRef.nativeElement.value.length) {
+        this._elementRef.nativeElement.value = '';
+    }
+  }
+
   /** It applies the mask in the input and updates the control's value. */
   private _applyValueChanges(): void {
     const val: string = this._elementRef.nativeElement.value;
@@ -168,6 +174,10 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
       this._onChange(maskedInput);
     } else {
       this._onChange(this._removeMask(maskedInput));
+    }
+
+    if (this._elementRef.nativeElement !== this.document.activeElement) {
+      this._clearIfNotMatchFn();
     }
   }
 
