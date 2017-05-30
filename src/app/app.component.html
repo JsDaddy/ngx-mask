@@ -152,6 +152,38 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
+        <md-card>
+          <md-card-header>
+            <md-card-title>Clear if not match</md-card-title>
+            <md-card-subtitle>
+              You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b> attribute.
+            </md-card-subtitle>
+          </md-card-header>
+          <md-card-content>
+            <div class="row">
+              <div class="col-md-3">
+                <md-input-container>
+                  <input mdInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
+                    [formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">
+                  <md-hint><b>Mask:</b> 000.000</md-hint>
+                </md-input-container>
+              </div>
+              <div class="col-md-3">
+                <p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>
+              </div>
+              <div class="col-md-3">
+                <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
+              </div>
+            </div>
+          </md-card-content>
+        </md-card>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-12">
+
         <md-grid-list cols="1" rowHeight="140px">
 
           <md-grid-tile>

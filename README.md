@@ -29,7 +29,7 @@ import {Ng2MaskModule} from 'ng2-mask'
 Then, just define masks in inputs.
 
 ```html
-<input type='text' mask='0000-00-00' />
+<input type='text' mask='0000-00-00' >
 ```
 
 ## Documentation
@@ -39,7 +39,7 @@ Then, just define masks in inputs.
 #### Usage
 
 ```html 
-<input type='text' mask='{here comes your mask}' />
+<input type='text' mask='{here comes your mask}' >
 ```
 
 #### Params
@@ -82,7 +82,7 @@ the boolean attribute `specialCharacters`.
 #### Usage
 
 ```html 
-<input type='text' specialCharacters="false" mask="000-000.00" />
+<input type='text' specialCharacters="false" mask="000-000.00" >
 ```
 
 Then:
@@ -90,6 +90,17 @@ Then:
 ```
 Input value: 789-874.98
 Model value: 78987498
+```
+
+### Clear if not match
+You can choose clear the input if the input value **not match** the mask, you just need
+to set the boolean attribute `clearIfNotMatch`
+
+
+#### Usage
+
+```html 
+<input type='text' clearIfNotMatch="false" mask="99.99-99" >
 ```
 
 ## Examples

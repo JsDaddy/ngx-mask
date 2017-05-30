@@ -5,7 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'test-mask',
-  template: `<input [mask]="mask"
+  template: `<input [mask]="mask" [clearIfNotMatch]="clearIfNotMatch"
     [specialCharacters]="specialCharacters" [formControl]="form" [(ngModel)]="ngModelValue">`
 })
 class TestMaskComponent {
@@ -14,9 +14,7 @@ class TestMaskComponent {
   public ngModelValue: string;
   public form: FormControl = new FormControl(null);
   public specialCharacters: boolean = true;
-
-  public constructor() {
-  }
+  public clearIfNotMatch: boolean = false;
 
 }
 
@@ -166,6 +164,25 @@ describe('Directive: Mask', () => {
       .toBe('257898');
     expect(component.ngModelValue)
       .toBe('257898');
+  });
+
+  it('model values shouldnt be bigger length than masks', () => {
+    component.mask = '00-00-00';
+    component.specialCharacters = false;
+    equal('2578989', '25-78-98');
+    expect(component.form.value)
+      .toBe('257898');
+    expect(component.ngModelValue)
+      .toBe('257898');
+  });
+
+  it('should clear if not match the mask', () => {
+    component.mask = '000.000-00';
+    component.clearIfNotMatch = true;
+    equal('', '');
+    equal('2578989', '');
+    equal('2578989888988', '257.898-98');
+    equal('111.111-11', '111.111-11');
   });
 
 });
