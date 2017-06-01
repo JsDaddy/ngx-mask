@@ -34,8 +34,11 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     'S': /[a-zA-Z]/
   };
 
-  public constructor(private _elementRef: ElementRef, private _renderer: Renderer2,
-  @Inject(DOCUMENT) private document: any) {
+  public constructor(
+    private _elementRef: ElementRef,
+    private _renderer: Renderer2,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     this.modelWithSpecialCharacters = true;
     this._clearIfNotMatch = false;
   }
@@ -159,7 +162,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   private _clearIfNotMatchFn(): void {
     if (this.clearIfNotMatch === true && this._maskExpression.length
       !== this._elementRef.nativeElement.value.length) {
-        this._elementRef.nativeElement.value = '';
+      this._elementRef.nativeElement.value = '';
     }
   }
 

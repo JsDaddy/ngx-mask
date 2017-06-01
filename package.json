@@ -1,6 +1,6 @@
 {
   "name": "ng2-mask",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "description": "awesome ng2 mask",
   "license": "MIT",
   "angular-cli": {},
@@ -20,7 +20,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "build:package": "./node_modules/.bin/ngc -p ./src/app/ng2-mask/tsconfig.json"
+    "build:package": "rm -rf ./build && ./node_modules/.bin/ngc -p ./src/app/ng2-mask/tsconfig.json"
   },
   "main": "./build/ng2-mask.module.js",
   "jsnext:main": "./build/ng2-mask.module.js",
@@ -50,6 +50,7 @@
     "@types/highlight.js": "^9.1.9",
     "@types/jasmine": "2.5.38",
     "@types/node": "^6.0.60",
+    "angular-cli-ghpages": "^0.5.1",
     "bootstrap": "^4.0.0-alpha.6",
     "codelyzer": "^2.0.0",
     "hammerjs": "^2.0.8",

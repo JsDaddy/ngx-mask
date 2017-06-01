@@ -1,8 +1,9 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MdGridListModule, MdIconModule, MdInputModule,
-  MdListModule, MdSelectModule, MdButtonModule,
-  MdToolbarModule, MdCardModule, MdSidenavModule
+  MdButtonModule, MdCardModule, MdGridListModule, MdIconModule, MdInputModule,
+  MdListModule,
+  MdSelectModule, MdSidenavModule,
+  MdToolbarModule
 }
   from
     '@angular/material';
