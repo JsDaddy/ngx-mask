@@ -1,6 +1,6 @@
 {
   "name": "ng2-mask-unofficial",
-  "version": "1.0.10",
+  "version": "1.0.5",
   "description": "awesome ng2 mask - unofficial",
   "license": "MIT",
   "angular-cli": {},
@@ -16,7 +16,7 @@
   ],
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4202",
+    "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
