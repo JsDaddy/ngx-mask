@@ -37,7 +37,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   public constructor(
     private _elementRef: ElementRef,
     private _renderer: Renderer2,
-    @Inject(DOCUMENT) private document: Document
+    @Inject(DOCUMENT) private document: any
   ) {
     this.modelWithSpecialCharacters = true;
     this._clearIfNotMatch = false;
