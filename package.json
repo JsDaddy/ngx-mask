@@ -1,11 +1,12 @@
 {
-  "name": "ng2-mask-unofficial",
+  "name": "ng2-mask",
   "version": "1.0.5",
-  "description": "awesome ng2 mask - unofficial",
+  "description": "awesome ng2 mask",
   "license": "MIT",
   "angular-cli": {},
   "keywords": [
     "ng2-mask",
+    "ngx-mask",
     "ng2",
     "angular-mask",
     "mask",
