@@ -82,6 +82,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   public onBlur(): void {
     this._clearIfNotMatchFn();
     this._applyValueChanges();
+    this._onTouch();
   }
 
   /** It writes the value in the input */
@@ -100,24 +101,32 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   /* TODO */
   // tslint:disable-next-line
-  public registerOnTouched(fn: any): void { }
+  public registerOnTouched(fn: any): void {
+    this._onTouch = fn;
+  }
 
   /** It disables the input element */
   public setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
       this._renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
     } else {
-      this._renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'false');
+      this._renderer.removeAttribute(this._elementRef.nativeElement, 'disabled');
     }
   }
 
   // tslint:disable-next-line
   private _onChange = (_: any) => { };
 
+  private _onTouch = () => { };
+
   private _applyMask(inputValue: string, maskExpression: string): string {
+    if ( inputValue === undefined || inputValue === null) {
+      return '';
+    }
+
     let cursor: number = 0;
     let result: string = '';
-    const inputArray: string[] = inputValue.split('');
+    const inputArray: string[] = inputValue.toString().split('');
 
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
