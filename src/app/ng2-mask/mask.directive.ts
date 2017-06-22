@@ -1,6 +1,6 @@
 import {
   Directive, ElementRef, forwardRef, HostListener, Inject, Input, OnInit,
-  Renderer
+  Renderer2
 } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -36,7 +36,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   public constructor(
     private _elementRef: ElementRef,
-    private _renderer: Renderer,
+    private _renderer: Renderer2,
     @Inject(DOCUMENT) private document: any
   ) {
     this.modelWithSpecialCharacters = true;
@@ -108,10 +108,10 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   /** It disables the input element */
   public setDisabledState(isDisabled: boolean): void {
     if (isDisabled) {
-      this._renderer.setElementAttribute(this._elementRef.nativeElement, 'disabled', 'true');
+      this._renderer.setAttribute(this._elementRef.nativeElement, 'disabled', 'true');
       return;
     }
-    this._renderer.setElementAttribute(this._elementRef.nativeElement, 'disabled', 'false');
+    this._renderer.removeAttribute(this._elementRef.nativeElement, 'disabled')
   }
 
   // tslint:disable-next-line
