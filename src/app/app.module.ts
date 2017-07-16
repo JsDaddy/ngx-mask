@@ -14,7 +14,7 @@ import { NgModule } from '@angular/core';
 import 'hammerjs';
 
 import { AppComponent } from './app.component';
-import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
+import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +30,7 @@ import { Ng2MaskModule } from './ng2-mask/ng2-mask.module';
     MdSelectModule,
     MdButtonModule,
     MdInputModule,
-    Ng2MaskModule,
+    NgxMaskModule,
     MdIconModule,
     MdListModule,
     MdCardModule,

@@ -11,14 +11,14 @@ $ npm install --save ngx-mask
 Import **ng2-mask** module in Angular app.
 
 ```typescript
-import {Ng2MaskModule} from 'ngx-mask'
+import {NgxMaskModule} from 'ngx-mask'
 
 (...)
 
 @NgModule({
   (...)
   imports: [
-    Ng2MaskModule
+    NgxMaskModule
   ]
   (...)
 })

@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "awesome ngx mask",
   "license": "MIT",
   "angular-cli": {},
@@ -21,10 +21,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "build:package": "rm -rf ./build && ./node_modules/.bin/ngc -p ./src/app/ng2-mask/tsconfig.json"
+    "build:package": "rm -rf ./build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json"
   },
-  "main": "./build/ng2-mask.module.js",
-  "jsnext:main": "./build/ng2-mask.module.js",
+  "main": "./build/ngx-mask.module.js",
+  "jsnext:main": "./build/ngx-mask.module.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/NepipenkoIgor/ngx-mask.git"

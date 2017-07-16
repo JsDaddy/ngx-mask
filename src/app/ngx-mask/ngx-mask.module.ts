@@ -7,4 +7,4 @@ import { MaskDirective } from './mask.directive';
   exports: [MaskDirective],
   declarations: [MaskDirective]
 })
-export class Ng2MaskModule { }
+export class NgxMaskModule { }
