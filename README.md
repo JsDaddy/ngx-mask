@@ -1,7 +1,5 @@
 ![screen shot 2017-01-22 at 14 07 50](https://cloud.githubusercontent.com/assets/1526680/22182355/31d103ca-e0ac-11e6-9664-c7c0399ef69f.png)
 
-(It's a WIP)
-
 ## Installing
 
 ```bash
@@ -105,4 +103,4 @@ to set the boolean attribute `clearIfNotMatch`
 
 ## Examples
 
-Check the [demo](https://nepipenkoigor.github.io/ng2-mask/).
+Check the [demo](https://nepipenkoigor.github.io/ngx-mask/).
