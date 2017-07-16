@@ -3,7 +3,7 @@
 ## Installing
 
 ```bash
-$ npm install --save ng2-mask
+$ npm install --save ngx-mask
 ```
 
 ## Quickstart
@@ -11,7 +11,7 @@ $ npm install --save ng2-mask
 Import **ng2-mask** module in Angular app.
 
 ```typescript
-import {Ng2MaskModule} from 'ng2-mask'
+import {Ng2MaskModule} from 'ngx-mask'
 
 (...)
 
