@@ -19,10 +19,10 @@ md-sidenav {
 
         <header>
           <h1>
-            <span class="jq-label">Angular2</span>
+            <span class="jq-label">Angular</span>
             <span class="plugin-name">Mask Plugin</span>
           </h1>
-          <span class="subtitle">An Angular2 Plugin to make masks on form fields and html elements.</span>
+          <span class="subtitle">An Angular Plugin to make masks on form fields and html elements.</span>
         </header>
 
       </div>
@@ -125,14 +125,14 @@ md-sidenav {
             <md-card-title>Masks and special characters</md-card-title>
             <md-card-subtitle>
               You could define if you want special characters propagate to the model or not with the
-              attribute <b>specialCharacters</b>.
+              attribute <b>dropSpecialCharacters</b>.
             </md-card-subtitle>
           </md-card-header>
           <md-card-content>
             <div class="row">
               <div class="col-md-3">
                 <md-input-container>
-                  <input mdInput placeholder="CPF" [specialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+                  <input mdInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
                   <md-hint><b>Mask:</b> 000.000.000-00</md-hint>
                 </md-input-container>
               </div>
