@@ -74,7 +74,7 @@ Masked value: [78]*[987]
   | code | meaning |
   |------|---------|
   | **0** | digits (like 0 to 9 numbers) |
-  | **0** | digits (like 0 to 9 numbers), but optional |
+  | **9** | digits (like 0 to 9 numbers), but optional |
   | **A** | letters (uppercase or lowercase) and digits |
   | **S** | only letters (uppercase or lowercase) |
 
