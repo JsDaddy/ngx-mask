@@ -79,7 +79,9 @@ Masked value: [78]*[987]
   | **0** | digits (like 0 to 9 numbers), but optional |
   | **A** | letters (uppercase or lowercase) and digits |
   | **S** | only letters (uppercase or lowercase) |
-  
+
+##### Usage:
+ 
 ```html 
 <input type='text' patterns="{'0': { pattern: new RegExp('\[a-zA-Z\]')}}" mask="(000-000)" >
 ```
