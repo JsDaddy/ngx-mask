@@ -7,12 +7,6 @@ import { MaskService } from './mask.service';
 
 const resolvedPromise: Promise<null> = Promise.resolve(null);
 
-/** TODO(custom special characters) */
-/** TODO(custom patterns) */
-
-/** TODO(cursor position) */
-/** TODO(create special characters object to specialCharacters directive) */
-
 @Directive({
   selector: '[mask]',
   providers: [
@@ -45,7 +39,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @Input()
   public set specialCharacters(value: Config['specialCharacters']) {
-    if (!value || !Array.isArray(value) || Array.isArray(value) && !value.length ) {
+    if (!value || !Array.isArray(value) || Array.isArray(value) && !value.length) {
       return;
     }
     this._maskService.maskSpecialCharacters = value;
@@ -69,9 +63,23 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     this._maskService.clearIfNotMatch = value;
   }
 
-  @HostListener('input')
-  public onInput(): void {
-    this._maskService.applyValueChanges(this._elementRef.nativeElement);
+  @HostListener('input', ['$event'])
+  public onInput(e: KeyboardEvent): void {
+    const el: HTMLInputElement = (e.target as HTMLInputElement);
+    const position: number = el.selectionStart;
+
+    let caretShift: number = 0;
+    this._maskService.applyValueChanges(
+      this._elementRef.nativeElement,
+      position,
+      (shift: number) => caretShift = shift
+    );
+    el.selectionStart = el.selectionEnd = position + (
+      // tslint:disable-next-line
+      (e as any).inputType === 'deleteContentBackward'
+        ? 0
+        : caretShift
+    );
   }
 
   @HostListener('blur')
