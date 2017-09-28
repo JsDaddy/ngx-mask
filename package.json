@@ -20,7 +20,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "tslint './src/app/**/*.ts'",
     "build:package": "rm -rf ./build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json"
   },
   "main": "./build/ngx-mask.module.js",
@@ -73,6 +73,7 @@
     "webdriver-manager": "12.0.6"
   },
   "pre-commit":[
-
+    "lint",
+    "test"
   ]
 }

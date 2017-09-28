@@ -1,3 +1,7 @@
+type Env = {
+  production: boolean
+};
+
 type Config = {
   clearIfNotMatch: boolean,
   dropSpecialCharacters: boolean,
