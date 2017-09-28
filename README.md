@@ -42,7 +42,7 @@ Then, just define masks in inputs.
 | SSSS | asDF |
 
 ## Mask Options 
-You can define your custom options for hole directives (as options object in the mask module) or per each (as attributes for directive)
+You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive)
 ### specialCharacters (string[ ]) 
  We have next default characters:
    
