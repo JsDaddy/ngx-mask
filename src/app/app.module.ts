@@ -30,7 +30,7 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
     MdSelectModule,
     MdButtonModule,
     MdInputModule,
-    NgxMaskModule,
+    NgxMaskModule.forRoot(),
     MdIconModule,
     MdListModule,
     MdCardModule,

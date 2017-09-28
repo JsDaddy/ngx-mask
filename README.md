@@ -1,5 +1,3 @@
-![screen shot 2017-01-22 at 14 07 50](https://cloud.githubusercontent.com/assets/1526680/22182355/31d103ca-e0ac-11e6-9664-c7c0399ef69f.png)
-
 ## Installing
 
 ```bash
@@ -8,7 +6,7 @@ $ npm install --save ngx-mask
 
 ## Quickstart
 
-Import **ng2-mask** module in Angular app.
+Import **ngx-mask** module in Angular app.
 
 ```typescript
 import {NgxMaskModule} from 'ngx-mask'
@@ -18,7 +16,7 @@ import {NgxMaskModule} from 'ngx-mask'
 @NgModule({
   (...)
   imports: [
-    NgxMaskModule
+    NgxMaskModule.forRoot(options)
   ]
   (...)
 })
@@ -26,43 +24,11 @@ import {NgxMaskModule} from 'ngx-mask'
 
 Then, just define masks in inputs.
 
-```html
-<input type='text' mask='0000-00-00' >
-```
-
-## Documentation
-
-### Mask
-
 #### Usage
 
 ```html 
 <input type='text' mask='{here comes your mask}' >
 ```
-
-#### Params
-You construct your mask pattern using these follow codes:
-
-| code | meaning |
-|------|---------|
-| **0** or **9** | digits (like 0 to 9 numbers) |
-| **A** | letters (uppercase or lowercase) and digits |
-| **S** | only letters (uppercase or lowercase) |
-| Custom Pattern | Work in Progress |
-
-And you can mix with special characters:
-
-| character |
-|-----------|
-| / | 
-| ( | 
-| ) |
-| . |
-| : |
-| - |
-| **space** |
-| + |
-| Custom characters (WIP) |
 
 #### Examples
 
@@ -73,33 +39,76 @@ And you can mix with special characters:
 | AAAA | 0F6g |
 | SSSS | asDF |
 
-### Special characters
-You can choose if mask will propagate to model, or not, you just need to set
-the boolean attribute `specialCharacters`.
-
-#### Usage
+## Mask Options 
+You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive)
+### specialCharacters (string[ ]) 
+ We have next default characters:
+   
+   | character |
+   |-----------|
+   | / | 
+   | ( | 
+   | ) |
+   | . |
+   | : |
+   | - |
+   | **space** |
+   | + | 
+   
+##### Usage
 
 ```html 
-<input type='text' specialCharacters="false" mask="000-000.00" >
+<input type='text' specialCharacters="[ '[' ,']' , '*' ]" mask="[00]*[000]" >
 ```
 
-Then:
+##### Then:
 
 ```
 Input value: 789-874.98
-Model value: 78987498
+Masked value: [78]*[987]
+```
+   
+### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+   We have next default patterns:
+   
+  | code | meaning |
+  |------|---------|
+  | **0** | digits (like 0 to 9 numbers) |
+  | **0** | digits (like 0 to 9 numbers), but optional |
+  | **A** | letters (uppercase or lowercase) and digits |
+  | **S** | only letters (uppercase or lowercase) |
+
+##### Usage:
+ 
+```html 
+<input type='text' patterns="{'0': { pattern: new RegExp('\[a-zA-Z\]')}}" mask="(000-000)" >
 ```
 
-### Clear if not match
-You can choose clear the input if the input value **not match** the mask, you just need
-to set the boolean attribute `clearIfNotMatch`
+##### Then:
 
+```
+Input value: 789HelloWorld
+Masked value: (Hel-loW)
+```
 
-#### Usage
+### dropSpecialCharacters (boolean) 
+   You can choose if mask will drop special character in the model, or not, default value true
+##### Usage
 
 ```html 
-<input type='text' clearIfNotMatch="false" mask="99.99-99" >
+<input type='text' dropSpecialCharacters="false" mask="000-000.00" >
 ```
+
+##### Then:
+
+```
+Input value: 789-874.98
+Model value: 789-874.98
+```
+
+### clearIfNotMatch (boolean)    
+   You can choose clear the input if the input value **not match** the mask, default value false 
+
 
 ## Examples
 
