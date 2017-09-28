@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgxMaskModule } from './ngx-mask.module';
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { IConfig } from './config';
 
 @Component({
   selector: 'test-mask',
@@ -18,10 +19,10 @@ class TestMaskComponent {
   public mask: string;
   public ngModelValue: string;
   public form: FormControl = new FormControl(null);
-  public dropSpecialCharacters: Config['dropSpecialCharacters'] = true;
-  public clearIfNotMatch: Config['clearIfNotMatch'] = false;
-  public patterns: Config['patterns'];
-  public specialCharacters: Config['specialCharacters'];
+  public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
+  public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
+  public patterns: IConfig['patterns'];
+  public specialCharacters: IConfig['specialCharacters'];
 
 }
 

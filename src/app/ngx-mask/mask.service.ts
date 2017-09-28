@@ -1,21 +1,21 @@
 import { Inject, Injectable } from '@angular/core';
-import { config } from './config';
+import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 
 @Injectable()
 export class MaskService {
 
-  public dropSpecialCharacters: Config['dropSpecialCharacters'];
-  public clearIfNotMatch: Config['clearIfNotMatch'];
+  public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
+  public clearIfNotMatch: IConfig['clearIfNotMatch'];
   public maskExpression: string = '';
-  public maskSpecialCharacters: Config['specialCharacters'];
-  public maskAvailablePatterns: Config['patterns'];
+  public maskSpecialCharacters: IConfig['specialCharacters'];
+  public maskAvailablePatterns: IConfig['patterns'];
   private _regExpForRemove: RegExp;
   private _shift: Set<number> = new Set();
 
   public constructor(
     @Inject(DOCUMENT) private document: Document,
-    @Inject(config) private _config: Config,
+    @Inject(config) private _config: IConfig,
   ) {
     this.clearIfNotMatch = this._config.clearIfNotMatch;
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;

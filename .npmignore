@@ -1,5 +1,6 @@
 src
 dist
+types
 .editorconfig
 .vscode
 angular-cli.json

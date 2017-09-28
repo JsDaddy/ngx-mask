@@ -4,6 +4,7 @@ import {
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
+import { IConfig } from './config';
 
 const resolvedPromise: Promise<null> = Promise.resolve(null);
 
@@ -38,7 +39,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public set specialCharacters(value: Config['specialCharacters']) {
+  public set specialCharacters(value: IConfig['specialCharacters']) {
     if (!value || !Array.isArray(value) || Array.isArray(value) && !value.length) {
       return;
     }
@@ -46,7 +47,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public set patterns(value: Config['patterns']) {
+  public set patterns(value: IConfig['patterns']) {
     if (!value) {
       return;
     }
@@ -54,12 +55,12 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public set dropSpecialCharacters(value: Config['dropSpecialCharacters']) {
+  public set dropSpecialCharacters(value: IConfig['dropSpecialCharacters']) {
     this._maskService.dropSpecialCharacters = value;
   }
 
   @Input()
-  public set clearIfNotMatch(value: Config['clearIfNotMatch']) {
+  public set clearIfNotMatch(value: IConfig['clearIfNotMatch']) {
     this._maskService.clearIfNotMatch = value;
   }
 

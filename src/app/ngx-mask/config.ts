@@ -1,8 +1,20 @@
 import { InjectionToken } from '@angular/core';
 
+export interface IConfig {
+  clearIfNotMatch: boolean;
+  dropSpecialCharacters: boolean;
+  specialCharacters: string[];
+  patterns: {
+    [character: string]: {
+      pattern: RegExp,
+      optional?: boolean
+    }
+  };
+}
+
 export const config: InjectionToken<string> = new InjectionToken('config');
 
-export const initialConfig: Config = {
+export const initialConfig: IConfig = {
   clearIfNotMatch: false,
   dropSpecialCharacters: true,
   specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+'],
