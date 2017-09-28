@@ -5,16 +5,23 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'test-mask',
-  template: `<input [mask]="mask" [clearIfNotMatch]="clearIfNotMatch"
-    [dropSpecialCharacters]="dropSpecialCharacters" [formControl]="form" [(ngModel)]="ngModelValue">`
+  template: `<input [mask]="mask"
+    [clearIfNotMatch]="clearIfNotMatch"
+    [dropSpecialCharacters]="dropSpecialCharacters"
+    [specialCharacters]="specialCharacters"
+    [patterns]="patterns"
+    [formControl]="form"
+    [(ngModel)]="ngModelValue">`
 })
 class TestMaskComponent {
 
   public mask: string;
   public ngModelValue: string;
   public form: FormControl = new FormControl(null);
-  public dropSpecialCharacters: boolean = true;
-  public clearIfNotMatch: boolean = false;
+  public dropSpecialCharacters: Config['dropSpecialCharacters'] = true;
+  public clearIfNotMatch: Config['clearIfNotMatch'] = false;
+  public patterns: Config['patterns'];
+  public specialCharacters: Config['specialCharacters'];
 
 }
 
@@ -111,6 +118,7 @@ describe('Directive: Mask', () => {
 
   it('Masks with numbers, strings e special characters', () => {
     component.mask = '(999) A99-SSSS';
+    equal('as', '(');
     equal('(1', '(1');
     equal('(12', '(12');
     equal('(123', '(123');
@@ -183,6 +191,42 @@ describe('Directive: Mask', () => {
     equal('2578989', '');
     equal('2578989888988', '257.898-98');
     equal('111.111-11', '111.111-11');
+  });
+
+  it('should work with custom special characters', () => {
+    component.mask = '[000]-[000]*[00]';
+    component.specialCharacters = ['[', ']', '-', '*'];
+    equal('', '');
+    equal('2578989', '[257]-[898]*[9');
+    equal('2578989888988', '[257]-[898]*[98]');
+    equal('111.111-11', '[111]-[111]*[11]');
+  });
+
+  it('should work with custom patterns', () => {
+    component.mask = '[000]-[000]*[00]';
+    component.specialCharacters = ['[', ']', '-', '*'];
+    component.patterns = {
+      '0': {
+        pattern: new RegExp('\[a-zA-Z\]')
+      }
+    };
+    equal('', '');
+    equal('2578989', '[');
+    equal('hello world', '[hel]-[low]*[or]');
+    equal('111.111-11', '[');
+
+    component.mask = '(000-000)';
+    component.specialCharacters = ['(', '-', ')'];
+    equal('323HelloWorld', '(Hel-loW)');
+
+    component.mask = '[00]*[000]';
+    component.specialCharacters = ['[', ']', '*'];
+    component.patterns = {
+      '0': {
+        pattern: new RegExp('\\d')
+      }
+    };
+    equal('789-874.98', '[78]*[987]');
   });
 
 });

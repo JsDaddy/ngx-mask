@@ -5,11 +5,11 @@ import { DOCUMENT } from '@angular/common';
 @Injectable()
 export class MaskService {
 
-  public dropSpecialCharacters: boolean;
-  public clearIfNotMatch: boolean;
+  public dropSpecialCharacters: Config['dropSpecialCharacters'];
+  public clearIfNotMatch: Config['clearIfNotMatch'];
   public maskExpression: string = '';
-  private _maskSpecialCharacters: string[];
-  private _maskAvaliablePatterns: { [key: string]: RegExp };
+  public maskSpecialCharacters: Config['specialCharacters'];
+  public maskAvailablePatterns: Config['patterns'];
   private _regExpForRemove: RegExp;
 
   public constructor(
@@ -18,9 +18,9 @@ export class MaskService {
   ) {
     this.clearIfNotMatch = this._config.clearIfNotMatch;
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;
-    this._maskSpecialCharacters = this._config.specialCharacters;
-    this._maskAvaliablePatterns = this._config.patterns;
-    this._regExpForRemove = new RegExp(this._maskSpecialCharacters
+    this.maskSpecialCharacters = this._config.specialCharacters;
+    this.maskAvailablePatterns = this._config.patterns;
+    this._regExpForRemove = new RegExp(this.maskSpecialCharacters
       .map((item: string) => `\\${item}`)
       .join('|'), 'gi');
   }
@@ -39,7 +39,6 @@ export class MaskService {
     let result: string = '';
     const inputArray: string[] = inputValue.toString()
       .split('');
-
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
     < inputArray.length; i++ , inputSymbol = inputArray[i]) {
@@ -50,17 +49,19 @@ export class MaskService {
       if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
-      } else if (this._maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
+      } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
         result += maskExpression[cursor];
         cursor++;
         i--;
-      } else if (maskExpression[cursor] === '9') {
+      } else if (this.maskSpecialCharacters.indexOf(inputSymbol) > -1
+        && this.maskAvailablePatterns[maskExpression[cursor]]
+        && this.maskAvailablePatterns[maskExpression[cursor]].optional) {
         cursor++;
         i--;
       }
     }
     if (result.length + 1 === maskExpression.length
-      && this._maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
+      && this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
       result += maskExpression[maskExpression.length - 1];
     }
     return result;
@@ -98,8 +99,9 @@ export class MaskService {
   }
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-    return inputSymbol === maskSymbol
-      || this._maskAvaliablePatterns[maskSymbol]
-      && this._maskAvaliablePatterns[maskSymbol].test(inputSymbol);
+    return inputSymbol
+      === maskSymbol
+      || this.maskAvailablePatterns[maskSymbol] && this.maskAvailablePatterns[maskSymbol].pattern
+      && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
   }
 }

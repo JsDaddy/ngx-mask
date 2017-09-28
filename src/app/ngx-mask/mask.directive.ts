@@ -9,6 +9,7 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
 
 /** TODO(custom special characters) */
 /** TODO(custom patterns) */
+
 /** TODO(cursor position) */
 /** TODO(create special characters object to specialCharacters directive) */
 
@@ -43,12 +44,28 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   }
 
   @Input()
-  public set dropSpecialCharacters(value: boolean) {
+  public set specialCharacters(value: Config['specialCharacters']) {
+    if (!value || !Array.isArray(value) || Array.isArray(value) && !value.length ) {
+      return;
+    }
+    this._maskService.maskSpecialCharacters = value;
+  }
+
+  @Input()
+  public set patterns(value: Config['patterns']) {
+    if (!value) {
+      return;
+    }
+    this._maskService.maskAvailablePatterns = value;
+  }
+
+  @Input()
+  public set dropSpecialCharacters(value: Config['dropSpecialCharacters']) {
     this._maskService.dropSpecialCharacters = value;
   }
 
   @Input()
-  public set clearIfNotMatch(value: boolean) {
+  public set clearIfNotMatch(value: Config['clearIfNotMatch']) {
     this._maskService.clearIfNotMatch = value;
   }
 

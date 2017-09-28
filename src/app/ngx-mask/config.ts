@@ -7,9 +7,18 @@ export const initialConfig: Config = {
   dropSpecialCharacters: true,
   specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+'],
   patterns: {
-    '0': new RegExp('\\d'),
-    '9': new RegExp('\\d'),
-    'A': new RegExp('\[a-zA-Z0-9\]'),
-    'S': new RegExp('\[a-zA-Z\]')
+    '0': {
+      pattern: new RegExp('\\d'),
+    },
+    '9': {
+      pattern: new RegExp('\\d'),
+      optional: true
+    },
+    'A': {
+      pattern: new RegExp('\[a-zA-Z0-9\]')
+    },
+    'S': {
+      pattern: new RegExp('\[a-zA-Z\]')
+    }
   }
 };
