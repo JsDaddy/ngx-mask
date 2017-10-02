@@ -19,7 +19,7 @@ export class MaskService {
   ) {
     this.clearIfNotMatch = this._config.clearIfNotMatch;
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;
-    this.maskSpecialCharacters = this._config.specialCharacters;
+    this.maskSpecialCharacters = this._config!.specialCharacters;
     this.maskAvailablePatterns = this._config.patterns;
     this._regExpForRemove = new RegExp(this.maskSpecialCharacters
       .map((item: string) => `\\${item}`)

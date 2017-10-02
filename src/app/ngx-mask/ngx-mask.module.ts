@@ -2,7 +2,7 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
 
-import { config, IConfig, initialConfig } from './config';
+import { config, initialConfig, optionsConfig } from './config';
 
 @NgModule({
   imports: [CommonModule],
@@ -11,7 +11,7 @@ import { config, IConfig, initialConfig } from './config';
 })
 export class NgxMaskModule {
 
-  public static forRoot(configValue: IConfig = initialConfig): ModuleWithProviders {
+  public static forRoot(configValue: optionsConfig = initialConfig): ModuleWithProviders {
     return {
       ngModule: NgxMaskModule,
       providers: [

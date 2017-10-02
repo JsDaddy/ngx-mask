@@ -11,6 +11,9 @@ export interface IConfig {
     }
   };
 }
+export type optionsConfig = {
+  [P in keyof IConfig]?: IConfig[P]
+};
 
 export const config: InjectionToken<string> = new InjectionToken('config');
 
