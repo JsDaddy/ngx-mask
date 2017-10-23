@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "awesome ngx mask",
   "license": "MIT",
   "angular-cli": {},
@@ -21,7 +21,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "tslint './src/app/**/*.ts'",
-    "build:package": "rm -rf ./build && mkdir build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json"
+    "build:package": "rm -rf ./build && mkdir build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json",
+    "prepare": "npm run build:package"
   },
   "main": "./build/ngx-mask.module.js",
   "jsnext:main": "./build/ngx-mask.module.js",

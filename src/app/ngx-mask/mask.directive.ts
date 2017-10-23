@@ -93,6 +93,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
   /** It writes the value in the input */
   public writeValue(inputValue: string): void {
     this._elementRef.nativeElement.value = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+    this._maskService.applyValueChanges(this._elementRef.nativeElement);
   }
 
   // tslint:disable-next-line
