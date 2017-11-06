@@ -15,9 +15,9 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
   $input-placeholder-color: mat-color($foreground, secondary-text);
 
-  md-input-container {
+  mat-input-container {
 
-    md-hint {
+    mat-hint {
       color: $input-placeholder-color;
     }
 
@@ -27,9 +27,9 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-
 
 @include ngmask-input-theme($candy-app-theme);
 
-md-card {
+mat-card {
 
-  md-card-content {
+  mat-card-content {
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -61,7 +61,7 @@ md-card {
 }
 
 
-md-input-container {
+mat-input-container {
   width: 100%;
 }
 

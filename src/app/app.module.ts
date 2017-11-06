@@ -1,9 +1,9 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MdButtonModule, MdCardModule, MdGridListModule, MdIconModule, MdInputModule,
-  MdListModule,
-  MdSelectModule, MdSidenavModule,
-  MdToolbarModule
+  MatButtonModule, MatCardModule, MatGridListModule, MatIconModule, MatInputModule,
+  MatListModule,
+  MatSelectModule, MatSidenavModule,
+  MatToolbarModule
 }
   from
     '@angular/material';
@@ -24,16 +24,16 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    MdGridListModule,
-    MdSidenavModule,
-    MdToolbarModule,
-    MdSelectModule,
-    MdButtonModule,
-    MdInputModule,
+    MatGridListModule,
+    MatSidenavModule,
+    MatToolbarModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatInputModule,
     NgxMaskModule.forRoot(),
-    MdIconModule,
-    MdListModule,
-    MdCardModule,
+    MatIconModule,
+    MatListModule,
+    MatCardModule,
     FormsModule,
     HttpModule
   ],

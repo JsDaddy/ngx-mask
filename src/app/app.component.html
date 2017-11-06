@@ -1,16 +1,16 @@
 <style>
-md-sidenav {
+mat-sidenav {
   display: flex;
   overflow: visible;
 }
 
 </style>
 
-<md-sidenav-container>
+<mat-sidenav-container>
 
-  <md-sidenav mode="side" opened="false">
+  <mat-sidenav mode="side" opened="false">
     Side menu
-  </md-sidenav>
+  </mat-sidenav>
 
   <div class="container">
 
@@ -31,15 +31,15 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-grid-list cols="1" rowHeight="140px">
+        <mat-grid-list cols="1" rowHeight="140px">
 
-          <md-grid-tile>
-            <md-toolbar color="primary">
+          <mat-grid-tile>
+            <mat-toolbar color="primary">
               <span>Examples</span>
-            </md-toolbar>
-          </md-grid-tile>
+            </mat-toolbar>
+          </mat-grid-tile>
 
-        </md-grid-list>
+        </mat-grid-list>
 
       </div>
     </div>
@@ -47,28 +47,28 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-card>
-          <md-card-header>
-            <md-card-title>Mask common case</md-card-title>
-            <md-card-subtitle>An case of date mask</md-card-subtitle>
-          </md-card-header>
-          <md-card-content>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Mask common case</mat-card-title>
+            <mat-card-subtitle>An case of date mask</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
             <div class="row">
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
-                  <md-hint><b>Mask:</b> 00/00/0000</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
+                  <mat-hint><b>Mask:</b> 00/00/0000</mat-hint>
+                </mat-input-container>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</p>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
               </div>
             </div>
-          </md-card-content>
-        </md-card>
+          </mat-card-content>
+        </mat-card>
 
       </div>
     </div>
@@ -76,43 +76,43 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-card>
-          <md-card-header>
-            <md-card-title>Other common cases</md-card-title>
-            <md-card-subtitle>Other common cases that you could apply in your projects. Try your self. :D</md-card-subtitle>
-          </md-card-header>
-          <md-card-content>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Other common cases</mat-card-title>
+            <mat-card-subtitle>Other common cases that you could apply in your projects. Try your self. :D</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
             <div class="row">
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
-                  <md-hint><b>Mask:</b> 00/00/00 00:00:00</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+                  <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
+                </mat-input-container>
               </div>
 
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Hour" mask="00:00:00">
-                  <md-hint><b>Mask:</b> 00:00:00</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Hour" mask="00:00:00">
+                  <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
+                </mat-input-container>
               </div>
 
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Mixed Type" mask="AAA 000-S0S">
-                  <md-hint><b>Mask:</b> AAA 000-S0S</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
+                  <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
+                </mat-input-container>
               </div>
 
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Phone" mask="(000) 000-0000">
-                  <md-hint><b>Mask:</b> (000) 000-0000</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Phone" mask="(000) 000-0000">
+                  <mat-hint><b>Mask:</b> (000) 000-0000</mat-hint>
+                </mat-input-container>
               </div>
             </div>
-          </md-card-content>
-        </md-card>
+          </mat-card-content>
+        </mat-card>
 
       </div>
     </div>
@@ -120,31 +120,31 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-card>
-          <md-card-header>
-            <md-card-title>Masks and special characters</md-card-title>
-            <md-card-subtitle>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Masks and special characters</mat-card-title>
+            <mat-card-subtitle>
               You could define if you want special characters propagate to the model or not with the
               attribute <b>dropSpecialCharacters</b>.
-            </md-card-subtitle>
-          </md-card-header>
-          <md-card-content>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
             <div class="row">
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
-                  <md-hint><b>Mask:</b> 000.000.000-00</md-hint>
-                </md-input-container>
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+                  <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
+                </mat-input-container>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</p>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>
               </div>
             </div>
-          </md-card-content>
-        </md-card>
+          </mat-card-content>
+        </mat-card>
 
       </div>
     </div>
@@ -152,31 +152,31 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-card>
-          <md-card-header>
-            <md-card-title>Clear if not match</md-card-title>
-            <md-card-subtitle>
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Clear if not match</mat-card-title>
+            <mat-card-subtitle>
               You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b> attribute.
-            </md-card-subtitle>
-          </md-card-header>
-          <md-card-content>
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
             <div class="row">
-              <div class="col-md-3">
-                <md-input-container>
-                  <input mdInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
+              <div class="col-mat-3">
+                <mat-input-container>
+                  <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
                     [formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">
-                  <md-hint><b>Mask:</b> 000.000</md-hint>
-                </md-input-container>
+                  <mat-hint><b>Mask:</b> 000.000</mat-hint>
+                </mat-input-container>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>
               </div>
-              <div class="col-md-3">
+              <div class="col-mat-3">
                 <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
               </div>
             </div>
-          </md-card-content>
-        </md-card>
+          </mat-card-content>
+        </mat-card>
 
       </div>
     </div>
@@ -184,19 +184,19 @@ md-sidenav {
     <div class="row">
       <div class="col-12">
 
-        <md-grid-list cols="1" rowHeight="140px">
+        <mat-grid-list cols="1" rowHeight="140px">
 
-          <md-grid-tile>
-            <md-toolbar color="primary">
+          <mat-grid-tile>
+            <mat-toolbar color="primary">
               <span>Documentation - comming soon...</span>
-            </md-toolbar>
-          </md-grid-tile>
+            </mat-toolbar>
+          </mat-grid-tile>
 
-        </md-grid-list>
+        </mat-grid-list>
 
       </div>
     </div>
 
   </div>
 
-</md-sidenav-container>
+</mat-sidenav-container>
