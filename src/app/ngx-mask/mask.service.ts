@@ -11,12 +11,13 @@ export class MaskService {
   public maskSpecialCharacters: IConfig['specialCharacters'];
   public maskAvailablePatterns: IConfig['patterns'];
   private _regExpForRemove: RegExp;
-  private _shift: Set<number> = new Set();
+  private _shift: Set<number>;
 
   public constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(config) private _config: IConfig,
   ) {
+    this._shift = new Set();
     this.clearIfNotMatch = this._config.clearIfNotMatch;
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;
     this.maskSpecialCharacters = this._config!.specialCharacters;
