@@ -16,7 +16,7 @@ export class NgxMaskModule {
       ngModule: NgxMaskModule,
       providers: [
         { provide: config, useFactory: _configFactory, deps: [_config] },
-        { provide: _config, useValue: configValue }
+        { provide: _config, useValue: { ...initialConfig, ...configValue } }
       ]
     };
   }
