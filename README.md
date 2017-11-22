@@ -112,4 +112,4 @@ Model value: 789-874.98
 
 ## Examples
 
-Check the [demo](https://nepipenkoigor.github.io/ngx-mask/).
+Check the [demo](https://jsdaddy.github.io/ngx-mask/).
