@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
-
 @Injectable()
 export class MaskService {
 
@@ -14,7 +13,8 @@ export class MaskService {
   private _shift: Set<number> = new Set();
 
   public constructor(
-    @Inject(DOCUMENT) private document: Document,
+    // tslint:disable-next-line
+    @Inject(DOCUMENT) private document: any,
     @Inject(config) private _config: IConfig,
   ) {
     this.clearIfNotMatch = this._config.clearIfNotMatch;
@@ -31,7 +31,7 @@ export class MaskService {
 
   public onTouch = () => { };
 
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
     if (inputValue === undefined || inputValue === null) {
       return '';
     }
@@ -43,7 +43,7 @@ export class MaskService {
       .split('');
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
-    < inputArray.length; i++ , inputSymbol = inputArray[i]) {
+      < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -78,7 +78,7 @@ export class MaskService {
     return result;
   }
 
-  public applyValueChanges(element: HTMLInputElement, position: number = 0, cb: Function = () => {}): void {
+  public applyValueChanges(element: HTMLInputElement, position: number = 0, cb: Function = () => { }): void {
     const val: string = element.value;
     const maskedInput: string = this.applyMask(val, this.maskExpression, position, cb);
 

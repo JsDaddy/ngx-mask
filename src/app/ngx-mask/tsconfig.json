@@ -2,13 +2,18 @@
   "extends": "../../../tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "module": "es6",
+    "module": "es2015",
     "sourceMap": false,
-    "moduleResolution": "node",
-    "outDir": "../../../build"
+    "outDir": "../../../build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
   },
+  "include": [
+    "./ngx-mask.module.ts"
+  ],
   "angularCompilerOptions": {
-    "skipMetadataEmit": false,
-    "skipTemplateCodegen": true
+    "skipTemplateCodegen": true,
+    "strictMetadataEmit": true,
+    "annotateForClosureCompiler": true
   }
 }
