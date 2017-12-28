@@ -20,6 +20,9 @@ const resolvedPromise: Promise<null> = Promise.resolve(null);
   ],
 })
 export class MaskDirective implements OnInit, ControlValueAccessor {
+
+  private _maskValue: string;
+
   public constructor(
     private _elementRef: ElementRef,
     private _renderer: Renderer2,
@@ -32,10 +35,15 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @Input('mask')
   public set maskExpression(value: string) {
-    if (!value) {
+    try {
+      this._maskValue = JSON.parse(value as string);
+    } catch (e) {
+      this._maskValue = value;
+    }
+    if (!this._maskValue) {
       return;
     }
-    this._maskService.maskExpression = value;
+    this._maskService.maskExpression = this._maskValue;
   }
 
   @Input()
@@ -66,6 +74,9 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @HostListener('input', ['$event'])
   public onInput(e: KeyboardEvent): void {
+    if (!this._maskValue) {
+      return;
+    }
     const el: HTMLInputElement = (e.target as HTMLInputElement);
     const position: number = el.selectionStart;
 

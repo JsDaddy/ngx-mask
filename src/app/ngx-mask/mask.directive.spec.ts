@@ -230,4 +230,25 @@ describe('Directive: Mask', () => {
     equal('789-874.98', '[78]*[987]');
   });
 
+  it('When I change the mask on-the-fly things should work normally', () => {
+    component.mask = '0000.0000';
+    equal('1.', '1');
+    equal('1éáa2aaaaqwo', '12');
+    equal('1234567', '1234.567');
+
+    component.mask = '0.000.000';
+    equal('1.', '1.');
+    equal('1éáa2aaaaqwo', '1.2');
+    equal('1234567', '1.234.567');
+
+    component.mask = 'null';
+    equal('1.', '1.');
+    equal('1éáa2aaaaqwo', '1éáa2aaaaqwo');
+    equal('1234567', '1234567');
+
+    component.mask = '0000.0000';
+    equal('1.', '1');
+    equal('1éáa2aaaaqwo', '12');
+    equal('1234567', '1234.567');
+  });
 });
