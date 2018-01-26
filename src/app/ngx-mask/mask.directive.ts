@@ -96,7 +96,6 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @HostListener('blur')
   public onBlur(): void {
-    this._maskService.clearIfNotMatchFn(this._elementRef.nativeElement);
     this._maskService.applyValueChanges(this._elementRef.nativeElement);
     this._maskService.onTouch();
   }
