@@ -16,7 +16,7 @@ import { IConfig } from './config';
 })
 class TestMaskComponent {
 
-  public mask: string;
+  public mask: string | null | number;
   public ngModelValue: string;
   public form: FormControl = new FormControl(null);
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
@@ -242,13 +242,37 @@ describe('Directive: Mask', () => {
     equal('1234567', '1.234.567');
 
     component.mask = 'null';
+    equal('1.', '');
+    equal('1éáa2aaaaqwo', '');
+    equal('1234567', '');
+    equal('null', 'null');
+    equal('nu3948', 'nu');
+
+    component.mask = null;
     equal('1.', '1.');
     equal('1éáa2aaaaqwo', '1éáa2aaaaqwo');
     equal('1234567', '1234567');
+
+    component.mask = 123;
+    equal('1.', '1');
+    equal('1éáa2aaaaqwo', '12');
+    equal('1234567', '123');
 
     component.mask = '0000.0000';
     equal('1.', '1');
     equal('1éáa2aaaaqwo', '12');
     equal('1234567', '1234.567');
+  });
+
+  it('0 and 0.00 should work', () => {
+    component.mask = '0';
+    equal('1.', '1');
+    equal('1éáa2aaaaqwo', '1');
+    equal('1234567', '1');
+
+    component.mask = '0.00';
+    equal('1.', '1.');
+    equal('1éáa2aaaaqwo', '1.2');
+    equal('1234567', '1.23');
   });
 });
