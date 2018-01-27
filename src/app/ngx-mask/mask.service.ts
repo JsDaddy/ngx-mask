@@ -101,16 +101,23 @@ export class MaskService {
     if (this.maskExpression.length === element.value.length) { return; }
 
     let regex: string = '';
-    this.maskExpression.split('').forEach((v: string, i: number) => {
-      const isPattern: boolean = this.maskAvailablePatterns[v] ? true : false;
-      const isOptional: boolean = isPattern && this.maskAvailablePatterns[v].optional === true;
+    for (let i: number = 0; i < this.maskExpression.length; i++) {
+      const isPattern: boolean = this.maskAvailablePatterns[this.maskExpression[i]]
+        ? true
+        : false;
+
+      const isOptional: boolean = isPattern
+        && this.maskAvailablePatterns[this.maskExpression[i]].optional === true;
 
       if (!isPattern) {
-        regex += '[' + v + ']';
+        regex += `[${this.maskExpression[i]}]`;
       } else {
-        regex += '(' + this.maskAvailablePatterns[v].pattern.source + ')' + (isOptional ? '?' : '');
+        regex += `(${this.maskAvailablePatterns[this.maskExpression[i]].pattern.source})`;
+        regex += isOptional
+            ? '?'
+            : '';
       }
-    });
+    }
 
     if (!RegExp(regex).test(maskedInput)) { element.value = ''; }
   }
