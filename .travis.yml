@@ -1,0 +1,17 @@
+dist: trusty
+sudo: false
+language: node_js
+node_js:
+  - "8"
+
+before_script:
+   - npm install -g @angular/cli
+
+install:
+  - npm install
+
+script:
+   - npm run lint
+   - npm run test
+   - npm run build
+   - npm run build:package
