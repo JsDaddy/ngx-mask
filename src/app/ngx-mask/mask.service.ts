@@ -92,15 +92,34 @@ export class MaskService {
     }
 
     if (element !== this.document.activeElement) {
-      this.clearIfNotMatchFn(element);
+      this.clearIfNotMatchFn(element, maskedInput);
     }
   }
 
-  public clearIfNotMatchFn(element: HTMLInputElement): void {
-    if (this.clearIfNotMatch === true && this.maskExpression.length
-      !== element.value.length) {
-      element.value = '';
+  public clearIfNotMatchFn(element: HTMLInputElement, maskedInput: string): void {
+    if (!this.clearIfNotMatch) { return; }
+    if (this.maskExpression.length === element.value.length) { return; }
+
+    let regex: string = '';
+    for (let i: number = 0; i < this.maskExpression.length; i++) {
+      const isPattern: boolean = this.maskAvailablePatterns[this.maskExpression[i]]
+        ? true
+        : false;
+
+      const isOptional: boolean = isPattern
+        && this.maskAvailablePatterns[this.maskExpression[i]].optional === true;
+
+      if (!isPattern) {
+        regex += `[${this.maskExpression[i]}]`;
+      } else {
+        regex += `(${this.maskAvailablePatterns[this.maskExpression[i]].pattern.source})`;
+        regex += isOptional
+            ? '?'
+            : '';
+      }
     }
+
+    if (!RegExp(regex).test(maskedInput)) { element.value = ''; }
   }
 
   private _removeMask(value: string): string {

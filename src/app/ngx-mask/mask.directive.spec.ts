@@ -251,4 +251,26 @@ describe('Directive: Mask', () => {
     equal('1éáa2aaaaqwo', '12');
     equal('1234567', '1234.567');
   });
+
+  it('optional patterns should not affect clearIfNotMatch', () => {
+    component.clearIfNotMatch = true;
+    component.mask = '0099';
+    equal('1', '');
+    equal('11', '11');
+    equal('111', '111');
+    equal('1111', '1111');
+
+    component.mask = '00990';
+    equal('1', '');
+    equal('11', '');
+    equal('111', '111');
+    equal('1111', '1111');
+
+    component.mask = '009090';
+    equal('1', '');
+    equal('11', '');
+    equal('111', '');
+    equal('1111', '1111');
+    equal('11111', '11111');
+  });
 });
