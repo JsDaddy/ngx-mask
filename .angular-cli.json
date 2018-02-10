@@ -30,6 +30,9 @@
       }
     }
   ],
+  "warnings":{
+    "typescriptMismatch":false
+  },
   "lint": [
     {
       "project": "src/tsconfig.app.json"
