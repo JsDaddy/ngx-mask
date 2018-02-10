@@ -39,13 +39,17 @@ module.exports = function(config) {
     logLevel: config.LOG_INFO,
     singleRun: true,
     browsers: ['Chrome'],
-    singleRun: true, singleRun: true,
+    singleRun: true,
     customLaunchers: {
       ChromeNoSandbox: {
-        base: 'Chrome',
+        base: 'ChromeHeadless',
         flags: [
           '--headless',
+          '--disable-gpu',
           '--no-sandbox',
+          '--no-default-browser-check',
+          '--no-first-run',
+          '--disable-default-apps'
         ]
       }
     },
