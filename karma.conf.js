@@ -38,19 +38,6 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     singleRun: true,
-    browsers: ['ChromeHeadless'],
-    customLaunchers: {
-      ChromeNoSandbox: {
-        base: 'ChromeHeadless',
-        flags: [
-          '--headless',
-          '--disable-gpu',
-          '--no-sandbox',
-          '--no-default-browser-check',
-          '--no-first-run',
-          '--disable-default-apps'
-        ]
-      }
-    },
+    browsers: ['ChromeHeadless']
   });
 };
