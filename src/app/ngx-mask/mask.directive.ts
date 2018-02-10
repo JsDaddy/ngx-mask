@@ -27,7 +27,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
     private _elementRef: ElementRef,
     private _renderer: Renderer2,
     private _maskService: MaskService,
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     resolvedPromise.then(() => this._maskService.applyValueChanges(this._elementRef.nativeElement));
