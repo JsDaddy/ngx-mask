@@ -18,7 +18,6 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --aot",
     "test": "ng test",
     "lint": "tslint './src/app/**/*.ts'",
     "build:library": "ng-packagr -p package.json"
