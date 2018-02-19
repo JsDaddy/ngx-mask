@@ -38,7 +38,7 @@ module.exports = function(config) {
     colors: true,
     logLevel: config.LOG_INFO,
     singleRun: true,
-    browsers: ['Chrome'],
+    browsers: ['ChromeNoSandbox'],
     singleRun: true,
     customLaunchers: {
       ChromeNoSandbox: {
