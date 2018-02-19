@@ -21,7 +21,8 @@
     "build": "ng build --aot",
     "test": "ng test",
     "lint": "tslint './src/app/**/*.ts'",
-    "build:package": "rm -rf ./build && mkdir build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json"
+    "build:package": "rm -rf ./build && mkdir build && ./node_modules/.bin/ngc -p ./src/app/ngx-mask/tsconfig.json",
+    "build:library": "ng-packagr -p package.json"
   },
   "main": "build/ngx-mask.module.js",
   "jsnext:main": "build/ngx-mask.module.js",
@@ -77,6 +78,7 @@
     "karma-coverage-istanbul-reporter": "1.4.1",
     "karma-jasmine": "1.1.1",
     "karma-jasmine-html-reporter": "0.2.2",
+    "ng-packagr": "2.0.0",
     "node-sass": "4.7.2",
     "pre-commit": "^1.2.2",
     "sass-loader": "6.0.6",
@@ -87,5 +89,6 @@
   "pre-commit": [
     "lint",
     "test"
-  ]
+  ],
+  "ngPackage": true
 }
