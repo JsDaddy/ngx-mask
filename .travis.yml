@@ -1,0 +1,26 @@
+sudo: false
+language: node_js
+node_js:
+  - "8"
+
+addons:
+  chrome: stable
+
+notifications:
+  email: false
+
+git:
+  depth: 3
+
+before_install:
+  - npm install -g npm@~5.3.0
+
+install:
+  - npm install
+
+script:
+   - export CHROME_BIN=chromium-browser
+   - npm run lint
+   - npm run test
+   - npm run build:library
+
