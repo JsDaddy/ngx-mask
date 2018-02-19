@@ -35,11 +35,7 @@ export class MaskDirective implements OnInit, ControlValueAccessor {
 
   @Input('mask')
   public set maskExpression(value: string) {
-    try {
-      this._maskValue = JSON.parse(value as string);
-    } catch (e) {
-      this._maskValue = value;
-    }
+    this._maskValue = value || '';
     if (!this._maskValue) {
       return;
     }

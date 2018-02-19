@@ -21,7 +21,6 @@ install:
 script:
    - export CHROME_BIN=chromium-browser
    - npm run lint
-   - ng test --single-run --no-progress --browser=ChromeNoSandbox
-   - npm run build
-   - npm run build:package
+   - npm run test
+   - npm run build:library
 
