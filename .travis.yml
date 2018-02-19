@@ -20,6 +20,6 @@ install:
 
 script:
    - npm run lint
-   - ng run test
+   - npm run test
    - npm run build:library
 
