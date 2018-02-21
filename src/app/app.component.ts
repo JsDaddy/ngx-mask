@@ -19,9 +19,6 @@ export class AppComponent {
 
   public constructor() {
     this.form = new FormControl('23234234');
-    setTimeout(() => {
-      this.form.reset();
-    }, 5000);
     this.cpfFormControl = new FormControl('04787954778');
     this.clearIfNotMatchForm = new FormControl();
   }

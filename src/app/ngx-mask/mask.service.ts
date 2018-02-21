@@ -1,7 +1,8 @@
-import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, EventEmitter, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor } from '@angular/forms';
+import 'rxjs/add/operator/take';
 
 @Injectable()
 export class MaskService implements ControlValueAccessor {
@@ -11,6 +12,7 @@ export class MaskService implements ControlValueAccessor {
   public maskExpression: string = '';
   public maskSpecialCharacters: IConfig['specialCharacters'];
   public maskAvailablePatterns: IConfig['patterns'];
+  public maskSetter$$: EventEmitter<string> = new EventEmitter();
 
   private _regExpForRemove: RegExp;
   private _shift: Set<number>;
@@ -20,7 +22,6 @@ export class MaskService implements ControlValueAccessor {
   public onChange = (_: any) => { };
 
   public onTouch = () => { };
-
 
   public constructor(
     // tslint:disable-next-line
@@ -113,12 +114,15 @@ export class MaskService implements ControlValueAccessor {
 
 
   /** It writes the value in the input */
-  public writeValue(inputValue: string): void {
-    /**
-     * FIXME init before mask expretion;
-     */
+  public async writeValue(inputValue: string): Promise<void> {
+    if (inputValue === undefined) {
+      return;
+    }
+    const maskExpression: string = this.maskExpression || await this.maskSetter$$.take(1)
+      .toPromise();
+
     inputValue
-      ? this._formElementProperty = ['value', this.applyMask(inputValue, this.maskExpression)]
+      ? this._formElementProperty = ['value', this.applyMask(inputValue, maskExpression)]
       : this._formElementProperty = ['value', ''];
   }
 
