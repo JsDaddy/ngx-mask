@@ -57,6 +57,26 @@ describe('Directive: Mask', () => {
       .toBe(expectedValue);
   }
 
+  it('Pristine and dirty', () => {
+    component.mask = '0000.0000';
+    expect(component.form.dirty)
+      .toBeFalsy();
+    expect(component.form.pristine)
+      .toBeTruthy();
+    equal('1.', '1');
+    equal('1éáa2aaaaqwo', '12');
+    equal('1234567', '1234.567');
+    expect(component.form.dirty)
+      .toBeTruthy();
+    expect(component.form.pristine)
+      .toBeFalsy();
+    component.form.reset();
+    expect(component.form.dirty)
+      .toBeFalsy();
+    expect(component.form.pristine)
+      .toBeTruthy();
+  });
+
   it('When I change the mask on-the-fly things should work normally', () => {
     component.mask = '0000.0000';
     equal('1.', '1');
