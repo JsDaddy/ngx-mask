@@ -18,10 +18,7 @@ export class AppComponent {
   public clearIfNotMatchModel: string;
 
   public constructor() {
-    this.form = new FormControl('23234234');
-    setTimeout(() => {
-      this.form.reset();
-    }, 5000);
+    this.form = new FormControl('1234567891');
     this.cpfFormControl = new FormControl('04787954778');
     this.clearIfNotMatchForm = new FormControl();
   }

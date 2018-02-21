@@ -31,6 +31,7 @@ export class MaskDirective {
       return;
     }
     this._maskService.maskExpression = this._maskValue;
+    this._maskService.maskSetter$$.emit(this._maskValue);
   }
 
   @Input()
