@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "2.3.2",
+  "version": "2.4.3",
   "description": "awesome ngx mask",
   "license": "MIT",
   "angular-cli": {},
@@ -47,17 +47,17 @@
     "@angular/platform-browser-dynamic": "5.2.5",
     "@angular/router": "5.2.5",
     "core-js": "2.5.3",
-    "rxjs": "5.5.6",
+    "rxjs": "^5.5.6",
     "ts-helpers": "1.1.2",
     "typescript": "^2.7.1",
     "zone.js": "0.8.20"
   },
   "devDependencies": {
     "@angular/animations": "5.2.5",
-    "@angular/cdk": "5.2.1",
+    "@angular/cdk": "5.2.2",
     "@angular/cli": "1.7.0",
     "@angular/compiler-cli": "5.2.5",
-    "@angular/material": "5.2.1",
+    "@angular/material": "5.2.2",
     "@types/highlight.js": "9.12.2",
     "@types/jasmine": "2.8.6",
     "@types/node": "9.4.6",
@@ -77,7 +77,7 @@
     "node-sass": "4.7.2",
     "pre-commit": "^1.2.2",
     "sass-loader": "6.0.6",
-    "ts-node": "4.1.0",
+    "ts-node": "5.0.0",
     "tslint": "5.9.1",
     "webdriver-manager": "12.0.6"
   },
