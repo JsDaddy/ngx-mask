@@ -1,21 +1,33 @@
-import { Inject, Injectable } from '@angular/core';
+import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
+import { ControlValueAccessor } from '@angular/forms';
+
 @Injectable()
-export class MaskService {
+export class MaskService implements ControlValueAccessor {
 
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
   public clearIfNotMatch: IConfig['clearIfNotMatch'];
   public maskExpression: string = '';
   public maskSpecialCharacters: IConfig['specialCharacters'];
   public maskAvailablePatterns: IConfig['patterns'];
+
   private _regExpForRemove: RegExp;
   private _shift: Set<number>;
+  private _formElement: HTMLInputElement;
+
+  // tslint:disable-next-line
+  public onChange = (_: any) => { };
+
+  public onTouch = () => { };
+
 
   public constructor(
     // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
     @Inject(config) private _config: IConfig,
+    private _elementRef: ElementRef,
+    private _renderer: Renderer2,
   ) {
     this._shift = new Set();
     this.clearIfNotMatch = this._config.clearIfNotMatch;
@@ -25,12 +37,9 @@ export class MaskService {
     this._regExpForRemove = new RegExp(this.maskSpecialCharacters
       .map((item: string) => `\\${item}`)
       .join('|'), 'gi');
+
+    this._formElement = this._elementRef.nativeElement;
   }
-
-  // tslint:disable-next-line
-  public onChange = (_: any) => { };
-
-  public onTouch = () => { };
 
   public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
     if (inputValue === undefined || inputValue === null) {
@@ -44,7 +53,7 @@ export class MaskService {
       .split('');
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
-      < inputArray.length; i++ , inputSymbol = inputArray[i]) {
+    < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (result.length === maskExpression.length) {
         break;
       }
@@ -79,35 +88,61 @@ export class MaskService {
     return result;
   }
 
-  public applyValueChanges(element: HTMLInputElement, position: number = 0, cb: Function = () => { }): void {
-    const val: string = element.value;
-    const maskedInput: string = this.applyMask(val, this.maskExpression, position, cb);
+  public applyValueChanges(position: number = 0, cb: Function = () => { }): void {
+    const maskedInput: string = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
 
-    element.value = maskedInput;
+    this._formElement.value = maskedInput;
 
-    if (this.dropSpecialCharacters === true) {
-      this.onChange(this._removeMask(maskedInput));
-    } else {
-      this.onChange(maskedInput);
+    this.dropSpecialCharacters === true
+      ? this.onChange(this._removeMask(maskedInput))
+      : this.onChange(maskedInput);
+
+    if (this._formElement === this.document.activeElement) {
+      return;
     }
+    this.clearIfNotMatchFn();
+  }
 
-    if (element !== this.document.activeElement) {
-      this.clearIfNotMatchFn(element);
+  public clearIfNotMatchFn(): void {
+    if (
+      this.clearIfNotMatch === true && this.maskExpression.length
+      !== this._formElement.value.length) {
+      this._formElementProperty = ['value', ''];
     }
   }
 
-  public clearIfNotMatchFn(element: HTMLInputElement): void {
-    if (this.clearIfNotMatch === true && this.maskExpression.length
-      !== element.value.length) {
-      element.value = '';
-    }
+
+  /** It writes the value in the input */
+  public writeValue(inputValue: string): void {
+    /**
+     * FIXME init before mask expretion;
+     */
+    inputValue
+      ? this._formElementProperty = ['value', this.applyMask(inputValue, this.maskExpression)]
+      : this._formElementProperty = ['value', ''];
+  }
+
+  // tslint:disable-next-line
+  public registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  // tslint:disable-next-line
+  public registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  /** It disables the input element */
+  public setDisabledState(isDisabled: boolean): void {
+    isDisabled
+      ? this._formElementProperty = ['disabled', 'true']
+      : this._formElementProperty = ['disabled', 'false'];
   }
 
   private _removeMask(value: string): string {
-    if (!value) {
-      return value;
-    }
-    return value.replace(this._regExpForRemove, '');
+    return value
+      ? value.replace(this._regExpForRemove, '')
+      : value;
   }
 
   private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
@@ -116,4 +151,9 @@ export class MaskService {
       || this.maskAvailablePatterns[maskSymbol] && this.maskAvailablePatterns[maskSymbol].pattern
       && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
   }
+
+  private set _formElementProperty([name, value]: [string, string]) {
+    this._renderer.setProperty(this._formElement, name, value);
+  }
+
 }
