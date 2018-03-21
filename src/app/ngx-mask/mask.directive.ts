@@ -62,10 +62,13 @@ export class MaskDirective {
 
   @HostListener('input', ['$event'])
   public onInput(e: KeyboardEvent): void {
+    const el: HTMLInputElement = (e.target as HTMLInputElement);
+
     if (!this._maskValue) {
+      this._maskService.onChange(el.value);
       return;
     }
-    const el: HTMLInputElement = (e.target as HTMLInputElement);
+
     const position: number = el.selectionStart;
 
     let caretShift: number = 0;

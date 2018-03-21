@@ -281,4 +281,13 @@ describe('Directive: Mask', () => {
     equal('1éáa2aaaaqwo', '12');
     equal('1234567', '1234.567');
   });
+
+  it('should work even has no mask', () => {
+    component.mask = '';
+
+    equal('1234567', '1234567');
+
+    expect(component.form.value)
+      .toBe('1234567');
+  });
 });
