@@ -1,10 +1,10 @@
 import {
   Directive, HostListener, Inject, Input
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { IConfig } from './config';
-import { DOCUMENT } from '@angular/common';
 
 @Directive({
   selector: '[mask]',
