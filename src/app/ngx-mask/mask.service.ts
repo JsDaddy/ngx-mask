@@ -138,9 +138,7 @@ export class MaskService implements ControlValueAccessor {
 
   /** It disables the input element */
   public setDisabledState(isDisabled: boolean): void {
-    isDisabled
-      ? this._formElementProperty = ['disabled', 'true']
-      : this._formElementProperty = ['disabled', 'false'];
+    this._formElementProperty = ['disabled', isDisabled];
   }
 
   private _removeMask(value: string): string {
