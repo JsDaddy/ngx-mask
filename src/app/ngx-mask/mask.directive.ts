@@ -22,7 +22,8 @@ export class MaskDirective {
   private _maskValue: string;
 
   public constructor(
-    @Inject(DOCUMENT) private document: Document,
+    // tslint:disable-next-line
+    @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
   ) { }
 
