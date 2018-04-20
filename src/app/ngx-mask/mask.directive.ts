@@ -1,6 +1,7 @@
 import {
-  Directive, HostListener, Input
+  Directive, HostListener, Inject, Input
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { IConfig } from './config';
@@ -21,6 +22,8 @@ export class MaskDirective {
   private _maskValue: string;
 
   public constructor(
+    // tslint:disable-next-line
+    @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
   ) { }
 
@@ -76,12 +79,16 @@ export class MaskDirective {
       position,
       (shift: number) => caretShift = shift
     );
-    el.selectionStart = el.selectionEnd = position + (
-      // tslint:disable-next-line
-      (e as any).inputType === 'deleteContentBackward'
-        ? 0
-        : caretShift
-    );
+
+    // only set the selection if the element is active
+    if (this.document.activeElement === el) {
+      el.selectionStart = el.selectionEnd = position + (
+        // tslint:disable-next-line
+        (e as any).inputType === 'deleteContentBackward'
+          ? 0
+          : caretShift
+      );
+    }
   }
 
   @HostListener('blur')
