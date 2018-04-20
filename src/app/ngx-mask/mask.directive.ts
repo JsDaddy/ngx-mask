@@ -72,23 +72,24 @@ export class MaskDirective {
       return;
     }
 
-    const position: number = el.selectionStart;
-
+    const position: number = el.selectionStart as number;
     let caretShift: number = 0;
+
     this._maskService.applyValueChanges(
       position,
       (shift: number) => caretShift = shift
     );
 
     // only set the selection if the element is active
-    if (this.document.activeElement === el) {
-      el.selectionStart = el.selectionEnd = position + (
-        // tslint:disable-next-line
-        (e as any).inputType === 'deleteContentBackward'
-          ? 0
-          : caretShift
-      );
+    if (this.document.activeElement !== el) {
+     return;
     }
+    el.selectionStart = el.selectionEnd = position + (
+      // tslint:disable-next-line
+      (e as any).inputType === 'deleteContentBackward'
+        ? 0
+        : caretShift
+    );
   }
 
   @HostListener('blur')

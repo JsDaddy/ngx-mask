@@ -35,3 +35,6 @@ Thumbs.db
 
 /src/**.*js
 /build
+
+.ng_pkg_build/
+dist.tgz
