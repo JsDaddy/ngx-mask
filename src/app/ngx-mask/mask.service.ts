@@ -2,7 +2,7 @@ import { ElementRef, EventEmitter, Inject, Injectable, Renderer2 } from '@angula
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor } from '@angular/forms';
-import 'rxjs/add/operator/take';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class MaskService implements ControlValueAccessor {
@@ -86,6 +86,11 @@ export class MaskService implements ControlValueAccessor {
       newPosition++;
     }
     cb(this._shift.has(position) ? shift : 0);
+
+    this.dropSpecialCharacters === true
+      ? this.onChange(this._removeMask(result))
+      : this.onChange(result);
+
     return result;
   }
 
@@ -93,10 +98,6 @@ export class MaskService implements ControlValueAccessor {
     const maskedInput: string = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
 
     this._formElement.value = maskedInput;
-
-    this.dropSpecialCharacters === true
-      ? this.onChange(this._removeMask(maskedInput))
-      : this.onChange(maskedInput);
 
     if (this._formElement === this.document.activeElement) {
       return;
@@ -115,10 +116,10 @@ export class MaskService implements ControlValueAccessor {
 
   /** It writes the value in the input */
   public async writeValue(inputValue: string): Promise<void> {
-    if (inputValue === undefined) {
+    if (inputValue === undefined || inputValue === null) {
       return;
     }
-    const maskExpression: string = this.maskExpression || await this.maskSetter$$.take(1)
+    const maskExpression: string = this.maskExpression || await this.maskSetter$$.pipe(take(1))
       .toPromise();
 
     inputValue

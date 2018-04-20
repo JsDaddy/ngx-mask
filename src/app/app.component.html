@@ -132,7 +132,7 @@ mat-sidenav {
             <div class="row">
               <div class="col-mat-3">
                 <mat-input-container>
-                  <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+                  <input matInput placeholder="CPF" [dropSpecialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
                   <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
                 </mat-input-container>
               </div>

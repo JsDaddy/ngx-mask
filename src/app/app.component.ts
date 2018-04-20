@@ -9,10 +9,10 @@ import { FormControl } from '@angular/forms';
 export class AppComponent {
 
   public form: FormControl;
-  public dateModel: string;
+  public dateModel: string = '23234235';
 
   public cpfFormControl: FormControl;
-  public cpfModel: string;
+  public cpfModel: string = '04787954778';
 
   public clearIfNotMatchForm: FormControl;
   public clearIfNotMatchModel: string;
