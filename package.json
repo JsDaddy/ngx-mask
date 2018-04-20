@@ -33,15 +33,14 @@
     "@angular/core": ">=2.4.3",
     "@angular/forms": ">=2.4.3",
     "@angular/platform-browser": ">=2.4.3",
-    "@angular/platform-browser-dynamic": ">=2.4.3"
+    "@angular/platform-browser-dynamic": ">=2.4.3",
+    "@angular/platform-browser-dynamic": ">=0.5.7"
   },
   "dependencies": {
     "@angular-devkit/core": "0.5.7",
     "@angular/common": "5.2.10",
     "@angular/compiler": "5.2.10",
     "@angular/core": "5.2.10",
-    "@angular/forms": "5.2.10",
-    "@angular/http": "5.2.10",
     "@angular/platform-browser": "5.2.10",
     "@angular/platform-browser-dynamic": "5.2.10",
     "@angular/router": "5.2.10",
@@ -49,7 +48,6 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
-    "@angular/animations": "5.2.10",
     "@angular/cdk": "5.2.5",
     "@angular/cli": "1.7.4",
     "@angular/compiler-cli": "5.2.10",
