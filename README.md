@@ -37,7 +37,7 @@ Then, just define masks in inputs.
 
 #### Usage
 
-```html 
+```html
 <input type='text' mask='{here comes your mask}' >
 ```
 
@@ -50,25 +50,25 @@ Then, just define masks in inputs.
 | AAAA | 0F6g |
 | SSSS | asDF |
 
-## Mask Options 
+## Mask Options
 You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive)
-### specialCharacters (string[ ]) 
+### specialCharacters (string[ ])
  We have next default characters:
-   
+
    | character |
    |-----------|
-   | / | 
-   | ( | 
+   | / |
+   | ( |
    | ) |
    | . |
    | : |
    | - |
    | **space** |
-   | + | 
-   
+   | + |
+
 ##### Usage
 
-```html 
+```html
 <input type='text' specialCharacters="[ '[' ,']' , '*' ]" mask="[00]*[000]" >
 ```
 
@@ -78,10 +78,10 @@ You can define your custom options for all directives (as  object in the mask mo
 Input value: 789-874.98
 Masked value: [78]*[987]
 ```
-   
+
 ### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
    We have next default patterns:
-   
+
   | code | meaning |
   |------|---------|
   | **0** | digits (like 0 to 9 numbers) |
@@ -90,8 +90,8 @@ Masked value: [78]*[987]
   | **S** | only letters (uppercase or lowercase) |
 
 ##### Usage:
- 
-```html 
+
+```html
 <input type='text' patterns="{'0': { pattern: new RegExp('\[a-zA-Z\]')}}" mask="(000-000)" >
 ```
 
@@ -102,12 +102,12 @@ Input value: 789HelloWorld
 Masked value: (Hel-loW)
 ```
 
-### dropSpecialCharacters (boolean) 
+### dropSpecialCharacters (boolean)
    You can choose if mask will drop special character in the model, or not, default value true
 ##### Usage
 
-```html 
-<input type='text' dropSpecialCharacters="false" mask="000-000.00" >
+```html
+<input type='text' [dropSpecialCharacters]="false" mask="000-000.00" >
 ```
 
 ##### Then:
@@ -117,8 +117,8 @@ Input value: 789-874.98
 Model value: 789-874.98
 ```
 
-### clearIfNotMatch (boolean)    
-   You can choose clear the input if the input value **not match** the mask, default value false 
+### clearIfNotMatch (boolean)
+   You can choose clear the input if the input value **not match** the mask, default value false
 
 
 ## Examples

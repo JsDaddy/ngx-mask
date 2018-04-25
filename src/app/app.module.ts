@@ -9,7 +9,6 @@ import {
     '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import 'hammerjs';
 
@@ -34,8 +33,7 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
     MatIconModule,
     MatListModule,
     MatCardModule,
-    FormsModule,
-    HttpModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
