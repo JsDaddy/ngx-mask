@@ -2,7 +2,7 @@ import { InjectionToken } from '@angular/core';
 
 export interface IConfig {
   clearIfNotMatch: boolean;
-  dropSpecialCharacters: boolean;
+  dropSpecialCharacters: boolean | string[];
   specialCharacters: string[];
   patterns: {
     [character: string]: {
@@ -11,6 +11,7 @@ export interface IConfig {
     }
   };
 }
+
 export type optionsConfig = {
   [P in keyof IConfig]?: IConfig[P]
 };
@@ -22,7 +23,7 @@ export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITI
 export const initialConfig: IConfig = {
   clearIfNotMatch: false,
   dropSpecialCharacters: true,
-  specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+'],
+  specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ','],
   patterns: {
     '0': {
       pattern: new RegExp('\\d'),

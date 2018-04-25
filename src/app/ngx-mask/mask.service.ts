@@ -2,7 +2,7 @@ import { ElementRef, EventEmitter, Inject, Injectable, Renderer2 } from '@angula
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor } from '@angular/forms';
-import { take } from 'rxjs/operators';
+import { take } from 'rxjs/operators/take';
 
 @Injectable()
 export class MaskService implements ControlValueAccessor {
@@ -14,7 +14,6 @@ export class MaskService implements ControlValueAccessor {
   public maskAvailablePatterns: IConfig['patterns'];
   public maskSetter$$: EventEmitter<string> = new EventEmitter();
 
-  private _regExpForRemove: RegExp;
   private _shift: Set<number>;
   private _formElement: HTMLInputElement;
 
@@ -35,9 +34,9 @@ export class MaskService implements ControlValueAccessor {
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;
     this.maskSpecialCharacters = this._config!.specialCharacters;
     this.maskAvailablePatterns = this._config.patterns;
-    this._regExpForRemove = new RegExp(this.maskSpecialCharacters
-      .map((item: string) => `\\${item}`)
-      .join('|'), 'gi');
+    // this._regExpForRemove = new RegExp(this.maskSpecialCharacters
+    //   .map((item: string) => `\\${item}`)
+    //   .join('|'), 'gi');
 
     this._formElement = this._elementRef.nativeElement;
   }
@@ -87,8 +86,11 @@ export class MaskService implements ControlValueAccessor {
     }
     cb(this._shift.has(position) ? shift : 0);
 
-    this.dropSpecialCharacters === true
-      ? this.onChange(this._removeMask(result))
+
+    Array.isArray(this.dropSpecialCharacters)
+      ? this.onChange(this._removeMask(result, this.dropSpecialCharacters))
+      : this.dropSpecialCharacters === true
+      ? this.onChange(this._removeMask(result, this.maskSpecialCharacters))
       : this.onChange(result);
 
     return result;
@@ -142,9 +144,9 @@ export class MaskService implements ControlValueAccessor {
     this._formElementProperty = ['disabled', isDisabled];
   }
 
-  private _removeMask(value: string): string {
+  private _removeMask(value: string, specialCharactersForRemove: string[]): string {
     return value
-      ? value.replace(this._regExpForRemove, '')
+      ? value.replace(this._regExpForRemove(specialCharactersForRemove), '')
       : value;
   }
 
@@ -157,6 +159,12 @@ export class MaskService implements ControlValueAccessor {
 
   private set _formElementProperty([name, value]: [string, string | boolean]) {
     this._renderer.setProperty(this._formElement, name, value);
+  }
+
+  private _regExpForRemove(specialCharactersForRemove: string []): RegExp {
+    return new RegExp(specialCharactersForRemove
+      .map((item: string) => `\\${item}`)
+      .join('|'), 'gi');
   }
 
 }
