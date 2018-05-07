@@ -46,6 +46,7 @@
     "@angular/platform-browser-dynamic": "5.2.10",
     "@angular/router": "5.2.10",
     "core-js": "2.5.5",
+    "rxjs-compat": "^6.1.0",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
@@ -71,12 +72,12 @@
     "ng-packagr": "2.4.2",
     "node-sass": "4.8.3",
     "pre-commit": "1.2.2",
+    "rxjs": "^6.1.0",
     "sass-loader": "7.0.1",
-    "ts-node": "6.0.0",
-    "rxjs": "5.5.10",
     "ts-helpers": "1.1.2",
-    "typescript": "2.8.3",
+    "ts-node": "6.0.0",
     "tslint": "5.9.1",
+    "typescript": "2.8.3",
     "webdriver-manager": "12.0.6"
   },
   "pre-commit": [
