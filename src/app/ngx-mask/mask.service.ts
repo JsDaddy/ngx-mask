@@ -2,7 +2,7 @@ import { ElementRef, EventEmitter, Inject, Injectable, Renderer2 } from '@angula
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor } from '@angular/forms';
-import { take } from 'rxjs/operators/take';
+import { take } from 'rxjs/operators';
 
 @Injectable()
 export class MaskService implements ControlValueAccessor {
