@@ -1,5 +1,6 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
 @import "assets/styles/variables";
+@import "assets/styles/loader";
 @include mat-core();
 $candy-app-primary: mat-palette($mat-cyan);
 $candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
@@ -52,6 +53,7 @@ body {
   font-family: sans-serif;
   padding: 0 0 100px 0;
   margin: 0;
+  position: relative;
 }
 
 .mat-drawer-container {
