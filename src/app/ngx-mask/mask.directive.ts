@@ -1,8 +1,8 @@
 import {
-  Directive, HostListener, Inject, Input
+  Directive, forwardRef, HostListener, Inject, Input
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { IConfig } from './config';
 
@@ -11,15 +11,20 @@ import { IConfig } from './config';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: MaskService,
+      useExisting: forwardRef(() => MaskDirective),
       multi: true
     },
     MaskService
   ],
 })
-export class MaskDirective {
+export class MaskDirective implements ControlValueAccessor {
 
   private _maskValue: string;
+
+  // tslint:disable-next-line
+  public onChange = (_: any) => { };
+
+  public onTouch = () => { };
 
   public constructor(
     // tslint:disable-next-line
@@ -34,7 +39,6 @@ export class MaskDirective {
       return;
     }
     this._maskService.maskExpression = this._maskValue;
-    this._maskService.maskSetter$$.emit(this._maskValue);
   }
 
   @Input()
@@ -68,7 +72,7 @@ export class MaskDirective {
     const el: HTMLInputElement = (e.target as HTMLInputElement);
 
     if (!this._maskValue) {
-      this._maskService.onChange(el.value);
+      this.onChange(el.value);
       return;
     }
 
@@ -82,7 +86,7 @@ export class MaskDirective {
 
     // only set the selection if the element is active
     if (this.document.activeElement !== el) {
-     return;
+      return;
     }
     el.selectionStart = el.selectionEnd = position + (
       // tslint:disable-next-line
@@ -95,6 +99,38 @@ export class MaskDirective {
   @HostListener('blur')
   public onBlur(): void {
     this._maskService.clearIfNotMatchFn();
-    this._maskService.onTouch();
+    this.onTouch();
   }
+
+
+  /** It writes the value in the input */
+  public async writeValue(inputValue: string): Promise<void> {
+    if (inputValue === undefined || inputValue === null) {
+      return;
+    }
+    const maskExpression: string = this._maskService.maskExpression;
+    // || await this.maskSetter$$.pipe(take(1))
+    // .toPromise();
+    inputValue
+      ? this._maskService.formElementProperty = ['value', this._maskService.applyMask(inputValue, maskExpression)]
+      : this._maskService.formElementProperty = ['value', ''];
+  }
+
+  // tslint:disable-next-line
+  public registerOnChange(fn: any): void {
+    this.onChange = fn;
+    this._maskService.onChange = this.onChange;
+  }
+
+  // tslint:disable-next-line
+  public registerOnTouched(fn: any): void {
+    this.onTouch = fn;
+  }
+
+  /** It disables the input element */
+  public setDisabledState(isDisabled: boolean): void {
+    this._maskService.formElementProperty = ['disabled', isDisabled];
+  }
+
+
 }
