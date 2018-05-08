@@ -29,11 +29,8 @@
   },
   "peerDependencies": {
     "@angular/common": ">=2.4.3",
-    "@angular/compiler": ">=2.4.3",
     "@angular/core": ">=2.4.3",
-    "@angular/forms": ">=2.4.3",
-    "@angular/platform-browser": ">=2.4.3",
-    "@angular/platform-browser-dynamic": ">=0.5.7"
+    "@angular/forms": ">=2.4.3"
   },
   "dependencies": {
     "@angular-devkit/core": "0.5.8",
@@ -44,7 +41,6 @@
     "@angular/forms": "5.2.10",
     "@angular/platform-browser": "5.2.10",
     "@angular/platform-browser-dynamic": "5.2.10",
-    "@angular/router": "5.2.10",
     "core-js": "2.5.5",
     "zone.js": "0.8.26"
   },
