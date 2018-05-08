@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatButtonModule, MatCardModule, MatGridListModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule,
   MatListModule,
   MatSelectModule, MatSidenavModule,
   MatToolbarModule
@@ -28,6 +28,7 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
     MatToolbarModule,
     MatSelectModule,
     MatButtonModule,
+    MatFormFieldModule,
     MatInputModule,
     NgxMaskModule.forRoot(),
     MatIconModule,

@@ -55,10 +55,10 @@ mat-sidenav {
           <mat-card-content>
             <div class="row">
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Date" mask="00/00/0000" [formControl]="form" [(ngModel)]="dateModel">
                   <mat-hint><b>Mask:</b> 00/00/0000</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
               <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</p>
@@ -84,31 +84,31 @@ mat-sidenav {
           <mat-card-content>
             <div class="row">
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
                   <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
 
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Hour" mask="00:00:00">
                   <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
 
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
                   <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
 
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Phone" mask="(000) 000-0000">
                   <mat-hint><b>Mask:</b> (000) 000-0000</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
             </div>
           </mat-card-content>
@@ -131,10 +131,10 @@ mat-sidenav {
           <mat-card-content>
             <div class="row">
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="CPF" [dropSpecialCharacters]="false" mask="000.000.000-00" [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
                   <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
               <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</p>
@@ -162,11 +162,11 @@ mat-sidenav {
           <mat-card-content>
             <div class="row">
               <div class="col-mat-3">
-                <mat-input-container>
+                <mat-form-field>
                   <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
                     [formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">
                   <mat-hint><b>Mask:</b> 000.000</mat-hint>
-                </mat-input-container>
+                </mat-form-field>
               </div>
               <div class="col-mat-3">
                 <p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>
