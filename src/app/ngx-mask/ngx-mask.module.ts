@@ -1,11 +1,9 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MaskDirective } from './mask.directive';
 
 import { config, INITIAL_CONFIG, initialConfig, NEW_CONFIG, optionsConfig } from './config';
 
 @NgModule({
-  imports: [CommonModule],
   exports: [MaskDirective],
   declarations: [MaskDirective]
 })

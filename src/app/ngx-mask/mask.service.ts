@@ -1,18 +1,15 @@
-import { ElementRef, EventEmitter, Inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
-import { ControlValueAccessor } from '@angular/forms';
-import { take } from 'rxjs/operators/take';
 
 @Injectable()
-export class MaskService implements ControlValueAccessor {
+export class MaskService {
 
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
   public clearIfNotMatch: IConfig['clearIfNotMatch'];
   public maskExpression: string = '';
   public maskSpecialCharacters: IConfig['specialCharacters'];
   public maskAvailablePatterns: IConfig['patterns'];
-  public maskSetter$$: EventEmitter<string> = new EventEmitter();
 
   private _shift: Set<number>;
   private _formElement: HTMLInputElement;
@@ -34,15 +31,12 @@ export class MaskService implements ControlValueAccessor {
     this.dropSpecialCharacters = this._config.dropSpecialCharacters;
     this.maskSpecialCharacters = this._config!.specialCharacters;
     this.maskAvailablePatterns = this._config.patterns;
-    // this._regExpForRemove = new RegExp(this.maskSpecialCharacters
-    //   .map((item: string) => `\\${item}`)
-    //   .join('|'), 'gi');
 
     this._formElement = this._elementRef.nativeElement;
   }
 
   public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
-    if (inputValue === undefined || inputValue === null) {
+    if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
     }
 
@@ -111,37 +105,12 @@ export class MaskService implements ControlValueAccessor {
     if (
       this.clearIfNotMatch === true && this.maskExpression.length
       !== this._formElement.value.length) {
-      this._formElementProperty = ['value', ''];
+      this.formElementProperty = ['value', ''];
     }
   }
 
-
-  /** It writes the value in the input */
-  public async writeValue(inputValue: string): Promise<void> {
-    if (inputValue === undefined || inputValue === null) {
-      return;
-    }
-    const maskExpression: string = this.maskExpression || await this.maskSetter$$.pipe(take(1))
-      .toPromise();
-
-    inputValue
-      ? this._formElementProperty = ['value', this.applyMask(inputValue, maskExpression)]
-      : this._formElementProperty = ['value', ''];
-  }
-
-  // tslint:disable-next-line
-  public registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  // tslint:disable-next-line
-  public registerOnTouched(fn: any): void {
-    this.onTouch = fn;
-  }
-
-  /** It disables the input element */
-  public setDisabledState(isDisabled: boolean): void {
-    this._formElementProperty = ['disabled', isDisabled];
+  public set formElementProperty([name, value]: [string, string | boolean]) {
+    this._renderer.setProperty(this._formElement, name, value);
   }
 
   private _removeMask(value: string, specialCharactersForRemove: string[]): string {
@@ -157,9 +126,6 @@ export class MaskService implements ControlValueAccessor {
       && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
   }
 
-  private set _formElementProperty([name, value]: [string, string | boolean]) {
-    this._renderer.setProperty(this._formElement, name, value);
-  }
 
   private _regExpForRemove(specialCharactersForRemove: string []): RegExp {
     return new RegExp(specialCharactersForRemove
