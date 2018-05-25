@@ -1,6 +1,4 @@
-import {
-  Directive, forwardRef, HostListener, Inject, Input
-} from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
@@ -20,6 +18,7 @@ import { IConfig } from './config';
 export class MaskDirective implements ControlValueAccessor {
 
   private _maskValue: string;
+  private _inputValue: string;
 
   // tslint:disable-next-line
   public onChange = (_: any) => { };
@@ -39,6 +38,11 @@ export class MaskDirective implements ControlValueAccessor {
       return;
     }
     this._maskService.maskExpression = this._maskValue;
+    this._maskService.formElementProperty = [
+      'value',
+      this._maskService.applyMask(this._inputValue, this._maskService.maskExpression)
+    ];
+
   }
 
   @Input()
@@ -70,7 +74,7 @@ export class MaskDirective implements ControlValueAccessor {
   @HostListener('input', ['$event'])
   public onInput(e: KeyboardEvent): void {
     const el: HTMLInputElement = (e.target as HTMLInputElement);
-
+    this._inputValue = el.value;
     if (!this._maskValue) {
       this.onChange(el.value);
       return;
@@ -108,12 +112,13 @@ export class MaskDirective implements ControlValueAccessor {
     if (inputValue === undefined || inputValue === null) {
       return;
     }
-    const maskExpression: string = this._maskService.maskExpression;
-    // || await this.maskSetter$$.pipe(take(1))
-    // .toPromise();
-    inputValue
-      ? this._maskService.formElementProperty = ['value', this._maskService.applyMask(inputValue, maskExpression)]
-      : this._maskService.formElementProperty = ['value', ''];
+    inputValue && this._maskService.maskExpression
+      ? this._maskService.formElementProperty = [
+        'value',
+        this._maskService.applyMask(inputValue, this._maskService.maskExpression)
+      ]
+      : this._maskService.formElementProperty = ['value', inputValue];
+    this._inputValue = inputValue;
   }
 
   // tslint:disable-next-line
