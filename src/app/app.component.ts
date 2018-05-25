@@ -17,6 +17,7 @@ export class AppComponent {
   public clearIfNotMatchForm: FormControl;
   public clearIfNotMatchModel: string;
 
+
   public constructor() {
     this.form = new FormControl('23234234');
     this.cpfFormControl = new FormControl('04787954778');
