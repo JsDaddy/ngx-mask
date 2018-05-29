@@ -46,6 +46,7 @@ Then, just define masks in inputs.
 | mask | example |
 | ------- | ------- |
 | 9999-99-99 | 2017-04-15 |
+| 0*.00 | 2017.22 |
 | 000.000.000-99 | 048.457.987-98 |
 | AAAA | 0F6g |
 | SSSS | asDF |
@@ -65,18 +66,20 @@ You can define your custom options for all directives (as  object in the mask mo
    | - |
    | **space** |
    | + |
+   | , |
+   | @ |
 
 ##### Usage
 
 ```html
-<input type='text' specialCharacters="[ '[' ,']' , '*' ]" mask="[00]*[000]" >
+<input type='text' specialCharacters="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
 ```
 
 ##### Then:
 
 ```
 Input value: 789-874.98
-Masked value: [78]*[987]
+Masked value: [78]\[987]
 ```
 
 ### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})

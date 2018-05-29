@@ -23,7 +23,7 @@ export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITI
 export const initialConfig: IConfig = {
   clearIfNotMatch: false,
   dropSpecialCharacters: true,
-  specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ','],
+  specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ',', '@'],
   patterns: {
     '0': {
       pattern: new RegExp('\\d'),

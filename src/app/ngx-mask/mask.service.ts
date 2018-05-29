@@ -48,17 +48,22 @@ export class MaskService {
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
     < inputArray.length; i++ , inputSymbol = inputArray[i]) {
-      if (result.length === maskExpression.length) {
+      if (cursor === maskExpression.length) {
         break;
       }
 
-      if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+      if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '*') {
+        result += inputSymbol;
+      } else if (maskExpression[cursor + 1] === '*' && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])) {
+        result += inputSymbol;
+        cursor += 3;
+      } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
         result += inputSymbol;
         cursor++;
       } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
         result += maskExpression[cursor];
         cursor++;
-        this._shift.add(cursor);
+        this._shift.add(inputArray.length);
         i--;
       } else if (this.maskSpecialCharacters.indexOf(inputSymbol) > -1
         && this.maskAvailablePatterns[maskExpression[cursor]]
