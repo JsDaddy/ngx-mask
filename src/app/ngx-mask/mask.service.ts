@@ -45,6 +45,8 @@ export class MaskService {
 
     const inputArray: string[] = inputValue.toString()
       .split('');
+
+    let multi: boolean = false;
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
     < inputArray.length; i++ , inputSymbol = inputArray[i]) {
@@ -52,9 +54,20 @@ export class MaskService {
         break;
       }
 
-      if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '*') {
+      if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
         result += inputSymbol;
-      } else if (maskExpression[cursor + 1] === '*' && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])) {
+        cursor += 2;
+      } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '*') {
+        result += inputSymbol;
+        multi = true;
+      } else if (maskExpression[cursor + 1] === '*' && multi && this._checkSymbolMask(
+        inputSymbol,
+        maskExpression[cursor + 2]
+      )) {
+        result += inputSymbol;
+        cursor += 3;
+        multi = false;
+      } else if (maskExpression[cursor + 1] === '?' && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])) {
         result += inputSymbol;
         cursor += 3;
       } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
