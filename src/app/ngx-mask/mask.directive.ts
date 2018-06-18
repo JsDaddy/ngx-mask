@@ -67,6 +67,11 @@ export class MaskDirective implements ControlValueAccessor {
   }
 
   @Input()
+  public set showTemplate(value: IConfig['showTemplate']) {
+    this._maskService.showTemplate = value;
+  }
+
+  @Input()
   public set clearIfNotMatch(value: IConfig['clearIfNotMatch']) {
     this._maskService.clearIfNotMatch = value;
   }

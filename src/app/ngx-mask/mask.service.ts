@@ -6,6 +6,7 @@ import { DOCUMENT } from '@angular/common';
 export class MaskService {
 
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
+  public showTemplate: IConfig['showTemplate'];
   public clearIfNotMatch: IConfig['clearIfNotMatch'];
   public maskExpression: string = '';
   public maskSpecialCharacters: IConfig['specialCharacters'];
@@ -49,7 +50,7 @@ export class MaskService {
     let multi: boolean = false;
     // tslint:disable-next-line
     for (let i: number = 0, inputSymbol: string = inputArray[0]; i
-    < inputArray.length; i++ , inputSymbol = inputArray[i]) {
+      < inputArray.length; i++ , inputSymbol = inputArray[i]) {
       if (cursor === maskExpression.length) {
         break;
       }
@@ -76,7 +77,10 @@ export class MaskService {
       } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
         result += maskExpression[cursor];
         cursor++;
-        this._shift.add(inputArray.length);
+        const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+          ? inputArray.length
+          : cursor;
+        this._shift.add(shiftStep);
         i--;
       } else if (this.maskSpecialCharacters.indexOf(inputSymbol) > -1
         && this.maskAvailablePatterns[maskExpression[cursor]]
@@ -85,6 +89,7 @@ export class MaskService {
         i--;
       }
     }
+
     if (result.length + 1 === maskExpression.length
       && this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
       result += maskExpression[maskExpression.length - 1];
@@ -102,8 +107,8 @@ export class MaskService {
     Array.isArray(this.dropSpecialCharacters)
       ? this.onChange(this._removeMask(result, this.dropSpecialCharacters))
       : this.dropSpecialCharacters === true
-      ? this.onChange(this._removeMask(result, this.maskSpecialCharacters))
-      : this.onChange(result);
+        ? this.onChange(this._removeMask(result, this.maskSpecialCharacters))
+        : this.onChange(result);
 
     return result;
   }
@@ -145,7 +150,7 @@ export class MaskService {
   }
 
 
-  private _regExpForRemove(specialCharactersForRemove: string []): RegExp {
+  private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
     return new RegExp(specialCharactersForRemove
       .map((item: string) => `\\${item}`)
       .join('|'), 'gi');
