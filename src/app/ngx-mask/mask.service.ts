@@ -97,6 +97,7 @@ export class MaskService {
 
     let shift: number = 1;
     let newPosition: number = position + 1;
+
     while (this._shift.has(newPosition)) {
       shift++;
       newPosition++;
