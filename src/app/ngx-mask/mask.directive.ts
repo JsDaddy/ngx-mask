@@ -19,6 +19,7 @@ export class MaskDirective implements ControlValueAccessor {
 
   private _maskValue: string;
   private _inputValue: string;
+  private _position: number | null = null;
 
   // tslint:disable-next-line
   public onChange = (_: any) => { };
@@ -84,7 +85,6 @@ export class MaskDirective implements ControlValueAccessor {
       this.onChange(el.value);
       return;
     }
-
     const position: number = el.selectionStart as number;
     let caretShift: number = 0;
 
@@ -97,18 +97,25 @@ export class MaskDirective implements ControlValueAccessor {
     if (this.document.activeElement !== el) {
       return;
     }
-    el.selectionStart = el.selectionEnd = position + (
-      // tslint:disable-next-line
-      (e as any).inputType === 'deleteContentBackward'
-        ? 0
-        : caretShift
-    );
+    el.selectionStart = el.selectionEnd = this._position !== null
+      ? this._position
+      : position + (
+        // tslint:disable-next-line
+        (e as any).inputType === 'deleteContentBackward'
+          ? 0
+          : caretShift
+      );
+    this._position = null;
   }
 
   @HostListener('blur')
   public onBlur(): void {
     this._maskService.clearIfNotMatchFn();
     this.onTouch();
+  }
+  @HostListener('paste')
+  public onPaste(): void {
+    this._position = Number.MAX_SAFE_INTEGER;
   }
 
 
