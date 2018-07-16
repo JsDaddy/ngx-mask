@@ -1,6 +1,6 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatButtonModule, MatCardModule, MatGridListModule, MatIconModule, MatInputModule,
+  MatButtonModule, MatCardModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule,
   MatListModule,
   MatSelectModule, MatSidenavModule,
   MatToolbarModule
@@ -9,7 +9,6 @@ import {
     '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
 import { NgModule } from '@angular/core';
 import 'hammerjs';
 
@@ -29,13 +28,13 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
     MatToolbarModule,
     MatSelectModule,
     MatButtonModule,
+    MatFormFieldModule,
     MatInputModule,
     NgxMaskModule.forRoot(),
     MatIconModule,
     MatListModule,
     MatCardModule,
-    FormsModule,
-    HttpModule
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

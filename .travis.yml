@@ -22,5 +22,4 @@ script:
    - export CHROME_BIN=chromium-browser
    - npm run lint
    - npm run test
-   - npm run build:library
 

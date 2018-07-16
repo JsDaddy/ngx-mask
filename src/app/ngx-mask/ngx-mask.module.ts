@@ -1,13 +1,14 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MaskDirective } from './mask.directive';
 
 import { config, INITIAL_CONFIG, initialConfig, NEW_CONFIG, optionsConfig } from './config';
+import { MaskApplierService } from './mask-applier.service';
+import { MaskDirective } from './mask.directive';
+import { MaskPipe } from './mask.pipe';
 
 @NgModule({
-  imports: [CommonModule],
-  exports: [MaskDirective],
-  declarations: [MaskDirective]
+  providers: [MaskApplierService],
+  exports: [MaskDirective, MaskPipe],
+  declarations: [MaskDirective, MaskPipe]
 })
 export class NgxMaskModule {
 

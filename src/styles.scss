@@ -1,49 +1,35 @@
-@import '~@angular/material/theming';
+@import "~@angular/material/theming";
+@import "assets/styles/variables";
+@import "assets/styles/loader";
 @include mat-core();
-
 $candy-app-primary: mat-palette($mat-cyan);
-$candy-app-accent:  mat-palette($mat-pink, A200, A100, A400);
-$candy-app-warn:    mat-palette($mat-red);
-
+$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
+$candy-app-warn: mat-palette($mat-red);
 $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
-
 @include angular-material-theme($candy-app-theme);
 
 @mixin ngmask-input-theme($theme) {
-
   $foreground: map-get($theme, foreground);
-
   $input-placeholder-color: mat-color($foreground, secondary-text);
-
   mat-input-container {
-
     mat-hint {
       color: $input-placeholder-color;
     }
-
   }
-
 }
-
 @include ngmask-input-theme($candy-app-theme);
-
 mat-card {
-
   mat-card-content {
     padding-left: 10px;
     padding-right: 10px;
   }
-
 }
-
-
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
   src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
 }
-
 .material-icons {
   font-family: 'Material Icons';
   font-weight: normal;
@@ -59,42 +45,166 @@ mat-card {
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
-
-
 mat-input-container {
   width: 100%;
 }
 
-
-/** LOGO */
-
-* {
-  font-family: 'Lato', sans-serif;
+body {
+  font-family: sans-serif;
+  padding: 0 0 100px 0;
+  margin: 0;
+  position: relative;
 }
 
+.mat-drawer-container {
+  background-color: #fff;
+}
+
+.mat-grid-list,
+.mat-grid-tile,
+.mat-grid-tile .mat-figure{
+  position: inherit !important;
+}
+
+.mat-toolbar {
+  background-color: #fff;
+  color: $black;
+}
+.mat-toolbar-row,
+.mat-toolbar-single-row {
+  padding: 0 !important;
+  span {
+    font-size: 24px;
+  }
+}
+
+.mat-grid-wr {
+  padding-top: 40px;
+  padding-bottom: 35px;
+}
 header {
-
-  h1 {
-    margin-bottom: -24px;
-
-    .plugin-name {
-      font-size: 140px;
-      margin-left: -10px;
-      color: #00bcd4;
+  padding: 10px 0;
+  background-color: #f8f8f8;
+  .logo {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding-top: 6px;
+    a {
+      display: block;
+      img {
+        width: 100%;
+        max-width: 140px;
+      }
     }
-
+  }
+  .title {
+    padding: 0;
+    margin: 0;
+    .plugin-name {
+      font-size: 60px;
+      color: $yellow;
+    }
     .jq-label {
-      font-size: 35px;
-      margin-bottom: -20px;
-      color: #CFCFCF;
+      font-size: 26px;
+      line-height: 30px;
+      color: $black;
       display: block;
     }
-
   }
-
   span.subtitle {
     margin-bottom: 20px;
     font-size: 14px;
   }
+}
 
+.mat-card:not([class*=mat-elevation-z]) {
+  box-shadow: none !important;
+}
+.mat-card-wr {
+  font-family: 'Lato', sans-serif;
+  padding-bottom: 60px;
+  .mat-card {
+    border-radius: 0;
+    padding: 0;
+    font-family: 'Lato', sans-serif;
+    color: $black;
+  }
+  .mat-drawer-container {
+    color: $black;
+  }
+  .mat-card-header-text {
+    padding: 0 0 25px 0;
+    margin: 0;
+    width: 100%;
+  }
+  .mat-card-header .mat-card-subtitle:not(:first-child) {
+    font-weight: normal;
+  }
+  .mat-card-subtitle,
+  .mat-card-content,
+  .mat-card-header .mat-card-title {
+    font-size: 16px;
+  }
+  .mat-card-header .mat-card-subtitle:not(:first-child) {
+    margin: 0;
+  }
+  .mat-card-actions,
+  .mat-card-content,
+  .mat-card-subtitle,
+  .mat-card-title {
+    margin-bottom: 10px;
+  }
+  .mat-card-content>:last-child:not(.mat-card-footer),
+  .mat-card>:last-child:not(.mat-card-footer) {
+    margin: 0;
+    padding: 0;
+  }
+  .mat-form-field.mat-focused {
+    .mat-form-field-ripple {
+      background-color: $yellow;
+    }
+    .mat-form-field-label {
+      color: $black;
+    }
+  }
+  .form-control {
+    padding-right: 20px;
+  }
+  .flex-row {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    .flex-cell {
+      &:last-child {
+        width: 100%;
+        padding-left: 40px;
+      }
+      b {
+        display: inline-block;
+        padding-right: 10px;
+      }
+    }
+    p {
+      display: inline-block;
+      vertical-align: middle;
+      padding-right: 30px;
+    }
+  }
+  .mat-form-wr {
+    margin-right: 60px;
+  }
+}
+.git-link {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  transition: $transition-default;
+  img {
+    max-width: 30px;
+    opacity: 0.9;
+  }
+  &:hover  {
+    opacity: 0.8;
+  }
 }

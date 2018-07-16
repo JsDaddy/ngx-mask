@@ -203,6 +203,16 @@ describe('Directive: Mask', () => {
       .toBe('25-78-98');
     expect(component.ngModelValue)
       .toBe('25-78-98');
+
+
+    component.mask = '00-00/00';
+    component.dropSpecialCharacters = ['/'];
+    equal('257898', '25-78/98');
+    expect(component.form.value)
+      .toBe('25-7898');
+    expect(component.ngModelValue)
+      .toBe('25-7898');
+
   });
 
   it('model values shouldnt be bigger length than masks', () => {
@@ -280,5 +290,14 @@ describe('Directive: Mask', () => {
     equal('1.', '1');
     equal('1éáa2aaaaqwo', '12');
     equal('1234567', '1234.567');
+  });
+
+  it('should work even has no mask', () => {
+    component.mask = '';
+
+    equal('1234567', '1234567');
+
+    expect(component.form.value)
+      .toBe('1234567');
   });
 });
