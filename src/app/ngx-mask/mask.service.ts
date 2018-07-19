@@ -65,6 +65,7 @@ export class MaskService extends MaskApplierService {
       this.clearIfNotMatch === true && this.maskExpression.length
       !== this._formElement.value.length) {
       this.formElementProperty = ['value', ''];
+        this.applyMask(this._formElement.value, this.maskExpression);
     }
   }
 
