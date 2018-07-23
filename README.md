@@ -97,7 +97,7 @@ Masked value: [78]\[987]
 ```html
 <input type='text' patterns="customPatterns" mask="(000-000)" >
 ```
-and in your component 
+and in your component
 
 ```typescript
 public customPatterns = {'0': { pattern: new RegExp('\[a-zA-Z\]')}};
@@ -108,6 +108,14 @@ public customPatterns = {'0': { pattern: new RegExp('\[a-zA-Z\]')}};
 ```
 Input value: 789HelloWorld
 Masked value: (Hel-loW)
+```
+
+### prefix (string)
+   You can add prefix to you masked value
+##### Usage
+
+```html
+<input type='text' prefix="+7 " mask="(000) 000 00 00" >
 ```
 
 ### dropSpecialCharacters (boolean)
