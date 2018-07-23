@@ -9,7 +9,7 @@ import { FormControl } from '@angular/forms';
 export class AppComponent {
 
   public form: FormControl;
-  public dateModel: string = '23234235';
+  public dateModel: string = '';
 
   public cpfFormControl: FormControl;
   public cpfModel: string = '04787954778';

@@ -53,7 +53,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="(000) 000-0000" [formControl]="form" [(ngModel)]="dateModel">
+                    <input matInput placeholder="Date" mask="(000) 000-0000" prefix="+7 " [formControl]="form" >
                     <mat-hint><b>Mask:</b> 00/00/0000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -68,138 +68,138 @@
       </div>
     </div>
   </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="mat-card-wr">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Other common cases</mat-card-title>
-              <mat-card-subtitle>Other common cases that you could apply in your projects. Try your self. :D
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="row">
-                <div class="col-mat-3">
-                  <div class="mat-form-wr">
-                    <mat-form-field>
-                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
-                      <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="col-mat-3">
-                  <div class="mat-form-wr">
-                    <mat-form-field>
-                      <input matInput placeholder="Hour" mask="00:00:00">
-                      <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="col-mat-3">
-                  <div class="mat-form-wr">
-                    <mat-form-field>
-                      <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
-                      <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
-                    </mat-form-field>
-                  </div>
-                </div>
-                <div class="col-mat-3">
-                  <div class="mat-form-wr">
-                    <mat-form-field>
-                      <input matInput placeholder="Phone" mask="(000) 000-0000">
-                      <mat-hint><b>Mask:</b> (000) 000-0000</mat-hint>
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="mat-card-wr">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Masks and special characters</mat-card-title>
-              <mat-card-subtitle>
-                You could define if you want special characters propagate to the model or not with the
-                attribute <b>dropSpecialCharacters</b>.
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="flex-row">
-                <div class="flex-cell">
-                  <mat-form-field>
-                    <input matInput placeholder="CPF" [dropSpecialCharacters]="false" mask="000.000.000-00"
-                           [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
-                    <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
-                  </mat-form-field>
-                </div>
-                <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="mat-card-wr">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>Clear if not match</mat-card-title>
-              <mat-card-subtitle>
-                You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b>
-                attribute.
-              </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-              <div class="flex-row">
-                <div class="flex-cell">
-                  <mat-form-field>
-                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
-                           [formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">
-                    <mat-hint><b>Mask:</b> 000.000</mat-hint>
-                  </mat-form-field>
-                </div>
-                <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
-                </div>
-              </div>
-            </mat-card-content>
-          </mat-card>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div class="mat-grid-wr">
-          <mat-grid-list cols="1" rowHeight="55px">
-            <mat-grid-tile>
-              <mat-toolbar>
-                <span>Documentation - see docs on
-                  <a class="git-link" target="_blank" href="https://github.com/JsDaddy/ngx-mask">
-                    <img src="assets/img/github.png" alt="github">
-                  </a>
-                </span>
-              </mat-toolbar>
-            </mat-grid-tile>
-          </mat-grid-list>
-        </div>
-      </div>
-    </div>
-  </div>
+  <!--<div class="container">-->
+    <!--<div class="row">-->
+      <!--<div class="col-12">-->
+        <!--<div class="mat-card-wr">-->
+          <!--<mat-card>-->
+            <!--<mat-card-header>-->
+              <!--<mat-card-title>Other common cases</mat-card-title>-->
+              <!--<mat-card-subtitle>Other common cases that you could apply in your projects. Try your self. :D-->
+              <!--</mat-card-subtitle>-->
+            <!--</mat-card-header>-->
+            <!--<mat-card-content>-->
+              <!--<div class="row">-->
+                <!--<div class="col-mat-3">-->
+                  <!--<div class="mat-form-wr">-->
+                    <!--<mat-form-field>-->
+                      <!--<input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">-->
+                      <!--<mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>-->
+                    <!--</mat-form-field>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-mat-3">-->
+                  <!--<div class="mat-form-wr">-->
+                    <!--<mat-form-field>-->
+                      <!--<input matInput placeholder="Hour" mask="00:00:00">-->
+                      <!--<mat-hint><b>Mask:</b> 00:00:00</mat-hint>-->
+                    <!--</mat-form-field>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-mat-3">-->
+                  <!--<div class="mat-form-wr">-->
+                    <!--<mat-form-field>-->
+                      <!--<input matInput placeholder="Mixed Type" mask="AAA 000-S0S">-->
+                      <!--<mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>-->
+                    <!--</mat-form-field>-->
+                  <!--</div>-->
+                <!--</div>-->
+                <!--<div class="col-mat-3">-->
+                  <!--<div class="mat-form-wr">-->
+                    <!--<mat-form-field>-->
+                      <!--<input matInput placeholder="Phone" mask="(000) 000-0000">-->
+                      <!--<mat-hint><b>Mask:</b> (000) 000-0000</mat-hint>-->
+                    <!--</mat-form-field>-->
+                  <!--</div>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-card-content>-->
+          <!--</mat-card>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="container">-->
+    <!--<div class="row">-->
+      <!--<div class="col-12">-->
+        <!--<div class="mat-card-wr">-->
+          <!--<mat-card>-->
+            <!--<mat-card-header>-->
+              <!--<mat-card-title>Masks and special characters</mat-card-title>-->
+              <!--<mat-card-subtitle>-->
+                <!--You could define if you want special characters propagate to the model or not with the-->
+                <!--attribute <b>dropSpecialCharacters</b>.-->
+              <!--</mat-card-subtitle>-->
+            <!--</mat-card-header>-->
+            <!--<mat-card-content>-->
+              <!--<div class="flex-row">-->
+                <!--<div class="flex-cell">-->
+                  <!--<mat-form-field>-->
+                    <!--<input matInput placeholder="CPF" [dropSpecialCharacters]="false" mask="000.000.000-00"-->
+                           <!--[formControl]="cpfFormControl" [(ngModel)]="cpfModel">-->
+                    <!--<mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>-->
+                  <!--</mat-form-field>-->
+                <!--</div>-->
+                <!--<div class="flex-cell">-->
+                  <!--<p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</p>-->
+                  <!--<p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-card-content>-->
+          <!--</mat-card>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="container">-->
+    <!--<div class="row">-->
+      <!--<div class="col-12">-->
+        <!--<div class="mat-card-wr">-->
+          <!--<mat-card>-->
+            <!--<mat-card-header>-->
+              <!--<mat-card-title>Clear if not match</mat-card-title>-->
+              <!--<mat-card-subtitle>-->
+                <!--You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b>-->
+                <!--attribute.-->
+              <!--</mat-card-subtitle>-->
+            <!--</mat-card-header>-->
+            <!--<mat-card-content>-->
+              <!--<div class="flex-row">-->
+                <!--<div class="flex-cell">-->
+                  <!--<mat-form-field>-->
+                    <!--<input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"-->
+                           <!--[formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">-->
+                    <!--<mat-hint><b>Mask:</b> 000.000</mat-hint>-->
+                  <!--</mat-form-field>-->
+                <!--</div>-->
+                <!--<div class="flex-cell">-->
+                  <!--<p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>-->
+                  <!--<p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</mat-card-content>-->
+          <!--</mat-card>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="container">-->
+    <!--<div class="row">-->
+      <!--<div class="col-12">-->
+        <!--<div class="mat-grid-wr">-->
+          <!--<mat-grid-list cols="1" rowHeight="55px">-->
+            <!--<mat-grid-tile>-->
+              <!--<mat-toolbar>-->
+                <!--<span>Documentation - see docs on-->
+                  <!--<a class="git-link" target="_blank" href="https://github.com/JsDaddy/ngx-mask">-->
+                    <!--<img src="assets/img/github.png" alt="github">-->
+                  <!--</a>-->
+                <!--</span>-->
+              <!--</mat-toolbar>-->
+            <!--</mat-grid-tile>-->
+          <!--</mat-grid-list>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+  <!--</div>-->
 </mat-sidenav-container>

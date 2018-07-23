@@ -39,11 +39,11 @@ export class MaskDirective implements ControlValueAccessor {
             return;
         }
         this._maskService.maskExpression = this._maskValue;
-
         this._maskService.formElementProperty = [
             'value',
             this._maskService.applyMask(this._inputValue, this._maskService.maskExpression)
         ];
+
     }
 
     @Input()
@@ -60,6 +60,22 @@ export class MaskDirective implements ControlValueAccessor {
             return;
         }
         this._maskService.maskAvailablePatterns = value;
+    }
+
+    @Input()
+    public set prefix(value: IConfig['prefix']) {
+        if (!value) {
+            return;
+        }
+        this._maskService.prefix = value;
+    }
+
+    @Input()
+    public set sufix(value: IConfig['sufix']) {
+        if (!value) {
+            return;
+        }
+        this._maskService.sufix = value;
     }
 
     @Input()
@@ -85,6 +101,7 @@ export class MaskDirective implements ControlValueAccessor {
             this.onChange(el.value);
             return;
         }
+
         const position: number = el.selectionStart as number;
         let caretShift: number = 0;
 
@@ -97,6 +114,7 @@ export class MaskDirective implements ControlValueAccessor {
         if (this.document.activeElement !== el) {
             return;
         }
+
         el.selectionStart = el.selectionEnd = this._position !== null
             ? this._position
             : position + (
@@ -114,6 +132,35 @@ export class MaskDirective implements ControlValueAccessor {
         this.onTouch();
     }
 
+    @HostListener('click', ['$event'])
+    public onFocus(e: MouseEvent | KeyboardEvent): void {
+
+        if (!this._maskService.prefix) {
+            return;
+        }
+        const el: HTMLInputElement = (e.target as HTMLInputElement);
+
+
+        if ((el.selectionStart === el.selectionEnd)
+            && el.selectionStart
+            > this._maskService.prefix.length
+            // tslint:disable-next-line
+            && (e as any).keyCode
+            !== 38) {
+            return;
+        }
+        e.preventDefault();
+        el.selectionStart = el.selectionEnd = this._maskService.prefix.length;
+
+    }
+
+    @HostListener('keydown', ['$event'])
+    public a(e: KeyboardEvent): void {
+        if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 8) {
+            this.onFocus(e);
+        }
+    }
+
     @HostListener('paste')
     public onPaste(): void {
         this._position = Number.MAX_SAFE_INTEGER;
@@ -125,12 +172,14 @@ export class MaskDirective implements ControlValueAccessor {
         if (inputValue === undefined) {
             return;
         }
+
         inputValue && this._maskService.maskExpression
             ? this._maskService.formElementProperty = [
                 'value',
                 this._maskService.applyMask(inputValue, this._maskService.maskExpression)
             ]
             : this._maskService.formElementProperty = ['value', inputValue];
+
         this._inputValue = inputValue;
     }
 
