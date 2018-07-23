@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { MaskApplierService } from './mask-applier.service';
-import { MaskPipe } from './mask.pipe';
-import { NgxMaskModule } from './ngx-mask.module';
+import { MaskApplierService } from '../mask-applier.service';
+import { MaskPipe } from '../mask.pipe';
+import { NgxMaskModule } from '../ngx-mask.module';
 
 describe('Pipe: Mask', () => {
   let maskPipe: MaskPipe;
