@@ -9,6 +9,7 @@ import { IConfig } from 'public_api';
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
       [patterns]="patterns"
+      [prefix]="prefix"
       [formControl]="form"
       [(ngModel)]="ngModelValue">`
 })
@@ -19,5 +20,6 @@ export class TestMaskComponent {
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
   public patterns: IConfig['patterns'];
+  public prefix: IConfig['prefix'] = '';
   public specialCharacters: IConfig['specialCharacters'];
 }

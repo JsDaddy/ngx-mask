@@ -28,4 +28,9 @@ describe('Pipe: Mask', () => {
 
     expect(maskedNumber).toEqual('123-456-789');
   });
+
+  it('should mask a number  and string', () => {
+    const maskedNumberAndString: string | number = maskPipe.transform('123abc', '09A/SAS');
+    expect(maskedNumberAndString).toEqual('123/abc');
+  });
 });

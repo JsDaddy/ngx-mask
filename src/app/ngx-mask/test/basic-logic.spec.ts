@@ -233,4 +233,19 @@ describe('Directive: Mask', () => {
     expect(component.form.value)
       .toBe('1234567');
   });
+
+  it('should be a UA phone', () => {
+    component.mask = '000-00-00-00-000';
+    equal('380975577234', '380-97-55-77-234', fixture);
+  });
+
+  it('should be a pasport number', () => {
+    component.mask = 'AA 000000';
+    equal('GH 234098', 'GH 234098', fixture);
+  });
+
+  it('should be bank card number', () => {
+    component.mask = '0000-0000-0000-0000';
+    equal('1234567890123456', '1234-5678-9012-3456', fixture);
+  });
 });
