@@ -41,6 +41,14 @@ Then, just define masks in inputs.
 <input type='text' mask='{here comes your mask}' >
 ```
 
+Also you can use mask pipe
+
+#### Usage
+
+```html
+<span>{{phone | mask: '(000) 000-0000'}}</span>
+```
+
 #### Examples
 
 | mask | example |
