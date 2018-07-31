@@ -1,3 +1,4 @@
+export * from './app/ngx-mask/mask.pipe.ts';
 export * from './app/ngx-mask/config';
 export * from './app/ngx-mask/mask.directive';
 export * from './app/ngx-mask/mask.service';
