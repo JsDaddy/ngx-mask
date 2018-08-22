@@ -103,7 +103,7 @@ Masked value: [78]\[987]
 ##### Usage:
 
 ```html
-<input type='text' patterns="customPatterns" mask="(000-000)" >
+<input type='text' [patterns]="customPatterns" mask="(000-000)" >
 ```
 and in your component
 
