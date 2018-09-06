@@ -8,14 +8,10 @@ import { MaskDirective } from './mask.directive';
 export class MaskService extends MaskApplierService {
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
-
   private _formElement: HTMLInputElement;
-
   // tslint:disable-next-line
   public onChange = (_: any) => {};
-
   public onTouch = () => {};
-
   public constructor(
     // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
@@ -24,7 +20,6 @@ export class MaskService extends MaskApplierService {
     private _renderer: Renderer2
   ) {
     super(_config);
-
     this._formElement = this._elementRef.nativeElement;
   }
 
@@ -40,7 +35,6 @@ export class MaskService extends MaskApplierService {
       position,
       cb
     );
-
     Array.isArray(this.dropSpecialCharacters)
         ? this.onChange(this._removeMask(this._removePrefix(result), this.dropSpecialCharacters))
         : this.dropSpecialCharacters === true
@@ -63,9 +57,7 @@ export class MaskService extends MaskApplierService {
       position,
       cb
     );
-
     this._formElement.value = maskedInput;
-
     if (this._formElement === this.document.activeElement) {
       return;
     }
