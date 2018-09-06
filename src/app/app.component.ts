@@ -12,7 +12,7 @@ export class AppComponent {
   public dateModel: string = '';
 
   public cpfFormControl: FormControl;
-  public cpfModel: string = '04787954778';
+  public cpfModel: number | string = '4787954778';
 
   public clearIfNotMatchForm: FormControl;
   public clearIfNotMatchModel: string;
@@ -20,7 +20,7 @@ export class AppComponent {
 
   public constructor() {
     this.form = new FormControl('23234234');
-    this.cpfFormControl = new FormControl('04787954778');
+    this.cpfFormControl = new FormControl(this.cpfModel);
     this.clearIfNotMatchForm = new FormControl();
   }
 

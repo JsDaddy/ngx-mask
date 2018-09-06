@@ -16,14 +16,15 @@ import { IConfig } from './config';
     ],
 })
 export class MaskDirective implements ControlValueAccessor {
+    public maskServiceFlag: boolean = false;
 
     private _maskValue: string;
     private _inputValue: string;
     private _position: number | null = null;
 
+
     // tslint:disable-next-line
     public onChange = (_: any) => { };
-
     public onTouch = () => { };
 
     public constructor(
@@ -169,19 +170,23 @@ export class MaskDirective implements ControlValueAccessor {
 
     /** It writes the value in the input */
     public async writeValue(inputValue: string): Promise<void> {
-        if (inputValue === undefined) {
-            return;
-        }
+      if (inputValue === undefined) {
+          return;
+      }
+      if (typeof inputValue === 'number') {
+        inputValue = String(inputValue);
+        this._maskService.isNumberValue = true;
 
-        inputValue && this._maskService.maskExpression
-            ? this._maskService.formElementProperty = [
-                'value',
-                this._maskService.applyMask(inputValue, this._maskService.maskExpression)
-            ]
-            : this._maskService.formElementProperty = ['value', inputValue];
+      }
+      inputValue && this._maskService.maskExpression
+          ? this._maskService.formElementProperty = [
+              'value',
+              this._maskService.applyMask(inputValue, this._maskService.maskExpression)
+          ]
+          : this._maskService.formElementProperty = ['value', inputValue];
 
-        this._inputValue = inputValue;
-    }
+      this._inputValue = inputValue;
+  }
 
     // tslint:disable-next-line
     public registerOnChange(fn: any): void {
@@ -200,4 +205,4 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
 
-}
+  }

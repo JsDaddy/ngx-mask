@@ -37,7 +37,7 @@ export class MaskApplierService {
         maskExpression: string,
         position: number = 0,
         cb: Function = () => {}
-    ): string {
+      ): string {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
         }
