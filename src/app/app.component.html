@@ -53,13 +53,13 @@
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="(000) 000-0000" prefix="+7 " [formControl]="form" >
+                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="clearIfNotMatchFormDate" [(ngModel)]="clearIfNotMatchModelDate">
                       <mat-hint><b>Mask:</b> 00/00/0000</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
-                    <p><b>FormControl:</b>{{ form.value ? form.value : 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
+                    <p><b>FormControl:</b> {{ clearIfNotMatchFormDate.value ? clearIfNotMatchFormDate.value : 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ clearIfNotMatchModelDate ? clearIfNotMatchModelDate : 'Empty' }}</p>
                   </div>
                 </div>
               </mat-card-content>
@@ -135,7 +135,7 @@
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.00"
+                      <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"
                              [formControl]="cpfFormControl">
                       <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
                     </mat-form-field>
@@ -177,6 +177,64 @@
                     <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
                   </div>
                 </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="mat-card-wr">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Phone number</mat-card-title>
+                <mat-card-subtitle>
+                  You can add prefix to you masked value
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                  <div class="flex-row">
+                    <div class="flex-cell-padding">
+                      <mat-form-field>
+                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7 " [formControl]="form" [(ngModel)]="dateModel">
+                        <mat-hint><b>Mask:</b>+7 (000) 000 00 00</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <p><b>FormControl:</b>{{ form.value ? form.value : 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="mat-card-wr">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Number or string</mat-card-title>
+                <mat-card-subtitle>
+                  You can pass in value of type number or string
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                  <div class="flex-row">
+                    <div class="flex-cell-padding">
+                      <mat-form-field>
+                        <input matInput placeholder="Type number or string" mask="000.00" [formControl]="cpfFormControl" >
+                        <mat-hint><b>Mask:</b>000.00</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <!-- <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ clearIfNotMatchFormNumber.value ? clearIfNotMatchFormNumber.value : 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ clearIfNotMatchModelNumber ? clearIfNotMatchModelNumber : 'Empty' }}</p>
+                    </div> -->
+                  </div>
               </mat-card-content>
             </mat-card>
           </div>

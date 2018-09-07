@@ -6,6 +6,7 @@ import { IConfig } from 'public_api';
   selector: 'test-mask',
   template: `<input [mask]="mask"
       [clearIfNotMatch]="clearIfNotMatch"
+      [clearIfNotMatchDate]="clearIfNotMatchDate"
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
       [patterns]="patterns"
@@ -19,6 +20,8 @@ export class TestMaskComponent {
   public form: FormControl = new FormControl(null);
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
+  // public clearIfNotMatchNumber: IConfig['clearIfNotMatchNumber'] = false;
+  public clearIfNotMatchDate: IConfig['clearIfNotMatchDate'] = false;
   public patterns: IConfig['patterns'];
   public prefix: IConfig['prefix'] = '';
   public specialCharacters: IConfig['specialCharacters'];

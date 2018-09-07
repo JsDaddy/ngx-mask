@@ -7,6 +7,8 @@ export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
     public showTemplate: IConfig['showTemplate'];
     public clearIfNotMatch: IConfig['clearIfNotMatch'];
+    // public clearIfNotMatchNumber: IConfig['clearIfNotMatchNumber'];
+    public clearIfNotMatchDate: IConfig['clearIfNotMatchDate'];
     public maskExpression: string = '';
     public maskSpecialCharacters: IConfig['specialCharacters'];
     public maskAvailablePatterns: IConfig['patterns'];
@@ -24,6 +26,8 @@ export class MaskApplierService {
         this.maskAvailablePatterns = this._config.patterns;
 
         this.clearIfNotMatch = this._config.clearIfNotMatch;
+        // this.clearIfNotMatchNumber = this._config.clearIfNotMatchNumber;
+        this.clearIfNotMatchDate = this._config.clearIfNotMatchDate;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;

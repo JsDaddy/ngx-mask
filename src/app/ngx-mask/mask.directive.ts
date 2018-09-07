@@ -101,6 +101,16 @@ export class MaskDirective implements ControlValueAccessor {
     this._maskService.clearIfNotMatch = value;
   }
 
+  // @Input()
+  // public set clearIfNotMatchNumber(value: IConfig['clearIfNotMatchNumber']) {
+  //   this._maskService.clearIfNotMatchNumber = value;
+  // }
+
+  @Input()
+  public set clearIfNotMatchDate(value: IConfig['clearIfNotMatchDate']) {
+    this._maskService.clearIfNotMatchDate = value;
+  }
+
   @HostListener('input', ['$event'])
   public onInput(e: KeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
