@@ -29,14 +29,12 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): string  {
-    console.log(maskExpression);
     const result: string  = super.applyMask(
       inputValue,
       maskExpression,
       position,
       cb
     );
-    console.log(result);
     Array.isArray(this.dropSpecialCharacters)
         ? this.onChange(this._removeMask(this._removePrefix(result), this.dropSpecialCharacters))
         : this.dropSpecialCharacters === true

@@ -24,7 +24,6 @@ export class AppComponent {
 
   public constructor() {
     this.form = new FormControl('2323423412');
-    this.form.valueChanges.subscribe((item) => console.log(item));
     this.cpfFormControl = new FormControl(this.cpfModel);
     this.clearIfNotMatchForm = new FormControl();
     // this.clearIfNotMatchFormNumber = new FormControl();
