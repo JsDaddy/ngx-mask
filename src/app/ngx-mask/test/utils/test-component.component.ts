@@ -15,7 +15,7 @@ import { IConfig } from 'public_api';
 })
 export class TestMaskComponent {
   public mask: string | null;
-  public ngModelValue: string;
+  public ngModelValue: string | number;
   public form: FormControl = new FormControl(null);
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;

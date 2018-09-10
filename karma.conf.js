@@ -15,12 +15,6 @@ module.exports = function(config) {
     client: {
       clearContext: false // leave Jasmine Spec Runner output visible in browser
     },
-    files: [
-      
-    ],
-    preprocessors: {
-      
-    },
     mime: {
       'text/x-typescript': ['ts', 'tsx']
     },
@@ -37,7 +31,6 @@ module.exports = function(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    singleRun: true,
     browsers: ['ChromeNoSandbox'],
     singleRun: true,
     customLaunchers: {
