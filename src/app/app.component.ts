@@ -8,20 +8,26 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent {
 
+
   public form: FormControl;
-  public dateModel: string = '';
-
+  public formDate: FormControl;
   public cpfFormControl: FormControl;
-  public cpfModel: string = '04787954778';
+  public clearIfNotMatch: FormControl;
+  public numberOrStringForm: FormControl;
 
-  public clearIfNotMatchForm: FormControl;
-  public clearIfNotMatchModel: string;
+  public numberOrStringFormModel: string | number = '';
+  public clearIfNotMatchModel: string | number = '';
+  public formModelDate: string | number = '';
+  public cpfModel: string | number = '';
+  public dateModel: string | number = '';
 
 
   public constructor() {
-    this.form = new FormControl('23234234');
-    this.cpfFormControl = new FormControl('04787954778');
-    this.clearIfNotMatchForm = new FormControl();
+    this.form = new FormControl('');
+    this.formDate = new FormControl('');
+    this.cpfFormControl = new FormControl();
+    this.clearIfNotMatch = new FormControl();
+    this.numberOrStringForm = new FormControl();
   }
 
 }

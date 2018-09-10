@@ -153,7 +153,8 @@ header {
   .mat-card-content,
   .mat-card-subtitle,
   .mat-card-title {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    padding:0px;
   }
   .mat-card-content>:last-child:not(.mat-card-footer),
   .mat-card>:last-child:not(.mat-card-footer) {

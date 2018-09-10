@@ -1,5 +1,5 @@
 // tslint:disable-next-line:no-any
-export function typeTest(inputValue: string, fixture: any): string {
+export function typeTest(inputValue: string, fixture: any): string  {
   fixture.detectChanges();
 
   fixture.nativeElement.querySelector('input').value = inputValue;
