@@ -53,13 +53,13 @@
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="clearIfNotMatchFormDate" [(ngModel)]="clearIfNotMatchModelDate">
-                      <mat-hint><b>Mask:</b> 00/00/0000</mat-hint>
+                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
+                      <mat-hint> <b>Mask:</b> 00/00/0000</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ clearIfNotMatchFormDate.value ? clearIfNotMatchFormDate.value : 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ clearIfNotMatchModelDate ? clearIfNotMatchModelDate : 'Empty' }}</p>
+                    <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
                   </div>
                 </div>
               </mat-card-content>
@@ -75,8 +75,6 @@
             <mat-card>
               <mat-card-header>
                 <mat-card-title>Other common cases</mat-card-title>
-                <mat-card-subtitle>Other common cases that you could apply in your projects. Try your self. :D
-                </mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
                 <div class="row">
@@ -84,7 +82,7 @@
                     <div class="mat-form-wr">
                       <mat-form-field>
                         <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
-                        <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
+                        <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
                       </mat-form-field>
                     </div>
                   </div>
@@ -92,7 +90,7 @@
                     <div class="mat-form-wr">
                       <mat-form-field>
                         <input matInput placeholder="Hour" mask="00:00:00">
-                        <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
+                        <mat-hint> <b>Mask:</b> 00:00:00</mat-hint>
                       </mat-form-field>
                     </div>
                   </div>
@@ -100,15 +98,7 @@
                     <div class="mat-form-wr">
                       <mat-form-field>
                         <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
-                        <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Phone" mask="(000) 000-0000">
-                        <mat-hint><b>Mask:</b> (000) 000-0000</mat-hint>
+                        <mat-hint> <b>Mask:</b> AAA 000-S0S</mat-hint>
                       </mat-form-field>
                     </div>
                   </div>
@@ -136,13 +126,13 @@
                   <div class="flex-cell">
                     <mat-form-field>
                       <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"
-                             [formControl]="cpfFormControl">
-                      <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
+                             [formControl]="cpfFormControl"  [(ngModel)]="cpfModel">
+                      <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>
+                    <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value: 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ cpfModel ? cpfModel: 'Empty' }}</p>
                   </div>
                 </div>
               </mat-card-content>
@@ -168,13 +158,13 @@
                   <div class="flex-cell">
                     <mat-form-field>
                       <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
-                             [formControl]="clearIfNotMatchForm" [(ngModel)]="clearIfNotMatchModel">
-                      <mat-hint><b>Mask:</b> 000.000</mat-hint>
+                             [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
+                      <mat-hint><b>Mask:</b>000.000</mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ clearIfNotMatchForm.value ? clearIfNotMatchForm.value : 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
+                    <p><b>FormControl:</b> {{ clearIfNotMatch.value ? clearIfNotMatch.value: 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p>
                   </div>
                 </div>
               </mat-card-content>
@@ -199,11 +189,13 @@
                     <div class="flex-cell-padding">
                       <mat-form-field>
                         <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7 " [formControl]="form" [(ngModel)]="dateModel">
-                        <mat-hint><b>Mask:</b>+7 (000) 000 00 00</mat-hint>
+                        <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                       </mat-form-field>
                     </div>
-                    <p><b>FormControl:</b>{{ form.value ? form.value : 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
+                    <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ form.value ? form.value: 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ dateModel ? dateModel: 'Empty' }}</p>
+                    </div>
                   </div>
               </mat-card-content>
             </mat-card>
@@ -226,14 +218,14 @@
                   <div class="flex-row">
                     <div class="flex-cell-padding">
                       <mat-form-field>
-                        <input matInput placeholder="Type number or string" mask="000.00" [formControl]="cpfFormControl" >
-                        <mat-hint><b>Mask:</b>000.00</mat-hint>
+                        <input matInput placeholder="Type number or string" mask="000.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
+                        <mat-hint><b>Mask: </b>000.00</mat-hint>
                       </mat-form-field>
                     </div>
-                    <!-- <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ clearIfNotMatchFormNumber.value ? clearIfNotMatchFormNumber.value : 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ clearIfNotMatchModelNumber ? clearIfNotMatchModelNumber : 'Empty' }}</p>
-                    </div> -->
+                    <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
+                    </div>
                   </div>
               </mat-card-content>
             </mat-card>

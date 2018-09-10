@@ -26,13 +26,13 @@ export class MaskDirective implements ControlValueAccessor {
   private _inputValue: string;
   private _position: number | null = null;
   // tslint:disable-next-line
-  public onChange = (_: any) => {};
-  public onTouch = () => {};
+  public onChange = (_: any) => { };
+  public onTouch = () => { };
   public constructor(
     // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService
-  ) {}
+  ) { }
 
   @Input('mask')
   public set maskExpression(value: string) {
@@ -101,16 +101,6 @@ export class MaskDirective implements ControlValueAccessor {
     this._maskService.clearIfNotMatch = value;
   }
 
-  // @Input()
-  // public set clearIfNotMatchNumber(value: IConfig['clearIfNotMatchNumber']) {
-  //   this._maskService.clearIfNotMatchNumber = value;
-  // }
-
-  @Input()
-  public set clearIfNotMatchDate(value: IConfig['clearIfNotMatchDate']) {
-    this._maskService.clearIfNotMatchDate = value;
-  }
-
   @HostListener('input', ['$event'])
   public onInput(e: KeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
@@ -133,8 +123,8 @@ export class MaskDirective implements ControlValueAccessor {
       this._position !== null
         ? this._position
         : position +
-          // tslint:disable-next-line
-          ((e as any).inputType === 'deleteContentBackward' ? 0 : caretShift);
+        // tslint:disable-next-line
+        ((e as any).inputType === 'deleteContentBackward' ? 0 : caretShift);
     this._position = null;
   }
 
@@ -146,10 +136,12 @@ export class MaskDirective implements ControlValueAccessor {
 
   @HostListener('click', ['$event'])
   public onFocus(e: MouseEvent | KeyboardEvent): void {
+    const el: HTMLInputElement = e.target as HTMLInputElement;
     if (!this._maskService.prefix) {
       return;
+    } else if (el !== null) {
+      el.value = this._maskService.prefix;
     }
-    const el: HTMLInputElement = e.target as HTMLInputElement;
     if (
       el !== null && el.selectionStart !== null &&
       el.selectionStart === el.selectionEnd &&
@@ -186,12 +178,12 @@ export class MaskDirective implements ControlValueAccessor {
     }
     inputValue && this._maskService.maskExpression
       ? (this._maskService.formElementProperty = [
-          'value',
-          this._maskService.applyMask(
-            inputValue,
-            this._maskService.maskExpression
-          )
-        ])
+        'value',
+        this._maskService.applyMask(
+          inputValue,
+          this._maskService.maskExpression
+        )
+      ])
       : (this._maskService.formElementProperty = ['value', inputValue]);
     this._inputValue = inputValue;
   }

@@ -4,8 +4,6 @@ export interface IConfig {
     sufix: string;
     prefix: string;
     clearIfNotMatch: boolean;
-    // clearIfNotMatchNumber: boolean;
-    clearIfNotMatchDate: boolean;
     showTemplate: boolean;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
@@ -26,8 +24,6 @@ export const initialConfig: IConfig = {
     sufix: '',
     prefix: '',
     clearIfNotMatch: false,
-    // clearIfNotMatchNumber: false,
-    clearIfNotMatchDate: false,
     showTemplate: false,
     dropSpecialCharacters: true,
     specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ',', '@', '[', ']'],

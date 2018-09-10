@@ -2,7 +2,6 @@ import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService } from './mask-applier.service';
-import { MaskDirective } from './mask.directive';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
