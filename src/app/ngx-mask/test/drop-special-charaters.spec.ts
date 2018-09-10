@@ -29,18 +29,12 @@ describe('Directive: Mask', () => {
         expect(component.ngModelValue)
             .toBe('25-78-98');
 
-        component.form.setValue('123456');
-        fixture.detectChanges();
-        expect(component.form.value)
-            .toBe('12-34-56');
-
         component.form.setValue(123456);
-        fixture.detectChanges();
+        equal('123456', '12-34-56', fixture);
         expect(component.form.value)
             .toBe('12-34-56');
-
-        // expect(component.ngModelValue)
-        //     .toBe('12-34-56');
+        expect(component.ngModelValue)
+            .toBe('12-34-56');
 
         component.mask = '00-00/00';
         component.dropSpecialCharacters = ['/'];
