@@ -1,16 +1,8 @@
 <a name="6.1.3"></a>
-# [6.1.3 update demo] (2018-10-09)
+# [6.1.3 update demo, added support, resolved issues] (2018-10-09)
 
 Update of demo version
-
-<a name="6.1.3"></a>
-# [6.1.3 support for numer or string] (2018-10-09)
-
 Added support to pass in value of type number or string
-
-<a name="6.1.3"></a>
-# [6.1.3 Resolved issue] (2018-10-09)
-
 Resolved issues
 
 <a name="6.1.1"></a>
