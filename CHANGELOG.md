@@ -1,27 +1,42 @@
-<a name="6.1.1"></a>
-# [6.1.1 suport for prefix] (2018-23-07)
+<a name="6.1.3"></a>
+# [6.1.3 update demo] (2018-10-09)
 
-Add suport for prefix
+Update of demo version
+
+<a name="6.1.3"></a>
+# [6.1.3 support for numer or string] (2018-10-09)
+
+Added support to pass in value of type number or string
+
+<a name="6.1.3"></a>
+# [6.1.3 Resolved issue] (2018-10-09)
+
+Resolved issues
+
+<a name="6.1.1"></a>
+# [6.1.1 support for prefix] (2018-23-07)
+
+Add support for prefix
 
 <a name="2.9.5"></a>
-# [2.9.5 suport for optional character in input '?'] (2018-18-06)
+# [2.9.5 support for optional character in input '?'] (2018-18-06)
 
 Add [ and ] as defoult symbols for mask
 
 <a name="2.9.4"></a>
-# [2.9.4 suport for optional character in input '?'] (2018-18-06)
+# [2.9.4 support for optional character in input '?'] (2018-18-06)
 
 Fix shift for cursor and updated all dependencies
 
 <a name="2.9.3"></a>
-# [2.9.3 suport for optional character in input '?'] (2018-29-05)
+# [2.9.3 support for optional character in input '?'] (2018-29-05)
 
-Add suport for optional character in input '?'
+Add support for optional character in input '?'
 
 <a name="2.8.3"></a>
-# [2.8.3 suport for multicharacter input '*'] (2018-29-05)
+# [2.8.3 support for multicharacter input '*'] (2018-29-05)
 
-Add suport for multicharacter input '*'
+Add support for multicharacter input '*'
 
 
 <a name="2.7.3"></a>
