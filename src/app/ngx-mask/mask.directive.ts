@@ -151,7 +151,6 @@ export class MaskDirective implements ControlValueAccessor {
           this._maskService.maskIsShown = this._maskService.maskExpression.replace(/[0-9]/g, '_');
           el.value = this._maskService.prefix + this._maskService.maskIsShown;
           el.selectionStart = this._maskService.prefix.length + 1;
-          return;
         }
     }
     if (
