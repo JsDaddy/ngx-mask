@@ -139,10 +139,9 @@ export class MaskDirective implements ControlValueAccessor {
     const el: HTMLInputElement = e.target as HTMLInputElement;
     if (!this._maskService.prefix) {
       return;
-    } else if (el !== null && el.value !== '') {
-      return;
-    } else if (el !== null) {
-      el.value = this._maskService.prefix;
+    }
+    if (!el.value ) {
+        el.value = this._maskService.prefix;
     }
     if (
       el !== null && el.selectionStart !== null &&
