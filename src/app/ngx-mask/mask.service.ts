@@ -45,10 +45,12 @@ export class MaskService extends MaskApplierService {
              : this._removeMask(this._removePrefix(result), this.maskSpecialCharacters)
             )
          : this.onChange(this._removePrefix(result));
-         const ifMaskIsShown: string = '';
-        // if (this.prefix && this.showMaskTyped) {
-        //   console.log(this.prefix + this.maskIsShown);
-        // }
+         let ifMaskIsShown: string = '';
+        if (this.prefix && this.showMaskTyped) {
+          const resLen: number = result.length;
+          const prefNmask: string = this.prefix + this.maskIsShown;
+          ifMaskIsShown = prefNmask.slice(resLen);
+        }
     return result + ifMaskIsShown;
   }
 
