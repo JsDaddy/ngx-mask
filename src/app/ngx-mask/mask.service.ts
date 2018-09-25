@@ -7,6 +7,8 @@ import { MaskApplierService } from './mask-applier.service';
 export class MaskService extends MaskApplierService {
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
+  public showMaskTyped: boolean = false;
+  public maskIsShown: string = '';
   private _formElement: HTMLInputElement;
   // tslint:disable-next-line
   public onChange = (_: any) => {};
@@ -43,7 +45,11 @@ export class MaskService extends MaskApplierService {
              : this._removeMask(this._removePrefix(result), this.maskSpecialCharacters)
             )
          : this.onChange(this._removePrefix(result));
-    return result;
+         const ifMaskIsShown: string = '';
+        // if (this.prefix && this.showMaskTyped) {
+        //   console.log(this.prefix + this.maskIsShown);
+        // }
+    return result + ifMaskIsShown;
   }
 
   public applyValueChanges(
