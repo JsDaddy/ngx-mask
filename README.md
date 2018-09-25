@@ -141,6 +141,14 @@ Input value: 789-874.98
 Model value: 789-874.98
 ```
 
+### showMaskTyped (boolean)
+  You can choose if mask is shown while typing, or not, default value false
+##### Usage
+
+```html
+ <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true">
+```
+
 ### clearIfNotMatch (boolean)
    You can choose clear the input if the input value **not match** the mask, default value false
 
