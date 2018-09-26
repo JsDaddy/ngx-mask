@@ -22,9 +22,13 @@ describe('Directive: Mask', () => {
 
   it('should clear if not match the mask!!!!', () => {
     component.mask = '(000) 000-0000';
-    // component.prefix = '+7';
     component.showMaskTyped = true;
     equal('', '(___) ___-____', fixture);
     equal('2345678', '(234) 567-8___', fixture);
+
+    component.prefix = '+7';
+    component.showMaskTyped = true;
+    equal('', '+7(___) ___-____', fixture);
+    equal('2345678', '+7(234) 567-8___', fixture);
   });
 });
