@@ -25,5 +25,6 @@ describe('Directive: Mask', () => {
     component.prefix = '+7';
     component.showMaskTyped = true;
     equal('', '+7(___) ___-____', fixture);
+    equal('2345', '+7(234) 5__-____', fixture);
   });
 });
