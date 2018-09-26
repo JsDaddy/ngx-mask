@@ -11,6 +11,7 @@ import { IConfig } from 'public_api';
       [patterns]="patterns"
       [prefix]="prefix"
       [formControl]="form"
+      [showMaskTyped] = "showMaskTyped"
       [(ngModel)]="ngModelValue">`
 })
 export class TestMaskComponent {
@@ -22,4 +23,5 @@ export class TestMaskComponent {
   public patterns: IConfig['patterns'];
   public prefix: IConfig['prefix'] = '';
   public specialCharacters: IConfig['specialCharacters'];
+  public showMaskTyped: IConfig['showMaskTyped'];
 }

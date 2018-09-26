@@ -53,7 +53,6 @@ export class MaskService extends MaskApplierService {
             )
          : this.onChange(this._removePrefix(result));
           let ifMaskIsShown: string = '';
-          console.log('fsaf', this.maskIsShown, result);
           if (!this.showMaskTyped) {
             return result;
           }
