@@ -21,11 +21,9 @@ describe('Directive: Mask', () => {
   });
 
   it('should clear if not match the mask!!!!', () => {
-    component.mask = '000.000-00';
-    component.clearIfNotMatch = true;
-    equal('', '', fixture);
-    equal('2571989', '', fixture);
-    equal('2571989888988', '257.198-98', fixture);
-    equal('111.111-11', '111.111-11', fixture);
+    component.mask = '(000) 000-0000';
+    component.prefix = '+7';
+    // component.showMaskTyped = true;
+    equal('', '+7', fixture);
   });
 });
