@@ -24,7 +24,8 @@ export class AppComponent {
   public showMaskModel: string | number = '';
 
 
-  public constructor() {
+  public constructor(
+  ) {
     this.form = new FormControl('');
     this.form1 = new FormControl('');
     this.formDate = new FormControl('');
