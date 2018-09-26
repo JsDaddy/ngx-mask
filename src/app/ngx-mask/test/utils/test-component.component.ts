@@ -23,5 +23,5 @@ export class TestMaskComponent {
   public patterns: IConfig['patterns'];
   public prefix: IConfig['prefix'] = '';
   public specialCharacters: IConfig['specialCharacters'];
-  public showMaskTyped: IConfig['showMaskTyped'];
+  public showMaskTyped: IConfig['showMaskTyped'] = false;
 }
