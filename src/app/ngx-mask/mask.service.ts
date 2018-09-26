@@ -7,6 +7,8 @@ import { MaskApplierService } from './mask-applier.service';
 export class MaskService extends MaskApplierService {
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
+  public showMaskTyped: boolean = false;
+  public maskIsShown: string = '';
   private _formElement: HTMLInputElement;
   // tslint:disable-next-line
   public onChange = (_: any) => {};
@@ -28,6 +30,13 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): string  {
+    if (this.showMaskTyped) {
+      this.maskIsShown = this.maskExpression.replace(/[0-9]/g, '_');
+    }
+    const _maskIsShown: string = this.maskIsShown || '';
+    if (!inputValue) {
+      return this.prefix + _maskIsShown;
+    }
     const result: string  = super.applyMask(
       inputValue,
       maskExpression,
@@ -43,7 +52,14 @@ export class MaskService extends MaskApplierService {
              : this._removeMask(this._removePrefix(result), this.maskSpecialCharacters)
             )
          : this.onChange(this._removePrefix(result));
-    return result;
+          let ifMaskIsShown: string = '';
+          if (!this.showMaskTyped) {
+            return result;
+          }
+          const resLen: number = result.length;
+          const prefNmask: string = this.prefix + this.maskIsShown;
+          ifMaskIsShown = prefNmask.slice(resLen);
+    return result + ifMaskIsShown;
   }
 
   public applyValueChanges(
@@ -61,6 +77,12 @@ export class MaskService extends MaskApplierService {
       return;
     }
     this.clearIfNotMatchFn();
+  }
+
+  public showMaskInInput(): void {
+    if (this.showMaskTyped) {
+      this.maskIsShown = this.maskExpression.replace(/[0-9]/g, '_');
+    }
   }
 
   public clearIfNotMatchFn(): void {

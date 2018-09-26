@@ -5,6 +5,7 @@ export interface IConfig {
     prefix: string;
     clearIfNotMatch: boolean;
     showTemplate: boolean;
+    showMaskTyped: boolean;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
     patterns: {
@@ -25,6 +26,7 @@ export const initialConfig: IConfig = {
     prefix: '',
     clearIfNotMatch: false,
     showTemplate: false,
+    showMaskTyped: false,
     dropSpecialCharacters: true,
     specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ',', '@', '[', ']'],
     patterns: {

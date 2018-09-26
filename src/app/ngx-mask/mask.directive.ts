@@ -92,6 +92,14 @@ export class MaskDirective implements ControlValueAccessor {
   }
 
   @Input()
+  public set showMaskTyped(value: IConfig['showMaskTyped']) {
+    if (!value) {
+      return;
+    }
+    this._maskService.showMaskTyped = value;
+  }
+
+  @Input()
   public set showTemplate(value: IConfig['showTemplate']) {
     this._maskService.showTemplate = value;
   }
@@ -137,13 +145,6 @@ export class MaskDirective implements ControlValueAccessor {
   @HostListener('click', ['$event'])
   public onFocus(e: MouseEvent | KeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
-    if (!this._maskService.prefix) {
-      return;
-    } else if (el !== null && el.value !== '') {
-      return;
-    } else if (el !== null) {
-      el.value = this._maskService.prefix;
-    }
     if (
       el !== null && el.selectionStart !== null &&
       el.selectionStart === el.selectionEnd &&
@@ -152,6 +153,15 @@ export class MaskDirective implements ControlValueAccessor {
       (e as any).keyCode !== 38
     ) {
       return;
+    }
+    if (!this._maskService.prefix) {
+      return;
+    }
+    el.value = this._maskService.prefix;
+    if (this._maskService.showMaskTyped) {
+      this._maskService.maskIsShown = this._maskService.maskExpression.replace(/[0-9]/g, '_');
+      el.value = this._maskService.prefix + this._maskService.maskIsShown;
+      el.selectionStart = this._maskService.prefix.length + 1;
     }
     e.preventDefault();
     el.selectionStart = el.selectionEnd = this._maskService.prefix.length;
@@ -178,7 +188,8 @@ export class MaskDirective implements ControlValueAccessor {
       inputValue = String(inputValue);
       this._maskService.isNumberValue = true;
     }
-    inputValue && this._maskService.maskExpression
+    inputValue && this._maskService.maskExpression ||
+    this._maskService.maskExpression && (this._maskService.prefix || this.showMaskTyped)
       ? (this._maskService.formElementProperty = [
         'value',
         this._maskService.applyMask(
