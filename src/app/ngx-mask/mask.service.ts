@@ -30,12 +30,11 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): string  {
-    if (this.showMaskTyped) {
-      this.maskIsShown = this.maskExpression.replace(/[0-9]/g, '_');
-    }
-    const _maskIsShown: string = this.maskIsShown || '';
+    this.maskIsShown = this.showMaskTyped
+        ? this.maskExpression.replace(/[0-9]/g, '_')
+        : '';
     if (!inputValue) {
-      return this.prefix + _maskIsShown;
+      return this.prefix + this.maskIsShown;
     }
     const result: string  = super.applyMask(
       inputValue,
