@@ -188,13 +188,43 @@
                   <div class="flex-row">
                     <div class="flex-cell-padding">
                       <mat-form-field>
-                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7 " [formControl]="form" [(ngModel)]="dateModel">
+                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7" [formControl]="form" [(ngModel)]="dateModel">
                         <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                       </mat-form-field>
                     </div>
                     <div class="flex-cell">
                       <p><b>FormControl:</b> {{ form.value ? form.value: 'Empty' }}</p>
                       <p><b>NgModel:</b> {{ dateModel ? dateModel: 'Empty' }}</p>
+                    </div>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="mat-card-wr">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Phone number</mat-card-title>
+                <mat-card-subtitle>
+                  You can add 'showMaskTyped' property to see maskExpression with underscores while typing
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                  <div class="flex-row">
+                    <div class="flex-cell-padding">
+                      <mat-form-field>
+                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+5" [showMaskTyped] = "true" [formControl]="form1" [(ngModel)]="showMaskModel">
+                        <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ form1.value ? form1.value: 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel: 'Empty' }}</p>
                     </div>
                   </div>
               </mat-card-content>

@@ -1,3 +1,9 @@
+<a name="6.2.4"></a>
+# [6.2.4 support for mask] (2018-10-09)
+
+Added support for using 'showMaskTyped' property to see mask while typing
+Resolved issues
+
 <a name="6.1.3"></a>
 # [6.1.3 update demo, added support, resolved issues] (2018-10-09)
 

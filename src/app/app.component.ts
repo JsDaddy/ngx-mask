@@ -10,6 +10,7 @@ export class AppComponent {
 
 
   public form: FormControl;
+  public form1: FormControl;
   public formDate: FormControl;
   public cpfFormControl: FormControl;
   public clearIfNotMatch: FormControl;
@@ -20,10 +21,13 @@ export class AppComponent {
   public formModelDate: string | number = '';
   public cpfModel: string | number = '';
   public dateModel: string | number = '';
+  public showMaskModel: string | number = '';
 
 
-  public constructor() {
+  public constructor(
+  ) {
     this.form = new FormControl('');
+    this.form1 = new FormControl('');
     this.formDate = new FormControl('');
     this.cpfFormControl = new FormControl();
     this.clearIfNotMatch = new FormControl();
