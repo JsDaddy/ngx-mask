@@ -32,6 +32,11 @@ export class NgxMaskModule {
       ]
     };
   }
+  public static forChild(configValue?: optionsConfig): ModuleWithProviders {
+    return {
+      ngModule: NgxMaskModule,
+    };
+  }
 }
 
 /**
