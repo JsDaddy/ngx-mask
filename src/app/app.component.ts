@@ -22,6 +22,7 @@ export class AppComponent {
   public cpfModel: string | number = '';
   public dateModel: string | number = '';
   public showMaskModel: string | number = '';
+  public suf: string = '+7';
 
 
   public constructor(
