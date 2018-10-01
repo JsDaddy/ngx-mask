@@ -42,7 +42,9 @@
     "@angular/platform-browser": "6.1.8",
     "@angular/platform-browser-dynamic": "6.1.8",
     "core-js": "2.5.7",
+    "intl": "^1.2.5",
     "npm-check-updates": "2.14.2",
+    "web-animations-js": "^2.3.1",
     "zone.js": "0.8.26"
   },
   "devDependencies": {
