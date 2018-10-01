@@ -1,4 +1,4 @@
-<a name="6.2.6"></a>
+<a name="6.2.8"></a>
 # [6.2.6 support for Mask Pipe/MaskService] (2018-01-10)
 Added ability to use MaskPipe/MaskService inside component
 
