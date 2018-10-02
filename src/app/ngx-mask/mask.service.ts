@@ -111,14 +111,18 @@ export class MaskService extends MaskApplierService {
     if (!this.prefix) {
       return value;
     }
-    return value ? value.replace(this.prefix, '') : value;
+    return value
+      ? value.replace(this.prefix, '')
+      : value;
   }
 
   private _removeSufix(value: string): string {
     if (!this.sufix) {
       return value;
     }
-    return value ? value.replace(this.sufix, '') : value;
+    return value
+      ? value.replace(this.sufix, '')
+      : value;
   }
 
   private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
