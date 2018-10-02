@@ -22,7 +22,6 @@ export class MaskApplierService {
         this._shift = new Set();
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
-        console.log('PATTERN', this.maskAvailablePatterns);
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
@@ -62,7 +61,6 @@ export class MaskApplierService {
 
             if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                 result += inputSymbol;
-                console.log(result);
                 cursor += 2;
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])
                 && maskExpression[cursor + 1]
@@ -115,11 +113,6 @@ export class MaskApplierService {
         }
 
         cb(this._shift.has(position) ? shift : 0);
-<<<<<<< HEAD
-
-
-        return this.prefix + result;
-=======
         const maskExPrefCount: number = `${this.prefix}${this.maskExpression}`.length;
         let res: string = `${this.prefix}${result}`;
         res = this.sufix &&
@@ -128,14 +121,11 @@ export class MaskApplierService {
             : `${this.prefix}${result}`;
 
         return res;
->>>>>>> 6dd90407afd7ff5391915f9d1001fd6c0f8692db
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-      const patternRes: number = inputSymbol.search(this.maskAvailablePatterns[maskSymbol].pattern);
-        return patternRes !== -1
-              && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol)
-            ? true
-            : false;
+        return this.maskAvailablePatterns[maskSymbol]
+            && this.maskAvailablePatterns[maskSymbol].pattern
+            && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
     }
 }

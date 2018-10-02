@@ -95,11 +95,11 @@ describe('Directive: Mask', () => {
 
   it('Testing masks with a literal on the last char', () => {
     component.mask = '(99)';
-    equal('(99', '(99)', fixture);
+    equal('99', '(99)', fixture);
   });
 
   it('Masks with numbers and special characters.', () => {
-    component.mask = '(123) 456-7899';
+    component.mask = '(000) 000-0000';
     equal('1', '(1', fixture);
     equal('12', '(12', fixture);
     equal('123', '(123', fixture);
@@ -110,7 +110,7 @@ describe('Directive: Mask', () => {
   });
 
   it('Masks with numbers, strings e special characters', () => {
-    component.mask = '(999) A99-SSSS';
+    component.mask = '(099) A99-SSSS';
     equal('as', '(', fixture);
     equal('(1', '(1', fixture);
     equal('(12', '(12', fixture);

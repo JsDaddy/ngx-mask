@@ -40,7 +40,6 @@ export class MaskDirective implements ControlValueAccessor {
     if (!this._maskValue) {
       return;
     }
-    // console.log(value);
     this._maskService.maskExpression = this._maskValue;
     this._maskService.formElementProperty = [
       'value',
@@ -146,7 +145,6 @@ export class MaskDirective implements ControlValueAccessor {
   @HostListener('click', ['$event'])
   public onFocus(e: MouseEvent | KeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
-    console.log('VASIA', this._maskService.maskAvailablePatterns);
     if (
       el !== null && el.selectionStart !== null &&
       el.selectionStart === el.selectionEnd &&
