@@ -15,6 +15,7 @@ export class AppComponent {
   public cpfFormControl: FormControl;
   public clearIfNotMatch: FormControl;
   public numberOrStringForm: FormControl;
+  public sufixForm: FormControl;
 
   public numberOrStringFormModel: string | number = '';
   public clearIfNotMatchModel: string | number = '';
@@ -22,15 +23,18 @@ export class AppComponent {
   public cpfModel: string | number = '';
   public dateModel: string | number = '';
   public showMaskModel: string | number = '';
+  public suf: string = '+7';
+  public sufixModel: string | number;
 
 
   public constructor() {
     this.form = new FormControl('');
     this.form1 = new FormControl('');
-    this.formDate = new FormControl('123234');
+    this.formDate = new FormControl('');
     this.cpfFormControl = new FormControl();
     this.clearIfNotMatch = new FormControl();
     this.numberOrStringForm = new FormControl();
+    this.sufixForm = new FormControl('');
   }
 
 }
