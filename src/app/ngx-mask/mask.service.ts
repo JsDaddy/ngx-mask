@@ -33,12 +33,7 @@ export class MaskService extends MaskApplierService {
     this.maskIsShown = this.showMaskTyped
         ? this.maskExpression.replace(/[0-9]/g, '_')
         : '';
-<<<<<<< HEAD
-    if (!inputValue) {
-      console.log('VASIA');
-=======
     if (!inputValue && this.showMaskTyped) {
->>>>>>> 87ffa9b7a20ad3769daae4798942c4a37bccb33c
       return this.prefix + this.maskIsShown;
     }
     const result: string  = super.applyMask(
