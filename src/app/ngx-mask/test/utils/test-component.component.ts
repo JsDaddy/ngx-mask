@@ -9,6 +9,7 @@ import { IConfig } from 'public_api';
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
       [patterns]="patterns"
+      [sufix]="sufix"
       [prefix]="prefix"
       [formControl]="form"
       [showMaskTyped] = "showMaskTyped"

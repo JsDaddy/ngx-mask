@@ -115,7 +115,7 @@ export class MaskService extends MaskApplierService {
   }
 
   private _removeSufix(value: string): string {
-    if (!this.prefix) {
+    if (!this.sufix) {
       return value;
     }
     return value ? value.replace(this.sufix, '') : value;

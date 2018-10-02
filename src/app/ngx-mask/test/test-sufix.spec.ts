@@ -23,7 +23,9 @@ describe('Directive: Mask', () => {
   it('should clear if not match the mask!!!!', () => {
     component.mask = '0000';
     component.sufix = ' $';
+    component.dropSpecialCharacters = true;
     equal('', '', fixture);
-    equal('1234', '1234', fixture);
+    // equal('1234', '1234', fixture);
+    equal('1234', '1234 $', fixture);
   });
 });
