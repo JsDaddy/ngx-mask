@@ -114,8 +114,14 @@ export class MaskApplierService {
         }
 
         cb(this._shift.has(position) ? shift : 0);
+        const maskExPrefCount: number = `${this.prefix}${this.maskExpression}`.length;
+        let res: string = `${this.prefix}${result}`;
+        res = this.sufix &&
+              res.length === maskExPrefCount
+            ? `${this.prefix}${result}${this.sufix}`
+            : `${this.prefix}${result}`;
 
-        return this.prefix + result;
+        return res;
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
