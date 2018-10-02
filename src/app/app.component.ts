@@ -27,11 +27,10 @@ export class AppComponent {
   public sufixModel: string | number;
 
 
-  public constructor(
-  ) {
+  public constructor() {
     this.form = new FormControl('');
     this.form1 = new FormControl('');
-    this.formDate = new FormControl('');
+    this.formDate = new FormControl('123234');
     this.cpfFormControl = new FormControl();
     this.clearIfNotMatch = new FormControl();
     this.numberOrStringForm = new FormControl();
