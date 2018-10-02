@@ -30,6 +30,7 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): string  {
+
     this.maskIsShown = this.showMaskTyped
         ? this.maskExpression.replace(/[0-9]/g, '_')
         : '';
@@ -42,6 +43,7 @@ export class MaskService extends MaskApplierService {
       position,
       cb
     );
+    // console.log(result);
     Array.isArray(this.dropSpecialCharacters)
         ? this.onChange(this._removeMask(this._removePrefix(result), this.dropSpecialCharacters))
         : this.dropSpecialCharacters === true
@@ -65,12 +67,14 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): void {
+    // console.log(this.inputValue);
     const maskedInput: string | number = this.applyMask(
       this._formElement.value,
       this.maskExpression,
       position,
       cb
     );
+    // console.log(maskedInput);
     this._formElement.value = maskedInput;
     if (this._formElement === this.document.activeElement) {
       return;
@@ -102,6 +106,7 @@ export class MaskService extends MaskApplierService {
     value: string,
     specialCharactersForRemove: string[]
   ): string {
+    console.log(value);
     return value
       ? value.replace(this._regExpForRemove(specialCharactersForRemove), '')
       : value;
@@ -115,6 +120,7 @@ export class MaskService extends MaskApplierService {
   }
 
   private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
+    console.log(specialCharactersForRemove);
     return new RegExp(
       specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'),
       'gi'
