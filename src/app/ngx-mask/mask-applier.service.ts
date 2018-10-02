@@ -1,3 +1,4 @@
+import { IConfig } from 'public_api';
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
@@ -12,6 +13,7 @@ export class MaskApplierService {
     public maskAvailablePatterns: IConfig['patterns'];
     public prefix: IConfig['prefix'];
     public sufix: IConfig['sufix'];
+    public inputSet: IConfig['inputSet'];
 
 
     private _shift: Set<number>;
@@ -29,6 +31,7 @@ export class MaskApplierService {
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
         this.sufix = this._config.sufix;
+        this.inputSet = this._config.inputSet;
 
     }
 

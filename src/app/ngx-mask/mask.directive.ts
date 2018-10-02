@@ -34,6 +34,14 @@ export class MaskDirective implements ControlValueAccessor {
     private _maskService: MaskService
   ) { }
 
+  @Input()
+  public set inputSet(value: IConfig['inputSet']) {
+    if (!value) {
+      return;
+    }
+    this._maskService.inputSet = value;
+  }
+
   @Input('mask')
   public set maskExpression(value: string) {
     this._maskValue = value || '';
@@ -41,6 +49,13 @@ export class MaskDirective implements ControlValueAccessor {
       return;
     }
     this._maskService.maskExpression = this._maskValue;
+    if (this._maskService.inputSet > 1) {
+      const maskExp: string = this._maskService.maskExpression;
+      this._maskService.inputSet =  Number(this._maskService.inputSet);
+      for (let i: number = 0; i < this._maskService.inputSet - 1; i++) {
+        this._maskService.maskExpression += maskExp;
+      }
+    }
     this._maskService.formElementProperty = [
       'value',
       this._maskService.applyMask(
@@ -183,7 +198,7 @@ export class MaskDirective implements ControlValueAccessor {
       this._maskService.isNumberValue = true;
     }
     inputValue && this._maskService.maskExpression ||
-    this._maskService.maskExpression && (this._maskService.prefix || this.showMaskTyped)
+      this._maskService.maskExpression && (this._maskService.prefix || this.showMaskTyped)
       ? (this._maskService.formElementProperty = [
         'value',
         this._maskService.applyMask(

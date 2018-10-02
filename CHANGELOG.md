@@ -1,5 +1,9 @@
+<a name="6.2.10"></a>
+# [6.2.10 support for repeatMask] (2018-02-10)
+Added possibility to add property repeat mask
+
 <a name="6.2.8"></a>
-# [6.2.6 support for Mask Pipe/MaskService] (2018-01-10)
+# [6.2.8 support for Mask Pipe/MaskService] (2018-01-10)
 Added ability to use MaskPipe/MaskService inside component
 
 <a name="6.2.5"></a>
