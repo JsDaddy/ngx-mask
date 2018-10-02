@@ -22,7 +22,6 @@ export class MaskApplierService {
         this._shift = new Set();
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
-
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
@@ -125,8 +124,7 @@ export class MaskApplierService {
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-        return inputSymbol === maskSymbol
-            || this.maskAvailablePatterns[maskSymbol]
+        return this.maskAvailablePatterns[maskSymbol]
             && this.maskAvailablePatterns[maskSymbol].pattern
             && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
     }
