@@ -9,6 +9,7 @@ import { IConfig } from 'public_api';
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
       [patterns]="patterns"
+      [sufix]="sufix"
       [prefix]="prefix"
       [formControl]="form"
       [showMaskTyped] = "showMaskTyped"
@@ -22,6 +23,7 @@ export class TestMaskComponent {
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
   public patterns: IConfig['patterns'];
   public prefix: IConfig['prefix'] = '';
+  public sufix: IConfig['sufix'] = '';
   public specialCharacters: IConfig['specialCharacters'];
   public showMaskTyped: IConfig['showMaskTyped'] = false;
 }

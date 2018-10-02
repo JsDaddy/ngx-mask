@@ -126,6 +126,14 @@ Masked value: (Hel-loW)
 <input type='text' prefix="+7 " mask="(000) 000 00 00" >
 ```
 
+### sufix (string)
+   You can add sufix to you masked value
+##### Usage
+
+```html
+<input type='text' sufix=" $" mask="0000" >
+```
+
 ### dropSpecialCharacters (boolean)
    You can choose if mask will drop special character in the model, or not, default value true
 ##### Usage
