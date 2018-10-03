@@ -1,3 +1,7 @@
+<a name="6.3.10"></a>
+# [6.3.10 fixed writeValue] (2018-03-10)
+Fixed writeValue in directive
+
 <a name="6.2.8"></a>
 # [6.2.6 support for Mask Pipe/MaskService] (2018-01-10)
 Added ability to use MaskPipe/MaskService inside component
