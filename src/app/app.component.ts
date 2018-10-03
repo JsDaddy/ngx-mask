@@ -8,7 +8,6 @@ import { FormControl } from '@angular/forms';
 })
 export class AppComponent {
 
-
   public form: FormControl;
   public form1: FormControl;
   public formDate: FormControl;

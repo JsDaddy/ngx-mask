@@ -179,7 +179,7 @@ export class MaskDirective implements ControlValueAccessor {
   /** It writes the value in the input */
   public async writeValue(inputValue: string): Promise<void> {
     if (inputValue === undefined) {
-      return;
+      inputValue = '';
     }
     if (typeof inputValue === 'number') {
       inputValue = String(inputValue);

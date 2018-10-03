@@ -50,10 +50,11 @@
                 <mat-card-subtitle>An case of date mask</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
+                    <br>
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate">
+                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
                       <mat-hint> <b>Mask:</b> 00/00/0000</mat-hint>
                     </mat-form-field>
                   </div>
