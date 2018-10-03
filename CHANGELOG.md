@@ -1,3 +1,7 @@
+<a name="6.3.11"></a>
+# [6.3.11 fixed mask visable ] (2018-03-10)
+Fixed when page is loaded the mask is visible
+
 <a name="6.3.10"></a>
 # [6.3.10 fixed writeValue] (2018-03-10)
 Fixed writeValue in directive
