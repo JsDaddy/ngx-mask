@@ -31,7 +31,6 @@ export class MaskApplierService {
         this.sufix = this._config.sufix;
 
 
-
     }
     // tslint:disable-next-line:no-any
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
