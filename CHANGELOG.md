@@ -1,3 +1,7 @@
+<a name="6.4.12"></a>
+# [6.4.12 pipe with mask expression and custom Pattern ] (2018-04-10)
+You can pass array of expression and custom Pattern to pipe
+
 <a name="6.3.11"></a>
 # [6.3.11 fixed mask visable ] (2018-03-10)
 Fixed when page is loaded the mask is visible

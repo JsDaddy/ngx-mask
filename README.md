@@ -157,6 +157,25 @@ Model value: 789-874.98
  <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true">
 ```
 
+###pipe with mask expression and custom Pattern ([string, pattern])
+  You can pass array of expression and custom Pattern to pipe
+##### Usage
+
+```html
+ <span>{{phone | mask: customMaska}}</span>
+```
+and in your component
+```
+customMaska: [string, pattern];
+
+pattern =  {
+    'P': {
+        pattern: new RegExp('\\d'),
+    }};
+  
+this.customMaska = ['PPP-PPP', this.pattern];
+```
+
 ### clearIfNotMatch (boolean)
    You can choose clear the input if the input value **not match** the mask, default value false
 
