@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { MaskApplierService } from '../mask-applier.service';
 import { MaskPipe } from '../mask.pipe';
 import { NgxMaskModule } from '../ngx-mask.module';
+import { IConfig } from '../config';
 
 describe('Pipe: Mask', () => {
   let maskPipe: MaskPipe;
@@ -32,5 +33,14 @@ describe('Pipe: Mask', () => {
   it('should mask a number  and string', () => {
     const maskedNumberAndString: string | number = maskPipe.transform('123abc', '09A/SAS');
     expect(maskedNumberAndString).toEqual('123/abc');
+  });
+
+  it('should custom pattern', () => {
+    const patttern: IConfig['patterns'] =  {
+      'P': {
+          pattern: new RegExp('\\d'),
+      }};
+    const maskedNumber: string = maskPipe.transform(123456789, ['PPP-PP-PPP', patttern]);
+    expect(maskedNumber).toEqual('123-45-678');
   });
 });

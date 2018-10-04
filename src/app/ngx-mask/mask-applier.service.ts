@@ -12,6 +12,7 @@ export class MaskApplierService {
     public maskAvailablePatterns: IConfig['patterns'];
     public prefix: IConfig['prefix'];
     public sufix: IConfig['sufix'];
+    public customPattern: IConfig['patterns'];
 
 
     private _shift: Set<number>;
@@ -29,8 +30,14 @@ export class MaskApplierService {
         this.prefix = this._config.prefix;
         this.sufix = this._config.sufix;
 
-    }
 
+    }
+    // tslint:disable-next-line:no-any
+    public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
+      const [mask, customPattern] = maskAndPattern;
+      this.customPattern = customPattern;
+      return this.applyMask(inputValue, mask);
+    }
     public applyMask(
         inputValue: string,
         maskExpression: string,
@@ -124,6 +131,9 @@ export class MaskApplierService {
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
+      this.maskAvailablePatterns = this.customPattern
+        ? this.customPattern
+        : this.maskAvailablePatterns;
         return this.maskAvailablePatterns[maskSymbol]
             && this.maskAvailablePatterns[maskSymbol].pattern
             && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);

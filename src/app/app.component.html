@@ -295,6 +295,30 @@
       </div>
     </div>
     <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="mat-card-wr">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Custom Pattern an mask in pipe</mat-card-title>
+                  <mat-card-subtitle>
+                    You can pass array of maskExpression and CutomPattern into pipe
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="flex-row">
+                      <div class="flex-cell-padding">
+                            <span >{{phone | mask: customMaska}}</span><br><br>
+                            <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
+                      </div>
+                    </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="mat-grid-wr">
