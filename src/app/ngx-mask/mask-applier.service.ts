@@ -1,4 +1,3 @@
-import { IConfig } from 'public_api';
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
