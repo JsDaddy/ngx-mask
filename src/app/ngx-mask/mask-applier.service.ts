@@ -65,22 +65,21 @@ export class MaskApplierService {
             if (cursor === maskExpression.length) {
                 break;
             }
-
             if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                 result += inputSymbol;
                 cursor += 2;
+            } else if (
+              maskExpression[cursor + 1] === '*' && multi
+              && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
+            ) {
+              result += inputSymbol;
+              cursor += 3;
+              multi = false;
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])
                 && maskExpression[cursor + 1]
                 === '*') {
                 result += inputSymbol;
                 multi = true;
-            } else if (
-                maskExpression[cursor + 1] === '*' && multi
-                && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
-            ) {
-                result += inputSymbol;
-                cursor += 3;
-                multi = false;
             } else if (maskExpression[cursor + 1] === '?' && this._checkSymbolMask(
                 inputSymbol,
                 maskExpression[cursor + 2]
@@ -103,13 +102,20 @@ export class MaskApplierService {
                 && this.maskAvailablePatterns[maskExpression[cursor]].optional) {
                 cursor++;
                 i--;
+            } else if ( (this.maskExpression[cursor + 1] === '*')
+              && (this._findSpecialChar(this.maskExpression[cursor + 2]))
+              && (this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]) ) {
+              cursor += 3;
+              result += inputSymbol;
             }
         }
+
 
         if (result.length + 1 === maskExpression.length
             && this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
             result += maskExpression[maskExpression.length - 1];
         }
+
 
         let shift: number = 1;
         let newPosition: number = position + 1;
@@ -126,8 +132,12 @@ export class MaskApplierService {
               res.length === maskExPrefCount
             ? `${this.prefix}${result}${this.sufix}`
             : `${this.prefix}${result}`;
-
         return res;
+    }
+    private _findSpecialChar (inputSymbol: string): undefined | string {
+      const symbol: string | undefined = this.maskSpecialCharacters
+          .find( (val: string) => val === inputSymbol);
+      return symbol ;
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
