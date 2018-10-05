@@ -4,7 +4,7 @@ import { IConfig } from 'public_api';
 
 @Component({
   selector: 'test-mask',
-  template: `<input [mask]="mask"
+  template: `<input id='maska' [mask]="mask"
       [clearIfNotMatch]="clearIfNotMatch"
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
