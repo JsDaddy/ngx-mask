@@ -117,7 +117,9 @@ export class MaskDirective implements ControlValueAccessor {
       this.onChange(el.value);
       return;
     }
-    const position: number = el.selectionStart as number;
+    const position: number = (el.selectionStart as number) === 1
+      ? (el.selectionStart as number) + this._maskService.prefix.length
+      : el.selectionStart as number;
     let caretShift: number = 0;
     this._maskService.applyValueChanges(
       position,
@@ -160,14 +162,31 @@ export class MaskDirective implements ControlValueAccessor {
     el.value =  !el.value || el.value === this._maskService.prefix
       ? this._maskService.prefix + this._maskService.maskIsShown
       : el.value;
-    e.preventDefault();
-    el.selectionStart = el.selectionEnd = this._maskService.prefix.length;
+       /** fix of cursor position with prefix when mouse click occur */
+      if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length ) {
+        el.selectionStart = this._maskService.prefix.length;
+       return;
+      }
   }
 
   @HostListener('keydown', ['$event'])
   public a(e: KeyboardEvent): void {
-    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 8) {
+    const el: HTMLInputElement = e.target as HTMLInputElement;
+     if (e.keyCode === 38 ) {
+        e.preventDefault();
+     }
+    if (e.keyCode === 37 || e.keyCode === 8) {
+      if ((el.selectionStart as number) <= this._maskService.prefix.length
+      && (el.selectionEnd as number) <= this._maskService.prefix.length) {
+        e.preventDefault();
+      }
       this.onFocus(e);
+      if (e.keyCode === 8
+        && el.selectionStart === 0
+        && el.selectionEnd === el.value.length ) {
+          el.value = this._maskService.prefix;
+          this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
+      }
     }
   }
 

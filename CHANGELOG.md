@@ -1,3 +1,7 @@
+<a name="6.4.13"></a>
+# [6.4.13 selection of input value and deletion of it is fixed ] (2018-04-10)
+You can select and delete value.
+
 <a name="6.4.12"></a>
 # [6.4.12 pipe with mask expression and custom Pattern ] (2018-04-10)
 You can pass array of expression and custom Pattern to pipe
