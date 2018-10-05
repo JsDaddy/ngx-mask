@@ -1,5 +1,9 @@
+<a name="6.4.14"></a>
+# [6.4.14 fixed '*' pattern in maskExpression ] (2018-10-05)
+Fixed pattern '*'
+
 <a name="6.4.13"></a>
-# [6.4.13 selection of input value and deletion of it is fixed ] (2018-04-10)
+# [6.4.13 selection of input value and deletion of it is fixed ] (2018-10-05)
 You can select and delete value.
 
 <a name="6.4.12"></a>
