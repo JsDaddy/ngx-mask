@@ -162,7 +162,7 @@ export class MaskDirective implements ControlValueAccessor {
     el.value =  !el.value || el.value === this._maskService.prefix
       ? this._maskService.prefix + this._maskService.maskIsShown
       : el.value;
-       /** fix of cursor position with prefix when mouse click occur */ 
+       /** fix of cursor position with prefix when mouse click occur */
       if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length ) {
         el.selectionStart = this._maskService.prefix.length;
        return;
