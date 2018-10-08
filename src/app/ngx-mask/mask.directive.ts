@@ -132,7 +132,9 @@ export class MaskDirective implements ControlValueAccessor {
       this.onChange(el.value);
       return;
     }
-    const position: number = el.selectionStart as number;
+    const position: number = (el.selectionStart as number) === 1
+      ? (el.selectionStart as number) + this._maskService.prefix.length
+      : el.selectionStart as number;
     let caretShift: number = 0;
     this._maskService.applyValueChanges(
       position,
@@ -169,17 +171,37 @@ export class MaskDirective implements ControlValueAccessor {
     ) {
       return;
     }
-    if (!this._maskService.prefix) {
-      return;
+    if (this._maskService.showMaskTyped) {
+      this._maskService.maskIsShown = this._maskService.maskExpression.replace(/[0-9]/g, '_');
     }
-    e.preventDefault();
-    el.selectionStart = el.selectionEnd = this._maskService.prefix.length;
+    el.value =  !el.value || el.value === this._maskService.prefix
+      ? this._maskService.prefix + this._maskService.maskIsShown
+      : el.value;
+       /** fix of cursor position with prefix when mouse click occur */
+      if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length ) {
+        el.selectionStart = this._maskService.prefix.length;
+       return;
+      }
   }
 
   @HostListener('keydown', ['$event'])
   public a(e: KeyboardEvent): void {
-    if (e.keyCode === 37 || e.keyCode === 38 || e.keyCode === 8) {
+    const el: HTMLInputElement = e.target as HTMLInputElement;
+     if (e.keyCode === 38 ) {
+        e.preventDefault();
+     }
+    if (e.keyCode === 37 || e.keyCode === 8) {
+      if ((el.selectionStart as number) <= this._maskService.prefix.length
+      && (el.selectionEnd as number) <= this._maskService.prefix.length) {
+        e.preventDefault();
+      }
       this.onFocus(e);
+      if (e.keyCode === 8
+        && el.selectionStart === 0
+        && el.selectionEnd === el.value.length ) {
+          el.value = this._maskService.prefix;
+          this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
+      }
     }
   }
 
@@ -191,14 +213,18 @@ export class MaskDirective implements ControlValueAccessor {
   /** It writes the value in the input */
   public async writeValue(inputValue: string): Promise<void> {
     if (inputValue === undefined) {
-      return;
+      inputValue = '';
     }
     if (typeof inputValue === 'number') {
       inputValue = String(inputValue);
       this._maskService.isNumberValue = true;
     }
     inputValue && this._maskService.maskExpression ||
+<<<<<<< HEAD
       this._maskService.maskExpression && (this._maskService.prefix || this.showMaskTyped)
+=======
+    this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
+>>>>>>> 5f730a7df047530a0e357da8648f4633c2ea895c
       ? (this._maskService.formElementProperty = [
         'value',
         this._maskService.applyMask(

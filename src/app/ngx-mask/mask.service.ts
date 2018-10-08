@@ -30,6 +30,7 @@ export class MaskService extends MaskApplierService {
     position: number = 0,
     cb: Function = () => {}
   ): string  {
+
     this.maskIsShown = this.showMaskTyped
         ? this.maskExpression.replace(/[0-9]/g, '_')
         : '';
@@ -43,14 +44,14 @@ export class MaskService extends MaskApplierService {
       cb
     );
     Array.isArray(this.dropSpecialCharacters)
-        ? this.onChange(this._removeMask(this._removePrefix(result), this.dropSpecialCharacters))
+        ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
         : this.dropSpecialCharacters === true
          ? this.onChange(
           this.isNumberValue
-             ? Number(this._removeMask(this._removePrefix(result), this.maskSpecialCharacters))
-             : this._removeMask(this._removePrefix(result), this.maskSpecialCharacters)
+             ? Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters))
+             : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
             )
-         : this.onChange(this._removePrefix(result));
+         : this.onChange(this._removeSufix(this._removePrefix(result)));
           let ifMaskIsShown: string = '';
           if (!this.showMaskTyped) {
             return result;
@@ -111,7 +112,18 @@ export class MaskService extends MaskApplierService {
     if (!this.prefix) {
       return value;
     }
-    return value ? value.replace(this.prefix, '') : value;
+    return value
+      ? value.replace(this.prefix, '')
+      : value;
+  }
+
+  private _removeSufix(value: string): string {
+    if (!this.sufix) {
+      return value;
+    }
+    return value
+      ? value.replace(this.sufix, '')
+      : value;
   }
 
   private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {

@@ -50,10 +50,11 @@
                 <mat-card-subtitle>An case of date mask</mat-card-subtitle>
               </mat-card-header>
               <mat-card-content>
+                    <br>
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="A" [formControl]="formDate" inputSet = '10'>
+                      <input matInput placeholder="Date" mask="A" [formControl]="formDate" inputSet = '10'[(ngModel)]="formModelDate">
                       <mat-hint> <b>Mask:</b> 00/00/0000</mat-hint>
                     </mat-form-field>
                   </div>
@@ -239,6 +240,36 @@
           <div class="mat-card-wr">
             <mat-card>
               <mat-card-header>
+                <mat-card-title>SUFIX</mat-card-title>
+                <mat-card-subtitle>
+                  You can add 'sufix' property
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                  <div class="flex-row">
+                    <div class="flex-cell-padding">
+                      <mat-form-field>
+                        <input matInput placeholder="Sum" mask="0000" sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
+                        <mat-hint><b>Mask: </b>0000</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ sufixForm.value ? sufixForm.value: 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ sufixModel ? sufixModel: 'Empty' }}</p>
+                    </div>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="mat-card-wr">
+            <mat-card>
+              <mat-card-header>
                 <mat-card-title>Number or string</mat-card-title>
                 <mat-card-subtitle>
                   You can pass in value of type number or string
@@ -248,7 +279,7 @@
                   <div class="flex-row">
                     <div class="flex-cell-padding">
                       <mat-form-field>
-                        <input matInput placeholder="Type number or string" mask="000.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
+                        <input matInput placeholder="Type number or string" mask="00*.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
                         <mat-hint><b>Mask: </b>000.00</mat-hint>
                       </mat-form-field>
                     </div>
@@ -263,6 +294,30 @@
         </div>
       </div>
     </div>
+    <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="mat-card-wr">
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>Custom Pattern an mask in pipe</mat-card-title>
+                  <mat-card-subtitle>
+                    You can pass array of maskExpression and CutomPattern into pipe
+                  </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="flex-row">
+                      <div class="flex-cell-padding">
+                            <span >{{phone | mask: customMaska}}</span><br><br>
+                            <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
+                      </div>
+                    </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
     <div class="container">
       <div class="row">
         <div class="col-12">

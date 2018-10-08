@@ -1,6 +1,22 @@
-<a name="6.2.10"></a>
-# [6.2.10 support for repeatMask] (2018-02-10)
-Added possibility to add property repeat mask
+<a name="6.4.14"></a>
+# [6.4.14 fixed '*' pattern in maskExpression ] (2018-10-05)
+Fixed pattern '*'
+
+<a name="6.4.13"></a>
+# [6.4.13 selection of input value and deletion of it is fixed ] (2018-10-05)
+You can select and delete value.
+
+<a name="6.4.12"></a>
+# [6.4.12 pipe with mask expression and custom Pattern ] (2018-04-10)
+You can pass array of expression and custom Pattern to pipe
+
+<a name="6.3.11"></a>
+# [6.3.11 fixed mask visable ] (2018-03-10)
+Fixed when page is loaded the mask is visible
+
+<a name="6.3.10"></a>
+# [6.3.10 fixed writeValue] (2018-03-10)
+Fixed writeValue in directive
 
 <a name="6.2.8"></a>
 # [6.2.8 support for Mask Pipe/MaskService] (2018-01-10)

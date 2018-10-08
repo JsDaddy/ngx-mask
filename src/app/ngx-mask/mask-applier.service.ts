@@ -13,6 +13,7 @@ export class MaskApplierService {
     public prefix: IConfig['prefix'];
     public sufix: IConfig['sufix'];
     public inputSet: IConfig['inputSet'];
+    public customPattern: IConfig['patterns'];
 
 
     private _shift: Set<number>;
@@ -23,7 +24,6 @@ export class MaskApplierService {
         this._shift = new Set();
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
-
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
@@ -32,8 +32,14 @@ export class MaskApplierService {
         this.sufix = this._config.sufix;
         this.inputSet = this._config.inputSet;
 
-    }
 
+    }
+    // tslint:disable-next-line:no-any
+    public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
+      const [mask, customPattern] = maskAndPattern;
+      this.customPattern = customPattern;
+      return this.applyMask(inputValue, mask);
+    }
     public applyMask(
         inputValue: string,
         maskExpression: string,
@@ -61,22 +67,21 @@ export class MaskApplierService {
             if (cursor === maskExpression.length) {
                 break;
             }
-
             if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                 result += inputSymbol;
                 cursor += 2;
+            } else if (
+              maskExpression[cursor + 1] === '*' && multi
+              && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
+            ) {
+              result += inputSymbol;
+              cursor += 3;
+              multi = false;
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])
                 && maskExpression[cursor + 1]
                 === '*') {
                 result += inputSymbol;
                 multi = true;
-            } else if (
-                maskExpression[cursor + 1] === '*' && multi
-                && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
-            ) {
-                result += inputSymbol;
-                cursor += 3;
-                multi = false;
             } else if (maskExpression[cursor + 1] === '?' && this._checkSymbolMask(
                 inputSymbol,
                 maskExpression[cursor + 2]
@@ -99,13 +104,20 @@ export class MaskApplierService {
                 && this.maskAvailablePatterns[maskExpression[cursor]].optional) {
                 cursor++;
                 i--;
+            } else if ( (this.maskExpression[cursor + 1] === '*')
+              && (this._findSpecialChar(this.maskExpression[cursor + 2]))
+              && (this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]) ) {
+              cursor += 3;
+              result += inputSymbol;
             }
         }
+
 
         if (result.length + 1 === maskExpression.length
             && this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
             result += maskExpression[maskExpression.length - 1];
         }
+
 
         let shift: number = 1;
         let newPosition: number = position + 1;
@@ -116,13 +128,25 @@ export class MaskApplierService {
         }
 
         cb(this._shift.has(position) ? shift : 0);
-
-        return this.prefix + result;
+        const maskExPrefCount: number = `${this.prefix}${this.maskExpression}`.length;
+        let res: string = `${this.prefix}${result}`;
+        res = this.sufix &&
+              res.length === maskExPrefCount
+            ? `${this.prefix}${result}${this.sufix}`
+            : `${this.prefix}${result}`;
+        return res;
+    }
+    private _findSpecialChar (inputSymbol: string): undefined | string {
+      const symbol: string | undefined = this.maskSpecialCharacters
+          .find( (val: string) => val === inputSymbol);
+      return symbol ;
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-        return inputSymbol === maskSymbol
-            || this.maskAvailablePatterns[maskSymbol]
+      this.maskAvailablePatterns = this.customPattern
+        ? this.customPattern
+        : this.maskAvailablePatterns;
+        return this.maskAvailablePatterns[maskSymbol]
             && this.maskAvailablePatterns[maskSymbol].pattern
             && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
     }
