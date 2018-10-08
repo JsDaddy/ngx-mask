@@ -3,7 +3,6 @@ import { InjectionToken } from '@angular/core';
 export interface IConfig {
     sufix: string;
     prefix: string;
-    inputSet: number | string;
     clearIfNotMatch: boolean;
     showTemplate: boolean;
     showMaskTyped: boolean;
@@ -25,7 +24,6 @@ export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITI
 export const initialConfig: IConfig = {
     sufix: '',
     prefix: '',
-    inputSet: 1,
     clearIfNotMatch: false,
     showTemplate: false,
     showMaskTyped: false,

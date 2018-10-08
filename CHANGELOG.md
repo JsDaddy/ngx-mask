@@ -1,3 +1,7 @@
+<a name="6.5.15"></a>
+# [6.5.14 support for repeat mask] (2018-10-08)
+You can pass into mask pattern with brackets
+
 <a name="6.4.14"></a>
 # [6.4.14 fixed '*' pattern in maskExpression ] (2018-10-05)
 Fixed pattern '*'

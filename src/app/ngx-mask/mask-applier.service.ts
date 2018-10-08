@@ -12,7 +12,6 @@ export class MaskApplierService {
     public maskAvailablePatterns: IConfig['patterns'];
     public prefix: IConfig['prefix'];
     public sufix: IConfig['sufix'];
-    public inputSet: IConfig['inputSet'];
     public customPattern: IConfig['patterns'];
 
 
@@ -30,7 +29,6 @@ export class MaskApplierService {
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
         this.sufix = this._config.sufix;
-        this.inputSet = this._config.inputSet;
 
 
     }
