@@ -220,11 +220,7 @@ export class MaskDirective implements ControlValueAccessor {
       this._maskService.isNumberValue = true;
     }
     inputValue && this._maskService.maskExpression ||
-<<<<<<< HEAD
-      this._maskService.maskExpression && (this._maskService.prefix || this.showMaskTyped)
-=======
     this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
->>>>>>> 5f730a7df047530a0e357da8648f4633c2ea895c
       ? (this._maskService.formElementProperty = [
         'value',
         this._maskService.applyMask(
