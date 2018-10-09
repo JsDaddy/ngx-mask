@@ -28,6 +28,7 @@ export class MaskDirective implements ControlValueAccessor {
   // tslint:disable-next-line
   private _start: number;
   private _end: number;
+  // tslint:disable-next-line
   public onChange = (_: any) => { };
   public onTouch = () => { };
   public constructor(
