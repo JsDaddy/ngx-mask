@@ -28,7 +28,7 @@ export const initialConfig: IConfig = {
     showTemplate: false,
     showMaskTyped: false,
     dropSpecialCharacters: true,
-    specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ',', '@', '[', ']'],
+    specialCharacters: ['/', '(', ')', '.', ':', '-', ' ', '+', ',', '@', '[', ']', ' " ', '\''],
     patterns: {
         '0': {
             pattern: new RegExp('\\d'),
