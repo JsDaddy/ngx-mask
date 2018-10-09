@@ -43,8 +43,7 @@ export class MaskDirective implements ControlValueAccessor {
     if (!this._maskValue) {
       return;
     }
-    this._maskService.maskExpression = this._maskValue;
-    this._repeatMask();
+    this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue);
     this._maskService.formElementProperty = [
       'value',
       this._maskService.applyMask(
@@ -237,18 +236,22 @@ export class MaskDirective implements ControlValueAccessor {
   public setDisabledState(isDisabled: boolean): void {
     this._maskService.formElementProperty = ['disabled', isDisabled];
   }
-  private _repeatMask(): void {
-    if (this._maskService.maskExpression.match(/{[0-9]}/)) {
-      for (let i: number = 0; i < this._maskService.maskExpression.length; i++) {
-        if (this._maskService.maskExpression[i] === '{') {
-          this._start = i;
-        } else if (this._maskService.maskExpression[i] === '}') {
-          this._end = i;
-          const repeatNumber: number = Number(this._maskService.maskExpression.slice(this._start + 1, this._end));
-          const replaceWith: string = new Array(repeatNumber).join(this._maskService.maskExpression[this._start - 1]);
-          this._maskService.maskExpression = this._maskService.maskExpression.replace(/{[0-9]}/, replaceWith);
-        }
-      }
-    }
+  private _repeatPatternSymbols(maskExp: string): string {
+    return maskExp.match(/{[0-9a-zA-Z]}/)
+      && maskExp.split('')
+        .reduce((accum: string, currval: string, index: number): string => {
+          this._start = (currval === '{') ? index : this._start;
+
+          if (currval !== '}') {
+            return this._maskService._findSpecialChar(currval) ? accum + currval : accum;
+          }
+          this._end = index;
+          const repeatNumber: number = Number(maskExp
+            .slice(this._start + 1, this._end));
+          const repaceWith: string = new Array(repeatNumber + 1)
+            .join(maskExp[this._start - 1]);
+          return accum + repaceWith;
+        }, '') || maskExp;
   }
+
 }
