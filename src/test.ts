@@ -13,11 +13,13 @@ import {
 } from '@angular/platform-browser-dynamic/testing';
 
 // Unfortunately there's no typing for the `__karma__` variable. Just declare it as any.
+// tslint:disable-next-line
 declare var __karma__: any;
+// tslint:disable-next-line
 declare var require: any;
 
 // Prevent Karma from running prematurely.
-__karma__.loaded = function () {};
+__karma__.loaded = function (): void {};
 
 // First, initialize the Angular testing environment.
 getTestBed()
@@ -26,7 +28,8 @@ getTestBed()
     platformBrowserDynamicTesting()
   );
 // Then we find all the tests.
-const context = require.context('./', true, /\.spec\.ts$/);
+// tslint:disable-next-line
+const context: any = require.context('./', true, /\.spec\.ts$/);
 // And load the modules.
 context.keys()
   .map(context);

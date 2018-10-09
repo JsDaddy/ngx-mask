@@ -1,3 +1,7 @@
+<a name="6.5.15"></a>
+# [6.5.14 support for repeat mask] (2018-10-08)
+You can pass into mask pattern with brackets
+
 <a name="6.4.14"></a>
 # [6.4.14 fixed '*' pattern in maskExpression ] (2018-10-05)
 Fixed pattern '*'
@@ -19,7 +23,7 @@ Fixed when page is loaded the mask is visible
 Fixed writeValue in directive
 
 <a name="6.2.8"></a>
-# [6.2.6 support for Mask Pipe/MaskService] (2018-01-10)
+# [6.2.8 support for Mask Pipe/MaskService] (2018-01-10)
 Added ability to use MaskPipe/MaskService inside component
 
 <a name="6.2.5"></a>
