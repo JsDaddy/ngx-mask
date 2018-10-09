@@ -26,8 +26,8 @@ export class MaskDirective implements ControlValueAccessor {
   private _inputValue: string;
   private _position: number | null = null;
   // tslint:disable-next-line
-  public startCurly: number;
-  // tslint:disable-next-line:no-any
+  private _start: number;
+  private _end: number;
   public onChange = (_: any) => { };
   public onTouch = () => { };
   public constructor(
@@ -43,9 +43,8 @@ export class MaskDirective implements ControlValueAccessor {
     if (!this._maskValue) {
       return;
     }
-
     this._maskService.maskExpression = this._maskValue;
-    this._repeatMaskExp();
+    this._repeatMask();
     this._maskService.formElementProperty = [
       'value',
       this._maskService.applyMask(
@@ -238,19 +237,16 @@ export class MaskDirective implements ControlValueAccessor {
   public setDisabledState(isDisabled: boolean): void {
     this._maskService.formElementProperty = ['disabled', isDisabled];
   }
-
-  private _repeatMaskExp(): void {
-    let endElement: number;
-    let repeatNtimes: number;
-    if (this._maskValue.match(/{/)) {
-      for ( let i: number = 0; i < this._maskValue.length; i++) {
-        if (this._maskValue[i] === '{') {
-          this.startCurly = i;
-        } else if (this._maskValue[i] === '}') {
-          endElement = i;
-          repeatNtimes = Number(this._maskService.maskExpression.slice(this.startCurly + 1, endElement));
-          const repeat: string = `${new Array(Number(repeatNtimes)).join(this._maskValue[this.startCurly - 1])}`;
-          this._maskService.maskExpression = this._maskService.maskExpression.replace(/{[0-9]}/, repeat);
+  private _repeatMask(): void {
+    if (this._maskService.maskExpression.match(/{[0-9]}/)) {
+      for (let i: number = 0; i < this._maskService.maskExpression.length; i++) {
+        if (this._maskService.maskExpression[i] === '{') {
+          this._start = i;
+        } else if (this._maskService.maskExpression[i] === '}') {
+          this._end = i;
+          const repeatNumber: number = Number(this._maskService.maskExpression.slice(this._start + 1, this._end));
+          const replaceWith: string = new Array(repeatNumber).join(this._maskService.maskExpression[this._start - 1]);
+          this._maskService.maskExpression = this._maskService.maskExpression.replace(/{[0-9]}/, replaceWith);
         }
       }
     }
