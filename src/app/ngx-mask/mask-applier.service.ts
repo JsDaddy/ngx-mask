@@ -134,7 +134,7 @@ export class MaskApplierService {
             : `${this.prefix}${result}`;
         return res;
     }
-    private _findSpecialChar (inputSymbol: string): undefined | string {
+    public _findSpecialChar (inputSymbol: string): undefined | string {
       const symbol: string | undefined = this.maskSpecialCharacters
           .find( (val: string) => val === inputSymbol);
       return symbol ;

@@ -157,6 +157,9 @@ Model value: 789-874.98
  <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true">
 ```
 
+### clearIfNotMatch (boolean)
+   You can choose clear the input if the input value **not match** the mask, default value false
+
 ###pipe with mask expression and custom Pattern ([string, pattern])
   You can pass array of expression and custom Pattern to pipe
 ##### Usage
@@ -176,9 +179,13 @@ pattern =  {
 this.customMaska = ['PPP-PPP', this.pattern];
 ```
 
-### clearIfNotMatch (boolean)
-   You can choose clear the input if the input value **not match** the mask, default value false
+###repeat mask
+  You can pass into mask pattern with brackets
+##### Usage
 
+```html
+ <input type='text' mask="A{4}">
+```
 
 ## Examples
 
