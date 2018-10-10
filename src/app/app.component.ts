@@ -17,6 +17,7 @@ export class AppComponent {
   public clearIfNotMatch: FormControl;
   public numberOrStringForm: FormControl;
   public sufixForm: FormControl;
+  public repeatForm: FormControl;
 
   public pattern: pattern =  {
     'P': {
@@ -31,6 +32,7 @@ export class AppComponent {
   public showMaskModel: string | number = '';
   public suf: string = '+7';
   public sufixModel: string | number;
+  public repeatFormModel: string | number;
 
 
   public constructor() {
@@ -41,6 +43,7 @@ export class AppComponent {
     this.clearIfNotMatch = new FormControl();
     this.numberOrStringForm = new FormControl();
     this.sufixForm = new FormControl('');
+    this.repeatForm = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }

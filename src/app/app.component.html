@@ -249,8 +249,8 @@
                   <div class="flex-row">
                     <div class="flex-cell-padding">
                       <mat-form-field>
-                        <input matInput placeholder="Sum" mask="0000" sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
-                        <mat-hint><b>Mask: </b>0000</mat-hint>
+                        <input matInput placeholder="Sum" mask= '00.00' sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
+                        <mat-hint><b>Mask: </b>0000.00</mat-hint>
                       </mat-form-field>
                     </div>
                     <div class="flex-cell">
@@ -279,13 +279,43 @@
                   <div class="flex-row">
                     <div class="flex-cell-padding">
                       <mat-form-field>
-                        <input matInput placeholder="Type number or string" mask="000.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
+                        <input matInput placeholder="Type number or string" mask="00*.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
                         <mat-hint><b>Mask: </b>000.00</mat-hint>
                       </mat-form-field>
                     </div>
                     <div class="flex-cell">
                       <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
                       <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
+                    </div>
+                  </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="mat-card-wr">
+            <mat-card>
+              <mat-card-header>
+                <mat-card-title>Repeat mask</mat-card-title>
+                <mat-card-subtitle>
+                  You can pass into mask pattern with brackets
+                </mat-card-subtitle>
+              </mat-card-header>
+              <mat-card-content>
+                  <div class="flex-row">
+                    <div class="flex-cell-padding">
+                      <mat-form-field>
+                        <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
+                        <mat-hint><b>Mask: </b>0000</mat-hint>
+                      </mat-form-field>
+                    </div>
+                    <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ repeatForm.value ? repeatForm.value: 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ repeatFormModel ? repeatFormModel: 'Empty' }}</p>
                     </div>
                   </div>
               </mat-card-content>

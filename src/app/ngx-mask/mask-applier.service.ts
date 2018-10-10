@@ -63,33 +63,38 @@ export class MaskApplierService {
         for (let i: number = 0, inputSymbol: string = inputArray[0]; i
         < inputArray.length; i++, inputSymbol = inputArray[i]) {
             if (cursor === maskExpression.length) {
+                console.log('Vasia');
                 break;
             }
-
             if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                 result += inputSymbol;
                 cursor += 2;
+                console.log('Vasia1');
+            } else if (
+              maskExpression[cursor + 1] === '*' && multi
+              && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
+            ) {
+              result += inputSymbol;
+              cursor += 3;
+              multi = false;
+              console.log('Vasia2');
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])
                 && maskExpression[cursor + 1]
                 === '*') {
                 result += inputSymbol;
                 multi = true;
-            } else if (
-                maskExpression[cursor + 1] === '*' && multi
-                && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
-            ) {
-                result += inputSymbol;
-                cursor += 3;
-                multi = false;
+                console.log('Vasia3');
             } else if (maskExpression[cursor + 1] === '?' && this._checkSymbolMask(
                 inputSymbol,
                 maskExpression[cursor + 2]
             )) {
                 result += inputSymbol;
                 cursor += 3;
+                console.log('Vasia4');
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
                 result += inputSymbol;
                 cursor++;
+                console.log('Vasia5');
             } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
                 result += maskExpression[cursor];
                 cursor++;
@@ -98,18 +103,28 @@ export class MaskApplierService {
                     : cursor;
                 this._shift.add(shiftStep + this.prefix.length || 0);
                 i--;
+                console.log('Vasia6');
             } else if (this.maskSpecialCharacters.indexOf(inputSymbol) > -1
                 && this.maskAvailablePatterns[maskExpression[cursor]]
                 && this.maskAvailablePatterns[maskExpression[cursor]].optional) {
                 cursor++;
                 i--;
+                console.log('Vasia7');
+            } else if ( (this.maskExpression[cursor + 1] === '*')
+              && (this._findSpecialChar(this.maskExpression[cursor + 2]))
+              && (this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]) ) {
+              cursor += 3;
+              result += inputSymbol;
+              console.log('Vasia8');
             }
         }
+
 
         if (result.length + 1 === maskExpression.length
             && this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1) {
             result += maskExpression[maskExpression.length - 1];
         }
+
 
         let shift: number = 1;
         let newPosition: number = position + 1;
@@ -120,14 +135,17 @@ export class MaskApplierService {
         }
 
         cb(this._shift.has(position) ? shift : 0);
-        const maskExPrefCount: number = `${this.prefix}${this.maskExpression}`.length;
         let res: string = `${this.prefix}${result}`;
         res = this.sufix &&
-              res.length === maskExPrefCount
+              cursor === maskExpression.length
             ? `${this.prefix}${result}${this.sufix}`
             : `${this.prefix}${result}`;
-
         return res;
+    }
+    public _findSpecialChar (inputSymbol: string): undefined | string {
+      const symbol: string | undefined = this.maskSpecialCharacters
+          .find( (val: string) => val === inputSymbol);
+      return symbol ;
     }
 
     private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
