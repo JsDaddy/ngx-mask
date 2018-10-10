@@ -126,10 +126,9 @@ export class MaskApplierService {
         }
 
         cb(this._shift.has(position) ? shift : 0);
-        const maskExPrefCount: number = `${this.prefix}${this.maskExpression}`.length;
         let res: string = `${this.prefix}${result}`;
         res = this.sufix &&
-              res.length === maskExPrefCount
+              cursor === maskExpression.length
             ? `${this.prefix}${result}${this.sufix}`
             : `${this.prefix}${result}`;
         return res;
