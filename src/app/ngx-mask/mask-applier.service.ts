@@ -63,13 +63,11 @@ export class MaskApplierService {
         for (let i: number = 0, inputSymbol: string = inputArray[0]; i
         < inputArray.length; i++, inputSymbol = inputArray[i]) {
             if (cursor === maskExpression.length) {
-                console.log('Vasia');
                 break;
             }
             if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
                 result += inputSymbol;
                 cursor += 2;
-                console.log('Vasia1');
             } else if (
               maskExpression[cursor + 1] === '*' && multi
               && this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
@@ -77,24 +75,20 @@ export class MaskApplierService {
               result += inputSymbol;
               cursor += 3;
               multi = false;
-              console.log('Vasia2');
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])
                 && maskExpression[cursor + 1]
                 === '*') {
                 result += inputSymbol;
                 multi = true;
-                console.log('Vasia3');
             } else if (maskExpression[cursor + 1] === '?' && this._checkSymbolMask(
                 inputSymbol,
                 maskExpression[cursor + 2]
             )) {
                 result += inputSymbol;
                 cursor += 3;
-                console.log('Vasia4');
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
                 result += inputSymbol;
                 cursor++;
-                console.log('Vasia5');
             } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
                 result += maskExpression[cursor];
                 cursor++;
@@ -103,19 +97,16 @@ export class MaskApplierService {
                     : cursor;
                 this._shift.add(shiftStep + this.prefix.length || 0);
                 i--;
-                console.log('Vasia6');
             } else if (this.maskSpecialCharacters.indexOf(inputSymbol) > -1
                 && this.maskAvailablePatterns[maskExpression[cursor]]
                 && this.maskAvailablePatterns[maskExpression[cursor]].optional) {
                 cursor++;
                 i--;
-                console.log('Vasia7');
             } else if ( (this.maskExpression[cursor + 1] === '*')
               && (this._findSpecialChar(this.maskExpression[cursor + 2]))
               && (this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]) ) {
               cursor += 3;
               result += inputSymbol;
-              console.log('Vasia8');
             }
         }
 
