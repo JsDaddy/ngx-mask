@@ -1,3 +1,7 @@
+<a name="6.5.17"></a>
+# [6.5.167 new valid date mask] (2018-10-09)
+You can used valid date mask
+
 <a name="6.5.16"></a>
 # [6.5.16 new specialCharacters 'quotes'] (2018-10-09)
 You can used new specialCharacters 'quotes'
