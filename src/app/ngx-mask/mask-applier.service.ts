@@ -87,6 +87,40 @@ export class MaskApplierService {
                 result += inputSymbol;
                 cursor += 3;
             } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+                if (maskExpression[cursor] === 'd') {
+                  if (Number(inputSymbol) > 3) {
+                    result += 0;
+                    cursor += 1;
+                    const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                      ? inputArray.length
+                      : cursor;
+                    this._shift.add( shiftStep + this.prefix.length || 0);
+                    i--;
+                    continue;
+                  }
+                }
+              if (maskExpression[cursor - 1] === 'd') {
+                  if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 ) {
+                    continue;
+                  }
+              }
+              if (maskExpression[cursor] === 'm') {
+                if (Number(inputSymbol) > 1) {
+                  result += 0;
+                  cursor += 1;
+                  const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                    ? inputArray.length
+                    : cursor;
+                  this._shift.add( shiftStep + this.prefix.length || 0);
+                  i--;
+                  continue;
+                }
+              }
+              if (maskExpression[cursor - 1] === 'm') {
+                if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ) {
+                  continue;
+                }
+              }
                 result += inputSymbol;
                 cursor++;
             } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
