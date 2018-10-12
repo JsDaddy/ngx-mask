@@ -27,4 +27,12 @@ describe('Directive: Mask', () => {
     equal('123', '123', fixture);
     equal('1234', '1234 $', fixture);
   });
+
+  it('should clear if not match the mask!!!!', () => {
+    component.mask = '0*.00';
+    component.sufix = ' $';
+    equal('', '', fixture);
+    equal('12345', '12345', fixture);
+    equal('12344.44', '12344.44 $', fixture);
+  });
 });
