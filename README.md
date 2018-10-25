@@ -160,8 +160,9 @@ Model value: 789-874.98
 ### clearIfNotMatch (boolean)
    You can choose clear the input if the input value **not match** the mask, default value false
 
-###pipe with mask expression and custom Pattern ([string, pattern])
+### Pipe with mask expression and custom Pattern ([string, pattern])
   You can pass array of expression and custom Pattern to pipe
+  
 ##### Usage
 
 ```html
@@ -179,8 +180,9 @@ pattern =  {
 this.customMaska = ['PPP-PPP', this.pattern];
 ```
 
-###repeat mask
+### Repeat mask
   You can pass into mask pattern with brackets
+  
 ##### Usage
 
 ```html
