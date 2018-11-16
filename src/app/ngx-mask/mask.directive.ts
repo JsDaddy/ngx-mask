@@ -238,7 +238,7 @@ export class MaskDirective implements ControlValueAccessor {
     this._maskService.formElementProperty = ['disabled', isDisabled];
   }
   private _repeatPatternSymbols(maskExp: string): string {
-    return maskExp.match(/{[0-9a-zA-Z]}/)
+    return maskExp.match(/{[0-9]+}/)
       && maskExp.split('')
         .reduce((accum: string, currval: string, index: number): string => {
           this._start = (currval === '{') ? index : this._start;
