@@ -31,4 +31,12 @@ describe('Directive: Mask', () => {
     equal('', '+7(___) ___-____', fixture);
     equal('2345678', '+7(234) 567-8___', fixture);
   });
+
+  it('should clear if not match the mask!!!!', () => {
+    component.mask = 'A{5}-A{2}';
+    component.showMaskTyped = true;
+    equal('', '_____-__', fixture);
+    equal('aaa', 'aaa__-__', fixture);
+    equal('aaaaaaa', 'aaaaa-aa', fixture);
+  });
 });
