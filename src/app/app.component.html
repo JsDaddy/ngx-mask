@@ -54,8 +54,8 @@
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
-                      <mat-hint> <b>Mask:</b> 00/00/0000</mat-hint>
+                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [showMaskTyped]="true" [(ngModel)]="formModelDate">
+                      <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
@@ -228,7 +228,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="A{4}" prefix="+5" [showMaskTyped]="true"
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+5" [showMaskTyped]="true"
                       [formControl]="form1" [(ngModel)]="showMaskModel">
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
