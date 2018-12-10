@@ -161,10 +161,10 @@ export class MaskApplierService {
 
         cb(this._shift.has(position) ? shift : 0);
         let res: string = `${this.prefix}${result}`;
-        res = this.sufix &&
-              cursor === maskExpression.length
-            ? `${this.prefix}${result}${this.sufix}`
-            : `${this.prefix}${result}`;
+        res = this.sufix ? `${this.prefix}${result}${this.sufix}` : `${this.prefix}${result}`;
+        if (result.length === 0) {
+            res = `${this.prefix}${result}`;
+        }
         return res;
     }
     public _findSpecialChar (inputSymbol: string): undefined | string {
