@@ -5,42 +5,42 @@
   }
 </style>
 <mat-sidenav-container>
-    <mat-sidenav mode="side" opened="false">Side menu</mat-sidenav>
-    <header>
-      <div class="container">
-        <div class="row">
-          <div class="col-7">
-            <div class="logo align-middle">
-              <a target="_blank" href="http://jsdaddy.io/"><img src="assets/img/logo.png" alt="jsdaddy"></a>
-            </div>
-
-          </div>
-          <div class="col-5">
-            <h1 class="title">
-              <span class="jq-label">Angular</span>
-              <span class="plugin-name">Mask Plugin</span>
-            </h1>
-            <span class="subtitle">Angular Plugin to make masks on form fields and html elements.</span>
-          </div>
-        </div>
-      </div>
-    </header>
+  Î<mat-sidenav mode="side" opened="false">Side menu</mat-sidenav>
+  <header>
     <div class="container">
       <div class="row">
-        <div class="col-12">
-          <div class="mat-grid-wr">
-            <mat-grid-list cols="1" rowHeight="55px">
-              <mat-grid-tile>
-                <mat-toolbar>
-                  <span>Examples</span>
-                </mat-toolbar>
-              </mat-grid-tile>
-            </mat-grid-list>
+        <div class="col-7">
+          <div class="logo align-middle">
+            <a target="_blank" href="http://jsdaddy.io/"><img src="assets/img/logo.png" alt="jsdaddy"></a>
           </div>
+
+        </div>
+        <div class="col-5">
+          <h1 class="title">
+            <span class="jq-label">Angular</span>
+            <span class="plugin-name">Mask Plugin</span>
+          </h1>
+          <span class="subtitle">Angular Plugin to make masks on form fields and html elements.</span>
         </div>
       </div>
     </div>
-    <div class="container">
+  </header>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-grid-wr">
+          <mat-grid-list cols="1" rowHeight="55px">
+            <mat-grid-tile>
+              <mat-toolbar>
+                <span>Examples</span>
+              </mat-toolbar>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="mat-card-wr">
@@ -54,8 +54,8 @@
                 <div class="flex-row">
                   <div class="flex-cell">
                     <mat-form-field>
-                      <input matInput placeholder="Date" mask="0{2}-0{5}-0{5}-A{11}-0{2}" [formControl]="formDate" [(ngModel)]="formModelDate">
-                      <mat-hint> <b>Mask:</b> 0{2}-0{5}-0{5}-A{11}-0{2}</mat-hint>
+                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
+                      <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                     </mat-form-field>
                   </div>
                   <div class="flex-cell">
@@ -69,310 +69,313 @@
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Other common cases</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="row">
-                  <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
-                        <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Hour" mask="00:00:00">
-                        <mat-hint> <b>Mask:</b> 00:00:00</mat-hint>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
-                        <mat-hint> <b>Mask:</b> AAA 000-S0S</mat-hint>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                  <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Valid date and month" mask="d0/m0/0000" [dropSpecialCharacters]="true">
-                        <mat-hint> <b>Mask:</b> d0/m0/0000</mat-hint>
-                      </mat-form-field>
-                    </div>
-                  </div>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Masks and special characters</mat-card-title>
-                <mat-card-subtitle>
-                  You could define if you want special characters propagate to the model or not with the
-                  attribute <b>dropSpecialCharacters</b>.
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="flex-row">
-                  <div class="flex-cell">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Other common cases</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="row">
+                <div class="col-mat-3">
+                  <div class="mat-form-wr">
                     <mat-form-field>
-                      <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"
-                             [formControl]="cpfFormControl"  [(ngModel)]="cpfModel">
-                      <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
+                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+                      <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
                     </mat-form-field>
                   </div>
-                  <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value: 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ cpfModel ? cpfModel: 'Empty' }}</p>
-                  </div>
                 </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Clear if not match</mat-card-title>
-                <mat-card-subtitle>
-                  You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b>
-                  attribute.
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                <div class="flex-row">
-                  <div class="flex-cell">
+                <div class="col-mat-3">
+                  <div class="mat-form-wr">
                     <mat-form-field>
-                      <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
-                             [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
-                      <mat-hint><b>Mask:</b>000.000</mat-hint>
+                      <input matInput placeholder="Hour" mask="00:00:00">
+                      <mat-hint> <b>Mask:</b> 00:00:00</mat-hint>
                     </mat-form-field>
                   </div>
-                  <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ clearIfNotMatch.value ? clearIfNotMatch.value: 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p>
+                </div>
+                <div class="col-mat-3">
+                  <div class="mat-form-wr">
+                    <mat-form-field>
+                      <input matInput placeholder="Mixed Type" mask="AAA 000-S0S">
+                      <mat-hint> <b>Mask:</b> AAA 000-S0S</mat-hint>
+                    </mat-form-field>
                   </div>
                 </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Phone number</mat-card-title>
-                <mat-card-subtitle>
-                  You can add prefix to you masked value
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                  <div class="flex-row">
-                    <div class="flex-cell-padding">
-                      <mat-form-field>
-                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7" [formControl]="form" [(ngModel)]="dateModel">
-                        <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ form.value ? form.value: 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ dateModel ? dateModel: 'Empty' }}</p>
-                    </div>
+                <div class="col-mat-3">
+                  <div class="mat-form-wr">
+                    <mat-form-field>
+                      <input matInput placeholder="Valid date and month" mask="d0/m0/0000" [dropSpecialCharacters]="true">
+                      <mat-hint> <b>Mask:</b> d0/m0/0000</mat-hint>
+                    </mat-form-field>
                   </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Phone number</mat-card-title>
-                <mat-card-subtitle>
-                  You can add 'showMaskTyped' property to see maskExpression with underscores while typing
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                  <div class="flex-row">
-                    <div class="flex-cell-padding">
-                      <mat-form-field>
-                        <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+5" [showMaskTyped] = "true" [formControl]="form1" [(ngModel)]="showMaskModel">
-                        <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ form1.value ? form1.value: 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel: 'Empty' }}</p>
-                    </div>
-                  </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Masks and special characters</mat-card-title>
+              <mat-card-subtitle>
+                You could define if you want special characters propagate to the model or not with the
+                attribute <b>dropSpecialCharacters</b>.
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"
+                      [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
+                    <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ cpfModel ? cpfModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>SUFIX</mat-card-title>
-                <mat-card-subtitle>
-                  You can add 'sufix' property
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                  <div class="flex-row">
-                    <div class="flex-cell-padding">
-                      <mat-form-field>
-                        <input matInput placeholder="Sum" mask= '00.00' sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
-                        <mat-hint><b>Mask: </b>0000.00</mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ sufixForm.value ? sufixForm.value: 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ sufixModel ? sufixModel: 'Empty' }}</p>
-                    </div>
-                  </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Clear if not match</mat-card-title>
+              <mat-card-subtitle>
+                You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b>
+                attribute.
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
+                      [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
+                    <mat-hint><b>Mask:</b>000.000</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ clearIfNotMatch.value ? clearIfNotMatch.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Number or string</mat-card-title>
-                <mat-card-subtitle>
-                  You can pass in value of type number or string
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                  <div class="flex-row">
-                    <div class="flex-cell-padding">
-                      <mat-form-field>
-                        <input matInput placeholder="Type number or string" mask="00*.00" [formControl]="numberOrStringForm" [(ngModel)]="numberOrStringFormModel">
-                        <mat-hint><b>Mask: </b>000.00</mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
-                    </div>
-                  </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Phone number</mat-card-title>
+              <mat-card-subtitle>
+                You can add prefix to you masked value
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7" [formControl]="form"
+                      [(ngModel)]="dateModel">
+                    <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ form.value ? form.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ dateModel ? dateModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Repeat mask</mat-card-title>
-                <mat-card-subtitle>
-                  You can pass into mask pattern with brackets
-                </mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                  <div class="flex-row">
-                    <div class="flex-cell-padding">
-                      <mat-form-field>
-                        <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
-                        <mat-hint><b>Mask: </b>00000</mat-hint>
-                      </mat-form-field>
-                    </div>
-                    <div class="flex-cell">
-                      <p><b>FormControl:</b> {{ repeatForm.value ? repeatForm.value: 'Empty' }}</p>
-                      <p><b>NgModel:</b> {{ repeatFormModel ? repeatFormModel: 'Empty' }}</p>
-                    </div>
-                  </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Phone number</mat-card-title>
+              <mat-card-subtitle>
+                You can add 'showMaskTyped' property to see maskExpression with underscores while typing
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+5" [showMaskTyped]="true"
+                      [formControl]="form1" [(ngModel)]="showMaskModel">
+                    <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ form1.value ? form1.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-    <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="mat-card-wr">
-              <mat-card>
-                <mat-card-header>
-                  <mat-card-title>Custom Pattern an mask in pipe</mat-card-title>
-                  <mat-card-subtitle>
-                    You can pass array of maskExpression and CutomPattern into pipe
-                  </mat-card-subtitle>
-                </mat-card-header>
-                <mat-card-content>
-                    <div class="flex-row">
-                      <div class="flex-cell-padding">
-                            <span >{{phone | mask: customMaska}}</span><br><br>
-                            <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
-                      </div>
-                    </div>
-                </mat-card-content>
-              </mat-card>
-            </div>
-          </div>
-        </div>
-      </div>
-    <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-grid-wr">
-            <mat-grid-list cols="1" rowHeight="55px">
-              <mat-grid-tile>
-                <mat-toolbar>
-                  <span>Documentation - see docs on
-                    <a class="git-link" target="_blank" href="https://github.com/JsDaddy/ngx-mask">
-                      <img src="assets/img/github.png" alt="github">
-                    </a>
-                  </span>
-                </mat-toolbar>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>SUFIX</mat-card-title>
+              <mat-card-subtitle>
+                You can add 'sufix' property
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Sum" mask='00.00' sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
+                    <mat-hint><b>Mask: </b>0000.00</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ sufixForm.value ? sufixForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ sufixModel ? sufixModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
-  </mat-sidenav-container>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Number or string</mat-card-title>
+              <mat-card-subtitle>
+                You can pass in value of type number or string
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Type number or string" mask="00*.00" [formControl]="numberOrStringForm"
+                      [(ngModel)]="numberOrStringFormModel">
+                    <mat-hint><b>Mask: </b>000.00</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Repeat mask</mat-card-title>
+              <mat-card-subtitle>
+                You can pass into mask pattern with brackets
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
+                    <mat-hint><b>Mask: </b>00000</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ repeatForm.value ? repeatForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ repeatFormModel ? repeatFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Custom Pattern an mask in pipe</mat-card-title>
+              <mat-card-subtitle>
+                You can pass array of maskExpression and CutomPattern into pipe
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <span>{{phone | mask: customMaska}}</span><br><br>
+                  <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-grid-wr">
+          <mat-grid-list cols="1" rowHeight="55px">
+            <mat-grid-tile>
+              <mat-toolbar>
+                <span>Documentation - see docs on
+                  <a class="git-link" target="_blank" href="https://github.com/JsDaddy/ngx-mask">
+                    <img src="assets/img/github.png" alt="github">
+                  </a>
+                </span>
+              </mat-toolbar>
+            </mat-grid-tile>
+          </mat-grid-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-sidenav-container>

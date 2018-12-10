@@ -1,6 +1,10 @@
+<a name="7.0.3">
+# [7.0.3 hotfix] (2018-12-10)
+hotfix
+
 <a name="7.0.2">
 # [7.0.2 update of sufix] (2018-12-10)
-sufix sufix appears while you inputing data
+sufix appears while you inputing data
 
 <a name="6.5.17"></a>
 # [6.5.17 fix of sufix] (2018-10-09)
