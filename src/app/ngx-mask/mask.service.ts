@@ -32,7 +32,7 @@ export class MaskService extends MaskApplierService {
   ): string  {
 
     this.maskIsShown = this.showMaskTyped
-        ? this.maskExpression.replace(/[0-9]/g, '_')
+        ? this.maskExpression.replace(/\w/g, '_')
         : '';
     if (!inputValue && this.showMaskTyped) {
       return this.prefix + this.maskIsShown;
@@ -81,7 +81,7 @@ export class MaskService extends MaskApplierService {
 
   public showMaskInInput(): void {
     if (this.showMaskTyped) {
-      this.maskIsShown = this.maskExpression.replace(/[0-9]/g, '_');
+      this.maskIsShown = this.maskExpression.replace(/\w/g, '_');
     }
   }
 
