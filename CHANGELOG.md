@@ -1,3 +1,7 @@
+<a name="7.0.4">
+# [7.0.4 fix multiple mask] (2018-12-11)
+Fix multiple mask when you use the same symbols bettwen *
+
 <a name="7.0.3">
 # [7.0.3 hotfix] (2018-12-10)
 hotfix
