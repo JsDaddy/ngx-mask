@@ -62,4 +62,10 @@ describe('Directive: Mask', () => {
     component.mask = '\'00\'00\'0000\'';
     equal('12345678', '\'12\'34\'5678\'', fixture);
   });
+
+  it('specialCharacters quotes', () => {
+    component.mask = '0-0-0*-0*-0*';
+    equal('123', '1-2-3', fixture);
+    equal('123-42-', '1-2-3-42-', fixture);
+  });
 });

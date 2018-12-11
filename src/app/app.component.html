@@ -5,7 +5,7 @@
   }
 </style>
 <mat-sidenav-container>
-  Î<mat-sidenav mode="side" opened="false">Side menu</mat-sidenav>
+  <mat-sidenav mode="side" opened="false">Side menu</mat-sidenav>
   <header>
     <div class="container">
       <div class="row">
@@ -41,34 +41,35 @@
     </div>
   </div>
   <div class="container">
-      <div class="row">
-        <div class="col-12">
-          <div class="mat-card-wr">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>Mask common case</mat-card-title>
-                <mat-card-subtitle>An case of date mask</mat-card-subtitle>
-              </mat-card-header>
-              <mat-card-content>
-                    <br>
-                <div class="flex-row">
-                  <div class="flex-cell">
-                    <mat-form-field>
-                      <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
-                      <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
-                    </mat-form-field>
-                  </div>
-                  <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
-                  </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Mask common case</mat-card-title>
+              <mat-card-subtitle>An case of date mask</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <br>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate"
+                      [(ngModel)]="formModelDate">
+                    <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
+                  </mat-form-field>
                 </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
         </div>
       </div>
     </div>
+  </div>
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -320,7 +321,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
+                    <input matInput placeholder="Repeat mask" mask="A{5}"   [showMaskTyped]="true" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
                     <mat-hint><b>Mask: </b>00000</mat-hint>
                   </mat-form-field>
                 </div>
