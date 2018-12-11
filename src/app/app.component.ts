@@ -18,6 +18,7 @@ export class AppComponent {
   public numberOrStringForm: FormControl;
   public sufixForm: FormControl;
   public repeatForm: FormControl;
+  public separatorForm: FormControl;
 
   public pattern: pattern =  {
     'P': {
@@ -33,7 +34,7 @@ export class AppComponent {
   public suf: string = '+7';
   public sufixModel: string | number;
   public repeatFormModel: string | number;
-
+  public separatorFormModel: string | number;
 
   public constructor() {
     this.form = new FormControl('');
@@ -44,6 +45,7 @@ export class AppComponent {
     this.numberOrStringForm = new FormControl();
     this.sufixForm = new FormControl('');
     this.repeatForm = new FormControl('');
+    this.separatorForm = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }

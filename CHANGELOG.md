@@ -1,3 +1,7 @@
+<a name="7.1.0">
+# [7.1.0 feature thousand separator] (2018-12-11)
+Added new mask that separates number by thousands
+
 <a name="7.0.4">
 # [7.0.4 fix multiple mask] (2018-12-11)
 Fix multiple mask when you use the same symbols bettwen *

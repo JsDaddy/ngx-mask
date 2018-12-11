@@ -189,6 +189,17 @@ this.customMaska = ['PPP-PPP', this.pattern];
  <input type='text' mask="A{4}">
 ```
 
+### Thousand separator
+  You can devide your input by thousands
+
+##### Usage
+
+```html
+ <input type='text' mask="separator">
+```
+
+
+
 ## Examples
 
 Check the [demo](https://jsdaddy.github.io/ngx-mask/).
