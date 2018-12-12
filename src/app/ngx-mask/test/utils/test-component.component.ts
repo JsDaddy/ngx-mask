@@ -13,7 +13,7 @@ import { IConfig } from 'public_api';
       [prefix]="prefix"
       [formControl]="form"
       [showMaskTyped] = "showMaskTyped"
-      [(ngModel)]="ngModelValue">`
+      [(ngModel)]="ngModelValue">`,
 })
 export class TestMaskComponent {
   public mask: string | null;

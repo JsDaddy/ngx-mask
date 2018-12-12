@@ -14,7 +14,6 @@ export class MaskApplierService {
     public sufix: IConfig['sufix'];
     public customPattern: IConfig['patterns'];
 
-
     private _shift: Set<number>;
 
     public constructor(
@@ -47,7 +46,6 @@ export class MaskApplierService {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
         }
-
         let cursor: number = 0;
         let result: string = ``;
         let multi: boolean = false;
@@ -60,6 +58,9 @@ export class MaskApplierService {
             .split('');
 
         if (maskExpression === 'separator') {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
             const strForSep: string = inputValue.replace(/\s/g, '');
             result = this.separator(strForSep);
             position = result.length + 1;
@@ -96,6 +97,49 @@ export class MaskApplierService {
                 )) {
                     result += inputSymbol;
                     cursor += 3;
+                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+                    if (maskExpression[cursor] === 'H') {
+                        if (Number(inputSymbol) > 2) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    } if (maskExpression[cursor] === 'h') {
+                        if (result === '2' && Number(inputSymbol) > 3) {
+                             continue;
+                        }
+                    }
+                    if (maskExpression[cursor] === 'm') {
+                        if (Number(inputSymbol) > 5) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    }
+                    if (maskExpression[cursor] === 's') {
+                        if (Number(inputSymbol) > 5) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    }
+                    result += inputSymbol;
+                    cursor++;
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
                     if (maskExpression[cursor] === 'd') {
                         if (Number(inputSymbol) > 3) {
