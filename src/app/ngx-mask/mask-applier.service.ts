@@ -13,7 +13,7 @@ export class MaskApplierService {
     public prefix: IConfig['prefix'];
     public sufix: IConfig['sufix'];
     public customPattern: IConfig['patterns'];
-
+    public flag: boolean = true;
 
     private _shift: Set<number>;
 
@@ -47,6 +47,7 @@ export class MaskApplierService {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
         }
+        debugger;
 
         let cursor: number = 0;
         let result: string = ``;
@@ -60,6 +61,9 @@ export class MaskApplierService {
             .split('');
 
         if (maskExpression === 'separator') {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
             const strForSep: string = inputValue.replace(/\s/g, '');
             result = this.separator(strForSep);
             position = result.length + 1;
@@ -68,6 +72,38 @@ export class MaskApplierService {
                 ? inputArray.length
                 : cursor;
             this._shift.add(shiftStep + this.prefix.length || 0);
+        } else if (maskExpression === 'time24') {
+            debugger;
+            if (inputValue.match('[a-z]|[A-Z]')) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
+            if (inputValue.length === 9) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
+            if (inputValue.length >= 7) {
+                this.flag = false;
+            }
+            if ((inputValue.length === 2 || inputValue.length === 5) && this.flag) {
+                inputValue += ':';
+            }
+            if (inputValue.length === 0 || /^\d\d:\d\d$/.test(inputValue) || /^\d\d$/.test(inputValue)) {
+                this.flag = true;
+            }
+            if (!this.time24(inputValue) && (inputValue.length === 4 || inputValue.length === 7)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1 );
+                result = inputValue;
+            } else if (!this.time24(inputValue) && (inputValue.length === 1 || inputValue.length === 3)) {
+                inputValue = inputValue.substring(0, inputValue.length - 2 );
+                result = inputValue;
+            } else {
+                result = inputValue;
+                position = result.length + 1;
+                cursor = position;
+                const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                    ? inputArray.length
+                    : cursor;
+                this._shift.add(shiftStep + this.prefix.length || 0);
+            }
         } else {
             // tslint:disable-next-line
             for (let i: number = 0, inputSymbol: string = inputArray[0]; i
@@ -200,6 +236,31 @@ export class MaskApplierService {
             res = res.replace(rgx, '$1' + ' ' + '$2');
         }
         return res;
+    }
+
+    private time24 = (str: string) => {
+        const inputArray: string[] = str.split(':');
+        const hours: RegExp = /^\d\d:$/;
+        const minute: RegExp = /^\d\d:\d$/;
+        const minutes: RegExp = /^\d\d:\d\d:$/;
+        const second: RegExp = /^\d\d:\d\d:\d$/;
+        const seconds: RegExp = /^\d\d:\d\d:\d\d$/;
+
+        if (/^\d$/.test(str) && inputArray[0] >= '0' && inputArray[0] <= '2') {
+            return true;
+        } else if ((hours.test(str) && inputArray[0] >= '0' && inputArray[0] <= '23')) {
+            return true;
+        } else if ((minute.test(str) && inputArray[1] >= '0' && inputArray[1] <= '5')) {
+            return true;
+        } else if ((minutes.test(str) && inputArray[1] >= '0' && inputArray[1] < '60')) {
+            return true;
+        } else if ((second.test(str) && inputArray[2] >= '0' && inputArray[2] <= '5')) {
+            return true;
+        } else if ((seconds.test(str) && inputArray[2] >= '0' && inputArray[2] < '60')) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 

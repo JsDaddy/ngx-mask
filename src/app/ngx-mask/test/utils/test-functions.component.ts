@@ -4,6 +4,8 @@ export function typeTest(inputValue: string, fixture: any): string {
     fixture.detectChanges();
 
     fixture.nativeElement.querySelector('input').value = inputValue;
+    // tslint:disable-next-line:no-console
+    // console.log('*********************' ,fixture.nativeElement.querySelector('input'));
     fixture.nativeElement.querySelector('input')
         .dispatchEvent(new Event('input'));
 

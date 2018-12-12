@@ -1,3 +1,7 @@
+<a name="7.1.1">
+# [7.1.1 update separator] (2018-12-11)
+Now it works only with numbers
+
 <a name="7.1.0">
 # [7.1.0 feature thousand separator] (2018-12-11)
 Added new mask that separates number by thousands

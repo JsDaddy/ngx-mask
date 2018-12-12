@@ -49,4 +49,12 @@ describe('Separator: Mask', () => {
     component.mask = 'separator';
     equal('1000000', '1 000 000', fixture);
   });
+
+  it('separator for letters', () => {
+    component.mask = 'separator';
+    equal('a', '', fixture);
+    equal('1a', '1', fixture);
+    equal('1000a', '1 000', fixture);
+    equal('1000/', '1 000', fixture);
+  });
 });
