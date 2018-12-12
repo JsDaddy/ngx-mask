@@ -44,10 +44,19 @@ export const initialConfig: IConfig = {
             pattern: new RegExp('\[a-zA-Z\]')
         },
         'd': {
-          pattern: new RegExp('\\d'),
+            pattern: new RegExp('\\d'),
         },
         'm': {
-          pattern: new RegExp('\\d'),
+            pattern: new RegExp('\\d'),
         },
+        'H': {
+            pattern: new RegExp('\\d'),
+        },
+        'h': {
+            pattern: new RegExp('\\d'),
+        },
+        's': {
+            pattern: new RegExp('\\d'),
+        }
     }
 };

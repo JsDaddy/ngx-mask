@@ -198,6 +198,15 @@ this.customMaska = ['PPP-PPP', this.pattern];
  <input type='text' mask="separator">
 ```
 
+### Time validation
+  You can validate your input as 24 hour format
+
+##### Usage
+
+```html
+ <input type='text' mask="Hh:m0:s0">
+```
+
 
 
 ## Examples

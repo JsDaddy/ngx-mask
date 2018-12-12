@@ -47,8 +47,6 @@ export class MaskApplierService {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
         }
-        debugger;
-
         let cursor: number = 0;
         let result: string = ``;
         let multi: boolean = false;
@@ -72,38 +70,6 @@ export class MaskApplierService {
                 ? inputArray.length
                 : cursor;
             this._shift.add(shiftStep + this.prefix.length || 0);
-        } else if (maskExpression === 'time24') {
-            debugger;
-            if (inputValue.match('[a-z]|[A-Z]')) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
-            }
-            if (inputValue.length === 9) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
-            }
-            if (inputValue.length >= 7) {
-                this.flag = false;
-            }
-            if ((inputValue.length === 2 || inputValue.length === 5) && this.flag) {
-                inputValue += ':';
-            }
-            if (inputValue.length === 0 || /^\d\d:\d\d$/.test(inputValue) || /^\d\d$/.test(inputValue)) {
-                this.flag = true;
-            }
-            if (!this.time24(inputValue) && (inputValue.length === 4 || inputValue.length === 7)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1 );
-                result = inputValue;
-            } else if (!this.time24(inputValue) && (inputValue.length === 1 || inputValue.length === 3)) {
-                inputValue = inputValue.substring(0, inputValue.length - 2 );
-                result = inputValue;
-            } else {
-                result = inputValue;
-                position = result.length + 1;
-                cursor = position;
-                const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
-                    ? inputArray.length
-                    : cursor;
-                this._shift.add(shiftStep + this.prefix.length || 0);
-            }
         } else {
             // tslint:disable-next-line
             for (let i: number = 0, inputSymbol: string = inputArray[0]; i
@@ -132,6 +98,49 @@ export class MaskApplierService {
                 )) {
                     result += inputSymbol;
                     cursor += 3;
+                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+                    if (maskExpression[cursor] === 'H') {
+                        if (Number(inputSymbol) > 2) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    } if (maskExpression[cursor] === 'h') {
+                        if (result === '2' && Number(inputSymbol) > 3) {
+                             continue;
+                        }
+                    }
+                    if (maskExpression[cursor] === 'm') {
+                        if (Number(inputSymbol) > 5) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    }
+                    if (maskExpression[cursor] === 's') {
+                        if (Number(inputSymbol) > 5) {
+                            result += 0;
+                            cursor += 1;
+                            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    }
+                    result += inputSymbol;
+                    cursor++;
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
                     if (maskExpression[cursor] === 'd') {
                         if (Number(inputSymbol) > 3) {
@@ -236,31 +245,6 @@ export class MaskApplierService {
             res = res.replace(rgx, '$1' + ' ' + '$2');
         }
         return res;
-    }
-
-    private time24 = (str: string) => {
-        const inputArray: string[] = str.split(':');
-        const hours: RegExp = /^\d\d:$/;
-        const minute: RegExp = /^\d\d:\d$/;
-        const minutes: RegExp = /^\d\d:\d\d:$/;
-        const second: RegExp = /^\d\d:\d\d:\d$/;
-        const seconds: RegExp = /^\d\d:\d\d:\d\d$/;
-
-        if (/^\d$/.test(str) && inputArray[0] >= '0' && inputArray[0] <= '2') {
-            return true;
-        } else if ((hours.test(str) && inputArray[0] >= '0' && inputArray[0] <= '23')) {
-            return true;
-        } else if ((minute.test(str) && inputArray[1] >= '0' && inputArray[1] <= '5')) {
-            return true;
-        } else if ((minutes.test(str) && inputArray[1] >= '0' && inputArray[1] < '60')) {
-            return true;
-        } else if ((second.test(str) && inputArray[2] >= '0' && inputArray[2] <= '5')) {
-            return true;
-        } else if ((seconds.test(str) && inputArray[2] >= '0' && inputArray[2] < '60')) {
-            return true;
-        } else {
-            return false;
-        }
     }
 }
 
