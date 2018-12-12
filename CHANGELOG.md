@@ -1,20 +1,25 @@
 <a name="7.2.0">
+
 # [7.2.0 update separator] (2018-12-12)
 Added valid 24 hour format mask
 
 <a name="7.1.0">
+
 # [7.1.0 feature thousand separator] (2018-12-11)
 Added new mask that separates number by thousands
 
 <a name="7.0.4">
+
 # [7.0.4 fix multiple mask] (2018-12-11)
 Fix multiple mask when you use the same symbols bettwen *
 
 <a name="7.0.3">
+
 # [7.0.3 hotfix] (2018-12-10)
 hotfix
 
 <a name="7.0.2">
+
 # [7.0.2 update of sufix] (2018-12-10)
 sufix appears while you inputing data
 

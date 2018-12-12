@@ -246,4 +246,3 @@ export class MaskApplierService {
         return res;
     }
 }
-
