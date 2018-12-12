@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { IConfig } from 'public_api';
 
@@ -14,12 +14,6 @@ import { IConfig } from 'public_api';
       [formControl]="form"
       [showMaskTyped] = "showMaskTyped"
       [(ngModel)]="ngModelValue">`,
-      // styles: [`
-      // input {
-      //      background-color: red;
-      //   }
-      // `],
-      // // encapsulation: ViewEncapsulation.ShadowDom
 })
 export class TestMaskComponent {
   public mask: string | null;
