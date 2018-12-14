@@ -207,6 +207,16 @@ this.customMaska = ['PPP-PPP', this.pattern];
  <input type='text' mask="Hh:m0:s0">
 ```
 
+### Percent validation
+  You can validate your input for percents
+
+##### Usage
+
+```html
+ <input type='text' mask="percents" sufix="%">
+```
+
+
 
 
 ## Examples

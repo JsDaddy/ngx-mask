@@ -1,7 +1,12 @@
 <a name="7.2.0">
 
-# [7.2.0 update separator] (2018-12-12)
-Added valid 24 hour format mask
+# [7.3.0 feature percent] (2018-12-12)
+Added validation for percent
+
+<a name="7.2.0">
+
+# [7.2.0 feature 24 hour forma] (2018-12-12)
+Added valid 24 hour format mask and update separator
 
 <a name="7.1.0">
 
