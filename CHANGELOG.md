@@ -1,6 +1,6 @@
 <a name="7.2.0">
 
-# [7.3.0 feature percent] (2018-12-12)
+# [7.3.0 feature percent] (2018-12-14)
 Added validation for percent
 
 <a name="7.2.0">
