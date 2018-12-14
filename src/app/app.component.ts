@@ -19,6 +19,7 @@ export class AppComponent {
   public sufixForm: FormControl;
   public repeatForm: FormControl;
   public separatorForm: FormControl;
+  public percent: FormControl;
 
   public pattern: pattern =  {
     'P': {
@@ -46,6 +47,7 @@ export class AppComponent {
     this.sufixForm = new FormControl('');
     this.repeatForm = new FormControl('');
     this.separatorForm = new FormControl('');
+    this.percent = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }

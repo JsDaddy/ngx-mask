@@ -196,6 +196,34 @@
         <div class="mat-card-wr">
           <mat-card>
             <mat-card-header>
+              <mat-card-title>Percent valid mask</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="Percent valid mask"  mask="percent" sufix="%"
+                      [formControl]="percent">
+                    <mat-hint><b>Mask:</b>percent</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ clearIfNotMatch.value ? clearIfNotMatch.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
               <mat-card-title>Phone number</mat-card-title>
               <mat-card-subtitle>
                 You can add prefix to you masked value

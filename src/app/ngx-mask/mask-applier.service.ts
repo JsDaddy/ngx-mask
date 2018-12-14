@@ -56,8 +56,16 @@ export class MaskApplierService {
 
         const inputArray: string[] = inputValue.toString()
             .split('');
-
-        if (maskExpression === 'separator') {
+        if (maskExpression === 'percent') {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
+            if (this.persantage(inputValue)) {
+                result = inputValue;
+            } else {
+                result = inputValue.substring(0, inputValue.length - 1);
+            }
+        } else if (maskExpression === 'separator') {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
@@ -111,7 +119,7 @@ export class MaskApplierService {
                         }
                     } if (maskExpression[cursor] === 'h') {
                         if (result === '2' && Number(inputSymbol) > 3) {
-                             continue;
+                            continue;
                         }
                     }
                     if (maskExpression[cursor] === 'm') {
@@ -244,5 +252,13 @@ export class MaskApplierService {
             res = res.replace(rgx, '$1' + ' ' + '$2');
         }
         return res;
+    }
+
+    private persantage = (str: string): boolean => {
+        if (Number(str) >= 0 && Number(str) <= 100) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
