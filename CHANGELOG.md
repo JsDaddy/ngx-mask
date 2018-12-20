@@ -1,5 +1,10 @@
 <a name="7.2.0">
 
+# [7.3.1 update separator] (2018-12-19)
+Now separator can separate by dots
+
+<a name="7.2.0">
+
 # [7.3.0 feature percent] (2018-12-14)
 Added validation for percent
 
