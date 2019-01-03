@@ -66,7 +66,7 @@ export class MaskApplierService {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
         } else if (maskExpression === 'separator') {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const strForSep: string = inputValue.replace(/\s/g, '');
@@ -78,7 +78,7 @@ export class MaskApplierService {
                 : cursor;
             this._shift.add(shiftStep + this.prefix.length || 0);
         } else if (maskExpression === 'dot_separator') {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const strForSep: string = inputValue.replace(/\./g, '');
