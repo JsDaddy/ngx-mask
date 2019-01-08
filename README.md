@@ -202,7 +202,15 @@ For separate input with dots
 ```html
  <input type='text' mask="dot_separator">
 ```
+For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
+```
+Input value: 1234.56
+Masked value: 1 234.56
+
+Input value: 1234,56
+Masked value: 1.234,56
+```
 
 ### Time validation
   You can validate your input as 24 hour format
