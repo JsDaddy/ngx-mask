@@ -1,9 +1,14 @@
-<a name="7.2.0">
+<a name="7.3.3">
+
+# [7.3.3 decimals values separator] (2019-01-08)
+Added decimals values for separator and dot_separator
+
+<a name="7.3.1">
 
 # [7.3.1 update separator] (2018-12-19)
 Now separator can separate by dots
 
-<a name="7.2.0">
+<a name="7.3.0">
 
 # [7.3.0 feature percent] (2018-12-14)
 Added validation for percent

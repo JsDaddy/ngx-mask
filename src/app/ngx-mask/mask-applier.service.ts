@@ -66,7 +66,7 @@ export class MaskApplierService {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
         } else if (maskExpression === 'separator') {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const strForSep: string = inputValue.replace(/\s/g, '');
@@ -78,7 +78,7 @@ export class MaskApplierService {
                 : cursor;
             this._shift.add(shiftStep + this.prefix.length || 0);
         } else if (maskExpression === 'dot_separator') {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const strForSep: string = inputValue.replace(/\./g, '');
@@ -257,24 +257,26 @@ export class MaskApplierService {
 
     private separator = (str: string) => {
         str += '';
-        const x: string[] = str.split(' ');
+        const x: string[] = str.split('.');
+        const decimals: string = x.length > 1 ? `.${x[1]}` : '';
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
             res = res.replace(rgx, '$1' + ' ' + '$2');
         }
-        return res;
+        return res + decimals;
     }
 
     private dotSeparator = (str: string) => {
         str += '';
-        const x: string[] = str.split(' ');
+        const x: string[] = str.split(',');
+        const decimals: string = x.length > 1 ? `,${x[1]}` : '';
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
             res = res.replace(rgx, '$1' + '.' + '$2');
         }
-        return res;
+        return res + decimals;
     }
 
     private persantage = (str: string): boolean => {
