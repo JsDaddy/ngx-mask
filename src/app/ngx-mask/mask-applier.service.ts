@@ -8,6 +8,7 @@ export class MaskApplierService {
     public showTemplate: IConfig['showTemplate'];
     public clearIfNotMatch: IConfig['clearIfNotMatch'];
     public maskExpression: string = '';
+    public shownMaskExpression: string = '';
     public maskSpecialCharacters: IConfig['specialCharacters'];
     public maskAvailablePatterns: IConfig['patterns'];
     public prefix: IConfig['prefix'];

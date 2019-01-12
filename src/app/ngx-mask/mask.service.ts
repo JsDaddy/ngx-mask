@@ -31,9 +31,7 @@ export class MaskService extends MaskApplierService {
     cb: Function = () => {}
   ): string  {
 
-    this.maskIsShown = this.showMaskTyped
-        ? this.maskExpression.replace(/\w/g, '_')
-        : '';
+    this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
     if (!inputValue && this.showMaskTyped) {
       return this.prefix + this.maskIsShown;
     }
@@ -44,21 +42,21 @@ export class MaskService extends MaskApplierService {
       cb
     );
     Array.isArray(this.dropSpecialCharacters)
-        ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
-        : this.dropSpecialCharacters === true
-         ? this.onChange(
-          this.isNumberValue
-             ? Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters))
-             : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-            )
-         : this.onChange(this._removeSufix(this._removePrefix(result)));
-          let ifMaskIsShown: string = '';
-          if (!this.showMaskTyped) {
-            return result;
-          }
-          const resLen: number = result.length;
-          const prefNmask: string = this.prefix + this.maskIsShown;
-          ifMaskIsShown = prefNmask.slice(resLen);
+      ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
+      : this.dropSpecialCharacters === true
+      ? this.onChange(
+        this.isNumberValue
+          ? Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters))
+          : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
+      )
+      : this.onChange(this._removeSufix(this._removePrefix(result)));
+    let ifMaskIsShown: string = '';
+    if (!this.showMaskTyped) {
+      return result;
+    }
+    const resLen: number = result.length;
+    const prefNmask: string = this.prefix + this.maskIsShown;
+    ifMaskIsShown = prefNmask.slice(resLen);
     return result + ifMaskIsShown;
   }
 
@@ -79,10 +77,17 @@ export class MaskService extends MaskApplierService {
     this.clearIfNotMatchFn();
   }
 
-  public showMaskInInput(): void {
-    if (this.showMaskTyped) {
-      this.maskIsShown = this.maskExpression.replace(/\w/g, '_');
+  public showMaskInInput(): string {
+    if (this.showMaskTyped && !!this.shownMaskExpression) {
+      if (this.maskExpression.length !== this.shownMaskExpression.length) {
+        throw new Error('Mask expression must match mask placeholder length');
+      } else {
+        return this.shownMaskExpression;
+      }
+    } else if (this.showMaskTyped) {
+      return this.maskExpression.replace(/\w/g, '_');
     }
+    return '';
   }
 
   public clearIfNotMatchFn(): void {
