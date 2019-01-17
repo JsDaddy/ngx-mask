@@ -204,12 +204,21 @@ For separate input with dots
 ```
 For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
+```html
+ <input type='text' mask="coma_separator">
+```
+For using decimals enter '.' to the end of your input to 'separator' or 'coma_separator' mask and ',' to 'dot_separator'
+
+
 ```
 Input value: 1234.56
 Masked value: 1 234.56
 
 Input value: 1234,56
 Masked value: 1.234,56
+
+Input value: 1234.56
+Masked value: 1,234.56
 ```
 
 ### Time validation
