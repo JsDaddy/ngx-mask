@@ -89,6 +89,18 @@ export class MaskApplierService {
                 ? inputArray.length
                 : cursor;
             this._shift.add(shiftStep + this.prefix.length || 0);
+        } else if (maskExpression === 'coma_separator') {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
+            const strForSep: string = inputValue.replace(/\,/g, '');
+            result = this.comaSeparator(strForSep);
+            position = result.length + 1;
+            cursor = position;
+            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
+                ? inputArray.length
+                : cursor;
+            this._shift.add(shiftStep + this.prefix.length || 0);
         } else {
             // tslint:disable-next-line
             for (let i: number = 0, inputSymbol: string = inputArray[0]; i
@@ -275,6 +287,18 @@ export class MaskApplierService {
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
             res = res.replace(rgx, '$1' + '.' + '$2');
+        }
+        return res + decimals;
+    }
+
+    private comaSeparator = (str: string) => {
+        str += '';
+        const x: string[] = str.split('.');
+        const decimals: string = x.length > 1 ? `.${x[1]}` : '';
+        let res: string = x[0];
+        const rgx: RegExp = /(\d+)(\d{3})/;
+        while (rgx.test(res)) {
+            res = res.replace(rgx, '$1' + ',' + '$2');
         }
         return res + decimals;
     }

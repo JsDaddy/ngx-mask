@@ -1,3 +1,8 @@
+<a name="7.3.4">
+
+# [7.3.4 decimals values separator] (2019-01-17)
+Added coma_separator
+
 <a name="7.3.3">
 
 # [7.3.3 decimals values separator] (2019-01-08)
