@@ -60,7 +60,7 @@ Also you can use mask pipe
 | SSSS | asDF |
 
 ## Mask Options
-You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive)
+You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
 ### specialCharacters (string[ ])
  We have next default characters:
 
@@ -80,7 +80,7 @@ You can define your custom options for all directives (as  object in the mask mo
 ##### Usage
 
 ```html
-<input type='text' specialCharacters="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
+<input type='text' [specialCharacters]="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
 ```
 
 ##### Then:
