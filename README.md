@@ -60,7 +60,7 @@ Also you can use mask pipe
 | SSSS | asDF |
 
 ## Mask Options
-You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive)
+You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
 ### specialCharacters (string[ ])
  We have next default characters:
 
@@ -80,7 +80,7 @@ You can define your custom options for all directives (as  object in the mask mo
 ##### Usage
 
 ```html
-<input type='text' specialCharacters="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
+<input type='text' [specialCharacters]="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
 ```
 
 ##### Then:
@@ -204,12 +204,21 @@ For separate input with dots
 ```
 For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
+```html
+ <input type='text' mask="coma_separator">
+```
+For using decimals enter '.' to the end of your input to 'separator' or 'coma_separator' mask and ',' to 'dot_separator'
+
+
 ```
 Input value: 1234.56
 Masked value: 1 234.56
 
 Input value: 1234,56
 Masked value: 1.234,56
+
+Input value: 1234.56
+Masked value: 1,234.56
 ```
 
 ### Time validation
