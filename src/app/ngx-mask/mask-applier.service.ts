@@ -8,6 +8,7 @@ export class MaskApplierService {
     public showTemplate: IConfig['showTemplate'];
     public clearIfNotMatch: IConfig['clearIfNotMatch'];
     public maskExpression: string = '';
+    public shownMaskExpression: string = '';
     public maskSpecialCharacters: IConfig['specialCharacters'];
     public maskAvailablePatterns: IConfig['patterns'];
     public prefix: IConfig['prefix'];
@@ -60,7 +61,7 @@ export class MaskApplierService {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
-            if (this.persantage(inputValue)) {
+            if (this.percentage(inputValue)) {
                 result = inputValue;
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
@@ -303,11 +304,7 @@ export class MaskApplierService {
         return res + decimals;
     }
 
-    private persantage = (str: string): boolean => {
-        if (Number(str) >= 0 && Number(str) <= 100) {
-            return true;
-        } else {
-            return false;
-        }
+    private percentage = (str: string): boolean => {
+        return Number(str) >= 0 && Number(str) <= 100;
     }
 }

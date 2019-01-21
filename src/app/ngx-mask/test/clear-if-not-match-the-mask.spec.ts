@@ -20,7 +20,7 @@ describe('Directive: Mask', () => {
     fixture.detectChanges();
   });
 
-  it('should clear if not match the mask!!!!', () => {
+  it('should clear if mask is not matched', () => {
     component.mask = '000.000-00';
     component.clearIfNotMatch = true;
     equal('', '', fixture);

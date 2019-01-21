@@ -104,6 +104,14 @@ export class MaskDirective implements ControlValueAccessor {
   }
 
   @Input()
+  public set shownMaskExpression(value: IConfig['shownMaskExpression']) {
+    if (!value) {
+      return;
+    }
+    this._maskService.shownMaskExpression = value;
+  }
+
+  @Input()
   public set showTemplate(value: IConfig['showTemplate']) {
     this._maskService.showTemplate = value;
   }
@@ -161,7 +169,7 @@ export class MaskDirective implements ControlValueAccessor {
       return;
     }
     if (this._maskService.showMaskTyped) {
-      this._maskService.maskIsShown = this._maskService.maskExpression.replace(/[0-9]/g, '_');
+      this._maskService.maskIsShown = this._maskService.showMaskInInput();
     }
     el.value = !el.value || el.value === this._maskService.prefix
       ? this._maskService.prefix + this._maskService.maskIsShown
