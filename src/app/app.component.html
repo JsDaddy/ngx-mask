@@ -391,14 +391,14 @@
             <mat-card-header>
               <mat-card-title>Thousand separator mask</mat-card-title>
               <mat-card-subtitle>
-                You can devide your input by thousands
+                You can divide your input by thousands
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="coma_separator" [formControl]="separatorForm" [(ngModel)]="separatorFormModel">
+                    <input matInput placeholder="Separator" mask="separator" [formControl]="separatorForm" [(ngModel)]="separatorFormModel">
                     <mat-hint><b>Mask: </b>separator</mat-hint>
                   </mat-form-field>
                 </div>
@@ -406,6 +406,96 @@
                     <p><b>FormControl:</b> {{ separatorForm.value ? separatorForm.value: 'Empty' }}</p>
                     <p><b>NgModel:</b> {{ separatorFormModel ? separatorFormModel: 'Empty' }}</p>
                   </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" mask="dot_separator" [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>dot_separator</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ dotSeparatorForm.value ? dotSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ dotSeparatorFormModel ? dotSeparatorFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" mask="coma_separator" [formControl]="commaSeparatorForm" [(ngModel)]="commaSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>coma_separator</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ commaSeparatorForm.value ? commaSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ commaSeparatorFormModel ? commaSeparatorFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Separator precision</mat-card-title>
+              <mat-card-subtitle>
+                You can set the precision for dot and comma separators
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" mask="dot_separator.2" [formControl]="dotPrecisionSeparatorForm" [(ngModel)]="dotPrecisionSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>dot_separator.2</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ dotPrecisionSeparatorForm.value ? dotPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ dotPrecisionSeparatorFormModel ? dotPrecisionSeparatorFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" [dropSpecialCharacters]="[',']" mask="coma_separator.2" [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>coma_separator.2</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ commaPrecisionSeparatorForm.value ? commaPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ commaPrecisionSeparatorFormModel ? commaPrecisionSeparatorFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" mask="dot_separator.0" [formControl]="dotZeroPrecisionSeparatorForm" [(ngModel)]="dotZeroPrecisionSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>dot_separator.0</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ dotZeroPrecisionSeparatorForm.value ? dotZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ dotZeroPrecisionSeparatorFormModel ? dotZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
+                </div>
+              </div>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Separator" mask="coma_separator.0" [formControl]="commaZeroPrecisionSeparatorForm" [(ngModel)]="commaZeroPrecisionSeparatorFormModel">
+                    <mat-hint><b>Mask: </b>coma_separator.0</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ commaZeroPrecisionSeparatorForm.value ? commaZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ commaZeroPrecisionSeparatorFormModel ? commaZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
+                </div>
               </div>
             </mat-card-content>
           </mat-card>
