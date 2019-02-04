@@ -221,6 +221,28 @@ Input value: 1234.56
 Masked value: 1,234.56
 ```
 
+```html
+ <input type='text' mask="dot_separator.2">
+ <input type='text' mask="coma_separator.2">
+ <input type='text' mask="dot_separator.0">
+ <input type='text' mask="coma_separator.0">
+```
+For limiting decimal precision add '.' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely. 
+
+```
+Input value: 1234,56
+Masked value: 1.234,56
+
+Input value: 1234.56
+Masked value: 1,234.56
+
+Input value: 1234,56
+Masked value: 1.234
+
+Input value: 1234.56
+Masked value: 1,234
+```
+
 ### Time validation
   You can validate your input as 24 hour format
 
