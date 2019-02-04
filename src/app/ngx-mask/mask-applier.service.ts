@@ -82,9 +82,10 @@ export class MaskApplierService {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
-            inputValue = this.checkInputPrecision(maskExpression, inputValue, ',');
+            const precision: number = this.getPrecision(maskExpression);
+            inputValue = this.checkInputPrecision(inputValue, precision, ',');
             const strForSep: string = inputValue.replace(/\./g, '');
-            result = this.dotSeparator(strForSep);
+            result = this.dotSeparator(strForSep, precision);
             position = result.length + 1;
             cursor = position;
             const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
@@ -95,9 +96,10 @@ export class MaskApplierService {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
-            inputValue = this.checkInputPrecision(maskExpression, inputValue, '.');
+            const precision: number = this.getPrecision(maskExpression);
+            inputValue = this.checkInputPrecision(inputValue, precision, '.');
             const strForSep: string = inputValue.replace(/\,/g, '');
-            result = this.comaSeparator(strForSep);
+            result = this.comaSeparator(strForSep, precision);
             position = result.length + 1;
             cursor = position;
             const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
@@ -282,7 +284,7 @@ export class MaskApplierService {
         return res + decimals;
     }
 
-    private dotSeparator = (str: string) => {
+    private dotSeparator = (str: string, precision: number) => {
         str += '';
         const x: string[] = str.split(',');
         const decimals: string = x.length > 1 ? `,${x[1]}` : '';
@@ -291,10 +293,15 @@ export class MaskApplierService {
         while (rgx.test(res)) {
             res = res.replace(rgx, '$1' + '.' + '$2');
         }
-        return res + decimals;
+        if (precision === undefined) {
+          return res + decimals;
+        } else if (precision === 0) {
+          return res;
+        }
+        return res + decimals.substr(0, precision + 1);
     }
 
-    private comaSeparator = (str: string, precision?: number) => {
+    private comaSeparator = (str: string, precision: number) => {
         str += '';
         const x: string[] = str.split('.');
         const decimals: string = x.length > 1 ? `.${x[1]}` : '';
@@ -309,23 +316,22 @@ export class MaskApplierService {
         } else if (precision === 0) {
           return res;
         }
-        return res + decimals.substr(0, precision);
+        return res + decimals.substr(0, precision + 1);
     }
 
     private percentage = (str: string): boolean => {
         return Number(str) >= 0 && Number(str) <= 100;
     }
 
-    private getPrecision = (str: string): number => {
-      const x: string[] = str.split('.');
+    private getPrecision = (maskExpression: string): number => {
+      const x: string[] = maskExpression.split('.');
       if (x.length > 1) {
         return Number(x[x.length - 1]);
       }
       return Infinity;
     }
 
-    private checkInputPrecision = (maskExpression: string, inputValue: string, decimalMarker: string): string  => {
-      const precision: number = this.getPrecision(maskExpression);
+    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string  => {
       if (precision < Infinity ) {
         let precisionRegEx: RegExp;
 
@@ -336,8 +342,9 @@ export class MaskApplierService {
         }
 
         const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
-        if ( precisionMatch && (precisionMatch.length && precisionMatch[0].length - 1 > precision )
-          || precision === 0 ) {
+        if (precisionMatch && precisionMatch[0].length - 1 > precision) {
+          inputValue = inputValue.substring(0, inputValue.length - 1);
+        } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
           inputValue = inputValue.substring(0, inputValue.length - 1);
         }
       }

@@ -44,9 +44,10 @@ export class AppComponent {
   public commaZeroPrecisionSeparatorFormModel: string | number;
   private dotSeparatorForm: FormControl;
   private dotPrecisionSeparatorForm: FormControl;
-
+  private dotZeroPrecisionSeparatorForm: FormControl;
   private commaSeparatorForm: FormControl;
   private commaPrecisionSeparatorForm: FormControl;
+  private commaZeroPrecisionSeparatorForm: FormControl;
 
   public constructor() {
     this.form = new FormControl('');
