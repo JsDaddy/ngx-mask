@@ -66,40 +66,36 @@ export class MaskApplierService {
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
-        } else if (maskExpression === 'separator') {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
-            }
-            const strForSep: string = inputValue.replace(/\s/g, '');
-            result = this.separator(strForSep);
-            position = result.length + 1;
-            cursor = position;
-            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
-            this._shift.add(shiftStep + this.prefix.length || 0);
-        } else if (maskExpression === 'dot_separator' || maskExpression.startsWith('dot_separator') ) {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
+        } else if (maskExpression === 'separator'
+            || maskExpression === 'dot_separator' || maskExpression.startsWith('dot_separator')
+            || maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const precision: number = this.getPrecision(maskExpression);
-            inputValue = this.checkInputPrecision(inputValue, precision, ',');
-            const strForSep: string = inputValue.replace(/\./g, '');
-            result = this.dotSeparator(strForSep, precision);
-            position = result.length + 1;
-            cursor = position;
-            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
-            this._shift.add(shiftStep + this.prefix.length || 0);
-        } else if (maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+            let strForSep: string;
+            if (maskExpression === 'separator') {
+                if (inputValue.includes(',')
+                    && inputValue.endsWith(',') && inputValue.indexOf(',') !== inputValue.lastIndexOf(',')) {
+                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                }
+                if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
+                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                }
+                strForSep = inputValue.replace(/\s/g, '');
+                result = this.separator(strForSep, ' ', '.', precision);
+            } else if (maskExpression === 'dot_separator' || maskExpression.startsWith('dot_separator')) {
+                if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
+                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                }
+                inputValue = this.checkInputPrecision(inputValue, precision, ',');
+                strForSep = inputValue.replace(/\./g, '');
+                result = this.separator(strForSep, '.', ',', precision);
+            } else if (maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
+                inputValue = this.checkInputPrecision(inputValue, precision, '.');
+                strForSep = inputValue.replace(/\,/g, '');
+                result = this.separator(strForSep, ',', '.', precision);
             }
-            const precision: number = this.getPrecision(maskExpression);
-            inputValue = this.checkInputPrecision(inputValue, precision, '.');
-            const strForSep: string = inputValue.replace(/\,/g, '');
-            result = this.comaSeparator(strForSep, precision);
             position = result.length + 1;
             cursor = position;
             const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor))
@@ -175,9 +171,6 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    result += inputSymbol;
-                    cursor++;
-                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
                     if (maskExpression[cursor] === 'd') {
                         if (Number(inputSymbol) > 3) {
                             result += 0;
@@ -272,49 +265,19 @@ export class MaskApplierService {
             && this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol);
     }
 
-    private separator = (str: string) => {
+    private separator = (str: string, char: string, decimalChar: string, precision: number) => {
         str += '';
-        const x: string[] = str.split('.');
-        const decimals: string = x.length > 1 ? `.${x[1]}` : '';
+        const x: string[] = str.split(decimalChar);
+        const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + ' ' + '$2');
-        }
-        return res + decimals;
-    }
-
-    private dotSeparator = (str: string, precision: number) => {
-        str += '';
-        const x: string[] = str.split(',');
-        const decimals: string = x.length > 1 ? `,${x[1]}` : '';
-        let res: string = x[0];
-        const rgx: RegExp = /(\d+)(\d{3})/;
-        while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + '.' + '$2');
+            res = res.replace(rgx, '$1' + char + '$2');
         }
         if (precision === undefined) {
-          return res + decimals;
+            return res + decimals;
         } else if (precision === 0) {
-          return res;
-        }
-        return res + decimals.substr(0, precision + 1);
-    }
-
-    private comaSeparator = (str: string, precision: number) => {
-        str += '';
-        const x: string[] = str.split('.');
-        const decimals: string = x.length > 1 ? `.${x[1]}` : '';
-        let res: string = x[0];
-        const rgx: RegExp = /(\d+)(\d{3})/;
-        while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + ',' + '$2');
-        }
-
-        if (precision === undefined) {
-          return res + decimals;
-        } else if (precision === 0) {
-          return res;
+            return res;
         }
         return res + decimals.substr(0, precision + 1);
     }
@@ -324,30 +287,30 @@ export class MaskApplierService {
     }
 
     private getPrecision = (maskExpression: string): number => {
-      const x: string[] = maskExpression.split('.');
-      if (x.length > 1) {
-        return Number(x[x.length - 1]);
-      }
-      return Infinity;
+        const x: string[] = maskExpression.split('.');
+        if (x.length > 1) {
+            return Number(x[x.length - 1]);
+        }
+        return Infinity;
     }
 
-    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string  => {
-      if (precision < Infinity ) {
-        let precisionRegEx: RegExp;
+    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string => {
+        if (precision < Infinity) {
+            let precisionRegEx: RegExp;
 
-        if (decimalMarker === '.') {
-          precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
-        } else {
-          precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
-        }
+            if (decimalMarker === '.') {
+                precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
+            } else {
+                precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
+            }
 
-        const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
-        if (precisionMatch && precisionMatch[0].length - 1 > precision) {
-          inputValue = inputValue.substring(0, inputValue.length - 1);
-        } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
-          inputValue = inputValue.substring(0, inputValue.length - 1);
+            const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
+            if (precisionMatch && precisionMatch[0].length - 1 > precision) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
         }
-      }
-      return inputValue;
+        return inputValue;
     }
 }
