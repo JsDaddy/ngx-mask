@@ -57,4 +57,34 @@ describe('Separator: Mask', () => {
     equal('1000a', '1 000', fixture);
     equal('1000/', '1 000', fixture);
   });
+
+  it('dot_separator for 1000000', () => {
+    component.mask = 'dot_separator';
+    equal('1000000', '1.000.000', fixture);
+  });
+
+  it('dot_separator precision 2 for 1000000.00', () => {
+    component.mask = 'dot_separator.2';
+    equal('1000000,00', '1.000.000,00', fixture);
+  });
+
+  it('dot_separator precision 0 for 1000000.00', () => {
+    component.mask = 'dot_separator.0';
+    equal('1000000,00', '1.000.000', fixture);
+  });
+
+  it('coma_separator for 1000000', () => {
+    component.mask = 'coma_separator';
+    equal('1000000', '1,000,000', fixture);
+  });
+
+  it('coma_separator precision 2 for 1000000.00', () => {
+    component.mask = 'coma_separator.2';
+    equal('1000000.00', '1,000,000.00', fixture);
+  });
+
+  it('coma_separator precision 0 for 1000000.00', () => {
+    component.mask = 'coma_separator.0';
+    equal('1000000.00', '1,000,000', fixture);
+  });
 });

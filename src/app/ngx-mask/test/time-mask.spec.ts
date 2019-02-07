@@ -45,13 +45,4 @@ describe('Separator: Mask', () => {
     equal('127', '12:07', fixture);
   });
 
-  it('Seconds', () => {
-    component.mask = 'Hh:m0:s0';
-    equal('121240', '12:12:40', fixture);
-  });
-
-  it('Seconds', () => {
-    component.mask = 'Hh:m0:s0';
-    equal('12127', '12:12:07', fixture);
-  });
 });
