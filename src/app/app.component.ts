@@ -36,6 +36,18 @@ export class AppComponent {
   public sufixModel: string | number;
   public repeatFormModel: string | number;
   public separatorFormModel: string | number;
+  public dotSeparatorFormModel: string | number;
+  public dotPrecisionSeparatorFormModel: string | number;
+  public dotZeroPrecisionSeparatorFormModel: string | number;
+  public commaSeparatorFormModel: string | number;
+  public commaPrecisionSeparatorFormModel: string | number;
+  public commaZeroPrecisionSeparatorFormModel: string | number;
+  private dotSeparatorForm: FormControl;
+  private dotPrecisionSeparatorForm: FormControl;
+  private dotZeroPrecisionSeparatorForm: FormControl;
+  private commaSeparatorForm: FormControl;
+  private commaPrecisionSeparatorForm: FormControl;
+  private commaZeroPrecisionSeparatorForm: FormControl;
 
   public constructor() {
     this.form = new FormControl('');
@@ -47,6 +59,12 @@ export class AppComponent {
     this.sufixForm = new FormControl('');
     this.repeatForm = new FormControl('');
     this.separatorForm = new FormControl('');
+    this.dotSeparatorForm = new FormControl('');
+    this.dotPrecisionSeparatorForm = new FormControl('');
+    this.dotZeroPrecisionSeparatorForm = new FormControl('');
+    this.commaSeparatorForm = new FormControl('');
+    this.commaPrecisionSeparatorForm = new FormControl('');
+    this.commaZeroPrecisionSeparatorForm = new FormControl('');
     this.percent = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
