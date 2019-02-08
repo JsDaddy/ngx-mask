@@ -11,8 +11,8 @@ export class MaskService extends MaskApplierService {
   public maskIsShown: string = '';
   private _formElement: HTMLInputElement;
   // tslint:disable-next-line
-  public onChange = (_: any) => {};
-  public onTouch = () => {};
+  public onChange = (_: any) => { };
+  public onTouch = () => { };
   public constructor(
     // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
@@ -28,28 +28,37 @@ export class MaskService extends MaskApplierService {
     inputValue: string,
     maskExpression: string,
     position: number = 0,
-    cb: Function = () => {}
-  ): string  {
+    cb: Function = () => { }
+  ): string {
 
     this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
     if (!inputValue && this.showMaskTyped) {
       return this.prefix + this.maskIsShown;
     }
-    const result: string  = super.applyMask(
+    const result: string = super.applyMask(
       inputValue,
       maskExpression,
       position,
       cb
     );
+    if (this.maskExpression === 'dot_separator.2' && this.dropSpecialCharacters === true) {
+      this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+    }
+    if ((this.maskExpression === 'coma_separator.2' && this.dropSpecialCharacters === true)) {
+      this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
+
+    }
+    // tslint:disable-next-line:no-console
+    console.table(this.maskSpecialCharacters, this.dropSpecialCharacters, this.maskExpression);
     Array.isArray(this.dropSpecialCharacters)
       ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
       : this.dropSpecialCharacters === true
-      ? this.onChange(
-        this.isNumberValue
-          ? Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters))
-          : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-      )
-      : this.onChange(this._removeSufix(this._removePrefix(result)));
+        ? this.onChange(
+          this.isNumberValue
+            ? Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters))
+            : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
+        )
+        : this.onChange(this._removeSufix(this._removePrefix(result)));
     let ifMaskIsShown: string = '';
     if (!this.showMaskTyped) {
       return result;
@@ -62,7 +71,7 @@ export class MaskService extends MaskApplierService {
 
   public applyValueChanges(
     position: number = 0,
-    cb: Function = () => {}
+    cb: Function = () => { }
   ): void {
     const maskedInput: string | number = this.applyMask(
       this._formElement.value,
