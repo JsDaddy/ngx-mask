@@ -48,8 +48,6 @@ export class MaskService extends MaskApplierService {
       this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
 
     }
-    // tslint:disable-next-line:no-console
-    console.table(this.maskSpecialCharacters, this.dropSpecialCharacters, this.maskExpression);
     Array.isArray(this.dropSpecialCharacters)
       ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
       : this.dropSpecialCharacters === true
