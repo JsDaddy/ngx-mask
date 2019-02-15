@@ -1,3 +1,8 @@
+<a name="7.3.6">
+
+# [7.4.6 coma_separator] (2019-02-15)
+Fix coma_separator behavior
+
 <a name="7.3.5">
 
 # [7.4.5 dependencies] (2019-02-15)
