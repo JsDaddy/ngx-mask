@@ -54,4 +54,16 @@ describe('Directive: Mask', () => {
             .toBe(123456);
 
     });
+
+    it('FormControl or NgModel should be filled without special characters', () => {
+        component.mask = 'coma_separator.4';
+        component.dropSpecialCharacters = true;
+        component.form.setValue(2578.9812);
+
+        equal('2578.9812', '2,578.9812', fixture);
+        expect(component.form.value)
+            .toBe(2578.9812);
+        expect(component.ngModelValue)
+            .toBe(2578.9812);
+    });
 });
