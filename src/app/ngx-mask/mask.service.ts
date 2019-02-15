@@ -41,13 +41,13 @@ export class MaskService extends MaskApplierService {
       position,
       cb
     );
-    if (this.maskExpression === 'dot_separator.2' && this.dropSpecialCharacters === true) {
+    if ((/dot_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true)) {
       this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
     }
-    if ((this.maskExpression === 'coma_separator.2' && this.dropSpecialCharacters === true)) {
+    if ((/coma_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true)) {
       this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
-
     }
+
     Array.isArray(this.dropSpecialCharacters)
       ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
       : this.dropSpecialCharacters === true
