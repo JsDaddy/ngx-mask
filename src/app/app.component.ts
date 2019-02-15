@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
+type SN = string | number;
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,28 +26,28 @@ export class AppComponent {
         pattern: new RegExp('\\d'),
     }};
 
-  public numberOrStringFormModel: string | number = '';
-  public clearIfNotMatchModel: string | number = '';
-  public formModelDate: string | number = '';
-  public cpfModel: string | number = '';
-  public dateModel: string | number = '';
-  public showMaskModel: string | number = '';
+  public numberOrStringFormModel: SN = '';
+  public clearIfNotMatchModel: SN = '';
+  public formModelDate: SN = '';
+  public cpfModel: SN = '';
+  public dateModel: SN = '';
+  public showMaskModel: SN = '';
   public suf: string = '+7';
-  public sufixModel: string | number;
-  public repeatFormModel: string | number;
-  public separatorFormModel: string | number;
-  public dotSeparatorFormModel: string | number;
-  public dotPrecisionSeparatorFormModel: string | number;
-  public dotZeroPrecisionSeparatorFormModel: string | number;
-  public commaSeparatorFormModel: string | number;
-  public commaPrecisionSeparatorFormModel: string | number;
-  public commaZeroPrecisionSeparatorFormModel: string | number;
-  private dotSeparatorForm: FormControl;
-  private dotPrecisionSeparatorForm: FormControl;
-  private dotZeroPrecisionSeparatorForm: FormControl;
-  private commaSeparatorForm: FormControl;
-  private commaPrecisionSeparatorForm: FormControl;
-  private commaZeroPrecisionSeparatorForm: FormControl;
+  public sufixModel!: SN;
+  public repeatFormModel!: SN;
+  public separatorFormModel!: SN;
+  public dotSeparatorFormModel!: SN;
+  public dotPrecisionSeparatorFormModel!: SN;
+  public dotZeroPrecisionSeparatorFormModel!: SN;
+  public commaSeparatorFormModel!: SN;
+  public commaPrecisionSeparatorFormModel!: SN;
+  public commaZeroPrecisionSeparatorFormModel!: SN;
+  private dotSeparatorForm!: FormControl;
+  private dotPrecisionSeparatorForm!: FormControl;
+  private dotZeroPrecisionSeparatorForm!: FormControl;
+  private commaSeparatorForm!: FormControl;
+  private commaPrecisionSeparatorForm!: FormControl;
+  private commaZeroPrecisionSeparatorForm!: FormControl;
 
   public constructor() {
     this.form = new FormControl('');

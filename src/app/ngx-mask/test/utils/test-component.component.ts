@@ -16,14 +16,14 @@ import { IConfig } from 'public_api';
       [(ngModel)]="ngModelValue">`,
 })
 export class TestMaskComponent {
-  public mask: string | null;
-  public ngModelValue: string | number;
+  public mask!: string | null;
+  public ngModelValue!: string | number;
   public form: FormControl = new FormControl(null);
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
-  public patterns: IConfig['patterns'];
+  public patterns!: IConfig['patterns'];
   public prefix: IConfig['prefix'] = '';
   public sufix: IConfig['sufix'] = '';
-  public specialCharacters: IConfig['specialCharacters'];
+  public specialCharacters!: IConfig['specialCharacters'];
   public showMaskTyped: IConfig['showMaskTyped'] = false;
 }

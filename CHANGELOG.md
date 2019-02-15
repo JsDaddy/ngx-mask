@@ -1,3 +1,8 @@
+<a name="7.3.5">
+
+# [7.3.5 dependencies] (2019-02-15)
+Update dev and prod dependencies
+
 <a name="7.3.4">
 
 # [7.3.4 decimals values separator] (2019-01-17)

@@ -22,12 +22,12 @@ import { IConfig } from './config';
   ]
 })
 export class MaskDirective implements ControlValueAccessor {
-  private _maskValue: string;
-  private _inputValue: string;
+  private _maskValue!: string;
+  private _inputValue!: string;
   private _position: number | null = null;
   // tslint:disable-next-line
-  private _start: number;
-  private _end: number;
+  private _start!: number;
+  private _end!: number;
   // tslint:disable-next-line
   public onChange = (_: any) => { };
   public onTouch = () => { };

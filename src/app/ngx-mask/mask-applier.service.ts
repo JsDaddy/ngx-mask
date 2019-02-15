@@ -5,17 +5,17 @@ import { config, IConfig } from './config';
 export class MaskApplierService {
 
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
-    public showTemplate: IConfig['showTemplate'];
-    public clearIfNotMatch: IConfig['clearIfNotMatch'];
+    public showTemplate!: IConfig['showTemplate'];
+    public clearIfNotMatch!: IConfig['clearIfNotMatch'];
     public maskExpression: string = '';
     public shownMaskExpression: string = '';
-    public maskSpecialCharacters: IConfig['specialCharacters'];
-    public maskAvailablePatterns: IConfig['patterns'];
-    public prefix: IConfig['prefix'];
-    public sufix: IConfig['sufix'];
-    public customPattern: IConfig['patterns'];
+    public maskSpecialCharacters!: IConfig['specialCharacters'];
+    public maskAvailablePatterns!: IConfig['patterns'];
+    public prefix!: IConfig['prefix'];
+    public sufix!: IConfig['sufix'];
+    public customPattern!: IConfig['patterns'];
 
-    private _shift: Set<number>;
+    private _shift!: Set<number>;
 
     public constructor(
         @Inject(config) protected _config: IConfig
