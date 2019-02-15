@@ -1,6 +1,6 @@
 <a name="7.3.5">
 
-# [7.3.5 dependencies] (2019-02-15)
+# [7.4.5 dependencies] (2019-02-15)
 Update dev and prod dependencies
 
 <a name="7.3.4">
