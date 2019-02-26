@@ -80,7 +80,7 @@ You can define your custom options for all directives (as  object in the mask mo
 ##### Usage
 
 ```html
-<input type='text' [specialCharacters]="[ '[' ,']' , '\' ]" mask="[00]\[000]" >
+<input type='text' [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]" >
 ```
 
 ##### Then:
