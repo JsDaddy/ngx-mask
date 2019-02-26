@@ -120,6 +120,7 @@ export class MaskApplierService {
     } else {
       // tslint:disable-next-line
       for (
+        // tslint:disable-next-line:one-variable-per-declaration
         let i: number = 0, inputSymbol: string = inputArray[0];
         i < inputArray.length;
         i++, inputSymbol = inputArray[i]

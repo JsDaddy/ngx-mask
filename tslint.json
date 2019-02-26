@@ -1,61 +1,28 @@
 {
   "jsRules": {
     "class-name": true,
-    "no-console": [
-      true,
-      "log",
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],
     "no-debugger": true,
     "no-arg": true,
     "no-invalid-this": true,
     "no-shadowed-variable": true,
     "no-var-keyword": true,
     "use-isnan": true,
-    "cyclomatic-complexity": [
-      true,
-      20
-    ],
-    "max-classes-per-file": [
-      true,
-      1
-    ],
-    "max-file-line-count": [
-      true,
-      400
-    ],
-    "max-line-length": [
-      true,
-      120
-    ],
-    "no-consecutive-blank-lines": [
-      true,
-      2
-    ],
+    "cyclomatic-complexity": [true, 20],
+    "max-classes-per-file": [true, 1],
+    "max-file-line-count": [true, 400],
+    "max-line-length": [true, 120],
+    "no-consecutive-blank-lines": [true, 2],
     "no-default-export": true,
     "prefer-const": true,
-    "array-type": [
-      true,
-      "array"
-    ],
+    "array-type": [true, "array"],
     "no-conditional-assignment": true,
     "curly": true,
-    "arrow-return-shorthand": [
-      true
-    ],
-    "interface-name": [
-      true,
-      "always-prefix"
-    ],
+    "arrow-return-shorthand": [true],
+    "interface-name": [true, "always-prefix"],
     "no-angle-bracket-type-assertion": true,
     "object-literal-shorthand": true,
-    "one-variable-per-declaration": [
-      true
-    ],
+    "one-variable-per-declaration": [true],
     "variable-name": [
       true,
       "ban-keywords",
@@ -63,18 +30,9 @@
       "allow-leading-underscore",
       "allow-trailing-underscore"
     ],
-    "comment-format": [
-      true,
-      "check-space"
-    ],
-    "indent": [
-      true,
-      "spaces"
-    ],
-    "align": [
-      true,
-      "parameters"
-    ],
+    "comment-format": [true, "check-space"],
+    "indent": [true, "spaces"],
+    "align": [true, "parameters"],
     "no-eval": true,
     "no-trailing-whitespace": true,
     "no-unsafe-finally": true,
@@ -86,18 +44,9 @@
       "check-else",
       "check-finally"
     ],
-    "quotemark": [
-      true,
-      "single"
-    ],
-    "semicolon": [
-      true,
-      "always",
-      "ignore-bound-class-methods"
-    ],
-    "triple-equals": [
-      true
-    ],
+    "quotemark": [true, "single"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "triple-equals": [true],
     "whitespace": [
       true,
       "check-branch",
@@ -110,11 +59,7 @@
   },
   "rules": {
     // TypeScript Specific
-    "member-access": [
-      true,
-      "check-accessor",
-      "check-constructor"
-    ],
+    "member-access": [true, "check-accessor", "check-constructor"],
     "member-ordering": [
       true,
       {
@@ -157,61 +102,28 @@
     ],
 
     "class-name": true,
-    "no-console": [
-      true,
-      "log",
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+    "no-console": [true, "log", "debug", "info", "time", "timeEnd", "trace"],
     "no-debugger": true,
     "no-arg": true,
     "no-invalid-this": true,
     "no-shadowed-variable": true,
     "no-var-keyword": true,
     "use-isnan": true,
-    "cyclomatic-complexity": [
-      true,
-      20
-    ],
-    "max-classes-per-file": [
-      true,
-      1
-    ],
-    "max-file-line-count": [
-      true,
-      400
-    ],
-    "max-line-length": [
-      true,
-      120
-    ],
-    "no-consecutive-blank-lines": [
-      true,
-      2
-    ],
+    "cyclomatic-complexity": [true, 20],
+    "max-classes-per-file": [true, 1],
+    "max-file-line-count": [true, 400],
+    "max-line-length": [true, 120],
+    "no-consecutive-blank-lines": [true, 2],
     "no-default-export": true,
     "prefer-const": true,
-    "array-type": [
-      true,
-      "array"
-    ],
+    "array-type": [true, "array"],
     "no-conditional-assignment": true,
     "curly": true,
-    "arrow-return-shorthand": [
-      true
-    ],
-    "interface-name": [
-      true,
-      "always-prefix"
-    ],
+    "arrow-return-shorthand": [true],
+    "interface-name": [true, "always-prefix"],
     "no-angle-bracket-type-assertion": true,
     "object-literal-shorthand": true,
-    "one-variable-per-declaration": [
-      true
-    ],
+    "one-variable-per-declaration": [true],
     "variable-name": [
       true,
       "ban-keywords",
@@ -219,18 +131,9 @@
       "allow-leading-underscore",
       "allow-trailing-underscore"
     ],
-    "comment-format": [
-      true,
-      "check-space"
-    ],
-    "indent": [
-      true,
-      "spaces"
-    ],
-    "align": [
-      true,
-      "parameters"
-    ],
+    "comment-format": [true, "check-space"],
+    "indent": [true, "spaces"],
+    "align": [true, "parameters"],
     "no-eval": true,
     "no-trailing-whitespace": true,
     "no-unsafe-finally": true,
@@ -242,18 +145,9 @@
       "check-else",
       "check-finally"
     ],
-    "quotemark": [
-      true,
-      "single"
-    ],
-    "semicolon": [
-      true,
-      "always",
-      "ignore-bound-class-methods"
-    ],
-    "triple-equals": [
-      true
-    ],
+    "quotemark": [true, "single"],
+    "semicolon": [true, "always", "ignore-bound-class-methods"],
+    "triple-equals": [true],
     "whitespace": [
       true,
       "check-branch",

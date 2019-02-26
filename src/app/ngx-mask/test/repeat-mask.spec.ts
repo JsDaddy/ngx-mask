@@ -57,7 +57,9 @@ describe('Directive: Mask', () => {
   });
 
   it('specialCharacters quotes', () => {
+    // tslint:disable-next-line:quotemark
     component.mask = "'00'00'0000'";
+    // tslint:disable-next-line:quotemark
     equal('12345678', "'12'34'5678'", fixture);
   });
 

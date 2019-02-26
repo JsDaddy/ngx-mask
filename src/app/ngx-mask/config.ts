@@ -30,6 +30,7 @@ export const initialConfig: IConfig = {
   showMaskTyped: false,
   dropSpecialCharacters: true,
   shownMaskExpression: '',
+  // tslint:disable-next-line:quotemark
   specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
   patterns: {
     '0': {
