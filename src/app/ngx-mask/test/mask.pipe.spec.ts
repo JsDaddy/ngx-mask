@@ -36,10 +36,11 @@ describe('Pipe: Mask', () => {
   });
 
   it('should custom pattern', () => {
-    const patttern: IConfig['patterns'] =  {
-      'P': {
-          pattern: new RegExp('\\d'),
-      }};
+    const patttern: IConfig['patterns'] = {
+      P: {
+        pattern: new RegExp('\\d')
+      }
+    };
     const maskedNumber: string = maskPipe.transform(123456789, ['PPP-PP-PPP', patttern]);
     expect(maskedNumber).toEqual('123-45-678');
   });

@@ -4,7 +4,10 @@ import { IConfig } from 'public_api';
 
 @Component({
   selector: 'test-mask',
-  template: `<input id='maska' [mask]="mask"
+  template: `
+    <input
+      id="maska"
+      [mask]="mask"
       [clearIfNotMatch]="clearIfNotMatch"
       [dropSpecialCharacters]="dropSpecialCharacters"
       [specialCharacters]="specialCharacters"
@@ -12,8 +15,10 @@ import { IConfig } from 'public_api';
       [sufix]="sufix"
       [prefix]="prefix"
       [formControl]="form"
-      [showMaskTyped] = "showMaskTyped"
-      [(ngModel)]="ngModelValue">`,
+      [showMaskTyped]="showMaskTyped"
+      [(ngModel)]="ngModelValue"
+    />
+  `
 })
 export class TestMaskComponent {
   public mask!: string | null;

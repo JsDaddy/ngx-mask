@@ -21,6 +21,10 @@
     "start": "ng serve",
     "test": "ng test",
     "lint": "tslint './src/app/**/*.ts'",
+    "precommit": "npm run format:fix",
+    "format:check": "prettier --config ./.prettierrc --list-different \"src/{app,environments}/**/*{.ts,.js,.json,.css,.html,.scss}\"",
+    "format:all": "prettier --config ./.prettierrc --write \"src/{app,environments}/**/*{.ts,.js,.json,.css,.html,.scss}\"",
+    "format:fix": "pretty-quick --staged",
     "build:library": "ng-packagr -p package.json"
   },
   "repository": {
@@ -60,6 +64,7 @@
     "bootstrap": "4.3.1",
     "codelyzer": "4.5.0",
     "hammerjs": "2.0.8",
+    "husky": "^1.3.1",
     "jasmine-core": "3.3.0",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "4.0.0",
@@ -71,6 +76,8 @@
     "ng-packagr": "4.7.0",
     "node-sass": "4.11.0",
     "pre-commit": "1.2.2",
+    "prettier": "^1.16.4",
+    "pretty-quick": "^1.10.0",
     "rxjs": "6.4.0",
     "sass-loader": "7.1.0",
     "ts-helpers": "1.1.2",

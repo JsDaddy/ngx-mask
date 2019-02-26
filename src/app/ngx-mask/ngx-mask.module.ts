@@ -11,7 +11,6 @@ import { MaskPipe } from './mask.pipe';
   declarations: [MaskDirective, MaskPipe]
 })
 export class NgxMaskModule {
-
   public static forRoot(configValue?: optionsConfig): ModuleWithProviders {
     return {
       ngModule: NgxMaskModule,
@@ -28,13 +27,13 @@ export class NgxMaskModule {
           provide: config,
           useFactory: _configFactory,
           deps: [INITIAL_CONFIG, NEW_CONFIG]
-        },
+        }
       ]
     };
   }
   public static forChild(_configValue?: optionsConfig): ModuleWithProviders {
     return {
-      ngModule: NgxMaskModule,
+      ngModule: NgxMaskModule
     };
   }
 }
@@ -42,7 +41,9 @@ export class NgxMaskModule {
 /**
  * @internal
  */
-export function _configFactory
-(initConfig: optionsConfig, configValue: optionsConfig | (() => optionsConfig)): Function | optionsConfig {
-  return (typeof configValue === 'function') ? configValue() : { ...initConfig, ...configValue };
+export function _configFactory(
+  initConfig: optionsConfig,
+  configValue: optionsConfig | (() => optionsConfig)
+): Function | optionsConfig {
+  return typeof configValue === 'function' ? configValue() : { ...initConfig, ...configValue };
 }

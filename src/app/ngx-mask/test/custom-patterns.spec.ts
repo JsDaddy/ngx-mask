@@ -5,7 +5,6 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 
 describe('Directive: Mask', () => {
-
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 
@@ -22,8 +21,8 @@ describe('Directive: Mask', () => {
   it('custom patterns', () => {
     component.mask = 'FFF';
     component.patterns = {
-      'F': {
-          pattern: new RegExp('\[0-9]')
+      F: {
+        pattern: new RegExp('[0-9]')
       }
     };
     equal('F', '', fixture);

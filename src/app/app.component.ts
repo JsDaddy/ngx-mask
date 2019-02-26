@@ -21,10 +21,11 @@ export class AppComponent {
   public separatorForm: FormControl;
   public percent: FormControl;
 
-  public pattern: pattern =  {
-    'P': {
-        pattern: new RegExp('\\d'),
-    }};
+  public pattern: pattern = {
+    P: {
+      pattern: new RegExp('\\d')
+    }
+  };
 
   public numberOrStringFormModel: SN = '';
   public clearIfNotMatchModel: SN = '';
@@ -69,11 +70,10 @@ export class AppComponent {
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }
-
 }
 
 type pattern = {
-    [character: string]: {
-        pattern: RegExp
-    }
+  [character: string]: {
+    pattern: RegExp;
+  };
 };

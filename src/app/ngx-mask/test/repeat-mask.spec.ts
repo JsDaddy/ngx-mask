@@ -4,9 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
-
 describe('Directive: Mask', () => {
-
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 
@@ -59,8 +57,8 @@ describe('Directive: Mask', () => {
   });
 
   it('specialCharacters quotes', () => {
-    component.mask = '\'00\'00\'0000\'';
-    equal('12345678', '\'12\'34\'5678\'', fixture);
+    component.mask = "'00'00'0000'";
+    equal('12345678', "'12'34'5678'", fixture);
   });
 
   it('specialCharacters quotes', () => {

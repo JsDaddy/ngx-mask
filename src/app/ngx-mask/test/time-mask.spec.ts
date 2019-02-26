@@ -4,9 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
-
 describe('Separator: Mask', () => {
-
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 
@@ -44,5 +42,4 @@ describe('Separator: Mask', () => {
     component.mask = 'Hh:m0:s0';
     equal('127', '12:07', fixture);
   });
-
 });

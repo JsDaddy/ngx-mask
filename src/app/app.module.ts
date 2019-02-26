@@ -1,12 +1,16 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  MatButtonModule, MatCardModule, MatFormFieldModule, MatGridListModule, MatIconModule, MatInputModule,
+  MatButtonModule,
+  MatCardModule,
+  MatFormFieldModule,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
   MatListModule,
-  MatSelectModule, MatSidenavModule,
+  MatSelectModule,
+  MatSidenavModule,
   MatToolbarModule
-}
-  from
-    '@angular/material';
+} from '@angular/material';
 import { TestMaskComponent } from './ngx-mask/test/utils/test-component.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -17,10 +21,7 @@ import { AppComponent } from './app.component';
 import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TestMaskComponent
-  ],
+  declarations: [AppComponent, TestMaskComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -41,5 +42,4 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
   providers: [],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-}
+export class AppModule {}

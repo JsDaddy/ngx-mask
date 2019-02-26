@@ -5,7 +5,6 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 
 describe('Directive: Mask', () => {
-
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 
@@ -21,22 +20,16 @@ describe('Directive: Mask', () => {
 
   it('Pristine and dirty', () => {
     component.mask = '0000.0000';
-    expect(component.form.dirty)
-      .toBeFalsy();
-    expect(component.form.pristine)
-      .toBeTruthy();
+    expect(component.form.dirty).toBeFalsy();
+    expect(component.form.pristine).toBeTruthy();
     equal('1.', '1', fixture);
     equal('1éáa2aaaaqwo', '12', fixture);
     equal('1234567', '1234.567', fixture);
-    expect(component.form.dirty)
-      .toBeTruthy();
-    expect(component.form.pristine)
-      .toBeFalsy();
+    expect(component.form.dirty).toBeTruthy();
+    expect(component.form.pristine).toBeFalsy();
     component.form.reset();
-    expect(component.form.dirty)
-      .toBeFalsy();
-    expect(component.form.pristine)
-      .toBeTruthy();
+    expect(component.form.dirty).toBeFalsy();
+    expect(component.form.pristine).toBeTruthy();
   });
 
   it('When I change the mask on-the-fly things should work normally', () => {
@@ -134,7 +127,6 @@ describe('Directive: Mask', () => {
     equal('12.1.12.1', '12.1.12.1', fixture);
     equal('127.001.1.1', '127.001.1.1', fixture);
     equal('192.168.1.78', '192.168.1.78', fixture);
-
   });
 
   it('Masks with numbers, strings e special characters #2 ', () => {
@@ -151,20 +143,16 @@ describe('Directive: Mask', () => {
   it('Result should be the same for FormControl and NgModel', () => {
     component.mask = '00/00/0000';
     typeTest('30/08/19921', fixture);
-    expect(component.form.value)
-      .toBe('30081992');
-    expect(component.ngModelValue)
-      .toBe('30081992');
+    expect(component.form.value).toBe('30081992');
+    expect(component.ngModelValue).toBe('30081992');
   });
 
   it('model values shouldnt be bigger length than masks', () => {
     component.mask = '00-00-00';
     component.dropSpecialCharacters = false;
     equal('2578989', '25-78-98', fixture);
-    expect(component.form.value)
-      .toBe('25-78-98');
-    expect(component.ngModelValue)
-      .toBe('25-78-98');
+    expect(component.form.value).toBe('25-78-98');
+    expect(component.ngModelValue).toBe('25-78-98');
   });
 
   it('should work with custom special characters', () => {
@@ -181,7 +169,7 @@ describe('Directive: Mask', () => {
     component.specialCharacters = ['[', ']', '-', '*'];
     component.patterns = {
       '0': {
-        pattern: new RegExp('\[a-zA-Z\]')
+        pattern: new RegExp('[a-zA-Z]')
       }
     };
     equal('', '', fixture);
@@ -230,8 +218,7 @@ describe('Directive: Mask', () => {
 
     equal('1234567', '1234567', fixture);
 
-    expect(component.form.value)
-      .toBe('1234567');
+    expect(component.form.value).toBe('1234567');
   });
 
   it('should be a UA phone', () => {

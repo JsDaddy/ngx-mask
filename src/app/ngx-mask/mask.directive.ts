@@ -1,10 +1,4 @@
-import {
-  Directive,
-  forwardRef,
-  HostListener,
-  Inject,
-  Input
-} from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MaskService } from './mask.service';
@@ -29,14 +23,13 @@ export class MaskDirective implements ControlValueAccessor {
   private _start!: number;
   private _end!: number;
   // tslint:disable-next-line
-  public onChange = (_: any) => { };
-  public onTouch = () => { };
+  public onChange = (_: any) => {};
+  public onTouch = () => {};
   public constructor(
     // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService
-  ) { }
-
+  ) {}
 
   @Input('mask')
   public set maskExpression(value: string) {
@@ -47,20 +40,13 @@ export class MaskDirective implements ControlValueAccessor {
     this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue);
     this._maskService.formElementProperty = [
       'value',
-      this._maskService.applyMask(
-        this._inputValue,
-        this._maskService.maskExpression
-      )
+      this._maskService.applyMask(this._inputValue, this._maskService.maskExpression)
     ];
   }
 
   @Input()
   public set specialCharacters(value: IConfig['specialCharacters']) {
-    if (
-      !value ||
-      !Array.isArray(value) ||
-      (Array.isArray(value) && !value.length)
-    ) {
+    if (!value || !Array.isArray(value) || (Array.isArray(value) && !value.length)) {
       return;
     }
     this._maskService.maskSpecialCharacters = value;
@@ -129,14 +115,12 @@ export class MaskDirective implements ControlValueAccessor {
       this.onChange(el.value);
       return;
     }
-    const position: number = (el.selectionStart as number) === 1
-      ? (el.selectionStart as number) + this._maskService.prefix.length
-      : el.selectionStart as number;
+    const position: number =
+      (el.selectionStart as number) === 1
+        ? (el.selectionStart as number) + this._maskService.prefix.length
+        : (el.selectionStart as number);
     let caretShift: number = 0;
-    this._maskService.applyValueChanges(
-      position,
-      (shift: number) => (caretShift = shift)
-    );
+    this._maskService.applyValueChanges(position, (shift: number) => (caretShift = shift));
     // only set the selection if the element is active
     if (this.document.activeElement !== el) {
       return;
@@ -145,8 +129,8 @@ export class MaskDirective implements ControlValueAccessor {
       this._position !== null
         ? this._position
         : position +
-        // tslint:disable-next-line
-        ((e as any).inputType === 'deleteContentBackward' ? 0 : caretShift);
+          // tslint:disable-next-line
+          ((e as any).inputType === 'deleteContentBackward' ? 0 : caretShift);
     this._position = null;
   }
 
@@ -160,7 +144,8 @@ export class MaskDirective implements ControlValueAccessor {
   public onFocus(e: MouseEvent | KeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
     if (
-      el !== null && el.selectionStart !== null &&
+      el !== null &&
+      el.selectionStart !== null &&
       el.selectionStart === el.selectionEnd &&
       el.selectionStart > this._maskService.prefix.length &&
       // tslint:disable-next-line
@@ -171,11 +156,15 @@ export class MaskDirective implements ControlValueAccessor {
     if (this._maskService.showMaskTyped) {
       this._maskService.maskIsShown = this._maskService.showMaskInInput();
     }
-    el.value = !el.value || el.value === this._maskService.prefix
-      ? this._maskService.prefix + this._maskService.maskIsShown
-      : el.value;
+    el.value =
+      !el.value || el.value === this._maskService.prefix
+        ? this._maskService.prefix + this._maskService.maskIsShown
+        : el.value;
     /** fix of cursor position with prefix when mouse click occur */
-    if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length) {
+    if (
+      ((el.selectionStart as number) || (el.selectionEnd as number)) <=
+      this._maskService.prefix.length
+    ) {
       el.selectionStart = this._maskService.prefix.length;
       return;
     }
@@ -188,14 +177,14 @@ export class MaskDirective implements ControlValueAccessor {
       e.preventDefault();
     }
     if (e.keyCode === 37 || e.keyCode === 8) {
-      if ((el.selectionStart as number) <= this._maskService.prefix.length
-        && (el.selectionEnd as number) <= this._maskService.prefix.length) {
+      if (
+        (el.selectionStart as number) <= this._maskService.prefix.length &&
+        (el.selectionEnd as number) <= this._maskService.prefix.length
+      ) {
         e.preventDefault();
       }
       this.onFocus(e);
-      if (e.keyCode === 8
-        && el.selectionStart === 0
-        && el.selectionEnd === el.value.length) {
+      if (e.keyCode === 8 && el.selectionStart === 0 && el.selectionEnd === el.value.length) {
         el.value = this._maskService.prefix;
         this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
         this.onInput(e);
@@ -217,15 +206,13 @@ export class MaskDirective implements ControlValueAccessor {
       inputValue = String(inputValue);
       this._maskService.isNumberValue = true;
     }
-    inputValue && this._maskService.maskExpression ||
-      this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
+    (inputValue && this._maskService.maskExpression) ||
+    (this._maskService.maskExpression &&
+      (this._maskService.prefix || this._maskService.showMaskTyped))
       ? (this._maskService.formElementProperty = [
-        'value',
-        this._maskService.applyMask(
-          inputValue,
-          this._maskService.maskExpression
-        )
-      ])
+          'value',
+          this._maskService.applyMask(inputValue, this._maskService.maskExpression)
+        ])
       : (this._maskService.formElementProperty = ['value', inputValue]);
     this._inputValue = inputValue;
   }
@@ -245,22 +232,22 @@ export class MaskDirective implements ControlValueAccessor {
   public setDisabledState(isDisabled: boolean): void {
     this._maskService.formElementProperty = ['disabled', isDisabled];
   }
+
   private _repeatPatternSymbols(maskExp: string): string {
-    return maskExp.match(/{[0-9]+}/)
-      && maskExp.split('')
-        .reduce((accum: string, currval: string, index: number): string => {
-          this._start = (currval === '{') ? index : this._start;
+    return (
+      (maskExp.match(/{[0-9]+}/) &&
+        maskExp.split('').reduce((accum: string, currval: string, index: number): string => {
+          this._start = currval === '{' ? index : this._start;
 
           if (currval !== '}') {
             return this._maskService._findSpecialChar(currval) ? accum + currval : accum;
           }
           this._end = index;
-          const repeatNumber: number = Number(maskExp
-            .slice(this._start + 1, this._end));
-          const repaceWith: string = new Array(repeatNumber + 1)
-            .join(maskExp[this._start - 1]);
+          const repeatNumber: number = Number(maskExp.slice(this._start + 1, this._end));
+          const repaceWith: string = new Array(repeatNumber + 1).join(maskExp[this._start - 1]);
           return accum + repaceWith;
-        }, '') || maskExp;
+        }, '')) ||
+      maskExp
+    );
   }
-
 }

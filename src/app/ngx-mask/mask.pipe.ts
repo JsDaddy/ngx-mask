@@ -7,10 +7,9 @@ import { IConfig } from './config';
   pure: true
 })
 export class MaskPipe implements PipeTransform {
+  public constructor(private _maskService: MaskApplierService) {}
 
-  public constructor(private _maskService: MaskApplierService) { }
-
-  public transform(value: string|number, mask: string | [string, IConfig['patterns']]): string {
+  public transform(value: string | number, mask: string | [string, IConfig['patterns']]): string {
     if (!value) {
       return '';
     }
