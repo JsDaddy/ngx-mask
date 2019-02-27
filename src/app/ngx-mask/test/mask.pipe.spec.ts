@@ -43,4 +43,9 @@ describe('Pipe: Mask', () => {
     const maskedNumber: string = maskPipe.transform(123456789, ['PPP-PP-PPP', patttern]);
     expect(maskedNumber).toEqual('123-45-678');
   });
+
+  it('should mask a zero number', () => {
+    const maskedNumberAndString: string | number = maskPipe.transform(0, '0');
+    expect(maskedNumberAndString).toEqual('0');
+  });
 });
