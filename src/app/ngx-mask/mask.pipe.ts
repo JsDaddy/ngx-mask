@@ -11,7 +11,7 @@ export class MaskPipe implements PipeTransform {
   public constructor(private _maskService: MaskApplierService) { }
 
   public transform(value: string|number, mask: string | [string, IConfig['patterns']]): string {
-    if (!value) {
+    if (!`${value}`) {
       return '';
     }
     if (typeof mask === 'string') {
