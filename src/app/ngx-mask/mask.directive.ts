@@ -28,6 +28,7 @@ export class MaskDirective implements ControlValueAccessor {
   // tslint:disable-next-line
   private _start!: number;
   private _end!: number;
+  private _code!: string;
   // tslint:disable-next-line
   public onChange = (_: any) => { };
   public onTouch = () => { };
@@ -146,7 +147,7 @@ export class MaskDirective implements ControlValueAccessor {
         ? this._position
         : position +
         // tslint:disable-next-line
-        ((e as any).inputType === 'deleteContentBackward' ? 0 : caretShift);
+        (this._code === 'Backspace' ? 0 : caretShift);
     this._position = null;
   }
 
@@ -183,6 +184,7 @@ export class MaskDirective implements ControlValueAccessor {
 
   @HostListener('keydown', ['$event'])
   public a(e: KeyboardEvent): void {
+    this._code = e.code;
     const el: HTMLInputElement = e.target as HTMLInputElement;
     if (e.keyCode === 38) {
       e.preventDefault();
