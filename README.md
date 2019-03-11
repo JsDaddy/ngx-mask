@@ -249,7 +249,7 @@ Masked value: 1,234
 ##### Usage
 
 ```html
- <input type='text' mask="Hh:m0:s0">
+ <input type='text' mask="Hh:M0:s0">
 ```
 
 ### Percent validation
