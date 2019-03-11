@@ -69,7 +69,7 @@ export class MaskApplierService {
         } else if (maskExpression === 'separator'
             || maskExpression === 'dot_separator' || maskExpression.startsWith('dot_separator')
             || maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             const precision: number = this.getPrecision(maskExpression);
@@ -188,7 +188,7 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'm') {
+                    if (maskExpression[cursor] === 'M') {
                         if (Number(inputSymbol) > 1) {
                             result += 0;
                             cursor += 1;
@@ -200,7 +200,7 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor - 1] === 'm') {
+                    if (maskExpression[cursor - 1] === 'M') {
                         if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12) {
                             continue;
                         }
