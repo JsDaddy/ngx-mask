@@ -38,13 +38,13 @@ export class MaskService extends MaskApplierService {
         if (/dot_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
-        if (('dot_separator' === this.maskExpression) && this.dropSpecialCharacters === true) {
+        if ('dot_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
         if (/coma_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
-        if (('coma_separator' === this.maskExpression) && this.dropSpecialCharacters === true) {
+        if ('coma_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
         Array.isArray(this.dropSpecialCharacters)

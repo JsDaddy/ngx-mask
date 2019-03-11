@@ -1,3 +1,8 @@
+<a name="7.6.0">
+
+# [7.6.0 coma_separator] (2019-03-11)
+Feature: added default validation
+
 <a name="7.5.0">
 
 # [7.5.0 coma_separator] (2019-03-11)
