@@ -37,7 +37,7 @@ export class MaskApplierService {
         inputValue: string,
         maskExpression: string,
         position: number = 0,
-        cb: Function = () => { }
+        cb: Function = () => {}
     ): string {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
@@ -106,7 +106,7 @@ export class MaskApplierService {
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
                 i < inputArray.length;
-                i++ , inputSymbol = inputArray[i]
+                i++, inputSymbol = inputArray[i]
             ) {
                 if (cursor === maskExpression.length) {
                     break;
