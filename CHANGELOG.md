@@ -1,14 +1,14 @@
-<a name="7.3.7">
+<a name="7.5.0">
 
-# [7.4.6 coma_separator] (2019-03-11)
-Bug fix
+# [7.5.0 coma_separator] (2019-03-11)
+Bugs fix: fix minutes validation, '-' in separator, decimal part in separator and fix issues with FF/IE
 
-<a name="7.3.6">
+<a name="7.4.6">
 
 # [7.4.6 coma_separator] (2019-02-15)
 Fix coma_separator behavior
 
-<a name="7.3.5">
+<a name="7.4.5">
 
 # [7.4.5 dependencies] (2019-02-15)
 Update dev and prod dependencies
