@@ -54,13 +54,11 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate"
-                      [(ngModel)]="formModelDate">
+                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
                   <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
                 </div>
               </div>
@@ -83,8 +81,9 @@
                 <div class="col-mat-3">
                   <div class="mat-form-wr">
                     <mat-form-field>
-                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
+                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00" [formControl]="formDate">
                       <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
+                      <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
                     </mat-form-field>
                   </div>
                 </div>
@@ -276,8 +275,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="000.000.000"
-                      [formControl]="form1" >
+                    <input matInput placeholder="Phone number" mask="000.000.000" [formControl]="form1">
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -344,7 +342,7 @@
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ numberOrStringForm.errors | json }}</p>
                   <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
                 </div>
               </div>
@@ -413,7 +411,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator" [dropSpecialCharacters]="true"  [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="dot_separator" [dropSpecialCharacters]="true"
+                      [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator</mat-hint>
                   </mat-form-field>
                 </div>
@@ -471,7 +470,7 @@
                 <div class="flex-cell-padding">
                   <mat-form-field>
                     <input matInput placeholder="Separator" [dropSpecialCharacters]="true"
-                      [dropSpecialCharacters]="[',']" mask="coma_separator.2"
+                      [dropSpecialCharacters]="[',']" mask="coma_separator.3"
                       [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>coma_separator.2</mat-hint>
                   </mat-form-field>
