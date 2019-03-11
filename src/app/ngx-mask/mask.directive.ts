@@ -1,12 +1,6 @@
-import {
-    Directive,
-    forwardRef,
-    HostListener,
-    Inject,
-    Input
-} from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { IConfig } from './config';
 
@@ -17,6 +11,11 @@ import { IConfig } from './config';
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => MaskDirective),
             multi: true
+        },
+        {
+            provide: NG_VALIDATORS,
+            useExisting: forwardRef(() => MaskDirective),
+            multi: true,
         },
         MaskService
     ]
@@ -32,12 +31,12 @@ export class MaskDirective implements ControlValueAccessor {
     // tslint:disable-next-line
     public onChange = (_: any) => { };
     public onTouch = () => { };
+
     public constructor(
         // tslint:disable-next-line
         @Inject(DOCUMENT) private document: any,
-        private _maskService: MaskService
+        private _maskService: MaskService,
     ) { }
-
 
     @Input('mask')
     public set maskExpression(value: string) {
@@ -120,6 +119,11 @@ export class MaskDirective implements ControlValueAccessor {
     @Input()
     public set clearIfNotMatch(value: IConfig['clearIfNotMatch']) {
         this._maskService.clearIfNotMatch = value;
+    }
+
+    // tslint:disable-next-line
+    public validate(_c: FormControl): ValidationErrors | null {
+        return null;
     }
 
     @HostListener('input', ['$event'])
@@ -220,7 +224,7 @@ export class MaskDirective implements ControlValueAccessor {
             this._maskService.isNumberValue = true;
         }
         inputValue && this._maskService.maskExpression ||
-            this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
+        this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)
             ? (this._maskService.formElementProperty = [
                 'value',
                 this._maskService.applyMask(
@@ -247,6 +251,7 @@ export class MaskDirective implements ControlValueAccessor {
     public setDisabledState(isDisabled: boolean): void {
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
+
     private _repeatPatternSymbols(maskExp: string): string {
         return maskExp.match(/{[0-9]+}/)
             && maskExp.split('')
