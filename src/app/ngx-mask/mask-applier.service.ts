@@ -45,7 +45,6 @@ export class MaskApplierService {
         let cursor: number = 0;
         let result: string = ``;
         let multi: boolean = false;
-
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }

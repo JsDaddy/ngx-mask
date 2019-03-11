@@ -130,7 +130,7 @@ export class MaskDirective implements ControlValueAccessor {
             this.onChange(el.value);
             return;
         }
-        const position: number = el.selectionStart
+        const position: number = el.selectionStart === 1
             ? (el.selectionStart as number) + this._maskService.prefix.length
             : el.selectionStart as number;
         let caretShift: number = 0;
@@ -200,7 +200,11 @@ export class MaskDirective implements ControlValueAccessor {
                 && el.selectionEnd === el.value.length) {
                 el.value = this._maskService.prefix;
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
-                this.onInput(e);
+                this._maskService.applyValueChanges(
+                  this._position,
+                  (shift: number) => (shift)
+                );
+                el.value = this.prefix;
             }
         }
     }
