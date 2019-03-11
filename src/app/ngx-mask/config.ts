@@ -11,9 +11,9 @@ export interface IConfig {
     specialCharacters: string[];
     patterns: {
         [character: string]: {
-            pattern: RegExp,
-            optional?: boolean
-        }
+            pattern: RegExp;
+            optional?: boolean;
+        };
     };
 }
 
@@ -30,38 +30,39 @@ export const initialConfig: IConfig = {
     showMaskTyped: false,
     dropSpecialCharacters: true,
     shownMaskExpression: '',
-    specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '\"', '\''],
+    // tslint:disable-next-line: quotemark
+    specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     patterns: {
         '0': {
-            pattern: new RegExp('\\d'),
+            pattern: new RegExp('\\d')
         },
         '9': {
             pattern: new RegExp('\\d'),
             optional: true
         },
-        'A': {
-            pattern: new RegExp('\[a-zA-Z0-9\]')
+        A: {
+            pattern: new RegExp('[a-zA-Z0-9]')
         },
-        'S': {
-            pattern: new RegExp('\[a-zA-Z\]')
+        S: {
+            pattern: new RegExp('[a-zA-Z]')
         },
-        'd': {
-            pattern: new RegExp('\\d'),
+        d: {
+            pattern: new RegExp('\\d')
         },
-        'm': {
-            pattern: new RegExp('\\d'),
+        m: {
+            pattern: new RegExp('\\d')
         },
-        'M': {
-            pattern: new RegExp('\\d'),
+        M: {
+            pattern: new RegExp('\\d')
         },
-        'H': {
-            pattern: new RegExp('\\d'),
+        H: {
+            pattern: new RegExp('\\d')
         },
-        'h': {
-            pattern: new RegExp('\\d'),
+        h: {
+            pattern: new RegExp('\\d')
         },
-        's': {
-            pattern: new RegExp('\\d'),
+        s: {
+            pattern: new RegExp('\\d')
         }
     }
 };

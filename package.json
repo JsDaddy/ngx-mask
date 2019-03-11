@@ -21,7 +21,8 @@
     "start": "ng serve",
     "test": "ng test",
     "lint": "tslint './src/app/**/*.ts'",
-    "build:library": "ng-packagr -p package.json"
+    "build:library": "ng-packagr -p package.json",
+    "prettier": "prettier './src/**/*.ts' --write --single-quote --tab-width 4 --print-width 120"
   },
   "repository": {
     "type": "git",
@@ -71,6 +72,7 @@
     "ng-packagr": "4.7.0",
     "node-sass": "4.11.0",
     "pre-commit": "1.2.2",
+    "prettier": "1.16.4",
     "rxjs": "6.4.0",
     "sass-loader": "7.1.0",
     "ts-helpers": "1.1.2",
@@ -81,6 +83,7 @@
     "webdriver-manager": "12.1.1"
   },
   "pre-commit": [
+    "prettier",
     "lint",
     "test"
   ],

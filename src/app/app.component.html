@@ -54,7 +54,8 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate" [(ngModel)]="formModelDate">
+                    <input matInput placeholder="Date" mask="00/00/0000" [formControl]="formDate"
+                      [(ngModel)]="formModelDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
                 </div>
@@ -96,13 +97,13 @@
                   </div>
                 </div>
                 <div class="col-mat-3">
-                    <div class="mat-form-wr">
-                      <mat-form-field>
-                        <input matInput placeholder="Valid 24 hour format" mask="Hh:m0:s0">
-                        <mat-hint> <b>Mask:</b> Hh:m0:s0</mat-hint>
-                      </mat-form-field>
-                    </div>
+                  <div class="mat-form-wr">
+                    <mat-form-field>
+                      <input matInput placeholder="Valid 24 hour format" mask="Hh:m0:s0">
+                      <mat-hint> <b>Mask:</b> Hh:m0:s0</mat-hint>
+                    </mat-form-field>
                   </div>
+                </div>
                 <div class="col-mat-3">
                   <div class="mat-form-wr">
                     <mat-form-field>
@@ -114,7 +115,8 @@
                 <div class="col-mat-3">
                   <div class="mat-form-wr">
                     <mat-form-field>
-                      <input matInput placeholder="Valid date and month" mask="d0/M0/0000" [dropSpecialCharacters]="true">
+                      <input matInput placeholder="Valid date and month" mask="d0/M0/0000"
+                        [dropSpecialCharacters]="true">
                       <mat-hint> <b>Mask:</b> d0/M0/0000</mat-hint>
                     </mat-form-field>
                   </div>
@@ -124,9 +126,7 @@
                   <div class="mat-form-wr">
                     <mat-form-field>
                       <input matInput placeholder="Date and month with placeholder" mask="d0/M0/0000"
-                             [showMaskTyped]="true"
-                             [shownMaskExpression]="'DD/MM/YYYY'"
-                             [dropSpecialCharacters]="true">
+                        [showMaskTyped]="true" [shownMaskExpression]="'DD/MM/YYYY'" [dropSpecialCharacters]="true">
                       <mat-hint> <b>Mask:</b> d0/m0/0000</mat-hint>
                     </mat-form-field>
                   </div>
@@ -178,7 +178,8 @@
             <mat-card-header>
               <mat-card-title>Clear if not match</mat-card-title>
               <mat-card-subtitle>
-                You could clear the input if the value not match the mask, you'll just need to set <b>clearIfNotMatch</b>
+                You could clear the input if the value not match the mask, you'll just need to set
+                <b>clearIfNotMatch</b>
                 attribute.
               </mat-card-subtitle>
             </mat-card-header>
@@ -214,8 +215,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Percent valid mask"  mask="percent" sufix="%"
-                      [formControl]="percent">
+                    <input matInput placeholder="Percent valid mask" mask="percent" sufix="%" [formControl]="percent">
                     <mat-hint><b>Mask:</b>percent</mat-hint>
                   </mat-form-field>
                 </div>
@@ -276,8 +276,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+5" [showMaskTyped]="true"
-                      [formControl]="form1" [(ngModel)]="showMaskModel">
+                    <input matInput placeholder="Phone number" mask="000.000.000"
+                      [formControl]="form1" >
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -307,7 +307,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Sum" mask='00.00' sufix=" $" [formControl]="sufixForm" [(ngModel)]="sufixModel">
+                    <input matInput placeholder="Sum" mask='00.00' sufix=" $" [formControl]="sufixForm"
+                      [(ngModel)]="sufixModel">
                     <mat-hint><b>Mask: </b>0000.00</mat-hint>
                   </mat-form-field>
                 </div>
@@ -368,7 +369,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm" [(ngModel)]="repeatFormModel">
+                    <input matInput placeholder="Repeat mask" mask="A{5}" [formControl]="repeatForm"
+                      [(ngModel)]="repeatFormModel">
                     <mat-hint><b>Mask: </b>00000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -398,19 +400,21 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="separator" [formControl]="separatorForm" [(ngModel)]="separatorFormModel">
+                    <input matInput placeholder="Separator" mask="separator" [formControl]="separatorForm"
+                      [(ngModel)]="separatorFormModel">
                     <mat-hint><b>Mask: </b>separator</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ separatorForm.value ? separatorForm.value: 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ separatorFormModel ? separatorFormModel: 'Empty' }}</p>
-                  </div>
+                  <p><b>FormControl:</b> {{ separatorForm.value ? separatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ separatorFormModel ? separatorFormModel: 'Empty' }}</p>
+                </div>
               </div>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator" [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="dot_separator" [formControl]="dotSeparatorForm"
+                      [(ngModel)]="dotSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator</mat-hint>
                   </mat-form-field>
                 </div>
@@ -422,7 +426,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="coma_separator" [formControl]="commaSeparatorForm" [(ngModel)]="commaSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="coma_separator" [formControl]="commaSeparatorForm"
+                      [(ngModel)]="commaSeparatorFormModel">
                     <mat-hint><b>Mask: </b>coma_separator</mat-hint>
                   </mat-form-field>
                 </div>
@@ -452,49 +457,62 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" [dropSpecialCharacters]="true" mask="dot_separator.2" [formControl]="dotPrecisionSeparatorForm" [(ngModel)]="dotPrecisionSeparatorFormModel">
+                    <input matInput placeholder="Separator" [dropSpecialCharacters]="true" mask="dot_separator.2"
+                      [formControl]="dotPrecisionSeparatorForm" [(ngModel)]="dotPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator.2</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ dotPrecisionSeparatorForm.value ? dotPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>FormControl:</b>
+                    {{ dotPrecisionSeparatorForm.value ? dotPrecisionSeparatorForm.value: 'Empty' }}</p>
                   <p><b>NgModel:</b> {{ dotPrecisionSeparatorFormModel ? dotPrecisionSeparatorFormModel: 'Empty' }}</p>
                 </div>
               </div>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator"     [dropSpecialCharacters]="true" [dropSpecialCharacters]="[',']" mask="coma_separator.2" [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
+                    <input matInput placeholder="Separator" [dropSpecialCharacters]="true"
+                      [dropSpecialCharacters]="[',']" mask="coma_separator.2"
+                      [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>coma_separator.2</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ commaPrecisionSeparatorForm.value ? commaPrecisionSeparatorForm.value: 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ commaPrecisionSeparatorFormModel ? commaPrecisionSeparatorFormModel: 'Empty' }}</p>
+                  <p><b>FormControl:</b>
+                    {{ commaPrecisionSeparatorForm.value ? commaPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ commaPrecisionSeparatorFormModel ? commaPrecisionSeparatorFormModel: 'Empty' }}
+                  </p>
                 </div>
               </div>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator.0" [formControl]="dotZeroPrecisionSeparatorForm" [(ngModel)]="dotZeroPrecisionSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="dot_separator.0"
+                      [formControl]="dotZeroPrecisionSeparatorForm" [(ngModel)]="dotZeroPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator.0</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ dotZeroPrecisionSeparatorForm.value ? dotZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ dotZeroPrecisionSeparatorFormModel ? dotZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
+                  <p><b>FormControl:</b>
+                    {{ dotZeroPrecisionSeparatorForm.value ? dotZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b>
+                    {{ dotZeroPrecisionSeparatorFormModel ? dotZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
                 </div>
               </div>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="coma_separator.0" [formControl]="commaZeroPrecisionSeparatorForm" [(ngModel)]="commaZeroPrecisionSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="coma_separator.0"
+                      [formControl]="commaZeroPrecisionSeparatorForm"
+                      [(ngModel)]="commaZeroPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>coma_separator.0</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ commaZeroPrecisionSeparatorForm.value ? commaZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ commaZeroPrecisionSeparatorFormModel ? commaZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
+                  <p><b>FormControl:</b>
+                    {{ commaZeroPrecisionSeparatorForm.value ? commaZeroPrecisionSeparatorForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b>
+                    {{ commaZeroPrecisionSeparatorFormModel ? commaZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>
