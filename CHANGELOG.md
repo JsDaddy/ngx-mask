@@ -1,3 +1,8 @@
+<a name="7.3.7">
+
+# [7.4.6 coma_separator] (2019-03-11)
+Bug fix
+
 <a name="7.3.6">
 
 # [7.4.6 coma_separator] (2019-02-15)
