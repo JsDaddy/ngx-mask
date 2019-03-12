@@ -66,3 +66,20 @@ export const initialConfig: IConfig = {
         }
     }
 };
+
+export const withoutValidation: string[] = [
+    'percent',
+    'Hh:m0:s0',
+    'Hh:m0',
+    'Hh',
+    'm0:s0',
+    's0',
+    'm0',
+    'separator',
+    'dot_separator',
+    'coma_separator',
+    'd0/M0/0000',
+    'd0/M0',
+    'd0',
+    'M0'
+];
