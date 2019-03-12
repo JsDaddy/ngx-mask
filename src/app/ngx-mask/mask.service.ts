@@ -9,7 +9,7 @@ export class MaskService extends MaskApplierService {
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;
     public maskIsShown: string = '';
-    private _formElement: HTMLInputElement;
+    protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
     public onChange = (_: any) => {};
     public onTouch = () => {};
