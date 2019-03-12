@@ -226,9 +226,8 @@ export class MaskDirective implements ControlValueAccessor {
             const cursorStart: number | null = el.selectionStart;
             this.onFocus(e);
             if (e.keyCode === 8 && cursorStart === 0 && el.selectionEnd === el.value.length) {
-                el.value = this._maskService.prefix;
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
-                el.value = this.prefix;
+                this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position);
             }
         }
     }
