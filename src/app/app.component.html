@@ -244,7 +244,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+49" [formControl]="form"
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+7" [formControl]="form"
                       [(ngModel)]="dateModel">
                     <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                   </mat-form-field>
@@ -275,7 +275,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="000.000.000" [formControl]="form1">
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form1" prefix="+5" [(ngModel)]="showMaskModel">
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -547,7 +547,7 @@
     <div class="row">
       <div class="col-12">
         <div class="mat-grid-wr">
-          <mat-grid-list cols="1" rowHeight="55px">
+            <mat-grid-list cols="1" rowHeight="55px">
             <mat-grid-tile>
               <mat-toolbar>
                 <span>Documentation - see docs on

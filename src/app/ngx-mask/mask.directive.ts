@@ -217,14 +217,11 @@ export class MaskDirective implements ControlValueAccessor {
             ) {
                 e.preventDefault();
             }
+            const cursorStart: number | null = el.selectionStart;
             this.onFocus(e);
-            if (e.keyCode === 8 && el.selectionStart === 0 && el.selectionEnd === el.value.length) {
+            if (e.keyCode === 8 && cursorStart === 0 && el.selectionEnd === el.value.length) {
                 el.value = this._maskService.prefix;
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
-                this._maskService.applyValueChanges(
-                  this._position,
-                  (shift: number) => (shift)
-                );
                 el.value = this.prefix;
             }
         }
