@@ -152,9 +152,10 @@ export class MaskDirective implements ControlValueAccessor {
             this.onChange(el.value);
             return;
         }
-        const position: number = el.selectionStart === 1
-            ? (el.selectionStart as number) + this._maskService.prefix.length
-            : (el.selectionStart as number);
+        const position: number =
+            el.selectionStart === 1
+                ? (el.selectionStart as number) + this._maskService.prefix.length
+                : (el.selectionStart as number);
         let caretShift: number = 0;
         this._maskService.applyValueChanges(position, (shift: number) => (caretShift = shift));
         // only set the selection if the element is active
