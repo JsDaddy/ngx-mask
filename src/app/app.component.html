@@ -54,12 +54,13 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate">
+                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate" [formControl]="formDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
                   <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>
@@ -81,9 +82,8 @@
                 <div class="col-mat-3">
                   <div class="mat-form-wr">
                     <mat-form-field>
-                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00" [formControl]="formDate">
+                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00">
                       <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
-                      <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
                     </mat-form-field>
                   </div>
                 </div>
@@ -342,8 +342,8 @@
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ numberOrStringForm.errors | json }}</p>
-                  <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
+                    <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
+                    <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>
