@@ -83,7 +83,6 @@
     "webdriver-manager": "12.1.1"
   },
   "pre-commit": [
-    "prettier",
     "lint",
     "test"
   ],
