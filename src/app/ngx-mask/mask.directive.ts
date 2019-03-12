@@ -2,7 +2,7 @@ import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/cor
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
-import { IConfig, withoutValidation } from './config';
+import { config, IConfig, withoutValidation } from './config';
 
 @Directive({
     selector: '[mask]',
@@ -119,6 +119,16 @@ export class MaskDirective implements ControlValueAccessor {
             return null;
         }
         if (value && value.toString().length >= 1) {
+            for (const key in this._maskService.maskAvailablePatterns) {
+                if (
+                    this._maskService.maskAvailablePatterns[key].optional &&
+                    this._maskService.maskAvailablePatterns[key].optional === true
+                ) {
+                    if (value.length >= this._maskValue.indexOf(key)) {
+                        return null;
+                    }
+                }
+            }
             if (this._maskValue.indexOf('*') === 1) {
                 return null;
             } else if (this._maskValue.indexOf('*') > 1 && value.length < this._maskValue.indexOf('*')) {
