@@ -413,7 +413,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator" [dropSpecialCharacters]="true"  [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
+                    <input matInput placeholder="Separator" mask="dot_separator" [dropSpecialCharacters]="true"  [dropSpecialCharacters]="[',']" [formControl]="dotSeparatorForm" [(ngModel)]="dotSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator</mat-hint>
                   </mat-form-field>
                 </div>

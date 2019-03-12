@@ -303,7 +303,7 @@ export class MaskApplierService {
         return Infinity;
     };
 
-    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string => {
+    private checkInputPrecision =  (inputValue: string, precision: number, decimalMarker: string): string => {
         if (precision < Infinity) {
             let precisionRegEx: RegExp;
 
