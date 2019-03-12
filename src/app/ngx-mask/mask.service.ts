@@ -55,6 +55,14 @@ export class MaskService extends MaskApplierService {
                       ? Number(
                             this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
                         )
+                      : this._removeMask(
+                            this._removeSufix(this._removePrefix(result)),
+                            this.maskSpecialCharacters
+                        ).indexOf(',') !== -1
+                      ? this._removeMask(
+                            this._removeSufix(this._removePrefix(result)),
+                            this.maskSpecialCharacters
+                        ).replace(',', '.')
                       : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
               )
             : this.onChange(this._removeSufix(this._removePrefix(result)));
