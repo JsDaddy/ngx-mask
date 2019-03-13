@@ -115,6 +115,12 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
+        if (
+            /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
+            /coma_separator\.\d{1,}/.test(this._maskValue) === true
+        ) {
+            return null;
+        }
         if (withoutValidation.includes(this._maskValue)) {
             return null;
         }
