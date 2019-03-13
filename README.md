@@ -258,7 +258,7 @@ Masked value: 1,234
 ##### Usage
 
 ```html
- <input type='text' mask="percents" sufix="%">
+ <input type='text' mask="percent" sufix="%">
 ```
 
 
