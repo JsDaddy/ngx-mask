@@ -128,15 +128,17 @@ export class MaskDirective implements ControlValueAccessor {
             return null;
         }
         if (value && value.toString().length >= 1) {
+            let counterOfOpt: number = 0;
             for (const key in this._maskService.maskAvailablePatterns) {
                 if (
                     this._maskService.maskAvailablePatterns[key].optional &&
                     this._maskService.maskAvailablePatterns[key].optional === true
                 ) {
+                    if (this._maskValue.indexOf(key) !== -1) {
+                        counterOfOpt++;
+                    }
                     if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
                         return null;
-                    } else if (this._maskValue.indexOf(key) !== -1) {
-                        return { 'Mask error': true };
                     }
                 }
             }
@@ -146,7 +148,8 @@ export class MaskDirective implements ControlValueAccessor {
                 return { 'Mask error': true };
             }
             if (this._maskValue.indexOf('*') === -1) {
-                const length: number = this._maskValue.length - this._checkSpecialCharAmount(this._maskValue);
+                const length: number =
+                    this._maskValue.length - this._checkSpecialCharAmount(this._maskValue) - counterOfOpt;
                 if (value.length !== length) {
                     return { 'Mask error': true };
                 }
