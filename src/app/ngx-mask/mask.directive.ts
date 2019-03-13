@@ -129,7 +129,7 @@ export class MaskDirective implements ControlValueAccessor {
                 ) {
                     if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
                         return null;
-                    } else {
+                    } else if (this._maskValue.indexOf(key) !== -1) {
                         return { 'Mask error': true };
                     }
                 }
