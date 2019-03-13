@@ -115,6 +115,12 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
+        if (
+            /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
+            /coma_separator\.\d{1,}/.test(this._maskValue) === true
+        ) {
+            return null;
+        }
         if (withoutValidation.includes(this._maskValue)) {
             return null;
         }
@@ -129,7 +135,7 @@ export class MaskDirective implements ControlValueAccessor {
                 ) {
                     if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
                         return null;
-                    } else {
+                    } else if (this._maskValue.indexOf(key) !== -1) {
                         return { 'Mask error': true };
                     }
                 }
