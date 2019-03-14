@@ -275,7 +275,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form1" prefix="+5" [(ngModel)]="showMaskModel">
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form1" prefix="+5" [(ngModel)]="showMaskModel" [showMaskTyped]="true">
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
                 </div>

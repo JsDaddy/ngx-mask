@@ -194,18 +194,24 @@ export class MaskDirective implements ControlValueAccessor {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | KeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
+        const posStart: number = 0;
+        const posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&
             // tslint:disable-next-line
-            (e as any).keyCode !== 38
-        ) {
-            return;
-        }
+            (e as any).keyCode !== 38)
+        // ) {
+        //     return;
+        // }
         if (this._maskService.showMaskTyped) {
             this._maskService.maskIsShown = this._maskService.showMaskInInput();
+             if (el.setSelectionRange) {
+                    el.focus();
+                    el.setSelectionRange(posStart, posEnd);
+             }
         }
         el.value =
             !el.value || el.value === this._maskService.prefix
@@ -226,6 +232,9 @@ export class MaskDirective implements ControlValueAccessor {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
+            if ( e.keyCode === 37 ) {
+                el.selectionStart = el.selectionEnd as number - 1;
+            }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length
