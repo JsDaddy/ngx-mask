@@ -48,7 +48,6 @@ export class MaskApplierService {
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
-
         const inputArray: string[] = inputValue.toString().split('');
         if (maskExpression === 'percent') {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
