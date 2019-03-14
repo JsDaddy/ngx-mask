@@ -253,6 +253,7 @@ export class MaskDirective implements ControlValueAccessor {
         }
         if (typeof inputValue === 'number') {
             inputValue = String(inputValue);
+            inputValue = this._maskValue.startsWith('dot_separator') ? inputValue.replace('.', ',') : inputValue;
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
