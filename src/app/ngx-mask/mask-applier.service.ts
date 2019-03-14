@@ -4,6 +4,7 @@ import { config, IConfig } from './config';
 @Injectable()
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
+    public hiddenInput: IConfig['hiddenInput'];
     public showTemplate!: IConfig['showTemplate'];
     public clearIfNotMatch!: IConfig['clearIfNotMatch'];
     public maskExpression: string = '';
@@ -19,13 +20,13 @@ export class MaskApplierService {
     public constructor(@Inject(config) protected _config: IConfig) {
         this._shift = new Set();
         this.maskSpecialCharacters = this._config!.specialCharacters;
-        this.maskAvailablePatterns = this._config.patterns;
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
         this.sufix = this._config.sufix;
+        this.hiddenInput = this._config.hiddenInput;
     }
     // tslint:disable-next-line:no-any
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {

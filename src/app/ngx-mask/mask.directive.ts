@@ -87,6 +87,10 @@ export class MaskDirective implements ControlValueAccessor {
     public set dropSpecialCharacters(value: IConfig['dropSpecialCharacters']) {
         this._maskService.dropSpecialCharacters = value;
     }
+    @Input()
+    public set hiddenInput(value: IConfig['hiddenInput']) {
+        this._maskService.hiddenInput = value;
+    }
 
     @Input()
     public set showMaskTyped(value: IConfig['showMaskTyped']) {

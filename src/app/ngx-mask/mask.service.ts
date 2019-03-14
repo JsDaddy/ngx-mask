@@ -9,6 +9,7 @@ export class MaskService extends MaskApplierService {
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;
     public maskIsShown: string = '';
+    public actualValue: string = '';
     protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
     public onChange = (_: any) => {};
@@ -35,6 +36,9 @@ export class MaskService extends MaskApplierService {
             return this.prefix + this.maskIsShown;
         }
         const result: string = super.applyMask(inputValue, maskExpression, position, cb);
+        this.actualValue = this.getActualValue(this.actualValue, result);
+
+
         if (/dot_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
@@ -63,11 +67,16 @@ export class MaskService extends MaskApplierService {
                             this._removeSufix(this._removePrefix(result)),
                             this.maskSpecialCharacters
                         ).replace(',', '.')
-                      : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-              )
+                      : this._removeMask(
+                          this._removeSufix(this._removePrefix(this.actualValue)), this.maskSpecialCharacters))
             : this.onChange(this._removeSufix(this._removePrefix(result)));
         let ifMaskIsShown: string = '';
         if (!this.showMaskTyped) {
+            if (this.hiddenInput) {
+                return result && result.length
+                    ? this.hideInput(result, this.maskExpression)
+                    : result;
+            }
             return result;
         }
         const resLen: number = result.length;
@@ -83,6 +92,29 @@ export class MaskService extends MaskApplierService {
             return;
         }
         this.clearIfNotMatchFn();
+    }
+
+    public hideInput(inputValue: string, maskExpression: string): string {
+        return inputValue.split('')
+            .map((curr: string, index: number) =>  {
+                if (this.maskAvailablePatterns &&
+                    this.maskAvailablePatterns[maskExpression[index]] &&
+                    this.maskAvailablePatterns[maskExpression[index]].symbol) {
+                        return this.maskAvailablePatterns[maskExpression[index]].symbol;
+                }
+                return curr;
+            }).join('');
+    }
+
+    public getActualValue(actualValue: string, res: string): string {
+        if (!this.actualValue.length) {
+            actualValue = res;
+        } else if (this.actualValue.length > res.length) {
+            actualValue = this.actualValue.slice(0, res.length);
+        } else if (this.actualValue.length < res.length) {
+            actualValue += res.slice(this.actualValue.length);
+        }
+        return actualValue;
     }
 
     public showMaskInInput(): string {
