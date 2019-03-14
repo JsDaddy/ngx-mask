@@ -186,7 +186,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000"
+                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="0*.00"
                       [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
                     <mat-hint><b>Mask:</b>000.000</mat-hint>
                   </mat-form-field>
@@ -424,9 +424,9 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="coma_separator" [formControl]="commaSeparatorForm"
+                    <input matInput placeholder="Separator" mask="comma_separator" [formControl]="commaSeparatorForm"
                       [(ngModel)]="commaSeparatorFormModel">
-                    <mat-hint><b>Mask: </b>coma_separator</mat-hint>
+                    <mat-hint><b>Mask: </b>comma_separator</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
@@ -470,9 +470,9 @@
                 <div class="flex-cell-padding">
                   <mat-form-field>
                     <input matInput placeholder="Separator" [dropSpecialCharacters]="true"
-                      [dropSpecialCharacters]="[',']" mask="coma_separator.3"
+                      [dropSpecialCharacters]="[',']" mask="comma_separator.2"
                       [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
-                    <mat-hint><b>Mask: </b>coma_separator.2</mat-hint>
+                    <mat-hint><b>Mask: </b>comma_separator.2</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
@@ -500,10 +500,10 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="coma_separator.0"
+                    <input matInput placeholder="Separator" mask="comma_separator.0"
                       [formControl]="commaZeroPrecisionSeparatorForm"
                       [(ngModel)]="commaZeroPrecisionSeparatorFormModel">
-                    <mat-hint><b>Mask: </b>coma_separator.0</mat-hint>
+                    <mat-hint><b>Mask: </b>comma_separator.0</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">

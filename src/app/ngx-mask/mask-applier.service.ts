@@ -63,8 +63,8 @@ export class MaskApplierService {
             maskExpression === 'separator' ||
             maskExpression === 'dot_separator' ||
             maskExpression.startsWith('dot_separator') ||
-            maskExpression === 'coma_separator' ||
-            maskExpression.startsWith('coma_separator')
+            maskExpression === 'comma_separator' ||
+            maskExpression.startsWith('comma_separator')
         ) {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
                 inputValue = inputValue.substring(0, inputValue.length - 1);
@@ -77,7 +77,7 @@ export class MaskApplierService {
                         ? inputValue.slice(1, inputValue.length)
                         : inputValue;
             }
-            if (maskExpression.startsWith('coma_separator')) {
+            if (maskExpression.startsWith('comma_separator')) {
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
                         ? inputValue.slice(1, inputValue.length)
@@ -103,7 +103,7 @@ export class MaskApplierService {
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
-            } else if (maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
+            } else if (maskExpression === 'comma_separator' || maskExpression.startsWith('comma_separator')) {
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);

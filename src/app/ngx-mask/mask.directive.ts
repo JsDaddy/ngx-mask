@@ -117,7 +117,7 @@ export class MaskDirective implements ControlValueAccessor {
     public validate({ value }: FormControl): ValidationErrors | null {
         if (
             /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
-            /coma_separator\.\d{1,}/.test(this._maskValue) === true
+            /comma_separator\.\d{1,}/.test(this._maskValue) === true
         ) {
             return null;
         }
@@ -149,7 +149,7 @@ export class MaskDirective implements ControlValueAccessor {
             }
             if (this._maskValue.indexOf('*') === -1) {
                 const length: number =
-                    this._maskValue.length - this._checkSpecialCharAmount(this._maskValue) - counterOfOpt;
+                    this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt;
                 if (value.length !== length) {
                     return { 'Mask error': true };
                 }
@@ -297,10 +297,5 @@ export class MaskDirective implements ControlValueAccessor {
                 }, '')) ||
             maskExp
         );
-    }
-
-    private _checkSpecialCharAmount(mask: string): number {
-        const chars: string[] = mask.split('').filter((item: string) => this._maskService._findSpecialChar(item));
-        return chars.length;
     }
 }

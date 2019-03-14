@@ -41,10 +41,10 @@ export class MaskService extends MaskApplierService {
         if ('dot_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
-        if (/coma_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
+        if (/comma_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
-        if ('coma_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
+        if ('comma_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
         Array.isArray(this.dropSpecialCharacters)
@@ -107,6 +107,11 @@ export class MaskService extends MaskApplierService {
 
     public set formElementProperty([name, value]: [string, string | boolean]) {
         this._renderer.setProperty(this._formElement, name, value);
+    }
+
+    public checkSpecialCharAmount(mask: string): number {
+        const chars: string[] = mask.split('').filter((item: string) => this._findSpecialChar(item));
+        return chars.length;
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {

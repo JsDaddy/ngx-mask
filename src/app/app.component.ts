@@ -38,7 +38,7 @@ export class AppComponent {
     public repeatFormModel!: SN;
     public separatorFormModel!: SN;
     public dotSeparatorFormModel!: SN;
-    public dotPrecisionSeparatorFormModel!: SN;
+    public dotPrecisionSeparatorFormModel: SN = '91239123,0923';
     public dotZeroPrecisionSeparatorFormModel!: SN;
     public commaSeparatorFormModel!: SN;
     public commaPrecisionSeparatorFormModel!: SN;
