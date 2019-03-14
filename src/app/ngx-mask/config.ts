@@ -77,7 +77,7 @@ export const withoutValidation: string[] = [
     'm0',
     'separator',
     'dot_separator',
-    'coma_separator',
+    'comma_separator',
     'd0/M0/0000',
     'd0/M0',
     'd0',

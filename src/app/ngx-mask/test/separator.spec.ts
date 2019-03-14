@@ -71,18 +71,18 @@ describe('Separator: Mask', () => {
         equal('1000000,00', '1.000.000', fixture);
     });
 
-    it('coma_separator for 1000000', () => {
-        component.mask = 'coma_separator';
+    it('comma_separator for 1000000', () => {
+        component.mask = 'comma_separator';
         equal('1000000', '1,000,000', fixture);
     });
 
-    it('coma_separator precision 2 for 1000000.00', () => {
-        component.mask = 'coma_separator.2';
+    it('comma_separator precision 2 for 1000000.00', () => {
+        component.mask = 'comma_separator.2';
         equal('1000000.00', '1,000,000.00', fixture);
     });
 
-    it('coma_separator precision 0 for 1000000.00', () => {
-        component.mask = 'coma_separator.0';
+    it('comma_separator precision 0 for 1000000.00', () => {
+        component.mask = 'comma_separator.0';
         equal('1000000.00', '1,000,000', fixture);
     });
 });

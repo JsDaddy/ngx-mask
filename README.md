@@ -205,9 +205,9 @@ For separate input with dots
 For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
 ```html
- <input type='text' mask="coma_separator">
+ <input type='text' mask="comma_separator">
 ```
-For using decimals enter '.' to the end of your input to 'separator' or 'coma_separator' mask and ',' to 'dot_separator'
+For using decimals enter '.' to the end of your input to 'separator' or 'comma_separator' mask and ',' to 'dot_separator'
 
 
 ```
@@ -223,9 +223,9 @@ Masked value: 1,234.56
 
 ```html
  <input type='text' mask="dot_separator.2">
- <input type='text' mask="coma_separator.2">
+ <input type='text' mask="comma_separator.2">
  <input type='text' mask="dot_separator.0">
- <input type='text' mask="coma_separator.0">
+ <input type='text' mask="comma_separator.0">
 ```
 For limiting decimal precision add '.' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely. 
 

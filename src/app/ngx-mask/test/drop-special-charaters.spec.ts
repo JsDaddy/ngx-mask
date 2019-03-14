@@ -46,7 +46,7 @@ describe('Directive: Mask', () => {
     });
 
     it('FormControl or NgModel should be filled without special characters', () => {
-        component.mask = 'coma_separator.4';
+        component.mask = 'comma_separator.4';
         component.dropSpecialCharacters = true;
         component.form.setValue(2578.9812);
 
