@@ -9,7 +9,6 @@ export class MaskService extends MaskApplierService {
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;
     public maskIsShown: string = '';
-    public actualValue: string = '';
     protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
     public onChange = (_: any) => {};
@@ -95,6 +94,15 @@ export class MaskService extends MaskApplierService {
     }
 
     public hideInput(inputValue: string, maskExpression: string): string {
+        if (this.hiddenInput) {
+            this.actualValue.split('').map((curr: string, index: number) => {
+                if (!this._checkSymbolMask(curr, maskExpression[index]) &&
+                    this.maskSpecialCharacters.indexOf(maskExpression[index]) === -1 ) {
+                    inputValue = this.prevResult;
+                    this.actualValue = this.prevActualResult;
+                }
+            });
+        }
         return inputValue.split('')
             .map((curr: string, index: number) =>  {
                 if (this.maskAvailablePatterns &&

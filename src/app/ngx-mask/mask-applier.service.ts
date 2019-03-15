@@ -8,18 +8,20 @@ export class MaskApplierService {
     public showTemplate!: IConfig['showTemplate'];
     public clearIfNotMatch!: IConfig['clearIfNotMatch'];
     public maskExpression: string = '';
+    public actualValue: string = '';
     public shownMaskExpression: string = '';
     public maskSpecialCharacters!: IConfig['specialCharacters'];
     public maskAvailablePatterns!: IConfig['patterns'];
     public prefix!: IConfig['prefix'];
     public sufix!: IConfig['sufix'];
     public customPattern!: IConfig['patterns'];
+    protected prevResult: string = '';
+    protected prevActualResult: string = '';
 
     private _shift!: Set<number>;
 
     public constructor(@Inject(config) protected _config: IConfig) {
         this._shift = new Set();
-        this.maskSpecialCharacters = this._config!.specialCharacters;
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;
         this.maskSpecialCharacters = this._config!.specialCharacters;
@@ -46,6 +48,8 @@ export class MaskApplierService {
         let cursor: number = 0;
         let result: string = ``;
         let multi: boolean = false;
+        this.prevResult = inputValue.slice(0, inputValue.length - 1);
+        this.prevActualResult = this.actualValue;
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -146,7 +150,10 @@ export class MaskApplierService {
                 ) {
                     result += inputSymbol;
                     cursor += 3;
-                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) ||
+                            this.hiddenInput &&
+                            this.maskAvailablePatterns[maskExpression[cursor]] &&
+                            this.maskAvailablePatterns[maskExpression[cursor]].symbol === inputSymbol) {
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
                             result += 0;
@@ -278,7 +285,7 @@ export class MaskApplierService {
         return symbol;
     }
 
-    private _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
+    protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
         this.maskAvailablePatterns = this.customPattern ? this.customPattern : this.maskAvailablePatterns;
         return (
             this.maskAvailablePatterns[maskSymbol] &&
