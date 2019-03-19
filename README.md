@@ -90,7 +90,7 @@ Input value: 789-874.98
 Masked value: [78]\[987]
 ```
 
-### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+	### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
    We have next default patterns:
 
   | code | meaning |

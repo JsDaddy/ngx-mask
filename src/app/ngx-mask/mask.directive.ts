@@ -29,14 +29,14 @@ export class MaskDirective implements ControlValueAccessor {
     private _end!: number;
     private _code!: string;
     // tslint:disable-next-line
-    public onChange = (_: any) => {};
-    public onTouch = () => {};
+    public onChange = (_: any) => { };
+    public onTouch = () => { };
 
     public constructor(
         // tslint:disable-next-line
         @Inject(DOCUMENT) private document: any,
         private _maskService: MaskService
-    ) {}
+    ) { }
 
     @Input('mask')
     public set maskExpression(value: string) {
@@ -119,6 +119,7 @@ export class MaskDirective implements ControlValueAccessor {
         this._maskService.validation = value;
     }
 
+    // tslint:disable-next-line: cyclomatic-complexity
     public validate({ value }: FormControl): ValidationErrors | null {
         if (!this._maskService.validation) {
             return null;
@@ -148,6 +149,9 @@ export class MaskDirective implements ControlValueAccessor {
                     if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
                         return null;
                     }
+                    if (counterOfOpt === this._maskValue.length) {
+                        return null;
+                    }
                 }
             }
             if (this._maskValue.indexOf('*') === 1) {
@@ -156,8 +160,9 @@ export class MaskDirective implements ControlValueAccessor {
                 return { 'Mask error': true };
             }
             if (this._maskValue.indexOf('*') === -1) {
-                const length: number =
-                    this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt;
+                const length: number = this._maskService.dropSpecialCharacters
+                    ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
+                    : this._maskValue.length - counterOfOpt;
                 if (value.length !== length) {
                     return { 'Mask error': true };
                 }
@@ -188,8 +193,8 @@ export class MaskDirective implements ControlValueAccessor {
             this._position !== null
                 ? this._position
                 : position +
-                  // tslint:disable-next-line
-                  (this._code === 'Backspace' ? 0 : caretShift);
+                // tslint:disable-next-line
+                (this._code === 'Backspace' ? 0 : caretShift);
         this._position = null;
     }
 
@@ -275,11 +280,11 @@ export class MaskDirective implements ControlValueAccessor {
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
-        (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+            (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
             ? (this._maskService.formElementProperty = [
-                  'value',
-                  this._maskService.applyMask(inputValue, this._maskService.maskExpression)
-              ])
+                'value',
+                this._maskService.applyMask(inputValue, this._maskService.maskExpression)
+            ])
             : (this._maskService.formElementProperty = ['value', inputValue]);
         this._inputValue = inputValue;
     }
