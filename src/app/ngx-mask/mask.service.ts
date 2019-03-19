@@ -57,16 +57,22 @@ export class MaskService extends MaskApplierService {
                             this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
                         )
                       : Number(
-                            this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-                                .indexOf(',')
-                                .toFixed(2)
-                        )
+                            this._removeMask(
+                                this._removeSufix(this._removePrefix(result)),
+                                this.maskSpecialCharacters
+                            ).indexOf(',') !== -1
+                        ).toFixed(2)
+                      ? Number(
+                            maskExpression.startsWith('dot_separator.2') ||
+                                maskExpression.startsWith('comma_separator.2')
+                        ).toFixed(2)
+                      : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
                       ? Number(
                             this._removeMask(
                                 this._removeSufix(this._removePrefix(result)),
                                 this.maskSpecialCharacters
                             ).replace(',', '.')
-                        ).toFixed(2)
+                        ) // .toFixed(2)
                       : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
               )
             : this.onChange(this._removeSufix(this._removePrefix(result)));
