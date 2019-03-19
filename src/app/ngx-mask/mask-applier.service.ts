@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
+import { containsElement } from '@angular/animations/browser/src/render/shared';
+import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 @Injectable()
 export class MaskApplierService {

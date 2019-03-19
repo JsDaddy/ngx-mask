@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { config, IConfig, withoutValidation } from './config';
+import { strict } from 'assert';
 
 @Directive({
     selector: '[mask]',
@@ -248,6 +249,9 @@ export class MaskDirective implements ControlValueAccessor {
         if (e.keyCode === 37 || e.keyCode === 8) {
             if (e.keyCode === 37) {
                 el.selectionStart = (el.selectionEnd as number) - 1;
+            }
+            if (e.keyCode === 8) {
+                el.value.slice((el.selectionEnd as number) - 1);
             }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
