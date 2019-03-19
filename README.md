@@ -275,3 +275,7 @@ Masked value: 1,234
 ## Examples
 
 Check the [demo](https://jsdaddy.github.io/ngx-mask/).
+
+Also You can try our NGX LOADER INDICATOR
+[Download](https://www.npmjs.com/package/ngx-loader-indicator).
+
