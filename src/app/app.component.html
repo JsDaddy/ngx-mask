@@ -54,7 +54,8 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate" [formControl]="formDate">
+                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate"
+                      [formControl]="formDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
                 </div>
@@ -275,7 +276,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form1" prefix="+5" [(ngModel)]="showMaskModel" [showMaskTyped]="true">
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form1" prefix="+5"
+                      [(ngModel)]="showMaskModel" [showMaskTyped]="true">
                     <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                   </mat-form-field>
                 </div>
@@ -342,8 +344,8 @@
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                    <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
-                    <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ numberOrStringForm.value ? numberOrStringForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ numberOrStringFormModel ? numberOrStringFormModel: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>
@@ -547,7 +549,7 @@
     <div class="row">
       <div class="col-12">
         <div class="mat-grid-wr">
-            <mat-grid-list cols="1" rowHeight="55px">
+          <mat-grid-list cols="1" rowHeight="55px">
             <mat-grid-tile>
               <mat-toolbar>
                 <span>Documentation - see docs on

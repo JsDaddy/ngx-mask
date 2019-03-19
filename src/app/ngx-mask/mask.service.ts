@@ -5,6 +5,7 @@ import { MaskApplierService } from './mask-applier.service';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
+    public validation: boolean = true;
     public maskExpression: string = '';
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;

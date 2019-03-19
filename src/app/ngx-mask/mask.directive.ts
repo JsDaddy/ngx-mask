@@ -114,7 +114,15 @@ export class MaskDirective implements ControlValueAccessor {
         this._maskService.clearIfNotMatch = value;
     }
 
+    @Input()
+    public set validation(value: IConfig['validation']) {
+        this._maskService.validation = value;
+    }
+
     public validate({ value }: FormControl): ValidationErrors | null {
+        if (!this._maskService.validation) {
+            return null;
+        }
         if (
             /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
             /comma_separator\.\d{1,}/.test(this._maskValue) === true
@@ -202,17 +210,18 @@ export class MaskDirective implements ControlValueAccessor {
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&
             // tslint:disable-next-line
-            (e as any).keyCode !== 38)
-        // ) {
-        //     return;
-        // }
-        if (this._maskService.showMaskTyped) {
-            this._maskService.maskIsShown = this._maskService.showMaskInInput();
-             if (el.setSelectionRange) {
+            (e as any).keyCode !== 38
+        )
+            if (this._maskService.showMaskTyped) {
+                // ) {
+                //     return;
+                // }
+                this._maskService.maskIsShown = this._maskService.showMaskInInput();
+                if (el.setSelectionRange) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
-             }
-        }
+                }
+            }
         el.value =
             !el.value || el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
@@ -232,8 +241,8 @@ export class MaskDirective implements ControlValueAccessor {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
-            if ( e.keyCode === 37 ) {
-                el.selectionStart = el.selectionEnd as number - 1;
+            if (e.keyCode === 37) {
+                el.selectionStart = (el.selectionEnd as number) - 1;
             }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&

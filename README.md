@@ -261,6 +261,14 @@ Masked value: 1,234
  <input type='text' mask="percent" sufix="%">
 ```
 
+### FormControl validation
+  You can validate your formControl, default value is true
+
+##### Usage
+
+```html
+ <input type='text' mask="00 00" [validation]="true">
+```
 
 
 
