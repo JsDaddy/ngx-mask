@@ -51,7 +51,10 @@ export class MaskApplierService {
         const inputArray: string[] = inputValue.toString().split('');
         if (maskExpression === 'percent') {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+                inputValue = this._checkInput(inputValue);
+                if (inputValue.length >= 3 && inputValue !== '100') {
+                    inputValue = inputValue.substring(0, 2);
+                }
             }
             if (this.percentage(inputValue)) {
                 result = inputValue;
@@ -66,7 +69,7 @@ export class MaskApplierService {
             maskExpression.startsWith('comma_separator')
         ) {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+                inputValue = this._checkInput(inputValue);
             }
             const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
@@ -333,4 +336,11 @@ export class MaskApplierService {
         }
         return inputValue;
     };
+
+    private _checkInput(str: string): string {
+        return str
+            .split('')
+            .filter((i: string) => i.match('\\d'))
+            .join('');
+    }
 }
