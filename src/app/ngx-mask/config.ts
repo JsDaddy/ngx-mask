@@ -9,6 +9,7 @@ export interface IConfig {
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
+    validation: boolean;
     patterns: {
         [character: string]: {
             pattern: RegExp;
@@ -30,6 +31,7 @@ export const initialConfig: IConfig = {
     showMaskTyped: false,
     dropSpecialCharacters: true,
     shownMaskExpression: '',
+    validation: true,
     // tslint:disable-next-line: quotemark
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     patterns: {

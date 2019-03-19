@@ -90,7 +90,7 @@ Input value: 789-874.98
 Masked value: [78]\[987]
 ```
 
-### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+	### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
    We have next default patterns:
 
   | code | meaning |
@@ -260,6 +260,17 @@ Masked value: 1,234
 ```html
  <input type='text' mask="percent" sufix="%">
 ```
+
+### FormControl validation
+  You can validate your formControl, default value is true
+
+##### Usage
+
+```html
+ <input type='text' mask="00 00" [validation]="true">
+```
+
+
 
 ## Examples
 
