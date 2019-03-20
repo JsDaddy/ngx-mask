@@ -143,8 +143,8 @@ describe('Directive: Mask', () => {
     it('Result should be the same for FormControl and NgModel', () => {
         component.mask = '00/00/0000';
         typeTest('30/08/19921', fixture);
-        expect(component.form.value).toBe('30081992.00');
-        expect(component.ngModelValue).toBe('30081992.00');
+        expect(component.form.value).toBe('30081992');
+        expect(component.ngModelValue).toBe('30081992');
     });
 
     it('model values shouldnt be bigger length than masks', () => {

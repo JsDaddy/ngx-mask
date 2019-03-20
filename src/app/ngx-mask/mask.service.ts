@@ -48,34 +48,14 @@ export class MaskService extends MaskApplierService {
         if ('comma_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
-        Array.isArray(this.dropSpecialCharacters)
-            ? this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters))
-            : this.dropSpecialCharacters === true
-            ? this.onChange(
-                  this.isNumberValue
-                      ? Number(
-                            this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-                        )
-                      : Number(
-                            this._removeMask(
-                                this._removeSufix(this._removePrefix(result)),
-                                this.maskSpecialCharacters
-                            ).indexOf(',') !== -1
-                        ).toFixed(2)
-                      ? Number(
-                            maskExpression.startsWith('dot_separator.2') ||
-                                maskExpression.startsWith('comma_separator.2')
-                        ).toFixed(2)
-                      : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-                      ? Number(
-                            this._removeMask(
-                                this._removeSufix(this._removePrefix(result)),
-                                this.maskSpecialCharacters
-                            ).replace(',', '.')
-                        ) // .toFixed(2)
-                      : this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-              )
-            : this.onChange(this._removeSufix(this._removePrefix(result)));
+        if (Array.isArray(this.dropSpecialCharacters)) {
+            this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters));
+        } else if (this.dropSpecialCharacters === true) {
+            this.onChange(this._checkSymbols(result));
+        } else {
+            this.onChange(this._removeSufix(this._removePrefix(result)));
+        }
+
         let ifMaskIsShown: string = '';
         if (!this.showMaskTyped) {
             return result;
@@ -144,5 +124,20 @@ export class MaskService extends MaskApplierService {
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
+    }
+    private _checkSymbols(result: string): string | number | undefined {
+        if (this.isNumberValue) {
+            return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters));
+        } else if (
+            this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(',') !==
+            -1
+        ) {
+            return this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
+                ',',
+                '.'
+            );
+        } else {
+            return this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters);
+        }
     }
 }
