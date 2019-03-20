@@ -9,6 +9,8 @@ export class MaskService extends MaskApplierService {
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;
     public maskIsShown: string = '';
+    public selStart: number | null = null;
+    public selEnd: number | null = null;
     protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
     public onChange = (_: any) => {};
@@ -24,6 +26,7 @@ export class MaskService extends MaskApplierService {
         this._formElement = this._elementRef.nativeElement;
     }
 
+    // tslint:disable-next-line:cyclomatic-complexity
     public applyMask(
         inputValue: string,
         maskExpression: string,
@@ -34,7 +37,23 @@ export class MaskService extends MaskApplierService {
         if (!inputValue && this.showMaskTyped) {
             return this.prefix + this.maskIsShown;
         }
-        const result: string = super.applyMask(inputValue, maskExpression, position, cb);
+        const getSymbol: string = !!inputValue && typeof this.selStart === 'number'
+                ? inputValue[this.selStart]
+                : '';
+        let newInputValue: string = '';
+        if (this.hiddenInput) {
+            const actualResult: string[] = this.actualValue.split('');
+            !!inputValue && typeof this.selStart === 'number'
+                ? actualResult.splice(this.selStart, 0, getSymbol)
+                : null;
+            newInputValue = this.actualValue.length
+                ? this.shiftTypedSymbols(actualResult.join(''))
+                : inputValue;
+        }
+        newInputValue = newInputValue.length
+            ? newInputValue
+            : inputValue;
+        const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
         this.actualValue = this.getActualValue(this.actualValue, result);
 
 
@@ -94,15 +113,6 @@ export class MaskService extends MaskApplierService {
     }
 
     public hideInput(inputValue: string, maskExpression: string): string {
-        if (this.hiddenInput) {
-            this.actualValue.split('').map((curr: string, index: number) => {
-                if (!this._checkSymbolMask(curr, maskExpression[index]) &&
-                    this.maskSpecialCharacters.indexOf(maskExpression[index]) === -1 ) {
-                    inputValue = this.prevResult;
-                    this.actualValue = this.prevActualResult;
-                }
-            });
-        }
         return inputValue.split('')
             .map((curr: string, index: number) =>  {
                 if (this.maskAvailablePatterns &&
@@ -115,14 +125,76 @@ export class MaskService extends MaskApplierService {
     }
 
     public getActualValue(actualValue: string, res: string): string {
-        if (!this.actualValue.length) {
-            actualValue = res;
-        } else if (this.actualValue.length > res.length) {
-            actualValue = this.actualValue.slice(0, res.length);
-        } else if (this.actualValue.length < res.length) {
-            actualValue += res.slice(this.actualValue.length);
+        const compare: string[] =
+            res.split('')
+            .filter( (symbol: string, i: number) => this._checkSymbolMask(symbol, this.maskExpression[i]) ||
+                this.maskSpecialCharacters.includes(this.maskExpression[i]) &&
+                symbol === this.maskExpression[i]);
+        if (compare.join('') === res) {
+            return res;
         }
-        return actualValue;
+        if (this.hiddenInput) {
+            if (!this.actualValue.length) {
+                actualValue = res;
+            } else if (this.actualValue.length > res.length &&
+                        typeof this.selStart === 'number' &&
+                        typeof this.selEnd === 'number') {
+                const tempActualres: string[] = this.actualValue.split('');
+                if (this.selStart === this.selEnd &&
+                    this.selStart !== 0 ) {
+                    tempActualres.splice(this.selStart - 1, this.selEnd - (this.selStart - 1));
+                } else {
+                    tempActualres.splice(this.selStart, this.selEnd - this.selStart);
+                }
+                actualValue = tempActualres.join('');
+            } else if (this.actualValue.length < res.length) {
+                const tempActualres: string[] = this.actualValue.split('');
+                if (this.selStart === this.actualValue.length) {
+                    actualValue += res.slice(this.actualValue.length);
+                } else {
+                    if (typeof this.selStart === 'number' &&
+                        typeof this.selEnd === 'number' ) {
+                        if (res.length - 1 !== this.maskExpression.length) {
+                            tempActualres.splice(this.selStart, 0, res.slice(this.selStart, this.selStart + 1));
+                        }
+                        actualValue = tempActualres.join('');
+                    }
+                }
+            } else if (res.length === 0) {
+                actualValue = '';
+            } else {
+                const tempActualres: string[] = this.actualValue.split('');
+                if (this.selStart === this.selEnd &&
+                    this.selStart !== 0 &&
+                    typeof this.selStart === 'number' &&
+                    typeof this.selEnd === 'number' ) {
+                    tempActualres.splice(this.selStart, 0, res.slice(this.selStart, this.selStart + 1));
+                }
+                actualValue = tempActualres.join('');
+            }
+            return actualValue;
+        }
+        return res;
+    }
+
+    public shiftTypedSymbols(inputValue: string): string {
+        let symbolToReplace: string = '';
+        const newInputValue: string[] = inputValue &&
+            inputValue.split('').map( (currSymbol: string, index: number) =>  {
+            if (
+                this.maskSpecialCharacters.includes(inputValue[index + 1]) &&
+                inputValue[index + 1] !== this.maskExpression[index + 1]) {
+                symbolToReplace = currSymbol;
+                return inputValue[index + 1];
+            }
+            if (symbolToReplace.length) {
+                const  replaceSymbol: string = symbolToReplace;
+                symbolToReplace = '';
+                return replaceSymbol;
+            }
+            return currSymbol;
+        }) || [];
+        return newInputValue.join('');
     }
 
     public showMaskInInput(): string {

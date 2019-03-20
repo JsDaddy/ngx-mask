@@ -226,6 +226,8 @@ export class MaskDirective implements ControlValueAccessor {
     public a(e: KeyboardEvent): void {
         this._code = e.code;
         const el: HTMLInputElement = e.target as HTMLInputElement;
+        this._maskService.selStart = el.selectionStart;
+        this._maskService.selEnd = el.selectionEnd;
         if (e.keyCode === 38) {
             e.preventDefault();
         }
