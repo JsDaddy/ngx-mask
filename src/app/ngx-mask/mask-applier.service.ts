@@ -106,14 +106,22 @@ export class MaskApplierService {
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression === 'comma_separator' || maskExpression.startsWith('comma_separator')) {
-                inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
             }
-            position = result.length + 1;
-            cursor = position;
-            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-            this._shift.add(shiftStep + this.prefix.length || 0);
+
+            const shiftStep: number = result.length - inputValue.length;
+            const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
+            if (shiftStep > 0 || commaShift < 0
+            ) {
+                let _shift: number = 0;
+                do {
+                    this._shift.add(position + _shift);
+                    _shift++;
+                } while (_shift < shiftStep);
+            } else {
+                this._shift.clear();
+            }
         } else {
             for (
                 // tslint:disable-next-line
