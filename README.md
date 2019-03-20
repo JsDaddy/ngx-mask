@@ -9,6 +9,9 @@
 </a>
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 
+
+You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
+
 ## Installing
 
 ```bash
