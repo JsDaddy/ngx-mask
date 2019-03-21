@@ -1,3 +1,8 @@
+<a name="7.7.0">
+
+# [7.7.0 coma_separator] (2019-03-21)
+Secure input and bugs fix
+
 <a name="7.6.6">
 
 # [7.6.6 coma_separator] (2019-03-18)

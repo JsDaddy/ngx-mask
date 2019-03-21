@@ -3,8 +3,7 @@ import { FormControl } from '@angular/forms';
 type SN = string | number;
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css']
+    templateUrl: './app.component.html'
 })
 export class AppComponent {
     public phone: number = 123456789;
