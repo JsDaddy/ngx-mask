@@ -272,8 +272,25 @@ Masked value: 1,234
 ```html
  <input type='text' mask="00 00" [validation]="true">
 ```
+### FormControl validation
+  You can hide symbols in input field and get the actual value in formcontrol
 
+##### Usage
 
+```html
+ <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
+```
+### Custom pattern for this
+ You can define custom pattern and specify symbol to be rendered in input field.
+ 
+```typescript
+pattern =  {
+    'B': {
+            pattern: new RegExp('\\d'),
+            symbol: 'X'
+      },
+  
+```
 
 ## Examples
 
