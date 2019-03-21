@@ -42,10 +42,19 @@ export class MaskService extends MaskApplierService {
                 : '';
         let newInputValue: string = '';
         if (this.hiddenInput) {
-            const actualResult: string[] = this.actualValue.split('');
-            !!inputValue && typeof this.selStart === 'number'
-                ? actualResult.splice(this.selStart, 0, getSymbol)
-                : null;
+            let actualResult: string[] = this.actualValue.split('');
+            inputValue !== '' && actualResult.length
+                ? typeof this.selStart === 'number' &&
+                  typeof this.selEnd === 'number'
+                    ? inputValue.length > actualResult.length
+                        ? actualResult.splice(this.selStart, 0, getSymbol)
+                        : inputValue.length < actualResult.length
+                            ? actualResult.length - inputValue.length === 1
+                                ? actualResult.splice(this.selStart - 1, 1)
+                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                            : null
+                    : null
+                : actualResult = [];
             newInputValue = this.actualValue.length
                 ? this.shiftTypedSymbols(actualResult.join(''))
                 : inputValue;
