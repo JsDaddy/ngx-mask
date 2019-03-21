@@ -9,6 +9,9 @@
 </a>
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 
+
+You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
+
 ## Installing
 
 ```bash
@@ -90,7 +93,7 @@ Input value: 789-874.98
 Masked value: [78]\[987]
 ```
 
-### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+	### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
    We have next default patterns:
 
   | code | meaning |
@@ -205,9 +208,9 @@ For separate input with dots
 For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
 ```html
- <input type='text' mask="coma_separator">
+ <input type='text' mask="comma_separator">
 ```
-For using decimals enter '.' to the end of your input to 'separator' or 'coma_separator' mask and ',' to 'dot_separator'
+For using decimals enter '.' to the end of your input to 'separator' or 'comma_separator' mask and ',' to 'dot_separator'
 
 
 ```
@@ -223,9 +226,9 @@ Masked value: 1,234.56
 
 ```html
  <input type='text' mask="dot_separator.2">
- <input type='text' mask="coma_separator.2">
+ <input type='text' mask="comma_separator.2">
  <input type='text' mask="dot_separator.0">
- <input type='text' mask="coma_separator.0">
+ <input type='text' mask="comma_separator.0">
 ```
 For limiting decimal precision add '.' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely. 
 
@@ -249,7 +252,7 @@ Masked value: 1,234
 ##### Usage
 
 ```html
- <input type='text' mask="Hh:M0:s0">
+ <input type='text' mask="Hh:m0:s0">
 ```
 
 ### Percent validation
@@ -261,6 +264,14 @@ Masked value: 1,234
  <input type='text' mask="percent" sufix="%">
 ```
 
+### FormControl validation
+  You can validate your formControl, default value is true
+
+##### Usage
+
+```html
+ <input type='text' mask="00 00" [validation]="true">
+```
 
 
 

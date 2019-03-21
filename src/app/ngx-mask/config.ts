@@ -10,6 +10,7 @@ export interface IConfig {
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
     hiddenInput: boolean;
+    validation: boolean;
     patterns: {
         [character: string]: {
             pattern: RegExp;
@@ -33,6 +34,7 @@ export const initialConfig: IConfig = {
     dropSpecialCharacters: true,
     hiddenInput: false,
     shownMaskExpression: '',
+    validation: true,
     // tslint:disable-next-line: quotemark
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     patterns: {
@@ -84,7 +86,7 @@ export const withoutValidation: string[] = [
     'm0',
     'separator',
     'dot_separator',
-    'coma_separator',
+    'comma_separator',
     'd0/M0/0000',
     'd0/M0',
     'd0',

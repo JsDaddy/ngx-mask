@@ -51,11 +51,13 @@ export class MaskApplierService {
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
-
         const inputArray: string[] = inputValue.toString().split('');
         if (maskExpression === 'percent') {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+                inputValue = this._checkInput(inputValue);
+                if (inputValue.length >= 3 && inputValue !== '100') {
+                    inputValue = inputValue.substring(0, 2);
+                }
             }
             if (this.percentage(inputValue)) {
                 result = inputValue;
@@ -66,11 +68,11 @@ export class MaskApplierService {
             maskExpression === 'separator' ||
             maskExpression === 'dot_separator' ||
             maskExpression.startsWith('dot_separator') ||
-            maskExpression === 'coma_separator' ||
-            maskExpression.startsWith('coma_separator')
+            maskExpression === 'comma_separator' ||
+            maskExpression.startsWith('comma_separator')
         ) {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
+                inputValue = this._checkInput(inputValue);
             }
             const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
@@ -80,7 +82,7 @@ export class MaskApplierService {
                         ? inputValue.slice(1, inputValue.length)
                         : inputValue;
             }
-            if (maskExpression.startsWith('coma_separator')) {
+            if (maskExpression.startsWith('comma_separator')) {
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
                         ? inputValue.slice(1, inputValue.length)
@@ -106,7 +108,7 @@ export class MaskApplierService {
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
-            } else if (maskExpression === 'coma_separator' || maskExpression.startsWith('coma_separator')) {
+            } else if (maskExpression === 'comma_separator' || maskExpression.startsWith('comma_separator')) {
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
@@ -340,4 +342,11 @@ export class MaskApplierService {
         }
         return inputValue;
     };
+
+    private _checkInput(str: string): string {
+        return str
+            .split('')
+            .filter((i: string) => i.match('\\d'))
+            .join('');
+    }
 }

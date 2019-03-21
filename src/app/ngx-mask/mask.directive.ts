@@ -118,10 +118,19 @@ export class MaskDirective implements ControlValueAccessor {
         this._maskService.clearIfNotMatch = value;
     }
 
+    @Input()
+    public set validation(value: IConfig['validation']) {
+        this._maskService.validation = value;
+    }
+
+    // tslint:disable-next-line: cyclomatic-complexity
     public validate({ value }: FormControl): ValidationErrors | null {
+        if (!this._maskService.validation) {
+            return null;
+        }
         if (
             /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
-            /coma_separator\.\d{1,}/.test(this._maskValue) === true
+            /comma_separator\.\d{1,}/.test(this._maskValue) === true
         ) {
             return null;
         }
@@ -141,20 +150,27 @@ export class MaskDirective implements ControlValueAccessor {
                     if (this._maskValue.indexOf(key) !== -1) {
                         counterOfOpt++;
                     }
-                    if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
+                    if (
+                        this._maskValue.indexOf(key) !== -1 &&
+                        value.toString().length >= this._maskValue.indexOf(key)
+                    ) {
+                        return null;
+                    }
+                    if (counterOfOpt === this._maskValue.length) {
                         return null;
                     }
                 }
             }
             if (this._maskValue.indexOf('*') === 1) {
                 return null;
-            } else if (this._maskValue.indexOf('*') > 1 && value.length < this._maskValue.indexOf('*')) {
+            } else if (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) {
                 return { 'Mask error': true };
             }
             if (this._maskValue.indexOf('*') === -1) {
-                const length: number =
-                    this._maskValue.length - this._checkSpecialCharAmount(this._maskValue) - counterOfOpt;
-                if (value.length !== length) {
+                const length: number = this._maskService.dropSpecialCharacters
+                    ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
+                    : this._maskValue.length - counterOfOpt;
+                if (value.toString().length !== length) {
                     return { 'Mask error': true };
                 }
             }
@@ -198,6 +214,8 @@ export class MaskDirective implements ControlValueAccessor {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | KeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
+        const posStart: number = 0;
+        const posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -205,12 +223,17 @@ export class MaskDirective implements ControlValueAccessor {
             el.selectionStart > this._maskService.prefix.length &&
             // tslint:disable-next-line
             (e as any).keyCode !== 38
-        ) {
-            return;
-        }
-        if (this._maskService.showMaskTyped) {
-            this._maskService.maskIsShown = this._maskService.showMaskInInput();
-        }
+        )
+            if (this._maskService.showMaskTyped) {
+                // ) {
+                //     return;
+                // }
+                this._maskService.maskIsShown = this._maskService.showMaskInInput();
+                if (el.setSelectionRange) {
+                    el.focus();
+                    el.setSelectionRange(posStart, posEnd);
+                }
+            }
         el.value =
             !el.value || el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
@@ -232,6 +255,9 @@ export class MaskDirective implements ControlValueAccessor {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
+            if (e.keyCode === 37) {
+                el.selectionStart = (el.selectionEnd as number) - 1;
+            }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length
@@ -259,6 +285,7 @@ export class MaskDirective implements ControlValueAccessor {
         }
         if (typeof inputValue === 'number') {
             inputValue = String(inputValue);
+            inputValue = this._maskValue.startsWith('dot_separator') ? inputValue.replace('.', ',') : inputValue;
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
@@ -303,10 +330,5 @@ export class MaskDirective implements ControlValueAccessor {
                 }, '')) ||
             maskExp
         );
-    }
-
-    private _checkSpecialCharAmount(mask: string): number {
-        const chars: string[] = mask.split('').filter((item: string) => this._maskService._findSpecialChar(item));
-        return chars.length;
     }
 }
