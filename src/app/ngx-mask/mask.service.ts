@@ -63,7 +63,7 @@ export class MaskService extends MaskApplierService {
             ? newInputValue
             : inputValue;
         const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
-        this.actualValue = this.getActualValue(this.actualValue, result);
+        this.actualValue = this.getActualValue(result);
 
 
         if (/dot_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
@@ -133,55 +133,15 @@ export class MaskService extends MaskApplierService {
             }).join('');
     }
 
-    public getActualValue(actualValue: string, res: string): string {
+    // this function is not necessary, it checks result against maskExpression
+    public getActualValue(res: string): string {
         const compare: string[] =
             res.split('')
             .filter( (symbol: string, i: number) => this._checkSymbolMask(symbol, this.maskExpression[i]) ||
                 this.maskSpecialCharacters.includes(this.maskExpression[i]) &&
                 symbol === this.maskExpression[i]);
         if (compare.join('') === res) {
-            return res;
-        }
-        if (this.hiddenInput) {
-            if (!this.actualValue.length) {
-                actualValue = res;
-            } else if (this.actualValue.length > res.length &&
-                        typeof this.selStart === 'number' &&
-                        typeof this.selEnd === 'number') {
-                const tempActualres: string[] = this.actualValue.split('');
-                if (this.selStart === this.selEnd &&
-                    this.selStart !== 0 ) {
-                    tempActualres.splice(this.selStart - 1, this.selEnd - (this.selStart - 1));
-                } else {
-                    tempActualres.splice(this.selStart, this.selEnd - this.selStart);
-                }
-                actualValue = tempActualres.join('');
-            } else if (this.actualValue.length < res.length) {
-                const tempActualres: string[] = this.actualValue.split('');
-                if (this.selStart === this.actualValue.length) {
-                    actualValue += res.slice(this.actualValue.length);
-                } else {
-                    if (typeof this.selStart === 'number' &&
-                        typeof this.selEnd === 'number' ) {
-                        if (res.length - 1 !== this.maskExpression.length) {
-                            tempActualres.splice(this.selStart, 0, res.slice(this.selStart, this.selStart + 1));
-                        }
-                        actualValue = tempActualres.join('');
-                    }
-                }
-            } else if (res.length === 0) {
-                actualValue = '';
-            } else {
-                const tempActualres: string[] = this.actualValue.split('');
-                if (this.selStart === this.selEnd &&
-                    this.selStart !== 0 &&
-                    typeof this.selStart === 'number' &&
-                    typeof this.selEnd === 'number' ) {
-                    tempActualres.splice(this.selStart, 0, res.slice(this.selStart, this.selStart + 1));
-                }
-                actualValue = tempActualres.join('');
-            }
-            return actualValue;
+            return compare.join('');
         }
         return res;
     }

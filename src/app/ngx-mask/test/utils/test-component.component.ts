@@ -31,4 +31,5 @@ export class TestMaskComponent {
     public sufix: IConfig['sufix'] = '';
     public specialCharacters!: IConfig['specialCharacters'];
     public showMaskTyped: IConfig['showMaskTyped'] = false;
+    public hiddenInput: IConfig['hiddenInput'] = false;
 }
