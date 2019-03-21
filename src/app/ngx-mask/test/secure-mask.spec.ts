@@ -21,7 +21,7 @@ describe('Directive: Mask', () => {
     it('it checks secure input functionality ', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
-        equal('123', '123', fixture);
+        equal('123', '***', fixture);
         // equal('124', '***/*', fixture);
         // equal('12467', '***/*6/7', fixture);
     });

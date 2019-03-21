@@ -16,6 +16,7 @@ import { IConfig } from 'public_api';
             [prefix]="prefix"
             [formControl]="form"
             [showMaskTyped]="showMaskTyped"
+            [hiddenInput]="hiddenInput"
             [(ngModel)]="ngModelValue"
         />
     `
