@@ -20,6 +20,7 @@ export class AppComponent {
     public repeatForm: FormControl;
     public separatorForm: FormControl;
     public percent: FormControl;
+    public formSecureInput: FormControl;
 
     public pattern: pattern = {
         P: {
@@ -30,6 +31,7 @@ export class AppComponent {
     public numberOrStringFormModel: SN = '';
     public clearIfNotMatchModel: SN = '';
     public formModelDate: SN = '';
+    public secureMask: SN = '';
     public cpfModel: SN = '';
     public dateModel: SN = '';
     public showMaskModel: SN = '';
@@ -54,6 +56,7 @@ export class AppComponent {
         this.form = new FormControl('');
         this.form1 = new FormControl('');
         this.formDate = new FormControl('');
+        this.formSecureInput = new FormControl('');
         this.cpfFormControl = new FormControl();
         this.clearIfNotMatch = new FormControl();
         this.numberOrStringForm = new FormControl();

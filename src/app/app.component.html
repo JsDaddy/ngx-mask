@@ -54,13 +54,42 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" [hiddenInput]="true" mask="XXX/X0/0000" [(ngModel)]="formModelDate" [formControl]="formDate">
+                    <input matInput placeholder="Date" [hiddenInput]="true" mask="00/00/0000" [(ngModel)]="formModelDate" [formControl]="formDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
                   <p><b>NgModel:</b> {{ formModelDate ? formModelDate: 'Empty' }}</p>
                   <p><b>FormControl:</b> {{ formDate.value ? formDate.value: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Mask common case</mat-card-title>
+              <mat-card-subtitle>Secure Input</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <br>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000" [(ngModel)]="secureMask" [formControl]="formSecureInput">
+                    <mat-hint> <b>Mask:</b> "XXX/X0/0000" </mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>NgModel:</b> {{ secureMask ? secureMask: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ formSecureInput.value ? formSecureInput.value: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>
