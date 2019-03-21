@@ -49,4 +49,12 @@ describe('Directive: Mask', () => {
         expect(component.form.value).toBe('123456789');
         expect(component.ngModelValue).toBe('123456789');
     });
+
+    it('it checks secure input functionality ', () => {
+        component.mask = '0000-00-XXXX';
+        component.hiddenInput = true;
+        equal('123456789', '1234-56-***', fixture);
+        expect(component.form.value).toBe('123456789');
+        expect(component.ngModelValue).toBe('123456789');
+    });
 });
