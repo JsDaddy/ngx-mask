@@ -12,6 +12,8 @@
 
 You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
 
+### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/main) with examples.
+
 ## Installing
 
 ```bash
@@ -291,7 +293,3 @@ pattern =  {
       },
   
 ```
-
-## Examples
-
-Check the [demo](https://jsdaddy.github.io/ngx-mask/).
