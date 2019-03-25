@@ -12,7 +12,7 @@
 
 You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
 
-### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/main) with examples.
+### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples.
 
 ## Installing
 
@@ -94,8 +94,9 @@ You can define your custom options for all directives (as  object in the mask mo
 Input value: 789-874.98
 Masked value: [78]\[987]
 ```
-
-	### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+```typescript
+patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+```
    We have next default patterns:
 
   | code | meaning |
@@ -121,6 +122,18 @@ public customPatterns = {'0': { pattern: new RegExp('\[a-zA-Z\]')}};
 ```
 Input value: 789HelloWorld
 Masked value: (Hel-loW)
+```
+
+### Custom pattern for this
+ You can define custom pattern and specify symbol to be rendered in input field.
+ 
+```typescript
+pattern =  {
+    'B': {
+            pattern: new RegExp('\\d'),
+            symbol: 'X'
+      }
+  }
 ```
 
 ### prefix (string)
@@ -281,15 +294,4 @@ Masked value: 1,234
 
 ```html
  <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
-```
-### Custom pattern for this
- You can define custom pattern and specify symbol to be rendered in input field.
- 
-```typescript
-pattern =  {
-    'B': {
-            pattern: new RegExp('\\d'),
-            symbol: 'X'
-      },
-  
 ```
