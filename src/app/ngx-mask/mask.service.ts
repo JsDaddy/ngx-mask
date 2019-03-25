@@ -207,6 +207,17 @@ export class MaskService extends MaskApplierService {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
     private _checkSymbols(result: string): string | number | undefined {
+        if ('dot_separator.2' === this.maskExpression ) {
+            // tslint:disable-next-line:max-line-length
+            return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
+                ',',
+                '.'
+            )).toFixed(2);
+        }
+        if ('comma_separator.2' === this.maskExpression) {
+            // tslint:disable-next-line:max-line-length
+            return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)).toFixed(2);
+        }
         if (this.isNumberValue) {
             return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters));
         } else if (
