@@ -229,7 +229,8 @@ export class MaskDirective implements ControlValueAccessor {
                 //     return;
                 // }
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
-                if (el.setSelectionRange) {
+                if (el.setSelectionRange &&
+                    this._maskService.prefix + this._maskService.maskIsShown === el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }
@@ -255,9 +256,6 @@ export class MaskDirective implements ControlValueAccessor {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
-            if (e.keyCode === 37) {
-                el.selectionStart = (el.selectionEnd as number) - 1;
-            }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length
