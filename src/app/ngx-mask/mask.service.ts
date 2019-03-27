@@ -3,6 +3,7 @@ import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService } from './mask-applier.service';
 
+
 @Injectable()
 export class MaskService extends MaskApplierService {
     public validation: boolean = true;
@@ -14,8 +15,8 @@ export class MaskService extends MaskApplierService {
     public selEnd: number | null = null;
     protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
-    public onChange = (_: any) => {};
-    public onTouch = () => {};
+    public onChange = (_: any) => { };
+    public onTouch = () => { };
     public constructor(
         // tslint:disable-next-line
         @Inject(DOCUMENT) private document: any,
@@ -32,21 +33,21 @@ export class MaskService extends MaskApplierService {
         inputValue: string,
         maskExpression: string,
         position: number = 0,
-        cb: Function = () => {}
+        cb: Function = () => { }
     ): string {
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
         if (!inputValue && this.showMaskTyped) {
             return this.prefix + this.maskIsShown;
         }
         const getSymbol: string = !!inputValue && typeof this.selStart === 'number'
-                ? inputValue[this.selStart]
-                : '';
+            ? inputValue[this.selStart]
+            : '';
         let newInputValue: string = '';
         if (this.hiddenInput) {
             let actualResult: string[] = this.actualValue.split('');
             inputValue !== '' && actualResult.length
                 ? typeof this.selStart === 'number' &&
-                  typeof this.selEnd === 'number'
+                    typeof this.selEnd === 'number'
                     ? inputValue.length > actualResult.length
                         ? actualResult.splice(this.selStart, 0, getSymbol)
                         : inputValue.length < actualResult.length
@@ -102,7 +103,7 @@ export class MaskService extends MaskApplierService {
         return result + ifMaskIsShown;
     }
 
-    public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
+    public applyValueChanges(position: number = 0, cb: Function = () => { }): void {
         const maskedInput: string | number = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
         this._formElement.value = maskedInput;
         if (this._formElement === this.document.activeElement) {
@@ -113,11 +114,11 @@ export class MaskService extends MaskApplierService {
 
     public hideInput(inputValue: string, maskExpression: string): string {
         return inputValue.split('')
-            .map((curr: string, index: number) =>  {
+            .map((curr: string, index: number) => {
                 if (this.maskAvailablePatterns &&
                     this.maskAvailablePatterns[maskExpression[index]] &&
                     this.maskAvailablePatterns[maskExpression[index]].symbol) {
-                        return this.maskAvailablePatterns[maskExpression[index]].symbol;
+                    return this.maskAvailablePatterns[maskExpression[index]].symbol;
                 }
                 return curr;
             }).join('');
@@ -127,7 +128,7 @@ export class MaskService extends MaskApplierService {
     public getActualValue(res: string): string {
         const compare: string[] =
             res.split('')
-                .filter( (symbol: string, i: number) => this._checkSymbolMask(symbol, this.maskExpression[i]) ||
+                .filter((symbol: string, i: number) => this._checkSymbolMask(symbol, this.maskExpression[i]) ||
                     this.maskSpecialCharacters.includes(this.maskExpression[i]) &&
                     symbol === this.maskExpression[i]);
         if (compare.join('') === res) {
@@ -139,20 +140,20 @@ export class MaskService extends MaskApplierService {
     public shiftTypedSymbols(inputValue: string): string {
         let symbolToReplace: string = '';
         const newInputValue: string[] = inputValue &&
-            inputValue.split('').map( (currSymbol: string, index: number) =>  {
-            if (
-                this.maskSpecialCharacters.includes(inputValue[index + 1]) &&
-                inputValue[index + 1] !== this.maskExpression[index + 1]) {
-                symbolToReplace = currSymbol;
-                return inputValue[index + 1];
-            }
-            if (symbolToReplace.length) {
-                const  replaceSymbol: string = symbolToReplace;
-                symbolToReplace = '';
-                return replaceSymbol;
-            }
-            return currSymbol;
-        }) || [];
+            inputValue.split('').map((currSymbol: string, index: number) => {
+                if (
+                    this.maskSpecialCharacters.includes(inputValue[index + 1]) &&
+                    inputValue[index + 1] !== this.maskExpression[index + 1]) {
+                    symbolToReplace = currSymbol;
+                    return inputValue[index + 1];
+                }
+                if (symbolToReplace.length) {
+                    const replaceSymbol: string = symbolToReplace;
+                    symbolToReplace = '';
+                    return replaceSymbol;
+                }
+                return currSymbol;
+            }) || [];
         return newInputValue.join('');
     }
 
@@ -207,12 +208,13 @@ export class MaskService extends MaskApplierService {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
     private _checkSymbols(result: string): string | number | undefined {
-        if ('dot_separator.2' === this.maskExpression ) {
+        if ('dot_separator.2' === this.maskExpression) {
             // tslint:disable-next-line:max-line-length
             return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
                 ',',
                 '.'
-            )).toFixed(2);
+            )
+            ).toFixed(2);
         }
         if ('comma_separator.2' === this.maskExpression) {
             // tslint:disable-next-line:max-line-length

@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
+
 @Injectable()
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
@@ -40,7 +41,7 @@ export class MaskApplierService {
         inputValue: string,
         maskExpression: string,
         position: number = 0,
-        cb: Function = () => {}
+        cb: Function = () => { }
     ): string {
         if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
             return '';
@@ -122,7 +123,7 @@ export class MaskApplierService {
                 // tslint:disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0];
                 i < inputArray.length;
-                i++, inputSymbol = inputArray[i]
+                i++ , inputSymbol = inputArray[i]
             ) {
                 if (cursor === maskExpression.length) {
                     break;
@@ -151,9 +152,9 @@ export class MaskApplierService {
                     result += inputSymbol;
                     cursor += 3;
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) ||
-                            this.hiddenInput &&
-                            this.maskAvailablePatterns[maskExpression[cursor]] &&
-                            this.maskAvailablePatterns[maskExpression[cursor]].symbol === inputSymbol) {
+                    this.hiddenInput &&
+                    this.maskAvailablePatterns[maskExpression[cursor]] &&
+                    this.maskAvailablePatterns[maskExpression[cursor]].symbol === inputSymbol) {
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
                             result += 0;
