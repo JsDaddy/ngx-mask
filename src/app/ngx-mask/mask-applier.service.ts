@@ -72,7 +72,7 @@ export class MaskApplierService {
             maskExpression === 'comma_separator' ||
             maskExpression.startsWith('comma_separator')
         ) {
-            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>?\/]/)) {
+            if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-@#!$%^&*()_+|~=`{}\[\]:";<>.?\/]/)) {
                 inputValue = this._checkInput(inputValue);
             }
             const precision: number = this.getPrecision(maskExpression);
@@ -347,7 +347,7 @@ export class MaskApplierService {
     private _checkInput(str: string): string {
         return str
             .split('')
-            .filter((i: string) => i.match('\\d'))
+            .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
             .join('');
     }
 }
