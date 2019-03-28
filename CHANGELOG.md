@@ -1,3 +1,13 @@
+<a name="7.7.3">
+
+# [7.7.3 polyfill] (2019-03-28)
+Added polyfill for IE11
+
+<a name="7.7.2">
+
+# [7.7.2 dot_separator] (2019-03-27)
+Fix decimals
+
 <a name="7.7.1">
 
 # [7.7.1 coma_separator] (2019-03-25)
