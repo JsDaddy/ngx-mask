@@ -1,3 +1,8 @@
+<a name="7.8.4">
+
+# [7.8.4 decimal] (2019-03-28)
+Added decimal percent, fix suffix prevents decimals
+
 <a name="7.7.3">
 
 # [7.7.3 polyfill] (2019-03-28)

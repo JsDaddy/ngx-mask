@@ -45,7 +45,7 @@ export const initialConfig: IConfig = {
             pattern: new RegExp('\\d'),
             optional: true
         },
-        'X': {
+        X: {
             pattern: new RegExp('\\d'),
             symbol: '*'
         },
