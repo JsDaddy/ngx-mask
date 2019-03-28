@@ -223,7 +223,9 @@ export class MaskService extends MaskApplierService {
             ).toFixed(2);
         }
         if (this.isNumberValue) {
-            return Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters));
+            return result === ''
+                ? result
+                : Number(this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters));
         } else if (
             this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(',') !==
             -1

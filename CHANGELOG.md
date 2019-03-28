@@ -1,3 +1,8 @@
+<a name="7.8.5">
+
+# [7.8.5 update of returned value type] (2019-03-28)
+Fix returned value when input value type is number
+
 <a name="7.8.4">
 
 # [7.8.4 decimal] (2019-03-28)
