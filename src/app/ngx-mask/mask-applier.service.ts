@@ -77,6 +77,13 @@ export class MaskApplierService {
             const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
             if (maskExpression.startsWith('dot_separator')) {
+                if (
+                    inputValue.indexOf('.') !== -1 &&
+                    inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
+                    inputValue.indexOf('.') > 3
+                ) {
+                    inputValue = inputValue.replace('.', ',');
+                }
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
                         ? inputValue.slice(1, inputValue.length)
