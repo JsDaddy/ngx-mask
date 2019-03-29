@@ -161,10 +161,16 @@ export class MaskDirective implements ControlValueAccessor {
                     }
                 }
             }
-            if (this._maskValue.indexOf('*') === 1 || this._maskValue.indexOf('?') === 1 ) {
+            if (
+                this._maskValue.indexOf('*') === 1 ||
+                this._maskValue.indexOf('?') === 1 ||
+                this._maskValue.indexOf('{') === 1
+            ) {
                 return null;
-            } else if (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*') ||
-            this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?')) {
+            } else if (
+                (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) ||
+                (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?'))
+            ) {
                 return { 'Mask error': true };
             }
             if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
