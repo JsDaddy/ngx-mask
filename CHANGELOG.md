@@ -1,3 +1,8 @@
+<a name="7.8.6">
+
+# [7.8.6 bugfix] (2019-03-29)
+Bugfix
+
 <a name="7.8.5">
 
 # [7.8.5 update of returned value type] (2019-03-28)
