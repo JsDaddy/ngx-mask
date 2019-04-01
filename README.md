@@ -11,6 +11,8 @@
 
 
 You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
+You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-copypaste) it.
+
 
 ### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples.
 
