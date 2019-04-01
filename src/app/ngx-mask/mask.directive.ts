@@ -203,6 +203,7 @@ export class MaskDirective implements ControlValueAccessor {
         if (this.document.activeElement !== el) {
             return;
         }
+        this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
         el.selectionStart = el.selectionEnd =
             this._position !== null
                 ? this._position
