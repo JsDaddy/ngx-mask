@@ -9,11 +9,13 @@ export interface IConfig {
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
+    hiddenInput: boolean;
     validation: boolean;
     patterns: {
         [character: string]: {
             pattern: RegExp;
             optional?: boolean;
+            symbol?: string;
         };
     };
 }
@@ -30,6 +32,7 @@ export const initialConfig: IConfig = {
     showTemplate: false,
     showMaskTyped: false,
     dropSpecialCharacters: true,
+    hiddenInput: false,
     shownMaskExpression: '',
     validation: true,
     // tslint:disable-next-line: quotemark
@@ -41,6 +44,10 @@ export const initialConfig: IConfig = {
         '9': {
             pattern: new RegExp('\\d'),
             optional: true
+        },
+        X: {
+            pattern: new RegExp('\\d'),
+            symbol: '*'
         },
         A: {
             pattern: new RegExp('[a-zA-Z0-9]')

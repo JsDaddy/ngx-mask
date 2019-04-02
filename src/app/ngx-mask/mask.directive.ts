@@ -87,6 +87,10 @@ export class MaskDirective implements ControlValueAccessor {
     public set dropSpecialCharacters(value: IConfig['dropSpecialCharacters']) {
         this._maskService.dropSpecialCharacters = value;
     }
+    @Input()
+    public set hiddenInput(value: IConfig['hiddenInput']) {
+        this._maskService.hiddenInput = value;
+    }
 
     @Input()
     public set showMaskTyped(value: IConfig['showMaskTyped']) {
@@ -146,7 +150,10 @@ export class MaskDirective implements ControlValueAccessor {
                     if (this._maskValue.indexOf(key) !== -1) {
                         counterOfOpt++;
                     }
-                    if (this._maskValue.indexOf(key) !== -1 && value.length >= this._maskValue.indexOf(key)) {
+                    if (
+                        this._maskValue.indexOf(key) !== -1 &&
+                        value.toString().length >= this._maskValue.indexOf(key)
+                    ) {
                         return null;
                     }
                     if (counterOfOpt === this._maskValue.length) {
@@ -154,16 +161,23 @@ export class MaskDirective implements ControlValueAccessor {
                     }
                 }
             }
-            if (this._maskValue.indexOf('*') === 1) {
+            if (
+                this._maskValue.indexOf('*') === 1 ||
+                this._maskValue.indexOf('?') === 1 ||
+                this._maskValue.indexOf('{') === 1
+            ) {
                 return null;
-            } else if (this._maskValue.indexOf('*') > 1 && value.length < this._maskValue.indexOf('*')) {
+            } else if (
+                (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) ||
+                (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?'))
+            ) {
                 return { 'Mask error': true };
             }
-            if (this._maskValue.indexOf('*') === -1) {
+            if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
-                if (value.length !== length) {
+                if (value.toString().length !== length) {
                     return { 'Mask error': true };
                 }
             }
@@ -195,6 +209,7 @@ export class MaskDirective implements ControlValueAccessor {
         if (this.document.activeElement !== el) {
             return;
         }
+        this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
         el.selectionStart = el.selectionEnd =
             this._position !== null
                 ? this._position
@@ -228,7 +243,7 @@ export class MaskDirective implements ControlValueAccessor {
                 //     return;
                 // }
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
-                if (el.setSelectionRange) {
+                if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }
@@ -248,13 +263,12 @@ export class MaskDirective implements ControlValueAccessor {
     public a(e: KeyboardEvent): void {
         this._code = e.code;
         const el: HTMLInputElement = e.target as HTMLInputElement;
+        this._maskService.selStart = el.selectionStart;
+        this._maskService.selEnd = el.selectionEnd;
         if (e.keyCode === 38) {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
-            if (e.keyCode === 37) {
-                el.selectionStart = (el.selectionEnd as number) - 1;
-            }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length

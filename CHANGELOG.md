@@ -1,3 +1,38 @@
+<a name="7.8.6">
+
+# [7.8.6 bugfix] (2019-03-29)
+Bugfix
+
+<a name="7.8.5">
+
+# [7.8.5 update of returned value type] (2019-03-28)
+Fix returned value when input value type is number
+
+<a name="7.8.4">
+
+# [7.8.4 decimal] (2019-03-28)
+Added decimal percent, fix suffix prevents decimals
+
+<a name="7.7.3">
+
+# [7.7.3 polyfill] (2019-03-28)
+Added polyfill for IE11
+
+<a name="7.7.2">
+
+# [7.7.2 dot_separator] (2019-03-27)
+Fix decimals
+
+<a name="7.7.1">
+
+# [7.7.1 coma_separator] (2019-03-25)
+Readme update
+
+<a name="7.7.0">
+
+# [7.7.0 coma_separator] (2019-03-21)
+Secure input and bugs fix
+
 <a name="7.6.6">
 
 # [7.6.6 coma_separator] (2019-03-18)

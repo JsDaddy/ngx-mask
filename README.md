@@ -8,9 +8,37 @@
   <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads" >
 </a>
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
+[![Backers on Open Collective](https://opencollective.com/ngx-mask/backers/badge.svg?style=flat-square)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/ngx-mask/sponsors/badge.svg?style=flat-square)](#sponsors)
+[![GitHub contributors](https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat-square)](https://github.com/JSDaddy/ngx-mask)
+[![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat-square)](https://github.com/JSDaddy/ngx-mask)
 
 
 You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
+You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-copypaste) it.
+
+
+### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples.
+
+
+## Credits
+
+### Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+
+<a href="https://github.com/JsDaddy/ngx-mask/graphs/contributors"></a>
+
+### Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/ngx-mask#backer)]
+
+<a href="https://opencollective.com/ngx-mask#backers" target="_blank"><img src="https://opencollective.com/ngx-mask/backers.svg?width=890"></a>
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/ngx-mask#sponsor)]
+
 
 ## Installing
 
@@ -92,8 +120,9 @@ You can define your custom options for all directives (as  object in the mask mo
 Input value: 789-874.98
 Masked value: [78]\[987]
 ```
-
-	### patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+```typescript
+patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
+```
    We have next default patterns:
 
   | code | meaning |
@@ -119,6 +148,18 @@ public customPatterns = {'0': { pattern: new RegExp('\[a-zA-Z\]')}};
 ```
 Input value: 789HelloWorld
 Masked value: (Hel-loW)
+```
+
+### Custom pattern for this
+ You can define custom pattern and specify symbol to be rendered in input field.
+ 
+```typescript
+pattern =  {
+    'B': {
+            pattern: new RegExp('\\d'),
+            symbol: 'X'
+      }
+  }
 ```
 
 ### prefix (string)
@@ -272,9 +313,11 @@ Masked value: 1,234
 ```html
  <input type='text' mask="00 00" [validation]="true">
 ```
+### FormControl validation
+  You can hide symbols in input field and get the actual value in formcontrol
 
+##### Usage
 
-
-## Examples
-
-Check the [demo](https://jsdaddy.github.io/ngx-mask/).
+```html
+ <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
+```

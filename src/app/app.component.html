@@ -76,6 +76,35 @@
         <div class="mat-card-wr">
           <mat-card>
             <mat-card-header>
+              <mat-card-title>Mask common case</mat-card-title>
+              <mat-card-subtitle>Secure Input</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <br>
+              <div class="flex-row">
+                <div class="flex-cell">
+                  <mat-form-field>
+                    <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000" [(ngModel)]="secureMask" [formControl]="formSecureInput">
+                    <mat-hint> <b>Mask:</b> "XXX/X0/0000" </mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>NgModel:</b> {{ secureMask ? secureMask: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ formSecureInput.value ? formSecureInput.value: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
               <mat-card-title>Other common cases</mat-card-title>
             </mat-card-header>
             <mat-card-content>
@@ -245,7 +274,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" prefix="+75" [formControl]="form"
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form"
                       [(ngModel)]="dateModel">
                     <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                   </mat-form-field>
@@ -338,7 +367,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Type number or string" mask="00*.00" [formControl]="numberOrStringForm"
+                    <input matInput placeholder="Type number or string" mask="00*.00"  [formControl]="numberOrStringForm"
                       [(ngModel)]="numberOrStringFormModel">
                     <mat-hint><b>Mask: </b>000.00</mat-hint>
                   </mat-form-field>
@@ -472,7 +501,7 @@
                 <div class="flex-cell-padding">
                   <mat-form-field>
                     <input matInput placeholder="Separator" [dropSpecialCharacters]="true"
-                      [dropSpecialCharacters]="[',']" mask="comma_separator.2"
+                      [dropSpecialCharacters]="[',']" mask="comma_separator.2" 
                       [formControl]="commaPrecisionSeparatorForm" [(ngModel)]="commaPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>comma_separator.2</mat-hint>
                   </mat-form-field>
