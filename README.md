@@ -16,6 +16,16 @@ You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-
 
 ### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples.
 
+
+## Credits
+
+### Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+
+<a href="https://github.com/ng-packagr/ng-packagr/graphs/contributors"><img src="https://opencollective.com/ngx-mask/contributors.svg?width=890&button=false" /></a>
+
+
 ## Installing
 
 ```bash
