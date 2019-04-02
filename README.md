@@ -27,7 +27,7 @@ You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
-<a href="https://github.com/JsDaddy/ngx-mask/graphs/contributors"><img src="https://opencollective.com/ngx-mask/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/JsDaddy/ngx-mask/graphs/contributors"></a>
 
 ### Backers
 
