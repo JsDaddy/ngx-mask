@@ -8,6 +8,10 @@
   <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads" >
 </a>
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
+[![Backers on Open Collective](https://opencollective.com/ngx-mask/backers/badge.svg?style=flat-square)](#backers)
+[![Sponsors on Open Collective](https://opencollective.com/ngx-mask/sponsors/badge.svg?style=flat-square)](#sponsors)
+[![GitHub contributors](https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat-square)](https://github.com/JSDaddy/ngx-mask)
+[![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat-square)](https://github.com/JSDaddy/ngx-mask)
 
 
 You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
@@ -23,7 +27,17 @@ You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
 
-<a href="https://github.com/ngx-mask/ngx-mask/graphs/contributors"><img src="https://opencollective.com/ngx-mask/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/JsDaddy/ngx-mask/graphs/contributors"><img src="https://opencollective.com/ngx-mask/contributors.svg?width=890&button=false" /></a>
+
+### Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/ngx-mask#backer)]
+
+<a href="https://opencollective.com/ngx-mask#backers" target="_blank"><img src="https://opencollective.com/ngx-mask/backers.svg?width=890"></a>
+
+### Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/ngx-mask#sponsor)]
 
 
 ## Installing
