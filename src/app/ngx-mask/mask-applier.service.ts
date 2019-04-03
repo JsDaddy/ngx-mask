@@ -48,6 +48,8 @@ export class MaskApplierService {
         let cursor: number = 0;
         let result: string = ``;
         let multi: boolean = false;
+        let backspaceShift: boolean = false;
+        let shift: number = 1;
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -116,14 +118,32 @@ export class MaskApplierService {
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression === 'comma_separator' || maskExpression.startsWith('comma_separator')) {
-                inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
             }
-            position = result.length + 1;
-            cursor = position;
-            const shiftStep: number = /\*|\?/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-            this._shift.add(shiftStep + this.prefix.length || 0);
+
+            const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
+            const shiftStep: number = result.length - inputValue.length;
+
+            if (shiftStep > 0 && result[position] !== ',') {
+                backspaceShift =  true;
+                let _shift: number = 0;
+                do {
+                    this._shift.add(position + _shift);
+                    _shift++;
+                } while (_shift < shiftStep);
+            } else if (commaShift !== 0
+                && result.indexOf(',') !== -1
+                && result.indexOf(',') < position
+                && shiftStep <= 0) {
+                this._shift.clear();
+                backspaceShift =  true;
+                shift = shiftStep;
+                position += shiftStep;
+                this._shift.add(position);
+            } else {
+                this._shift.clear();
+            }
         } else {
             for (
                 // tslint:disable-next-line
@@ -281,7 +301,6 @@ export class MaskApplierService {
             result += maskExpression[maskExpression.length - 1];
         }
 
-        let shift: number = 1;
         let newPosition: number = position + 1;
 
         while (this._shift.has(newPosition)) {
@@ -289,7 +308,10 @@ export class MaskApplierService {
             newPosition++;
         }
 
-        cb(this._shift.has(position) ? shift : 0);
+        cb(this._shift.has(position) ? shift : 0, backspaceShift);
+        if (shift < 0) {
+            this._shift.clear();
+        }
         let res: string = `${this.prefix}${result}`;
         res = this.sufix ? `${this.prefix}${result}${this.sufix}` : `${this.prefix}${result}`;
         if (result.length === 0) {

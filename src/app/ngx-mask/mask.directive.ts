@@ -198,7 +198,13 @@ export class MaskDirective implements ControlValueAccessor {
                 ? (el.selectionStart as number) + this._maskService.prefix.length
                 : (el.selectionStart as number);
         let caretShift: number = 0;
-        this._maskService.applyValueChanges(position, (shift: number) => (caretShift = shift));
+        let backspaceShift: boolean = false;
+        this._maskService.applyValueChanges(
+            position,
+            ( shift: number, _backspaceShift: boolean) => {
+                caretShift = shift;
+                backspaceShift = _backspaceShift;
+            });
         // only set the selection if the element is active
         if (this.document.activeElement !== el) {
             return;
@@ -209,7 +215,7 @@ export class MaskDirective implements ControlValueAccessor {
                 ? this._position
                 : position +
                   // tslint:disable-next-line
-                  (this._code === 'Backspace' ? 0 : caretShift);
+                  (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
         this._position = null;
     }
 
