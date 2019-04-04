@@ -126,18 +126,20 @@ export class MaskApplierService {
             const shiftStep: number = result.length - inputValue.length;
 
             if (shiftStep > 0 && result[position] !== ',') {
-                backspaceShift =  true;
+                backspaceShift = true;
                 let _shift: number = 0;
                 do {
                     this._shift.add(position + _shift);
                     _shift++;
                 } while (_shift < shiftStep);
-            } else if (commaShift !== 0
-                && result.indexOf(',') !== -1
-                && result.indexOf(',') < position
-                && shiftStep <= 0) {
+            } else if (
+                commaShift !== 0 &&
+                result.indexOf(',') !== -1 &&
+                result.indexOf(',') < position &&
+                shiftStep <= 0
+            ) {
                 this._shift.clear();
-                backspaceShift =  true;
+                backspaceShift = true;
                 shift = shiftStep;
                 position += shiftStep;
                 this._shift.add(position);

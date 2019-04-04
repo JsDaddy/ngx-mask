@@ -13,7 +13,7 @@ describe('Separator: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()]
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;
@@ -98,7 +98,7 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1,5000,000';
         inputTarget.selectionStart = 3;
         inputTarget.selectionEnd = 3;
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('15,000,000');
         expect(inputTarget.selectionStart).toEqual(3);
@@ -114,8 +114,8 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1,234,67';
         inputTarget.selectionStart = 6;
         inputTarget.selectionEnd = 6;
-        debugElement.triggerEventHandler('keydown', {code: 'Backspace', keyCode: 8, target: inputTarget});
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('123,467');
         expect(inputTarget.selectionStart).toEqual(5);

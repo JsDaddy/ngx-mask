@@ -10,15 +10,15 @@ import { config, IConfig, withoutValidation } from './config';
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => MaskDirective),
-            multi: true
+            multi: true,
         },
         {
             provide: NG_VALIDATORS,
             useExisting: forwardRef(() => MaskDirective),
-            multi: true
+            multi: true,
         },
-        MaskService
-    ]
+        MaskService,
+    ],
 })
 export class MaskDirective implements ControlValueAccessor {
     private _maskValue!: string;
@@ -47,7 +47,7 @@ export class MaskDirective implements ControlValueAccessor {
         this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue);
         this._maskService.formElementProperty = [
             'value',
-            this._maskService.applyMask(this._inputValue, this._maskService.maskExpression)
+            this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
         ];
     }
 
@@ -199,12 +199,10 @@ export class MaskDirective implements ControlValueAccessor {
                 : (el.selectionStart as number);
         let caretShift: number = 0;
         let backspaceShift: boolean = false;
-        this._maskService.applyValueChanges(
-            position,
-            ( shift: number, _backspaceShift: boolean) => {
-                caretShift = shift;
-                backspaceShift = _backspaceShift;
-            });
+        this._maskService.applyValueChanges(position, (shift: number, _backspaceShift: boolean) => {
+            caretShift = shift;
+            backspaceShift = _backspaceShift;
+        });
         // only set the selection if the element is active
         if (this.document.activeElement !== el) {
             return;
@@ -303,7 +301,7 @@ export class MaskDirective implements ControlValueAccessor {
         (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
             ? (this._maskService.formElementProperty = [
                   'value',
-                  this._maskService.applyMask(inputValue, this._maskService.maskExpression)
+                  this._maskService.applyMask(inputValue, this._maskService.maskExpression),
               ])
             : (this._maskService.formElementProperty = ['value', inputValue]);
         this._inputValue = inputValue;

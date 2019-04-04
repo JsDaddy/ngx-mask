@@ -11,7 +11,7 @@ describe('Separator: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()]
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

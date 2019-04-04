@@ -4,7 +4,7 @@ import { IConfig } from './config';
 
 @Pipe({
     name: 'mask',
-    pure: true
+    pure: true,
 })
 export class MaskPipe implements PipeTransform {
     public constructor(private _maskService: MaskApplierService) {}

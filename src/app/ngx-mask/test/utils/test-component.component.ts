@@ -19,7 +19,7 @@ import { IConfig } from 'public_api';
             [hiddenInput]="hiddenInput"
             [(ngModel)]="ngModelValue"
         />
-    `
+    `,
 })
 export class TestMaskComponent {
     public mask!: string | null;

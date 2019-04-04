@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 type SN = string | number;
 @Component({
     selector: 'app-root',
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
 })
 export class AppComponent {
     public phone: number = 123456789;
@@ -23,8 +23,8 @@ export class AppComponent {
 
     public pattern: pattern = {
         P: {
-            pattern: new RegExp('\\d')
-        }
+            pattern: new RegExp('\\d'),
+        },
     };
 
     public numberOrStringFormModel: SN = '';
@@ -71,6 +71,9 @@ export class AppComponent {
         this.percent = new FormControl('');
 
         this.customMaska = ['PPP-PPP-PPP', this.pattern];
+
+        // tslint:disable-next-line
+        this.form1.valueChanges.subscribe((x: any) => console.log('Value', x));
     }
 }
 
