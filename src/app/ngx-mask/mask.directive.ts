@@ -94,9 +94,9 @@ export class MaskDirective implements ControlValueAccessor {
 
     @Input()
     public set showMaskTyped(value: IConfig['showMaskTyped']) {
-        if (!value) {
-            return;
-        }
+        //if (!value) {
+            //return;
+        //}
         this._maskService.showMaskTyped = value;
     }
 
