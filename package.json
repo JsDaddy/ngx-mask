@@ -26,7 +26,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "https://github.com/NepipenkoIgor/ngx-mask.git"
+        "url": "https://github.com/izmaylovdev/ngx-mask"
     },
     "peerDependencies": {
         "@angular/common": ">=6.0.0",
