@@ -207,7 +207,7 @@ export class MaskService extends MaskApplierService {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
     private _checkSymbols(result: string): string | number | undefined {
-        if ('dot_separator.2' === this.maskExpression) {
+        if ('dot_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
             return Number(
                 this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
@@ -216,7 +216,7 @@ export class MaskService extends MaskApplierService {
                 )
             ).toFixed(2);
         }
-        if ('comma_separator.2' === this.maskExpression) {
+        if ('comma_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
             return Number(
                 this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
