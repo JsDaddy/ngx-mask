@@ -1,3 +1,4 @@
+import { IKeyboardEvent } from './../models/keyboard-event.model';
 import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
@@ -186,7 +187,7 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     @HostListener('input', ['$event'])
-    public onInput(e: KeyboardEvent): void {
+    public onInput(e: IKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
         if (!this._maskValue) {
@@ -224,7 +225,7 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     @HostListener('click', ['$event'])
-    public onFocus(e: MouseEvent | KeyboardEvent): void {
+    public onFocus(e: MouseEvent | IKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const posStart: number = 0;
         const posEnd: number = 0;
@@ -258,7 +259,7 @@ export class MaskDirective implements ControlValueAccessor {
     }
 
     @HostListener('keydown', ['$event'])
-    public a(e: KeyboardEvent): void {
+    public a(e: IKeyboardEvent): void {
         this._code = e.code;
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._maskService.selStart = el.selectionStart;
