@@ -1,4 +1,4 @@
-import { Directive, forwardRef, HostListener, Inject, Input } from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
@@ -20,7 +20,19 @@ import { config, IConfig, withoutValidation } from './config';
         MaskService,
     ],
 })
-export class MaskDirective implements ControlValueAccessor {
+export class MaskDirective implements ControlValueAccessor, OnChanges {
+    @Input('mask') public maskExpression: string = '';
+    @Input() public specialCharacters: IConfig['specialCharacters'] = [];
+    @Input() public patterns: IConfig['patterns'] = {};
+    @Input() public prefix: IConfig['prefix'] = '';
+    @Input() public sufix: IConfig['sufix'] = '';
+    @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
+    @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
+    @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
+    @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
+    @Input() public showTemplate: IConfig['showTemplate'] | null = null;
+    @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
+    @Input() public validation: IConfig['validation'] | null = null;
     private _maskValue!: string;
     private _inputValue!: string;
     private _position: number | null = null;
@@ -38,89 +50,66 @@ export class MaskDirective implements ControlValueAccessor {
         private _maskService: MaskService
     ) {}
 
-    @Input('mask')
-    public set maskExpression(value: string) {
-        this._maskValue = value || '';
-        if (!this._maskValue) {
-            return;
+    public ngOnChanges(changes: SimpleChanges): void {
+        // tslint:disable-next-line:max-line-length
+        const {
+            maskExpression,
+            specialCharacters,
+            patterns,
+            prefix,
+            sufix,
+            dropSpecialCharacters,
+            hiddenInput,
+            showMaskTyped,
+            shownMaskExpression,
+            showTemplate,
+            clearIfNotMatch,
+            validation,
+        } = changes;
+        if (maskExpression) {
+            this._maskValue = changes.maskExpression.currentValue || '';
         }
-        this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue);
-        this._maskService.formElementProperty = [
-            'value',
-            this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
-        ];
-    }
-
-    @Input()
-    public set specialCharacters(value: IConfig['specialCharacters']) {
-        if (!value || !Array.isArray(value) || (Array.isArray(value) && !value.length)) {
-            return;
+        if (specialCharacters) {
+            if (
+                !specialCharacters.currentValue ||
+                !Array.isArray(specialCharacters.currentValue) ||
+                (Array.isArray(specialCharacters.currentValue) && !specialCharacters.currentValue.length)
+            ) {
+                return;
+            }
+            this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
         }
-        this._maskService.maskSpecialCharacters = value;
-    }
-
-    @Input()
-    public set patterns(value: IConfig['patterns']) {
-        if (!value) {
-            return;
+        if (patterns) {
+            this._maskService.maskAvailablePatterns = patterns.currentValue;
         }
-        this._maskService.maskAvailablePatterns = value;
-    }
-
-    @Input()
-    public set prefix(value: IConfig['prefix']) {
-        if (!value) {
-            return;
+        if (prefix) {
+            this._maskService.prefix = prefix.currentValue;
         }
-        this._maskService.prefix = value;
-    }
-
-    @Input()
-    public set sufix(value: IConfig['sufix']) {
-        if (!value) {
-            return;
+        if (sufix) {
+            this._maskService.sufix = sufix.currentValue;
         }
-        this._maskService.sufix = value;
-    }
-
-    @Input()
-    public set dropSpecialCharacters(value: IConfig['dropSpecialCharacters']) {
-        this._maskService.dropSpecialCharacters = value;
-    }
-    @Input()
-    public set hiddenInput(value: IConfig['hiddenInput']) {
-        this._maskService.hiddenInput = value;
-    }
-
-    @Input()
-    public set showMaskTyped(value: IConfig['showMaskTyped']) {
-        if (!value) {
-            return;
+        if (dropSpecialCharacters) {
+            this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
         }
-        this._maskService.showMaskTyped = value;
-    }
-
-    @Input()
-    public set shownMaskExpression(value: IConfig['shownMaskExpression']) {
-        if (!value) {
-            return;
+        if (hiddenInput) {
+            this._maskService.hiddenInput = hiddenInput.currentValue;
         }
-        this._maskService.shownMaskExpression = value;
-    }
-
-    @Input()
-    public set showTemplate(value: IConfig['showTemplate']) {
-        this._maskService.showTemplate = value;
-    }
-
-    @Input()
-    public set clearIfNotMatch(value: IConfig['clearIfNotMatch']) {
-        this._maskService.clearIfNotMatch = value;
-    }
-
-    @Input()
-    public set validation(value: IConfig['validation']) {
-        this._maskService.validation = value;
+        if (showMaskTyped) {
+            this._maskService.showMaskTyped = showMaskTyped.currentValue;
+        }
+        if (shownMaskExpression) {
+            this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
+        }
+        if (showTemplate) {
+            this._maskService.showTemplate = showTemplate.currentValue;
+        }
+        if (clearIfNotMatch) {
+            this._maskService.clearIfNotMatch = clearIfNotMatch.currentValue;
+        }
+        if (validation) {
+            this._maskService.validation = validation.currentValue;
+        }
+        this._applyMask();
     }
 
     // tslint:disable-next-line: cyclomatic-complexity
@@ -339,5 +328,13 @@ export class MaskDirective implements ControlValueAccessor {
                 }, '')) ||
             maskExp
         );
+    }
+    // tslint:disable-next-line:no-any
+    private _applyMask(): any {
+        this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue || '');
+        this._maskService.formElementProperty = [
+            'value',
+            this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
+        ];
     }
 }

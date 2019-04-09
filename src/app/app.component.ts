@@ -5,7 +5,8 @@ type SN = string | number;
     selector: 'app-root',
     templateUrl: './app.component.html',
 })
-export class AppComponent {
+export class AppComponent  {
+    public mask: string = '';
     public phone: number = 123456789;
     public customMaska: [string, pattern];
 
@@ -51,6 +52,7 @@ export class AppComponent {
     public commaPrecisionSeparatorForm!: FormControl;
     public commaZeroPrecisionSeparatorForm!: FormControl;
 
+
     public constructor() {
         this.form = new FormControl('');
         this.form1 = new FormControl('');
@@ -75,6 +77,13 @@ export class AppComponent {
         // tslint:disable-next-line
         this.form1.valueChanges.subscribe((x: any) => console.log('Value', x));
     }
+    public change(): void {
+        this.mask = '00-00';
+    }
+    public change1(): void {
+        this.mask = '000,000';
+    }
+
 }
 
 type pattern = {

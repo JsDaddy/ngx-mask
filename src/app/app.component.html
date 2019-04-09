@@ -250,8 +250,8 @@
                 </div>
                 <div class="flex-cell">
                   <p><b>FormControl:</b> {{ percent.value ? percent.value: 'Empty' }}</p>
-                  <!-- <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p> -->
-                </div>
+                   <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p> -->
+                 </div>
               </div>
             </mat-card-content>
           </mat-card>
@@ -274,7 +274,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form"
+                    <input matInput placeholder="Phone number"  mask="(000) 000-0000" [formControl]="form"
                       [(ngModel)]="dateModel">
                     <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                   </mat-form-field>
@@ -593,4 +593,4 @@
       </div>
     </div>
   </div>
-</mat-sidenav-container>
+</mat-sidenav-container>  
