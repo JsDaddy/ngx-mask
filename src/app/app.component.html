@@ -250,8 +250,8 @@
                 </div>
                 <div class="flex-cell">
                   <p><b>FormControl:</b> {{ percent.value ? percent.value: 'Empty' }}</p>
-                  <!-- <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p> -->
-                </div>
+                   <p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel: 'Empty' }}</p> -->
+                 </div>
               </div>
             </mat-card-content>
           </mat-card>
@@ -274,7 +274,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form"
+                    <input matInput placeholder="Phone number" prefix="+5"  mask="(000) 000-0000" [formControl]="form"
                       [(ngModel)]="dateModel">
                     <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                   </mat-form-field>
@@ -516,7 +516,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator.0"
+                    <input matInput placeholder="Separator" 
+                    [specialCharacters]="[ '[' ,']' , '\\' ]"  mask="[00]\[000]" 
                       [formControl]="dotZeroPrecisionSeparatorForm" [(ngModel)]="dotZeroPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator.0</mat-hint>
                   </mat-form-field>
@@ -531,7 +532,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="comma_separator.0"
+                    <input matInput placeholder="Separator" [mask]="mask"
                       [formControl]="commaZeroPrecisionSeparatorForm"
                       [(ngModel)]="commaZeroPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>comma_separator.0</mat-hint>
@@ -543,6 +544,8 @@
                   <p><b>NgModel:</b>
                     {{ commaZeroPrecisionSeparatorFormModel ? commaZeroPrecisionSeparatorFormModel: 'Empty' }}</p>
                 </div>
+                <button (click)="change()">change</button>
+                <button (click)="change1()">change1</button>
               </div>
             </mat-card-content>
           </mat-card>
@@ -593,4 +596,4 @@
       </div>
     </div>
   </div>
-</mat-sidenav-container>
+</mat-sidenav-container>  
