@@ -9,7 +9,7 @@ import {
     MatListModule,
     MatSelectModule,
     MatSidenavModule,
-    MatToolbarModule
+    MatToolbarModule,
 } from '@angular/material';
 import { TestMaskComponent } from './ngx-mask/test/utils/test-component.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -37,9 +37,9 @@ import { NgxMaskModule } from './ngx-mask/ngx-mask.module';
         MatIconModule,
         MatListModule,
         MatCardModule,
-        FormsModule
+        FormsModule,
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
 export class AppModule {}

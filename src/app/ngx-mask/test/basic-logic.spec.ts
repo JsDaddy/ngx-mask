@@ -11,7 +11,7 @@ describe('Directive: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()]
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;
@@ -169,8 +169,8 @@ describe('Directive: Mask', () => {
         component.specialCharacters = ['[', ']', '-', '*'];
         component.patterns = {
             '0': {
-                pattern: new RegExp('[a-zA-Z]')
-            }
+                pattern: new RegExp('[a-zA-Z]'),
+            },
         };
         equal('', '', fixture);
         equal('2578989', '[', fixture);
@@ -185,8 +185,8 @@ describe('Directive: Mask', () => {
         component.specialCharacters = ['[', ']', '*'];
         component.patterns = {
             '0': {
-                pattern: new RegExp('\\d')
-            }
+                pattern: new RegExp('\\d'),
+            },
         };
         equal('789-874.98', '[78]*[987]', fixture);
     });

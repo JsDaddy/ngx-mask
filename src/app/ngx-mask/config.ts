@@ -9,10 +9,13 @@ export interface IConfig {
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
+    hiddenInput: boolean;
+    validation: boolean;
     patterns: {
         [character: string]: {
             pattern: RegExp;
             optional?: boolean;
+            symbol?: string;
         };
     };
 }
@@ -29,42 +32,48 @@ export const initialConfig: IConfig = {
     showTemplate: false,
     showMaskTyped: false,
     dropSpecialCharacters: true,
+    hiddenInput: false,
     shownMaskExpression: '',
+    validation: true,
     // tslint:disable-next-line: quotemark
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     patterns: {
         '0': {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         '9': {
             pattern: new RegExp('\\d'),
-            optional: true
+            optional: true,
+        },
+        X: {
+            pattern: new RegExp('\\d'),
+            symbol: '*',
         },
         A: {
-            pattern: new RegExp('[a-zA-Z0-9]')
+            pattern: new RegExp('[a-zA-Z0-9]'),
         },
         S: {
-            pattern: new RegExp('[a-zA-Z]')
+            pattern: new RegExp('[a-zA-Z]'),
         },
         d: {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         m: {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         M: {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         H: {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         h: {
-            pattern: new RegExp('\\d')
+            pattern: new RegExp('\\d'),
         },
         s: {
-            pattern: new RegExp('\\d')
-        }
-    }
+            pattern: new RegExp('\\d'),
+        },
+    },
 };
 
 export const withoutValidation: string[] = [
@@ -77,9 +86,9 @@ export const withoutValidation: string[] = [
     'm0',
     'separator',
     'dot_separator',
-    'coma_separator',
+    'comma_separator',
     'd0/M0/0000',
     'd0/M0',
     'd0',
-    'M0'
+    'M0',
 ];

@@ -3,6 +3,8 @@ import { NgxMaskModule } from '../ngx-mask.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
+import { By } from '@angular/platform-browser';
+import { DebugElement } from '@angular/core/src/debug/debug_node';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -11,7 +13,7 @@ describe('Separator: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()]
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;
@@ -71,18 +73,51 @@ describe('Separator: Mask', () => {
         equal('1000000,00', '1.000.000', fixture);
     });
 
-    it('coma_separator for 1000000', () => {
-        component.mask = 'coma_separator';
+    it('comma_separator for 1000000', () => {
+        component.mask = 'comma_separator';
         equal('1000000', '1,000,000', fixture);
     });
 
-    it('coma_separator precision 2 for 1000000.00', () => {
-        component.mask = 'coma_separator.2';
+    it('comma_separator precision 2 for 1000000.00', () => {
+        component.mask = 'comma_separator.2';
         equal('1000000.00', '1,000,000.00', fixture);
     });
 
-    it('coma_separator precision 0 for 1000000.00', () => {
-        component.mask = 'coma_separator.0';
+    it('comma_separator precision 0 for 1000000.00', () => {
+        component.mask = 'comma_separator.0';
         equal('1000000.00', '1,000,000', fixture);
+    });
+
+    it('should not shift cursor for input in-between digits', () => {
+        component.mask = 'comma_separator.0';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '1,5000,000';
+        inputTarget.selectionStart = 3;
+        inputTarget.selectionEnd = 3;
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('15,000,000');
+        expect(inputTarget.selectionStart).toEqual(3);
+    });
+
+    it('sould not shift cursor for backspce on in-between digits', () => {
+        component.mask = 'comma_separator.0';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '1,234,67';
+        inputTarget.selectionStart = 6;
+        inputTarget.selectionEnd = 6;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('123,467');
+        expect(inputTarget.selectionStart).toEqual(5);
     });
 });

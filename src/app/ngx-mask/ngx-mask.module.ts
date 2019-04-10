@@ -8,7 +8,7 @@ import { MaskPipe } from './mask.pipe';
 @NgModule({
     providers: [MaskApplierService],
     exports: [MaskDirective, MaskPipe],
-    declarations: [MaskDirective, MaskPipe]
+    declarations: [MaskDirective, MaskPipe],
 })
 export class NgxMaskModule {
     public static forRoot(configValue?: optionsConfig): ModuleWithProviders {
@@ -17,23 +17,23 @@ export class NgxMaskModule {
             providers: [
                 {
                     provide: NEW_CONFIG,
-                    useValue: configValue
+                    useValue: configValue,
                 },
                 {
                     provide: INITIAL_CONFIG,
-                    useValue: initialConfig
+                    useValue: initialConfig,
                 },
                 {
                     provide: config,
                     useFactory: _configFactory,
-                    deps: [INITIAL_CONFIG, NEW_CONFIG]
-                }
-            ]
+                    deps: [INITIAL_CONFIG, NEW_CONFIG],
+                },
+            ],
         };
     }
     public static forChild(_configValue?: optionsConfig): ModuleWithProviders {
         return {
-            ngModule: NgxMaskModule
+            ngModule: NgxMaskModule,
         };
     }
 }
