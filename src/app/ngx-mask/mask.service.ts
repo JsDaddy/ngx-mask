@@ -36,6 +36,7 @@ export class MaskService extends MaskApplierService {
     ): string {
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
         if (!inputValue && this.showMaskTyped) {
+            this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
         const getSymbol: string = !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
@@ -72,13 +73,7 @@ export class MaskService extends MaskApplierService {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
 
-        if (Array.isArray(this.dropSpecialCharacters)) {
-            this.onChange(this._removeMask(this._removeSufix(this._removePrefix(result)), this.dropSpecialCharacters));
-        } else if (this.dropSpecialCharacters === true) {
-            this.onChange(this._checkSymbols(result));
-        } else {
-            this.onChange(this._removeSufix(this._removePrefix(result)));
-        }
+        this.formControlResult(result);
 
         let ifMaskIsShown: string = '';
         if (!this.showMaskTyped) {
@@ -183,6 +178,17 @@ export class MaskService extends MaskApplierService {
     public checkSpecialCharAmount(mask: string): number {
         const chars: string[] = mask.split('').filter((item: string) => this._findSpecialChar(item));
         return chars.length;
+    }
+
+    private formControlResult(inputValue: string): void {
+        if (Array.isArray(this.dropSpecialCharacters)) {
+            this.onChange(
+                this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
+        } else if (this.dropSpecialCharacters === true) {
+            this.onChange(this._checkSymbols(inputValue));
+        } else {
+            this.onChange(this._removeSufix(this._removePrefix(inputValue)));
+        }
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
