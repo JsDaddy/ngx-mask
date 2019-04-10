@@ -313,11 +313,19 @@ Masked value: 1,234
 ```html
  <input type='text' mask="00 00" [validation]="true">
 ```
-### FormControl validation
+### Secure input
   You can hide symbols in input field and get the actual value in formcontrol
 
 ##### Usage
 
 ```html
  <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
+```
+
+### IP valid mask
+
+##### Usage
+
+```html
+ <input mask="IP">
 ```
