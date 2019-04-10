@@ -256,6 +256,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
+            if (e.keyCode === 37) {
+                el.selectionStart = (el.selectionEnd as number) - 1;
+            }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length
@@ -263,7 +266,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 e.preventDefault();
             }
             const cursorStart: number | null = el.selectionStart;
-            this.onFocus(e);
+            // this.onFocus(e);
             if (e.keyCode === 8 && cursorStart === 0 && el.selectionEnd === el.value.length) {
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 1;
                 this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position);
