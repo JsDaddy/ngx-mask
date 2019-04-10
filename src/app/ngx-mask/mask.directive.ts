@@ -117,11 +117,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (!this._maskService.validation) {
             return null;
         }
-        if (this._maskService.ipError) {
-            return { 'Mask error': true };
-        } else if (!this._maskService.ipError) {
-            return null;
-        }
         if (
             /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
             /comma_separator\.\d{1,}/.test(this._maskValue) === true

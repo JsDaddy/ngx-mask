@@ -15,7 +15,6 @@ export class MaskApplierService {
     public prefix!: IConfig['prefix'];
     public sufix!: IConfig['sufix'];
     public customPattern!: IConfig['patterns'];
-    public ipError?: boolean;
     protected prevResult: string = '';
     protected prevActualResult: string = '';
 
@@ -55,14 +54,6 @@ export class MaskApplierService {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
         const inputArray: string[] = inputValue.toString().split('');
-        if (maskExpression === 'IP') {
-            if (inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7) {
-                this.ipError = true;
-            } else {
-                this.ipError = false;
-            }
-            maskExpression = '099.099.099.099';
-        }
         if (maskExpression === 'percent') {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = this._checkInput(inputValue);
@@ -399,5 +390,4 @@ export class MaskApplierService {
             .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
             .join('');
     }
-    // tslint:disable-next-line: max-file-line-count
 }
