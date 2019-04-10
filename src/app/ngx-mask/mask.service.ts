@@ -35,6 +35,9 @@ export class MaskService extends MaskApplierService {
         cb: Function = () => {}
     ): string {
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
+        if (this.maskExpression === 'IP' && this.showMaskTyped) {
+            this.maskIsShown = this.showMaskInInput(inputValue || '#');
+        }
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
@@ -84,7 +87,7 @@ export class MaskService extends MaskApplierService {
         }
         const resLen: number = result.length;
         const prefNmask: string = this.prefix + this.maskIsShown;
-        ifMaskIsShown = prefNmask.slice(resLen);
+        ifMaskIsShown = this.maskExpression === 'IP' ? prefNmask : prefNmask.slice(resLen);
         return result + ifMaskIsShown;
     }
 
@@ -151,7 +154,7 @@ export class MaskService extends MaskApplierService {
         return newInputValue.join('');
     }
 
-    public showMaskInInput(): string {
+    public showMaskInInput(inputVal?: string): string {
         if (this.showMaskTyped && !!this.shownMaskExpression) {
             if (this.maskExpression.length !== this.shownMaskExpression.length) {
                 throw new Error('Mask expression must match mask placeholder length');
@@ -159,6 +162,9 @@ export class MaskService extends MaskApplierService {
                 return this.shownMaskExpression;
             }
         } else if (this.showMaskTyped) {
+            if (inputVal) {
+                return this._checkForIp(inputVal);
+            }
             return this.maskExpression.replace(/\w/g, '_');
         }
         return '';
@@ -180,10 +186,37 @@ export class MaskService extends MaskApplierService {
         return chars.length;
     }
 
+    // tslint:disable-next-line: cyclomatic-complexity
+    private _checkForIp(inputVal: string): string {
+        if (inputVal === '#') {
+            return '_._._._';
+        }
+        const arr: string[] = [];
+        for (let i: number = 0; i < inputVal.length; i++) {
+            if (inputVal[i].match('\\d')) {
+                arr.push(inputVal[i]);
+            }
+        }
+        if (arr.length <= 3) {
+            return '_._._';
+        }
+        if (arr.length > 3 && arr.length <= 6) {
+            return '_._';
+        }
+        if (arr.length > 6 && arr.length <= 9) {
+            return '_';
+        }
+        if (arr.length > 9 && arr.length <= 12) {
+            return '';
+        }
+        return '';
+    }
+
     private formControlResult(inputValue: string): void {
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
+                this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
+            );
         } else if (this.dropSpecialCharacters === true) {
             this.onChange(this._checkSymbols(inputValue));
         } else {
