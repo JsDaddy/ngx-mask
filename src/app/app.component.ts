@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 type SN = string | number;
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
 })
-export class AppComponent  {
+export class AppComponent {
     public mask: string = '';
     public phone: number = 123456789;
     public customMaska: [string, pattern];
@@ -52,7 +52,6 @@ export class AppComponent  {
     public commaPrecisionSeparatorForm!: FormControl;
     public commaZeroPrecisionSeparatorForm!: FormControl;
 
-
     public constructor() {
         this.form = new FormControl('');
         this.form1 = new FormControl('');
@@ -65,10 +64,10 @@ export class AppComponent  {
         this.repeatForm = new FormControl('');
         this.separatorForm = new FormControl('');
         this.dotSeparatorForm = new FormControl('');
-        this.dotPrecisionSeparatorForm = new FormControl('');
+        this.dotPrecisionSeparatorForm = new FormControl(0);
         this.dotZeroPrecisionSeparatorForm = new FormControl('');
         this.commaSeparatorForm = new FormControl('');
-        this.commaPrecisionSeparatorForm = new FormControl('');
+        this.commaPrecisionSeparatorForm = new FormControl(0);
         this.commaZeroPrecisionSeparatorForm = new FormControl('');
         this.percent = new FormControl('');
 
@@ -77,13 +76,6 @@ export class AppComponent  {
         // tslint:disable-next-line
         this.form1.valueChanges.subscribe((x: any) => console.log('Value', x));
     }
-    public change(): void {
-        this.mask = '00-00';
-    }
-    public change1(): void {
-        this.mask = '000,000';
-    }
-
 }
 
 type pattern = {
