@@ -40,10 +40,10 @@ export class AppComponent {
     public repeatFormModel!: SN;
     public separatorFormModel!: SN;
     public dotSeparatorFormModel!: SN;
-    public dotPrecisionSeparatorFormModel!: SN;
+    public dotPrecisionSeparatorFormModel: SN = '';
     public dotZeroPrecisionSeparatorFormModel!: SN;
     public commaSeparatorFormModel!: SN;
-    public commaPrecisionSeparatorFormModel!: SN;
+    public commaPrecisionSeparatorFormModel: SN = '';
     public commaZeroPrecisionSeparatorFormModel!: SN;
     public dotSeparatorForm!: FormControl;
     public dotPrecisionSeparatorForm!: FormControl;

@@ -41,7 +41,7 @@ export class MaskService extends MaskApplierService {
         }
         const getSymbol: string = !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
         let newInputValue: string = '';
-        if (this.hiddenInput) {
+        if (this.hiddenInput && newInputValue === undefined) {
             let actualResult: string[] = this.actualValue.split('');
             inputValue !== '' && actualResult.length
                 ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
@@ -183,7 +183,8 @@ export class MaskService extends MaskApplierService {
     private formControlResult(inputValue: string): void {
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
+                this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
+            );
         } else if (this.dropSpecialCharacters === true) {
             this.onChange(this._checkSymbols(inputValue));
         } else {
