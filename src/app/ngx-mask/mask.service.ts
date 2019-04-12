@@ -216,7 +216,9 @@ export class MaskService extends MaskApplierService {
     private _checkSymbols(result: string): string | number | undefined {
         if ('dot_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
-            return Number(
+            return result === ''
+                ? result
+                : Number(
                 this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
                     ',',
                     '.'
@@ -225,7 +227,9 @@ export class MaskService extends MaskApplierService {
         }
         if ('comma_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
-            return Number(
+            return result === ''
+                ? result
+                : Number(
                 this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
             ).toFixed(2);
         }
