@@ -64,7 +64,7 @@ export class MaskApplierService {
             maskExpression = '099.099.099.099';
         }
         if (maskExpression.startsWith('percent')) {
-            const decCount = maskExpression.split('.')[1];
+            const decCount: string | number = maskExpression.split('.')[1];
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = this._checkInput(inputValue);
                 if (inputValue.length >= 3 && inputValue !== '100') {
