@@ -63,11 +63,12 @@ export class MaskApplierService {
             }
             maskExpression = '099.099.099.099';
         }
-        if (maskExpression === 'percent') {
+        if (maskExpression.startsWith('percent')) {
+            const decCount = maskExpression.split('.')[1];
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = this._checkInput(inputValue);
                 if (inputValue.length >= 3 && inputValue !== '100') {
-                    inputValue = inputValue.substring(0, 5);
+                    inputValue = inputValue.substring(0, decCount ? +decCount : 2);
                 }
             }
             if (this.percentage(inputValue)) {
