@@ -34,6 +34,9 @@ export class MaskService extends MaskApplierService {
         position: number = 0,
         cb: Function = () => {}
     ): string {
+		if (!maskExpression) {
+          return inputValue;
+        }
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
