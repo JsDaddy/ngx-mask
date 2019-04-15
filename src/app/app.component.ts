@@ -76,7 +76,6 @@ export class AppComponent {
         // tslint:disable-next-line
         this.form1.valueChanges.subscribe((x: any) => console.log('Value', x));
     }
-    // tslint:disable-next-line:no-any
 }
 
 type pattern = {

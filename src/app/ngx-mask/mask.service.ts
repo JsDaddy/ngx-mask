@@ -213,25 +213,29 @@ export class MaskService extends MaskApplierService {
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
-    private _checkSymbols(result: string): string | number | undefined {
+    private _checkSymbols(result: string): string | number | undefined | null {
         if ('dot_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
             return result === ''
                 ? result
+                : result === ','
+                ? null
                 : Number(
-                this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
-                    ',',
-                    '.'
-                )
-            ).toFixed(2);
+                      this._removeMask(
+                          this._removeSufix(this._removePrefix(result)),
+                          this.maskSpecialCharacters
+                      ).replace(',', '.')
+                  ).toFixed(2);
         }
         if ('comma_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
             return result === ''
                 ? result
+                : result === '.'
+                ? null
                 : Number(
-                this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
-            ).toFixed(2);
+                      this._removeMask(this._removeSufix(this._removePrefix(result)), this.maskSpecialCharacters)
+                  ).toFixed(2);
         }
         if (this.isNumberValue) {
             return result === ''
