@@ -120,4 +120,38 @@ describe('Separator: Mask', () => {
         expect(inputTarget.value).toBe('123,467');
         expect(inputTarget.selectionStart).toEqual(5);
     });
+
+    it('sould not shift cursor on backspce when result has no separator', () => {
+        component.mask = 'comma_separator.0';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '1,34';
+        inputTarget.selectionStart = 2;
+        inputTarget.selectionEnd = 2;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('134');
+        expect(inputTarget.selectionStart).toEqual(1);
+    });
+
+    it('should keep cursor on position 0 for backspce on first digit', () => {
+        component.mask = 'comma_separator.0';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = ',134';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('134');
+        expect(inputTarget.selectionStart).toEqual(0);
+    });
 });
