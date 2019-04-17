@@ -143,10 +143,8 @@ export class MaskApplierService {
                     _shift++;
                 } while (_shift < shiftStep);
             } else if (
-                commaShift !== 0 &&
-                position > 0 &&
-                !(result.indexOf(',') >= position &&  position > 3) &&
-                shiftStep <= 0
+                (commaShift !== 0 && position > 0 && !(result.indexOf(',') >= position && position > 3)) ||
+                (!(result.indexOf('.') >= position && position > 3) && shiftStep <= 0)
             ) {
                 this._shift.clear();
                 backspaceShift = true;
