@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
 import { config, IConfig, withoutValidation } from './config';
+import { CustomKeyboardEvent } from './custom-keyboard-event';
 
 @Directive({
     selector: '[mask]',
@@ -180,7 +181,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
 
     @HostListener('input', ['$event'])
-    public onInput(e: KeyboardEvent): void {
+    public onInput(e: CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
         if (!this._maskValue) {
@@ -218,7 +219,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
 
     @HostListener('click', ['$event'])
-    public onFocus(e: MouseEvent | KeyboardEvent): void {
+    public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const posStart: number = 0;
         const posEnd: number = 0;
@@ -252,7 +253,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
 
     @HostListener('keydown', ['$event'])
-    public a(e: KeyboardEvent): void {
+    public a(e: CustomKeyboardEvent): void {
         this._code = e.code;
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._maskService.selStart = el.selectionStart;
