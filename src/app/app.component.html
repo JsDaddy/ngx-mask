@@ -216,9 +216,9 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="0*.00"
+                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="(000) 000-0000" prefix="+49"
                       [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
-                    <mat-hint><b>Mask:</b>000.000</mat-hint>
+                    <mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
