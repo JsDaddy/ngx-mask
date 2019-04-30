@@ -214,7 +214,6 @@ export class MaskService extends MaskApplierService {
         }
         return '';
     }
-
     private formControlResult(inputValue: string): void {
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
