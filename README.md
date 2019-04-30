@@ -53,7 +53,7 @@ Import **ngx-mask** module in Angular app.
 ```typescript
 import {NgxMaskModule} from 'ngx-mask'
 
-(...)
+export const options: Partial<IConfig> | (() => Partial<IConfig>);
 
 @NgModule({
   (...)
@@ -82,13 +82,13 @@ Also you can use mask pipe
 
 #### Examples
 
-| mask | example |
-| ------- | ------- |
-| 9999-99-99 | 2017-04-15 |
-| 0*.00 | 2017.22 |
+| mask           | example        |
+| -------------- | -------------- |
+| 9999-99-99     | 2017-04-15     |
+| 0*.00          | 2017.22        |
 | 000.000.000-99 | 048.457.987-98 |
-| AAAA | 0F6g |
-| SSSS | asDF |
+| AAAA           | 0F6g           |
+| SSSS           | asDF           |
 
 ## Mask Options
 You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
@@ -125,12 +125,12 @@ patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
 ```
    We have next default patterns:
 
-  | code | meaning |
-  |------|---------|
-  | **0** | digits (like 0 to 9 numbers) |
-  | **9** | digits (like 0 to 9 numbers), but optional |
+  | code  | meaning                                     |
+  | ----- | ------------------------------------------- |
+  | **0** | digits (like 0 to 9 numbers)                |
+  | **9** | digits (like 0 to 9 numbers), but optional  |
   | **A** | letters (uppercase or lowercase) and digits |
-  | **S** | only letters (uppercase or lowercase) |
+  | **S** | only letters (uppercase or lowercase)       |
 
 ##### Usage:
 
