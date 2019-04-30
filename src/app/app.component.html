@@ -216,7 +216,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="(000) 000-0000" prefix="+49"
+                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000 0*.00" 
                       [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
                     <mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
                   </mat-form-field>
@@ -244,7 +244,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Percent valid mask" mask="percent.5" sufix="%" [formControl]="percent">
+                    <input matInput placeholder="Percent valid mask" mask="percent.5" sufix="%" [formControl]="percent" >
                     <mat-hint><b>Mask:</b>percent</mat-hint>
                   </mat-form-field>
                 </div>
