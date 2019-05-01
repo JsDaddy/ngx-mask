@@ -26,4 +26,13 @@ describe('Directive: Mask', () => {
         equal('2578989888988', '257.898-98', fixture);
         equal('111.111-11', '111.111-11', fixture);
     });
+
+    it('should clear if mask is not matched with prefix', () => {
+        component.mask = '000-000-00';
+        component.prefix = '+5';
+        component.clearIfNotMatch = true;
+        equal('', '', fixture);
+        equal('2578989', '', fixture);
+        equal('25789898', '+5257-898-98', fixture);
+    });
 });
