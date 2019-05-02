@@ -2,7 +2,7 @@ import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleCh
 import { DOCUMENT } from '@angular/common';
 import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { MaskService } from './mask.service';
-import { config, IConfig, withoutValidation } from './config';
+import { IConfig, withoutValidation } from './config';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 
 @Directive({
@@ -124,8 +124,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return null;
         }
         if (
-            /dot_separator\.\d{1,}/.test(this._maskValue) === true ||
-            /comma_separator\.\d{1,}/.test(this._maskValue) === true
+            this._maskValue.startsWith('dot_separator') ||
+            this._maskValue.startsWith('comma_separator')
         ) {
             return null;
         }
@@ -289,7 +289,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
 
     /** It writes the value in the input */
-    public async writeValue(inputValue: string): Promise<void> {
+    public async writeValue(inputValue: string | number): Promise<void> {
         if (inputValue === undefined) {
             inputValue = '';
         }

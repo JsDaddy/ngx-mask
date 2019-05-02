@@ -15,7 +15,6 @@ export class MaskService extends MaskApplierService {
     protected _formElement: HTMLInputElement;
     // tslint:disable-next-line
     public onChange = (_: any) => {};
-    public onTouch = () => {};
     public constructor(
         // tslint:disable-next-line
         @Inject(DOCUMENT) private document: any,
@@ -66,13 +65,19 @@ export class MaskService extends MaskApplierService {
         const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
         this.actualValue = this.getActualValue(result);
 
-        if (/dot_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
+        if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
+          this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+        }
+        if ('separator' === this.maskExpression && this.dropSpecialCharacters === true) {
+          this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+        }
+        if (this.maskExpression.startsWith('dot_separator') && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
         if ('dot_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
-        if (/comma_separator\.\d{1,}/.test(this.maskExpression) === true && this.dropSpecialCharacters === true) {
+        if (this.maskExpression.startsWith('comma_separator') && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
         }
         if ('comma_separator' === this.maskExpression && this.dropSpecialCharacters === true) {
@@ -95,8 +100,7 @@ export class MaskService extends MaskApplierService {
     }
 
     public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
-        const maskedInput: string | number = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
-        this._formElement.value = maskedInput;
+        this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
         if (this._formElement === this.document.activeElement) {
             return;
         }
@@ -174,8 +178,8 @@ export class MaskService extends MaskApplierService {
     }
 
     public clearIfNotMatchFn(): void {
-        if (this.clearIfNotMatch === true &&
-            this.prefix.length + this.maskExpression.length + this.sufix.length !== this._formElement.value.length) {
+        if (this.clearIfNotMatch
+            && this.prefix.length + this.maskExpression.length + this.sufix.length !== this._formElement.value.length) {
             this.formElementProperty = ['value', ''];
             this.applyMask(this._formElement.value, this.maskExpression);
         }
@@ -220,7 +224,7 @@ export class MaskService extends MaskApplierService {
             this.onChange(
                 this._removeMask(this._removeSufix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
             );
-        } else if (this.dropSpecialCharacters === true) {
+        } else if (this.dropSpecialCharacters) {
             this.onChange(this._checkSymbols(inputValue));
         } else {
             this.onChange(this._removeSufix(this._removePrefix(inputValue)));
@@ -249,6 +253,19 @@ export class MaskService extends MaskApplierService {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
     private _checkSymbols(result: string): string | number | undefined | null {
+        if ('separator.2' === this.maskExpression && this.isNumberValue) {
+          // tslint:disable-next-line:max-line-length
+          return result === ''
+            ? result
+            : result === ','
+              ? null
+              : Number(
+                this._removeMask(
+                  this._removeSufix(this._removePrefix(result)),
+                  this.maskSpecialCharacters
+                ).replace(',', '.')
+              ).toFixed(2);
+        }
         if ('dot_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length
             return result === ''
