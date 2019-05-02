@@ -58,19 +58,10 @@ export class MaskApplierService {
             maskExpression = '099.099.099.099';
         }
         if (maskExpression.startsWith('percent')) {
-            const decCount: string | number = maskExpression.split('.')[1];
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
                 inputValue = this._checkInput(inputValue);
-                if (inputValue.length >= 3 && inputValue !== '100') {
-                    inputValue = inputValue.substring(0, decCount ? +decCount : 2);
-                }
-                if (maskExpression === 'percent.5' || maskExpression.startsWith('percent.5')) {
-                    const precision: number = this.getPrecision(maskExpression);
-                    inputValue = this.checkInputPrecision(inputValue, precision, '.');
-                    // Number(inputValue.substring(0, inputValue.indexOf('.') + 3)).toFixed(2);
-                   // Number(inputValue).toFixed(3);
-                    // return inputValue;
-                }
+                const precision: number = this.getPrecision(maskExpression);
+                inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
             if (this.percentage(inputValue)) {
                 result = inputValue;
