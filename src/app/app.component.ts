@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 type SN = string | number;
 @Component({
@@ -39,12 +39,16 @@ export class AppComponent {
     public sufixModel!: SN;
     public repeatFormModel!: SN;
     public separatorFormModel!: SN;
+    public separatorPrecisionSeparatorFormModel!: SN;
+    public separatorZeroPrecisionSeparatorFormModel!: SN;
     public dotSeparatorFormModel!: SN;
     public dotPrecisionSeparatorFormModel: SN = '';
     public dotZeroPrecisionSeparatorFormModel!: SN;
     public commaSeparatorFormModel!: SN;
     public commaPrecisionSeparatorFormModel: SN = '';
     public commaZeroPrecisionSeparatorFormModel!: SN;
+    public separatorPrecisionSeparatorForm: FormControl;
+    public separatorZeroPrecisionSeparatorForm: FormControl;
     public dotSeparatorForm!: FormControl;
     public dotPrecisionSeparatorForm!: FormControl;
     public dotZeroPrecisionSeparatorForm!: FormControl;
@@ -63,6 +67,8 @@ export class AppComponent {
         this.sufixForm = new FormControl('');
         this.repeatForm = new FormControl('');
         this.separatorForm = new FormControl('');
+        this.separatorPrecisionSeparatorForm = new FormControl('');
+        this.separatorZeroPrecisionSeparatorForm = new FormControl('');
         this.dotSeparatorForm = new FormControl('');
         this.dotPrecisionSeparatorForm = new FormControl(0);
         this.dotZeroPrecisionSeparatorForm = new FormControl('');
@@ -72,9 +78,6 @@ export class AppComponent {
         this.percent = new FormControl('');
 
         this.customMaska = ['PPP-PPP-PPP', this.pattern];
-
-        // tslint:disable-next-line
-        this.form1.valueChanges.subscribe((x: any) => console.log('Value', x));
     }
 }
 
