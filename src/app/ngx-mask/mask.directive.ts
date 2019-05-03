@@ -203,6 +203,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return;
         }
         this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
+        // tslint:disable-next-line:no-console
+        console.log(this._position);
         el.selectionStart = el.selectionEnd =
             this._position !== null
                 ? this._position
@@ -237,6 +239,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 // }
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
+                    el.focus();
+                    el.setSelectionRange(posStart, posEnd);
+                } else if (el.setSelectionRange &&  this._maskService.maskIsShown  !== el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }

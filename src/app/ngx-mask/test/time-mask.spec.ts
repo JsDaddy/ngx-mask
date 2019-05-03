@@ -30,7 +30,7 @@ describe('Separator: Mask', () => {
 
     it('Hours', () => {
         component.mask = 'Hh:m0:s0';
-        equal('3', '03', fixture);
+        equal('03', '03', fixture);
     });
 
     it('Minutes', () => {
@@ -40,6 +40,6 @@ describe('Separator: Mask', () => {
 
     it('Minutes', () => {
         component.mask = 'Hh:m0:s0';
-        equal('127', '12:07', fixture);
+        equal('1207', '12:07', fixture);
     });
 });
