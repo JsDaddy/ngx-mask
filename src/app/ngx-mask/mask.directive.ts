@@ -239,6 +239,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
+                } else if (el.setSelectionRange &&  this._maskService.maskIsShown  !== el.value) {
+                    el.focus();
+                    el.setSelectionRange(posStart, posEnd);
                 }
             }
         el.value =

@@ -192,7 +192,7 @@ export class MaskApplierService {
                 ) {
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
-                            result += 0;
+                           // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -209,7 +209,7 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'm') {
                         if (Number(inputSymbol) > 5) {
-                            result += 0;
+                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -221,7 +221,7 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 's') {
                         if (Number(inputSymbol) > 5) {
-                            result += 0;
+                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -233,7 +233,7 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'd') {
                         if (Number(inputSymbol) > 3) {
-                            result += 0;
+                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -250,7 +250,7 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'M') {
                         if (Number(inputSymbol) > 1) {
-                            result += 0;
+                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
