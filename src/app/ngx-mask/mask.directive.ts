@@ -203,8 +203,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return;
         }
         this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-        // tslint:disable-next-line:no-console
-        console.log(this._position);
         el.selectionStart = el.selectionEnd =
             this._position !== null
                 ? this._position
