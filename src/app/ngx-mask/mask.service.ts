@@ -170,7 +170,7 @@ export class MaskService extends MaskApplierService {
             }
         } else if (this.showMaskTyped) {
             if (inputVal) {
-                return this.checkForIp(inputVal);
+                return this._checkForIp(inputVal);
             }
             return this.maskExpression.replace(/\w/g, '_');
         }
@@ -195,7 +195,7 @@ export class MaskService extends MaskApplierService {
     }
 
     // tslint:disable-next-line: cyclomatic-complexity
-    public checkForIp(inputVal: string): string {
+    private _checkForIp(inputVal: string): string {
         if (inputVal === '#') {
             return '_._._._';
         }
