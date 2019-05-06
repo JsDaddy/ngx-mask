@@ -119,14 +119,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return null;
         }
         if (this._maskService.ipError) {
-            return { 'Mask error': true };
-        } else if (!this._maskService.ipError) {
-            return null;
+          return { 'Mask error': true };
         }
-        if (
-            this._maskValue.startsWith('dot_separator') ||
-            this._maskValue.startsWith('comma_separator')
-        ) {
+        if (this._maskValue.startsWith('dot_separator') || this._maskValue.startsWith('comma_separator')) {
             return null;
         }
         if (withoutValidation.includes(this._maskValue)) {
@@ -239,7 +234,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
-                } else if (el.setSelectionRange &&  this._maskService.maskIsShown  !== el.value) {
+                } else if (el.setSelectionRange && this._maskService.maskIsShown !== el.value) {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }
