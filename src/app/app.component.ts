@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MaskApplierService } from './ngx-mask';
+
 type SN = string | number;
 @Component({
     selector: 'app-root',
@@ -78,7 +80,9 @@ export class AppComponent {
         this.percent = new FormControl('');
 
         this.customMaska = ['PPP-PPP-PPP', this.pattern];
+
     }
+
 }
 
 type pattern = {

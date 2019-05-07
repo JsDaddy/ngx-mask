@@ -1,4 +1,4 @@
-import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, Host, Inject, Injectable, Renderer2, Self, SkipSelf } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService } from './mask-applier.service';
