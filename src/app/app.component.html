@@ -51,10 +51,11 @@
             </mat-card-header>
             <mat-card-content>
               <br>
+
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Date" mask="00/00/0000" [(ngModel)]="formModelDate" 
+                    <input matInput placeholder="Date"  mask="000-000-000-099" [validation]="true" [(ngModel)]="formModelDate" 
                       [formControl]="formDate">
                     <mat-hint> <b>Mask:</b> "00/00/0000" </mat-hint>
                   </mat-form-field>
@@ -183,7 +184,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"  [validation]="true"
+                    <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" 
                       [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
                     <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
                   </mat-form-field>
