@@ -16,6 +16,7 @@ export class MaskApplierService {
     public sufix!: IConfig['sufix'];
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
+    public showMaskTyped!: IConfig['showMaskTyped'];
 
     private _shift!: Set<number>;
 
@@ -28,6 +29,7 @@ export class MaskApplierService {
         this.prefix = this._config.prefix;
         this.sufix = this._config.sufix;
         this.hiddenInput = this._config.hiddenInput;
+        this.showMaskTyped = this._config.showMaskTyped;
     }
     // tslint:disable-next-line:no-any
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
@@ -76,20 +78,23 @@ export class MaskApplierService {
             maskExpression === 'comma_separator' ||
             maskExpression.startsWith('comma_separator')
         ) {
-            if (inputValue.match('[\wа-яА-Я]') || inputValue.match('[a-z]|[A-Z]')
-                || inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/)) {
+            if (
+                inputValue.match('[wа-яА-Я]') ||
+                inputValue.match('[a-z]|[A-Z]') ||
+                inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/)
+            ) {
                 inputValue = this._checkInput(inputValue);
             }
             const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
             if (maskExpression.startsWith('separator')) {
-              if (
-                inputValue.includes(',') &&
-                inputValue.endsWith(',') &&
-                inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
-              ) {
-                inputValue = inputValue.substring(0, inputValue.length - 1);
-              }
+                if (
+                    inputValue.includes(',') &&
+                    inputValue.endsWith(',') &&
+                    inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
+                ) {
+                    inputValue = inputValue.substring(0, inputValue.length - 1);
+                }
             }
             if (maskExpression.startsWith('dot_separator')) {
                 if (
@@ -192,7 +197,6 @@ export class MaskApplierService {
                 ) {
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
-                           // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -209,7 +213,6 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'm') {
                         if (Number(inputSymbol) > 5) {
-                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -221,7 +224,6 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 's') {
                         if (Number(inputSymbol) > 5) {
-                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -233,7 +235,6 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'd') {
                         if (Number(inputSymbol) > 3) {
-                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -250,7 +251,6 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'M') {
                         if (Number(inputSymbol) > 1) {
-                            // result += 0;
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -326,7 +326,7 @@ export class MaskApplierService {
         return res;
     }
     public _findSpecialChar(inputSymbol: string): undefined | string {
-      return this.maskSpecialCharacters.find((val: string) => val === inputSymbol);
+        return this.maskSpecialCharacters.find((val: string) => val === inputSymbol);
     }
 
     protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
