@@ -46,7 +46,7 @@ export class MaskService extends MaskApplierService {
         }
         const getSymbol: string = !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
         let newInputValue: string = '';
-        if (this.hiddenInput) {
+        if (this.hiddenInput !== undefined) {
             let actualResult: string[] = this.actualValue.split('');
             inputValue !== '' && actualResult.length
                 ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'

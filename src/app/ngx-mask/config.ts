@@ -9,7 +9,7 @@ export interface IConfig {
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
-    hiddenInput: boolean;
+    hiddenInput: boolean | undefined;
     validation: boolean;
     patterns: {
         [character: string]: {
@@ -32,7 +32,7 @@ export const initialConfig: IConfig = {
     showTemplate: false,
     showMaskTyped: false,
     dropSpecialCharacters: true,
-    hiddenInput: false,
+    hiddenInput: undefined,
     shownMaskExpression: '',
     validation: true,
     // tslint:disable-next-line: quotemark

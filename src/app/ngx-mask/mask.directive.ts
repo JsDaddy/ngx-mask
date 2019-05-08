@@ -258,7 +258,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
     @HostListener('keydown', ['$event'])
     public a(e: CustomKeyboardEvent): void {
-        this._code = e.code;
+        this._code = e.code ? e.code : e.key;
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._maskService.selStart = el.selectionStart;
         this._maskService.selEnd = el.selectionEnd;
