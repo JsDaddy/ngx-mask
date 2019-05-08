@@ -137,7 +137,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     this._maskService.maskAvailablePatterns[key].optional &&
                     this._maskService.maskAvailablePatterns[key].optional === true
                 ) {
-                    if (this._maskValue.indexOf(key) !== -1) {
+                    if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
+                        const opt: string = this._maskValue.split('').filter((i: string) => i === key).join('');
+                        counterOfOpt += opt.length;
+                    } else if (this._maskValue.indexOf(key) !== -1) {
                         counterOfOpt++;
                     }
                     if (
@@ -167,7 +170,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
-                if (value.toString().length !== length) {
+                if (value.toString().length < length) {
                     return { 'Mask error': true };
                 }
             }
@@ -238,7 +241,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }
-            }
+                if (this._inputValue.match('[wа-яА-Я]') || this._inputValue.match('[a-z]|[A-Z]')) {
+                    posStart;
+                    }
+                }
         el.value =
             !el.value || el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
