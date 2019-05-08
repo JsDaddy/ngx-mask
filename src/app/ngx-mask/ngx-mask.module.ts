@@ -9,10 +9,8 @@ import { MaskApplierService } from './mask-applier.service';
 import { MaskDirective } from './mask.directive';
 import { MaskPipe } from './mask.pipe';
 import { ModuleWithProviders, NgModule } from '@angular/core';
-import { MaskService } from './mask.service';
 
 @NgModule({
-    providers: [MaskApplierService],
     exports: [MaskDirective, MaskPipe],
     declarations: [MaskDirective, MaskPipe],
 })
@@ -34,7 +32,7 @@ export class NgxMaskModule {
                     useFactory: _configFactory,
                     deps: [INITIAL_CONFIG, NEW_CONFIG],
                 },
-                MaskService,
+                MaskApplierService,
             ],
         };
     }
