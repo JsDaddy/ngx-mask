@@ -17,6 +17,7 @@ export class MaskApplierService {
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
+    public validation: IConfig['validation'];
 
     private _shift!: Set<number>;
 
@@ -30,6 +31,7 @@ export class MaskApplierService {
         this.sufix = this._config.sufix;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
+        this.validation = this._config.validation;
     }
     // tslint:disable-next-line:no-any
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
