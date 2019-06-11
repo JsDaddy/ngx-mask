@@ -66,10 +66,10 @@ export class MaskService extends MaskApplierService {
         this.actualValue = this.getActualValue(result);
 
         if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
-          this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
         if ('separator' === this.maskExpression && this.dropSpecialCharacters === true) {
-          this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
         }
         if (this.maskExpression.startsWith('dot_separator') && this.dropSpecialCharacters === true) {
             this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
@@ -178,8 +178,10 @@ export class MaskService extends MaskApplierService {
     }
 
     public clearIfNotMatchFn(): void {
-        if (this.clearIfNotMatch
-            && this.prefix.length + this.maskExpression.length + this.sufix.length !== this._formElement.value.length) {
+        if (
+            this.clearIfNotMatch &&
+            this.prefix.length + this.maskExpression.length + this.sufix.length !== this._formElement.value.length
+        ) {
             this.formElementProperty = ['value', ''];
             this.applyMask(this._formElement.value, this.maskExpression);
         }
@@ -254,17 +256,17 @@ export class MaskService extends MaskApplierService {
     }
     private _checkSymbols(result: string): string | number | undefined | null {
         if ('separator.2' === this.maskExpression && this.isNumberValue) {
-          // tslint:disable-next-line:max-line-length
-          return result === ''
-            ? result
-            : result === ','
-              ? null
-              : Number(
-                this._removeMask(
-                  this._removeSufix(this._removePrefix(result)),
-                  this.maskSpecialCharacters
-                ).replace(',', '.')
-              ).toFixed(2);
+            // tslint:disable-next-line:max-line-length
+            return result === ''
+                ? result
+                : result === ','
+                ? null
+                : Number(
+                      this._removeMask(
+                          this._removeSufix(this._removePrefix(result)),
+                          this.maskSpecialCharacters
+                      ).replace(',', '.')
+                  ).toFixed(2);
         }
         if ('dot_separator.2' === this.maskExpression && this.isNumberValue) {
             // tslint:disable-next-line:max-line-length

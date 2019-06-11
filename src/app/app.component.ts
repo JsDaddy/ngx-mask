@@ -80,9 +80,7 @@ export class AppComponent {
         this.percent = new FormControl('');
 
         this.customMaska = ['PPP-PPP-PPP', this.pattern];
-
     }
-
 }
 
 type pattern = {
