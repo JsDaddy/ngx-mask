@@ -1,6 +1,12 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
+export enum Separators {
+    SEPARATOR = 'separator',
+    COMMA_SEPARATOR = 'comma_separator',
+    DOT_SEPARATOR = 'dot_separator',
+}
+
 @Injectable()
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
@@ -13,7 +19,7 @@ export class MaskApplierService {
     public maskSpecialCharacters!: IConfig['specialCharacters'];
     public maskAvailablePatterns!: IConfig['patterns'];
     public prefix!: IConfig['prefix'];
-    public sufix!: IConfig['sufix'];
+    public suffix!: IConfig['suffix'];
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
@@ -28,7 +34,7 @@ export class MaskApplierService {
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
-        this.sufix = this._config.sufix;
+        this.suffix = this._config.suffix;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
         this.validation = this._config.validation;
@@ -73,12 +79,9 @@ export class MaskApplierService {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
         } else if (
-            maskExpression === 'separator' ||
-            maskExpression.startsWith('separator') ||
-            maskExpression === 'dot_separator' ||
-            maskExpression.startsWith('dot_separator') ||
-            maskExpression === 'comma_separator' ||
-            maskExpression.startsWith('comma_separator')
+            maskExpression.startsWith(Separators.SEPARATOR) ||
+            maskExpression.startsWith(Separators.DOT_SEPARATOR) ||
+            maskExpression.startsWith(Separators.COMMA_SEPARATOR)
         ) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
@@ -89,7 +92,7 @@ export class MaskApplierService {
             }
             const precision: number = this.getPrecision(maskExpression);
             let strForSep: string;
-            if (maskExpression.startsWith('separator')) {
+            if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (
                     inputValue.includes(',') &&
                     inputValue.endsWith(',') &&
@@ -98,7 +101,7 @@ export class MaskApplierService {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
             }
-            if (maskExpression.startsWith('dot_separator')) {
+            if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
                     inputValue.indexOf('.') !== -1 &&
                     inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
@@ -111,27 +114,27 @@ export class MaskApplierService {
                         ? inputValue.slice(1, inputValue.length)
                         : inputValue;
             }
-            if (maskExpression.startsWith('comma_separator')) {
+            if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
                         ? inputValue.slice(1, inputValue.length)
                         : inputValue;
             }
-            if (maskExpression === 'separator' || maskExpression.startsWith('separator')) {
+            if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
                 strForSep = inputValue.replace(/\s/g, '');
                 result = this.separator(strForSep, ' ', ',', precision);
-            } else if (maskExpression === 'dot_separator' || maskExpression.startsWith('dot_separator')) {
+            } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
-            } else if (maskExpression === 'comma_separator' || maskExpression.startsWith('comma_separator')) {
+            } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
                 strForSep = inputValue.replace(/,/g, '');
                 result = this.separator(strForSep, ',', '.', precision);
             }
@@ -321,7 +324,7 @@ export class MaskApplierService {
         if (shift < 0) {
             this._shift.clear();
         }
-        let res: string = this.sufix ? `${this.prefix}${result}${this.sufix}` : `${this.prefix}${result}`;
+        let res: string = this.suffix ? `${this.prefix}${result}${this.suffix}` : `${this.prefix}${result}`;
         if (result.length === 0) {
             res = `${this.prefix}${result}`;
         }

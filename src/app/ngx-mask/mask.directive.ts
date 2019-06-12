@@ -26,7 +26,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
     @Input() public patterns: IConfig['patterns'] = {};
     @Input() public prefix: IConfig['prefix'] = '';
-    @Input() public sufix: IConfig['sufix'] = '';
+    @Input() public suffix: IConfig['suffix'] = '';
     @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
     @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
     @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
@@ -58,7 +58,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             specialCharacters,
             patterns,
             prefix,
-            sufix,
+            suffix,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
@@ -86,8 +86,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (prefix) {
             this._maskService.prefix = prefix.currentValue;
         }
-        if (sufix) {
-            this._maskService.sufix = sufix.currentValue;
+        if (suffix) {
+            this._maskService.suffix = suffix.currentValue;
         }
         if (dropSpecialCharacters) {
             this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
@@ -119,7 +119,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return null;
         }
         if (this._maskService.ipError) {
-          return { 'Mask error': true };
+            return { 'Mask error': true };
         }
         if (this._maskValue.startsWith('dot_separator') || this._maskValue.startsWith('comma_separator')) {
             return null;
@@ -138,7 +138,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     this._maskService.maskAvailablePatterns[key].optional === true
                 ) {
                     if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
-                        const opt: string = this._maskValue.split('').filter((i: string) => i === key).join('');
+                        const opt: string = this._maskValue
+                            .split('')
+                            .filter((i: string) => i === key)
+                            .join('');
                         counterOfOpt += opt.length;
                     } else if (this._maskValue.indexOf(key) !== -1) {
                         counterOfOpt++;
@@ -243,8 +246,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 }
                 if (this._inputValue.match('[wа-яА-Я]') || this._inputValue.match('[a-z]|[A-Z]')) {
                     posStart;
-                    }
                 }
+            }
         el.value =
             !el.value || el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown

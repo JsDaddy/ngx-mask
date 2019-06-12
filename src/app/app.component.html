@@ -245,7 +245,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Percent valid mask" mask="percent.5" sufix="%" [formControl]="percent" >
+                    <input matInput placeholder="Percent valid mask" mask="percent.5" suffix="%" [formControl]="percent" >
                     <mat-hint><b>Mask:</b>percent</mat-hint>
                   </mat-form-field>
                 </div>
@@ -328,23 +328,23 @@
         <div class="mat-card-wr">
           <mat-card>
             <mat-card-header>
-              <mat-card-title>SUFIX</mat-card-title>
+              <mat-card-title>suffix</mat-card-title>
               <mat-card-subtitle>
-                You can add 'sufix' property
+                You can add 'suffix' property
               </mat-card-subtitle>
             </mat-card-header>
             <mat-card-content>
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Sum" mask='0000.00' sufix=" $" [formControl]="sufixForm" 
-                      [(ngModel)]="sufixModel">
+                    <input matInput placeholder="Sum" mask='0000.00' suffix=" $" [formControl]="suffixForm"
+                      [(ngModel)]="suffixModel">
                     <mat-hint><b>Mask: </b>0000.00</mat-hint>
                   </mat-form-field>
                 </div>
                 <div class="flex-cell">
-                  <p><b>FormControl:</b> {{ sufixForm.value ? sufixForm.value: 'Empty' }}</p>
-                  <p><b>NgModel:</b> {{ sufixModel ? sufixModel: 'Empty' }}</p>
+                  <p><b>FormControl:</b> {{ suffixForm.value ? suffixForm.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ suffixModel ? suffixModel: 'Empty' }}</p>
                 </div>
               </div>
             </mat-card-content>

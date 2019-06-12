@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 export interface IConfig {
-    sufix: string;
+    suffix: string;
     prefix: string;
     clearIfNotMatch: boolean;
     showTemplate: boolean;
@@ -26,7 +26,7 @@ export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('NEW_CONFI
 export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITIAL_CONFIG');
 
 export const initialConfig: IConfig = {
-    sufix: '',
+    suffix: '',
     prefix: '',
     clearIfNotMatch: false,
     showTemplate: false,

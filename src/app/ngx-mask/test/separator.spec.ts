@@ -5,7 +5,6 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { InputType } from 'zlib';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -52,13 +51,13 @@ describe('Separator: Mask', () => {
     });
 
     it('separator precision 2 for 1000000.00', () => {
-      component.mask = 'separator.2';
-      equal('1000000,00', '1 000 000,00', fixture);
+        component.mask = 'separator.2';
+        equal('1000000,00', '1 000 000,00', fixture);
     });
 
     it('separator precision 0 for 1000000.00', () => {
-      component.mask = 'separator.0';
-      equal('1000000,00', '1 000 000', fixture);
+        component.mask = 'separator.0';
+        equal('1000000,00', '1 000 000', fixture);
     });
 
     it('separator for letters', () => {
@@ -154,11 +153,10 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1.5000.000,00';
         inputTarget.selectionStart = 3;
         inputTarget.selectionEnd = 3;
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('15.000.000,00');
         expect(inputTarget.selectionStart).toEqual(3);
-
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask = 'comma_separator';
@@ -170,7 +168,7 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1,5000,000.000';
         inputTarget.selectionStart = 3;
         inputTarget.selectionEnd = 3;
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('15,000,000.000');
         expect(inputTarget.selectionStart).toEqual(3);
@@ -185,7 +183,7 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1.5000.000,000';
         inputTarget.selectionStart = 3;
         inputTarget.selectionEnd = 3;
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('15.000.000,000');
         expect(inputTarget.selectionStart).toEqual(3);
@@ -217,8 +215,8 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1.234.67';
         inputTarget.selectionStart = 6;
         inputTarget.selectionEnd = 6;
-        debugElement.triggerEventHandler('keydown', {code: 'Backspace', keyCode: 8, target: inputTarget});
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('123.467');
         expect(inputTarget.selectionStart).toEqual(5);
@@ -250,8 +248,8 @@ describe('Separator: Mask', () => {
         inputTarget.value = '1.234.67,00';
         inputTarget.selectionStart = 8;
         inputTarget.selectionEnd = 8;
-        debugElement.triggerEventHandler('keydown', {code: 'Backspace', keyCode: 8, target: inputTarget});
-        debugElement.triggerEventHandler('input', {target: inputTarget});
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('123.467,00');
         expect(inputTarget.selectionStart).toEqual(7);
