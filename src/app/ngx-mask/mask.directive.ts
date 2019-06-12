@@ -26,7 +26,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
     @Input() public patterns: IConfig['patterns'] = {};
     @Input() public prefix: IConfig['prefix'] = '';
-    @Input() public sufix: IConfig['sufix'] = '';
+    @Input() public suffix: IConfig['suffix'] = '';
     @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
     @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
     @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
@@ -58,7 +58,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             specialCharacters,
             patterns,
             prefix,
-            sufix,
+            suffix,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
@@ -86,8 +86,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (prefix) {
             this._maskService.prefix = prefix.currentValue;
         }
-        if (sufix) {
-            this._maskService.sufix = sufix.currentValue;
+        if (suffix) {
+            this._maskService.suffix = suffix.currentValue;
         }
         if (dropSpecialCharacters) {
             this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;

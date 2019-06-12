@@ -18,7 +18,7 @@ export class AppComponent {
     public cpfFormControl: FormControl;
     public clearIfNotMatch: FormControl;
     public numberOrStringForm: FormControl;
-    public sufixForm: FormControl;
+    public suffixForm: FormControl;
     public repeatForm: FormControl;
     public separatorForm: FormControl;
     public percent: FormControl;
@@ -38,7 +38,7 @@ export class AppComponent {
     public dateModel: SN = '';
     public showMaskModel: SN = '';
     public suf: string = '+7';
-    public sufixModel!: SN;
+    public suffixModel!: SN;
     public repeatFormModel!: SN;
     public separatorFormModel!: SN;
     public separatorPrecisionSeparatorFormModel!: SN;
@@ -66,7 +66,7 @@ export class AppComponent {
         this.cpfFormControl = new FormControl();
         this.clearIfNotMatch = new FormControl();
         this.numberOrStringForm = new FormControl();
-        this.sufixForm = new FormControl('');
+        this.suffixForm = new FormControl('');
         this.repeatForm = new FormControl('');
         this.separatorForm = new FormControl('');
         this.separatorPrecisionSeparatorForm = new FormControl('');

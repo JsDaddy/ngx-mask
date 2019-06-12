@@ -19,7 +19,7 @@ export class MaskApplierService {
     public maskSpecialCharacters!: IConfig['specialCharacters'];
     public maskAvailablePatterns!: IConfig['patterns'];
     public prefix!: IConfig['prefix'];
-    public sufix!: IConfig['sufix'];
+    public suffix!: IConfig['suffix'];
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
@@ -34,7 +34,7 @@ export class MaskApplierService {
         this.maskSpecialCharacters = this._config!.specialCharacters;
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
-        this.sufix = this._config.sufix;
+        this.suffix = this._config.suffix;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
         this.validation = this._config.validation;
@@ -324,7 +324,7 @@ export class MaskApplierService {
         if (shift < 0) {
             this._shift.clear();
         }
-        let res: string = this.sufix ? `${this.prefix}${result}${this.sufix}` : `${this.prefix}${result}`;
+        let res: string = this.suffix ? `${this.prefix}${result}${this.suffix}` : `${this.prefix}${result}`;
         if (result.length === 0) {
             res = `${this.prefix}${result}`;
         }

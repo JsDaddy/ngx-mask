@@ -20,7 +20,7 @@ describe('Directive: Mask', () => {
 
     it('should have a suffix', () => {
         component.mask = '00-000-000-00';
-        component.sufix = '$';
+        component.suffix = '$';
         equal('6', '6$', fixture);
     });
 });

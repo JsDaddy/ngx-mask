@@ -43,9 +43,9 @@ describe('Separator: Mask', () => {
         equal('99.99', '99.99', fixture);
     });
 
-    it('percent with sufix', () => {
+    it('percent with suffix', () => {
         component.mask = 'percent';
-        component.sufix = '%';
+        component.suffix = '%';
         equal('50', '50%', fixture);
         equal('123', '12%', fixture);
         equal('50.50', '50.50%', fixture);
