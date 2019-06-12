@@ -5,7 +5,6 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core/src/debug/debug_node';
-import { InputType } from 'zlib';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
