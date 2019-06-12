@@ -216,12 +216,12 @@ export class MaskService extends MaskApplierService {
     private formControlResult(inputValue: string): void {
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this._removeMask(this._removesuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
+                this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
             );
         } else if (this.dropSpecialCharacters) {
             this.onChange(this._checkSymbols(inputValue));
         } else {
-            this.onChange(this._removesuffix(this._removePrefix(inputValue)));
+            this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
         }
     }
 
@@ -236,7 +236,7 @@ export class MaskService extends MaskApplierService {
         return value ? value.replace(this.prefix, '') : value;
     }
 
-    private _removesuffix(value: string): string {
+    private _removeSuffix(value: string): string {
         if (!this.suffix) {
             return value;
         }
@@ -258,7 +258,7 @@ export class MaskService extends MaskApplierService {
                 ? null
                 : Number(
                       this._removeMask(
-                          this._removesuffix(this._removePrefix(result)),
+                          this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
                   );
@@ -272,7 +272,7 @@ export class MaskService extends MaskApplierService {
                 ? null
                 : Number(
                       this._removeMask(
-                          this._removesuffix(this._removePrefix(result)),
+                          this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
                   );
@@ -284,23 +284,23 @@ export class MaskService extends MaskApplierService {
                 ? result
                 : result === '.'
                 ? null
-                : Number(this._removeMask(this._removesuffix(this._removePrefix(result)), this.maskSpecialCharacters));
+                : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
         }
         if (this.isNumberValue) {
             return result === ''
                 ? result
-                : Number(this._removeMask(this._removesuffix(this._removePrefix(result)), this.maskSpecialCharacters));
+                : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
         } else if (
-            this._removeMask(this._removesuffix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(
+            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(
                 ','
             ) !== -1
         ) {
-            return this._removeMask(this._removesuffix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
+            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
                 ',',
                 '.'
             );
         } else {
-            return this._removeMask(this._removesuffix(this._removePrefix(result)), this.maskSpecialCharacters);
+            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
         }
     }
 
