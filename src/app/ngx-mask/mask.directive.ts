@@ -248,10 +248,16 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     posStart;
                 }
             }
-        el.value =
+        const nextValue: string | null =
             !el.value || el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
                 : el.value;
+
+        /** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
+        if (el.value !== nextValue) {
+            el.value = nextValue;
+        }
+
         /** fix of cursor position with prefix when mouse click occur */
         if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length) {
             el.selectionStart = this._maskService.prefix.length;
