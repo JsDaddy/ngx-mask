@@ -244,9 +244,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 }
-                if (this._inputValue.match('[wа-яА-Я]') || this._inputValue.match('[a-z]|[A-Z]')) {
-                    posStart;
-                }
             }
         const nextValue: string | null =
             !el.value || el.value === this._maskService.prefix
@@ -275,8 +272,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8) {
-            if (e.keyCode === 37) {
-                el.selectionStart = (el.selectionEnd as number) - 1;
+            // if (e.keyCode === 37) {
+            //     el.selectionStart = (el.selectionEnd as number) - 1;
+            // }
+            if (e.keyCode === 8 && el.value.length === 0) {
+                el.selectionStart = el.selectionEnd;
             }
             if (e.keyCode === 8 && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;

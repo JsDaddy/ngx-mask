@@ -368,7 +368,8 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Type number or string" mask="000.00"  [formControl]="numberOrStringForm"
+                    <input matInput placeholder="Type number or string" mask="000.00"  
+                     [formControl]="numberOrStringForm"
                       [(ngModel)]="numberOrStringFormModel">
                     <mat-hint><b>Mask: </b>000.00</mat-hint>
                   </mat-form-field>

@@ -85,6 +85,7 @@ export class MaskApplierService {
         ) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
+                inputValue.match('[ЁёА-я]') ||
                 inputValue.match('[a-z]|[A-Z]') ||
                 inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/)
             ) {
