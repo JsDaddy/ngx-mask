@@ -1,9 +1,23 @@
-import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
-import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
-import { MaskService } from './mask.service';
-import { IConfig, withoutValidation } from './config';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors
+  } from '@angular/forms';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
+import {
+  Directive,
+  forwardRef,
+  HostListener,
+  Inject,
+  Input,
+  OnChanges,
+  SimpleChanges
+  } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { IConfig, withoutValidation } from './config';
+import { MaskService } from './mask.service';
 
 @Directive({
     selector: '[mask]',
@@ -204,12 +218,13 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return;
         }
         this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-        el.selectionStart = el.selectionEnd =
-            this._position !== null
-                ? this._position
-                : position +
-                  // tslint:disable-next-line
-                  (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+
+        const positionToApply: number = this._position
+            ? this._inputValue.length + position + caretShift
+            : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+
+        el.setSelectionRange(positionToApply, positionToApply);
+
         this._position = null;
     }
 
