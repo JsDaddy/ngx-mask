@@ -170,12 +170,12 @@ pattern =  {
 <input type='text' prefix="+7 " mask="(000) 000 00 00" >
 ```
 
-### sufix (string)
-   You can add sufix to you masked value
+### suffix (string)
+   You can add suffix to you masked value
 ##### Usage
 
 ```html
-<input type='text' sufix=" $" mask="0000" >
+<input type='text' suffix=" $" mask="0000" >
 ```
 
 ### dropSpecialCharacters (boolean)
@@ -302,7 +302,7 @@ Masked value: 1,234
 ##### Usage
 
 ```html
- <input type='text' mask="percent" sufix="%">
+ <input type='text' mask="percent" suffix="%">
 ```
 
 ### FormControl validation
