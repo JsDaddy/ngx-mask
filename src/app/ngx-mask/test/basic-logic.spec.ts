@@ -3,6 +3,9 @@ import { NgxMaskModule } from '../ngx-mask.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { MaskDirective } from '..';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -234,5 +237,41 @@ describe('Directive: Mask', () => {
     it('should be bank card number', () => {
         component.mask = '0000-0000-0000-0000';
         equal('1234567890123456', '1234-5678-9012-3456', fixture);
+    });
+
+    it('sould apply mask on backspace for readonly inputs when all text is selected', () => {
+        component.mask = 'AAAAAA';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = 'abcdef';
+        inputTarget.readOnly = false;
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 6;
+
+        const directiveInstance: MaskDirective = debugElement.injector.get(MaskDirective);
+        spyOn(directiveInstance['_maskService'], 'applyMask');
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        expect(directiveInstance['_maskService'].applyMask).toHaveBeenCalled();
+    });
+
+    it('should not apply mask on backspace for readonly inputs when all text is selected', () => {
+        component.mask = 'AAAAAA';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = 'abcdef';
+        inputTarget.readOnly = true;
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 6;
+
+        const directiveInstance: MaskDirective = debugElement.injector.get(MaskDirective);
+        spyOn(directiveInstance['_maskService'], 'applyMask');
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        expect(directiveInstance['_maskService'].applyMask).not.toHaveBeenCalled();
     });
 });
