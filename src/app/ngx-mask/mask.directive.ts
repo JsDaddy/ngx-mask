@@ -1,20 +1,6 @@
-import {
-  ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
-  ValidationErrors
-  } from '@angular/forms';
+import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import {
-  Directive,
-  forwardRef,
-  HostListener,
-  Inject,
-  Input,
-  OnChanges,
-  SimpleChanges
-  } from '@angular/core';
+import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { IConfig, withoutValidation } from './config';
 import { MaskService } from './mask.service';
