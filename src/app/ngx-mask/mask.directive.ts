@@ -121,7 +121,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (this._maskService.ipError) {
             return { 'Mask error': true };
         }
-        if (this._maskValue.startsWith('dot_separator') || this._maskValue.startsWith('comma_separator')) {
+        if (
+            this._maskValue.startsWith('dot_separator') ||
+            this._maskValue.startsWith('comma_separator') ||
+            this._maskValue.startsWith('separator')
+        ) {
             return null;
         }
         if (withoutValidation.includes(this._maskValue)) {
@@ -208,8 +212,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             this._position !== null
                 ? this._position
                 : position +
-                // tslint:disable-next-line
-                (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+                  // tslint:disable-next-line
+                  (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
         this._position = null;
     }
 
@@ -289,8 +293,13 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             }
             const cursorStart: number | null = el.selectionStart;
             // this.onFocus(e);
-            if (e.keyCode === 8 && !el.readOnly &&
-                cursorStart === 0 && el.selectionEnd === el.value.length && el.value.length !== 0) {
+            if (
+                e.keyCode === 8 &&
+                !el.readOnly &&
+                cursorStart === 0 &&
+                el.selectionEnd === el.value.length &&
+                el.value.length !== 0
+            ) {
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 0;
                 this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position);
             }
@@ -313,11 +322,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
-            (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+        (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
             ? (this._maskService.formElementProperty = [
-                'value',
-                this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-            ])
+                  'value',
+                  this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+              ])
             : (this._maskService.formElementProperty = ['value', inputValue]);
         this._inputValue = inputValue;
     }
