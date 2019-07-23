@@ -106,7 +106,7 @@ export class MaskApplierService {
                 if (
                     inputValue.indexOf('.') !== -1 &&
                     inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
-                    inputValue.indexOf('.') > 3
+                    (inputValue.indexOf('.') > 3  || inputValue.length < 6)
                 ) {
                     inputValue = inputValue.replace('.', ',');
                 }
