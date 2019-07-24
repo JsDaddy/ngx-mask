@@ -31,6 +31,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
     @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
     @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
+    @Input() public shownMaskAutoPosition: IConfig['shownMaskAutoPosition'] | null = null;
     @Input() public showTemplate: IConfig['showTemplate'] | null = null;
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
     @Input() public validation: IConfig['validation'] | null = null;
@@ -227,8 +228,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        const posStart: number = 0;
-        const posEnd: number = 0;
+        let posStart: number = 0;
+        let posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -238,9 +239,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             (e as any).keyCode !== 38
         )
             if (this._maskService.showMaskTyped) {
-                // ) {
-                //     return;
-                // }
+                if (this.shownMaskAutoPosition) {
+                    const maskPosition: number = el && el.value ? el.value.indexOf('_') : 0;
+                    const selectionStart: number = el ? el.selectionStart : 0;
+                    const newPosition: number =
+                        maskPosition >= 0 && maskPosition < selectionStart ? maskPosition : selectionStart;
+                    posStart = newPosition;
+                    posEnd = newPosition;
+                }
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
                     el.focus();

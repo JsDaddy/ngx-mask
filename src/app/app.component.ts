@@ -13,6 +13,7 @@ export class AppComponent {
 
     public form: FormControl;
     public form1: FormControl;
+    public form2: FormControl;
     public formDate: FormControl;
     public cpfFormControl: FormControl;
     public clearIfNotMatch: FormControl;
@@ -36,6 +37,7 @@ export class AppComponent {
     public cpfModel: SN = '';
     public dateModel: SN = '';
     public showMaskModel: SN = '';
+    public showMaskModelWithAuto: SN = '';
     public suf: string = '+7';
     public suffixModel!: SN;
     public repeatFormModel!: SN;
@@ -60,6 +62,7 @@ export class AppComponent {
     public constructor() {
         this.form = new FormControl('');
         this.form1 = new FormControl('');
+        this.form2 = new FormControl('');
         this.formDate = new FormControl('');
         this.formSecureInput = new FormControl('');
         this.cpfFormControl = new FormControl();

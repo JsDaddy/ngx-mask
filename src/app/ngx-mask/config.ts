@@ -7,6 +7,7 @@ export interface IConfig {
     showTemplate: boolean;
     showMaskTyped: boolean;
     shownMaskExpression: string;
+    shownMaskAutoPosition: boolean;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
     hiddenInput: boolean | undefined;
@@ -34,6 +35,7 @@ export const initialConfig: IConfig = {
     dropSpecialCharacters: true,
     hiddenInput: undefined,
     shownMaskExpression: '',
+    shownMaskAutoPosition: false,
     validation: true,
     // tslint:disable-next-line: quotemark
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],

@@ -184,7 +184,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00" 
+                    <input matInput placeholder="CPF" [dropSpecialCharacters]="true" mask="000.000.000-00"
                       [formControl]="cpfFormControl" [(ngModel)]="cpfModel">
                     <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
                   </mat-form-field>
@@ -217,7 +217,7 @@
               <div class="flex-row">
                 <div class="flex-cell">
                   <mat-form-field>
-                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000 0*.00" 
+                    <input matInput placeholder="Clear if not match" [clearIfNotMatch]="true" mask="000.000 0*.00"
                       [formControl]="clearIfNotMatch" [(ngModel)]="clearIfNotMatchModel">
                     <mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
                   </mat-form-field>
@@ -328,6 +328,38 @@
         <div class="mat-card-wr">
           <mat-card>
             <mat-card-header>
+              <mat-card-title>Phone number with showed mask</mat-card-title>
+              <mat-card-subtitle>
+                You can add 'showMaskTyped' property to see maskExpression with underscores while typing and add
+                'shownMaskAutoPosition' property to set auto cursor position
+              </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="flex-row">
+                <div class="flex-cell-padding">
+                  <mat-form-field>
+                    <input matInput placeholder="Phone number" mask="(000) 000-0000" [formControl]="form2" prefix="+7"
+                           [(ngModel)]="showMaskModelWithAuto" [showMaskTyped]="true" [shownMaskAutoPosition]="true">
+                    <mat-hint><b>Mask: </b>+7 (000) 000 0000</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="flex-cell">
+                  <p><b>FormControl:</b> {{ form2.value ? form2.value: 'Empty' }}</p>
+                  <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel: 'Empty' }}</p>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="mat-card-wr">
+          <mat-card>
+            <mat-card-header>
               <mat-card-title>suffix</mat-card-title>
               <mat-card-subtitle>
                 You can add 'suffix' property
@@ -368,7 +400,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Type number or string" mask="000.00"  
+                    <input matInput placeholder="Type number or string" mask="000.00"
                      [formControl]="numberOrStringForm"
                       [(ngModel)]="numberOrStringFormModel">
                     <mat-hint><b>Mask: </b>000.00</mat-hint>
@@ -546,7 +578,7 @@
               <div class="flex-row">
                 <div class="flex-cell-padding">
                   <mat-form-field>
-                    <input matInput placeholder="Separator" mask="dot_separator.0" 
+                    <input matInput placeholder="Separator" mask="dot_separator.0"
                       [formControl]="dotZeroPrecisionSeparatorForm" [(ngModel)]="dotZeroPrecisionSeparatorFormModel">
                     <mat-hint><b>Mask: </b>dot_separator.0</mat-hint>
                   </mat-form-field>
