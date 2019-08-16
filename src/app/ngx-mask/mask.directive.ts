@@ -227,8 +227,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        const posStart: number = 0;
-        const posEnd: number = 0;
+        let posStart: number = 0;
+        let posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -238,16 +238,21 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             (e as any).keyCode !== 38
         )
             if (this._maskService.showMaskTyped) {
-                // ) {
-                //     return;
-                // }
+                // We are showing the mask in the input
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (el.setSelectionRange && this._maskService.prefix + this._maskService.maskIsShown === el.value) {
+                    // the input ONLY contains the mask, so position the cursor at the start
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
-                } else if (el.setSelectionRange && this._maskService.maskIsShown !== el.value) {
-                    el.focus();
-                    el.setSelectionRange(posStart, posEnd);
+                } else {
+                    // the input contains some characters already
+                    if (el.selectionStart > this._maskService.actualValue.length) {
+                        // if the user clicked beyond our value's length, position the cursor at the end of our value
+                        posStart = this._maskService.actualValue.length;
+                        posEnd = this._maskService.actualValue.length;
+                        el.focus();
+                        el.setSelectionRange(posStart, posEnd);
+                    }
                 }
             }
         const nextValue: string | null =
