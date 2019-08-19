@@ -59,7 +59,7 @@ export class MaskApplierService {
         let multi: boolean = false;
         let backspaceShift: boolean = false;
         let shift: number = 1;
-		let stepBack: boolean = false;
+        let stepBack: boolean = false;
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -306,9 +306,13 @@ export class MaskApplierService {
                 ) {
                     cursor += 3;
                     result += inputSymbol;
-                } else if (this.showMaskTyped && this.maskSpecialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== '_') {
-					stepBack = true;
-				}
+                } else if (
+                    this.showMaskTyped &&
+                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0
+                    && inputSymbol !== '_'
+                ) {
+                    stepBack = true;
+                }
             }
         }
         if (
@@ -324,9 +328,11 @@ export class MaskApplierService {
             shift++;
             newPosition++;
         }
-		
-		let actualShift: number = this._shift.has(position) ? shift : 0;
-		if(stepBack) actualShift--;
+
+        let actualShift: number = this._shift.has(position) ? shift : 0;
+        if (stepBack) {
+            actualShift--;
+        }
 
         cb(actualShift, backspaceShift);
         if (shift < 0) {
