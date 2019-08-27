@@ -101,6 +101,7 @@ export class MaskApplierService {
                 ) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
+                inputValue = inputValue.replace('.', ' ');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
