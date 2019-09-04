@@ -1,3 +1,9 @@
+<a name="8.0.3">
+
+# [8.0.3 cursor](2019-09-04)
+minor bug fixes
+
+
 <a name="7.9.9">
 
 # [7.9.9 cursor](2019-05-8)

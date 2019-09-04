@@ -31,7 +31,7 @@ export class AppComponent {
 
     public numberOrStringFormModel: SN = '';
     public clearIfNotMatchModel: SN = '';
-    public formModelDate: SN = '12345678';
+    public formModelDate: SN = '';
     public secureMask: SN = '';
     public cpfModel: SN = '';
     public dateModel: SN = '';
