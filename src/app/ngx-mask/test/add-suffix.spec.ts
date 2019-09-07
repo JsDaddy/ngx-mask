@@ -18,9 +18,9 @@ describe('Directive: Mask', () => {
         fixture.detectChanges();
     });
 
-    it('should have a prefix', () => {
+    it('should have a suffix', () => {
         component.mask = '00-000-000-00';
-        component.prefix = '+7 ';
-        equal('6', '+7 6', fixture);
+        component.suffix = '$';
+        equal('6', '6$', fixture);
     });
 });
