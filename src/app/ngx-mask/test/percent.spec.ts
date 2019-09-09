@@ -43,6 +43,11 @@ describe('Separator: Mask', () => {
         equal('99.99', '99.99', fixture);
     });
 
+    it('percent for 123.23', () => {
+        component.mask = 'percent';
+        equal('123.23', '12.23', fixture);
+    });
+
     it('percent with suffix', () => {
         component.mask = 'percent';
         component.suffix = '%';

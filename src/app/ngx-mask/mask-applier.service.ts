@@ -74,6 +74,10 @@ export class MaskApplierService {
                 const precision: number = this.getPrecision(maskExpression);
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
+            if (inputValue.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))) {
+                const base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
+                inputValue = `${base}${inputValue.substring(inputValue.indexOf('.'), inputValue.length)}`;
+            }
             if (this.percentage(inputValue)) {
                 result = inputValue;
             } else {
@@ -308,8 +312,8 @@ export class MaskApplierService {
                     result += inputSymbol;
                 } else if (
                     this.showMaskTyped &&
-                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0
-                    && inputSymbol !== '_'
+                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
+                    inputSymbol !== '_'
                 ) {
                     stepBack = true;
                 }
