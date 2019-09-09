@@ -254,12 +254,13 @@ export class MaskService extends MaskApplierService {
                 ? result
                 : result === ','
                 ? null
-                : Number(
+                : this._checkPrecision(
+                      this.maskExpression,
                       this._removeMask(
                           this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
-                  ).toFixed(2);
+                  );
         }
         separatorValue = this.testFn(Separators.DOT_SEPARATOR, this.maskExpression);
         if (separatorValue && this.isNumberValue) {
@@ -267,12 +268,13 @@ export class MaskService extends MaskApplierService {
                 ? result
                 : result === ','
                 ? null
-                : Number(
+                : this._checkPrecision(
+                      this.maskExpression,
                       this._removeMask(
                           this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
-                  ).toFixed(2);
+                  );
         }
         separatorValue = this.testFn(Separators.COMMA_SEPARATOR, this.maskExpression);
         if (separatorValue && this.isNumberValue) {
@@ -280,9 +282,10 @@ export class MaskService extends MaskApplierService {
                 ? result
                 : result === '.'
                 ? null
-                : Number(
+                : this._checkPrecision(
+                      this.maskExpression,
                       this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)
-                  ).toFixed(2);
+                  );
         }
         if (this.isNumberValue) {
             return result === ''
@@ -306,5 +309,12 @@ export class MaskService extends MaskApplierService {
     private testFn(baseSeparator: string, maskExpretion: string): number | null {
         const matcher: RegExpMatchArray | null = maskExpretion.match(new RegExp(`^${baseSeparator}\\.([^d]*)`));
         return matcher ? Number(matcher[1]) : null;
+    }
+
+    private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
+        if (separatorExpression.indexOf('2') > 0) {
+            return Number(separatorValue).toFixed(2);
+        }
+        return Number(separatorValue);
     }
 }
