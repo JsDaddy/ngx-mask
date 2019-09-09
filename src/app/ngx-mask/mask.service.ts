@@ -187,7 +187,6 @@ export class MaskService extends MaskApplierService {
         return chars.length;
     }
 
-    // tslint:disable-next-line: cyclomatic-complexity
     private _checkForIp(inputVal: string): string {
         if (inputVal === '#') {
             return '_._._._';
@@ -251,7 +250,6 @@ export class MaskService extends MaskApplierService {
         // TODO should simplify this code
         let separatorValue: number | null = this.testFn(Separators.SEPARATOR, this.maskExpression);
         if (separatorValue && this.isNumberValue) {
-            // tslint:disable-next-line:max-line-length
             return result === ''
                 ? result
                 : result === ','
@@ -261,11 +259,10 @@ export class MaskService extends MaskApplierService {
                           this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
-                  );
+                  ).toFixed(2);
         }
         separatorValue = this.testFn(Separators.DOT_SEPARATOR, this.maskExpression);
         if (separatorValue && this.isNumberValue) {
-            // tslint:disable-next-line:max-line-length
             return result === ''
                 ? result
                 : result === ','
@@ -275,16 +272,17 @@ export class MaskService extends MaskApplierService {
                           this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
                       ).replace(',', '.')
-                  );
+                  ).toFixed(2);
         }
         separatorValue = this.testFn(Separators.COMMA_SEPARATOR, this.maskExpression);
         if (separatorValue && this.isNumberValue) {
-            // tslint:disable-next-line:max-line-length
             return result === ''
                 ? result
                 : result === '.'
                 ? null
-                : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
+                : Number(
+                      this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)
+                  ).toFixed(2);
         }
         if (this.isNumberValue) {
             return result === ''
