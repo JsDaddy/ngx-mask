@@ -29,9 +29,9 @@
         "url": "https://github.com/NepipenkoIgor/ngx-mask.git"
     },
     "peerDependencies": {
-        "@angular/common": "6.0.0",
-        "@angular/core": "6.0.0",
-        "@angular/forms": "6.0.0"
+        "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+        "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
+        "@angular/forms": "^6.0.0 || ^7.0.0 || ^8.0.0"
     },
     "dependencies": {
         "@angular-devkit/core": "8.3.2",
