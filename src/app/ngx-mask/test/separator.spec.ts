@@ -60,6 +60,11 @@ describe('Separator: Mask', () => {
         equal('1000000,00', '1 000 000', fixture);
     });
 
+    it('comma_separator precision 2 with 0 after point for 1000000.00', () => {
+        component.mask = 'separator.2';
+        equal('1000000,20', '1 000 000,20', fixture);
+    });
+
     it('separator for letters', () => {
         component.mask = 'separator';
         equal('a', '', fixture);
@@ -78,6 +83,11 @@ describe('Separator: Mask', () => {
         equal('1000000,00', '1.000.000,00', fixture);
     });
 
+    it('dot_separator precision 2 with 0 after point for 1000000.00', () => {
+        component.mask = 'dot_separator.2';
+        equal('1000000,20', '1.000.000,20', fixture);
+    });
+
     it('dot_separator precision 0 for 1000000.00', () => {
         component.mask = 'dot_separator.0';
         equal('1000000,00', '1.000.000', fixture);
@@ -91,6 +101,11 @@ describe('Separator: Mask', () => {
     it('comma_separator precision 2 for 1000000.00', () => {
         component.mask = 'comma_separator.2';
         equal('1000000.00', '1,000,000.00', fixture);
+    });
+
+    it('comma_separator precision 2 with 0 after point for 1000000.00', () => {
+        component.mask = 'comma_separator.2';
+        equal('1000000.20', '1,000,000.20', fixture);
     });
 
     it('comma_separator precision 0 for 1000000.00', () => {
