@@ -312,11 +312,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
     }
 
-    @HostListener('paste')
-    public onPaste(): void {
-        this._position = Number.MAX_SAFE_INTEGER;
-    }
-
     /** It writes the value in the input */
     public async writeValue(inputValue: string | number): Promise<void> {
         if (inputValue === undefined) {
