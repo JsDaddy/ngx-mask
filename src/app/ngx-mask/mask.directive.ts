@@ -2,7 +2,7 @@ import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Va
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { IConfig, withoutValidation } from './config';
+import { config, IConfig, withoutValidation } from './config';
 import { MaskService } from './mask.service';
 
 @Directive({
@@ -48,7 +48,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     public constructor(
         // tslint:disable-next-line
         @Inject(DOCUMENT) private document: any,
-        private _maskService: MaskService
+        private _maskService: MaskService,
+        @Inject(config) protected _config: IConfig
     ) {}
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -208,13 +209,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             return;
         }
         this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-
         const positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
 
         el.setSelectionRange(positionToApply, positionToApply);
-
         this._position = null;
     }
 
@@ -276,8 +275,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     public a(e: CustomKeyboardEvent): void {
         this._code = e.code ? e.code : e.key;
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        this._maskService.selStart = el.selectionStart;
-        this._maskService.selEnd = el.selectionEnd;
+        this._inputValue = el.value;
         if (e.keyCode === 38) {
             e.preventDefault();
         }
@@ -288,8 +286,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             if (e.keyCode === 8 && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;
             }
-            if (e.keyCode === 8 && el.value.length === 0) {
-                el.selectionStart = el.selectionEnd;
+            if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
+                this.specialCharacters = this._config!.specialCharacters;
+                while (
+                    this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
+                ) {
+                    el.selectionStart = (el.selectionStart as number) - 1;
+                    el.selectionEnd = (el.selectionEnd as number) - 1;
+                }
             }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
@@ -310,6 +314,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position);
             }
         }
+        this._maskService.selStart = el.selectionStart;
+        this._maskService.selEnd = el.selectionEnd;
     }
 
     /** It writes the value in the input */

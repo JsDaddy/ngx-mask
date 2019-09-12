@@ -218,7 +218,7 @@ describe('Separator: Mask', () => {
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('123,467');
-        expect(inputTarget.selectionStart).toEqual(5);
+        expect(inputTarget.selectionStart).toEqual(4);
     });
     it('sould not shift cursor for backspce on in-between digits', () => {
         component.mask = 'dot_separator.0';
@@ -234,7 +234,7 @@ describe('Separator: Mask', () => {
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('123.467');
-        expect(inputTarget.selectionStart).toEqual(5);
+        expect(inputTarget.selectionStart).toEqual(4);
     });
 
     it('sould not shift cursor for backspce on in-between digits', () => {
@@ -284,7 +284,7 @@ describe('Separator: Mask', () => {
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
         expect(inputTarget.value).toBe('134');
-        expect(inputTarget.selectionStart).toEqual(1);
+        expect(inputTarget.selectionStart).toEqual(0);
     });
 
     // it('sould not shift cursor on backspce when result has no separator' , () => {
