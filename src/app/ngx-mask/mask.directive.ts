@@ -212,8 +212,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         const positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
-
         el.setSelectionRange(positionToApply, positionToApply);
+        if (this.maskExpression.includes('H') && caretShift === 0) {
+            el.selectionStart = (el.selectionStart as number) + 1;
+            el.selectionEnd = (el.selectionEnd as number) + 1;
+        }
         this._position = null;
     }
 

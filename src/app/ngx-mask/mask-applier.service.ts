@@ -220,6 +220,8 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'h') {
                         if (result === '2' && Number(inputSymbol) > 3) {
+                            cursor += 1;
+                            i--;
                             continue;
                         }
                     }
