@@ -281,7 +281,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         this._inputValue = el.value;
         if (e.keyCode === 38) {
             e.preventDefault();
-        }        
+        }
         if (e.keyCode === 37 || e.keyCode === 8) {
             // if (e.keyCode === 37) {
             //     el.selectionStart = (el.selectionEnd as number) - 1;
