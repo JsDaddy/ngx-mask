@@ -247,24 +247,19 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'd') {
-                        if (Number(inputSymbol) > 3) {
-                            cursor += 1;
-                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
-                                : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
-                            i--;
-                            continue;
-                        }
-                    }
+                    // if (maskExpression[cursor] === 'd') {
+                    //     if (Number(inputSymbol) > 3) {
+                    //         cursor += 1;
+                    //         const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                    //             ? inputArray.length
+                    //             : cursor;
+                    //         this._shift.add(shiftStep + this.prefix.length || 0);
+                    //         i--;
+                    //         continue;
+                    //     }
+                    // }
                     if (maskExpression[cursor - 1] === 'd') {
-                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31) {
-                            continue;
-                        }
-                    }
-                    if (maskExpression[cursor] === 'M') {
-                        if (Number(inputSymbol) > 1) {
+                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -274,8 +269,25 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    // if (maskExpression[cursor] === 'M') {
+                    //     if (Number(inputSymbol) > 1) {
+                    //         cursor += 1;
+                    //         const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                    //             ? inputArray.length
+                    //             : cursor;
+                    //         this._shift.add(shiftStep + this.prefix.length || 0);
+                    //         i--;
+                    //         continue;
+                    //     }
+                    // }
                     if (maskExpression[cursor - 1] === 'M') {
-                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12) {
+                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 || inputValue[cursor] === '/') {
+                            cursor += 1;
+                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
                             continue;
                         }
                     }

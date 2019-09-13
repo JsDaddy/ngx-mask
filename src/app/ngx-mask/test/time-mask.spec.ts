@@ -33,6 +33,11 @@ describe('Separator: Mask', () => {
         equal('03', '03', fixture);
     });
 
+    it('Hours', () => {
+        component.mask = 'Hh:m0:s0';
+        equal('730', '7:30', fixture);
+    });
+
     it('Minutes', () => {
         component.mask = 'Hh:m0:s0';
         equal('1212', '12:12', fixture);
@@ -42,4 +47,28 @@ describe('Separator: Mask', () => {
         component.mask = 'Hh:m0:s0';
         equal('1207', '12:07', fixture);
     });
+    it('Minutes', () => {
+        component.mask = 'Hh:m0:s0';
+        equal('127', '12:7', fixture);
+    });
+    it('Hours and minutes', () => {
+        component.mask = 'Hh:m0:s0';
+        equal('7712', '7:7:12', fixture);
+    });
+    it('Date', () => {
+        component.mask = 'd0/M0/0000';
+        equal('03021234', '03/02/1234', fixture);
+    });
+    // it('Date', () => {
+    //     component.mask = 'd0/M0/0000';
+    //     equal('321234', '3/2/1234', fixture);
+    // });
+    // it('Date ', () => {
+    //     component.mask = 'd0/M0/0000';
+    //     equal('41234', '4/12/1234', fixture);
+    // });
+    // it('Date ', () => {
+    //     component.mask = 'd0/M0/0000';
+    //     equal('413234', '4/1/3234', fixture);
+    // });
 });
