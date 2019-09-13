@@ -55,17 +55,13 @@ describe('Separator: Mask', () => {
         component.mask = 'Hh:m0:s0';
         equal('7712', '7:7:12', fixture);
     });
-    it('Date', () => {
-        component.mask = 'd0/M0/0000';
-        equal('03021234', '03/02/1234', fixture);
-    });
     // it('Date', () => {
     //     component.mask = 'd0/M0/0000';
     //     equal('321234', '3/2/1234', fixture);
     // });
     // it('Date ', () => {
     //     component.mask = 'd0/M0/0000';
-    //     equal('41234', '4/12/1234', fixture);
+    //     equal('4121234', '4/12/1234', fixture);
     // });
     // it('Date ', () => {
     //     component.mask = 'd0/M0/0000';
