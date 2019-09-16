@@ -213,9 +213,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
         el.setSelectionRange(positionToApply, positionToApply);
-        if ((this.maskExpression.includes('H') || this.maskExpression.includes('d')) && caretShift === 0) {
-            el.selectionStart = (el.selectionStart as number) + 1;
-            el.selectionEnd = (el.selectionEnd as number) + 1;
+        if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
+            el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);
         }
         this._position = null;
     }
@@ -294,8 +293,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 while (
                     this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
                 ) {
-                    el.selectionStart = (el.selectionStart as number) - 1;
-                    el.selectionEnd = (el.selectionEnd as number) - 1;
+                    el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                 }
             }
             if (

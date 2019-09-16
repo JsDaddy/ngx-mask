@@ -18,6 +18,7 @@ import { IConfig } from 'public_api';
             [showMaskTyped]="showMaskTyped"
             [hiddenInput]="hiddenInput"
             [(ngModel)]="ngModelValue"
+            [shownMaskExpression]="shownMaskExpression"
         />
     `,
 })
@@ -33,4 +34,5 @@ export class TestMaskComponent {
     public specialCharacters!: IConfig['specialCharacters'];
     public showMaskTyped: IConfig['showMaskTyped'] = false;
     public hiddenInput: IConfig['hiddenInput'] = false;
+    public shownMaskExpression: IConfig['shownMaskExpression'] = '';
 }

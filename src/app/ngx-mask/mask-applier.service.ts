@@ -248,7 +248,11 @@ export class MaskApplierService {
                         }
                     }
                     if (maskExpression[cursor - 1] === 'd') {
-                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
+                        if (
+                            Number(inputValue[cursor - 1]) > 3 ||
+                            Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 ||
+                            inputValue[cursor] === '/'
+                        ) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -258,8 +262,12 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor - 1] === 'M') {
-                        if (Number(inputValue.slice(cursor - 2, cursor)) > 12 || inputValue[cursor - 1] === '/') {
+                    if (maskExpression[cursor] === 'M') {
+                        if (
+                            Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
+                            inputValue[cursor] === '/' ||
+                            Number(inputValue[cursor]) > 1
+                        ) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
