@@ -228,8 +228,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        let posStart: number = 0;
-        let posEnd: number = 0;
+        const posStart: number = 0;
+        const posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -249,10 +249,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     // the input contains some characters already
                     if (el.selectionStart > this._maskService.actualValue.length) {
                         // if the user clicked beyond our value's length, position the cursor at the end of our value
-                        posStart = this._maskService.actualValue.length;
-                        posEnd = this._maskService.actualValue.length;
-                        el.focus();
-                        el.setSelectionRange(posStart, posEnd);
+                        el.setSelectionRange(
+                            this._maskService.actualValue.length,
+                            this._maskService.actualValue.length
+                        );
                     }
                 }
             }

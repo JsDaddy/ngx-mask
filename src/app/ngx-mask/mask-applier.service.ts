@@ -265,18 +265,21 @@ export class MaskApplierService {
                     if (maskExpression[cursor] === 'M') {
                         if (
                             Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
-                            inputValue[cursor] === '/' ||
-                            Number(inputValue[cursor]) > 1
+                            // (Number(inputValue[cursor]) > 1 )
+                            // ||
+                            (inputValue[cursor - 1] === '/' &&
+                                (Number(inputValue.slice(cursor, cursor + 2)) > 12 || inputValue[cursor + 1] === '/'))
                         ) {
-                            cursor += 1;
-                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
-                                : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
-                            i--;
+                                cursor += 1;
+                                const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                                    ? inputArray.length
+                                    : cursor;
+                                this._shift.add(shiftStep + this.prefix.length || 0);
+                                i--;
                             continue;
                         }
                     }
+
                     result += inputSymbol;
                     cursor++;
                 } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
