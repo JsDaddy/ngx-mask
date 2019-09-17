@@ -248,11 +248,7 @@ export class MaskApplierService {
                         }
                     }
                     if (maskExpression[cursor - 1] === 'd') {
-                        if (
-                            Number(inputValue[cursor - 1]) > 3 ||
-                            Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 ||
-                            inputValue[cursor] === '/'
-                        ) {
+                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
                                 ? inputArray.length
@@ -264,18 +260,19 @@ export class MaskApplierService {
                     }
                     if (maskExpression[cursor] === 'M') {
                         if (
-                            Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
-                            // (Number(inputValue[cursor]) > 1 )
-                            // ||
                             (inputValue[cursor - 1] === '/' &&
-                                (Number(inputValue.slice(cursor, cursor + 2)) > 12 || inputValue[cursor + 1] === '/'))
+                                (Number(inputValue.slice(cursor, cursor + 2)) > 12 ||
+                                    inputValue[cursor + 1] === '/')) ||
+                            (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
+                                Number(inputValue.slice(0, 2)) > 31 ||
+                                (Number(inputValue[cursor - 1]) > 1 && inputValue[cursor - 2] === '/'))
                         ) {
-                                cursor += 1;
-                                const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                    ? inputArray.length
-                                    : cursor;
-                                this._shift.add(shiftStep + this.prefix.length || 0);
-                                i--;
+                            cursor += 1;
+                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
                             continue;
                         }
                     }

@@ -55,10 +55,10 @@ describe('Separator: Mask', () => {
         component.mask = 'Hh:m0:s0';
         equal('7712', '7:7:12', fixture);
     });
-    // it('Date', () => {
-    //     component.mask = 'd0/M0/0000';
-    //     equal('321234', '3/2/1234', fixture);
-    // });
+    it('Date', () => {
+        component.mask = 'd0/M0/0000';
+        equal('321234', '3/2/1234', fixture);
+    });
     it('Date', () => {
         component.mask = 'd0/M0/0000';
         equal('3113123', '31/1/3123', fixture);
@@ -67,10 +67,6 @@ describe('Separator: Mask', () => {
         component.mask = 'd0/M0/0000';
         equal('413234', '4/1/3234', fixture);
     });
-    // it('Date ', () => {
-    //     component.mask = 'd0/M0/0000';
-    //     equal('4121234', '4/12/1234', fixture);
-    // });
     it('Date ', () => {
         component.mask = 'd0/M0/0000';
         equal('01011234', '01/01/1234', fixture);
@@ -87,4 +83,5 @@ describe('Separator: Mask', () => {
         component.mask = 'd0/M0/0000';
         equal('0314123', '03/1/4123', fixture);
     });
+
 });
