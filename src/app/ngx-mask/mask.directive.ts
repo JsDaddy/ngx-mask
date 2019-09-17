@@ -212,8 +212,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         const positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
-
         el.setSelectionRange(positionToApply, positionToApply);
+        if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
+            el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);
+        }
         this._position = null;
     }
 
@@ -226,8 +228,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @HostListener('click', ['$event'])
     public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        let posStart: number = 0;
-        let posEnd: number = 0;
+        const posStart: number = 0;
+        const posEnd: number = 0;
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -247,10 +249,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                     // the input contains some characters already
                     if (el.selectionStart > this._maskService.actualValue.length) {
                         // if the user clicked beyond our value's length, position the cursor at the end of our value
-                        posStart = this._maskService.actualValue.length;
-                        posEnd = this._maskService.actualValue.length;
-                        el.focus();
-                        el.setSelectionRange(posStart, posEnd);
+                        el.setSelectionRange(
+                            this._maskService.actualValue.length,
+                            this._maskService.actualValue.length
+                        );
                     }
                 }
             }
@@ -291,8 +293,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 while (
                     this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
                 ) {
-                    el.selectionStart = (el.selectionStart as number) - 1;
-                    el.selectionEnd = (el.selectionEnd as number) - 1;
+                    el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                 }
             }
             if (
