@@ -252,14 +252,14 @@ export class MaskService extends MaskApplierService {
         if (separatorValue && this.isNumberValue) {
             return result === ''
                 ? result
-                : result === ','
+                : result === '.'
                 ? null
                 : this._checkPrecision(
                       this.maskExpression,
                       this._removeMask(
                           this._removeSuffix(this._removePrefix(result)),
                           this.maskSpecialCharacters
-                      ).replace(',', '.')
+                      )
                   );
         }
         separatorValue = this.testFn(Separators.DOT_SEPARATOR, this.maskExpression);

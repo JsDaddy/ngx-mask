@@ -100,13 +100,13 @@ export class MaskApplierService {
             let strForSep: string;
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
                 if (
-                    inputValue.includes(',') &&
-                    inputValue.endsWith(',') &&
-                    inputValue.indexOf(',') !== inputValue.lastIndexOf(',')
+                    inputValue.includes('.') &&
+                    inputValue.endsWith('.') &&
+                    inputValue.indexOf('.') !== inputValue.lastIndexOf('.')
                 ) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
-                inputValue = inputValue.replace('.', ' ');
+                // inputValue = inputValue.replace('.', ',');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (
@@ -128,12 +128,12 @@ export class MaskApplierService {
                         : inputValue;
             }
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:.";<>?\/]/)) {
+                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:,";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
-                inputValue = this.checkInputPrecision(inputValue, precision, ',');
+                inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\s/g, '');
-                result = this.separator(strForSep, ' ', ',', precision);
+                result = this.separator(strForSep, ' ', '.', precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
@@ -387,6 +387,7 @@ export class MaskApplierService {
         if (x.length > 1) {
             return Number(x[x.length - 1]);
         }
+
         return Infinity;
     };
 
