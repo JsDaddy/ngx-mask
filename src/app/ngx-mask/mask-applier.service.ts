@@ -92,7 +92,8 @@ export class MaskApplierService {
                 inputValue.match('[wа-яА-Я]') ||
                 inputValue.match('[ЁёА-я]') ||
                 inputValue.match('[a-z]|[A-Z]') ||
-                inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/)
+                inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/) ||
+                inputValue.match('[^A-Za-z0-9_,]')
             ) {
                 inputValue = this._checkInput(inputValue);
             }
