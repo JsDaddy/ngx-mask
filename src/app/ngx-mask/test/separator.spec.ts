@@ -65,6 +65,14 @@ describe('Separator: Mask', () => {
         equal('1000000.20', '1 000 000.20', fixture);
     });
 
+    it('separator.2 with suffix', () => {
+        component.mask = 'separator.2';
+        component.suffix = '₽';
+        equal('50', '50₽', fixture);
+        equal('123 4', '1 234₽', fixture);
+        equal('50.50', '50.50₽', fixture);
+    });
+
     it('separator for letters', () => {
         component.mask = 'separator';
         equal('a', '', fixture);
