@@ -291,7 +291,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
                 this.specialCharacters = this._config!.specialCharacters;
                 while (
-                    this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
+                    (el.selectionStart as number) > 0 &&
+                        this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
                 ) {
                     el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                 }

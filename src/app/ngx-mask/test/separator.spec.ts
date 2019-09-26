@@ -295,6 +295,23 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(0);
     });
 
+    // it('not change dot with comma with backspce on last digits', () => {
+    //     component.mask = 'dot_separator';
+    //     const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+    //     const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+    //     spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+    //     fixture.detectChanges();
+
+    //     inputTarget.value = '1.234,';
+    //     inputTarget.selectionStart = 6;
+    //     inputTarget.selectionEnd = 6;
+    //     debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+    //     debugElement.triggerEventHandler('input', { target: inputTarget });
+
+    //     expect(inputTarget.value).toBe('123');
+    //     expect(inputTarget.selectionStart).toEqual(5);
+    // });
+
     // it('sould not shift cursor on backspce when result has no separator' , () => {
 
     // });
