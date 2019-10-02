@@ -76,12 +76,11 @@ export const initialConfig: IConfig = {
     },
 };
 
+export const timeMasks: string[] = ['Hh:m0:s0', 'Hh:m0', 'm0:s0'];
+
 export const withoutValidation: string[] = [
     'percent',
-    'Hh:m0:s0',
-    'Hh:m0',
     'Hh',
-    'm0:s0',
     's0',
     'm0',
     'separator',
