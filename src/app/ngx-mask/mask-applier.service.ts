@@ -110,13 +110,6 @@ export class MaskApplierService {
                 // inputValue = inputValue.replace('.', ',');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                if (
-                    inputValue.indexOf('.') !== -1 &&
-                    inputValue.indexOf('.') === inputValue.lastIndexOf('.') &&
-                    (inputValue.indexOf('.') > 3 || inputValue.length < 6)
-                ) {
-                    inputValue = inputValue.replace('.', ',');
-                }
                 inputValue =
                     inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
                         ? inputValue.slice(1, inputValue.length)
