@@ -2,7 +2,7 @@ import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Va
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { config, IConfig, withoutValidation } from './config';
+import { config, IConfig, timeMasks, withoutValidation } from './config';
 import { MaskService } from './mask.service';
 
 @Directive({
@@ -134,6 +134,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         if (this._maskService.clearIfNotMatch) {
             return null;
+        }
+        if (timeMasks.includes(this._maskValue)) {
+            return this._validateTime(value);
         }
         if (value && value.toString().length >= 1) {
             let counterOfOpt: number = 0;
@@ -379,5 +382,16 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             'value',
             this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
         ];
+    }
+
+    private _validateTime(value: string): ValidationErrors | null {
+        const rowMaskLen: number = this._maskValue.split('').filter((s: string) => s !== ':').length;
+        if (+value[value.length - 1] === 0 && value.length < rowMaskLen) {
+            return { 'Mask error': true };
+        }
+        if (value.length <= rowMaskLen - 2) {
+            return { 'Mask error': true };
+        }
+        return null;
     }
 }
