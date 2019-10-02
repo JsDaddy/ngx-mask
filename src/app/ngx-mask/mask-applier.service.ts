@@ -258,25 +258,11 @@ export class MaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor - 1] === 'd') {
-                        if (Number(inputValue.slice(cursor - 1, cursor + 1)) > 31 || inputValue[cursor] === '/') {
-                            cursor += 1;
-                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                                ? inputArray.length
-                                : cursor;
-                            this._shift.add(shiftStep + this.prefix.length || 0);
-                            i--;
-                            continue;
-                        }
-                    }
-                    if (maskExpression[cursor] === 'M') {
+                    const daysCount: number = 31;
+                    if (maskExpression[cursor] === 'd') {
                         if (
-                            (inputValue[cursor - 1] === '/' &&
-                                (Number(inputValue.slice(cursor, cursor + 2)) > 12 ||
-                                    inputValue[cursor + 1] === '/')) ||
-                            (Number(inputValue.slice(cursor - 1, cursor + 1)) > 12 ||
-                                Number(inputValue.slice(0, 2)) > 31 ||
-                                (Number(inputValue[cursor - 1]) > 1 && inputValue[cursor - 2] === '/'))
+                            Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
+                            inputValue[cursor + 1] === '/'
                         ) {
                             cursor += 1;
                             const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
@@ -287,7 +273,55 @@ export class MaskApplierService {
                             continue;
                         }
                     }
+                    if (maskExpression[cursor] === 'M') {
+                        const monthsCount: number = 12;
+                        // mask without day
+                        const withoutDays: boolean =
+                            cursor === 0 &&
+                            (Number(inputSymbol) > 2 ||
+                                Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
+                                inputValue[cursor + 1] === '/');
+                        // day<10 && month<12 for input
+                        const day1monthInput: boolean =
+                            inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            ((inputValue[cursor - 2] === '/' &&
+                                (Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
+                                    inputValue[cursor] !== '/')) ||
+                                inputValue[cursor] === '/' ||
+                                ((inputValue[cursor - 3] === '/' &&
+                                    (Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
+                                        inputValue[cursor - 1] !== '/')) ||
+                                    inputValue[cursor - 1] === '/'));
+                        // 10<day<31 && month<12 for input
+                        const day2monthInput: boolean =
+                            Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
+                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            inputValue[cursor - 1] === '/' &&
+                            (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
+                                inputValue[cursor + 1] === '/');
+                        // day<10 && month<12 for paste whole data
+                        const day1monthPaste: boolean =
+                            Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
+                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            (!inputValue.slice(cursor - 2, cursor).includes('/') &&
+                                Number(inputValue.slice(cursor - 2, cursor)) > monthsCount);
+                        // 10<day<31 && month<12 for paste whole data
+                        const day2monthPaste: boolean =
+                            Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
+                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            inputValue[cursor - 1] !== '/' &&
+                            Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount;
 
+                        if (withoutDays || day1monthInput || day2monthInput || day1monthPaste || day2monthPaste) {
+                            cursor += 1;
+                            const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
+                                ? inputArray.length
+                                : cursor;
+                            this._shift.add(shiftStep + this.prefix.length || 0);
+                            i--;
+                            continue;
+                        }
+                    }
                     result += inputSymbol;
                     cursor++;
                 } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
