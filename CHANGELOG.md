@@ -1,7 +1,7 @@
 <a name="8.0.7">
 
 # [8.0.7 update date and time](2019-10-02)
-Update date and time masks
+Update date and time masks [refs: #571, #567, #572, #564, #558, #573]
 
 <a name="8.0.4">
 
