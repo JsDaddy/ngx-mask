@@ -50,9 +50,26 @@ describe('Separator: Mask', () => {
         equal('1000000', '1 000 000', fixture);
     });
 
+    it('should limit separator to 1000', () => {
+        component.mask = 'separator';
+        component.separatorLimit = '1000';
+        equal('1000000', '1 000', fixture);
+    });
+
     it('separator precision 2 for 1000000.00', () => {
         component.mask = 'separator.2';
         equal('1000000.00', '1 000 000.00', fixture);
+    });
+
+    it('should limit separator with precision 2 to 10000', () => {
+        component.mask = 'separator.2';
+        component.separatorLimit = '10000';
+        equal('1000000.00', '10 000.00', fixture);
+    });
+    it('should limit separator with precision 2 to 10 000', () => {
+        component.mask = 'separator.2';
+        component.separatorLimit = '10 000';
+        equal('1000000.00', '10 000.00', fixture);
     });
 
     it('separator precision 0 for 1000000.00', () => {
@@ -84,6 +101,12 @@ describe('Separator: Mask', () => {
     it('dot_separator for 1000000', () => {
         component.mask = 'dot_separator';
         equal('1000000', '1.000.000', fixture);
+    });
+
+    it('should limit dot_separator to 100000', () => {
+        component.mask = 'dot_separator';
+        component.separatorLimit = '100000';
+        equal('1000000', '100.000', fixture);
     });
 
     it('dot_separator precision 2 for 1000000.00', () => {
@@ -294,24 +317,4 @@ describe('Separator: Mask', () => {
         expect(inputTarget.value).toBe('134');
         expect(inputTarget.selectionStart).toEqual(0);
     });
-
-    // it('sould not shift cursor on backspce when result has no separator' , () => {
-
-    // });
-    // it('should keep cursor on position 0 for backspce on first digit', () => {
-    //     component.mask = 'comma_separator.0';
-    //     const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
-    //     const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-    //     spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
-    //     fixture.detectChanges();
-
-    //     inputTarget.value = ',134';
-    //     inputTarget.selectionStart = 0;
-    //     inputTarget.selectionEnd = 0;
-    //     debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
-    //     debugElement.triggerEventHandler('input', { target: inputTarget });
-
-    //     expect(inputTarget.value).toBe('134');
-    //     expect(inputTarget.selectionStart).toEqual(0);
-    // });
 });

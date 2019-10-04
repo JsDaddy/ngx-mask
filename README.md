@@ -267,6 +267,15 @@ Masked value: 1.234
 Input value: 1234.56
 Masked value: 1,234
 ```
+```html
+ <input type='text' mask="dot_separator.2" separatorLimit="1000">
+```
+For limiting the number of digits before the decimal point you can set `separatorLimit` value to _10_, _100_, _1000_ etc.
+
+```
+Input value: 12345678,56
+Masked value: 1.234,56
+```
 
 ### Time validation
   You can validate your input as 24 hour format

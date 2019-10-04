@@ -11,6 +11,7 @@ export interface IConfig {
     specialCharacters: string[];
     hiddenInput: boolean | undefined;
     validation: boolean;
+    separatorLimit: string;
     patterns: {
         [character: string]: {
             pattern: RegExp;
@@ -34,6 +35,7 @@ export const initialConfig: IConfig = {
     dropSpecialCharacters: true,
     hiddenInput: undefined,
     shownMaskExpression: '',
+    separatorLimit: '',
     validation: true,
     // tslint:disable-next-line: quotemark
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
