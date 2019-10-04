@@ -327,6 +327,9 @@ export class MaskApplierService {
                     this.maskAvailablePatterns[maskExpression[cursor]] &&
                     this.maskAvailablePatterns[maskExpression[cursor]].optional
                 ) {
+                    if (!!inputArray[cursor] && maskExpression !== '099.099.099.099') {
+                        result += inputArray[cursor];
+                    }
                     cursor++;
                     i--;
                 } else if (
