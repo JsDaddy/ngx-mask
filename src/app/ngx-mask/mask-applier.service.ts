@@ -65,6 +65,12 @@ export class MaskApplierService {
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
+        if (
+            !!this.suffix &&
+            inputValue.endsWith(this.suffix)
+        ) {
+            inputValue = inputValue.slice(0, inputValue.length - this.suffix.length);
+        }
         const inputArray: string[] = inputValue.toString().split('');
         if (maskExpression === 'IP') {
             this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
@@ -122,29 +128,22 @@ export class MaskApplierService {
                         ? inputValue.slice(1, inputValue.length)
                         : inputValue;
             }
-            const suffixCurrency: string[] = ['₽', '€', '₴', '$', '£', '¥'];
-            let currencyExist: boolean = false;
-            suffixCurrency.forEach((val: string) => {
-                if (inputValue.includes(val)) {
-                    currencyExist = true;
-                }
-            });
             if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:,";<>?\/]/) || currencyExist) {
+                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:,";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
                 strForSep = inputValue.replace(/\s/g, '');
                 result = this.separator(strForSep, ' ', '.', precision);
             } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/) || currencyExist) {
+                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 inputValue = this.checkInputPrecision(inputValue, precision, ',');
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/) || currencyExist) {
+                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/) ) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 strForSep = inputValue.replace(/,/g, '');

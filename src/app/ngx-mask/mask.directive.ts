@@ -281,6 +281,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
     }
 
+    // tslint:disable-next-line: cyclomatic-complexity
     @HostListener('keydown', ['$event'])
     public a(e: CustomKeyboardEvent): void {
         this._code = e.code ? e.code : e.key;
@@ -305,6 +306,15 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                         el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                     }
                 }
+                if (
+                    this.suffix.length > 1 &&
+                    this._inputValue.length - this.suffix.length < (el.selectionStart as number)
+                ) {
+                    el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
+                }
+                if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
+                    el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+                }
             }
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
@@ -324,6 +334,13 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 this._position = this._maskService.prefix ? this._maskService.prefix.length : 0;
                 this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position);
             }
+        }
+        if (
+            !!this.suffix &&
+            this.suffix.length > 1 &&
+            this._inputValue.length - this.suffix.length < (el.selectionStart as number)
+        ) {
+            el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
         }
         this._maskService.selStart = el.selectionStart;
         this._maskService.selEnd = el.selectionEnd;
@@ -401,5 +418,5 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         return null;
     }
-// tslint:disable-next-line:max-file-line-count
+    // tslint:disable-next-line:max-file-line-count
 }

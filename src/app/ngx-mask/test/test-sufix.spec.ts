@@ -33,4 +33,12 @@ describe('Directive: Mask', () => {
         equal('12345', '12345 $', fixture);
         equal('12344.44', '12344.44 $', fixture);
     });
+
+    it('should work with suffix .com', () => {
+        component.mask = '0000';
+        component.suffix = '.com';
+        equal('', '', fixture);
+        equal('12', '12.com', fixture);
+        equal('12344', '1234.com', fixture);
+    });
 });
