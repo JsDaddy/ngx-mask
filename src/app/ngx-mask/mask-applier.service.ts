@@ -24,6 +24,7 @@ export class MaskApplierService {
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
     public validation: IConfig['validation'];
+    public separatorLimit: IConfig['separatorLimit'];
 
     private _shift!: Set<number>;
 
@@ -38,8 +39,9 @@ export class MaskApplierService {
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
         this.validation = this._config.validation;
+        this.separatorLimit = this._config.separatorLimit;
     }
-    // tslint:disable-next-line:no-any
+
     public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
         const [mask, customPattern] = maskAndPattern;
         this.customPattern = customPattern;
@@ -107,7 +109,6 @@ export class MaskApplierService {
                 ) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
-                // inputValue = inputValue.replace('.', ',');
             }
             if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
                 inputValue =
@@ -404,6 +405,9 @@ export class MaskApplierService {
         const x: string[] = str.split(decimalChar);
         const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
+        if (this.separatorLimit) {
+            res = res.slice(0, this.separatorLimit.length);
+        }
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
             res = res.replace(rgx, '$1' + char + '$2');
@@ -455,5 +459,5 @@ export class MaskApplierService {
             .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
             .join('');
     }
-    // tslint:disable-next-line: max-file-line-count
+    // tslint:disable-next-line:max-file-line-count
 }

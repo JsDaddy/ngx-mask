@@ -56,8 +56,8 @@
                                         <input
                                             matInput
                                             placeholder="Secure input"
-                                            [hiddenInput]="true"
-                                            mask="XXX/X0/0000"
+                                            separatorLimit="1000"
+                                            mask="separator"
                                             [(ngModel)]="secureMask"
                                             [formControl]="formSecureInput"
                                         />

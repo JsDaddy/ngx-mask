@@ -34,6 +34,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public showTemplate: IConfig['showTemplate'] | null = null;
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
     @Input() public validation: IConfig['validation'] | null = null;
+    @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
     private _maskValue!: string;
     private _inputValue!: string;
     private _position: number | null = null;
@@ -67,6 +68,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             showTemplate,
             clearIfNotMatch,
             validation,
+            separatorLimit,
         } = changes;
         if (maskExpression) {
             this._maskValue = changes.maskExpression.currentValue || '';
@@ -110,6 +112,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         if (validation) {
             this._maskService.validation = validation.currentValue;
+        }
+        if (separatorLimit) {
+            this._maskService.separatorLimit = separatorLimit.currentValue;
         }
         this._applyMask();
     }
@@ -396,4 +401,5 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         return null;
     }
+// tslint:disable-next-line:max-file-line-count
 }
