@@ -405,8 +405,9 @@ export class MaskApplierService {
         const x: string[] = str.split(decimalChar);
         const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
-        if (this.separatorLimit) {
-            res = res.slice(0, this.separatorLimit.length);
+        const separatorLimit: string = this.separatorLimit.replace(/\s/g, '');
+        if (separatorLimit && +separatorLimit) {
+            res = res.slice(0, separatorLimit.length);
         }
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
