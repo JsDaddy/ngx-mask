@@ -1,3 +1,7 @@
+<a name="8.0.8">
+
+# [8.0.7 bugfix](2019-10-04)
+bugs fix [refs: #579, #576, #561]
 <a name="8.0.7">
 
 # [8.0.7 update date and time](2019-10-02)
