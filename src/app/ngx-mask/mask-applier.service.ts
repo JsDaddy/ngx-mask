@@ -65,10 +65,7 @@ export class MaskApplierService {
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
-        if (
-            !!this.suffix &&
-            inputValue.endsWith(this.suffix)
-        ) {
+        if (!!this.suffix && inputValue.endsWith(this.suffix)) {
             inputValue = inputValue.slice(0, inputValue.length - this.suffix.length);
         }
         const inputArray: string[] = inputValue.toString().split('');
@@ -143,7 +140,7 @@ export class MaskApplierService {
                 strForSep = inputValue.replace(/\./g, '');
                 result = this.separator(strForSep, '.', ',', precision);
             } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/) ) {
+                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
                     inputValue = inputValue.substring(0, inputValue.length - 1);
                 }
                 strForSep = inputValue.replace(/,/g, '');

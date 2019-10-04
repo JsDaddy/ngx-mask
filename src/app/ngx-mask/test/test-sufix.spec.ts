@@ -3,6 +3,8 @@ import { NgxMaskModule } from '../ngx-mask.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -34,11 +36,55 @@ describe('Directive: Mask', () => {
         equal('12344.44', '12344.44 $', fixture);
     });
 
-    it('should work with suffix .com', () => {
+    it('should work correct with suffix .com', () => {
         component.mask = '0000';
         component.suffix = '.com';
         equal('', '', fixture);
         equal('12', '12.com', fixture);
         equal('12344', '1234.com', fixture);
+        equal('1234.co7m', '1234.com', fixture);
+        equal('123.co4m', '1234.com', fixture);
+    });
+
+    it('separator should work correct with suffix', () => {
+        component.mask = 'separator';
+        component.suffix = '$';
+        equal('', '', fixture);
+        equal('123', '123$', fixture);
+        equal('1234', '1 234$', fixture);
+    });
+    it('should not delete suffix', () => {
+        component.mask = '0000';
+        component.suffix = '$';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '5678$';
+        inputTarget.selectionStart = 5;
+        inputTarget.selectionEnd = 5;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('5678$');
+        expect(inputTarget.selectionStart).toEqual(4);
+    });
+    it('should not delete suffix', () => {
+        component.mask = 'A{5}';
+        component.suffix = '.com';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = 'qwert.com';
+        inputTarget.selectionStart = 10;
+        inputTarget.selectionEnd = 10;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('qwert.com');
+        expect(inputTarget.selectionStart).toEqual(5);
     });
 });
