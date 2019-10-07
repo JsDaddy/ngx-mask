@@ -290,7 +290,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (e.keyCode === 38) {
             e.preventDefault();
         }
-        if (e.keyCode === 37 || e.keyCode === 8) {
+        if (e.keyCode === 37 || e.keyCode === 8 || e.keyCode === 46) {
             // if (e.keyCode === 37) {
             //     el.selectionStart = (el.selectionEnd as number) - 1;
             // }
@@ -314,6 +314,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 }
                 if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
                     el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+                }
+            }
+            if (e.keyCode === 46 && this.suffix.length > 0) {
+                if (this._inputValue.length - this.suffix.length <= (el.selectionStart as number)) {
+                    el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
                 }
             }
             if (
