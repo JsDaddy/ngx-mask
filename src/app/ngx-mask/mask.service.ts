@@ -41,7 +41,7 @@ export class MaskService extends MaskApplierService {
         if (this.maskExpression === 'IP' && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || '#');
         }
-        if (!inputValue && this.showMaskTyped) {
+        if ((!inputValue && inputValue!=0) && this.showMaskTyped) {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
