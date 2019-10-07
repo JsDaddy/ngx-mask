@@ -171,14 +171,18 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 }
             }
             if (
-                this._maskValue.indexOf('*') === 1 ||
-                this._maskValue.indexOf('?') === 1 ||
-                this._maskValue.indexOf('{') === 1
+                this._maskValue.indexOf('{') === 1 &&
+                value.toString().length ===
+                    this._maskValue.length + Number(this._maskValue.split('{')[1].split('}')[0]) - 4
             ) {
+                return null;
+            }
+            if (this._maskValue.indexOf('*') === 1 || this._maskValue.indexOf('?') === 1) {
                 return null;
             } else if (
                 (this._maskValue.indexOf('*') > 1 && value.toString().length < this._maskValue.indexOf('*')) ||
-                (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?'))
+                (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?')) ||
+                this._maskValue.indexOf('{') === 1
             ) {
                 return { 'Mask error': true };
             }
@@ -301,9 +305,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
                 this.specialCharacters = this._config!.specialCharacters;
                 if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
                     while (
-                        this.specialCharacters.includes(
-                            this._inputValue[(el.selectionStart as number) - 1].toString()
-                        )
+                        this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
                     ) {
                         el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
                     }
