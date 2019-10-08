@@ -3,6 +3,8 @@ import { InjectionToken } from '@angular/core';
 export interface IConfig {
     suffix: string;
     prefix: string;
+    thousandSeparator: string;
+    decimalMarker: '.' | ',';
     clearIfNotMatch: boolean;
     showTemplate: boolean;
     showMaskTyped: boolean;
@@ -29,6 +31,8 @@ export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITI
 export const initialConfig: IConfig = {
     suffix: '',
     prefix: '',
+    thousandSeparator: ' ',
+    decimalMarker: '.',
     clearIfNotMatch: false,
     showTemplate: false,
     showMaskTyped: false,
@@ -86,8 +90,6 @@ export const withoutValidation: string[] = [
     's0',
     'm0',
     'separator',
-    'dot_separator',
-    'comma_separator',
     'd0/M0/0000',
     'd0/M0',
     'd0',

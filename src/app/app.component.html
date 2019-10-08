@@ -480,12 +480,13 @@
                                         <input
                                             matInput
                                             placeholder="Separator"
-                                            mask="dot_separator"
+                                            mask="separator"
+                                            thousandSeparator="."
                                             [dropSpecialCharacters]="true"
                                             [formControl]="dotSeparatorForm"
                                             [(ngModel)]="dotSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>dot_separator</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator  <b>thousandSeparator: </b>.</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">
@@ -502,11 +503,12 @@
                                         <input
                                             matInput
                                             placeholder="Separator"
-                                            mask="comma_separator"
+                                            mask="separator"
+                                            thousandSeparator=","
                                             [formControl]="commaSeparatorForm"
                                             [(ngModel)]="commaSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>comma_separator</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator  <b>thousandSeparator: </b>,</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">
@@ -578,11 +580,12 @@
                                             matInput
                                             placeholder="Separator"
                                             [dropSpecialCharacters]="true"
-                                            mask="dot_separator.2"
+                                            mask="separator.2"
+                                            thousandSeparator="."
                                             [formControl]="dotPrecisionSeparatorForm"
                                             [(ngModel)]="dotPrecisionSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>dot_separator.2</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator.2 <b>thousandSeparator: </b>.</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">
@@ -606,11 +609,12 @@
                                             placeholder="Separator"
                                             [dropSpecialCharacters]="true"
                                             [dropSpecialCharacters]="[',']"
-                                            mask="comma_separator.2"
+                                            mask="separator.2"
+                                            thousandSeparator=","
                                             [formControl]="commaPrecisionSeparatorForm"
                                             [(ngModel)]="commaPrecisionSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>comma_separator.2</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator.2  <b>thousandSeparator: </b>,</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">
@@ -671,11 +675,12 @@
                                         <input
                                             matInput
                                             placeholder="Separator"
-                                            mask="dot_separator.0"
+                                            mask="separator.0"
+                                            thousandSeparator="."
                                             [formControl]="dotZeroPrecisionSeparatorForm"
                                             [(ngModel)]="dotZeroPrecisionSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>dot_separator.0</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator.0 <b>thousandSeparator: </b>.</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">
@@ -703,11 +708,12 @@
                                         <input
                                             matInput
                                             placeholder="Separator"
-                                            mask="comma_separator.0"
+                                            mask="separator.0"
+                                            thousandSeparator=","
                                             [formControl]="commaZeroPrecisionSeparatorForm"
                                             [(ngModel)]="commaZeroPrecisionSeparatorFormModel"
                                         />
-                                        <mat-hint><b>Mask: </b>comma_separator.0</mat-hint>
+                                        <mat-hint><b>Mask: </b>separator.0  <b>thousandSeparator: </b>,</mat-hint>
                                     </mat-form-field>
                                 </div>
                                 <div class="flex-cell">

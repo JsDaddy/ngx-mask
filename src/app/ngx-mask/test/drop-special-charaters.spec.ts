@@ -45,8 +45,9 @@ describe('Directive: Mask', () => {
         expect(component.ngModelValue).toBe(123456);
     });
 
-    it('FormControl or NgModel should be filled without special characters', () => {
-        component.mask = 'comma_separator.4';
+    it('FormControl and NgModel should be filled without special characters', () => {
+        component.mask = 'separator.4';
+        component.thousandSeparator = ',';
         component.dropSpecialCharacters = true;
         component.form.setValue(2578.9812);
 

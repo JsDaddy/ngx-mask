@@ -1,7 +1,7 @@
 import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
-import { MaskApplierService, Separators } from './mask-applier.service';
+import { MaskApplierService } from './mask-applier.service';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
@@ -66,15 +66,16 @@ export class MaskService extends MaskApplierService {
         const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
         this.actualValue = this.getActualValue(result);
 
-        if (
-            (this.maskExpression.startsWith(Separators.SEPARATOR) ||
-                this.maskExpression.startsWith(Separators.DOT_SEPARATOR)) &&
-            this.dropSpecialCharacters === true
-        ) {
-            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== ',');
+        // handle some separator implications:
+        // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
+        if (this.thousandSeparator === '.' && this.decimalMarker === '.') {
+          this.decimalMarker = ',';
         }
-        if (this.maskExpression.startsWith(Separators.COMMA_SEPARATOR) && this.dropSpecialCharacters === true) {
-            this.maskSpecialCharacters = this.maskSpecialCharacters.filter((item: string) => item !== '.');
+
+        // b) remove decimal marker from list of special characters to mask
+        if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
+          this.maskSpecialCharacters = this.maskSpecialCharacters
+            .filter((item: string) => item !== this.decimalMarker);
         }
 
         this.formControlResult(result);
@@ -242,72 +243,43 @@ export class MaskService extends MaskApplierService {
         return value ? value.replace(this.suffix, '') : value;
     }
 
+    private _retrieveSeparatorValue(result: string): string {
+      return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
+    }
+
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'), 'gi');
     }
 
     private _checkSymbols(result: string): string | number | undefined | null {
-        // TODO should simplify this code
-        let separatorValue: number | null = this.testFn(Separators.SEPARATOR, this.maskExpression);
-        if (separatorValue && this.isNumberValue) {
-            return result === ''
-                ? result
-                : result === '.'
-                ? null
-                : this._checkPrecision(
-                      this.maskExpression,
-                      this._removeMask(
-                          this._removeSuffix(this._removePrefix(result)),
-                          this.maskSpecialCharacters
-                      )
-                  );
-        }
-        separatorValue = this.testFn(Separators.DOT_SEPARATOR, this.maskExpression);
-        if (separatorValue && this.isNumberValue) {
-            return result === ''
-                ? result
-                : result === ','
-                ? null
-                : this._checkPrecision(
-                      this.maskExpression,
-                      this._removeMask(
-                          this._removeSuffix(this._removePrefix(result)),
-                          this.maskSpecialCharacters
-                      ).replace(',', '.')
-                  );
-        }
-        separatorValue = this.testFn(Separators.COMMA_SEPARATOR, this.maskExpression);
-        if (separatorValue && this.isNumberValue) {
-            return result === ''
-                ? result
-                : result === '.'
-                ? null
-                : this._checkPrecision(
-                      this.maskExpression,
-                      this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters)
-                  );
-        }
-        if (this.isNumberValue) {
-            return result === ''
-                ? result
-                : Number(this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters));
-        } else if (
-            this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).indexOf(
-                ','
-            ) !== -1
-        ) {
-            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters).replace(
-                ',',
-                '.'
-            );
+      if (result === '') {
+        return result;
+      }
+
+      const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
+      let separatorValue: string = this._retrieveSeparatorValue(result);
+      if (this.decimalMarker !== '.') {
+        separatorValue = separatorValue.replace(this.decimalMarker, '.');
+      }
+
+      if (this.isNumberValue) {
+
+        if (separatorPrecision) {
+          if (result === this.decimalMarker) {
+            return null;
+          }
+          return this._checkPrecision(this.maskExpression, separatorValue);
         } else {
-            return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
+          return Number(separatorValue);
         }
+      } else {
+        return separatorValue;
+      }
     }
 
-    // TODO should think about helpers
-    private testFn(baseSeparator: string, maskExpretion: string): number | null {
-        const matcher: RegExpMatchArray | null = maskExpretion.match(new RegExp(`^${baseSeparator}\\.([^d]*)`));
+    // TODO should think about helpers or separting decimal precision to own property
+    private _retrieveSeparatorPrecision(maskExpretion: string): number | null {
+        const matcher: RegExpMatchArray | null = maskExpretion.match(new RegExp(`^separator\\.([^d]*)`));
         return matcher ? Number(matcher[1]) : null;
     }
 
