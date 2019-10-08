@@ -70,4 +70,43 @@ describe('Mask: Delete', () => {
         equal(inputTarget.value, '***/*5/6789', fixture);
         expect(inputTarget.selectionStart).toEqual(6);
     });
+    it('delete special character on 1 position', () => {
+        component.mask = '[00]';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '[12]';
+        inputTarget.selectionStart = 1;
+        inputTarget.selectionEnd = 1;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.selectionStart).toEqual(1);
+    });
+    it('delete suffix with backspace and delete', () => {
+        component.mask = 'A{5}';
+        component.suffix = '.com';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '123.com';
+        inputTarget.selectionStart = 4;
+        inputTarget.selectionEnd = 4;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 46, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.selectionStart).toEqual(3);
+
+        inputTarget.selectionStart = 4;
+        inputTarget.selectionEnd = 4;
+
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.selectionStart).toEqual(3);
+    });
 });
