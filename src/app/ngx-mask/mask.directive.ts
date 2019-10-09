@@ -37,7 +37,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
     @Input() public validation: IConfig['validation'] | null = null;
     @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
-    private _maskValue!: string;
+    private _maskValue: string = '';
     private _inputValue!: string;
     private _position: number | null = null;
     // tslint:disable-next-line
@@ -81,7 +81,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
                 return;
             } else {
-              this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
+                this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
             }
         }
         if (patterns) {
