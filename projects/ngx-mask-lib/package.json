@@ -1,0 +1,40 @@
+{
+  "name": "ngx-mask",
+  "version": "8.0.9",
+  "description": "awesome ngx mask",
+  "keywords": [
+    "ng2-mask",
+    "ngx-mask",
+    "ng2",
+    "angular-mask",
+    "mask",
+    "angular",
+    "angular2",
+    "angular2-mask",
+    "ng2mask",
+    "jsdaddy"
+  ],
+  "license": "MIT",
+  "author": "ngx-mask",
+  "contributors": [
+    "ngx-mask"
+  ],
+  "homepage": "https://github.com/JsDaddy/ngx-mask",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:JsDaddy/ngx-mask.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JsDaddy/ngx-mask/issues"
+  },
+  "main": "./bundles/ngx-mask.umd.js",
+  "module": "./esm5/ngx-mask.js",
+  "es2015": "./esm2015/ngx-mask.js",
+  "typings": "./ngx-mask.d.ts",
+  "peerDependencies": {
+    "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
+    "@angular/forms": "^6.0.0 || ^7.0.0 || ^8.0.0"
+  },
+  "dependencies": {}
+}

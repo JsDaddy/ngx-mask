@@ -16,52 +16,64 @@
     "ng2mask",
     "jsdaddy"
   ],
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "npm run precommit-msg && npm run lint && npm run test"
+    }
+  },
+  "private": true,
   "scripts": {
+    "build": "ng build showcase --prod",
+    "build:lib": "ng build --prod ngx-mask-lib",
+    "ci": "npm run lint && npm run build:lib && npm run test && npm run build",
+    "lint": "concurrently --kill-others-on-fail \"ng lint showcase\" \"ng lint ngx-mask-lib\"",
     "ng": "ng",
-    "start": "ng serve -o",
-    "test": "ng test",
-    "lint": "tslint './src/app/**/*.ts'",
-    "build:library": "ng-packagr -p package.json",
+    "precommit-msg": "echo 'Please wait while we do our pre-commit checks...' && exit 0",
+    "start": "ng serve -o showcase",
+    "test": "ng test ngx-mask-lib",
     "prettier": "prettier './src/**/*.ts' --write"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/NepipenkoIgor/ngx-mask.git"
   },
-  "peerDependencies": {
-    "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@angular/forms": "^6.0.0 || ^7.0.0 || ^8.0.0"
-  },
   "dependencies": {
-    "@angular-devkit/core": "8.3.6",
-    "@angular/animations": "8.2.8",
-    "@angular/common": "8.2.6",
-    "@angular/compiler": "8.2.8",
-    "@angular/core": "8.2.6",
-    "@angular/forms": "8.2.6",
-    "@angular/platform-browser": "8.2.8",
-    "@angular/platform-browser-dynamic": "8.2.8",
+    "@angular/animations": "8.2.9",
+    "@angular/cdk": "8.2.2",
+    "@angular/common": "8.2.9",
+    "@angular/compiler": "8.2.9",
+    "@angular/core": "8.2.9",
+    "@angular/forms": "8.2.9",
+    "@angular/platform-browser": "8.2.9",
+    "@angular/platform-browser-dynamic": "8.2.9",
+    "@angular/router": "8.2.9",
+    "bootstrap": "4.3.1",
     "core-js": "3.2.1",
+    "hammerjs": "2.0.8",
     "intl": "1.2.5",
     "npm-check-updates": "3.1.23",
-    "web-animations-js": "2.3.2",
+    "rxjs": "6.5.3",
     "zone.js": "0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "0.803.6",
-    "@angular/cdk": "8.2.2",
+    "@angular-devkit/build-angular": "~0.803.6",
+    "@angular-devkit/build-ng-packagr": "~0.803.6",
     "@angular/cli": "8.3.6",
-    "@angular/compiler-cli": "8.2.8",
+    "@angular/compiler-cli": "8.2.9",
+    "@angular/language-service": "^8.2.9",
     "@angular/material": "8.2.2",
+    "@commitlint/cli": "~8.2.0",
+    "@commitlint/config-conventional": "~8.2.0",
     "@types/highlight.js": "9.12.3",
     "@types/jasmine": "3.4.2",
     "@types/node": "12.7.9",
     "angular-cli-ghpages": "0.6.0",
-    "bootstrap": "4.3.1",
     "codelyzer": "5.1.2",
-    "hammerjs": "2.0.8",
+    "concurrently": "4.1.2",
+    "husky": "~3.0.8",
     "jasmine-core": "3.5.0",
+    "jasmine-expect": "~4.0.2",
     "jasmine-spec-reporter": "4.2.1",
     "karma": "4.3.0",
     "karma-chrome-launcher": "3.1.0",
@@ -69,23 +81,16 @@
     "karma-coverage-istanbul-reporter": "2.1.0",
     "karma-jasmine": "2.0.1",
     "karma-jasmine-html-reporter": "1.4.2",
+    "karma-mocha-reporter": "^2.2.5",
     "ng-packagr": "5.5.1",
     "node-sass": "^4.12.0",
     "pre-commit": "1.2.2",
     "prettier": "1.18.2",
     "puppeteer": "^1.20.0",
-    "rxjs": "6.5.3",
-    "sass-loader": "7.2.0",
-    "ts-helpers": "1.1.2",
     "ts-node": "8.4.1",
     "tsickle": "0.37.0",
+    "tslib": "^1.10.0",
     "tslint": "5.20.0",
-    "typescript": "3.5.3",
-    "webdriver-manager": "13.0.0"
-  },
-  "pre-commit": [
-    "lint",
-    "test"
-  ],
-  "ngPackage": true
+    "typescript": "3.5.3"
+  }
 }
