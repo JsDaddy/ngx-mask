@@ -29,7 +29,9 @@
     "ci": "npm run lint && npm run build:lib && npm run test && npm run build",
     "lint": "concurrently --kill-others-on-fail \"ng lint showcase\" \"ng lint ngx-mask-lib\"",
     "ng": "ng",
+    "pack:lib": "cd dist/ngx-mask-lib && npm pack",
     "precommit-msg": "echo 'Please wait while we do our pre-commit checks...' && exit 0",
+    "publish:lib": "cd dist/ngx-mask-lib && npm publish",
     "start": "ng serve -o showcase",
     "test": "ng test ngx-mask-lib",
     "prettier": "prettier './src/**/*.ts' --write"
