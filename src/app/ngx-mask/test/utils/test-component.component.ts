@@ -14,6 +14,8 @@ import { IConfig } from 'public_api';
             [patterns]="patterns"
             [suffix]="suffix"
             [prefix]="prefix"
+            [thousandSeparator]="thousandSeparator"
+            [decimalMarker]="decimalMarker"
             [formControl]="form"
             [showMaskTyped]="showMaskTyped"
             [separatorLimit]="separatorLimit"
@@ -30,6 +32,8 @@ export class TestMaskComponent {
     public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
     public patterns!: IConfig['patterns'];
     public prefix: IConfig['prefix'] = '';
+    public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+    public decimalMarker: IConfig['decimalMarker'] = ',';
     public suffix: IConfig['suffix'] = '';
     public specialCharacters!: IConfig['specialCharacters'];
     public showMaskTyped: IConfig['showMaskTyped'] = false;

@@ -77,7 +77,7 @@ describe('Separator: Mask', () => {
         equal('1000000.00', '1 000 000', fixture);
     });
 
-    it('comma_separator precision 2 with 0 after point for 1000000.00', () => {
+    it('separator precision 2 with 0 after point for 1000000.00', () => {
         component.mask = 'separator.2';
         equal('1000000.20', '1 000 000.20', fixture);
     });
@@ -98,54 +98,88 @@ describe('Separator: Mask', () => {
         equal('1000/', '1 000', fixture);
     });
 
-    it('dot_separator for 1000000', () => {
-        component.mask = 'dot_separator';
+    it('separator thousandSeparator . for 1000000', () => {
+        component.mask = 'separator';
+        component.thousandSeparator = '.';
         equal('1000000', '1.000.000', fixture);
     });
 
-    it('should limit dot_separator to 100000', () => {
-        component.mask = 'dot_separator';
+    it('should limit separator thousandSeparator . to 100000', () => {
+        component.mask = 'separator';
+        component.thousandSeparator = '.';
         component.separatorLimit = '100000';
         equal('1000000', '100.000', fixture);
     });
 
-    it('dot_separator precision 2 for 1000000.00', () => {
-        component.mask = 'dot_separator.2';
+    it('separator thousandSeparator . precision 2 for 1000000.00', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
         equal('1000000,00', '1.000.000,00', fixture);
     });
 
-    it('dot_separator precision 2 with 0 after point for 1000000.00', () => {
-        component.mask = 'dot_separator.2';
+    it('separator thousandSeparator . precision 2 with 0 after point for 1000000.00', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
         equal('1000000,20', '1.000.000,20', fixture);
     });
 
-    it('dot_separator precision 0 for 1000000.00', () => {
-        component.mask = 'dot_separator.0';
+    it('separator thousandSeparator . precision 0 for 1000000.00', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = '.';
         equal('1000000,00', '1.000.000', fixture);
     });
 
-    it('comma_separator for 1000000', () => {
-        component.mask = 'comma_separator';
+    it('separator thousandSeparator , for 1000000', () => {
+        component.mask = 'separator';
+        component.thousandSeparator = ',';
         equal('1000000', '1,000,000', fixture);
     });
 
-    it('comma_separator precision 2 for 1000000.00', () => {
-        component.mask = 'comma_separator.2';
+    it('separator thousandSeparator , precision 2 for 1000000.00', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
         equal('1000000.00', '1,000,000.00', fixture);
     });
 
-    it('comma_separator precision 2 with 0 after point for 1000000.00', () => {
-        component.mask = 'comma_separator.2';
+    it('separator thousandSeparator , precision 2 with 0 after point for 1000000.00', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
         equal('1000000.20', '1,000,000.20', fixture);
     });
 
-    it('comma_separator precision 0 for 1000000.00', () => {
-        component.mask = 'comma_separator.0';
+    it('separator thousandSeparator , precision 0 for 1000000.00', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = ',';
         equal('1000000.00', '1,000,000', fixture);
     });
 
-    it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'comma_separator.0';
+  it('separator thousandSeparator \' for 1000000', () => {
+    component.mask = 'separator';
+    component.thousandSeparator = '\'';
+    equal('1000000', '1\'000\'000', fixture);
+  });
+
+  it('separator thousandSeparator \' precision 2 for 1000000.00', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = '\'';
+    equal('1000000.00', '1\'000\'000.00', fixture);
+  });
+
+  it('separator thousandSeparator \' precision 2 with 0 after point for 1000000.00', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = '\'';
+    equal('1000000.20', '1\'000\'000.20', fixture);
+  });
+
+  it('separator thousandSeparator \' precision 0 for 1000000.00', () => {
+    component.mask = 'separator.0';
+    component.thousandSeparator = '\'';
+    equal('1000000.00', '1\'000\'000', fixture);
+  });
+
+  it('should not shift cursor for input in-between digits', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -160,7 +194,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'dot_separator.0';
+        component.mask = 'separator.0';
+        component.thousandSeparator = '.';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -175,7 +210,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'comma_separator.2';
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -190,7 +226,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'dot_separator.2';
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -205,7 +242,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'comma_separator';
+        component.mask = 'separator';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -220,7 +258,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'dot_separator';
+        component.mask = 'separator';
+        component.thousandSeparator = '.';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -235,8 +274,9 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
 
-    it('sould not shift cursor for backspce on in-between digits', () => {
-        component.mask = 'comma_separator.0';
+    it('should not shift cursor for backspace on in-between digits', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -251,8 +291,9 @@ describe('Separator: Mask', () => {
         expect(inputTarget.value).toBe('123,467');
         expect(inputTarget.selectionStart).toEqual(4);
     });
-    it('sould not shift cursor for backspce on in-between digits', () => {
-        component.mask = 'dot_separator.0';
+    it('should not shift cursor for backspace on in-between digits', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = '.';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -268,8 +309,9 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(4);
     });
 
-    it('sould not shift cursor for backspce on in-between digits', () => {
-        component.mask = 'comma_separator.2';
+    it('should not shift cursor for backspace on in-between digits', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -284,8 +326,9 @@ describe('Separator: Mask', () => {
         expect(inputTarget.value).toBe('123,467.00');
         expect(inputTarget.selectionStart).toEqual(7);
     });
-    it('sould not shift cursor for backspce on in-between digits', () => {
-        component.mask = 'dot_separator.2';
+    it('should not shift cursor for backspace on in-between digits', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -301,8 +344,9 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(7);
     });
 
-    it('sould not shift cursor on backspce when result has no separator', () => {
-        component.mask = 'comma_separator.0';
+    it('should not shift cursor on backspace when result has no separator', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = ',';
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);

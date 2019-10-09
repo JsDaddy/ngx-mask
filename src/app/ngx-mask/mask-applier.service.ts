@@ -1,12 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
-export enum Separators {
-    SEPARATOR = 'separator',
-    COMMA_SEPARATOR = 'comma_separator',
-    DOT_SEPARATOR = 'dot_separator',
-}
-
 @Injectable()
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
@@ -20,6 +14,8 @@ export class MaskApplierService {
     public maskAvailablePatterns!: IConfig['patterns'];
     public prefix!: IConfig['prefix'];
     public suffix!: IConfig['suffix'];
+    public thousandSeparator!: IConfig['thousandSeparator'];
+    public decimalMarker!: IConfig['decimalMarker'];
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
@@ -36,6 +32,8 @@ export class MaskApplierService {
         this.maskAvailablePatterns = this._config.patterns;
         this.prefix = this._config.prefix;
         this.suffix = this._config.suffix;
+        this.thousandSeparator = this._config.thousandSeparator;
+        this.decimalMarker = this._config.decimalMarker;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
         this.validation = this._config.validation;
@@ -75,7 +73,7 @@ export class MaskApplierService {
         }
         if (maskExpression.startsWith('percent')) {
             if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
-                inputValue = this._checkInput(inputValue);
+                inputValue = this._stripToDecimal(inputValue);
                 const precision: number = this.getPrecision(maskExpression);
                 inputValue = this.checkInputPrecision(inputValue, precision, '.');
             }
@@ -88,11 +86,7 @@ export class MaskApplierService {
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
-        } else if (
-            maskExpression.startsWith(Separators.SEPARATOR) ||
-            maskExpression.startsWith(Separators.DOT_SEPARATOR) ||
-            maskExpression.startsWith(Separators.COMMA_SEPARATOR)
-        ) {
+        } else if (maskExpression.startsWith('separator')) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
                 inputValue.match('[ЁёА-я]') ||
@@ -100,52 +94,33 @@ export class MaskApplierService {
                 inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\[\]:";<>.?\/]/) ||
                 inputValue.match('[^A-Za-z0-9,]')
             ) {
-                inputValue = this._checkInput(inputValue);
+                inputValue = this._stripToDecimal(inputValue);
             }
+
+            inputValue = inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== this.decimalMarker
+              ? inputValue.slice(1, inputValue.length)
+              : inputValue;
+
+            // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
+            //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK
+
+            const thousandSeperatorCharEscaped: string = this._charToRegExpExpression(this.thousandSeparator);
+            const decimalMarkerEscaped: string = this._charToRegExpExpression(this.decimalMarker);
+            const invalidChars: string = '@#!$%^&*()_+|~=`{}\\[\\]:\\s,";<>?\\/'
+              .replace(thousandSeperatorCharEscaped, '')
+              .replace(decimalMarkerEscaped, '');
+
+            const invalidCharRegexp: RegExp = new RegExp('[' + invalidChars + ']');
+
+            if (inputValue.match(invalidCharRegexp)) {
+              inputValue = inputValue.substring(0, inputValue.length - 1);
+            }
+
             const precision: number = this.getPrecision(maskExpression);
-            let strForSep: string;
-            if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (
-                    inputValue.includes('.') &&
-                    inputValue.endsWith('.') &&
-                    inputValue.indexOf('.') !== inputValue.lastIndexOf('.')
-                ) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
-                }
-            }
-            if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                inputValue =
-                    inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== ','
-                        ? inputValue.slice(1, inputValue.length)
-                        : inputValue;
-            }
-            if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                inputValue =
-                    inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== '.'
-                        ? inputValue.slice(1, inputValue.length)
-                        : inputValue;
-            }
-            if (maskExpression.startsWith(Separators.SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:,";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
-                }
-                inputValue = this.checkInputPrecision(inputValue, precision, '.');
-                strForSep = inputValue.replace(/\s/g, '');
-                result = this.separator(strForSep, ' ', '.', precision);
-            } else if (maskExpression.startsWith(Separators.DOT_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
-                }
-                inputValue = this.checkInputPrecision(inputValue, precision, ',');
-                strForSep = inputValue.replace(/\./g, '');
-                result = this.separator(strForSep, '.', ',', precision);
-            } else if (maskExpression.startsWith(Separators.COMMA_SEPARATOR)) {
-                if (inputValue.match(/[@#!$%^&*()_+|~=`{}\[\]:\s";<>?\/]/)) {
-                    inputValue = inputValue.substring(0, inputValue.length - 1);
-                }
-                strForSep = inputValue.replace(/,/g, '');
-                result = this.separator(strForSep, ',', '.', precision);
-            }
+            inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
+            const strForSep: string = inputValue.replace(new RegExp(thousandSeperatorCharEscaped, 'g'), '');
+            result = this._formatWithSeparators(strForSep, this.thousandSeparator, this.decimalMarker, precision);
+
 
             const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
             const shiftStep: number = result.length - inputValue.length;
@@ -380,7 +355,7 @@ export class MaskApplierService {
         if (shift < 0) {
             this._shift.clear();
         }
-        let res: string = this.suffix ? `${this.prefix}${result}${this.suffix}` : `${this.prefix}${result}`;
+        let res: string = `${this.prefix}${result}${this.suffix}`;
         if (result.length === 0) {
             res = `${this.prefix}${result}`;
         }
@@ -399,8 +374,8 @@ export class MaskApplierService {
         );
     }
 
-    private separator = (str: string, char: string, decimalChar: string, precision: number) => {
-        str += '';
+    private _formatWithSeparators = (str: string, thousandSeparatorChar: string, decimalChar: string,
+                                     precision: number) => {
         const x: string[] = str.split(decimalChar);
         const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
         let res: string = x[0];
@@ -410,7 +385,7 @@ export class MaskApplierService {
         }
         const rgx: RegExp = /(\d+)(\d{3})/;
         while (rgx.test(res)) {
-            res = res.replace(rgx, '$1' + char + '$2');
+            res = res.replace(rgx, '$1' + thousandSeparatorChar + '$2');
         }
         if (precision === undefined) {
             return res + decimals;
@@ -433,15 +408,11 @@ export class MaskApplierService {
         return Infinity;
     };
 
-    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: string): string => {
+    private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: IConfig['decimalMarker'])
+      : string => {
         if (precision < Infinity) {
-            let precisionRegEx: RegExp;
-
-            if (decimalMarker === '.') {
-                precisionRegEx = new RegExp(`\\.\\d{${precision}}.*$`);
-            } else {
-                precisionRegEx = new RegExp(`,\\d{${precision}}.*$`);
-            }
+            const precisionRegEx: RegExp
+              = new RegExp(this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`);
 
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
             if (precisionMatch && precisionMatch[0].length - 1 > precision) {
@@ -453,11 +424,18 @@ export class MaskApplierService {
         return inputValue;
     };
 
-    private _checkInput(str: string): string {
+    private _stripToDecimal(str: string): string {
         return str
             .split('')
             .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
             .join('');
+    }
+
+    private _charToRegExpExpression(char: string): string {
+      const charsToEscape: string = '[\\^$.|?*+()';
+      return char === ' ' ? '\\s'
+        : charsToEscape.indexOf(char) >= 0 ? '\\' + char
+        : char;
     }
     // tslint:disable-next-line:max-file-line-count
 }

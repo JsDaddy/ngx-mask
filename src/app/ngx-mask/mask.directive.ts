@@ -27,6 +27,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public patterns: IConfig['patterns'] = {};
     @Input() public prefix: IConfig['prefix'] = '';
     @Input() public suffix: IConfig['suffix'] = '';
+    @Input() public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+    @Input() public decimalMarker: IConfig['decimalMarker'] = '.';
     @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
     @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
     @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
@@ -61,6 +63,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             patterns,
             prefix,
             suffix,
+            thousandSeparator,
+            decimalMarker,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
@@ -74,14 +78,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             this._maskValue = changes.maskExpression.currentValue || '';
         }
         if (specialCharacters) {
-            if (
-                !specialCharacters.currentValue ||
-                !Array.isArray(specialCharacters.currentValue) ||
-                (Array.isArray(specialCharacters.currentValue) && !specialCharacters.currentValue.length)
-            ) {
+            if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
                 return;
+            } else {
+              this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
             }
-            this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
         }
         if (patterns) {
             this._maskService.maskAvailablePatterns = patterns.currentValue;
@@ -91,6 +92,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         if (suffix) {
             this._maskService.suffix = suffix.currentValue;
+        }
+        if (thousandSeparator) {
+            this._maskService.thousandSeparator = thousandSeparator.currentValue;
+        }
+        if (decimalMarker) {
+            this._maskService.decimalMarker = decimalMarker.currentValue;
         }
         if (dropSpecialCharacters) {
             this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
@@ -127,11 +134,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (this._maskService.ipError) {
             return { 'Mask error': true };
         }
-        if (
-            this._maskValue.startsWith('dot_separator') ||
-            this._maskValue.startsWith('comma_separator') ||
-            this._maskValue.startsWith('separator')
-        ) {
+        if (this._maskValue.startsWith('separator')) {
             return null;
         }
         if (withoutValidation.includes(this._maskValue)) {
@@ -362,7 +365,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         if (typeof inputValue === 'number') {
             inputValue = String(inputValue);
-            inputValue = this._maskValue.startsWith('dot_separator') ? inputValue.replace('.', ',') : inputValue;
+            inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
             this._maskService.isNumberValue = true;
         }
         (inputValue && this._maskService.maskExpression) ||
