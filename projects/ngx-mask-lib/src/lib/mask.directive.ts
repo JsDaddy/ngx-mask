@@ -39,7 +39,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
   @Input() public validation: IConfig['validation'] | null = null;
   @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
-  private _maskValue!: string;
+  private _maskValue: string = '';
   private _inputValue!: string;
   private _position: number | null = null;
   // tslint:disable-next-line

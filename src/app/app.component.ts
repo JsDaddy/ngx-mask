@@ -49,7 +49,7 @@ export class AppComponent {
   public separatorFormModel!: SN;
   public separatorPrecisionSeparatorFormModel!: SN;
   public separatorZeroPrecisionSeparatorFormModel!: SN;
-  public dotSeparatorFormModel!: SN;
+  public dotSeparatorFormModel!: string;
   public dotPrecisionSeparatorFormModel: SN = '';
   public dotZeroPrecisionSeparatorFormModel!: SN;
   public commaSeparatorFormModel!: SN;
