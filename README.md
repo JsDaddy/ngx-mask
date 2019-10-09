@@ -79,16 +79,20 @@ We have next default characters:
 
    | character |
    |-----------|
+   | - |
    | / |
    | ( |
    | ) |
    | . |
    | : |
-   | - |
    | **space** |
    | + |
    | , |
    | @ |
+   | [ |
+   | ] |
+   | " |
+   | ' |
 
 #### Usage
 
@@ -168,7 +172,7 @@ You can add suffix to you masked value
 <input type='text' suffix=" $" mask="0000" >
 ```
 
-### dropSpecialCharacters (boolean)
+### dropSpecialCharacters (boolean | string[])
 
 You can choose if mask will drop special character in the model, or not, default value true
 
