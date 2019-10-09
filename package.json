@@ -25,8 +25,9 @@
   "private": true,
   "scripts": {
     "build": "ng build showcase --prod",
-    "build:lib": "ng build --prod ngx-mask-lib",
+    "build:lib": "ng build --prod ngx-mask-lib && npm run copy-libdocs",
     "ci": "npm run lint && npm run build:lib && npm run test && npm run build",
+    "copy-libdocs": "copyfiles -V -E README.md LICENSE dist/ngx-mask-lib",
     "lint": "concurrently --kill-others-on-fail \"ng lint showcase\" \"ng lint ngx-mask-lib\" \"npm run lint:markdown\"",
     "lint:markdown": "markdownlint -i node_modules -i CHANGELOG.md ./",
     "ng": "ng",
@@ -74,6 +75,7 @@
     "angular-cli-ghpages": "0.6.0",
     "codelyzer": "5.1.2",
     "concurrently": "4.1.2",
+    "copyfiles": "2.1.1",
     "husky": "~3.0.8",
     "jasmine-core": "3.5.0",
     "jasmine-expect": "~4.0.2",
