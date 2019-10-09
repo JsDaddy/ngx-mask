@@ -29,12 +29,15 @@ export class AppComponent {
   public separatorForm: FormControl;
   public percent: FormControl;
   public formSecureInput: FormControl;
+  public customPatternForm: FormControl;
 
   public pattern: Pattern = {
     P: {
       pattern: new RegExp('\\d'),
     },
   };
+
+  public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z \'-]') } };
 
   public numberOrStringFormModel: SN = '';
   public clearIfNotMatchModel: SN = '';
@@ -46,6 +49,7 @@ export class AppComponent {
   public suf: string = '+7';
   public suffixModel!: SN;
   public repeatFormModel!: SN;
+  public customPatternFormModel!: SN;
   public separatorFormModel!: SN;
   public separatorPrecisionSeparatorFormModel!: SN;
   public separatorZeroPrecisionSeparatorFormModel!: SN;
@@ -84,6 +88,7 @@ export class AppComponent {
     this.commaPrecisionSeparatorForm = new FormControl(0);
     this.commaZeroPrecisionSeparatorForm = new FormControl('');
     this.percent = new FormControl('');
+    this.customPatternForm = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }

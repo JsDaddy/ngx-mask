@@ -49,9 +49,14 @@ mat-input-container {
   width: 100%;
 }
 
+mat-sidenav {
+  display: flex;
+  overflow: visible;
+}
+
 body {
   font-family: sans-serif;
-  padding: 0 0 100px 0;
+  padding: 0 0 25px 0;
   margin: 0;
   position: relative;
 }

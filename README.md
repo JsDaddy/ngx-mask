@@ -30,7 +30,7 @@ $ npm install --save ngx-mask
 Import **ngx-mask** module in Angular app.
 
 ```typescript
-import {NgxMaskModule} from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask'
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -48,7 +48,7 @@ Then, just define masks in inputs.
 ### Usage
 
 ```html
-<input type='text' mask='{here comes your mask}' >
+<input type="text" mask="{here comes your mask}" />
 ```
 
 Also you can use mask pipe
@@ -97,7 +97,7 @@ We have next default characters:
 #### Usage
 
 ```html
-<input type='text' [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]" >
+<input type="text" [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]" />
 ```
 
 ##### Then
@@ -123,7 +123,7 @@ We have next default patterns:
 ##### Usage
 
 ```html
-<input type='text' [patterns]="customPatterns" mask="(000-000)" >
+<input type="text" [patterns]="customPatterns" mask="(000-000)" />
 ```
 
 and in your component
@@ -159,7 +159,7 @@ You can add prefix to you masked value
 #### Usage
 
 ```html
-<input type='text' prefix="+7 " mask="(000) 000 00 00" >
+<input type="text" prefix="+7" mask="(000) 000 00 00" />
 ```
 
 ### suffix (string)
@@ -169,7 +169,7 @@ You can add suffix to you masked value
 #### Usage
 
 ```html
-<input type='text' suffix=" $" mask="0000" >
+<input type="text" suffix="$" mask="0000" />
 ```
 
 ### dropSpecialCharacters (boolean | string[])
@@ -179,7 +179,7 @@ You can choose if mask will drop special character in the model, or not, default
 #### Usage
 
 ```html
-<input type='text' [dropSpecialCharacters]="false" mask="000-000.00" >
+<input type="text" [dropSpecialCharacters]="false" mask="000-000.00" />
 ```
 
 ##### Then
@@ -196,7 +196,7 @@ You can choose if mask is shown while typing, or not, default value false
 #### Usage
 
 ```html
- <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true">
+ <input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true" />
 ```
 
 ### clearIfNotMatch (boolean)
@@ -233,7 +233,7 @@ You can pass into mask pattern with brackets
 #### Usage
 
 ```html
- <input type='text' mask="A{4}">
+ <input type="text" mask="A{4}" />
 ```
 
 ### Thousand separator
@@ -243,22 +243,20 @@ You can divide your input by thousands, by default will seperate with a space
 #### Usage
 
 ```html
- <input type='text' mask="separator">
+ <input type="text" mask="separator" />
 ```
 
 For separate input with dots
 
 ```html
- <input type='text' mask="dot_separator">
+ <input type="text" mask="separator" thousandSeparator="." />
 ```
 
-For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
+For using decimals enter '.' and how many decimals to the end of your input to 'separator' mask
 
 ```html
- <input type='text' mask="comma_separator">
+ <input type="text" mask="separator.2" />
 ```
-
-For using decimals enter '.' to the end of your input to 'separator' mask and ',' to 'dot_separator'
 
 ```text
 Input value: 1234.56
@@ -272,10 +270,10 @@ Masked value: 1,234.56
 ```
 
 ```html
- <input type='text' mask="dot_separator.2">
- <input type='text' mask="comma_separator.2">
- <input type='text' mask="dot_separator.0">
- <input type='text' mask="comma_separator.0">
+ <input type="text" mask="separator.2" thousandSeparator="." />
+ <input type="text" mask="separator.2" thousandSeparator="," />
+ <input type="text" mask="separator.0" thousandSeparator="." />
+ <input type="text" mask="separator.0" thousandSeparator="," />
 ```
 
 For limiting decimal precision add '.' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely.
@@ -295,7 +293,7 @@ Masked value: 1,234
 ```
 
 ```html
- <input type='text' mask="dot_separator.2" separatorLimit="1000">
+ <input type="text" mask="separator.2" separatorLimit="1000" />
 ```
 
 For limiting the number of digits before the decimal point you can set `separatorLimit` value to _10_, _100_, _1000_ etc.
@@ -312,7 +310,7 @@ You can validate your input as 24 hour format
 #### Usage
 
 ```html
- <input type='text' mask="Hh:m0:s0">
+ <input type="text" mask="Hh:m0:s0" />
 ```
 
 ### Percent validation
@@ -322,7 +320,7 @@ You can validate your input for percents
 #### Usage
 
 ```html
- <input type='text' mask="percent" suffix="%">
+ <input type="text" mask="percent" suffix="%" />
 ```
 
 ### FormControl validation
@@ -332,7 +330,7 @@ You can validate your formControl, default value is true
 #### Usage
 
 ```html
- <input type='text' mask="00 00" [validation]="true">
+ <input type="text" mask="00 00" [validation]="true" />
 ```
 
 ### Secure input
@@ -342,7 +340,7 @@ You can hide symbols in input field and get the actual value in formcontrol
 #### Usage
 
 ```html
- <input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
+ <input placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000" />
 ```
 
 ### IP valid mask
@@ -350,5 +348,5 @@ You can hide symbols in input field and get the actual value in formcontrol
 #### Usage
 
 ```html
- <input mask="IP">
+ <input mask="IP" />
 ```
