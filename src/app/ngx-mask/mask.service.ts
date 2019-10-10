@@ -69,13 +69,14 @@ export class MaskService extends MaskApplierService {
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
         if (this.thousandSeparator === '.' && this.decimalMarker === '.') {
-          this.decimalMarker = ',';
+            this.decimalMarker = ',';
         }
 
         // b) remove decimal marker from list of special characters to mask
         if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
-          this.maskSpecialCharacters = this.maskSpecialCharacters
-            .filter((item: string) => item !== this.decimalMarker);
+            this.maskSpecialCharacters = this.maskSpecialCharacters.filter(
+                (item: string) => item !== this.decimalMarker
+            );
         }
 
         this.formControlResult(result);
@@ -244,7 +245,7 @@ export class MaskService extends MaskApplierService {
     }
 
     private _retrieveSeparatorValue(result: string): string {
-      return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
+        return this._removeMask(this._removeSuffix(this._removePrefix(result)), this.maskSpecialCharacters);
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
@@ -252,29 +253,28 @@ export class MaskService extends MaskApplierService {
     }
 
     private _checkSymbols(result: string): string | number | undefined | null {
-      if (result === '') {
-        return result;
-      }
-
-      const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
-      let separatorValue: string = this._retrieveSeparatorValue(result);
-      if (this.decimalMarker !== '.') {
-        separatorValue = separatorValue.replace(this.decimalMarker, '.');
-      }
-
-      if (this.isNumberValue) {
-
-        if (separatorPrecision) {
-          if (result === this.decimalMarker) {
-            return null;
-          }
-          return this._checkPrecision(this.maskExpression, separatorValue);
-        } else {
-          return Number(separatorValue);
+        if (result === '') {
+            return result;
         }
-      } else {
-        return separatorValue;
-      }
+
+        const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
+        let separatorValue: string = this._retrieveSeparatorValue(result);
+        if (this.decimalMarker !== '.') {
+            separatorValue = separatorValue.replace(this.decimalMarker, '.');
+        }
+
+        if (this.isNumberValue) {
+            if (separatorPrecision) {
+                if (result === this.decimalMarker) {
+                    return null;
+                }
+                return this._checkPrecision(this.maskExpression, separatorValue);
+            } else {
+                return Number(separatorValue);
+            }
+        } else {
+            return separatorValue;
+        }
     }
 
     // TODO should think about helpers or separting decimal precision to own property
