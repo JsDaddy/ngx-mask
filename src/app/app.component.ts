@@ -37,7 +37,7 @@ export class AppComponent {
     },
   };
 
-  public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z \'-]') } };
+  public surnamePattern = { N: { pattern: new RegExp(`[A-Za-z '-]`) } };
 
   public numberOrStringFormModel: SN = '';
   public clearIfNotMatchModel: SN = '';

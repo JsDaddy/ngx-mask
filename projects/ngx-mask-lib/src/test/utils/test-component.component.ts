@@ -6,24 +6,24 @@ import { IConfig } from '../../lib/config';
 @Component({
   selector: 'mask-test-mask',
   template: `
-        <input
-            id="maska"
-            [mask]="mask"
-            [clearIfNotMatch]="clearIfNotMatch"
-            [dropSpecialCharacters]="dropSpecialCharacters"
-            [specialCharacters]="specialCharacters"
-            [patterns]="patterns"
-            [suffix]="suffix"
-            [prefix]="prefix"
-            [thousandSeparator]="thousandSeparator"
-            [decimalMarker]="decimalMarker"
-            [formControl]="form"
-            [showMaskTyped]="showMaskTyped"
-            [separatorLimit]="separatorLimit"
-            [hiddenInput]="hiddenInput"
-            [(ngModel)]="ngModelValue"
-        />
-    `,
+    <input
+      id="maska"
+      [mask]="mask"
+      [clearIfNotMatch]="clearIfNotMatch"
+      [dropSpecialCharacters]="dropSpecialCharacters"
+      [specialCharacters]="specialCharacters"
+      [patterns]="patterns"
+      [suffix]="suffix"
+      [prefix]="prefix"
+      [thousandSeparator]="thousandSeparator"
+      [decimalMarker]="decimalMarker"
+      [formControl]="form"
+      [showMaskTyped]="showMaskTyped"
+      [separatorLimit]="separatorLimit"
+      [hiddenInput]="hiddenInput"
+      [(ngModel)]="ngModelValue"
+    />
+  `,
 })
 export class TestMaskComponent {
   public mask!: string | null;

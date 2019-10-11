@@ -154,28 +154,28 @@ describe('Separator: Mask', () => {
     equal('1000000.00', '1,000,000', fixture);
   });
 
-  it('separator thousandSeparator \' for 1000000', () => {
+  it(`separator thousandSeparator ' for 1000000`, () => {
     component.mask = 'separator';
-    component.thousandSeparator = '\'';
-    equal('1000000', '1\'000\'000', fixture);
+    component.thousandSeparator = `'`;
+    equal('1000000', `1'000'000`, fixture);
   });
 
-  it('separator thousandSeparator \' precision 2 for 1000000.00', () => {
+  it(`separator thousandSeparator ' precision 2 for 1000000.00`, () => {
     component.mask = 'separator.2';
-    component.thousandSeparator = '\'';
-    equal('1000000.00', '1\'000\'000.00', fixture);
+    component.thousandSeparator = `'`;
+    equal('1000000.00', `1'000'000.00`, fixture);
   });
 
-  it('separator thousandSeparator \' precision 2 with 0 after point for 1000000.00', () => {
+  it(`separator thousandSeparator ' precision 2 with 0 after point for 1000000.00`, () => {
     component.mask = 'separator.2';
-    component.thousandSeparator = '\'';
-    equal('1000000.20', '1\'000\'000.20', fixture);
+    component.thousandSeparator = `'`;
+    equal('1000000.20', `1'000'000.20`, fixture);
   });
 
-  it('separator thousandSeparator \' precision 0 for 1000000.00', () => {
+  it(`separator thousandSeparator ' precision 0 for 1000000.00`, () => {
     component.mask = 'separator.0';
-    component.thousandSeparator = '\'';
-    equal('1000000.00', '1\'000\'000', fixture);
+    component.thousandSeparator = `'`;
+    equal('1000000.00', `1'000'000`, fixture);
   });
 
   it('should not shift cursor for input in-between digits', () => {

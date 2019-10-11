@@ -98,12 +98,20 @@
     "radix": true,
     "semicolon": [
       true,
-      "always"
+      "always",
+      "ignore-bound-class-methods"
     ],
     "trailing-comma": [
       true,
       {
-        "multiline": "always",
+        "multiline": {
+          "objects": "always",
+          "arrays": "always",
+          "functions": "ignore",
+          "typeLiterals": "always",
+          "imports": "always",
+          "exports": "always"
+        },
         "singleline": "never",
         "esSpecCompliant": true
       }

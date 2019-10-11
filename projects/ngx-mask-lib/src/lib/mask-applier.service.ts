@@ -45,12 +45,7 @@ export class MaskApplierService {
     this.customPattern = customPattern;
     return this.applyMask(inputValue, mask);
   }
-  public applyMask(
-    inputValue: string,
-    maskExpression: string,
-    position: number = 0,
-    cb: Function = () => { },
-  ): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
     }
@@ -97,9 +92,10 @@ export class MaskApplierService {
         inputValue = this._stripToDecimal(inputValue);
       }
 
-      inputValue = inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== this.decimalMarker
-        ? inputValue.slice(1, inputValue.length)
-        : inputValue;
+      inputValue =
+        inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== this.decimalMarker
+          ? inputValue.slice(1, inputValue.length)
+          : inputValue;
 
       // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
       //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK
@@ -120,7 +116,6 @@ export class MaskApplierService {
       inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
       const strForSep: string = inputValue.replace(new RegExp(thousandSeperatorCharEscaped, 'g'), '');
       result = this._formatWithSeparators(strForSep, this.thousandSeparator, this.decimalMarker, precision);
-
 
       const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
       const shiftStep: number = result.length - inputValue.length;
@@ -149,7 +144,7 @@ export class MaskApplierService {
         // tslint:disable-next-line
         let i: number = 0, inputSymbol: string = inputArray[0];
         i < inputArray.length;
-        i++ , inputSymbol = inputArray[i]
+        i++, inputSymbol = inputArray[i]
       ) {
         if (cursor === maskExpression.length) {
           break;
@@ -165,10 +160,7 @@ export class MaskApplierService {
           result += inputSymbol;
           cursor += 3;
           multi = false;
-        } else if (
-          this._checkSymbolMask(inputSymbol, maskExpression[cursor]) &&
-          maskExpression[cursor + 1] === '*'
-        ) {
+        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '*') {
           result += inputSymbol;
           multi = true;
         } else if (
@@ -186,9 +178,7 @@ export class MaskApplierService {
           if (maskExpression[cursor] === 'H') {
             if (Number(inputSymbol) > 2) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
+              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
               this._shift.add(shiftStep + this.prefix.length || 0);
               i--;
               continue;
@@ -204,9 +194,7 @@ export class MaskApplierService {
           if (maskExpression[cursor] === 'm') {
             if (Number(inputSymbol) > 5) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
+              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
               this._shift.add(shiftStep + this.prefix.length || 0);
               i--;
               continue;
@@ -215,9 +203,7 @@ export class MaskApplierService {
           if (maskExpression[cursor] === 's') {
             if (Number(inputSymbol) > 5) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
+              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
               this._shift.add(shiftStep + this.prefix.length || 0);
               i--;
               continue;
@@ -225,14 +211,9 @@ export class MaskApplierService {
           }
           const daysCount = 31;
           if (maskExpression[cursor] === 'd') {
-            if (
-              Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
-              inputValue[cursor + 1] === '/'
-            ) {
+            if (Number(inputValue.slice(cursor, cursor + 2)) > daysCount || inputValue[cursor + 1] === '/') {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
+              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
               this._shift.add(shiftStep + this.prefix.length || 0);
               i--;
               continue;
@@ -250,20 +231,17 @@ export class MaskApplierService {
             const day1monthInput: boolean =
               inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
               ((inputValue[cursor - 2] === '/' &&
-                (Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
-                  inputValue[cursor] !== '/')) ||
+                (Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount && inputValue[cursor] !== '/')) ||
                 inputValue[cursor] === '/' ||
                 ((inputValue[cursor - 3] === '/' &&
-                  (Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
-                    inputValue[cursor - 1] !== '/')) ||
+                  (Number(inputValue.slice(cursor - 2, cursor)) > monthsCount && inputValue[cursor - 1] !== '/')) ||
                   inputValue[cursor - 1] === '/'));
             // 10<day<31 && month<12 for input
             const day2monthInput: boolean =
               Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
               !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
               inputValue[cursor - 1] === '/' &&
-              (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
-                inputValue[cursor + 1] === '/');
+              (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount || inputValue[cursor + 1] === '/');
             // day<10 && month<12 for paste whole data
             const day1monthPaste: boolean =
               Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
@@ -279,9 +257,7 @@ export class MaskApplierService {
 
             if (withoutDays || day1monthInput || day2monthInput || day1monthPaste || day2monthPaste) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-                ? inputArray.length
-                : cursor;
+              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
               this._shift.add(shiftStep + this.prefix.length || 0);
               i--;
               continue;
@@ -292,9 +268,7 @@ export class MaskApplierService {
         } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
           result += maskExpression[cursor];
           cursor++;
-          const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-            ? inputArray.length
-            : cursor;
+          const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
           this._shift.add(shiftStep + this.prefix.length || 0);
           i--;
         } else if (
@@ -323,11 +297,7 @@ export class MaskApplierService {
         ) {
           cursor += 3;
           result += inputSymbol;
-        } else if (
-          this.showMaskTyped &&
-          this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
-          inputSymbol !== '_'
-        ) {
+        } else if (this.showMaskTyped && this.maskSpecialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== '_') {
           stepBack = true;
         }
       }
@@ -374,8 +344,12 @@ export class MaskApplierService {
     );
   }
 
-  private _formatWithSeparators = (str: string, thousandSeparatorChar: string, decimalChar: string,
-    precision: number) => {
+  private _formatWithSeparators = (
+    str: string,
+    thousandSeparatorChar: string,
+    decimalChar: string,
+    precision: number
+  ) => {
     const x: string[] = str.split(decimalChar);
     const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
     let res: string = x[0];
@@ -393,11 +367,11 @@ export class MaskApplierService {
       return res;
     }
     return res + decimals.substr(0, precision + 1);
-  }
+  };
 
   private percentage = (str: string): boolean => {
     return Number(str) >= 0 && Number(str) <= 100;
-  }
+  };
 
   private getPrecision = (maskExpression: string): number => {
     const x: string[] = maskExpression.split('.');
@@ -406,13 +380,15 @@ export class MaskApplierService {
     }
 
     return Infinity;
-  }
+  };
 
-  private checkInputPrecision = (inputValue: string, precision: number, decimalMarker: IConfig['decimalMarker'])
-    : string => {
+  private checkInputPrecision = (
+    inputValue: string,
+    precision: number,
+    decimalMarker: IConfig['decimalMarker']
+  ): string => {
     if (precision < Infinity) {
-      const precisionRegEx: RegExp
-        = new RegExp(this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`);
+      const precisionRegEx: RegExp = new RegExp(this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`);
 
       const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
       if (precisionMatch && precisionMatch[0].length - 1 > precision) {
@@ -422,7 +398,7 @@ export class MaskApplierService {
       }
     }
     return inputValue;
-  }
+  };
 
   private _stripToDecimal(str: string): string {
     return str
@@ -433,9 +409,7 @@ export class MaskApplierService {
 
   private _charToRegExpExpression(char: string): string {
     const charsToEscape = '[\\^$.|?*+()';
-    return char === ' ' ? '\\s'
-      : charsToEscape.indexOf(char) >= 0 ? '\\' + char
-        : char;
+    return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? '\\' + char : char;
   }
   // tslint:disable-next-line:max-file-line-count
 }

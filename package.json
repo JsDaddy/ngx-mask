@@ -36,7 +36,7 @@
     "publish:lib": "cd dist/ngx-mask-lib && npm publish",
     "start": "ng serve -o showcase",
     "test": "ng test ngx-mask-lib",
-    "prettier": "prettier './src/**/*.ts' --write"
+    "prettier": "prettier './src/**/*.ts' './projects/**/*.ts' --write"
   },
   "repository": {
     "type": "git",

@@ -50,11 +50,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   public constructor(
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
-    @Inject(config) protected _config: IConfig,
-  ) { }
+    @Inject(config) protected _config: IConfig
+  ) {}
 
-  public onChange = (_: any) => { };
-  public onTouch = () => { };
+  public onChange = (_: any) => {};
+  public onTouch = () => {};
 
   public ngOnChanges(changes: SimpleChanges): void {
     const {
@@ -162,10 +162,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
           } else if (this._maskValue.indexOf(key) !== -1) {
             counterOfOpt++;
           }
-          if (
-            this._maskValue.indexOf(key) !== -1 &&
-            value.toString().length >= this._maskValue.indexOf(key)
-          ) {
+          if (this._maskValue.indexOf(key) !== -1 && value.toString().length >= this._maskValue.indexOf(key)) {
             return null;
           }
           if (counterOfOpt === this._maskValue.length) {
@@ -175,8 +172,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       }
       if (
         this._maskValue.indexOf('{') === 1 &&
-        value.toString().length ===
-        this._maskValue.length + Number(this._maskValue.split('{')[1].split('}')[0]) - 4
+        value.toString().length === this._maskValue.length + Number(this._maskValue.split('{')[1].split('}')[0]) - 4
       ) {
         return null;
       }
@@ -264,10 +260,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
           // the input contains some characters already
           if (el.selectionStart > this._maskService.actualValue.length) {
             // if the user clicked beyond our value's length, position the cursor at the end of our value
-            el.setSelectionRange(
-              this._maskService.actualValue.length,
-              this._maskService.actualValue.length,
-            );
+            el.setSelectionRange(this._maskService.actualValue.length, this._maskService.actualValue.length);
           }
         }
       }
@@ -307,16 +300,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
         this.specialCharacters = this._config.specialCharacters;
         if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
-          while (
-            this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
-          ) {
+          while (this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())) {
             el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
           }
         }
-        if (
-          this.suffix.length > 1 &&
-          this._inputValue.length - this.suffix.length < (el.selectionStart as number)
-        ) {
+        if (this.suffix.length > 1 && this._inputValue.length - this.suffix.length < (el.selectionStart as number)) {
           el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
         }
         if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
@@ -369,11 +357,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._maskService.isNumberValue = true;
     }
     (inputValue && this._maskService.maskExpression) ||
-      (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+    (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
       ? (this._maskService.formElementProperty = [
-        'value',
-        this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-      ])
+          'value',
+          this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+        ])
       : (this._maskService.formElementProperty = ['value', inputValue]);
     this._inputValue = inputValue;
   }
@@ -438,5 +426,4 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
     return null;
   }
-
 }
