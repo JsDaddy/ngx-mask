@@ -8,6 +8,7 @@ export interface IConfig {
     clearIfNotMatch: boolean;
     showTemplate: boolean;
     showMaskTyped: boolean;
+    placeHolderCharacter: string;
     shownMaskExpression: string;
     dropSpecialCharacters: boolean | string[];
     specialCharacters: string[];
@@ -36,6 +37,7 @@ export const initialConfig: IConfig = {
     clearIfNotMatch: false,
     showTemplate: false,
     showMaskTyped: false,
+    placeHolderCharacter: '_',
     dropSpecialCharacters: true,
     hiddenInput: undefined,
     shownMaskExpression: '',

@@ -182,6 +182,16 @@ Model value: 789-874.98
  <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true">
 ```
 
+### placeHolderCharacter (string)
+
+  If the `showMaskTyped` parameter is enabled, this setting customizes the character used as placeholder. Default value is '_'.
+
+##### Usage
+
+```html
+ <input mask="(000) 000-0000" prefix="+7" [showMaskTyped] = "true" placeHolderCharacter="*">
+```
+
 ### clearIfNotMatch (boolean)
    You can choose clear the input if the input value **not match** the mask, default value false
 
