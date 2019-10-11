@@ -9,6 +9,7 @@ export class MaskService extends MaskApplierService {
     public maskExpression: string = '';
     public isNumberValue: boolean = false;
     public showMaskTyped: boolean = false;
+    public placeHolderCharacter: string = '_';
     public maskIsShown: string = '';
     public selStart: number | null = null;
     public selEnd: number | null = null;
@@ -165,7 +166,7 @@ export class MaskService extends MaskApplierService {
             if (inputVal) {
                 return this._checkForIp(inputVal);
             }
-            return this.maskExpression.replace(/\w/g, '_');
+            return this.maskExpression.replace(/\w/g, this.placeHolderCharacter);
         }
         return '';
     }
@@ -192,7 +193,7 @@ export class MaskService extends MaskApplierService {
 
     private _checkForIp(inputVal: string): string {
         if (inputVal === '#') {
-            return '_._._._';
+            return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         const arr: string[] = [];
         for (let i: number = 0; i < inputVal.length; i++) {
@@ -201,13 +202,13 @@ export class MaskService extends MaskApplierService {
             }
         }
         if (arr.length <= 3) {
-            return '_._._';
+            return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         if (arr.length > 3 && arr.length <= 6) {
-            return '_._';
+            return `${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         if (arr.length > 6 && arr.length <= 9) {
-            return '_';
+          return `${this.placeHolderCharacter}`;
         }
         if (arr.length > 9 && arr.length <= 12) {
             return '';

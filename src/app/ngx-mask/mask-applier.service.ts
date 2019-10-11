@@ -19,6 +19,7 @@ export class MaskApplierService {
     public customPattern!: IConfig['patterns'];
     public ipError?: boolean;
     public showMaskTyped!: IConfig['showMaskTyped'];
+    public placeHolderCharacter!: IConfig['placeHolderCharacter'];
     public validation: IConfig['validation'];
     public separatorLimit: IConfig['separatorLimit'];
 
@@ -36,6 +37,7 @@ export class MaskApplierService {
         this.decimalMarker = this._config.decimalMarker;
         this.hiddenInput = this._config.hiddenInput;
         this.showMaskTyped = this._config.showMaskTyped;
+        this.placeHolderCharacter = this._config.placeHolderCharacter;
         this.validation = this._config.validation;
         this.separatorLimit = this._config.separatorLimit;
     }
@@ -326,7 +328,7 @@ export class MaskApplierService {
                 } else if (
                     this.showMaskTyped &&
                     this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
-                    inputSymbol !== '_'
+                    inputSymbol !== this.placeHolderCharacter
                 ) {
                     stepBack = true;
                 }

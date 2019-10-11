@@ -18,6 +18,7 @@ import { IConfig } from 'public_api';
             [decimalMarker]="decimalMarker"
             [formControl]="form"
             [showMaskTyped]="showMaskTyped"
+            [placeHolderCharacter]="placeHolderCharacter"
             [separatorLimit]="separatorLimit"
             [hiddenInput]="hiddenInput"
             [(ngModel)]="ngModelValue"
@@ -37,6 +38,7 @@ export class TestMaskComponent {
     public suffix: IConfig['suffix'] = '';
     public specialCharacters!: IConfig['specialCharacters'];
     public showMaskTyped: IConfig['showMaskTyped'] = false;
+    public placeHolderCharacter: IConfig['placeHolderCharacter'] = '_';
     public hiddenInput: IConfig['hiddenInput'] = false;
     public separatorLimit: IConfig['separatorLimit'] = '';
 }

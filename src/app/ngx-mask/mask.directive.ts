@@ -32,6 +32,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
     @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
     @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
+    @Input() public placeHolderCharacter: IConfig['placeHolderCharacter'] | null = null;
     @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
     @Input() public showTemplate: IConfig['showTemplate'] | null = null;
     @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
@@ -56,7 +57,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     public onTouch = () => {};
 
     public ngOnChanges(changes: SimpleChanges): void {
-        // tslint:disable-next-line:max-line-length
+        // tslint:disable-next-line:max-line-length: cyclomatic-complexity
         const {
             maskExpression,
             specialCharacters,
@@ -68,6 +69,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
+            placeHolderCharacter,
             shownMaskExpression,
             showTemplate,
             clearIfNotMatch,
@@ -107,6 +109,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
         if (showMaskTyped) {
             this._maskService.showMaskTyped = showMaskTyped.currentValue;
+        }
+        if (placeHolderCharacter) {
+          this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
         }
         if (shownMaskExpression) {
             this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
