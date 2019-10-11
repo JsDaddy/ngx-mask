@@ -34,6 +34,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
   @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
   @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
+  @Input() public placeHolderCharacter: IConfig['placeHolderCharacter'] | null = null;
   @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
   @Input() public showTemplate: IConfig['showTemplate'] | null = null;
   @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
@@ -51,10 +52,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
     @Inject(config) protected _config: IConfig
-  ) {}
+  ) { }
 
-  public onChange = (_: any) => {};
-  public onTouch = () => {};
+  public onChange = (_: any) => { };
+  public onTouch = () => { };
 
   public ngOnChanges(changes: SimpleChanges): void {
     const {
@@ -68,6 +69,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       dropSpecialCharacters,
       hiddenInput,
       showMaskTyped,
+      placeHolderCharacter,
       shownMaskExpression,
       showTemplate,
       clearIfNotMatch,
@@ -107,6 +109,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
     if (showMaskTyped) {
       this._maskService.showMaskTyped = showMaskTyped.currentValue;
+    }
+    if (placeHolderCharacter) {
+      this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
     }
     if (shownMaskExpression) {
       this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
@@ -357,11 +362,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._maskService.isNumberValue = true;
     }
     (inputValue && this._maskService.maskExpression) ||
-    (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+      (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
       ? (this._maskService.formElementProperty = [
-          'value',
-          this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-        ])
+        'value',
+        this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+      ])
       : (this._maskService.formElementProperty = ['value', inputValue]);
     this._inputValue = inputValue;
   }

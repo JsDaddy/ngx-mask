@@ -5,7 +5,7 @@ import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
-describe('Directive: Mask', () => {
+describe('Directive: Mask (Secure)', () => {
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 

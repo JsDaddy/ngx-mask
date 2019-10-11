@@ -333,6 +333,46 @@
 
 <div class="container">
   <div class="row">
+    <div class="col-12">
+      <div class="mat-card-wr">
+        <mat-card>
+          <mat-card-header>
+              <mat-card-title>Phone number</mat-card-title>
+              <mat-card-subtitle>
+                  You can add 'placeHolderCharacter' property to changed the placeholder character used when displaying the mask.
+              </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+              <div class="flex-row">
+                  <div class="flex-cell-padding">
+                      <mat-form-field>
+                          <input
+                              matInput
+                              placeholder="Phone number"
+                              mask="(000) 000-0000"
+                              [formControl]="form1"
+                              prefix="+5"
+                              [(ngModel)]="showMaskModel"
+                              [showMaskTyped]="true"
+                              placeHolderCharacter="*"
+                          />
+                          <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
+                      </mat-form-field>
+                  </div>
+                  <div class="flex-cell">
+                      <p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
+                      <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
+                  </div>
+              </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
       <div class="col-12">
           <div class="mat-card-wr">
               <mat-card>

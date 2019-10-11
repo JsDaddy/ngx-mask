@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
-describe('Directive: Mask', () => {
+describe('Directive: Mask (Custom date)', () => {
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 

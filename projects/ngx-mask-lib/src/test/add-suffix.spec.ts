@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { ReactiveFormsModule } from '@angular/forms';
+
+import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
-describe('Directive: Mask', () => {
+describe('Directive: Mask (Add suffix)', () => {
   let fixture: ComponentFixture<TestMaskComponent>;
   let component: TestMaskComponent;
 

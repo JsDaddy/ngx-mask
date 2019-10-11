@@ -10,12 +10,13 @@ export class MaskService extends MaskApplierService {
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
   public showMaskTyped: boolean = false;
+  public placeHolderCharacter: string = '_';
   public maskIsShown: string = '';
   public selStart: number | null = null;
   public selEnd: number | null = null;
   protected _formElement: HTMLInputElement;
   // tslint:disable-next-line
-  public onChange = (_: any) => {};
+  public onChange = (_: any) => { };
 
   public constructor(
     // tslint:disable-next-line
@@ -29,7 +30,7 @@ export class MaskService extends MaskApplierService {
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
     if (!maskExpression) {
       return inputValue;
     }
@@ -51,10 +52,10 @@ export class MaskService extends MaskApplierService {
           ? inputValue.length > actualResult.length
             ? actualResult.splice(this.selStart, 0, getSymbol)
             : inputValue.length < actualResult.length
-            ? actualResult.length - inputValue.length === 1
-              ? actualResult.splice(this.selStart - 1, 1)
-              : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-            : null
+              ? actualResult.length - inputValue.length === 1
+                ? actualResult.splice(this.selStart - 1, 1)
+                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+              : null
           : null
         : (actualResult = []);
       // tslint:enable no-unused-expression
@@ -88,7 +89,7 @@ export class MaskService extends MaskApplierService {
     return result + (this.maskExpression === 'IP' ? prefNmask : prefNmask.slice(resLen));
   }
 
-  public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
+  public applyValueChanges(position: number = 0, cb: Function = () => { }): void {
     this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
     if (this._formElement === this.document.activeElement) {
       return;
@@ -161,7 +162,7 @@ export class MaskService extends MaskApplierService {
       if (inputVal) {
         return this._checkForIp(inputVal);
       }
-      return this.maskExpression.replace(/\w/g, '_');
+      return this.maskExpression.replace(/\w/g, this.placeHolderCharacter);
     }
     return '';
   }
@@ -170,7 +171,7 @@ export class MaskService extends MaskApplierService {
     if (
       this.clearIfNotMatch &&
       this.prefix.length + this.maskExpression.length + this.suffix.length !==
-        this._formElement.value.replace(/_/g, '').length
+      this._formElement.value.replace(/_/g, '').length
     ) {
       this.formElementProperty = ['value', ''];
       this.applyMask(this._formElement.value, this.maskExpression);
@@ -188,7 +189,7 @@ export class MaskService extends MaskApplierService {
 
   private _checkForIp(inputVal: string): string {
     if (inputVal === '#') {
-      return '_._._._';
+      return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
     }
     const arr: string[] = [];
     for (let i = 0; i < inputVal.length; i++) {
@@ -197,13 +198,13 @@ export class MaskService extends MaskApplierService {
       }
     }
     if (arr.length <= 3) {
-      return '_._._';
+      return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
     }
     if (arr.length > 3 && arr.length <= 6) {
-      return '_._';
+      return `${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
     }
     if (arr.length > 6 && arr.length <= 9) {
-      return '_';
+      return this.placeHolderCharacter;
     }
     if (arr.length > 9 && arr.length <= 12) {
       return '';

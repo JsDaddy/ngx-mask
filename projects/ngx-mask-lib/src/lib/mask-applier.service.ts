@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
+
 import { config, IConfig } from './config';
 
 @Injectable()
@@ -19,6 +20,7 @@ export class MaskApplierService {
   public customPattern!: IConfig['patterns'];
   public ipError?: boolean;
   public showMaskTyped!: IConfig['showMaskTyped'];
+  public placeHolderCharacter!: IConfig['placeHolderCharacter'];
   public validation: IConfig['validation'];
   public separatorLimit: IConfig['separatorLimit'];
 
@@ -36,6 +38,7 @@ export class MaskApplierService {
     this.decimalMarker = this._config.decimalMarker;
     this.hiddenInput = this._config.hiddenInput;
     this.showMaskTyped = this._config.showMaskTyped;
+    this.placeHolderCharacter = this._config.placeHolderCharacter;
     this.validation = this._config.validation;
     this.separatorLimit = this._config.separatorLimit;
   }
@@ -45,7 +48,7 @@ export class MaskApplierService {
     this.customPattern = customPattern;
     return this.applyMask(inputValue, mask);
   }
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
     }
@@ -144,7 +147,7 @@ export class MaskApplierService {
         // tslint:disable-next-line
         let i: number = 0, inputSymbol: string = inputArray[0];
         i < inputArray.length;
-        i++, inputSymbol = inputArray[i]
+        i++ , inputSymbol = inputArray[i]
       ) {
         if (cursor === maskExpression.length) {
           break;
@@ -297,7 +300,7 @@ export class MaskApplierService {
         ) {
           cursor += 3;
           result += inputSymbol;
-        } else if (this.showMaskTyped && this.maskSpecialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== '_') {
+        } else if (this.showMaskTyped && this.maskSpecialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== this.placeHolderCharacter) {
           stepBack = true;
         }
       }
