@@ -83,7 +83,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
         return;
       } else {
-        this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || '';
+        this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || [];
       }
     }
     if (patterns) {
@@ -303,7 +303,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         el.selectionStart = el.selectionEnd;
       }
       if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
-        this.specialCharacters = this._config.specialCharacters;
+        // If specialChars is false, (shouldn't ever happen) then set to the defaults
+        this.specialCharacters = this.specialCharacters || this._config.specialCharacters;
         if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
           while (this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())) {
             el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
