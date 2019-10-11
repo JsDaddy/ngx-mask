@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { NgxMaskModule } from '../lib/ngx-mask.module';
+import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
 describe('Mask: Delete', () => {
@@ -53,6 +54,7 @@ describe('Mask: Delete', () => {
     expect(inputTarget.value).toBe('12/34/5678');
     expect(inputTarget.selectionStart).toEqual(2);
   });
+
   it('delete special character in secure input', () => {
     component.mask = 'XXX/X0/0000';
     component.hiddenInput = true;
@@ -70,6 +72,7 @@ describe('Mask: Delete', () => {
     equal(inputTarget.value, '***/*5/6789', fixture);
     expect(inputTarget.selectionStart).toEqual(6);
   });
+
   it('delete special character on 1 position', () => {
     component.mask = '[00]';
     const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
@@ -85,6 +88,7 @@ describe('Mask: Delete', () => {
 
     expect(inputTarget.selectionStart).toEqual(1);
   });
+
   it('delete suffix with backspace and delete', () => {
     component.mask = 'A{5}';
     component.suffix = '.com';

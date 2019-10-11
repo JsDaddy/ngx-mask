@@ -239,7 +239,7 @@ describe('Directive: Mask', () => {
     equal('1234567890123456', '1234-5678-9012-3456', fixture);
   });
 
-  it('should apply mask on backspace for readonly inputs when all text is selected', () => {
+  it('should apply mask on backspace for non readonly inputs when all text is selected', () => {
     component.mask = 'AAAAAA';
     const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
     const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
