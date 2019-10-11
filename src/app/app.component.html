@@ -198,7 +198,8 @@
                                       matInput
                                       placeholder="Clear if not match"
                                       [clearIfNotMatch]="true"
-                                      mask="000.000 0*.00"
+                                      mask="000.000 0"
+                                      [showMaskTyped]="true"
                                       [formControl]="clearIfNotMatch"
                                       [(ngModel)]="clearIfNotMatchModel"
                                   />

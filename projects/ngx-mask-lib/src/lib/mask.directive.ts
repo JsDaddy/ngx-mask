@@ -46,19 +46,17 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   private _start!: number;
   private _end!: number;
   private _code!: string;
-  // tslint:disable-next-line
-  public onChange = (_: any) => { };
-  public onTouch = () => { };
 
   public constructor(
-    // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
     @Inject(config) protected _config: IConfig,
   ) { }
 
+  public onChange = (_: any) => { };
+  public onTouch = () => { };
+
   public ngOnChanges(changes: SimpleChanges): void {
-    // tslint:disable-next-line:max-line-length
     const {
       maskExpression,
       specialCharacters,
@@ -292,7 +290,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
   // tslint:disable-next-line: cyclomatic-complexity
   @HostListener('keydown', ['$event'])
-  public a(e: CustomKeyboardEvent): void {
+  public onKeyDown(e: CustomKeyboardEvent): void {
     this._code = e.code ? e.code : e.key;
     const el: HTMLInputElement = e.target as HTMLInputElement;
     this._inputValue = el.value;
@@ -394,6 +392,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   /** It disables the input element */
   public setDisabledState(isDisabled: boolean): void {
     this._maskService.formElementProperty = ['disabled', isDisabled];
+  }
+
+  @HostListener('ngModelChange', ['$event'])
+  // tslint:disable-next-line: no-any
+  public onModelChange(e: any): void {
+    if (!e) {
+      this._maskService.actualValue = '';
+    }
   }
 
   private _repeatPatternSymbols(maskExp: string): string {
