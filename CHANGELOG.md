@@ -1,6 +1,13 @@
+<a name="8.1.2">
+
+# [8.1.2 bugfix](2019-10-11)
+Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
+
+Project folder structure converted over to follow Angular CLI way of libraries
+
 <a name="8.1.1">
 
-# [8.1.1 bugfix](2019-10-010)
+# [8.1.1 bugfix](2019-10-10)
 bugs fix
 
 <a name="8.1.0">
@@ -8,7 +15,6 @@ bugs fix
 # [8.1.0 separator update](2019-11-09)
 update separator
 <a name="8.1.0">
-
 
 <a name="8.0.9">
 
@@ -32,7 +38,6 @@ minor bug fixes
 
 # [8.0.3 cursor](2019-09-04)
 minor bug fixes
-
 
 <a name="7.9.9">
 
