@@ -5,7 +5,7 @@
 [![Build Status](https://img.shields.io/travis/JsDaddy/ngx-mask.svg?branch=develop)](https://travis-ci.org/JsDaddy/ngx-mask)
 [![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 <a href="https://npmjs.org/ngx-mask">
-  <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads" >
+  <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads">
 </a>
 
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
@@ -14,8 +14,8 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat-square)](https://github.com/JSDaddy/ngx-mask)
 
-You can also try our NGX LOADER INDICATOR [Download](https://www.npmjs.com/package/ngx-loader-indicator) it.
-You can also try our NGX COPYPASTE [Download](https://www.npmjs.com/package/ngx-copypaste) it.
+You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
+You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
 
 ### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples
 
@@ -51,7 +51,7 @@ Then, just define masks in inputs.
 <input type="text" mask="{here comes your mask}" />
 ```
 
-Also you can use mask pipe
+Also, you can use mask pipe.
 
 ### Usage
 
@@ -129,7 +129,7 @@ We have next default patterns:
 and in your component
 
 ```typescript
-public customPatterns = {'0': { pattern: new RegExp('\[a-zA-Z\]')}};
+public customPatterns = { '0': { pattern: new RegExp('\[a-zA-Z\]')} };
 ```
 
 ##### Then
@@ -144,12 +144,12 @@ Masked value: (Hel-loW)
 You can define custom pattern and specify symbol to be rendered in input field.
 
 ```typescript
-pattern =  {
-    'B': {
-            pattern: new RegExp('\\d'),
-            symbol: 'X'
-      }
+pattern = {
+  'B': {
+    pattern: new RegExp('\\d'),
+    symbol: 'X'
   }
+}
 ```
 
 ### prefix (string)
@@ -174,7 +174,7 @@ You can add suffix to you masked value
 
 ### dropSpecialCharacters (boolean | string[])
 
-You can choose if mask will drop special character in the model, or not, default value true
+You can choose if mask will drop special character in the model, or not, default value is `true`.
 
 #### Usage
 
@@ -191,7 +191,7 @@ Model value: 789-874.98
 
 ### showMaskTyped (boolean)
 
-You can choose if mask is shown while typing, or not, default value false
+You can choose if mask is shown while typing, or not, default value is `false`.
 
 #### Usage
 
@@ -201,7 +201,7 @@ You can choose if mask is shown while typing, or not, default value false
 
 ### placeHolderCharacter (string)
 
-  If the `showMaskTyped` parameter is enabled, this setting customizes the character used as placeholder. Default value is '_'.
+If the `showMaskTyped` parameter is enabled, this setting customizes the character used as placeholder. Default value is `_`.
 
 #### Usage
 
@@ -211,34 +211,35 @@ You can choose if mask is shown while typing, or not, default value false
 
 ### clearIfNotMatch (boolean)
 
-You can choose clear the input if the input value **not match** the mask, default value false
+You can choose clear the input if the input value **not match** the mask, default value is `false`.
 
 ### Pipe with mask expression and custom Pattern ([string, pattern])
 
-You can pass array of expression and custom Pattern to pipe
+You can pass array of expression and custom Pattern to pipe.
   
 #### Usage
 
 ```html
- <span>{{phone | mask: customMaska}}</span>
+<span>{{phone | mask: customMask}}</span>
 ```
 
 and in your component
 
 ```typescript
-customMaska: [string, pattern];
+customMask: [string, pattern];
 
-pattern =  {
-    'P': {
-        pattern: new RegExp('\\d'),
-    }};
+pattern = {
+  'P': {
+    pattern: new RegExp('\\d'),
+  }
+};
   
-this.customMaska = ['PPP-PPP', this.pattern];
+this.customMask = ['PPP-PPP', this.pattern];
 ```
 
 ### Repeat mask
 
-You can pass into mask pattern with brackets
+You can pass into mask pattern with brackets.
   
 #### Usage
 
@@ -248,7 +249,7 @@ You can pass into mask pattern with brackets
 
 ### Thousand separator
 
-You can divide your input by thousands, by default will seperate with a space
+You can divide your input by thousands, by default will seperate with a space.
 
 #### Usage
 
@@ -256,13 +257,13 @@ You can divide your input by thousands, by default will seperate with a space
  <input type="text" mask="separator" />
 ```
 
-For separate input with dots
+For separate input with dots.
 
 ```html
  <input type="text" mask="separator" thousandSeparator="." />
 ```
 
-For using decimals enter '.' and how many decimals to the end of your input to 'separator' mask
+For using decimals enter `.` and how many decimals to the end of your input to `separator` mask.
 
 ```html
  <input type="text" mask="separator.2" />
@@ -286,7 +287,7 @@ Masked value: 1,234.56
  <input type="text" mask="separator.0" thousandSeparator="," />
 ```
 
-For limiting decimal precision add '.' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely.
+For limiting decimal precision add `.` and the precision you want to limit too on the input. **2** is useful for currency. **0** will prevent decimals completely.
 
 ```text
 Input value: 1234,56
@@ -315,7 +316,7 @@ Masked value: 1.234,56
 
 ### Time validation
 
-You can validate your input as 24 hour format
+You can validate your input as 24 hour format.
 
 #### Usage
 
@@ -325,7 +326,7 @@ You can validate your input as 24 hour format
 
 ### Percent validation
 
-You can validate your input for percents
+You can validate your input for percents.
 
 #### Usage
 
@@ -335,7 +336,7 @@ You can validate your input for percents
 
 ### FormControl validation
 
-You can validate your formControl, default value is true
+You can validate your `formControl`, default value is `true`.
 
 #### Usage
 
@@ -345,7 +346,7 @@ You can validate your formControl, default value is true
 
 ### Secure input
 
-You can hide symbols in input field and get the actual value in formcontrol
+You can hide symbols in input field and get the actual value in `formcontrol`.
 
 #### Usage
 
