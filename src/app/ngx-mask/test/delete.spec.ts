@@ -109,4 +109,66 @@ describe('Mask: Delete', () => {
 
         expect(inputTarget.selectionStart).toEqual(3);
     });
+
+    it('prefix shouldn`t be deleted', () => {
+        component.mask = '00 00';
+        component.prefix = '+1';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '+100 00';
+        inputTarget.selectionStart = 1;
+        inputTarget.selectionEnd = 1;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        expect(inputTarget.selectionStart).toEqual(2);
+    });
+    it('prefix shouldn`t be deleted', () => {
+        component.mask = '00 00';
+        component.prefix = '+1 ';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '+1 00 00';
+        inputTarget.selectionStart = 1;
+        inputTarget.selectionEnd = 1;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        expect(inputTarget.selectionStart).toEqual(3);
+    });
+
+    it('prefix shouldn`t be deleted', () => {
+        component.mask = '(00) 00';
+        component.prefix = '+1';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '+1(00) 00';
+        inputTarget.selectionStart = 3;
+        inputTarget.selectionEnd = 3;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        expect(inputTarget.selectionStart).toEqual(2);
+    });
+    it('prefix shouldn`t be deleted', () => {
+        component.mask = '(00) 00';
+        component.prefix = '+1 ';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '+1 (00) 00';
+        inputTarget.selectionStart = 4;
+        inputTarget.selectionEnd = 4;
+        debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        expect(inputTarget.selectionStart).toEqual(3);
+    });
 });

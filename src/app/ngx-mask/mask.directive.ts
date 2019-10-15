@@ -111,7 +111,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             this._maskService.showMaskTyped = showMaskTyped.currentValue;
         }
         if (placeHolderCharacter) {
-          this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
+            this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
         }
         if (shownMaskExpression) {
             this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
@@ -303,36 +303,32 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
             e.preventDefault();
         }
         if (e.keyCode === 37 || e.keyCode === 8 || e.keyCode === 46) {
-            // if (e.keyCode === 37) {
-            //     el.selectionStart = (el.selectionEnd as number) - 1;
-            // }
             if (e.keyCode === 8 && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;
             }
             if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
                 this.specialCharacters = this._config!.specialCharacters;
-                if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
-                    while (
-                        this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString())
+                if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
+                    el.setSelectionRange(this.prefix.length, this.prefix.length);
+                } else {
+                    if (
+                        this._inputValue.length !== (el.selectionStart as number) &&
+                        (el.selectionStart as number) !== 1
                     ) {
-                        el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+                        while (
+                            this.specialCharacters.includes(
+                                this._inputValue[(el.selectionStart as number) - 1].toString()
+                            ) &&
+                            ((this.prefix.length >= 1 && (el.selectionStart as number) > this.prefix.length) ||
+                                this.prefix.length === 0)
+                        ) {
+                            el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+                        }
                     }
-                }
-                if (
-                    this.suffix.length > 1 &&
-                    this._inputValue.length - this.suffix.length < (el.selectionStart as number)
-                ) {
-                    el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-                }
-                if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
-                    el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+                    this.suffixCheckOnPressDelete(e.keyCode, el);
                 }
             }
-            if (e.keyCode === 46 && this.suffix.length > 0) {
-                if (this._inputValue.length - this.suffix.length <= (el.selectionStart as number)) {
-                    el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-                }
-            }
+            this.suffixCheckOnPressDelete(e.keyCode, el);
             if (
                 (el.selectionStart as number) <= this._maskService.prefix.length &&
                 (el.selectionEnd as number) <= this._maskService.prefix.length
@@ -392,6 +388,25 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     // tslint:disable-next-line
     public registerOnTouched(fn: any): void {
         this.onTouch = fn;
+    }
+    // tslint:disable-next-line
+    public suffixCheckOnPressDelete(keyCode: number, el: HTMLInputElement): void {
+        if (keyCode === 46 && this.suffix.length > 0) {
+            if (this._inputValue.length - this.suffix.length <= (el.selectionStart as number)) {
+                el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
+            }
+        }
+        if (keyCode === 8) {
+            if (
+                this.suffix.length > 1 &&
+                this._inputValue.length - this.suffix.length < (el.selectionStart as number)
+            ) {
+                el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
+            }
+            if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
+                el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+            }
+        }
     }
 
     /** It disables the input element */
