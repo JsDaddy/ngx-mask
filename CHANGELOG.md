@@ -1,10 +1,16 @@
-<a name="8.1.3">
+<a name="8.1.4">
 
-# [8.1.3 bugfix](2019-10-15)
+# [8.1.4 bugfix](2019-10-23)
 
 Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
 
 Project folder structure converted over to follow Angular CLI way of libraries
+
+<a name="8.1.3">
+
+# [8.1.3 bugfix](2019-10-23)
+
+Fix for #590 - Problem if prefix last char is not a number
 
 <a name="8.1.2">
 
