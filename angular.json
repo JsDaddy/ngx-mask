@@ -3,19 +3,20 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "template": {
+    "showcase": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "schematics": {},
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/showcase",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
               "src/assets",
               "src/favicon.ico"
@@ -49,27 +50,29 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "template:build"
+            "browserTarget": "showcase:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "template:build:production"
+              "browserTarget": "showcase:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "template:build"
+            "browserTarget": "showcase:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
+            "karmaConfig": "src/karma.conf.js",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.spec.json",
+            "codeCoverage": true,
+            "sourceMap": true,
             "scripts": [],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap-grid.css",
@@ -88,18 +91,64 @@
               "src/tsconfig.app.json",
               "src/tsconfig.spec.json"
             ],
-            "exclude": []
+            "format": "stylish",
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
     },
-    "template-e2e": {
+    "showcase-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application"
+    },
+    "ngx-mask-lib": {
+      "root": "projects/ngx-mask-lib",
+      "sourceRoot": "projects/ngx-mask-lib/src",
+      "projectType": "library",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json",
+            "project": "projects/ngx-mask-lib/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "project": "projects/ngx-mask-lib/ng-package.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/ngx-mask-lib/src/test.ts",
+            "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
+            "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
+            "codeCoverage": true,
+            "sourceMap": true
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/ngx-mask-lib/tsconfig.lib.json",
+              "projects/ngx-mask-lib/tsconfig.spec.json"
+            ],
+            "format": "stylish",
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
-  "defaultProject": "template",
+  "defaultProject": "showcase",
   "cli": {
     "warnings": {
       "typescriptMismatch": false

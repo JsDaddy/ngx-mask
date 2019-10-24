@@ -14,18 +14,19 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat-square)](https://github.com/JSDaddy/ngx-mask)
 
-
 You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
 You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
 
-### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples.
+### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples
 
 ## Installing
+
 ```bash
 $ npm install --save ngx-mask
 ```
 
 ## Quickstart
+
 Import **ngx-mask** module in Angular app.
 
 ```typescript
@@ -44,19 +45,22 @@ export const options: Partial<IConfig> | (() => Partial<IConfig>);
 
 Then, just define masks in inputs.
 
-#### Usage
+### Usage
+
 ```html
-<input type="text" mask="{here comes your mask}">
+<input type="text" mask="{here comes your mask}" />
 ```
 
 Also, you can use mask pipe.
 
-#### Usage
+### Usage
+
 ```html
 <span>{{phone | mask: '(000) 000-0000'}}</span>
 ```
 
 #### Examples
+
 | mask           | example        |
 | -------------- | -------------- |
 | 9999-99-99     | 2017-04-15     |
@@ -66,38 +70,48 @@ Also, you can use mask pipe.
 | SSSS           | asDF           |
 
 ## Mask Options
-You can define your custom options for all directives (as object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
+
+You can define your custom options for all directives (as  object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
 
 ### specialCharacters (string[ ])
+
 We have next default characters:
 
-  | character |
-  |-----------|
-  | / |
-  | ( |
-  | ) |
-  | . |
-  | : |
-  | - |
-  | **space** |
-  | + |
-  | , |
-  | @ |
+   | character |
+   |-----------|
+   | - |
+   | / |
+   | ( |
+   | ) |
+   | . |
+   | : |
+   | **space** |
+   | + |
+   | , |
+   | @ |
+   | [ |
+   | ] |
+   | " |
+   | ' |
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]">
+<input type="text" [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]" />
 ```
 
 ##### Then
-```
+
+```text
 Input value: 789-874.98
 Masked value: [78]\[987]
 ```
+
 ```typescript
 patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
 ```
-  We have next default patterns:
+
+We have next default patterns:
 
   | code  | meaning                                     |
   | ----- | ------------------------------------------- |
@@ -107,8 +121,9 @@ patterns ({ [character: string]: { pattern: RegExp, optional?: boolean})
   | **S** | only letters (uppercase or lowercase)       |
 
 ##### Usage
+
 ```html
-<input type="text" [patterns]="customPatterns" mask="(000-000)">
+<input type="text" [patterns]="customPatterns" mask="(000-000)" />
 ```
 
 and in your component
@@ -118,14 +133,16 @@ public customPatterns = { '0': { pattern: new RegExp('\[a-zA-Z\]')} };
 ```
 
 ##### Then
-```
+
+```text
 Input value: 789HelloWorld
 Masked value: (Hel-loW)
 ```
 
 ### Custom pattern for this
+
 You can define custom pattern and specify symbol to be rendered in input field.
- 
+
 ```typescript
 pattern = {
   'B': {
@@ -136,63 +153,78 @@ pattern = {
 ```
 
 ### prefix (string)
+
 You can add prefix to you masked value
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" prefix="+7 " mask="(000) 000 00 00">
+<input type="text" prefix="+7" mask="(000) 000 00 00" />
 ```
 
 ### suffix (string)
+
 You can add suffix to you masked value
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" suffix=" $" mask="0000">
+<input type="text" suffix="$" mask="0000" />
 ```
 
-### dropSpecialCharacters (boolean)
+### dropSpecialCharacters (boolean | string[])
+
 You can choose if mask will drop special character in the model, or not, default value is `true`.
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" [dropSpecialCharacters]="false" mask="000-000.00">
+<input type="text" [dropSpecialCharacters]="false" mask="000-000.00" />
 ```
 
 ##### Then
-```
+
+```text
 Input value: 789-874.98
 Model value: 789-874.98
 ```
 
 ### showMaskTyped (boolean)
+
 You can choose if mask is shown while typing, or not, default value is `false`.
 
-##### Usage
+#### Usage
+
 ```html
-<input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true">
+ <input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true" />
 ```
 
 ### placeHolderCharacter (string)
+
 If the `showMaskTyped` parameter is enabled, this setting customizes the character used as placeholder. Default value is `_`.
 
-##### Usage
+#### Usage
+
 ```html
-<input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true" placeHolderCharacter="*">
+ <input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true" placeHolderCharacter="*" />
 ```
 
 ### clearIfNotMatch (boolean)
+
 You can choose clear the input if the input value **not match** the mask, default value is `false`.
 
 ### Pipe with mask expression and custom Pattern ([string, pattern])
+
 You can pass array of expression and custom Pattern to pipe.
   
-##### Usage
+#### Usage
+
 ```html
 <span>{{phone | mask: customMask}}</span>
 ```
 
 and in your component
+
 ```typescript
 customMask: [string, pattern];
 
@@ -206,41 +238,58 @@ this.customMask = ['PPP-PPP', this.pattern];
 ```
 
 ### Repeat mask
+
 You can pass into mask pattern with brackets.
   
-##### Usage
+#### Usage
+
 ```html
-<input type="text" mask="A{4}">
+ <input type="text" mask="A{4}" />
 ```
 
 ### Thousand separator
-You can divide your input by thousands.
 
-##### Usage
+You can divide your input by thousands, by default will seperate with a space.
+
+#### Usage
+
 ```html
-<input type="text" mask="separator">
+ <input type="text" mask="separator" />
 ```
 
-For separate input with dots
+For separate input with dots.
+
 ```html
-<input type="text" mask="dot_separator">
+ <input type="text" mask="separator" thousandSeparator="." />
 ```
 
-For separate input with commas
+For using decimals enter `.` and how many decimals to the end of your input to `separator` mask.
+
 ```html
-<input type="text" mask="comma_separator">
+ <input type="text" mask="separator.2" />
 ```
 
-For using decimals enter `.` to the end of your input to 'separator' or 'dot_separator' mask and `,` to 'comma_separator'.
+```text
+Input value: 1234.56
+Masked value: 1 234.56
+
+Input value: 1234,56
+Masked value: 1.234,56
+
+Input value: 1234.56
+Masked value: 1,234.56
+```
+
 ```html
-<input type="text" mask="dot_separator.2">
-<input type="text" mask="comma_separator.2">
-<input type="text" mask="dot_separator.0">
-<input type="text" mask="comma_separator.0">
+ <input type="text" mask="separator.2" thousandSeparator="." />
+ <input type="text" mask="separator.2" thousandSeparator="," />
+ <input type="text" mask="separator.0" thousandSeparator="." />
+ <input type="text" mask="separator.0" thousandSeparator="," />
 ```
 
-For limiting decimal precision add `.` and the precision you want to limit too on the input. **2** is useful for currency. **0** will prevent decimals completely. 
-```
+For limiting decimal precision add `.` and the precision you want to limit too on the input. **2** is useful for currency. **0** will prevent decimals completely.
+
+```text
 Input value: 1234,56
 Masked value: 1.234,56
 
@@ -254,50 +303,61 @@ Input value: 1234.56
 Masked value: 1,234
 ```
 
-For limiting the number of digits before the decimal point you can set `separatorLimit` value to _10_, _100_, _1000_, etc.
 ```html
-<input type="text" mask="dot_separator.2" separatorLimit="1000">
+ <input type="text" mask="separator.2" separatorLimit="1000" />
 ```
-```
+
+For limiting the number of digits before the decimal point you can set `separatorLimit` value to _10_, _100_, _1000_ etc.
+
+```text
 Input value: 12345678,56
 Masked value: 1.234,56
 ```
 
 ### Time validation
-You can validate your input as 24-hour format.
 
-##### Usage
+You can validate your input as 24 hour format.
+
+#### Usage
+
 ```html
-<input type="text" mask="Hh:m0:s0">
+ <input type="text" mask="Hh:m0:s0" />
 ```
 
 ### Percent validation
+
 You can validate your input for percents.
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" mask="percent" suffix="%">
+ <input type="text" mask="percent" suffix="%" />
 ```
 
 ### FormControl validation
+
 You can validate your `formControl`, default value is `true`.
 
-##### Usage
+#### Usage
+
 ```html
-<input type="text" mask="00 00" [validation]="true">
+ <input type="text" mask="00 00" [validation]="true" />
 ```
 
 ### Secure input
-You can hide symbols in input field and get the actual value in `formControl`.
 
-##### Usage
+You can hide symbols in input field and get the actual value in `formcontrol`.
+
+#### Usage
+
 ```html
-<input matInput placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000">
+ <input placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000" />
 ```
 
 ### IP valid mask
 
-##### Usage
+#### Usage
+
 ```html
-<input mask="IP">
+ <input mask="IP" />
 ```

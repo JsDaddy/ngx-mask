@@ -49,9 +49,14 @@ mat-input-container {
   width: 100%;
 }
 
+mat-sidenav {
+  display: flex;
+  overflow: visible;
+}
+
 body {
   font-family: sans-serif;
-  padding: 0 0 100px 0;
+  padding: 0 0 25px 0;
   margin: 0;
   position: relative;
 }
@@ -123,7 +128,10 @@ header {
 }
 .mat-card-wr {
   font-family: 'Lato', sans-serif;
-  padding-bottom: 60px;
+  padding: 1.2rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
   .mat-card {
     border-radius: 0;
     padding: 0;
@@ -176,6 +184,9 @@ header {
     display: flex;
     width: 100%;
     align-items: center;
+    &:not(:last-child) {
+      margin-bottom: 1.4rem;
+    }
     .flex-cell {
       &:last-child {
         width: 100%;

@@ -1,47 +1,73 @@
+<a name="8.1.4">
+
+# [8.1.4 bugfix](2019-10-23)
+
+Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
+
+Project folder structure converted over to follow Angular CLI way of libraries
+
+<a name="8.1.3">
+
+# [8.1.3 bugfix](2019-10-23)
+
+Fix for #590 - Problem if prefix last char is not a number
+
+<a name="8.1.2">
+
+# [8.1.2 placeholder customisation](2019-10-11)
+
+Placeholder can now be customised
+
 <a name="8.1.1">
 
-# [8.1.1 bugfix](2019-10-010)
+# [8.1.1 bugfix](2019-10-10)
+
 bugs fix
 
 <a name="8.1.0">
 
 # [8.1.0 separator update](2019-11-09)
-update separator
-<a name="8.1.0">
 
+update separator
 
 <a name="8.0.9">
 
-# [8.0.7 bugfix](2019-10-07)
+# [8.0.8 bugfix](2019-10-07)
+
 bugs fix [refs: #554, #580, #582]
 <a name="8.0.8">
 
 # [8.0.7 bugfix](2019-10-04)
+
 bugs fix [refs: #579, #576, #561]
 <a name="8.0.7">
 
 # [8.0.7 update date and time](2019-10-02)
+
 Update date and time masks [refs: #571, #567, #572, #564, #558, #573]
 
 <a name="8.0.4">
 
 # [8.0.4 bugfix](2019-09-09)
+
 minor bug fixes
 
 <a name="8.0.3">
 
 # [8.0.3 cursor](2019-09-04)
-minor bug fixes
 
+minor bug fixes
 
 <a name="7.9.9">
 
 # [7.9.9 cursor](2019-05-8)
+
 Issues fix
 
 <a name="7.9.2">
 
 # [7.9.1 cursor](2019-04-15)
+
 Bugs fix
 
 <a name="7.9.1">
@@ -201,25 +227,25 @@ You can pass into mask pattern with brackets
 
 <a name="6.4.14"></a>
 
-# [6.4.14 fixed '\*' pattern in maskExpression ](2018-10-05)
+# [6.4.14 fixed '\*' pattern in maskExpression](2018-10-05)
 
 Fixed pattern '\*'
 
 <a name="6.4.13"></a>
 
-# [6.4.13 selection of input value and deletion of it is fixed ](2018-10-05)
+# [6.4.13 selection of input value and deletion of it is fixed](2018-10-05)
 
 You can select and delete value.
 
 <a name="6.4.12"></a>
 
-# [6.4.12 pipe with mask expression and custom Pattern ](2018-04-10)
+# [6.4.12 pipe with mask expression and custom Pattern](2018-04-10)
 
 You can pass array of expression and custom Pattern to pipe
 
 <a name="6.3.11"></a>
 
-# [6.3.11 fixed mask visable ](2018-03-10)
+# [6.3.11 fixed mask visable](2018-03-10)
 
 Fixed when page is loaded the mask is visible
 
