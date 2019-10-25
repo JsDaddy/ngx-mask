@@ -1,3 +1,9 @@
+<a name="8.1.5">
+
+# [8.1.5 bugfix](2019-10-25)
+
+Fix for #614 - export everything from config
+
 <a name="8.1.4">
 
 # [8.1.4 bugfix](2019-10-23)
