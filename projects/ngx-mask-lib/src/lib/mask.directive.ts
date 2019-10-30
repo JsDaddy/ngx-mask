@@ -86,7 +86,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || [];
       }
     }
-    if (patterns) {
+    // Only overwrite the mask available patterns if a pattern has actually been passed in
+    if (patterns && patterns.currentValue) {
       this._maskService.maskAvailablePatterns = patterns.currentValue;
     }
     if (prefix) {
