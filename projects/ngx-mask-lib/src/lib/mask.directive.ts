@@ -324,7 +324,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
       }
       this.suffixCheckOnPressDelete(e.keyCode, el);
-      if (
+      if (this._maskService.prefix.length &&
         (el.selectionStart as number) <= this._maskService.prefix.length &&
         (el.selectionEnd as number) <= this._maskService.prefix.length
       ) {
