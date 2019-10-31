@@ -43,7 +43,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   private _maskValue: string = '';
   private _inputValue!: string;
   private _position: number | null = null;
-  // tslint:disable-next-line
   private _start!: number;
   private _end!: number;
   private _code!: string;
