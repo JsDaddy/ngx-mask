@@ -16,9 +16,9 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import 'hammerjs';
+import { NgxMaskModule } from 'ngx-mask';
 
 import { AppComponent } from './app.component';
-import { NgxMaskModule } from 'ngx-mask';
 
 @NgModule({
   declarations: [AppComponent, TestMaskComponent],
@@ -33,7 +33,9 @@ import { NgxMaskModule } from 'ngx-mask';
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
-    NgxMaskModule.forRoot(),
+    NgxMaskModule.forRoot({
+      validation: true,
+    }),
     MatIconModule,
     MatListModule,
     MatCardModule,
@@ -42,4 +44,4 @@ import { NgxMaskModule } from 'ngx-mask';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
