@@ -43,7 +43,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   private _maskValue: string = '';
   private _inputValue!: string;
   private _position: number | null = null;
-  // tslint:disable-next-line
   private _start!: number;
   private _end!: number;
   private _code!: string;
@@ -86,7 +85,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || [];
       }
     }
-    if (patterns) {
+    // Only overwrite the mask available patterns if a pattern has actually been passed in
+    if (patterns && patterns.currentValue) {
       this._maskService.maskAvailablePatterns = patterns.currentValue;
     }
     if (prefix) {
@@ -323,7 +323,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
       }
       this.suffixCheckOnPressDelete(e.keyCode, el);
-      if (
+      if (this._maskService.prefix.length &&
         (el.selectionStart as number) <= this._maskService.prefix.length &&
         (el.selectionEnd as number) <= this._maskService.prefix.length
       ) {

@@ -6,7 +6,6 @@ import { MaskApplierService } from './mask-applier.service';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
-  public validation: boolean = true;
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
   public showMaskTyped: boolean = false;
@@ -15,11 +14,10 @@ export class MaskService extends MaskApplierService {
   public selStart: number | null = null;
   public selEnd: number | null = null;
   protected _formElement: HTMLInputElement;
-  // tslint:disable-next-line
+
   public onChange = (_: any) => { };
 
   public constructor(
-    // tslint:disable-next-line
     @Inject(DOCUMENT) private document: any,
     @Inject(config) protected _config: IConfig,
     private _elementRef: ElementRef,

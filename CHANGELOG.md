@@ -1,3 +1,13 @@
+<a name="8.1.6">
+
+# [8.1.6 bugfix](2019-10-30)
+
+Fix for #560 - do not overwrite the mask available patterns when patterns attribute passed in value is a falsey value i.e null/undefined/false
+
+Fix for #620 - allow delete button to work when at beginning of input and no prefix exists
+
+Fix for #621 - validation config value now works correctly
+
 <a name="8.1.5">
 
 # [8.1.5 bugfix](2019-10-25)

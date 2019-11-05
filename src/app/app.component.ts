@@ -30,6 +30,11 @@ export class AppComponent {
   public percent: FormControl;
   public formSecureInput: FormControl;
   public customPatternForm: FormControl;
+  public hourTimeForm: FormControl;
+  public hourForm: FormControl;
+  public hour24Form: FormControl;
+  public mixedTypeForm: FormControl;
+  public dateMonthForm: FormControl;
 
   public pattern: Pattern = {
     P: {
@@ -89,6 +94,11 @@ export class AppComponent {
     this.commaZeroPrecisionSeparatorForm = new FormControl('');
     this.percent = new FormControl('');
     this.customPatternForm = new FormControl('');
+    this.hourTimeForm = new FormControl('');
+    this.hourForm = new FormControl('');
+    this.hour24Form = new FormControl('');
+    this.mixedTypeForm = new FormControl('');
+    this.dateMonthForm = new FormControl('');
 
     this.customMaska = ['PPP-PPP-PPP', this.pattern];
   }

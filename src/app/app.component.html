@@ -86,7 +86,7 @@
                           <div class="col-mat-3">
                               <div class="mat-form-wr">
                                   <mat-form-field>
-                                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00" />
+                                      <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00" [formControl]="hourTimeForm" />
                                       <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
                                   </mat-form-field>
                               </div>
@@ -94,7 +94,7 @@
                           <div class="col-mat-3">
                               <div class="mat-form-wr">
                                   <mat-form-field>
-                                      <input matInput placeholder="Hour" mask="00:00:00" />
+                                      <input matInput placeholder="Hour" mask="00:00:00" [formControl]="hourForm" />
                                       <mat-hint> <b>Mask:</b> 00:00:00</mat-hint>
                                   </mat-form-field>
                               </div>
@@ -102,7 +102,7 @@
                           <div class="col-mat-3">
                               <div class="mat-form-wr">
                                   <mat-form-field>
-                                      <input matInput placeholder="Valid 24 hour format" mask="Hh:m0:s0" />
+                                      <input matInput placeholder="Valid 24 hour format" mask="Hh:m0:s0" [formControl]="hour24Form" />
                                       <mat-hint> <b>Mask:</b> Hh:m0:s0</mat-hint>
                                   </mat-form-field>
                               </div>
@@ -110,7 +110,7 @@
                           <div class="col-mat-3">
                               <div class="mat-form-wr">
                                   <mat-form-field>
-                                      <input matInput placeholder="Mixed Type" mask="AAA 000-S0S" />
+                                      <input matInput placeholder="Mixed Type" mask="AAA 000-S0S" [formControl]="mixedTypeForm" />
                                       <mat-hint> <b>Mask:</b> AAA 000-S0S</mat-hint>
                                   </mat-form-field>
                               </div>
@@ -123,7 +123,7 @@
                                           placeholder="Valid date and month"
                                           mask="d0/M0/0000"
                                           [dropSpecialCharacters]="true"
-                                      />
+                                          [formControl]="dateMonthForm" />
                                       <mat-hint> <b>Mask:</b> d0/M0/0000</mat-hint>
                                   </mat-form-field>
                               </div>
@@ -274,6 +274,7 @@
                                       matInput
                                       placeholder="Phone number"
                                       mask="(000) 000-0000"
+                                      prefix="+7 "
                                       [formControl]="form"
                                       [(ngModel)]="dateModel"
                                   />
@@ -312,7 +313,7 @@
                                       placeholder="Phone number"
                                       mask="(000) 000-0000"
                                       [formControl]="form1"
-                                      prefix="+5"
+                                      prefix="+5 "
                                       [(ngModel)]="showMaskModel"
                                       [showMaskTyped]="true"
                                   />
@@ -351,7 +352,7 @@
                               placeholder="Phone number"
                               mask="(000) 000-0000"
                               [formControl]="form1"
-                              prefix="+5"
+                              prefix="+5 "
                               [(ngModel)]="showMaskModel"
                               [showMaskTyped]="true"
                               placeHolderCharacter="*"
