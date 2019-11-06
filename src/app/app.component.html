@@ -630,6 +630,7 @@
                             [dropSpecialCharacters]="true"
                             mask="separator.2"
                             thousandSeparator="."
+                            decimalMarker=","
                             [formControl]="dotPrecisionSeparatorForm"
                             [(ngModel)]="dotPrecisionSeparatorFormModel"
                         />
@@ -656,10 +657,9 @@
                         <input
                             matInput
                             placeholder="Separator"
-                            [dropSpecialCharacters]="true"
-                            [dropSpecialCharacters]="[',']"
                             mask="separator.2"
                             thousandSeparator=","
+                            decimalMarker="."
                             [formControl]="commaPrecisionSeparatorForm"
                             [(ngModel)]="commaPrecisionSeparatorFormModel"
                         />

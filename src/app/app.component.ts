@@ -59,7 +59,7 @@ export class AppComponent {
   public separatorPrecisionSeparatorFormModel!: SN;
   public separatorZeroPrecisionSeparatorFormModel!: SN;
   public dotSeparatorFormModel!: string;
-  public dotPrecisionSeparatorFormModel: SN = '';
+  public dotPrecisionSeparatorFormModel: SN = 1234.56;
   public dotZeroPrecisionSeparatorFormModel!: SN;
   public commaSeparatorFormModel!: SN;
   public commaPrecisionSeparatorFormModel: SN = '';
@@ -87,7 +87,7 @@ export class AppComponent {
     this.separatorPrecisionSeparatorForm = new FormControl('');
     this.separatorZeroPrecisionSeparatorForm = new FormControl('');
     this.dotSeparatorForm = new FormControl('');
-    this.dotPrecisionSeparatorForm = new FormControl(0);
+    this.dotPrecisionSeparatorForm = new FormControl(1234.56);
     this.dotZeroPrecisionSeparatorForm = new FormControl('');
     this.commaSeparatorForm = new FormControl('');
     this.commaPrecisionSeparatorForm = new FormControl(0);

@@ -1,3 +1,9 @@
+<a name="8.1.7">
+
+# [8.1.7 bugfix](2019-11-06)
+
+Fix for #624 - formatting of float numbers
+
 <a name="8.1.6">
 
 # [8.1.6 bugfix](2019-10-30)

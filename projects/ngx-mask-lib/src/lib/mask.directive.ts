@@ -202,6 +202,15 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     return null;
   }
 
+  @HostListener('paste', ['$event'])
+  public onPaste(e: ClipboardEvent): void {
+    const clipboardData = e.clipboardData;
+    if (clipboardData) {
+      e.preventDefault();
+      this.writeValue(clipboardData.getData('text'));
+    }
+  }
+
   @HostListener('input', ['$event'])
   public onInput(e: CustomKeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
@@ -358,7 +367,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     if (inputValue === undefined) {
       inputValue = '';
     }
-    if (typeof inputValue === 'number') {
+    if (typeof inputValue === 'number' || this._maskService.maskExpression.startsWith('separator')) {
       inputValue = String(inputValue);
       inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
       this._maskService.isNumberValue = true;
