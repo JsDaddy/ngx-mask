@@ -406,7 +406,9 @@ export class MaskApplierService {
   private _stripToDecimal(str: string): string {
     return str
       .split('')
-      .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
+      .filter((i: string, idx: number) => {
+        return i.match('^-?\\d') || i === '.' || i === ',' || (i === '-' && idx == 0)
+      })
       .join('');
   }
 
