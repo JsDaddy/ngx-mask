@@ -17,6 +17,7 @@ export class AppComponent {
   public mask: string = '';
   public phone: number = 123456789;
   public customMaska: [string, Pattern];
+  public pipeSeparatorValue: string = '123456789';
 
   public form: FormControl;
   public form1: FormControl;
