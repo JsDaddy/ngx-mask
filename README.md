@@ -59,6 +59,14 @@ Also, you can use mask pipe.
 <span>{{phone | mask: '(000) 000-0000'}}</span>
 ```
 
+For separator you can add thousandSeparator
+
+### Usage
+
+```html
+<span>{{value | mask: 'separator':','}}</span>
+```
+
 #### Examples
 
 | mask           | example        |
