@@ -284,6 +284,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       el.selectionStart = this._maskService.prefix.length;
       return;
     }
+
+    /** select only inserted text */
+    if ((el.selectionEnd as number) > this._getActualInputLength()) {
+      el.selectionEnd = this._getActualInputLength();
+    }
   }
 
   // tslint:disable-next-line: cyclomatic-complexity
@@ -348,6 +353,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._inputValue.length - this.suffix.length < (el.selectionStart as number)
     ) {
       el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
+    } else if (
+      (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+ A
+      (e.keyCode === 65 && e.metaKey === true)    // Cmd + A (Mac)
+    ) {
+      el.setSelectionRange(0, this._getActualInputLength());
+      e.preventDefault();
     }
     this._maskService.selStart = el.selectionStart;
     this._maskService.selEnd = el.selectionEnd;
@@ -449,5 +460,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       return { 'Mask error': true };
     }
     return null;
+  }
+
+  private _getActualInputLength() {
+    return this._maskService.actualValue.length ||
+      this._maskService.actualValue.length + this._maskService.prefix.length;
   }
 }
