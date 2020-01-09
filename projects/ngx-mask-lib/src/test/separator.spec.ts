@@ -31,14 +31,34 @@ describe('Separator: Mask', () => {
     equal('100', '100', fixture);
   });
 
+  it('separator for -100', () => {
+    component.mask = 'separator';
+    equal('-100', '-100', fixture);
+  });
+
   it('separator for 1000', () => {
     component.mask = 'separator';
     equal('1000', '1 000', fixture);
   });
 
+  it('separator for -1000', () => {
+    component.mask = 'separator';
+    equal('-1000', '-1 000', fixture);
+  });
+
   it('separator for 10000', () => {
     component.mask = 'separator';
     equal('10000', '10 000', fixture);
+  });
+
+  it('separator for -10000', () => {
+    component.mask = 'separator';
+    equal('-10000', '-10 000', fixture);
+  });
+
+  it('separator for -100000', () => {
+    component.mask = 'separator';
+    equal('-100000', '-100 000', fixture);
   });
 
   it('separator for 100000', () => {
@@ -51,6 +71,11 @@ describe('Separator: Mask', () => {
     equal('1000000', '1 000 000', fixture);
   });
 
+  it('separator for -1000000', () => {
+    component.mask = 'separator';
+    equal('-1000000', '-1 000 000', fixture);
+  });
+
   it('should limit separator to 1000', () => {
     component.mask = 'separator';
     component.separatorLimit = '1000';
@@ -60,6 +85,11 @@ describe('Separator: Mask', () => {
   it('separator precision 2 for 1000000.00', () => {
     component.mask = 'separator.2';
     equal('1000000.00', '1 000 000.00', fixture);
+  });
+
+  it('separator precision 2 for -1000000.00', () => {
+    component.mask = 'separator.2';
+    equal('-1000000.00', '-1 000 000.00', fixture);
   });
 
   it('should limit separator with precision 2 to 10000', () => {
@@ -105,6 +135,18 @@ describe('Separator: Mask', () => {
     equal('1000000', '1.000.000', fixture);
   });
 
+  it('should not accept more than one minus signal at the beginning of input for separator thousandSeparator . for --1000', () => {
+    component.mask = 'separator';
+    component.thousandSeparator = '.';
+    equal('--1000', '-1.000', fixture);
+  });
+
+  it('should not accept more than one minus signal for separator thousandSeparator . for -100-0000', () => {
+    component.mask = 'separator';
+    component.thousandSeparator = '.';
+    equal('-100-0000', '-1.000.000', fixture);
+  });
+
   it('should limit separator thousandSeparator . to 100000', () => {
     component.mask = 'separator';
     component.thousandSeparator = '.';
@@ -112,10 +154,23 @@ describe('Separator: Mask', () => {
     equal('1000000', '100.000', fixture);
   });
 
+  it('should limit separator thousandSeparator . to -100000', () => {
+    component.mask = 'separator';
+    component.thousandSeparator = '.';
+    component.separatorLimit = '100000';
+    equal('-1000000', '-100.000', fixture);
+  });
+
   it('separator thousandSeparator . precision 2 for 1000000.00', () => {
     component.mask = 'separator.2';
     component.thousandSeparator = '.';
     equal('1000000,00', '1.000.000,00', fixture);
+  });
+
+  it('separator thousandSeparator . precision 2 for -1000000.00', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = '.';
+    equal('-1000000,00', '-1.000.000,00', fixture);
   });
 
   it('separator thousandSeparator . precision 2 with 0 after point for 1000000.00', () => {

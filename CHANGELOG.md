@@ -1,3 +1,11 @@
+<a name="8.1.7">
+
+# [8.1.7 bugfix](2019-12-27)
+
+Fix for #369 - add thousandSeparator to separator pipe
+
+Fix for #381 - add support to negative number in separator mask
+
 <a name="8.1.6">
 
 # [8.1.6 bugfix](2019-10-30)

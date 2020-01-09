@@ -67,10 +67,9 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "src/karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
+            "main": "projects/ngx-mask-lib/src/test.ts",
+            "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
+            "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
             "codeCoverage": true,
             "sourceMap": true,
             "scripts": [],

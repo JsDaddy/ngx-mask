@@ -10,9 +10,16 @@ import { IConfig } from './config';
 export class MaskPipe implements PipeTransform {
   public constructor(private _maskService: MaskApplierService) {}
 
-  public transform(value: string | number, mask: string | [string, IConfig['patterns']]): string {
+  public transform(
+    value: string | number,
+    mask: string | [string, IConfig['patterns']],
+    thousandSeparator: string | null = null
+  ): string {
     if (!value && typeof value !== 'number') {
       return '';
+    }
+    if (thousandSeparator) {
+      this._maskService.thousandSeparator = thousandSeparator;
     }
     if (typeof mask === 'string') {
       return this._maskService.applyMask(`${value}`, mask);

@@ -225,9 +225,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       return;
     }
     this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-    const positionToApply: number = this._position
+    let positionToApply: number = this._position
       ? this._inputValue.length + position + caretShift
       : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+    if (positionToApply > this._getActualInputLength()) {
+      positionToApply = this._getActualInputLength();
+    }
     el.setSelectionRange(positionToApply, positionToApply);
     if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
       el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);
@@ -283,6 +286,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     if (((el.selectionStart as number) || (el.selectionEnd as number)) <= this._maskService.prefix.length) {
       el.selectionStart = this._maskService.prefix.length;
       return;
+    }
+
+    /** select only inserted text */
+    if ((el.selectionEnd as number) > this._getActualInputLength()) {
+      el.selectionEnd = this._getActualInputLength();
     }
   }
 
@@ -348,6 +356,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._inputValue.length - this.suffix.length < (el.selectionStart as number)
     ) {
       el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
+    } else if (
+      (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+ A
+      (e.keyCode === 65 && e.metaKey === true)    // Cmd + A (Mac)
+    ) {
+      el.setSelectionRange(0, this._getActualInputLength());
+      e.preventDefault();
     }
     this._maskService.selStart = el.selectionStart;
     this._maskService.selEnd = el.selectionEnd;
@@ -449,5 +463,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       return { 'Mask error': true };
     }
     return null;
+  }
+
+  private _getActualInputLength() {
+    return this._maskService.actualValue.length ||
+      this._maskService.actualValue.length + this._maskService.prefix.length;
   }
 }

@@ -358,7 +358,11 @@ export class MaskApplierService {
     let res: string = x[0];
     const separatorLimit: string = this.separatorLimit.replace(/\s/g, '');
     if (separatorLimit && +separatorLimit) {
-      res = res.slice(0, separatorLimit.length);
+      if (res[0] === '-') {
+          res = `-${res.slice(1, res.length).slice(0, separatorLimit.length)}`;
+      } else {
+          res = res.slice(0, separatorLimit.length);
+      }
     }
     const rgx: RegExp = /(\d+)(\d{3})/;
     while (rgx.test(res)) {
@@ -406,7 +410,9 @@ export class MaskApplierService {
   private _stripToDecimal(str: string): string {
     return str
       .split('')
-      .filter((i: string) => i.match('\\d') || i === '.' || i === ',')
+      .filter((i: string, idx: number) => {
+        return i.match('^-?\\d') || i === '.' || i === ',' || (i === '-' && idx === 0);
+      })
       .join('');
   }
 
