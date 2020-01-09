@@ -17,14 +17,8 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
-              "src/styles.scss"
-            ],
+            "assets": ["src/assets", "src/favicon.ico"],
+            "styles": ["node_modules/bootstrap/dist/css/bootstrap-grid.min.css", "src/styles.scss"],
             "scripts": []
           },
           "configurations": {
@@ -67,33 +61,23 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/ngx-mask-lib/src/test.ts",
-            "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
-            "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
+            "main": "src/test.ts",
+            "karmaConfig": "src/karma.conf.js",
+            "polyfills": "src/polyfills.ts",
+            "tsConfig": "src/tsconfig.spec.json",
             "codeCoverage": true,
             "sourceMap": true,
             "scripts": [],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap-grid.css",
-              "src/styles.scss"
-            ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ]
+            "styles": ["node_modules/bootstrap/dist/css/bootstrap-grid.css", "src/styles.scss"],
+            "assets": ["src/assets", "src/favicon.ico"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "src/tsconfig.app.json",
-              "src/tsconfig.spec.json"
-            ],
+            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
             "format": "stylish",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
@@ -134,14 +118,9 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": [
-              "projects/ngx-mask-lib/tsconfig.lib.json",
-              "projects/ngx-mask-lib/tsconfig.spec.json"
-            ],
+            "tsConfig": ["projects/ngx-mask-lib/tsconfig.lib.json", "projects/ngx-mask-lib/tsconfig.spec.json"],
             "format": "stylish",
-            "exclude": [
-              "**/node_modules/**"
-            ]
+            "exclude": ["**/node_modules/**"]
           }
         }
       }
