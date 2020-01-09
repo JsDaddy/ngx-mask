@@ -1,3 +1,9 @@
+<a name="8.1.8">
+
+# [8.1.8 bugfix](2020-01-09)
+
+Fix for #657 - showMaskTyped option now works correctly when set in the config
+
 <a name="8.1.7">
 
 # [8.1.7 bugfix](2019-12-27)
