@@ -30,7 +30,7 @@ $ npm install --save ngx-mask
 Import **ngx-mask** module in Angular app.
 
 ```typescript
-import { NgxMaskModule } from 'ngx-mask'
+import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>);
 
@@ -48,7 +48,11 @@ Then, just define masks in inputs.
 ### Usage
 
 ```html
-<input type="text" mask="{here comes your mask}" />
+<input type="text" mask="<here goes your mask>" />
+```
+or
+```html
+<input type="text" [mask]="<here goes a reference to your component's mask property>" />
 ```
 
 Also, you can use mask pipe.
