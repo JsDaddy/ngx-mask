@@ -51,10 +51,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     @Inject(DOCUMENT) private document: any,
     private _maskService: MaskService,
     @Inject(config) protected _config: IConfig
-  ) { }
+  ) {}
 
-  public onChange = (_: any) => { };
-  public onTouch = () => { };
+  public onChange = (_: any) => {};
+  public onTouch = () => {};
 
   public ngOnChanges(changes: SimpleChanges): void {
     const {
@@ -313,14 +313,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
           el.setSelectionRange(this.prefix.length, this.prefix.length);
         } else {
-          if (
-            this._inputValue.length !== (el.selectionStart as number) &&
-            (el.selectionStart as number) !== 1
-          ) {
+          if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
             while (
-              this.specialCharacters.includes(
-                this._inputValue[(el.selectionStart as number) - 1].toString()
-              ) &&
+              this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString()) &&
               ((this.prefix.length >= 1 && (el.selectionStart as number) > this.prefix.length) ||
                 this.prefix.length === 0)
             ) {
@@ -331,7 +326,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         }
       }
       this.suffixCheckOnPressDelete(e.keyCode, el);
-      if (this._maskService.prefix.length &&
+      if (
+        this._maskService.prefix.length &&
         (el.selectionStart as number) <= this._maskService.prefix.length &&
         (el.selectionEnd as number) <= this._maskService.prefix.length
       ) {
@@ -358,7 +354,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
     } else if (
       (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+ A
-      (e.keyCode === 65 && e.metaKey === true)    // Cmd + A (Mac)
+      (e.keyCode === 65 && e.metaKey === true) // Cmd + A (Mac)
     ) {
       el.setSelectionRange(0, this._getActualInputLength());
       e.preventDefault();
@@ -378,11 +374,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._maskService.isNumberValue = true;
     }
     (inputValue && this._maskService.maskExpression) ||
-      (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+    (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
       ? (this._maskService.formElementProperty = [
-        'value',
-        this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-      ])
+          'value',
+          this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+        ])
       : (this._maskService.formElementProperty = ['value', inputValue]);
     this._inputValue = inputValue;
   }
@@ -403,10 +399,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       }
     }
     if (keyCode === 8) {
-      if (
-        this.suffix.length > 1 &&
-        this._inputValue.length - this.suffix.length < (el.selectionStart as number)
-      ) {
+      if (this.suffix.length > 1 && this._inputValue.length - this.suffix.length < (el.selectionStart as number)) {
         el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
       }
       if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
@@ -456,6 +449,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
   private _validateTime(value: string): ValidationErrors | null {
     const rowMaskLen: number = this._maskValue.split('').filter((s: string) => s !== ':').length;
+    if (value === null) {
+      return { 'Mask error': true };
+    }
+
     if (+value[value.length - 1] === 0 && value.length < rowMaskLen) {
       return { 'Mask error': true };
     }
@@ -466,7 +463,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   }
 
   private _getActualInputLength() {
-    return this._maskService.actualValue.length ||
-      this._maskService.actualValue.length + this._maskService.prefix.length;
+    return (
+      this._maskService.actualValue.length || this._maskService.actualValue.length + this._maskService.prefix.length
+    );
   }
 }

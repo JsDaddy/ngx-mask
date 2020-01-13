@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-grid-wr">
+        <mat-grid-list cols="1" rowHeight="55px">
+          <mat-grid-tile>
+            <mat-toolbar>
+              <span>Bugs Testing Page</span>
+            </mat-toolbar>
+          </mat-grid-tile>
+        </mat-grid-list>
+        <a routerLink="/">Back to showcase</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <p>Time validation test</p>
+      <div [formGroup]="bugsForm">
+        <input
+          matInput
+          [showMaskTyped]="true"
+          [dropSpecialCharacters]="false"
+          mask="Hh:m0"
+          formControlName="MonStart"
+        />
+        Valid: {{ bugsForm.controls.MonStart.valid }}
+      </div>
+    </div>
+  </div>
+</div>
