@@ -48,7 +48,7 @@ Then, just define masks in inputs.
 ### Usage
 
 ```html
-<input type="text" mask="{here comes your mask}" />
+<input type="text" mask="here comes your mask" />
 ```
 
 Also, you can use mask pipe.
