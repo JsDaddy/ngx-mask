@@ -6,6 +6,8 @@ Fix for #657 - showMaskTyped option now works correctly when set in the config
 
 Fix for #665 - validateTime mark field as invalid immediately if value is null
 
+Feature: Added new error page for handling 404's, and new bugs page for being a playground for bug fixing
+
 <a name="8.1.7">
 
 # [8.1.7 bugfix](2019-12-27)

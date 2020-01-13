@@ -20,14 +20,13 @@
     <div class="col-12">
       <p>Time validation test</p>
       <div [formGroup]="bugsForm">
-        <input
-          matInput
-          [showMaskTyped]="true"
-          [dropSpecialCharacters]="false"
-          mask="Hh:m0"
-          formControlName="MonStart"
-        />
-        Valid: {{ bugsForm.controls.MonStart.valid }}
+        <p>
+          <input [showMaskTyped]="true" [dropSpecialCharacters]="false" mask="Hh:m0" formControlName="MonStart" />
+        </p>
+        <p>
+          Valid: {{ bugsForm.controls.MonStart.valid }}<br />
+          Value: {{ bugsForm.controls.MonStart.value }}
+        </p>
       </div>
     </div>
   </div>
