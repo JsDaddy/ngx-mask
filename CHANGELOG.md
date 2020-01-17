@@ -1,12 +1,15 @@
-<a name="8.1.8">
+<a name="8.2.0">
 
-# [8.1.8 bugfix](2020-01-09)
+# [8.2.0 bugfix and breaking change](2020-01-17)
 
 Fix for #657 - showMaskTyped option now works correctly when set in the config
 
 Fix for #665 - validateTime mark field as invalid immediately if value is null
 
 Feature: Added new error page for handling 404's, and new bugs page for being a playground for bug fixing
+
+Breaking change: Made validation error return an object named mask. If you were previously checking for a
+validation error named 'Mask error' then it will need changing to just 'mask'.
 
 <a name="8.1.7">
 

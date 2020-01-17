@@ -137,7 +137,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       return null;
     }
     if (this._maskService.ipError) {
-      return { 'Mask error': true };
+      return {
+        mask: {
+          requiredMask: this._maskValue,
+          actualValue: value,
+        },
+      };
     }
     if (this._maskValue.startsWith('separator')) {
       return null;
@@ -188,14 +193,24 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?')) ||
         this._maskValue.indexOf('{') === 1
       ) {
-        return { 'Mask error': true };
+        return {
+          mask: {
+            requiredMask: this._maskValue,
+            actualValue: value,
+          },
+        };
       }
       if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
         const length: number = this._maskService.dropSpecialCharacters
           ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
           : this._maskValue.length - counterOfOpt;
         if (value.toString().length < length) {
-          return { 'Mask error': true };
+          return {
+            mask: {
+              requiredMask: this._maskValue,
+              actualValue: value,
+            },
+          };
         }
       }
     }
@@ -449,16 +464,19 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
   private _validateTime(value: string): ValidationErrors | null {
     const rowMaskLen: number = this._maskValue.split('').filter((s: string) => s !== ':').length;
-    if (value === null) {
-      return { 'Mask error': true };
+    if (value === null || value.length === 0) {
+      return null; // Don't validate empty values to allow for optional form control
     }
 
-    if (+value[value.length - 1] === 0 && value.length < rowMaskLen) {
-      return { 'Mask error': true };
+    if ((+value[value.length - 1] === 0 && value.length < rowMaskLen) || value.length <= rowMaskLen - 2) {
+      return {
+        mask: {
+          requiredMask: this._maskValue,
+          actualValue: value,
+        },
+      };
     }
-    if (value.length <= rowMaskLen - 2) {
-      return { 'Mask error': true };
-    }
+
     return null;
   }
 

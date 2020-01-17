@@ -25,7 +25,8 @@
         </p>
         <p>
           Valid: {{ bugsForm.controls.MonStart.valid }}<br />
-          Value: {{ bugsForm.controls.MonStart.value }}
+          Value: {{ bugsForm.controls.MonStart.value }}<br />
+          Errors: {{ bugsForm.controls.MonStart.errors | json }}
         </p>
       </div>
     </div>
