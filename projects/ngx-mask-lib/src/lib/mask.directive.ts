@@ -137,12 +137,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       return null;
     }
     if (this._maskService.ipError) {
-      return {
-        mask: {
-          requiredMask: this._maskValue,
-          actualValue: value,
-        },
-      };
+      return this._createValidationError(value);
     }
     if (this._maskValue.startsWith('separator')) {
       return null;
@@ -193,24 +188,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         (this._maskValue.indexOf('?') > 1 && value.toString().length < this._maskValue.indexOf('?')) ||
         this._maskValue.indexOf('{') === 1
       ) {
-        return {
-          mask: {
-            requiredMask: this._maskValue,
-            actualValue: value,
-          },
-        };
+        return this._createValidationError(value);
       }
       if (this._maskValue.indexOf('*') === -1 || this._maskValue.indexOf('?') === -1) {
         const length: number = this._maskService.dropSpecialCharacters
           ? this._maskValue.length - this._maskService.checkSpecialCharAmount(this._maskValue) - counterOfOpt
           : this._maskValue.length - counterOfOpt;
         if (value.toString().length < length) {
-          return {
-            mask: {
-              requiredMask: this._maskValue,
-              actualValue: value,
-            },
-          };
+          return this._createValidationError(value);
         }
       }
     }
@@ -469,12 +454,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
 
     if ((+value[value.length - 1] === 0 && value.length < rowMaskLen) || value.length <= rowMaskLen - 2) {
-      return {
-        mask: {
-          requiredMask: this._maskValue,
-          actualValue: value,
-        },
-      };
+      return this._createValidationError(value);
     }
 
     return null;
@@ -484,5 +464,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     return (
       this._maskService.actualValue.length || this._maskService.actualValue.length + this._maskService.prefix.length
     );
+  }
+
+  private _createValidationError(actualValue: string): ValidationErrors {
+    return {
+      mask: {
+        requiredMask: this._maskValue,
+        actualValue,
+      },
+    };
   }
 }
