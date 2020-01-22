@@ -33,7 +33,6 @@ testem.log
 .DS_Store
 Thumbs.db
 
-/src/**.*js
 /build
 
 .ng_pkg_build/

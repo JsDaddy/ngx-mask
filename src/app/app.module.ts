@@ -11,21 +11,26 @@ import {
   MatSidenavModule,
   MatToolbarModule,
 } from '@angular/material';
-import { TestMaskComponent } from '../../projects/ngx-mask-lib/src/test/utils/test-component.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import 'hammerjs';
 import { NgxMaskModule } from 'ngx-mask';
 
+import { TestMaskComponent } from '../../projects/ngx-mask-lib/src/test/utils/test-component.component';
 import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app.routes';
+import { BugsComponent } from './bugs/bugs.component';
+import { ShowcaseComponent } from './showcase/showcase.component';
+import { ErrorComponent } from './error/error.component';
 
 @NgModule({
-  declarations: [AppComponent, TestMaskComponent],
+  declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
+    AppRoutingModule,
     MatGridListModule,
     MatSidenavModule,
     MatToolbarModule,
@@ -44,4 +49,4 @@ import { AppComponent } from './app.component';
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
