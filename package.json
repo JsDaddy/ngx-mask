@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "8.1.7",
+  "version": "8.2.0",
   "description": "awesome ngx mask",
   "license": "MIT",
   "angular-cli": {},
@@ -26,7 +26,7 @@
   "scripts": {
     "build": "ng build showcase --prod",
     "build:lib": "ng build --prod ngx-mask-lib && npm run copy-libdocs",
-    "ci": "npm run lint && npm run build:lib && npm run test && npm run build",
+    "ci": "npm run lint && npm run build:lib && npm run test:all && npm run build",
     "copy-libdocs": "copyfiles -V -E README.md LICENSE dist/ngx-mask-lib",
     "lint": "concurrently --kill-others-on-fail \"ng lint showcase\" \"ng lint ngx-mask-lib\" \"npm run lint:markdown\"",
     "lint:markdown": "markdownlint -i node_modules -i CHANGELOG.md ./",
@@ -39,14 +39,17 @@
     "release:minor": "npm run version:minor && npm run build:lib && npm run pack:lib && npm run publish:lib",
     "release:patch": "npm run version:patch && npm run build:lib && npm run pack:lib && npm run publish:lib",
     "start": "ng serve -o showcase",
-    "test": "ng test ngx-mask-lib",
+    "test": "npm run test:lib",
+    "test:all": "npm run test:app && npm run test:lib",
+    "test:app": "ng test showcase",
+    "test:lib": "ng test ngx-mask-lib",
     "version:major": "npm --no-git-tag-version version major && cd projects/ngx-mask-lib && npm --no-git-tag-version version major",
     "version:minor": "npm --no-git-tag-version version minor && cd projects/ngx-mask-lib && npm --no-git-tag-version version minor",
     "version:patch": "npm --no-git-tag-version version patch && cd projects/ngx-mask-lib && npm --no-git-tag-version version patch"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NepipenkoIgor/ngx-mask.git"
+    "url": "https://github.com/JsDaddy/ngx-mask.git"
   },
   "dependencies": {
     "@angular/animations": "8.2.9",

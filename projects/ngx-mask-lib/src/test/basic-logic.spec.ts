@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
-import { ReactiveFormsModule } from '@angular/forms';
-import { TestMaskComponent } from './utils/test-component.component';
-import { equal, typeTest } from './utils/test-functions.component';
 import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { MaskDirective } from '..';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { NgxMaskModule } from '../lib/ngx-mask.module';
+import { TestMaskComponent } from './utils/test-component.component';
+import { equal, typeTest } from './utils/test-functions.component';
+import { MaskDirective } from '../lib/mask.directive';
 
 describe('Directive: Mask', () => {
   let fixture: ComponentFixture<TestMaskComponent>;
@@ -251,7 +252,7 @@ describe('Directive: Mask', () => {
     inputTarget.selectionStart = 0;
     inputTarget.selectionEnd = 6;
 
-    const directiveInstance: MaskDirective = debugElement.injector.get(MaskDirective);
+    const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
     spyOn(directiveInstance['_maskService'], 'applyMask');
     debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
     expect(directiveInstance['_maskService'].applyMask).toHaveBeenCalled();
@@ -269,7 +270,7 @@ describe('Directive: Mask', () => {
     inputTarget.selectionStart = 0;
     inputTarget.selectionEnd = 6;
 
-    const directiveInstance: MaskDirective = debugElement.injector.get(MaskDirective);
+    const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
     spyOn(directiveInstance['_maskService'], 'applyMask');
     debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
     expect(directiveInstance['_maskService'].applyMask).not.toHaveBeenCalled();

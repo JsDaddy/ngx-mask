@@ -8,14 +8,13 @@ import { MaskApplierService } from './mask-applier.service';
 export class MaskService extends MaskApplierService {
   public maskExpression: string = '';
   public isNumberValue: boolean = false;
-  public showMaskTyped: boolean = false;
   public placeHolderCharacter: string = '_';
   public maskIsShown: string = '';
   public selStart: number | null = null;
   public selEnd: number | null = null;
   protected _formElement: HTMLInputElement;
 
-  public onChange = (_: any) => { };
+  public onChange = (_: any) => {};
 
   public constructor(
     @Inject(DOCUMENT) private document: any,
@@ -28,7 +27,7 @@ export class MaskService extends MaskApplierService {
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
     if (!maskExpression) {
       return inputValue;
     }
@@ -50,10 +49,10 @@ export class MaskService extends MaskApplierService {
           ? inputValue.length > actualResult.length
             ? actualResult.splice(this.selStart, 0, getSymbol)
             : inputValue.length < actualResult.length
-              ? actualResult.length - inputValue.length === 1
-                ? actualResult.splice(this.selStart - 1, 1)
-                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-              : null
+            ? actualResult.length - inputValue.length === 1
+              ? actualResult.splice(this.selStart - 1, 1)
+              : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+            : null
           : null
         : (actualResult = []);
       // tslint:enable no-unused-expression
@@ -87,7 +86,7 @@ export class MaskService extends MaskApplierService {
     return result + (this.maskExpression === 'IP' ? prefNmask : prefNmask.slice(resLen));
   }
 
-  public applyValueChanges(position: number = 0, cb: Function = () => { }): void {
+  public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
     this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
     if (this._formElement === this.document.activeElement) {
       return;
@@ -169,7 +168,7 @@ export class MaskService extends MaskApplierService {
     if (
       this.clearIfNotMatch &&
       this.prefix.length + this.maskExpression.length + this.suffix.length !==
-      this._formElement.value.replace(/_/g, '').length
+        this._formElement.value.replace(/_/g, '').length
     ) {
       this.formElementProperty = ['value', ''];
       this.applyMask(this._formElement.value, this.maskExpression);

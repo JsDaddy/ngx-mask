@@ -7,10 +7,9 @@ import { equal } from './utils/test-functions.component';
 
 @Component({
   selector: 'mask-test-no-validation-attr',
-  template: `<input
-      id="maska"
-      mask="0000"
-      [formControl]="form" />`,
+  template: `
+    <input id="maska" mask="0000" [formControl]="form" />
+  `,
 })
 export class TestMaskNoValidationAttributeComponent {
   public form: FormControl = new FormControl('');
@@ -18,11 +17,9 @@ export class TestMaskNoValidationAttributeComponent {
 
 @Component({
   selector: 'mask-test-validation-attr',
-  template: `<input
-      id="maska"
-      mask="0000"
-      [validation]="validate"
-      [formControl]="form" />`,
+  template: `
+    <input id="maska" mask="0000" [validation]="validate" [formControl]="form" />
+  `,
 })
 export class TestMaskValidationAttributeComponent {
   public form: FormControl = new FormControl('');
@@ -30,7 +27,6 @@ export class TestMaskValidationAttributeComponent {
 }
 
 describe('Directive: Mask (Validation)', () => {
-
   describe('Global validation true, validation attribute on input not specified', () => {
     let fixture: ComponentFixture<TestMaskNoValidationAttributeComponent>;
     let component: TestMaskNoValidationAttributeComponent;
@@ -38,9 +34,12 @@ describe('Directive: Mask (Validation)', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestMaskNoValidationAttributeComponent],
-        imports: [ReactiveFormsModule, NgxMaskModule.forRoot({
-          validation: true,
-        })],
+        imports: [
+          ReactiveFormsModule,
+          NgxMaskModule.forRoot({
+            validation: true,
+          }),
+        ],
       });
       fixture = TestBed.createComponent(TestMaskNoValidationAttributeComponent);
       component = fixture.componentInstance;
@@ -50,7 +49,7 @@ describe('Directive: Mask (Validation)', () => {
     it('should be marked as not valid if not valid', () => {
       equal('12', '12', fixture);
       expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('Mask error')).toBeTrue();
+      expect(component.form.hasError('mask')).toBeTrue();
     });
 
     it('should be marked as valid if valid', () => {
@@ -66,9 +65,12 @@ describe('Directive: Mask (Validation)', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestMaskValidationAttributeComponent],
-        imports: [ReactiveFormsModule, NgxMaskModule.forRoot({
-          validation: true,
-        })],
+        imports: [
+          ReactiveFormsModule,
+          NgxMaskModule.forRoot({
+            validation: true,
+          }),
+        ],
       });
       fixture = TestBed.createComponent(TestMaskValidationAttributeComponent);
       component = fixture.componentInstance;
@@ -78,7 +80,7 @@ describe('Directive: Mask (Validation)', () => {
     it('should be marked as not valid if not valid and validation attribute true', () => {
       equal('12', '12', fixture);
       expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('Mask error')).toBeTrue();
+      expect(component.form.hasError('mask')).toBeTrue();
     });
 
     it('should be marked as valid if valid and validation attribute true', () => {
@@ -100,9 +102,12 @@ describe('Directive: Mask (Validation)', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestMaskNoValidationAttributeComponent],
-        imports: [ReactiveFormsModule, NgxMaskModule.forRoot({
-          validation: false,
-        })],
+        imports: [
+          ReactiveFormsModule,
+          NgxMaskModule.forRoot({
+            validation: false,
+          }),
+        ],
       });
       fixture = TestBed.createComponent(TestMaskNoValidationAttributeComponent);
       component = fixture.componentInstance;
@@ -113,7 +118,6 @@ describe('Directive: Mask (Validation)', () => {
       equal('12', '12', fixture);
       expect(component.form.valid).toBeTrue();
     });
-
   });
 
   describe('Global validation false, validation attribute on input specified', () => {
@@ -123,9 +127,12 @@ describe('Directive: Mask (Validation)', () => {
     beforeEach(() => {
       TestBed.configureTestingModule({
         declarations: [TestMaskValidationAttributeComponent],
-        imports: [ReactiveFormsModule, NgxMaskModule.forRoot({
-          validation: false,
-        })],
+        imports: [
+          ReactiveFormsModule,
+          NgxMaskModule.forRoot({
+            validation: false,
+          }),
+        ],
       });
       fixture = TestBed.createComponent(TestMaskValidationAttributeComponent);
       component = fixture.componentInstance;
@@ -135,7 +142,7 @@ describe('Directive: Mask (Validation)', () => {
     it('should be marked as not valid if not valid and validation attribute true', () => {
       equal('12', '12', fixture);
       expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('Mask error')).toBeTrue();
+      expect(component.form.hasError('mask')).toBeTrue();
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
@@ -144,5 +151,4 @@ describe('Directive: Mask (Validation)', () => {
       expect(component.form.valid).toBeTrue();
     });
   });
-
 });
