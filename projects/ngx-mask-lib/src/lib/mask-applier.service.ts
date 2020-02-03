@@ -23,6 +23,7 @@ export class MaskApplierService {
   public placeHolderCharacter!: IConfig['placeHolderCharacter'];
   public validation: IConfig['validation'];
   public separatorLimit: IConfig['separatorLimit'];
+  public allowNegativeNumbers: IConfig['allowNegativeNumbers'];
 
   private _shift!: Set<number>;
 
@@ -41,6 +42,7 @@ export class MaskApplierService {
     this.placeHolderCharacter = this._config.placeHolderCharacter;
     this.validation = this._config.validation;
     this.separatorLimit = this._config.separatorLimit;
+    this.allowNegativeNumbers = this._config.allowNegativeNumbers;
   }
 
   public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
