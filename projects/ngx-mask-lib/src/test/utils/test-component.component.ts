@@ -22,6 +22,7 @@ import { IConfig } from '../../lib/config';
       [placeHolderCharacter]="placeHolderCharacter"
       [separatorLimit]="separatorLimit"
       [hiddenInput]="hiddenInput"
+      [allowNegativeNumbers]="allowNegativeNumbers"
       [(ngModel)]="ngModelValue"
     />
   `,
@@ -42,4 +43,5 @@ export class TestMaskComponent {
   public placeHolderCharacter: IConfig['placeHolderCharacter'] = '_';
   public hiddenInput: IConfig['hiddenInput'] = false;
   public separatorLimit: IConfig['separatorLimit'] = '';
+  public allowNegativeNumbers: IConfig['allowNegativeNumbers'] = false;
 }

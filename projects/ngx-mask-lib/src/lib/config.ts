@@ -15,6 +15,7 @@ export interface IConfig {
   hiddenInput: boolean | undefined;
   validation: boolean;
   separatorLimit: string;
+  allowNegativeNumbers: boolean;
   patterns: {
     [character: string]: {
       pattern: RegExp;
@@ -42,6 +43,7 @@ export const initialConfig: IConfig = {
   hiddenInput: undefined,
   shownMaskExpression: '',
   separatorLimit: '',
+  allowNegativeNumbers: false,
   validation: true,
   // tslint:disable-next-line: quotemark
   specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],

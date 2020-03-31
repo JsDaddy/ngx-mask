@@ -207,6 +207,23 @@ You can choose if mask is shown while typing, or not, default value is `false`.
  <input mask="(000) 000-0000" prefix="+7" [showMaskTyped]="true" />
 ```
 
+### allowNegativeNumbers (boolean)
+
+You can choose if mask will allow the use of negative numbers. The default value is `false`.
+
+#### Usage
+
+```html
+<input type="text" [allowNegativeNumbers]="true" mask="separator.2" />
+```
+
+##### Then
+
+```text
+Input value: -10,000.45
+Model value: -10000.45
+```
+
 ### placeHolderCharacter (string)
 
 If the `showMaskTyped` parameter is enabled, this setting customizes the character used as placeholder. Default value is `_`.
