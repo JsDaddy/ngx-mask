@@ -208,25 +208,18 @@
       <div class="mat-card-wr">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Percent valid mask</mat-card-title>
+            <mat-card-title>Percent mask</mat-card-title>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
               <div class="flex-cell">
                 <mat-form-field>
-                  <input
-                    matInput
-                    placeholder="Percent valid mask"
-                    mask="percent.5"
-                    suffix="%"
-                    [formControl]="percent"
-                  />
+                  <input matInput placeholder="Percent mask" mask="percent" suffix="%" [formControl]="percent" />
                   <mat-hint><b>Mask:</b>percent</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
                 <p><b>FormControl:</b> {{ percent.value ? percent.value : 'Empty' }}</p>
-                <p><b>NgModel:</b> {{ percent.value ? percent.value : 'Empty' }}</p>
               </div>
             </div>
           </mat-card-content>

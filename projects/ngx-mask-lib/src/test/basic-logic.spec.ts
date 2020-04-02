@@ -144,11 +144,10 @@ describe('Directive: Mask', () => {
     equal('123 456-7', '123 456-', fixture);
   });
 
-  it('Result should be the same for FormControl and NgModel', () => {
+  it('should strip special characters from form control value', () => {
     component.mask = '00/00/0000';
     typeTest('30/08/19921', fixture);
     expect(component.form.value).toBe('30081992');
-    expect(component.ngModelValue).toBe('30081992');
   });
 
   it('model values shouldnt be bigger length than masks', () => {
@@ -156,7 +155,6 @@ describe('Directive: Mask', () => {
     component.dropSpecialCharacters = false;
     equal('2578989', '25-78-98', fixture);
     expect(component.form.value).toBe('25-78-98');
-    expect(component.ngModelValue).toBe('25-78-98');
   });
 
   it('should work with custom special characters', () => {

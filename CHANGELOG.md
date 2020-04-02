@@ -1,3 +1,9 @@
+<a name="9.0.0">
+
+# [9.0.0 Update to Angular 9](2020-01-17)
+
+Feature: Library updated to Angular 9
+
 <a name="8.2.0">
 
 # [8.2.0 bugfix and breaking change](2020-01-17)
