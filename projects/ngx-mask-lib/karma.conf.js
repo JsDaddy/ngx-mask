@@ -2,7 +2,7 @@
 // https://karma-runner.github.io/1.0/config/configuration-file.html
 process.env.CHROME_BIN = require('puppeteer').executablePath();
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
@@ -63,9 +63,9 @@ module.exports = function (config) {
           '--no-sandbox',
           '--no-default-browser-check',
           '--no-first-run',
-          '--disable-default-apps'
-        ]
-      }
+          '--disable-default-apps',
+        ],
+      },
     },
   });
 };

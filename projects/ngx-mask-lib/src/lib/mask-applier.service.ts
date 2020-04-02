@@ -50,7 +50,7 @@ export class MaskApplierService {
     this.customPattern = customPattern;
     return this.applyMask(inputValue, mask);
   }
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => { }): string {
+  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
     }
@@ -149,7 +149,7 @@ export class MaskApplierService {
         // tslint:disable-next-line
         let i: number = 0, inputSymbol: string = inputArray[0];
         i < inputArray.length;
-        i++ , inputSymbol = inputArray[i]
+        i++, inputSymbol = inputArray[i]
       ) {
         if (cursor === maskExpression.length) {
           break;
@@ -236,11 +236,13 @@ export class MaskApplierService {
             const day1monthInput: boolean =
               inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
               ((inputValue[cursor - 2] === '/' &&
-                (Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount && inputValue[cursor] !== '/')) ||
+                Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
+                inputValue[cursor] !== '/') ||
                 inputValue[cursor] === '/' ||
-                ((inputValue[cursor - 3] === '/' &&
-                  (Number(inputValue.slice(cursor - 2, cursor)) > monthsCount && inputValue[cursor - 1] !== '/')) ||
-                  inputValue[cursor - 1] === '/'));
+                (inputValue[cursor - 3] === '/' &&
+                  Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
+                  inputValue[cursor - 1] !== '/') ||
+                inputValue[cursor - 1] === '/');
             // 10<day<31 && month<12 for input
             const day2monthInput: boolean =
               Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
@@ -251,8 +253,8 @@ export class MaskApplierService {
             const day1monthPaste: boolean =
               Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
               !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-              (!inputValue.slice(cursor - 2, cursor).includes('/') &&
-                Number(inputValue.slice(cursor - 2, cursor)) > monthsCount);
+              !inputValue.slice(cursor - 2, cursor).includes('/') &&
+              Number(inputValue.slice(cursor - 2, cursor)) > monthsCount;
             // 10<day<31 && month<12 for paste whole data
             const day2monthPaste: boolean =
               Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
@@ -302,7 +304,11 @@ export class MaskApplierService {
         ) {
           cursor += 3;
           result += inputSymbol;
-        } else if (this.showMaskTyped && this.maskSpecialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== this.placeHolderCharacter) {
+        } else if (
+          this.showMaskTyped &&
+          this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
+          inputSymbol !== this.placeHolderCharacter
+        ) {
           stepBack = true;
         }
       }
@@ -336,6 +342,7 @@ export class MaskApplierService {
     }
     return res;
   }
+
   public _findSpecialChar(inputSymbol: string): undefined | string {
     return this.maskSpecialCharacters.find((val: string) => val === inputSymbol);
   }
@@ -361,9 +368,9 @@ export class MaskApplierService {
     const separatorLimit: string = this.separatorLimit.replace(/\s/g, '');
     if (separatorLimit && +separatorLimit) {
       if (res[0] === '-') {
-          res = `-${res.slice(1, res.length).slice(0, separatorLimit.length)}`;
+        res = `-${res.slice(1, res.length).slice(0, separatorLimit.length)}`;
       } else {
-          res = res.slice(0, separatorLimit.length);
+        res = res.slice(0, separatorLimit.length);
       }
     }
     const rgx: RegExp = /(\d+)(\d{3})/;
