@@ -40,6 +40,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
   @Input() public validation: IConfig['validation'] | null = null;
   @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
+  @Input() public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | null = null;
   private _maskValue: string = '';
   private _inputValue!: string;
   private _position: number | null = null;
@@ -74,6 +75,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       clearIfNotMatch,
       validation,
       separatorLimit,
+      allowNegativeNumbers,
     } = changes;
     if (maskExpression) {
       this._maskValue = changes.maskExpression.currentValue || '';
@@ -127,6 +129,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     }
     if (separatorLimit) {
       this._maskService.separatorLimit = separatorLimit.currentValue;
+    }
+    if (allowNegativeNumbers) {
+      this._maskService.maskSpecialCharacters = this._maskService.maskSpecialCharacters.filter((c: string) => c !== '-');
     }
     this._applyMask();
   }
