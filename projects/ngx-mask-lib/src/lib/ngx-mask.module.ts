@@ -1,6 +1,5 @@
 import { ModuleWithProviders, NgModule } from '@angular/core';
-
-import { config, INITIAL_CONFIG, initialConfig, NEW_CONFIG, optionsConfig } from './config';
+import { config, initialConfig, INITIAL_CONFIG, NEW_CONFIG, optionsConfig } from './config';
 import { MaskApplierService } from './mask-applier.service';
 import { MaskDirective } from './mask.directive';
 import { MaskPipe } from './mask.pipe';
@@ -10,7 +9,7 @@ import { MaskPipe } from './mask.pipe';
   declarations: [MaskDirective, MaskPipe],
 })
 export class NgxMaskModule {
-  public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders {
+  public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders<NgxMaskModule> {
     return {
       ngModule: NgxMaskModule,
       providers: [
