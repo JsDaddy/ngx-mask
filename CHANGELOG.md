@@ -4,6 +4,7 @@
 
 Feature: Library updated to Angular 9
 Fix: allowNegativeNumbers works correctly when set as true or false. If false, entering a hyphen will not be allowed
+Feature: Can pass empty string for thousandSeparator if do not want any separation
 
 <a name="8.2.0">
 

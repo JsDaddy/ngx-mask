@@ -544,6 +544,31 @@
                 </p>
               </div>
             </div>
+            <div class="flex-row">
+              <div class="flex-cell-padding">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="No Separator"
+                    mask="separator"
+                    thousandSeparator=""
+                    [formControl]="emptySeparatorForm"
+                    [(ngModel)]="emptySeparatorFormModel"
+                  />
+                  <mat-hint><b>Mask: </b>separator <b>thousandSeparator: </b>(empty string)</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p>
+                  <b>FormControl:</b>
+                  {{ emptySeparatorForm.value ? emptySeparatorForm.value : 'Empty' }}
+                </p>
+                <p>
+                  <b>NgModel:</b>
+                  {{ emptySeparatorFormModel ? emptySeparatorFormModel : 'Empty' }}
+                </p>
+              </div>
+            </div>
           </mat-card-content>
         </mat-card>
       </div>

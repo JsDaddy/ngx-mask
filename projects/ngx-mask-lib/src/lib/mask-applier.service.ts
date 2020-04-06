@@ -374,9 +374,11 @@ export class MaskApplierService {
       }
     }
     const rgx: RegExp = /(\d+)(\d{3})/;
-    while (rgx.test(res)) {
+
+    while (thousandSeparatorChar && rgx.test(res)) {
       res = res.replace(rgx, '$1' + thousandSeparatorChar + '$2');
     }
+
     if (precision === undefined) {
       return res + decimals;
     } else if (precision === 0) {
@@ -426,8 +428,10 @@ export class MaskApplierService {
   }
 
   private _charToRegExpExpression(char: string): string {
-    const charsToEscape = '[\\^$.|?*+()';
-    return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? '\\' + char : char;
+    if (char) {
+      const charsToEscape = '[\\^$.|?*+()';
+      return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? '\\' + char : char;
+    }
+    return char;
   }
-  // tslint:disable-next-line:max-file-line-count
 }
