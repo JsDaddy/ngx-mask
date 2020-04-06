@@ -3,6 +3,7 @@
 # [9.0.0 Update to Angular 9](2020-01-17)
 
 Feature: Library updated to Angular 9
+Fix: allowNegativeNumbers works correctly when set as true or false. If false, entering a hyphen will not be allowed
 
 <a name="8.2.0">
 
