@@ -420,7 +420,7 @@ export class MaskApplierService {
     return str
       .split('')
       .filter((i: string, idx: number) => {
-        return i.match('^-?\\d') || i === '.' || i === ',' || (i === '-' && idx === 0);
+        return i.match('^-?\\d') || i === '.' || i === ',' || (i === '-' && idx === 0 && this.allowNegativeNumbers);
       })
       .join('');
   }

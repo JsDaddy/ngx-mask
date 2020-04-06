@@ -33,6 +33,7 @@ describe('Separator: Mask', () => {
 
   it('separator for -100', () => {
     component.mask = 'separator';
+    component.allowNegativeNumbers = true;
     equal('-100', '-100', fixture);
   });
 
@@ -43,6 +44,7 @@ describe('Separator: Mask', () => {
 
   it('separator for -1000', () => {
     component.mask = 'separator';
+    component.allowNegativeNumbers = true;
     equal('-1000', '-1 000', fixture);
   });
 
@@ -53,11 +55,13 @@ describe('Separator: Mask', () => {
 
   it('separator for -10000', () => {
     component.mask = 'separator';
+    component.allowNegativeNumbers = true;
     equal('-10000', '-10 000', fixture);
   });
 
   it('separator for -100000', () => {
     component.mask = 'separator';
+    component.allowNegativeNumbers = true;
     equal('-100000', '-100 000', fixture);
   });
 
@@ -73,6 +77,7 @@ describe('Separator: Mask', () => {
 
   it('separator for -1000000', () => {
     component.mask = 'separator';
+    component.allowNegativeNumbers = true;
     equal('-1000000', '-1 000 000', fixture);
   });
 
@@ -89,6 +94,7 @@ describe('Separator: Mask', () => {
 
   it('separator precision 2 for -1000000.00', () => {
     component.mask = 'separator.2';
+    component.allowNegativeNumbers = true;
     equal('-1000000.00', '-1 000 000.00', fixture);
   });
 
@@ -138,12 +144,14 @@ describe('Separator: Mask', () => {
   it('should not accept more than one minus signal at the beginning of input for separator thousandSeparator . for --1000', () => {
     component.mask = 'separator';
     component.thousandSeparator = '.';
+    component.allowNegativeNumbers = true;
     equal('--1000', '-1.000', fixture);
   });
 
   it('should not accept more than one minus signal for separator thousandSeparator . for -100-0000', () => {
     component.mask = 'separator';
     component.thousandSeparator = '.';
+    component.allowNegativeNumbers = true;
     equal('-100-0000', '-1.000.000', fixture);
   });
 
@@ -158,6 +166,7 @@ describe('Separator: Mask', () => {
     component.mask = 'separator';
     component.thousandSeparator = '.';
     component.separatorLimit = '100000';
+    component.allowNegativeNumbers = true;
     equal('-1000000', '-100.000', fixture);
   });
 
@@ -170,6 +179,7 @@ describe('Separator: Mask', () => {
   it('separator thousandSeparator . precision 2 for -1000000.00', () => {
     component.mask = 'separator.2';
     component.thousandSeparator = '.';
+    component.allowNegativeNumbers = true;
     equal('-1000000,00', '-1.000.000,00', fixture);
   });
 

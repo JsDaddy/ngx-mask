@@ -130,10 +130,13 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     if (separatorLimit) {
       this._maskService.separatorLimit = separatorLimit.currentValue;
     }
-    if (allowNegativeNumbers && allowNegativeNumbers.currentValue) {
-      this._maskService.maskSpecialCharacters = this._maskService.maskSpecialCharacters.filter(
-        (c: string) => c !== '-'
-      );
+    if (allowNegativeNumbers) {
+      this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
+      if (this._maskService.allowNegativeNumbers) {
+        this._maskService.maskSpecialCharacters = this._maskService.maskSpecialCharacters.filter(
+          (c: string) => c !== '-'
+        );
+      }
     }
     this._applyMask();
   }
