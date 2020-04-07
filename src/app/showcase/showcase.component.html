@@ -839,3 +839,41 @@
     </div>
   </div>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-card-wr">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Empty mask</mat-card-title>
+            <mat-card-subtitle>
+              If you are conditioanlly setting the value of the mask, it should do nothing at all when the mask is set
+              as empty
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="flex-row">
+              <div class="flex-cell-padding">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Empty mask"
+                    mask=""
+                    [formControl]="emptyMaskForm"
+                    [(ngModel)]="emptyMaskFormModel"
+                  />
+                  <mat-hint><b>Mask: </b>(empty string)</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p><b>FormControl:</b> {{ emptyMaskForm.value ? emptyMaskForm.value : 'Empty' }}</p>
+                <p><b>NgModel:</b> {{ emptyMaskFormModel ? emptyMaskFormModel : 'Empty' }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

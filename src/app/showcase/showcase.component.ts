@@ -26,6 +26,7 @@ export class ShowcaseComponent {
   public numberOrStringForm: FormControl;
   public suffixForm: FormControl;
   public repeatForm: FormControl;
+  public emptyMaskForm: FormControl;
   public separatorForm: FormControl;
   public percent: FormControl;
   public formSecureInput: FormControl;
@@ -54,6 +55,7 @@ export class ShowcaseComponent {
   public suf: string = '+7';
   public suffixModel!: SN;
   public repeatFormModel!: SN;
+  public emptyMaskFormModel!: SN;
   public customPatternFormModel!: SN;
   public separatorFormModel!: SN;
   public separatorPrecisionSeparatorFormModel!: SN;
@@ -85,6 +87,7 @@ export class ShowcaseComponent {
     this.numberOrStringForm = new FormControl();
     this.suffixForm = new FormControl('');
     this.repeatForm = new FormControl('');
+    this.emptyMaskForm = new FormControl('');
     this.separatorForm = new FormControl('');
     this.separatorPrecisionSeparatorForm = new FormControl('');
     this.separatorZeroPrecisionSeparatorForm = new FormControl('');
