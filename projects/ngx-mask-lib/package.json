@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "8.2.0",
+  "version": "9.0.0",
   "description": "awesome ngx mask",
   "keywords": [
     "ng2-mask",
@@ -32,9 +32,9 @@
   "es2015": "./esm2015/ngx-mask.js",
   "typings": "./ngx-mask.d.ts",
   "peerDependencies": {
-    "@angular/common": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@angular/core": "^6.0.0 || ^7.0.0 || ^8.0.0",
-    "@angular/forms": "^6.0.0 || ^7.0.0 || ^8.0.0"
+    "@angular/common": "^9.0.0",
+    "@angular/core": "^9.0.0",
+    "@angular/forms": "^9.0.0"
   },
   "dependencies": {}
 }

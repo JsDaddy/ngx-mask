@@ -125,7 +125,12 @@ describe('Directive: Mask (Delete)', () => {
     inputTarget.value = '+100 00';
     inputTarget.selectionStart = 1;
     inputTarget.selectionEnd = 1;
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget, preventDefault: () => { } });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+      preventDefault: () => {},
+    });
     debugElement.triggerEventHandler('input', { target: inputTarget });
     expect(inputTarget.selectionStart).toEqual(2);
   });
@@ -141,7 +146,12 @@ describe('Directive: Mask (Delete)', () => {
     inputTarget.value = '+1 00 00';
     inputTarget.selectionStart = 1;
     inputTarget.selectionEnd = 1;
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget, preventDefault: () => { } });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+      preventDefault: () => {},
+    });
     debugElement.triggerEventHandler('input', { target: inputTarget });
     expect(inputTarget.selectionStart).toEqual(3);
   });
@@ -157,7 +167,12 @@ describe('Directive: Mask (Delete)', () => {
     inputTarget.value = '+1(00) 00';
     inputTarget.selectionStart = 3;
     inputTarget.selectionEnd = 3;
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget, preventDefault: () => { } });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+      preventDefault: () => {},
+    });
     debugElement.triggerEventHandler('input', { target: inputTarget });
     expect(inputTarget.selectionStart).toEqual(2);
   });
@@ -173,7 +188,12 @@ describe('Directive: Mask (Delete)', () => {
     inputTarget.value = '+1 (00) 00';
     inputTarget.selectionStart = 4;
     inputTarget.selectionEnd = 4;
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget, preventDefault: () => { } });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+      preventDefault: () => {},
+    });
     debugElement.triggerEventHandler('input', { target: inputTarget });
     expect(inputTarget.selectionStart).toEqual(3);
   });

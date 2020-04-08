@@ -12,6 +12,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
             "outputPath": "dist/showcase",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -23,6 +24,12 @@
           },
           "configurations": {
             "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -101,7 +108,8 @@
           },
           "configurations": {
             "production": {
-              "project": "projects/ngx-mask-lib/ng-package.prod.json"
+              "project": "projects/ngx-mask-lib/ng-package.prod.json",
+              "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.prod.json"
             }
           }
         },
@@ -136,7 +144,7 @@
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "scss"
+      "style": "scss"
     },
     "@schematics/angular:directive": {
       "prefix": "app"
