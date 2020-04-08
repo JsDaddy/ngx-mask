@@ -78,13 +78,13 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       allowNegativeNumbers,
     } = changes;
     if (maskExpression) {
-      this._maskValue = changes.maskExpression.currentValue || '';
+      this._maskValue = maskExpression.currentValue || '';
     }
     if (specialCharacters) {
       if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
         return;
       } else {
-        this._maskService.maskSpecialCharacters = changes.specialCharacters.currentValue || [];
+        this._maskService.maskSpecialCharacters = specialCharacters.currentValue || [];
       }
     }
     // Only overwrite the mask available patterns if a pattern has actually been passed in
@@ -131,14 +131,19 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       this._maskService.separatorLimit = separatorLimit.currentValue;
     }
     if (allowNegativeNumbers) {
-      this._maskService.maskSpecialCharacters = this._maskService.maskSpecialCharacters.filter((c: string) => c !== '-');
+      this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
+      if (this._maskService.allowNegativeNumbers) {
+        this._maskService.maskSpecialCharacters = this._maskService.maskSpecialCharacters.filter(
+          (c: string) => c !== '-'
+        );
+      }
     }
     this._applyMask();
   }
 
   // tslint:disable-next-line: cyclomatic-complexity
   public validate({ value }: FormControl): ValidationErrors | null {
-    if (!this._maskService.validation) {
+    if (!this._maskService.validation || !this._maskValue) {
       return null;
     }
     if (this._maskService.ipError) {
@@ -245,12 +250,18 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
   @HostListener('blur')
   public onBlur(): void {
+    if (!this._maskValue) {
+      return;
+    }
     this._maskService.clearIfNotMatchFn();
     this.onTouch();
   }
 
   @HostListener('click', ['$event'])
   public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
+    if (!this._maskValue) {
+      return;
+    }
     const el: HTMLInputElement = e.target as HTMLInputElement;
     const posStart = 0;
     const posEnd = 0;
@@ -302,6 +313,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   // tslint:disable-next-line: cyclomatic-complexity
   @HostListener('keydown', ['$event'])
   public onKeyDown(e: CustomKeyboardEvent): void {
+    if (!this._maskValue) {
+      return;
+    }
     this._code = e.code ? e.code : e.key;
     const el: HTMLInputElement = e.target as HTMLInputElement;
     this._inputValue = el.value;

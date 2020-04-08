@@ -14,7 +14,7 @@ describe('Pipe: Mask', () => {
   });
 
   beforeEach(() => {
-    const service: MaskApplierService = TestBed.get(MaskApplierService);
+    const service: MaskApplierService = TestBed.inject<MaskApplierService>(MaskApplierService);
     maskPipe = new MaskPipe(service);
   });
 

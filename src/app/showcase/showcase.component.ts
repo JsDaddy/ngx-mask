@@ -26,6 +26,7 @@ export class ShowcaseComponent {
   public numberOrStringForm: FormControl;
   public suffixForm: FormControl;
   public repeatForm: FormControl;
+  public emptyMaskForm: FormControl;
   public separatorForm: FormControl;
   public percent: FormControl;
   public formSecureInput: FormControl;
@@ -54,6 +55,7 @@ export class ShowcaseComponent {
   public suf: string = '+7';
   public suffixModel!: SN;
   public repeatFormModel!: SN;
+  public emptyMaskFormModel!: SN;
   public customPatternFormModel!: SN;
   public separatorFormModel!: SN;
   public separatorPrecisionSeparatorFormModel!: SN;
@@ -62,6 +64,7 @@ export class ShowcaseComponent {
   public dotPrecisionSeparatorFormModel: SN = '';
   public dotZeroPrecisionSeparatorFormModel!: SN;
   public commaSeparatorFormModel!: SN;
+  public emptySeparatorFormModel!: SN;
   public commaPrecisionSeparatorFormModel: SN = '';
   public commaZeroPrecisionSeparatorFormModel!: SN;
   public separatorPrecisionSeparatorForm: FormControl;
@@ -70,6 +73,7 @@ export class ShowcaseComponent {
   public dotPrecisionSeparatorForm!: FormControl;
   public dotZeroPrecisionSeparatorForm!: FormControl;
   public commaSeparatorForm!: FormControl;
+  public emptySeparatorForm!: FormControl;
   public commaPrecisionSeparatorForm!: FormControl;
   public commaZeroPrecisionSeparatorForm!: FormControl;
 
@@ -83,6 +87,7 @@ export class ShowcaseComponent {
     this.numberOrStringForm = new FormControl();
     this.suffixForm = new FormControl('');
     this.repeatForm = new FormControl('');
+    this.emptyMaskForm = new FormControl('');
     this.separatorForm = new FormControl('');
     this.separatorPrecisionSeparatorForm = new FormControl('');
     this.separatorZeroPrecisionSeparatorForm = new FormControl('');
@@ -90,6 +95,7 @@ export class ShowcaseComponent {
     this.dotPrecisionSeparatorForm = new FormControl(0);
     this.dotZeroPrecisionSeparatorForm = new FormControl('');
     this.commaSeparatorForm = new FormControl('');
+    this.emptySeparatorForm = new FormControl('');
     this.commaPrecisionSeparatorForm = new FormControl(0);
     this.commaZeroPrecisionSeparatorForm = new FormControl('');
     this.percent = new FormControl('');

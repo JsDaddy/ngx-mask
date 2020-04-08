@@ -23,13 +23,11 @@ import { IConfig } from '../../lib/config';
       [separatorLimit]="separatorLimit"
       [hiddenInput]="hiddenInput"
       [allowNegativeNumbers]="allowNegativeNumbers"
-      [(ngModel)]="ngModelValue"
     />
   `,
 })
 export class TestMaskComponent {
   public mask!: string | null;
-  public ngModelValue!: string | number;
   public form: FormControl = new FormControl(null);
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
   public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;

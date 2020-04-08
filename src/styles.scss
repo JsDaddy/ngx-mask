@@ -1,6 +1,6 @@
-@import "~@angular/material/theming";
-@import "assets/styles/variables";
-@import "assets/styles/loader";
+@import '~@angular/material/theming';
+@import 'assets/styles/variables';
+@import 'assets/styles/loader';
 @include mat-core();
 $candy-app-primary: mat-palette($mat-cyan);
 $candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
@@ -28,7 +28,8 @@ mat-card {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'),
+    url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
 }
 .material-icons {
   font-family: 'Material Icons';
@@ -67,7 +68,7 @@ body {
 
 .mat-grid-list,
 .mat-grid-tile,
-.mat-grid-tile .mat-figure{
+.mat-grid-tile .mat-figure {
   position: inherit !important;
 }
 
@@ -123,7 +124,7 @@ header {
   }
 }
 
-.mat-card:not([class*=mat-elevation-z]) {
+.mat-card:not([class*='mat-elevation-z']) {
   box-shadow: none !important;
 }
 .mat-card-wr {
@@ -162,10 +163,10 @@ header {
   .mat-card-subtitle,
   .mat-card-title {
     margin-bottom: 15px;
-    padding:0px;
+    padding: 0px;
   }
-  .mat-card-content>:last-child:not(.mat-card-footer),
-  .mat-card>:last-child:not(.mat-card-footer) {
+  .mat-card-content > :last-child:not(.mat-card-footer),
+  .mat-card > :last-child:not(.mat-card-footer) {
     margin: 0;
     padding: 0;
   }
@@ -216,7 +217,7 @@ header {
     max-width: 30px;
     opacity: 0.9;
   }
-  &:hover  {
+  &:hover {
     opacity: 0.8;
   }
 }
