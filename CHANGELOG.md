@@ -1,10 +1,19 @@
+<a name="9.0.1">
+
+# [9.0.1 Bugfix](2020-04-08)
+
+Fix for #715 - mark fields as touched on blur on form fields with an empty mask
+
 <a name="9.0.0">
 
-# [9.0.0 Update to Angular 9](2020-01-17)
+# [9.0.0 Update to Angular 9](2020-04-08)
 
 Feature: Library updated to Angular 9
+
 Feature: Can pass empty string for thousandSeparator if do not want any separation
+
 Fix: allowNegativeNumbers works correctly when set as true or false. If false, entering a hyphen will not be allowed
+
 Fix: stop cursor jumping around when mask is set as empty
 
 <a name="8.2.0">
