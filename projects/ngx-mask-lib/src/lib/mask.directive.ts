@@ -28,7 +28,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
   @Input() public patterns: IConfig['patterns'] = {};
   @Input() public prefix: IConfig['prefix'] = '';
-  @Input() public suffix: IConfig['suffix'] = '';
+  @Input('sufix') public suffix: IConfig['suffix'] = '';
   @Input() public thousandSeparator: IConfig['thousandSeparator'] = ' ';
   @Input() public decimalMarker: IConfig['decimalMarker'] = '.';
   @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
