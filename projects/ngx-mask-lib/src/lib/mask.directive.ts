@@ -1,4 +1,11 @@
-import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -23,7 +30,7 @@ import { MaskService } from './mask.service';
     MaskService,
   ],
 })
-export class MaskDirective implements ControlValueAccessor, OnChanges {
+export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
   @Input('mask') public maskExpression: string = '';
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
   @Input() public patterns: IConfig['patterns'] = {};
