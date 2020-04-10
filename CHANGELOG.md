@@ -4,6 +4,8 @@
 
 Fix for #715 - mark fields as touched on blur on form fields with an empty mask
 
+Fix for #711 - stop fields being marked as dirty after a form reset
+
 <a name="9.0.0">
 
 # [9.0.0 Update to Angular 9](2020-04-08)

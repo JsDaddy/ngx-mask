@@ -398,13 +398,21 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
       this._maskService.isNumberValue = true;
     }
-    (inputValue && this._maskService.maskExpression) ||
-    (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
-      ? (this._maskService.formElementProperty = [
-          'value',
-          this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-        ])
-      : (this._maskService.formElementProperty = ['value', inputValue]);
+    if (
+      (inputValue && this._maskService.maskExpression) ||
+      (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+    ) {
+      // Let the service we know we are writing value so that triggering onChange function wont happen during applyMask
+      this._maskService.writingValue = true;
+      this._maskService.formElementProperty = [
+        'value',
+        this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+      ];
+      // Let the service know we've finished writing value
+      this._maskService.writingValue = false;
+    } else {
+      this._maskService.formElementProperty = ['value', inputValue];
+    }
     this._inputValue = inputValue;
   }
 

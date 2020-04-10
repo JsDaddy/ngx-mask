@@ -12,7 +12,14 @@ export class MaskService extends MaskApplierService {
   public maskIsShown: string = '';
   public selStart: number | null = null;
   public selEnd: number | null = null;
-  protected _formElement: HTMLInputElement;
+
+  /**
+   * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
+   * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
+   */
+  public writingValue: boolean = false;
+
+  private _formElement: HTMLInputElement;
 
   public onChange = (_: any) => {};
 
@@ -209,13 +216,22 @@ export class MaskService extends MaskApplierService {
     return '';
   }
 
+  /**
+   * Propogates the input value back to the Angular model by triggering the onChange function. It won't do this if writingValue
+   * is true. If that is true it means we are currently in the writeValue function, which is supposed to only update the actual
+   * DOM element based on the Angular model value. It should be a one way process, i.e. writeValue should not be modifying the Angular
+   * model value too. Therefore, we don't trigger onChange in this scenario.
+   * @param inputValue the current form input value
+   */
   private formControlResult(inputValue: string): void {
-    if (Array.isArray(this.dropSpecialCharacters)) {
-      this.onChange(this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
-    } else if (this.dropSpecialCharacters) {
-      this.onChange(this._checkSymbols(inputValue));
-    } else {
-      this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
+    if (!this.writingValue) {
+      if (Array.isArray(this.dropSpecialCharacters)) {
+        this.onChange(this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
+      } else if (this.dropSpecialCharacters) {
+        this.onChange(this._checkSymbols(inputValue));
+      } else {
+        this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
+      }
     }
   }
 
