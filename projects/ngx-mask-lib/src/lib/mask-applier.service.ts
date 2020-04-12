@@ -71,6 +71,13 @@ export class MaskApplierService {
       this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
       maskExpression = '099.099.099.099';
     }
+    if (maskExpression === 'CPF_CNPJ') {
+      if (inputArray.length > 14) {
+        maskExpression = '00.000.000/0000-00';
+      } else {
+        maskExpression = '000.000.000-00';
+      }
+    }
     if (maskExpression.startsWith('percent')) {
       if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
         inputValue = this._stripToDecimal(inputValue);

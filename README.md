@@ -392,3 +392,11 @@ You can hide symbols in input field and get the actual value in `formcontrol`.
 ```html
 <input mask="IP" />
 ```
+
+### CPF_CNPJ valid mask
+
+#### Usage
+
+```html
+<input mask="CPF_CNPJ" />
+```
