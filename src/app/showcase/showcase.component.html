@@ -932,3 +932,58 @@
     </div>
   </div>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-card-wr">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Dynamics Masks</mat-card-title>
+            <mat-card-subtitle>
+              You can pass into mask pattern with <b>||</b>.
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="flex-row">
+              <div class="flex-cell">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="CPF_CNPJ"
+                    mask="000.000.000-00||00.000.000/0000-00"
+                    [formControl]="cpfCnpjDynamicFormControl"
+                    [(ngModel)]="cpfCnpjDynamicModel"
+                  />
+                  <mat-hint> <b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p><b>FormControl:</b> {{ cpfCnpjDynamicFormControl.value ? cpfCnpjDynamicFormControl.value : 'Empty' }}</p>
+                <p><b>NgModel:</b> {{ cpfCnpjDynamicModel ? cpfCnpjDynamicModel : 'Empty' }}</p>
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="flex-cell">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="PHONE_BR"
+                    mask="(00) 0000-0000||(00) 0 0000-0000"
+                    [formControl]="phoneBrFormControl"
+                    [(ngModel)]="phoneBrModel"
+                  />
+                  <mat-hint> <b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000 </mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p><b>FormControl:</b> {{ phoneBrFormControl.value ? phoneBrFormControl.value : 'Empty' }}</p>
+                <p><b>NgModel:</b> {{ phoneBrModel ? phoneBrModel : 'Empty' }}</p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

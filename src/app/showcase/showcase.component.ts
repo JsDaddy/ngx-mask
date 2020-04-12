@@ -24,6 +24,8 @@ export class ShowcaseComponent {
   public ipFormControl: FormControl;
   public cpfFormControl: FormControl;
   public cpfCnpjFormControl: FormControl;
+  public cpfCnpjDynamicFormControl: FormControl;
+  public phoneBrFormControl: FormControl;
   public clearIfNotMatch: FormControl;
   public numberOrStringForm: FormControl;
   public suffixForm: FormControl;
@@ -54,6 +56,8 @@ export class ShowcaseComponent {
   public ipModel: SN = '';
   public cpfModel: SN = '';
   public cpfCnpjModel: SN = '';
+  public cpfCnpjDynamicModel: SN = '';
+  public phoneBrModel: SN = '';
   public dateModel: SN = '';
   public showMaskModel: SN = '';
   public suf: string = '+7';
@@ -89,6 +93,8 @@ export class ShowcaseComponent {
     this.ipFormControl = new FormControl();
     this.cpfFormControl = new FormControl();
     this.cpfCnpjFormControl = new FormControl();
+    this.cpfCnpjDynamicFormControl = new FormControl();
+    this.phoneBrFormControl = new FormControl();
     this.clearIfNotMatch = new FormControl();
     this.numberOrStringForm = new FormControl();
     this.suffixForm = new FormControl('');

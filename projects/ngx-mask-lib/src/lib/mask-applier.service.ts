@@ -67,6 +67,17 @@ export class MaskApplierService {
       inputValue = inputValue.slice(0, inputValue.length - this.suffix.length);
     }
     const inputArray: string[] = inputValue.toString().split('');
+    if (maskExpression.includes('||')) {
+      let masksArray: string[] = maskExpression.split('||').sort((a, b) => {return a.length - b.length});
+      masksArray.some((mask, index) => {
+        if (inputArray.length <= mask.length) {
+          maskExpression = mask;
+          return inputArray.length <= mask.length;
+        } else {
+          maskExpression = masksArray[masksArray.length - 1];
+        }
+      })
+    }
     if (maskExpression === 'IP') {
       this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
       maskExpression = '099.099.099.099';
