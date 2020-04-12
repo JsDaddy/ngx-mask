@@ -68,7 +68,7 @@ export class MaskApplierService {
     }
     const inputArray: string[] = inputValue.toString().split('');
     if (maskExpression.includes('||')) {
-      let masksArray: string[] = maskExpression.split('||').sort((a, b) => {
+      const masksArray: string[] = maskExpression.split('||').sort((a, b) => {
         return a.length - b.length;
       });
       masksArray.some((mask, index) => {
