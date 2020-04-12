@@ -86,7 +86,10 @@ export class MaskService extends MaskApplierService {
     }
     const resLen: number = result.length;
     const prefNmask: string = this.prefix + this.maskIsShown;
-    return result + (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ' ? prefNmask : prefNmask.slice(resLen));
+    return (
+      result +
+      (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ' ? prefNmask : prefNmask.slice(resLen))
+    );
   }
 
   public applyValueChanges(position: number = 0, cb: Function = () => {}): void {

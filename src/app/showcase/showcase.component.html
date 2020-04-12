@@ -885,21 +885,13 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Patterns Masks</mat-card-title>
-            <mat-card-subtitle>
-              You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>.
-            </mat-card-subtitle>
+            <mat-card-subtitle> You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>. </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
               <div class="flex-cell">
                 <mat-form-field>
-                  <input
-                    matInput
-                    placeholder="IP"
-                    mask="IP"
-                    [formControl]="ipFormControl"
-                    [(ngModel)]="ipModel"
-                  />
+                  <input matInput placeholder="IP" mask="IP" [formControl]="ipFormControl" [(ngModel)]="ipModel" />
                   <mat-hint> <b>Mask:</b> IP</mat-hint>
                 </mat-form-field>
               </div>
@@ -940,9 +932,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Dynamics Masks</mat-card-title>
-            <mat-card-subtitle>
-              You can pass into mask pattern with <b>||</b>.
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can pass into mask pattern with <b>||</b>. </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -959,7 +949,9 @@
                 </mat-form-field>
               </div>
               <div class="flex-cell">
-                <p><b>FormControl:</b> {{ cpfCnpjDynamicFormControl.value ? cpfCnpjDynamicFormControl.value : 'Empty' }}</p>
+                <p>
+                  <b>FormControl:</b> {{ cpfCnpjDynamicFormControl.value ? cpfCnpjDynamicFormControl.value : 'Empty' }}
+                </p>
                 <p><b>NgModel:</b> {{ cpfCnpjDynamicModel ? cpfCnpjDynamicModel : 'Empty' }}</p>
               </div>
             </div>

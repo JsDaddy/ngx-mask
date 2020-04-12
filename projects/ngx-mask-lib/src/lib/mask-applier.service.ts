@@ -68,7 +68,9 @@ export class MaskApplierService {
     }
     const inputArray: string[] = inputValue.toString().split('');
     if (maskExpression.includes('||')) {
-      let masksArray: string[] = maskExpression.split('||').sort((a, b) => {return a.length - b.length});
+      let masksArray: string[] = maskExpression.split('||').sort((a, b) => {
+        return a.length - b.length;
+      });
       masksArray.some((mask, index) => {
         if (inputArray.length <= mask.length) {
           maskExpression = mask;
@@ -76,7 +78,7 @@ export class MaskApplierService {
         } else {
           maskExpression = masksArray[masksArray.length - 1];
         }
-      })
+      });
     }
     if (maskExpression === 'IP') {
       this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
