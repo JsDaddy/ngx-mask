@@ -19,6 +19,7 @@ export class MaskApplierService {
   public decimalMarker!: IConfig['decimalMarker'];
   public customPattern!: IConfig['patterns'];
   public ipError?: boolean;
+  public cpfCnpjError?: boolean;
   public showMaskTyped!: IConfig['showMaskTyped'];
   public placeHolderCharacter!: IConfig['placeHolderCharacter'];
   public validation: IConfig['validation'];
@@ -67,25 +68,19 @@ export class MaskApplierService {
       inputValue = inputValue.slice(0, inputValue.length - this.suffix.length);
     }
     const inputArray: string[] = inputValue.toString().split('');
-    if (maskExpression.includes('||')) {
-      const masksArray: string[] = maskExpression.split('||').sort((a, b) => {
-        return a.length - b.length;
-      });
-      masksArray.some((mask, index) => {
-        if (inputArray.length <= mask.length) {
-          maskExpression = mask;
-          return inputArray.length <= mask.length;
-        } else {
-          maskExpression = masksArray[masksArray.length - 1];
-        }
-      });
-    }
     if (maskExpression === 'IP') {
       this.ipError = !!(inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7);
       maskExpression = '099.099.099.099';
     }
+    const arr: string[] = [];
+    for (let i = 0; i < inputValue.length; i++) {
+      if (inputValue[i].match('\\d')) {
+        arr.push(inputValue[i]);
+      }
+    }
     if (maskExpression === 'CPF_CNPJ') {
-      if (inputArray.length > 14) {
+      this.cpfCnpjError = !!(arr.length !== 11 && arr.length !== 14);
+      if (arr.length > 11) {
         maskExpression = '00.000.000/0000-00';
       } else {
         maskExpression = '000.000.000-00';
@@ -303,7 +298,12 @@ export class MaskApplierService {
           this.maskAvailablePatterns[maskExpression[cursor]] &&
           this.maskAvailablePatterns[maskExpression[cursor]].optional
         ) {
-          if (!!inputArray[cursor] && maskExpression !== '099.099.099.099') {
+          if (
+            !!inputArray[cursor] &&
+            maskExpression !== '099.099.099.099' &&
+            maskExpression !== '000.000.000-00' &&
+            maskExpression !== '00.000.000/0000-00'
+          ) {
             result += inputArray[cursor];
           }
           cursor++;

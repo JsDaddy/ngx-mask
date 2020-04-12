@@ -47,6 +47,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   private _start!: number;
   private _end!: number;
   private _code!: string;
+  private _maskExpressionArray: string[] = [];
 
   public constructor(
     @Inject(DOCUMENT) private document: any,
@@ -79,6 +80,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     } = changes;
     if (maskExpression) {
       this._maskValue = maskExpression.currentValue || '';
+      if (maskExpression.currentValue && maskExpression.currentValue.split('||').length > 1) {
+        this._maskExpressionArray = maskExpression.currentValue.split('||').sort((a: string, b: string) => {
+          return a.length - b.length;
+        });
+        this._maskValue = this._maskExpressionArray[0];
+        this.maskExpression = this._maskExpressionArray[0];
+        this._maskService.maskExpression = this._maskExpressionArray[0];
+      }
     }
     if (specialCharacters) {
       if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
@@ -149,6 +158,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     if (this._maskService.ipError) {
       return this._createValidationError(value);
     }
+    if (this._maskService.cpfCnpjError) {
+      return this._createValidationError(value);
+    }
     if (this._maskValue.startsWith('separator')) {
       return null;
     }
@@ -216,6 +228,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
   public onInput(e: CustomKeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
     this._inputValue = el.value;
+
+    this._setMask();
+
     if (!this._maskValue) {
       this.onChange(el.value);
       return;
@@ -319,6 +334,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
     this._code = e.code ? e.code : e.key;
     const el: HTMLInputElement = e.target as HTMLInputElement;
     this._inputValue = el.value;
+
+    this._setMask();
+
     if (e.keyCode === 38) {
       e.preventDefault();
     }
@@ -492,5 +510,23 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
         actualValue,
       },
     };
+  }
+
+  private _setMask() {
+    if (this._maskExpressionArray.length > 0) {
+      this._maskExpressionArray.some(mask => {
+        const test = this._maskService.removeMask(this._inputValue).length <= this._maskService.removeMask(mask).length;
+        if (this._inputValue && test) {
+          this._maskValue = mask;
+          this.maskExpression = mask;
+          this._maskService.maskExpression = mask;
+          return test;
+        } else {
+          this._maskValue = this._maskExpressionArray[this._maskExpressionArray.length - 1];
+          this.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1];
+          this._maskService.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1];
+        }
+      });
+    }
   }
 }

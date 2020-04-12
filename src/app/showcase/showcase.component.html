@@ -891,7 +891,14 @@
             <div class="flex-row">
               <div class="flex-cell">
                 <mat-form-field>
-                  <input matInput placeholder="IP" mask="IP" [formControl]="ipFormControl" [(ngModel)]="ipModel" />
+                  <input
+                    matInput
+                    placeholder="IP"
+                    mask="IP"
+                    [showMaskTyped]="true"
+                    [formControl]="ipFormControl"
+                    [(ngModel)]="ipModel"
+                  />
                   <mat-hint> <b>Mask:</b> IP</mat-hint>
                 </mat-form-field>
               </div>
@@ -909,6 +916,7 @@
                     mask="CPF_CNPJ"
                     [formControl]="cpfCnpjFormControl"
                     [(ngModel)]="cpfCnpjModel"
+                    [showMaskTyped]="true"
                   />
                   <mat-hint> <b>Mask:</b> CPF_CNPJ </mat-hint>
                 </mat-form-field>
@@ -944,6 +952,7 @@
                     mask="000.000.000-00||00.000.000/0000-00"
                     [formControl]="cpfCnpjDynamicFormControl"
                     [(ngModel)]="cpfCnpjDynamicModel"
+                    [showMaskTyped]="true"
                   />
                   <mat-hint> <b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint>
                 </mat-form-field>
@@ -964,6 +973,8 @@
                     mask="(00) 0000-0000||(00) 0 0000-0000"
                     [formControl]="phoneBrFormControl"
                     [(ngModel)]="phoneBrModel"
+                    [showMaskTyped]="true"
+                    prefix="+55 "
                   />
                   <mat-hint> <b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000 </mat-hint>
                 </mat-form-field>
