@@ -1,4 +1,11 @@
-import { ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, ValidationErrors } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormControl,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ValidationErrors,
+  Validator,
+} from '@angular/forms';
 import { Directive, forwardRef, HostListener, Inject, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -23,7 +30,7 @@ import { MaskService } from './mask.service';
     MaskService,
   ],
 })
-export class MaskDirective implements ControlValueAccessor, OnChanges {
+export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
   @Input('mask') public maskExpression: string = '';
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
   @Input() public patterns: IConfig['patterns'] = {};
@@ -265,10 +272,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
 
   @HostListener('blur')
   public onBlur(): void {
-    if (!this._maskValue) {
-      return;
+    if (this._maskValue) {
+      this._maskService.clearIfNotMatchFn();
     }
-    this._maskService.clearIfNotMatchFn();
     this.onTouch();
   }
 
@@ -410,13 +416,21 @@ export class MaskDirective implements ControlValueAccessor, OnChanges {
       inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
       this._maskService.isNumberValue = true;
     }
-    (inputValue && this._maskService.maskExpression) ||
-    (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
-      ? (this._maskService.formElementProperty = [
-          'value',
-          this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-        ])
-      : (this._maskService.formElementProperty = ['value', inputValue]);
+    if (
+      (inputValue && this._maskService.maskExpression) ||
+      (this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped))
+    ) {
+      // Let the service we know we are writing value so that triggering onChange function wont happen during applyMask
+      this._maskService.writingValue = true;
+      this._maskService.formElementProperty = [
+        'value',
+        this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+      ];
+      // Let the service know we've finished writing value
+      this._maskService.writingValue = false;
+    } else {
+      this._maskService.formElementProperty = ['value', inputValue];
+    }
     this._inputValue = inputValue;
   }
 

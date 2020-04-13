@@ -15,20 +15,69 @@
   </div>
 </div>
 
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <p>Time validation test</p>
-      <div [formGroup]="bugsForm">
-        <p>
-          <input [showMaskTyped]="true" [dropSpecialCharacters]="false" mask="Hh:m0" formControlName="MonStart" />
-        </p>
-        <p>
-          Valid: {{ bugsForm.controls.MonStart.valid }}<br />
-          Value: {{ bugsForm.controls.MonStart.value }}<br />
-          Errors: {{ bugsForm.controls.MonStart.errors | json }}
-        </p>
+<form [formGroup]="bugsForm" (submit)="submitForm()">
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <label for="MonStart">Time validation test</label>
+        <div>
+          <p>
+            <input
+              [showMaskTyped]="true"
+              [dropSpecialCharacters]="false"
+              mask="Hh:m0"
+              formControlName="MonStart"
+              id="MonStart"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.MonStart.valid }}<br />
+            Value: {{ bugsForm.controls.MonStart.value }}<br />
+            Errors: {{ bugsForm.controls.MonStart.errors | json }}
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <label for="PrePopulate">Separator 2 Decimal Places Pre Populate Test</label>
+        <div>
+          <p>
+            <input mask="separator.2" [thousandSeparator]="','" formControlName="PrePopulate" id="PrePopulate" />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.PrePopulate.valid }}<br />
+            Value: {{ bugsForm.controls.PrePopulate.value }}<br />
+            Errors: {{ bugsForm.controls.PrePopulate.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <button type="submit" mat-raised-button color="primary">Submit</button>
+        <button type="reset" mat-raised-button color="accent">Native Reset</button>
+        <button type="button" mat-raised-button color="accent" (click)="resetForm()">Angular Reset</button>
+      </div>
+    </div>
+    <div class="row" *ngIf="submitted">
+      <div class="col-12">
+        <h4>Form successfully submitted</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <h3>Current form values</h3>
+        <pre>{{ bugsForm.value | json }}</pre>
+      </div>
+    </div>
+  </div>
+</form>
