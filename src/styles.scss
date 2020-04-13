@@ -221,3 +221,25 @@ header {
     opacity: 0.8;
   }
 }
+
+.box {
+  padding: 1.2rem;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+
+  input {
+    height: 2.5em;
+    font-size: 1em;
+    border-radius: 2px;
+    box-shadow: none;
+    border: 1px solid #d4d4d4;
+    width: 100%;
+  }
+  button {
+    margin-right: 1em;
+  }
+  label {
+    color: $black;
+  }
+}
