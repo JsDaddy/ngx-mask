@@ -1,3 +1,9 @@
+<a name="9.0.2">
+
+# [9.0.2 Bugfix](2020-04-20)
+
+Fix for #721 - prevent entering dots when decimal marker is comma
+
 <a name="9.0.1">
 
 # [9.0.1 Bugfix](2020-04-08)

@@ -107,7 +107,7 @@ export class MaskApplierService {
 
       const thousandSeperatorCharEscaped: string = this._charToRegExpExpression(this.thousandSeparator);
       const decimalMarkerEscaped: string = this._charToRegExpExpression(this.decimalMarker);
-      const invalidChars: string = '@#!$%^&*()_+|~=`{}\\[\\]:\\s,";<>?\\/'
+      const invalidChars: string = '@#!$%^&*()_+|~=`{}\\[\\]:\\s,\\.";<>?\\/'
         .replace(thousandSeperatorCharEscaped, '')
         .replace(decimalMarkerEscaped, '');
 
