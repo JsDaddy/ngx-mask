@@ -13,7 +13,12 @@ export class BugsComponent implements OnInit, OnDestroy {
   private onDestroy$ = new Subject();
 
   public constructor(private formBuilder: FormBuilder) {
-    this.bugsForm = this.formBuilder.group({ MonStart: [], PrePopulate: [123456] });
+    this.bugsForm = this.formBuilder.group({
+      MonStart: [],
+      PrePopulate: [123456],
+      DecMarkerComma: [],
+      DecMarkerDot: [],
+    });
   }
 
   ngOnDestroy(): void {

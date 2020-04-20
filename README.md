@@ -29,17 +29,49 @@ $ npm install --save ngx-mask
 
 Import **ngx-mask** module in Angular app.
 
+### With default mask config options
+
 ```typescript
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 
 export const options: Partial<IConfig> | (() => Partial<IConfig>);
 
 @NgModule({
-  (...)
   imports: [
-    NgxMaskModule.forRoot(options)
-  ]
-  (...)
+    NgxMaskModule.forRoot(),
+  ],
+})
+```
+
+### Passing in your own mask config options
+
+```typescript
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
+
+@NgModule({
+  imports: [
+    NgxMaskModule.forRoot(maskConfig),
+  ],
+})
+```
+
+Or using a function to get the config:
+
+```typescript
+const maskConfigFunction: () => Partial<IConfig> = () => {
+  return {
+    validation: false,
+  };
+};
+
+@NgModule({
+  imports: [
+    NgxMaskModule.forRoot(maskConfigFunction),
+  ],
 })
 ```
 

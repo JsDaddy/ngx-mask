@@ -23,6 +23,7 @@
         <div>
           <p>
             <input
+              type="text"
               [showMaskTyped]="true"
               [dropSpecialCharacters]="false"
               mask="Hh:m0"
@@ -46,12 +47,67 @@
         <label for="PrePopulate">Separator 2 Decimal Places Pre Populate Test</label>
         <div>
           <p>
-            <input mask="separator.2" [thousandSeparator]="','" formControlName="PrePopulate" id="PrePopulate" />
+            <input
+              type="text"
+              mask="separator.2"
+              [thousandSeparator]="','"
+              formControlName="PrePopulate"
+              id="PrePopulate"
+            />
           </p>
           <p>
             Valid: {{ bugsForm.controls.PrePopulate.valid }}<br />
             Value: {{ bugsForm.controls.PrePopulate.value }}<br />
             Errors: {{ bugsForm.controls.PrePopulate.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Comma</label>
+        <div>
+          <p>
+            <input
+              type="text"
+              mask="separator.2"
+              thousandSeparator="."
+              decimalMarker=","
+              formControlName="DecMarkerComma"
+              id="DecMarkerComma"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.DecMarkerComma.valid }}<br />
+            Value: {{ bugsForm.controls.DecMarkerComma.value }}<br />
+            Errors: {{ bugsForm.controls.DecMarkerComma.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Dot</label>
+        <div>
+          <p>
+            <input
+              type="text"
+              mask="separator.2"
+              thousandSeparator=","
+              decimalMarker="."
+              formControlName="DecMarkerDot"
+              id="DecMarkerDot"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.DecMarkerDot.valid }}<br />
+            Value: {{ bugsForm.controls.DecMarkerDot.value }}<br />
+            Errors: {{ bugsForm.controls.DecMarkerDot.errors | json }}
           </p>
         </div>
       </div>
