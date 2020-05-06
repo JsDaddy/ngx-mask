@@ -15,7 +15,7 @@ import { MaskService } from './mask.service';
 
 // tslint:disable deprecation
 @Directive({
-  selector: '[mask]',
+  selector: 'input[mask]',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
