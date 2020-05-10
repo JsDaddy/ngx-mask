@@ -14,6 +14,7 @@ import { config, IConfig, timeMasks, withoutValidation } from './config';
 import { MaskService } from './mask.service';
 
 // tslint:disable deprecation
+// tslint:disable no-input-rename
 @Directive({
   selector: 'input[mask]',
   providers: [
