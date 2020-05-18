@@ -16,7 +16,7 @@ import { MaskService } from './mask.service';
 // tslint:disable deprecation
 // tslint:disable no-input-rename
 @Directive({
-  selector: 'input[mask]',
+  selector: 'input[mask], textarea[mask]',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
