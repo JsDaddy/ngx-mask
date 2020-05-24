@@ -424,3 +424,25 @@ You can hide symbols in input field and get the actual value in `formcontrol`.
 ```html
 <input mask="IP" />
 ```
+
+### CPF_CNPJ valid mask
+
+#### Usage
+
+```html
+<input mask="CPF_CNPJ" />
+```
+
+### Dynamic valid mask
+
+#### Usage
+
+You can pass into mask pattern with `||`.
+
+```html
+<input mask="000.000.000-00||00.000.000/0000-00" />
+```
+
+```html
+<input mask="(00) 0000-0000||(00) 0 0000-0000" />
+```
