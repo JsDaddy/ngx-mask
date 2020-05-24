@@ -1,3 +1,9 @@
+<a name="9.1.0">
+
+# [9.1.0 Directive's selector change](2020-05-20)
+
+Change directive selector to restrict to input and textarea tags
+
 <a name="9.0.2">
 
 # [9.0.2 Bugfix](2020-04-20)
