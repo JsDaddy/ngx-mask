@@ -72,18 +72,24 @@ export class ShowcaseComponent {
   public dotPrecisionSeparatorFormModel: SN = '';
   public dotZeroPrecisionSeparatorFormModel!: SN;
   public commaSeparatorFormModel!: SN;
+  public spacebarSeparatorFormModel!: SN;
   public emptySeparatorFormModel!: SN;
   public commaPrecisionSeparatorFormModel: SN = '';
+  public spacebarPrecisionSeparatorFormModel: SN = '';
   public commaZeroPrecisionSeparatorFormModel!: SN;
+  public spacebarZeroPrecisionSeparatorFormModel!: SN;
   public separatorPrecisionSeparatorForm: FormControl;
   public separatorZeroPrecisionSeparatorForm: FormControl;
   public dotSeparatorForm!: FormControl;
   public dotPrecisionSeparatorForm!: FormControl;
   public dotZeroPrecisionSeparatorForm!: FormControl;
   public commaSeparatorForm!: FormControl;
+  public spacebarSeparatorForm!: FormControl;
   public emptySeparatorForm!: FormControl;
   public commaPrecisionSeparatorForm!: FormControl;
+  public spacebarPrecisionSeparatorForm!: FormControl;
   public commaZeroPrecisionSeparatorForm!: FormControl;
+  public spacebarZeroPrecisionSeparatorForm!: FormControl;
 
   public constructor() {
     this.form = new FormControl('');
@@ -107,9 +113,12 @@ export class ShowcaseComponent {
     this.dotPrecisionSeparatorForm = new FormControl(0);
     this.dotZeroPrecisionSeparatorForm = new FormControl('');
     this.commaSeparatorForm = new FormControl('');
+    this.spacebarSeparatorForm = new FormControl('');
     this.emptySeparatorForm = new FormControl('');
     this.commaPrecisionSeparatorForm = new FormControl(0);
+    this.spacebarPrecisionSeparatorForm = new FormControl(0);
     this.commaZeroPrecisionSeparatorForm = new FormControl('');
+    this.spacebarZeroPrecisionSeparatorForm = new FormControl('');
     this.percent = new FormControl('');
     this.customPatternForm = new FormControl('');
     this.hourTimeForm = new FormControl('');
