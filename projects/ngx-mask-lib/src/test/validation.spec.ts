@@ -7,9 +7,7 @@ import { equal } from './utils/test-functions.component';
 
 @Component({
   selector: 'mask-test-no-validation-attr',
-  template: `
-    <input id="maska" mask="0000" [formControl]="form" />
-  `,
+  template: ` <input id="maska" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskNoValidationAttributeComponent {
   public form: FormControl = new FormControl('');
@@ -17,9 +15,7 @@ export class TestMaskNoValidationAttributeComponent {
 
 @Component({
   selector: 'mask-test-validation-attr',
-  template: `
-    <input id="maska" mask="0000" [validation]="validate" [formControl]="form" />
-  `,
+  template: ` <input id="maska" mask="0000" [validation]="validate" [formControl]="form" /> `,
 })
 export class TestMaskValidationAttributeComponent {
   public form: FormControl = new FormControl('');
