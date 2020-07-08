@@ -51,4 +51,16 @@ describe('Directive: Mask (Drop special characters)', () => {
     equal('2578.9812', '2,578.9812', fixture);
     expect(component.form.value).toBe(2578.9812);
   });
+
+  it('FormControl should normally handle the removal of whitespace', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = ' ';
+    component.dropSpecialCharacters = true;
+    component.form.setValue(1234567.89);
+
+    // @todo add backspace event check
+
+    equal('1234567.89', '1 234 567.89', fixture);
+    expect(component.form.value).toBe('1234567.89');
+  });
 });
