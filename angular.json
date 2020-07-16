@@ -137,9 +137,7 @@
   },
   "defaultProject": "showcase",
   "cli": {
-    "warnings": {
-      "typescriptMismatch": false
-    }
+    "warnings": {}
   },
   "schematics": {
     "@schematics/angular:component": {

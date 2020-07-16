@@ -36,5 +36,7 @@
     "@angular/core": "^9.1.0",
     "@angular/forms": "^9.1.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "tslib": "^2.0.0"
+}
 }
