@@ -87,10 +87,10 @@ export class MaskApplierService {
       }
     }
     if (maskExpression.startsWith('percent')) {
-      if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/]/)) {
+      if (inputValue.match('[a-z]|[A-Z]') || inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/.]/)) {
         inputValue = this._stripToDecimal(inputValue);
         const precision: number = this.getPrecision(maskExpression);
-        inputValue = this.checkInputPrecision(inputValue, precision, '.');
+        inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
       }
       if (inputValue.indexOf('.') > 0 && !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))) {
         const base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
@@ -430,8 +430,10 @@ export class MaskApplierService {
 
       const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
       if (precisionMatch && precisionMatch[0].length - 1 > precision) {
-        inputValue = inputValue.substring(0, inputValue.length - 1);
-      } else if (precision === 0 && inputValue.endsWith(decimalMarker)) {
+        const diff = precisionMatch[0].length - 1 - precision;
+        inputValue = inputValue.substring(0, inputValue.length - diff);
+      }
+      if (precision === 0 && inputValue.endsWith(decimalMarker)) {
         inputValue = inputValue.substring(0, inputValue.length - 1);
       }
     }
