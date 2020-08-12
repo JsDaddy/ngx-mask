@@ -18,6 +18,7 @@ export class BugsComponent implements OnInit, OnDestroy {
       PrePopulate: [123456],
       DecMarkerComma: [],
       DecMarkerDot: [],
+      CorrectRemovingSpace: [1200300.99],
     });
   }
 

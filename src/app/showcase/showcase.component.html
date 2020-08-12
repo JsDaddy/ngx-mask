@@ -549,6 +549,31 @@
                 <mat-form-field>
                   <input
                     matInput
+                    placeholder="Spacebar separator"
+                    mask="separator"
+                    thousandSeparator=" "
+                    [formControl]="spacebarSeparatorForm"
+                    [(ngModel)]="spacebarSeparatorFormModel"
+                  />
+                  <mat-hint><b>Mask: </b>separator <b>thousandSeparator: </b>spacebar</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p>
+                  <b>FormControl:</b>
+                  {{ spacebarSeparatorForm.value ? spacebarSeparatorForm.value : 'Empty' }}
+                </p>
+                <p>
+                  <b>NgModel:</b>
+                  {{ spacebarSeparatorFormModel ? spacebarSeparatorFormModel : 'Empty' }}
+                </p>
+              </div>
+            </div>
+            <div class="flex-row">
+              <div class="flex-cell-padding">
+                <mat-form-field>
+                  <input
+                    matInput
                     placeholder="No Separator"
                     mask="separator"
                     thousandSeparator=""
@@ -675,6 +700,32 @@
                   <input
                     matInput
                     placeholder="Separator"
+                    mask="separator.2"
+                    thousandSeparator=" "
+                    [formControl]="spacebarPrecisionSeparatorForm"
+                    [(ngModel)]="spacebarPrecisionSeparatorFormModel"
+                  />
+                  <mat-hint><b>Mask: </b>separator.2 <b>thousandSeparator: </b>spacebar</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p>
+                  <b>FormControl:</b>
+                  {{ spacebarPrecisionSeparatorForm.value ? spacebarPrecisionSeparatorForm.value : 'Empty' }}
+                </p>
+                <p>
+                  <b>NgModel:</b>
+                  {{ spacebarPrecisionSeparatorFormModel ? spacebarPrecisionSeparatorFormModel : 'Empty' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="flex-cell-padding">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Separator"
                     [dropSpecialCharacters]="true"
                     mask="separator.0"
                     [formControl]="separatorZeroPrecisionSeparatorForm"
@@ -743,6 +794,32 @@
                 <p>
                   <b>NgModel:</b>
                   {{ commaZeroPrecisionSeparatorFormModel ? commaZeroPrecisionSeparatorFormModel : 'Empty' }}
+                </p>
+              </div>
+            </div>
+
+            <div class="flex-row">
+              <div class="flex-cell-padding">
+                <mat-form-field>
+                  <input
+                    matInput
+                    placeholder="Separator"
+                    mask="separator.0"
+                    thousandSeparator=" "
+                    [formControl]="spacebarZeroPrecisionSeparatorForm"
+                    [(ngModel)]="spacebarZeroPrecisionSeparatorFormModel"
+                  />
+                  <mat-hint><b>Mask: </b>separator.0 <b>thousandSeparator: </b>spacebar</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p>
+                  <b>FormControl:</b>
+                  {{ spacebarZeroPrecisionSeparatorForm.value ? spacebarZeroPrecisionSeparatorForm.value : 'Empty' }}
+                </p>
+                <p>
+                  <b>NgModel:</b>
+                  {{ spacebarZeroPrecisionSeparatorFormModel ? spacebarZeroPrecisionSeparatorFormModel : 'Empty' }}
                 </p>
               </div>
             </div>

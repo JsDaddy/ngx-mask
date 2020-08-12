@@ -113,6 +113,32 @@
       </div>
     </div>
   </div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
+        <label for="CorrectRemovingSpace">Correctly removing a space delimited value</label>
+        <div>
+          <p>
+            <input
+              type="text"
+              mask="separator.2"
+              thousandSeparator=" "
+              suffix="$"
+              formControlName="CorrectRemovingSpace"
+              id="CorrectRemovingSpace"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.CorrectRemovingSpace.valid }}<br />
+            Value: {{ bugsForm.controls.CorrectRemovingSpace.value }}<br />
+            Errors: {{ bugsForm.controls.CorrectRemovingSpace.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container box">
     <div class="row">
       <div class="col-12">
