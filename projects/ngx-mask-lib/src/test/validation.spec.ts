@@ -44,13 +44,13 @@ describe('Directive: Mask (Validation)', () => {
 
     it('should be marked as not valid if not valid', () => {
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('mask')).toBeTrue();
+      expect(component.form.valid).toBe(false);
+      expect(component.form.hasError('mask')).toBe(true);
     });
 
     it('should be marked as valid if valid', () => {
       equal('1234', '1234', fixture);
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
     });
   });
 
@@ -75,19 +75,19 @@ describe('Directive: Mask (Validation)', () => {
 
     it('should be marked as not valid if not valid and validation attribute true', () => {
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('mask')).toBeTrue();
+      expect(component.form.valid).toBe(false);
+      expect(component.form.hasError('mask')).toBe(true);
     });
 
     it('should be marked as valid if valid and validation attribute true', () => {
       equal('1234', '1234', fixture);
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
       component.validate = false;
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
     });
   });
 
@@ -112,7 +112,7 @@ describe('Directive: Mask (Validation)', () => {
 
     it('should be marked as valid if not valid', () => {
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
     });
   });
 
@@ -137,14 +137,14 @@ describe('Directive: Mask (Validation)', () => {
 
     it('should be marked as not valid if not valid and validation attribute true', () => {
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeFalse();
-      expect(component.form.hasError('mask')).toBeTrue();
+      expect(component.form.valid).toBe(false);
+      expect(component.form.hasError('mask')).toBe(true);
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
       component.validate = false;
       equal('12', '12', fixture);
-      expect(component.form.valid).toBeTrue();
+      expect(component.form.valid).toBe(true);
     });
   });
 });
