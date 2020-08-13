@@ -32,9 +32,9 @@
   "es2015": "./esm2015/ngx-mask.js",
   "typings": "./ngx-mask.d.ts",
   "peerDependencies": {
-    "@angular/common": "^10.0.9",
-    "@angular/core": "^10.0.9",
-    "@angular/forms": "^10.0.9"
+    "@angular/common": ">=10.0.0",
+    "@angular/core": ">=10.0.0",
+    "@angular/forms": ">=10.0.0"
   },
   "dependencies": {}
 }
