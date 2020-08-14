@@ -14,7 +14,7 @@ describe('ShowcaseComponent', () => {
     const fixture = TestBed.createComponent(ShowcaseComponent);
     const app = fixture.componentInstance;
     fixture.detectChanges();
-    expect(app).toBeObject();
-    expect(app instanceof ShowcaseComponent).toBeTrue();
+    expect(app).toBeTruthy();
+    expect(app instanceof ShowcaseComponent).toBe(true);
   });
 });
