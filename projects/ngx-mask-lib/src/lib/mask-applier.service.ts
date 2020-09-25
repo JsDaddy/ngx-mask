@@ -189,12 +189,7 @@ export class MaskApplierService {
         ) {
           result += inputSymbol;
           cursor += 3;
-        } else if (
-          this._checkSymbolMask(inputSymbol, maskExpression[cursor]) ||
-          (this.hiddenInput &&
-            this.maskAvailablePatterns[maskExpression[cursor]] &&
-            this.maskAvailablePatterns[maskExpression[cursor]].symbol === inputSymbol)
-        ) {
+        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
           if (maskExpression[cursor] === 'H') {
             if (Number(inputSymbol) > 2) {
               cursor += 1;
