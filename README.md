@@ -34,7 +34,7 @@ Import **ngx-mask** module in Angular app.
 ```typescript
 import { NgxMaskModule, IConfig } from 'ngx-mask'
 
-export const options: Partial<IConfig> | (() => Partial<IConfig>);
+export const options: Partial<IConfig> | (() => Partial<IConfig>) = null;
 
 @NgModule({
   imports: [
