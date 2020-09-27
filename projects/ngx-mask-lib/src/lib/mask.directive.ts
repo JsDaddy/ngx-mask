@@ -265,9 +265,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       positionToApply = this._getActualInputLength();
     }
     el.setSelectionRange(positionToApply, positionToApply);
-    if ((this.maskExpression.includes('H') || this.maskExpression.includes('M')) && caretShift === 0) {
-      el.setSelectionRange((el.selectionStart as number) + 1, (el.selectionStart as number) + 1);
-    }
     this._position = null;
   }
 
@@ -353,7 +350,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       }
       if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
         // If specialChars is false, (shouldn't ever happen) then set to the defaults
-        this.specialCharacters = this.specialCharacters || this._config.specialCharacters;
+        this.specialCharacters = this.specialCharacters?.length
+          ? this.specialCharacters
+          : this._config.specialCharacters;
         if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
           el.setSelectionRange(this.prefix.length, this.prefix.length);
         } else {

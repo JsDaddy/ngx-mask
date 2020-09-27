@@ -39,6 +39,12 @@ describe('Directive: Mask (Time)', () => {
     equal('730', '7:30', fixture);
   });
 
+  it('Hours', () => {
+    component.showMaskTyped = true;
+    component.mask = 'Hh:m0';
+    equal('3__:__', '3:__', fixture);
+  });
+
   it('Minutes', () => {
     component.mask = 'Hh:m0:s0';
     equal('1212', '12:12', fixture);

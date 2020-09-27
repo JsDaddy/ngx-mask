@@ -93,10 +93,26 @@ export class MaskService extends MaskApplierService {
     }
     const resLen: number = result.length;
     const prefNmask: string = this.prefix + this.maskIsShown;
-    return (
-      result +
-      (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ' ? prefNmask : prefNmask.slice(resLen))
-    );
+
+    if (this.maskExpression.includes('H')) {
+      const countSkipedSymbol = this._numberSkipedSymbols(result);
+      return result + prefNmask.slice(resLen + countSkipedSymbol);
+    } else if (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ') {
+      return result + prefNmask;
+    }
+    return result + prefNmask.slice(resLen);
+  }
+
+  // get the number of characters that were shifted
+  private _numberSkipedSymbols(value: string): number {
+    const regex = /(^|\D)(\d\D)/g;
+    let match = regex.exec(value);
+    let countSkipedSymbol = 0;
+    while (match != null) {
+      countSkipedSymbol += 1;
+      match = regex.exec(value);
+    }
+    return countSkipedSymbol;
   }
 
   public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
