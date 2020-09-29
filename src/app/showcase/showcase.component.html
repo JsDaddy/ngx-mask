@@ -37,7 +37,7 @@
                     [(ngModel)]="secureMask"
                     [formControl]="formSecureInput"
                   />
-                  <mat-hint> <b>Mask:</b> "XXX/X0/0000" </mat-hint>
+                  <mat-hint><b>Mask:</b> "XXX/X0/0000"</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
@@ -69,7 +69,7 @@
                 <div class="mat-form-wr">
                   <mat-form-field>
                     <input matInput placeholder="Date and Hour" mask="00/00/00 00:00:00" [formControl]="hourTimeForm" />
-                    <mat-hint> <b>Mask:</b> 00/00/00 00:00:00</mat-hint>
+                    <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -77,7 +77,7 @@
                 <div class="mat-form-wr">
                   <mat-form-field>
                     <input matInput placeholder="Hour" mask="00:00:00" [formControl]="hourForm" />
-                    <mat-hint> <b>Mask:</b> 00:00:00</mat-hint>
+                    <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -85,7 +85,7 @@
                 <div class="mat-form-wr">
                   <mat-form-field>
                     <input matInput placeholder="Valid 24 hour format" mask="Hh:m0:s0" [formControl]="hour24Form" />
-                    <mat-hint> <b>Mask:</b> Hh:m0:s0</mat-hint>
+                    <mat-hint><b>Mask:</b> Hh:m0:s0</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -93,7 +93,7 @@
                 <div class="mat-form-wr">
                   <mat-form-field>
                     <input matInput placeholder="Mixed Type" mask="AAA 000-S0S" [formControl]="mixedTypeForm" />
-                    <mat-hint> <b>Mask:</b> AAA 000-S0S</mat-hint>
+                    <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -107,7 +107,7 @@
                       [dropSpecialCharacters]="true"
                       [formControl]="dateMonthForm"
                     />
-                    <mat-hint> <b>Mask:</b> d0/M0/0000</mat-hint>
+                    <mat-hint><b>Mask:</b> d0/M0/0000</mat-hint>
                   </mat-form-field>
                 </div>
               </div>
@@ -143,7 +143,7 @@
                     [formControl]="cpfFormControl"
                     [(ngModel)]="cpfModel"
                   />
-                  <mat-hint> <b>Mask:</b> 000.000.000-00</mat-hint>
+                  <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
@@ -236,9 +236,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Phone number</mat-card-title>
-            <mat-card-subtitle>
-              You can add prefix to you masked value
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can add prefix to you masked value </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -354,9 +352,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>suffix</mat-card-title>
-            <mat-card-subtitle>
-              You can add 'suffix' property
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can add 'suffix' property </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -392,9 +388,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Number or string</mat-card-title>
-            <mat-card-subtitle>
-              You can pass in value of type number or string
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can pass in value of type number or string </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -435,9 +429,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Repeat mask</mat-card-title>
-            <mat-card-subtitle>
-              You can pass into mask pattern with brackets
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can pass into mask pattern with brackets </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -472,9 +464,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Thousand separator mask</mat-card-title>
-            <mat-card-subtitle>
-              You can divide your input by thousands
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can divide your input by thousands </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -608,9 +598,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Separator precision</mat-card-title>
-            <mat-card-subtitle>
-              You can set the precision for dot and comma separators
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can set the precision for dot and comma separators </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -837,9 +825,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Custom Pattern and mask in pipe</mat-card-title>
-            <mat-card-subtitle>
-              You can pass array of maskExpression and CustomPattern into pipe
-            </mat-card-subtitle>
+            <mat-card-subtitle> You can pass array of maskExpression and CustomPattern into pipe </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -903,9 +889,9 @@
         <h4>Example code (Reactive Forms)</h4>
         <pre>
 // In component
-{{ "public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z '-]') } };" }}
+          {{ "public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z '-]') } };" }}
 
-// In template
+          // In template
 &lt;input mask="N*"
   [specialCharacters]="[]"
   [patterns]="surnamePattern"
@@ -962,7 +948,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Patterns Masks</mat-card-title>
-            <mat-card-subtitle> You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>. </mat-card-subtitle>
+            <mat-card-subtitle> You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>.</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -976,7 +962,7 @@
                     [formControl]="ipFormControl"
                     [(ngModel)]="ipModel"
                   />
-                  <mat-hint> <b>Mask:</b> IP</mat-hint>
+                  <mat-hint><b>Mask:</b> IP</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
@@ -995,7 +981,7 @@
                     [(ngModel)]="cpfCnpjModel"
                     [showMaskTyped]="true"
                   />
-                  <mat-hint> <b>Mask:</b> CPF_CNPJ </mat-hint>
+                  <mat-hint><b>Mask:</b> CPF_CNPJ</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
@@ -1017,7 +1003,7 @@
         <mat-card>
           <mat-card-header>
             <mat-card-title>Dynamics Masks</mat-card-title>
-            <mat-card-subtitle> You can pass into mask pattern with <b>||</b>. </mat-card-subtitle>
+            <mat-card-subtitle> You can pass into mask pattern with <b>||</b>.</mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
             <div class="flex-row">
@@ -1031,7 +1017,7 @@
                     [(ngModel)]="cpfCnpjDynamicModel"
                     [showMaskTyped]="true"
                   />
-                  <mat-hint> <b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint>
+                  <mat-hint><b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
@@ -1053,7 +1039,7 @@
                     [showMaskTyped]="true"
                     prefix="+55 "
                   />
-                  <mat-hint> <b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000 </mat-hint>
+                  <mat-hint><b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">
