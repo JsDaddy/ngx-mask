@@ -25,6 +25,7 @@ export class MaskApplierService {
   public validation: IConfig['validation'];
   public separatorLimit: IConfig['separatorLimit'];
   public allowNegativeNumbers: IConfig['allowNegativeNumbers'];
+  public leadZeroDateTime: IConfig['leadZeroDateTime'];
 
   private _shift!: Set<number>;
 
@@ -44,6 +45,7 @@ export class MaskApplierService {
     this.validation = this._config.validation;
     this.separatorLimit = this._config.separatorLimit;
     this.allowNegativeNumbers = this._config.allowNegativeNumbers;
+    this.leadZeroDateTime = this._config.leadZeroDateTime;
   }
 
   public applyMaskWithPattern(inputValue: string, maskAndPattern: [string, IConfig['patterns']]): string {
@@ -51,6 +53,7 @@ export class MaskApplierService {
     this.customPattern = customPattern;
     return this.applyMask(inputValue, mask);
   }
+
   public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
@@ -198,9 +201,11 @@ export class MaskApplierService {
           if (maskExpression[cursor] === 'H') {
             if (Number(inputSymbol) > 2) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-              this._shift.add(shiftStep + this.prefix.length || 0);
+              this._shiftStep(maskExpression, cursor, inputArray.length);
               i--;
+              if (this.leadZeroDateTime) {
+                result += '0';
+              }
               continue;
             }
           }
@@ -214,28 +219,38 @@ export class MaskApplierService {
           if (maskExpression[cursor] === 'm') {
             if (Number(inputSymbol) > 5) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-              this._shift.add(shiftStep + this.prefix.length || 0);
+              this._shiftStep(maskExpression, cursor, inputArray.length);
               i--;
+              if (this.leadZeroDateTime) {
+                result += '0';
+              }
               continue;
             }
           }
           if (maskExpression[cursor] === 's') {
             if (Number(inputSymbol) > 5) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-              this._shift.add(shiftStep + this.prefix.length || 0);
+              this._shiftStep(maskExpression, cursor, inputArray.length);
               i--;
+              if (this.leadZeroDateTime) {
+                result += '0';
+              }
               continue;
             }
           }
           const daysCount = 31;
           if (maskExpression[cursor] === 'd') {
-            if (Number(inputValue.slice(cursor, cursor + 2)) > daysCount || inputValue[cursor + 1] === '/') {
+            if (
+              (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
+              Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
+              inputValue[cursor + 1] === '/'
+            ) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-              this._shift.add(shiftStep + this.prefix.length || 0);
+              this._shiftStep(maskExpression, cursor, inputArray.length);
               i--;
+              if (this.leadZeroDateTime) {
+                result += '0';
+              }
               continue;
             }
           }
@@ -277,11 +292,20 @@ export class MaskApplierService {
               inputValue[cursor - 1] !== '/' &&
               Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount;
 
-            if (withoutDays || day1monthInput || day2monthInput || day1monthPaste || day2monthPaste) {
+            if (
+              (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
+              withoutDays ||
+              day1monthInput ||
+              day2monthInput ||
+              day1monthPaste ||
+              day2monthPaste
+            ) {
               cursor += 1;
-              const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-              this._shift.add(shiftStep + this.prefix.length || 0);
+              this._shiftStep(maskExpression, cursor, inputArray.length);
               i--;
+              if (this.leadZeroDateTime) {
+                result += '0';
+              }
               continue;
             }
           }
@@ -290,8 +314,7 @@ export class MaskApplierService {
         } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
           result += maskExpression[cursor];
           cursor++;
-          const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputArray.length : cursor;
-          this._shift.add(shiftStep + this.prefix.length || 0);
+          this._shiftStep(maskExpression, cursor, inputArray.length);
           i--;
         } else if (
           this.maskSpecialCharacters.indexOf(inputSymbol) > -1 &&
@@ -461,5 +484,10 @@ export class MaskApplierService {
       return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? '\\' + char : char;
     }
     return char;
+  }
+
+  private _shiftStep(maskExpression: string, cursor: number, inputLength: number) {
+    const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor)) ? inputLength : cursor;
+    this._shift.add(shiftStep + this.prefix.length || 0);
   }
 }

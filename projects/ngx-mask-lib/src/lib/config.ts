@@ -16,6 +16,7 @@ export interface IConfig {
   validation: boolean;
   separatorLimit: string;
   allowNegativeNumbers: boolean;
+  leadZeroDateTime: boolean;
   patterns: {
     [character: string]: {
       pattern: RegExp;
@@ -47,6 +48,7 @@ export const initialConfig: IConfig = {
   validation: true,
   // tslint:disable-next-line: quotemark
   specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
+  leadZeroDateTime: false,
   patterns: {
     '0': {
       pattern: new RegExp('\\d'),

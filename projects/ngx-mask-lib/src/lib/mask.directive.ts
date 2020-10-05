@@ -49,6 +49,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
   @Input() public validation: IConfig['validation'] | null = null;
   @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
   @Input() public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | null = null;
+  @Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
   private _maskValue: string = '';
   private _inputValue!: string;
   private _position: number | null = null;
@@ -85,6 +86,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       validation,
       separatorLimit,
       allowNegativeNumbers,
+      leadZeroDateTime,
     } = changes;
     if (maskExpression) {
       this._maskValue = maskExpression.currentValue || '';
@@ -154,6 +156,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
           (c: string) => c !== '-'
         );
       }
+    }
+    if (leadZeroDateTime) {
+      this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
     }
     this._applyMask();
   }
