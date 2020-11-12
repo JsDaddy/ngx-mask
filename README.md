@@ -387,6 +387,40 @@ You can validate your input as 24 hour format.
 <input type="text" mask="Hh:m0:s0" />
 ```
 
+### Date validation
+
+You can validate your date.
+
+#### Usage
+
+```html
+<input type="text" mask="d0/M0/0000" />
+```
+
+### leadZeroDateTime (boolean)
+
+If the `leadZeroDateTime` parameter is `true`, skipped symbols of date or time will be replaced by `0`. Default value is `false`.
+
+#### Usage
+
+```html
+<input type="text" mask="d0/M0/0000" [leadZeroDateTime]="true" />
+```
+
+```text
+Input value: 422020
+Masked value: 04/02/2020
+```
+
+```html
+<input type="text" mask="Hh:m0:s0" [leadZeroDateTime]="true" />
+```
+
+```text
+Input value: 777
+Masked value: 07:07:07
+```
+
 ### Percent validation
 
 You can validate your input for percents.

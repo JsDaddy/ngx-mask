@@ -23,6 +23,7 @@ import { IConfig } from '../../lib/config';
       [separatorLimit]="separatorLimit"
       [hiddenInput]="hiddenInput"
       [allowNegativeNumbers]="allowNegativeNumbers"
+      [leadZeroDateTime]="leadZeroDateTime"
     />
   `,
 })
@@ -42,4 +43,5 @@ export class TestMaskComponent {
   public hiddenInput: IConfig['hiddenInput'] = false;
   public separatorLimit: IConfig['separatorLimit'] = '';
   public allowNegativeNumbers: IConfig['allowNegativeNumbers'] = false;
+  public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
 }
