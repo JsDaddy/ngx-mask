@@ -33,7 +33,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -101,7 +100,7 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-ng-packagr:build",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json",
             "project": "projects/ngx-mask-lib/ng-package.json"
@@ -139,7 +138,8 @@
   "cli": {
     "warnings": {
       "typescriptMismatch": false
-    }
+    },
+    "analytics": "682218d2-280d-47b1-b385-b2c8c903f9a9"
   },
   "schematics": {
     "@schematics/angular:component": {
