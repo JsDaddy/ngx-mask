@@ -26,6 +26,7 @@ const APP_ROUTES: Routes = [
     RouterModule.forRoot(APP_ROUTES, {
       scrollPositionRestoration: 'enabled',
       anchorScrolling: 'enabled',
+      relativeLinkResolution: 'legacy',
     }),
   ],
   exports: [RouterModule],

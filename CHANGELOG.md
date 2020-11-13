@@ -1,3 +1,9 @@
+<a name="11.0.0">
+
+# [11.0.0 Update to Angular 11](2020-11-12)
+
+Update to Angular 11
+
 <a name="9.1.0">
 
 # [9.1.0 Directive's selector change](2020-05-20)

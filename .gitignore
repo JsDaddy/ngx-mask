@@ -20,6 +20,8 @@
 /.sass-cache
 /connect.lock
 /coverage/*
+/src/coverage/*
+/projects/ngx-mask-lib/coverage/*
 /libpeerconnection.log
 npm-debug.log
 testem.log
