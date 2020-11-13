@@ -5,34 +5,34 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 
 describe('Directive: Mask', () => {
-  let fixture: ComponentFixture<TestMaskComponent>;
-  let component: TestMaskComponent;
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [TestMaskComponent],
-      imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestMaskComponent],
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
     });
-    fixture = TestBed.createComponent(TestMaskComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
 
-  it('should clear if mask is not matched', () => {
-    component.mask = '000.000-00';
-    component.clearIfNotMatch = true;
-    equal('', '', fixture);
-    equal('2578989', '', fixture);
-    equal('2578989888988', '257.898-98', fixture);
-    equal('111.111-11', '111.111-11', fixture);
-  });
+    it('should clear if mask is not matched', async () => {
+        component.mask = '000.000-00';
+        component.clearIfNotMatch = true;
+        equal('', '', fixture, true);
+        equal('2578989', '', fixture, true );
+        equal('2578989888988', '257.898-98', fixture);
+        equal('111.111-11', '111.111-11', fixture);
+    });
 
-  it('should clear if mask is not matched with prefix', () => {
-    component.mask = '000-000-00';
-    component.prefix = '+5';
-    component.clearIfNotMatch = true;
-    equal('', '', fixture);
-    equal('2578989', '', fixture);
-    equal('25789898', '+5257-898-98', fixture);
-  });
+    it('should clear if mask is not matched with prefix', async () => {
+        component.mask = '000-000-00';
+        component.prefix = '+5';
+        component.clearIfNotMatch = true;
+        equal('', '', fixture, true);
+        equal('2578989', '', fixture, true);
+        equal('25789898', '+5257-898-98', fixture);
+    });
 });
