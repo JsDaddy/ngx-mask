@@ -19,8 +19,6 @@ export class MaskService extends MaskApplierService {
    */
   public writingValue: boolean = false;
 
-  private _formElement: HTMLInputElement;
-
   public onChange = (_: any) => {};
 
   public constructor(
@@ -30,7 +28,6 @@ export class MaskService extends MaskApplierService {
     private _renderer: Renderer2
   ) {
     super(_config);
-    this._formElement = this._elementRef.nativeElement;
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
@@ -116,8 +113,9 @@ export class MaskService extends MaskApplierService {
   }
 
   public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
-    this._formElement.value = this.applyMask(this._formElement.value, this.maskExpression, position, cb);
-    if (this._formElement === this.document.activeElement) {
+    const formElement = this._elementRef.nativeElement;
+    formElement.value = this.applyMask(formElement.value, this.maskExpression, position, cb);
+    if (formElement === this.document.activeElement) {
       return;
     }
     this.clearIfNotMatchFn();
@@ -199,18 +197,19 @@ export class MaskService extends MaskApplierService {
   }
 
   public clearIfNotMatchFn(): void {
+    const formElement = this._elementRef.nativeElement;
     if (
       this.clearIfNotMatch &&
       this.prefix.length + this.maskExpression.length + this.suffix.length !==
-        this._formElement.value.replace(/_/g, '').length
+        formElement.value.replace(/_/g, '').length
     ) {
       this.formElementProperty = ['value', ''];
-      this.applyMask(this._formElement.value, this.maskExpression);
+      this.applyMask(formElement.value, this.maskExpression);
     }
   }
 
   public set formElementProperty([name, value]: [string, string | boolean]) {
-    this._renderer.setProperty(this._formElement, name, value);
+    Promise.resolve().then(() => this._renderer.setProperty(this._elementRef.nativeElement, name, value));
   }
 
   public checkSpecialCharAmount(mask: string): number {

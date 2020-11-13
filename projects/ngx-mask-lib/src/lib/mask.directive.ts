@@ -296,7 +296,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       el.selectionStart > this._maskService.prefix.length &&
       // tslint:disable-next-line
       (e as any).keyCode !== 38
-    )
+    ) {
       if (this._maskService.showMaskTyped) {
         // We are showing the mask in the input
         this._maskService.maskIsShown = this._maskService.showMaskInInput();
@@ -312,6 +312,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
           }
         }
       }
+    }
     const nextValue: string | null =
       !el.value || el.value === this._maskService.prefix
         ? this._maskService.prefix + this._maskService.maskIsShown
@@ -412,7 +413,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
   }
 
   /** It writes the value in the input */
-  public async writeValue(inputValue: string | number): Promise<void> {
+  public async writeValue(inputValue: string | number | { value: string | number; disable?: boolean }): Promise<void> {
+    if (typeof inputValue === 'object' && inputValue !== null && 'value' in inputValue) {
+      if ('disable' in inputValue) {
+        this.setDisabledState(Boolean(inputValue.disable));
+      }
+      inputValue = inputValue.value;
+    }
+
     if (inputValue === undefined) {
       inputValue = '';
     }
@@ -494,6 +502,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       maskExp
     );
   }
+
   // tslint:disable-next-line:no-any
   private _applyMask(): any {
     this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue || '');

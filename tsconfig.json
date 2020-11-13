@@ -16,8 +16,10 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
-      "ngx-mask": ["dist/ngx-mask-lib"],
-      "ngx-mask/*": ["dist/ngx-mask-lib/*"]
+      //      "ngx-mask": ["dist/ngx-mask-lib"],
+      //      "ngx-mask/*": ["dist/ngx-mask-lib/*"]
+      "ngx-mask": ["projects/ngx-mask-lib/src"],
+      "ngx-mask/*": ["projects/ngx-mask-lib/src"]
     }
   }
 }

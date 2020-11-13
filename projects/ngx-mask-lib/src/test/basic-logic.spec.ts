@@ -397,7 +397,11 @@ describe('Directive: Mask', () => {
 
     const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
     spyOn(directiveInstance['_maskService'], 'applyMask');
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+    });
     expect(directiveInstance['_maskService'].applyMask).toHaveBeenCalled();
   });
 
@@ -415,7 +419,26 @@ describe('Directive: Mask', () => {
 
     const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
     spyOn(directiveInstance['_maskService'], 'applyMask');
-    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+    debugElement.triggerEventHandler('keydown', {
+      code: 'Backspace',
+      keyCode: 8,
+      target: inputTarget,
+    });
     expect(directiveInstance['_maskService'].applyMask).not.toHaveBeenCalled();
+  });
+
+  it('should right work with {value, disable}', async (done) => {
+    component.mask = '000';
+    fixture.detectChanges();
+    component.form.setValue({
+      value: 123,
+      disable: true,
+    });
+    fixture.detectChanges();
+    const inputEl = fixture.debugElement.query(By.css('input'));
+    Promise.resolve().then(() => {
+      expect(inputEl.properties.disabled).toEqual(true);
+      done();
+    });
   });
 });

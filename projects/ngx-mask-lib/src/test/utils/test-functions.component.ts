@@ -11,6 +11,14 @@ export function typeTest(inputValue: string, fixture: any): string {
 }
 
 // tslint:disable-next-line:no-any
-export function equal(value: string, expectedValue: string, fixture: any): void {
-  expect(typeTest(value, fixture)).toBe(expectedValue);
+export function equal(value: string, expectedValue: string, fixture: any, async = false): void {
+  typeTest(value, fixture);
+
+  if (async) {
+    Promise.resolve().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe(expectedValue);
+    });
+    return;
+  }
+  expect(fixture.nativeElement.querySelector('input').value).toBe(expectedValue);
 }
