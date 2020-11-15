@@ -1,10 +1,10 @@
 <a name="11.1.0"></a>
 
-# 11.1.0 (2020-11-11)
+# 11.1.0 (2020-11-15)
 
 ### Bug Fixes
 
-No difinition for form control with `{value, disable} should work ([#803](https://github.com/JsDaddy/ngx-mask/issues/803)) ([826](https://github.com/JsDaddy/ngx-mask/pull/826))
+Difinition for form control with `{value, disable} should work ([#803](https://github.com/JsDaddy/ngx-mask/issues/803)) ([826](https://github.com/JsDaddy/ngx-mask/pull/826))
 
 <a name="11.0.0">
 
