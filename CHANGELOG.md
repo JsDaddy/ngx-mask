@@ -1,5 +1,13 @@
 <a name="11.1.0"></a>
 
+# 11.2.0 (2020-11-23)
+
+### Bug Fixes
+
+Copy paste event should work as expected ([#803](https://github.com/JsDaddy/ngx-mask/issues/765)) ([826](https://github.com/JsDaddy/ngx-mask/pull/827))
+
+<a name="11.1.0"></a>
+
 # 11.1.0 (2020-11-15)
 
 ### Bug Fixes

@@ -54,7 +54,13 @@ export class MaskApplierService {
     return this.applyMask(inputValue, mask);
   }
 
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
+  public applyMask(
+    inputValue: string,
+    maskExpression: string,
+    position: number = 0,
+    justPasted: boolean = false,
+    cb: Function = () => {}
+  ): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
       return '';
     }
@@ -365,7 +371,7 @@ export class MaskApplierService {
       newPosition++;
     }
 
-    let actualShift: number = this._shift.has(position) ? shift : 0;
+    let actualShift: number = justPasted ? cursor : this._shift.has(position) ? shift : 0;
     if (stepBack) {
       actualShift--;
     }
