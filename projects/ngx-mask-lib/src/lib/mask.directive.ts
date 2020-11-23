@@ -57,6 +57,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
   private _end!: number;
   private _code!: string;
   private _maskExpressionArray: string[] = [];
+  private _justPasted: boolean = false;
 
   public constructor(
     @Inject(DOCUMENT) private document: any,
@@ -236,6 +237,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     }
     return null;
   }
+  @HostListener('paste')
+  public onPaste() {
+    this._justPasted = true;
+  }
 
   @HostListener('input', ['$event'])
   public onInput(e: CustomKeyboardEvent): void {
@@ -254,7 +259,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
         : (el.selectionStart as number);
     let caretShift = 0;
     let backspaceShift = false;
-    this._maskService.applyValueChanges(position, (shift: number, _backspaceShift: boolean) => {
+    this._maskService.applyValueChanges(position, this._justPasted, (shift: number, _backspaceShift: boolean) => {
+      this._justPasted = false;
       caretShift = shift;
       backspaceShift = _backspaceShift;
     });

@@ -31,7 +31,13 @@ export class MaskService extends MaskApplierService {
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
-  public applyMask(inputValue: string, maskExpression: string, position: number = 0, cb: Function = () => {}): string {
+  public applyMask(
+    inputValue: string,
+    maskExpression: string,
+    position: number = 0,
+    justPasted = false,
+    cb: Function = () => {}
+  ): string {
     if (!maskExpression) {
       return inputValue;
     }
@@ -66,7 +72,7 @@ export class MaskService extends MaskApplierService {
       newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
     }
     newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
-    const result: string = super.applyMask(newInputValue, maskExpression, position, cb);
+    const result: string = super.applyMask(newInputValue, maskExpression, position, justPasted, cb);
     this.actualValue = this.getActualValue(result);
 
     // handle some separator implications:
@@ -112,9 +118,9 @@ export class MaskService extends MaskApplierService {
     return countSkipedSymbol;
   }
 
-  public applyValueChanges(position: number = 0, cb: Function = () => {}): void {
+  public applyValueChanges(position: number = 0, justPasted: boolean, cb: Function = () => {}): void {
     const formElement = this._elementRef.nativeElement;
-    formElement.value = this.applyMask(formElement.value, this.maskExpression, position, cb);
+    formElement.value = this.applyMask(formElement.value, this.maskExpression, position, justPasted, cb);
     if (formElement === this.document.activeElement) {
       return;
     }

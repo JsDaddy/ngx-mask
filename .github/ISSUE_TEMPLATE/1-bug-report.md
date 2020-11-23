@@ -2,6 +2,7 @@
 name: "\U0001F41E Bug report"
 about: Report a bug in the ngx-mask package
 ---
+
 <!--🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅
 
 Oh hi there! 😄
@@ -11,7 +12,6 @@ Existing issues often contain information about workarounds, resolution, or prog
 
 🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅🔅-->
 
-
 # 🐞 bug report
 
 ### Is this a regression?
@@ -19,13 +19,12 @@ Existing issues often contain information about workarounds, resolution, or prog
 <!-- Did this behavior use to work in the previous version? -->
 <!-- ✍️--> Yes, the previous version in which this bug was not present was: ....
 
-
 ### Description
 
 <!-- ✍️--> A clear and concise description of the problem...
 
-
 ## 🔬 Minimal Reproduction
+
 <!--
 Please create and share minimal reproduction of the issue starting with this template: https://stackblitz.com/fork/angular-ivy
 -->
@@ -42,16 +41,17 @@ You can read more about issue submission guidelines here: https://github.com/ang
 -->
 
 ## 🔥 Exception or Error
+
 <pre><code>
 <!-- If the issue is accompanied by an exception or an error, please share it below: -->
 <!-- ✍️-->
 
 </code></pre>
 
-
-## 🌍  Your Environment
+## 🌍 Your Environment
 
 **Angular Version:**
+
 <pre><code>
 <!-- run `ng version` and paste output below -->
 <!-- ✍️-->
@@ -59,6 +59,7 @@ You can read more about issue submission guidelines here: https://github.com/ang
 </code></pre>
 
 **Anything else relevant?**
+
 <!-- ✍️Is this a browser specific issue? If so, please specify the browser and version. -->
 
 <!-- ✍️Do any of these matter: operating system, IDE, package manager, HTTP server, ...? If so, please mention it below. -->
