@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "11.0.1",
+  "version": "11.1.1",
   "description": "awesome ngx mask",
   "license": "MIT",
   "angular-cli": {},
@@ -29,6 +29,7 @@
     "ci": "npm run lint && npm run build:lib && npm run test:all && npm run build",
     "copy-libdocs": "copyfiles -V -E README.md LICENSE dist/ngx-mask-lib",
     "fix:prettier": "prettier --write \"./**/*.{js,json,md,ts,html,scss}\"",
+    "fix:lint": "npm run lint -- --fix",
     "lint": "concurrently --kill-others-on-fail \"ng lint showcase\" \"ng lint ngx-mask-lib\" \"npm run lint:markdown\" \"npm run lint:prettier\"",
     "lint:markdown": "markdownlint -i projects/ngx-mask-lib/coverage -i node_modules -i CHANGELOG.md ./",
     "lint:prettier": "prettier --check \"./**/*.{js,json,md,ts,html,scss}\"",

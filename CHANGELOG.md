@@ -1,10 +1,18 @@
+<a name="11.1.1"></a>
+
+# 11.1.1 (2020-11-24)
+
+### Bug Fixes
+
+Number cast bug. Now if model value number mask should return type number ([#791](https://github.com/JsDaddy/ngx-mask/issues/791)) ([#702](https://github.com/JsDaddy/ngx-mask/issues/702)) ([829](https://github.com/JsDaddy/ngx-mask/pull/829))
+
 <a name="11.1.0"></a>
 
 # 11.1.0 (2020-11-23)
 
 ### Bug Fixes
 
-Copy paste event should work as expected ([#803](https://github.com/JsDaddy/ngx-mask/issues/765)) ([826](https://github.com/JsDaddy/ngx-mask/pull/827))
+Copy paste event should work as expected ([#765](https://github.com/JsDaddy/ngx-mask/issues/765)) ([827](https://github.com/JsDaddy/ngx-mask/pull/827))
 
 <a name="11.0.1"></a>
 

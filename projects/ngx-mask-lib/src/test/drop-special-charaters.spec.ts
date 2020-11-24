@@ -61,6 +61,6 @@ describe('Directive: Mask (Drop special characters)', () => {
     // @todo add backspace event check
 
     equal('1234567.89', '1 234 567.89', fixture);
-    expect(component.form.value).toBe('1234567.89');
+    expect(component.form.value).toBe(1234567.89);
   });
 });
