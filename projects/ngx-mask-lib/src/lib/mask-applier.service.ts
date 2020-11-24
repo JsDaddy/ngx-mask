@@ -371,7 +371,7 @@ export class MaskApplierService {
       newPosition++;
     }
 
-    let actualShift: number = justPasted ? cursor : (this._shift.has(position) ? shift : 0);
+    let actualShift: number = justPasted ? cursor : this._shift.has(position) ? shift : 0;
     if (stepBack) {
       actualShift--;
     }

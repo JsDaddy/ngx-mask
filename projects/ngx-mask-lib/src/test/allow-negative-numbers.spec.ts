@@ -30,7 +30,7 @@ describe('Directive: Mask (Allow negative numbers)', () => {
 
     component.form.setValue(-123456);
     equal('-123456.00', '123,456.00', fixture);
-    expect(component.form.value).toBe('123456.00');
+    expect(component.form.value).toBe(123456);
   });
 
   it('FormControl and NgModel should be filled with negative values', () => {
@@ -41,6 +41,6 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     component.form.setValue(-123456);
 
     equal('-123456.00', '-123,456.00', fixture);
-    expect(component.form.value).toBe('-123456.00');
+    expect(component.form.value).toBe(-123456);
   });
 });

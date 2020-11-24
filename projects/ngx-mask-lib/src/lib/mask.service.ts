@@ -314,13 +314,25 @@ export class MaskService extends MaskApplierService {
   private formControlResult(inputValue: string): void {
     if (!this.writingValue) {
       if (Array.isArray(this.dropSpecialCharacters)) {
-        this.onChange(this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters));
+        this.onChange(
+          this._toNumber(
+            this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
+          )
+        );
       } else if (this.dropSpecialCharacters) {
-        this.onChange(this._checkSymbols(inputValue));
+        this.onChange(this._toNumber(this._checkSymbols(inputValue)));
       } else {
         this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
       }
     }
+  }
+
+  private _toNumber(value: string | number | undefined | null) {
+    if (!this.isNumberValue) {
+      return value;
+    }
+    const num = Number(value);
+    return Number.isNaN(num) ? value : num;
   }
 
   private _removeMask(value: string, specialCharactersForRemove: string[]): string {
@@ -360,17 +372,16 @@ export class MaskService extends MaskApplierService {
       separatorValue = separatorValue.replace(this.decimalMarker, '.');
     }
 
-    if (this.isNumberValue) {
-      if (separatorPrecision) {
-        if (result === this.decimalMarker) {
-          return null;
-        }
-        return this._checkPrecision(this.maskExpression, separatorValue);
-      } else {
-        return Number(separatorValue);
-      }
-    } else {
+    if (!this.isNumberValue) {
       return separatorValue;
+    }
+    if (separatorPrecision) {
+      if (result === this.decimalMarker) {
+        return null;
+      }
+      return this._checkPrecision(this.maskExpression, separatorValue);
+    } else {
+      return Number(separatorValue);
     }
   }
 
