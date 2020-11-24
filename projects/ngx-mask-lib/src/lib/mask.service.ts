@@ -312,18 +312,17 @@ export class MaskService extends MaskApplierService {
    * @param inputValue the current form input value
    */
   private formControlResult(inputValue: string): void {
-    if (!this.writingValue) {
-      if (Array.isArray(this.dropSpecialCharacters)) {
-        this.onChange(
-          this._toNumber(
-            this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)
-          )
-        );
-      } else if (this.dropSpecialCharacters) {
-        this.onChange(this._toNumber(this._checkSymbols(inputValue)));
-      } else {
-        this.onChange(this._removeSuffix(this._removePrefix(inputValue)));
-      }
+    if (this.writingValue) {
+      return;
+    }
+    if (Array.isArray(this.dropSpecialCharacters)) {
+      this.onChange(
+        this._toNumber(this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters))
+      );
+    } else if (this.dropSpecialCharacters) {
+      this.onChange(this._toNumber(this._checkSymbols(inputValue)));
+    } else {
+      this.onChange(this._removeSuffix(inputValue));
     }
   }
 

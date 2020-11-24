@@ -1,5 +1,13 @@
 <a name="11.1.1"></a>
 
+# 11.1.2 (2020-11-24)
+
+### Bug Fixes
+
+DropSpecialCharacters false also should return prefix ([#686](https://github.com/JsDaddy/ngx-mask/issues/686)) ([830](https://github.com/JsDaddy/ngx-mask/pull/830))
+
+<a name="11.1.1"></a>
+
 # 11.1.1 (2020-11-24)
 
 ### Bug Fixes
@@ -22,25 +30,25 @@ Copy paste event should work as expected ([#765](https://github.com/JsDaddy/ngx-
 
 Difinition for form control with `{value, disable} should work ([#803](https://github.com/JsDaddy/ngx-mask/issues/803)) ([826](https://github.com/JsDaddy/ngx-mask/pull/826))
 
-<a name="11.0.0">
+<a name="11.0.0"></a>
 
 # [11.0.0 Update to Angular 11](2020-11-12)
 
 Update to Angular 11
 
-<a name="9.1.0">
+<a name="9.1.0"></a>
 
 # [9.1.0 Directive's selector change](2020-05-20)
 
 Change directive selector to restrict to input and textarea tags
 
-<a name="9.0.2">
+<a name="9.0.2"></a>
 
 # [9.0.2 Bugfix](2020-04-20)
 
 Fix for #721 - prevent entering dots when decimal marker is comma
 
-<a name="9.0.1">
+<a name="9.0.1"></a>
 
 # [9.0.1 Bugfix](2020-04-08)
 
@@ -48,7 +56,7 @@ Fix for #715 - mark fields as touched on blur on form fields with an empty mask
 
 Fix for #711 - stop fields being marked as dirty after a form reset
 
-<a name="9.0.0">
+<a name="9.0.0"></a>
 
 # [9.0.0 Update to Angular 9](2020-04-08)
 
@@ -60,7 +68,7 @@ Fix: allowNegativeNumbers works correctly when set as true or false. If false, e
 
 Fix: stop cursor jumping around when mask is set as empty
 
-<a name="8.2.0">
+<a name="8.2.0"></a>
 
 # [8.2.0 bugfix and breaking change](2020-01-17)
 
@@ -73,7 +81,7 @@ Feature: Added new error page for handling 404's, and new bugs page for being a 
 Breaking change: Made validation error return an object named mask. If you were previously checking for a
 validation error named 'Mask error' then it will need changing to just 'mask'.
 
-<a name="8.1.7">
+<a name="8.1.7"></a>
 
 # [8.1.7 bugfix](2019-12-27)
 
@@ -81,7 +89,7 @@ Fix for #369 - add thousandSeparator to separator pipe
 
 Fix for #381 - add support to negative number in separator mask
 
-<a name="8.1.6">
+<a name="8.1.6"></a>
 
 # [8.1.6 bugfix](2019-10-30)
 
@@ -91,13 +99,13 @@ Fix for #620 - allow delete button to work when at beginning of input and no pre
 
 Fix for #621 - validation config value now works correctly
 
-<a name="8.1.5">
+<a name="8.1.5"></a>
 
 # [8.1.5 bugfix](2019-10-25)
 
 Fix for #614 - export everything from config
 
-<a name="8.1.4">
+<a name="8.1.4"></a>
 
 # [8.1.4 bugfix](2019-10-23)
 
@@ -105,202 +113,202 @@ Fix for #580 - honour the special characters that user may have specified, and p
 
 Project folder structure converted over to follow Angular CLI way of libraries
 
-<a name="8.1.3">
+<a name="8.1.3"></a>
 
 # [8.1.3 bugfix](2019-10-23)
 
 Fix for #590 - Problem if prefix last char is not a number
 
-<a name="8.1.2">
+<a name="8.1.2"></a>
 
 # [8.1.2 placeholder customisation](2019-10-11)
 
 Placeholder can now be customised
 
-<a name="8.1.1">
+<a name="8.1.1"></a>
 
 # [8.1.1 bugfix](2019-10-10)
 
 bugs fix
 
-<a name="8.1.0">
+<a name="8.1.0"></a>
 
 # [8.1.0 separator update](2019-11-09)
 
 update separator
 
-<a name="8.0.9">
+<a name="8.0.9"></a>
 
 # [8.0.8 bugfix](2019-10-07)
 
 bugs fix [refs: #554, #580, #582]
-<a name="8.0.8">
+<a name="8.0.8"></a>
 
 # [8.0.7 bugfix](2019-10-04)
 
 bugs fix [refs: #579, #576, #561]
-<a name="8.0.7">
+<a name="8.0.7"></a>
 
 # [8.0.7 update date and time](2019-10-02)
 
 Update date and time masks [refs: #571, #567, #572, #564, #558, #573]
 
-<a name="8.0.4">
+<a name="8.0.4"></a>
 
 # [8.0.4 bugfix](2019-09-09)
 
 minor bug fixes
 
-<a name="8.0.3">
+<a name="8.0.3"></a>
 
 # [8.0.3 cursor](2019-09-04)
 
 minor bug fixes
 
-<a name="7.9.9">
+<a name="7.9.9"></a>
 
 # [7.9.9 cursor](2019-05-8)
 
 Issues fix
 
-<a name="7.9.2">
+<a name="7.9.2"></a>
 
 # [7.9.1 cursor](2019-04-15)
 
 Bugs fix
 
-<a name="7.9.1">
+<a name="7.9.1"></a>
 
 # [7.9.1 cursor](2019-04-11)
 
 Fix Backspace on empty input causes cursor to jump after entering a value
 
-<a name="7.8.6">
+<a name="7.8.6"></a>
 
 # [7.8.6 bugfix](2019-03-29)
 
 Bugfix
 
-<a name="7.8.5">
+<a name="7.8.5"></a>
 
 # [7.8.5 update of returned value type](2019-03-28)
 
 Fix returned value when input value type is number
 
-<a name="7.8.4">
+<a name="7.8.4"></a>
 
 # [7.8.4 decimal](2019-03-28)
 
 Added decimal percent, fix suffix prevents decimals
 
-<a name="7.7.3">
+<a name="7.7.3"></a>
 
 # [7.7.3 polyfill](2019-03-28)
 
 Added polyfill for IE11
 
-<a name="7.7.2">
+<a name="7.7.2"></a>
 
 # [7.7.2 dot_separator](2019-03-27)
 
 Fix decimals
 
-<a name="7.7.1">
+<a name="7.7.1"></a>
 
 # [7.7.1 coma_separator](2019-03-25)
 
 Readme update
 
-<a name="7.7.0">
+<a name="7.7.0"></a>
 
 # [7.7.0 coma_separator](2019-03-21)
 
 Secure input and bugs fix
 
-<a name="7.6.6">
+<a name="7.6.6"></a>
 
 # [7.6.6 coma_separator](2019-03-18)
 
 Bugs fix
-<a name="7.6.4">
+<a name="7.6.4"></a>
 
 # [7.6.4 coma_separator] (2019-03-13)
 
 Bugs fix
 
-<a name="7.6.0">
+<a name="7.6.0"></a>
 
 # [7.6.0 coma_separator] (2019-03-11)
 
 Feature: added default validation
 
-<a name="7.5.0">
+<a name="7.5.0"></a>
 
 # [7.5.0 coma_separator] (2019-03-11)
 
 Bugs fix: fix minutes validation, '-' in separator, decimal part in separator and fix issues with FF/IE
 
-<a name="7.4.6">
+<a name="7.4.6"></a>
 
 # [7.4.6 coma_separator] (2019-02-15)
 
 Fix coma_separator behavior
 
-<a name="7.4.5">
+<a name="7.4.5"></a>
 
 # [7.4.5 dependencies] (2019-02-15)
 
 Update dev and prod dependencies
 
-<a name="7.3.4">
+<a name="7.3.4"></a>
 
 # [7.3.4 decimals values separator] (2019-01-17)
 
 Added coma_separator
 
-<a name="7.3.3">
+<a name="7.3.3"></a>
 
 # [7.3.3 decimals values separator] (2019-01-08)
 
 Added decimals values for separator and dot_separator
 
-<a name="7.3.1">
+<a name="7.3.1"></a>
 
 # [7.3.1 update separator] (2018-12-19)
 
 Now separator can separate by dots
 
-<a name="7.3.0">
+<a name="7.3.0"></a>
 
 # [7.3.0 feature percent] (2018-12-14)
 
 Added validation for percent
 
-<a name="7.2.0">
+<a name="7.2.0"></a>
 
 # [7.2.0 feature 24 hour forma] (2018-12-12)
 
 Added valid 24 hour format mask and update separator
 
-<a name="7.1.0">
+<a name="7.1.0"></a>
 
 # [7.1.0 feature thousand separator] (2018-12-11)
 
 Added new mask that separates number by thousands
 
-<a name="7.0.4">
+<a name="7.0.4"></a>
 
 # [7.0.4 fix multiple mask] (2018-12-11)
 
 Fix multiple mask when you use the same symbols bettwen \*
 
-<a name="7.0.3">
+<a name="7.0.3"></a>
 
 # [7.0.3 hotfix] (2018-12-10)
 
 hotfix
 
-<a name="7.0.2">
+<a name="7.0.2"></a>
 
 # [7.0.2 update of sufix] (2018-12-10)
 
