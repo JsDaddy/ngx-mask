@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
-Number cast bug. Now if model value number mask should ([#791](https://github.com/JsDaddy/ngx-mask/issues/791)) ([#702](https://github.com/JsDaddy/ngx-mask/issues/702)) ([829](https://github.com/JsDaddy/ngx-mask/pull/829))
+Number cast bug. Now if model value number mask should return type number ([#791](https://github.com/JsDaddy/ngx-mask/issues/791)) ([#702](https://github.com/JsDaddy/ngx-mask/issues/702)) ([829](https://github.com/JsDaddy/ngx-mask/pull/829))
 
 <a name="11.1.0"></a>
 
