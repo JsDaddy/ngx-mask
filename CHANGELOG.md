@@ -1,5 +1,14 @@
 <a name="11.1.1"></a>
 
+# 11.1.2 (2020-11-24)
+
+### Bug Fixes
+
+DropSpecialCharacters false also should return prefix  ([#686](https://github.com/JsDaddy/ngx-mask/issues/686)) ([830](https://github.com/JsDaddy/ngx-mask/pull/830))
+
+
+<a name="11.1.1"></a>
+
 # 11.1.1 (2020-11-24)
 
 ### Bug Fixes

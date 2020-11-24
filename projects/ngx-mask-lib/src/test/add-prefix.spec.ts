@@ -50,4 +50,11 @@ describe('Directive: Mask (Add prefix)', () => {
     equal('+55 (12) 3456-7890', '+55 (12) 3456-7890', fixture);
     equal('+55 (12) 3 4567-8901', '+55 (12) 3 4567-8901', fixture);
   });
+  it('dropSpecialCharacters false should return value with prefix', () => {
+    component.mask = '00-000-000-00';
+    component.dropSpecialCharacters = false;
+    component.prefix = '+7 ';
+    equal('097', '+7 09-7', fixture);
+    expect(component.form.value).toEqual('+7 09-7');
+  });
 });
