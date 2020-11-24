@@ -26,7 +26,7 @@ Existing issues often contain information about workarounds, resolution, or prog
 ## 🔬 Minimal Reproduction
 
 <!--
-Please create and share minimal reproduction of the issue starting with this template: https://stackblitz.com/fork/angular-ivy
+Please create and share minimal reproduction of the issue starting with this template: https://stackblitz.com/fork/angular-ivy-mask
 -->
 <!-- ✍️--> https://stackblitz.com/...
 
@@ -37,7 +37,7 @@ Share the link to the repo below along with step-by-step instructions to reprodu
 
 Issues that don't have enough info and can't be reproduced will be closed.
 
-You can read more about issue submission guidelines here: https://github.com/angular/angular/blob/master/CONTRIBUTING.md#-submitting-an-issue
+You can read more about issue submission guidelines here: https://github.com/JsDaddy/ngx-mask/blob/master/CONTRIBUTING.md#-submitting-an-issue
 -->
 
 ## 🔥 Exception or Error
