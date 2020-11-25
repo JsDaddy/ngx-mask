@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@angular/core';
-
 import { config, IConfig } from './config';
 
 @Injectable()
@@ -74,8 +73,8 @@ export class MaskApplierService {
     if (inputValue.slice(0, this.prefix.length) === this.prefix) {
       inputValue = inputValue.slice(this.prefix.length, inputValue.length);
     }
-    if (!!this.suffix && inputValue.endsWith(this.suffix)) {
-      inputValue = inputValue.slice(0, inputValue.length - this.suffix.length);
+    if (!!this.suffix && inputValue?.length > 0) {
+      inputValue = this.checkAndRemoveSuffix(inputValue);
     }
     const inputArray: string[] = inputValue.toString().split('');
     if (maskExpression === 'IP') {
@@ -447,6 +446,19 @@ export class MaskApplierService {
     }
 
     return Infinity;
+  };
+
+  private checkAndRemoveSuffix = (inputValue: string): string => {
+    for (let i = this.suffix?.length - 1; i >= 0; i--) {
+      const substr = this.suffix.substr(i, this.suffix?.length);
+      if (
+        inputValue.includes(substr) &&
+        (i - 1 < 0 || !inputValue.includes(this.suffix.substr(i - 1, this.suffix?.length)))
+      ) {
+        return inputValue.replace(substr, '');
+      }
+    }
+    return inputValue;
   };
 
   private checkInputPrecision = (

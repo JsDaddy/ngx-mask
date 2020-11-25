@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-
+import { By } from '@angular/platform-browser';
 import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
@@ -70,6 +69,24 @@ describe('Directive: Mask (Suffix)', () => {
 
     expect(inputTarget.value).toBe('5678$');
     expect(inputTarget.selectionStart).toEqual(4);
+  });
+  it('should delete all if value and part of suffix are deleted', () => {
+    component.mask = 'A*';
+    component.suffix = ' test';
+    const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+    const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+    spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+    fixture.detectChanges();
+
+    inputTarget.value = '10 test';
+    debugElement.triggerEventHandler('input', { target: inputTarget });
+
+    expect(inputTarget.value).toBe('10 test');
+
+    inputTarget.value = 'st';
+    debugElement.triggerEventHandler('input', { target: inputTarget });
+
+    expect(inputTarget.value).toBe('');
   });
   it('should not delete suffix', () => {
     component.mask = 'A{5}';

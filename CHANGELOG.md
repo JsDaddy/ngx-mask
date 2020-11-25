@@ -1,3 +1,11 @@
+<a name="11.1.4"></a>
+
+# 11.1.4 (2020-11-26)
+
+### Bug Fixes
+
+Remove complet mask if part of it is deleted ([#831](https://github.com/JsDaddy/ngx-mask/issues/831))
+
 <a name="11.1.3"></a>
 
 # 11.1.3 (2020-11-25)
@@ -6,7 +14,7 @@
 
 Now backspace no leaves special characters ([#692](https://github.com/JsDaddy/ngx-mask/issues/692)) ([831](https://github.com/JsDaddy/ngx-mask/pull/831))
 
-<a name="11.1.1"></a>
+<a name="11.1.2"></a>
 
 # 11.1.2 (2020-11-24)
 
