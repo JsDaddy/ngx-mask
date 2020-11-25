@@ -6,7 +6,6 @@
 
 Now backspace no leaves special characters ([#692](https://github.com/JsDaddy/ngx-mask/issues/692)) ([831](https://github.com/JsDaddy/ngx-mask/pull/831))
 
-
 <a name="11.1.1"></a>
 
 # 11.1.2 (2020-11-24)
