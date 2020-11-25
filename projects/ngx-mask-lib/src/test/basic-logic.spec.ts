@@ -441,4 +441,14 @@ describe('Directive: Mask', () => {
       done();
     });
   });
+
+  it('should return empty string if input consist only special symbols', () => {
+    component.mask = '(000) 000-00-00';
+    fixture.detectChanges();
+    component.form.setValue(2);
+    fixture.detectChanges();
+    const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+    //  debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8 });
+    expect(debugElement.nativeElement.value).toEqual('');
+  });
 });
