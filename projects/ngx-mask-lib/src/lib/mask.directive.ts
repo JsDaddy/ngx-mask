@@ -259,11 +259,16 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
         : (el.selectionStart as number);
     let caretShift = 0;
     let backspaceShift = false;
-    this._maskService.applyValueChanges(position, this._justPasted, (shift: number, _backspaceShift: boolean) => {
-      this._justPasted = false;
-      caretShift = shift;
-      backspaceShift = _backspaceShift;
-    });
+    this._maskService.applyValueChanges(
+      position,
+      this._justPasted,
+      this._code === 'Backspace',
+      (shift: number, _backspaceShift: boolean) => {
+        this._justPasted = false;
+        caretShift = shift;
+        backspaceShift = _backspaceShift;
+      }
+    );
     // only set the selection if the element is active
     if (this.document.activeElement !== el) {
       return;
@@ -483,14 +488,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     this._maskService.formElementProperty = ['disabled', isDisabled];
   }
 
-  @HostListener('ngModelChange', ['$event'])
-  // tslint:disable-next-line: no-any
-  public onModelChange(e: any): void {
-    if (!e) {
-      this._maskService.actualValue = '';
-    }
-  }
-
   private _repeatPatternSymbols(maskExp: string): string {
     return (
       (maskExp.match(/{[0-9]+}/) &&
@@ -502,8 +499,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
           }
           this._end = index;
           const repeatNumber: number = Number(maskExp.slice(this._start + 1, this._end));
-          const repaceWith: string = new Array(repeatNumber + 1).join(maskExp[this._start - 1]);
-          return accum + repaceWith;
+          const replaceWith: string = new Array(repeatNumber + 1).join(maskExp[this._start - 1]);
+          return accum + replaceWith;
         }, '')) ||
       maskExp
     );

@@ -441,4 +441,15 @@ describe('Directive: Mask', () => {
       done();
     });
   });
+
+  it('should return empty string if input consist only special symbols', () => {
+    component.mask = '(000) 000-00-00';
+    fixture.detectChanges();
+    equal('0', '(0', fixture);
+    equal('(', '(', fixture);
+    const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+    const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+    debugElement.triggerEventHandler('keydown', { code: 'Backspace', keyCode: 8, target: inputTarget });
+    equal('(', '', fixture);
+  });
 });

@@ -59,6 +59,7 @@ export class MaskApplierService {
     maskExpression: string,
     position: number = 0,
     justPasted: boolean = false,
+    backspaced: boolean = false,
     cb: Function = () => {}
   ): string {
     if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
@@ -380,7 +381,11 @@ export class MaskApplierService {
     if (shift < 0) {
       this._shift.clear();
     }
-    let res = `${this.prefix}${result}${this.suffix}`;
+    let onlySpecial = false;
+    if (backspaced) {
+      onlySpecial = inputArray.every((char) => this.maskSpecialCharacters.includes(char));
+    }
+    let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
     if (result.length === 0) {
       res = `${this.prefix}${result}`;
     }

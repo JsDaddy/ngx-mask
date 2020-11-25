@@ -36,6 +36,7 @@ export class MaskService extends MaskApplierService {
     maskExpression: string,
     position: number = 0,
     justPasted = false,
+    backspaced = false,
     cb: Function = () => {}
   ): string {
     if (!maskExpression) {
@@ -72,7 +73,7 @@ export class MaskService extends MaskApplierService {
       newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
     }
     newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
-    const result: string = super.applyMask(newInputValue, maskExpression, position, justPasted, cb);
+    const result: string = super.applyMask(newInputValue, maskExpression, position, justPasted, backspaced, cb);
     this.actualValue = this.getActualValue(result);
 
     // handle some separator implications:
@@ -118,9 +119,14 @@ export class MaskService extends MaskApplierService {
     return countSkipedSymbol;
   }
 
-  public applyValueChanges(position: number = 0, justPasted: boolean, cb: Function = () => {}): void {
+  public applyValueChanges(
+    position: number = 0,
+    justPasted: boolean,
+    backspaced: boolean,
+    cb: Function = () => {}
+  ): void {
     const formElement = this._elementRef.nativeElement;
-    formElement.value = this.applyMask(formElement.value, this.maskExpression, position, justPasted, cb);
+    formElement.value = this.applyMask(formElement.value, this.maskExpression, position, justPasted, backspaced, cb);
     if (formElement === this.document.activeElement) {
       return;
     }
