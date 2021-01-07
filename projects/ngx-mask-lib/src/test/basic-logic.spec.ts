@@ -125,6 +125,13 @@ describe('Directive: Mask', () => {
     equal('(123) 456-ABCD1', '(123) 456-ABCD', fixture);
   });
 
+  it('Masks with optional numbers', () => {
+    component.mask = '99999';
+    equal('1', '1', fixture);
+    equal('112', '112', fixture);
+    equal('123456', '12345', fixture);
+  });
+
   it('Masks with ip', () => {
     component.mask = '099.099.099.099';
     equal('1.1.1.1', '1.1.1.1', fixture);
