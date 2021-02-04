@@ -336,7 +336,7 @@ export class MaskService extends MaskApplierService {
   }
 
   private _toNumber(value: string | number | undefined | null) {
-    if (!this.isNumberValue) {
+    if (!this.isNumberValue || value === '') {
       return value;
     }
     const num = Number(value);
