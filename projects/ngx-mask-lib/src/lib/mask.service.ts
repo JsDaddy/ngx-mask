@@ -70,7 +70,10 @@ export class MaskService extends MaskApplierService {
           : null
         : (actualResult = []);
       // tslint:enable no-unused-expression
-      newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
+      newInputValue =
+        this.actualValue.length && actualResult.length <= inputValue.length
+          ? this.shiftTypedSymbols(actualResult.join(''))
+          : inputValue;
     }
     newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
     const result: string = super.applyMask(newInputValue, maskExpression, position, justPasted, backspaced, cb);
