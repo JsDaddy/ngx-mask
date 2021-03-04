@@ -61,14 +61,6 @@ describe('Directive: Mask (Secure)', () => {
     expect(component.form.value).toBe('123456789');
   });
 
-  it('it checks secure input functionality on programmic update', () => {
-    component.mask = 'XXX/X0/0000';
-    component.hiddenInput = true;
-    typeTest('54321', fixture);
-    typeTest('1', fixture);
-    expect(component.form.value).toBe('1');
-  });
-
   it('it checks secure input functionality on reset', () => {
     component.mask = 'XXX/X0/0000';
     component.hiddenInput = true;
@@ -76,6 +68,24 @@ describe('Directive: Mask (Secure)', () => {
     component.form.reset('98765');
     fixture.whenStable().then(() => {
       expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5');
+    });
+  });
+
+  it('it checks secure input functionality on reset then typed', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    typeTest('54321', fixture);
+    component.form.reset();
+    equal('98765', '***/*5', fixture);
+  });
+
+  it('it checks secure input functionality on setValue(longer string)', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    typeTest('54321', fixture);
+    component.form.setValue('1234567');
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');
     });
   });
 });
