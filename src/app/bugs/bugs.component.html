@@ -142,6 +142,31 @@
   <div class="container box">
     <div class="row">
       <div class="col-12">
+        <label for="SecureInput">Form reset on hidden mask</label>
+        <div>
+          <p>
+            <input
+              type="text"
+              placeholder="Secure input"
+              [hiddenInput]="true"
+              mask="XXX-X0-0000"
+              formControlName="SecureInput"
+              id="SecureInput"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls.SecureInput.valid }}<br />
+            Value: {{ bugsForm.controls.SecureInput.value }}<br />
+            Errors: {{ bugsForm.controls.SecureInput.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
         <button type="submit" mat-raised-button color="primary">Submit</button>
         <button type="reset" mat-raised-button color="accent">Native Reset</button>
         <button type="button" mat-raised-button color="accent" (click)="resetForm()">Angular Reset</button>

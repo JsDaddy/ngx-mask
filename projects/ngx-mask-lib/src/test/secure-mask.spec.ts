@@ -3,7 +3,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, typeTest } from './utils/test-functions.component';
 
 describe('Directive: Mask (Secure)', () => {
   let fixture: ComponentFixture<TestMaskComponent>;
@@ -59,5 +59,33 @@ describe('Directive: Mask (Secure)', () => {
     component.hiddenInput = true;
     equal('123456789', '1234-*6-***', fixture);
     expect(component.form.value).toBe('123456789');
+  });
+
+  it('it checks secure input functionality on reset', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    typeTest('54321', fixture);
+    component.form.reset('98765');
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5');
+    });
+  });
+
+  it('it checks secure input functionality on reset then typed', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    typeTest('54321', fixture);
+    component.form.reset();
+    equal('98765', '***/*5', fixture);
+  });
+
+  it('it checks secure input functionality on setValue(longer string)', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    typeTest('54321', fixture);
+    component.form.setValue('1234567');
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');
+    });
   });
 });

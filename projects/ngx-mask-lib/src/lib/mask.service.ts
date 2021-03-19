@@ -55,7 +55,7 @@ export class MaskService extends MaskApplierService {
     }
     const getSymbol: string = !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
     let newInputValue = '';
-    if (this.hiddenInput !== undefined) {
+    if (this.hiddenInput && !this.writingValue) {
       let actualResult: string[] = this.actualValue.split('');
       // tslint:disable no-unused-expression
       inputValue !== '' && actualResult.length
@@ -70,7 +70,10 @@ export class MaskService extends MaskApplierService {
           : null
         : (actualResult = []);
       // tslint:enable no-unused-expression
-      newInputValue = this.actualValue.length ? this.shiftTypedSymbols(actualResult.join('')) : inputValue;
+      newInputValue =
+        this.actualValue.length && actualResult.length <= inputValue.length
+          ? this.shiftTypedSymbols(actualResult.join(''))
+          : inputValue;
     }
     newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
     const result: string = super.applyMask(newInputValue, maskExpression, position, justPasted, backspaced, cb);
@@ -333,7 +336,7 @@ export class MaskService extends MaskApplierService {
   }
 
   private _toNumber(value: string | number | undefined | null) {
-    if (!this.isNumberValue) {
+    if (!this.isNumberValue || value === '') {
       return value;
     }
     const num = Number(value);
