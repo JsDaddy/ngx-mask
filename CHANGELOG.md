@@ -4,7 +4,7 @@
 
 ### Bug Fixes
 
-Fixed ([#875](https://github.com/JsDaddy/ngx-mask/issues/875)) 
+Fixed ([#875](https://github.com/JsDaddy/ngx-mask/issues/875))
 
 <a name="11.1.5"></a>
 
@@ -13,7 +13,6 @@ Fixed ([#875](https://github.com/JsDaddy/ngx-mask/issues/875))
 ### Bug Fixes
 
 Fixed ([#864](https://github.com/JsDaddy/ngx-mask/issues/864)) ([#863](https://github.com/JsDaddy/ngx-mask/issues/863)) ([#706](https://github.com/JsDaddy/ngx-mask/issues/706))
-
 
 <a name="11.1.4"></a>
 
