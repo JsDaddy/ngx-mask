@@ -550,7 +550,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
   private _setMask() {
     if (this._maskExpressionArray.length > 0) {
       this._maskExpressionArray.some((mask) => {
-        const test = this._maskService.removeMask(this._inputValue).length <= this._maskService.removeMask(mask).length;
+        const test =
+          this._maskService.removeMask(this._inputValue)?.length <= this._maskService.removeMask(mask)?.length;
         if (this._inputValue && test) {
           this._maskValue = mask;
           this.maskExpression = mask;
