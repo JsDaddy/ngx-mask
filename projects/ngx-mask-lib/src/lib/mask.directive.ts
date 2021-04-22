@@ -521,7 +521,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
   private _validateTime(value: string): ValidationErrors | null {
     const rowMaskLen: number = this._maskValue.split('').filter((s: string) => s !== ':').length;
-    if (value === null || value.length === 0) {
+    if (!value) {
       return null; // Don't validate empty values to allow for optional form control
     }
 

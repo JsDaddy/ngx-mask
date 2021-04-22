@@ -1,3 +1,11 @@
+<a name="11.1.6"></a>
+
+# 11.1.6 (2021-04-22)
+
+### Bug Fixes
+
+Fixed ([#875](https://github.com/JsDaddy/ngx-mask/issues/875))
+
 <a name="11.1.5"></a>
 
 # 11.1.5 (2020-03-19)
@@ -5,7 +13,6 @@
 ### Bug Fixes
 
 Fixed ([#864](https://github.com/JsDaddy/ngx-mask/issues/864)) ([#863](https://github.com/JsDaddy/ngx-mask/issues/863)) ([#706](https://github.com/JsDaddy/ngx-mask/issues/706))
-
 
 <a name="11.1.4"></a>
 
