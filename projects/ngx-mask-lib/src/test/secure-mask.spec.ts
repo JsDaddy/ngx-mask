@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { NgxMaskModule } from '../lib/ngx-mask.module';
@@ -86,6 +86,40 @@ describe('Directive: Mask (Secure)', () => {
     component.form.setValue('1234567');
     fixture.whenStable().then(() => {
       expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');
+    });
+  });
+
+  it('should be same form state (pristine) after mask change', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    component.form.reset('123456789');
+    fixture.detectChanges();
+    expect(component.form.dirty).toBeFalsy();
+    expect(component.form.pristine).toBeTruthy();
+    component.mask = '000/00/0000';
+    fixture.detectChanges();
+    expect(component.form.dirty).toBeFalsy();
+    expect(component.form.pristine).toBeTruthy();
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
+    });
+  });
+
+  it('should be same form state (dirty) after mask change', () => {
+    component.mask = 'XXX/X0/0000';
+    component.hiddenInput = true;
+    component.form.reset('123456789');
+    component.form.markAsDirty();
+    component.form.markAsTouched();
+    fixture.detectChanges();
+    expect(component.form.dirty).toBeTruthy();
+    expect(component.form.pristine).toBeFalsy();
+    component.mask = '000/00/0000';
+    fixture.detectChanges();
+    expect(component.form.dirty).toBeTruthy();
+    expect(component.form.pristine).toBeFalsy();
+    fixture.whenStable().then(() => {
+      expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
     });
   });
 });
