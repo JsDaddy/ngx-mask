@@ -433,4 +433,22 @@ describe('Separator: Mask', () => {
     expect(inputTarget.value).toBe('134');
     expect(inputTarget.selectionStart).toEqual(0);
   });
+
+  it('caret should remain in position when deleting the first digit', () => {
+    component.mask = 'separator';
+    component.thousandSeparator = ',';
+    const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+    const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+    spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+    fixture.detectChanges();
+
+    inputTarget.value = '1,000';
+    inputTarget.selectionStart = 0;
+    inputTarget.selectionEnd = 0;
+
+    debugElement.triggerEventHandler('input', { target: inputTarget });
+    debugElement.triggerEventHandler('keydown', { code: 'Delete', keyCode: 46, target: inputTarget });
+
+    expect(inputTarget.selectionStart).toEqual(0);
+  });
 });
