@@ -122,7 +122,7 @@ export class MaskApplierService {
       }
 
       inputValue =
-        inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== this.decimalMarker
+        inputValue.length > 1 && inputValue[0] === '0' && inputValue[1] !== this.decimalMarker && !backspaced
           ? inputValue.slice(1, inputValue.length)
           : inputValue;
 

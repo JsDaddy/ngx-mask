@@ -262,7 +262,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     this._maskService.applyValueChanges(
       position,
       this._justPasted,
-      this._code === 'Backspace',
+      this._code === 'Backspace' || this._code === 'Delete',
       (shift: number, _backspaceShift: boolean) => {
         this._justPasted = false;
         caretShift = shift;
@@ -279,6 +279,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
     if (positionToApply > this._getActualInputLength()) {
       positionToApply = this._getActualInputLength();
+    }
+    if (positionToApply < 0) {
+      positionToApply = 0;
     }
     el.setSelectionRange(positionToApply, positionToApply);
     this._position = null;
