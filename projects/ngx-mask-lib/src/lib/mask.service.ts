@@ -18,6 +18,7 @@ export class MaskService extends MaskApplierService {
    * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
    */
   public writingValue: boolean = false;
+  public maskChanged: boolean = false;
 
   public onChange = (_: any) => {};
 
@@ -321,7 +322,8 @@ export class MaskService extends MaskApplierService {
    * @param inputValue the current form input value
    */
   private formControlResult(inputValue: string): void {
-    if (this.writingValue) {
+    if (this.writingValue || this.maskChanged) {
+      this.maskChanged = false;
       return;
     }
     if (Array.isArray(this.dropSpecialCharacters)) {

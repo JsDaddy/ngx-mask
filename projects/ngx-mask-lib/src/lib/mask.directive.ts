@@ -90,6 +90,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       leadZeroDateTime,
     } = changes;
     if (maskExpression) {
+      if (maskExpression.currentValue !== maskExpression.previousValue && !maskExpression.firstChange) {
+        this._maskService.maskChanged = true;
+      }
       this._maskValue = maskExpression.currentValue || '';
       if (maskExpression.currentValue && maskExpression.currentValue.split('||').length > 1) {
         this._maskExpressionArray = maskExpression.currentValue.split('||').sort((a: string, b: string) => {
