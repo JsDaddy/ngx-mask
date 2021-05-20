@@ -42,3 +42,6 @@ dist.tgz
 yarn.lock
 
 test-reports/
+
+/projects/ngx-mask-lib/cypress/videos
+/projects/ngx-mask-lib/cypress/screenshots
