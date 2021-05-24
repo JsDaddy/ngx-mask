@@ -6,5 +6,5 @@
     "entryFile": "src/index.ts",
     "umdModuleIds": {}
   },
-  "whitelistedNonPeerDependencies": []
+  "allowedNonPeerDependencies": []
 }
