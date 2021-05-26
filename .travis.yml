@@ -1,7 +1,7 @@
 sudo: false
 language: node_js
 node_js:
-  - '10'
+  - '14'
 
 cache:
   directories:
@@ -17,7 +17,7 @@ git:
   depth: 3
 
 before_install:
-  - npm install -g npm@~6.9.0
+  - npm install -g npm@^6.14.0
 
 script:
   - export CHROME_BIN=chromium-browser
