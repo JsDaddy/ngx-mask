@@ -245,6 +245,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     this._justPasted = true;
   }
 
+  @HostListener('ngModelChange', ['$event'])
+  public onModelChange(value: any): void {
+    // on form reset we need to update the actualValue
+    if (!value && this._maskService.actualValue) {
+      this._maskService.actualValue = this._maskService.getActualValue('');
+    }
+  }
+
   @HostListener('input', ['$event'])
   public onInput(e: CustomKeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;

@@ -34,7 +34,6 @@ export class BugsComponent implements OnInit, OnDestroy {
       .get('SecureInput')
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
       .subscribe((value) => {
-        console.log(value);
         if (this.bugsForm.get('SecureInput')?.valid) {
           this.mask = '000-00-0000';
         } else {
