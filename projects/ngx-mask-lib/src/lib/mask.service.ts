@@ -131,7 +131,7 @@ export class MaskService extends MaskApplierService {
   ): void {
     const formElement = this._elementRef.nativeElement;
     formElement.value = this.applyMask(formElement.value, this.maskExpression, position, justPasted, backspaced, cb);
-    if (formElement === this.document.activeElement) {
+    if (formElement === this._getActiveElement()) {
       return;
     }
     this.clearIfNotMatchFn();
@@ -407,4 +407,16 @@ export class MaskService extends MaskApplierService {
     }
     return Number(separatorValue);
   }
+
+    /**
+   * Recursively determine the current active element by navigating the Shadow DOM until the Active Element is found.
+   */
+     private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
+      const shadowRootEl = document?.activeElement?.shadowRoot;
+      if (!shadowRootEl?.activeElement) {
+        return document.activeElement;
+      } else {
+        return this._getActiveElement(shadowRootEl);
+      }
+    }
 }

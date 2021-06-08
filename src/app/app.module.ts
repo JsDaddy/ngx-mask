@@ -20,9 +20,10 @@ import { AppRoutingModule } from './app.routes';
 import { BugsComponent } from './bugs/bugs.component';
 import { ShowcaseComponent } from './showcase/showcase.component';
 import { ErrorComponent } from './error/error.component';
+import { ShadowDomComponent } from './bugs/shadow-dom/shadow-dom.component';
 
 @NgModule({
-  declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent],
+  declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent, ShadowDomComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
