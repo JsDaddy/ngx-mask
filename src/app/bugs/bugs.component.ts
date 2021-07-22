@@ -10,7 +10,7 @@ export class BugsComponent implements OnInit, OnDestroy {
   public submitted: boolean = false;
 
   // Can be used as a takeUntil for any observables this component may subscribe to. e.g. a form control valueChanges
-  private onDestroy$ = new Subject();
+  private onDestroy$ = new Subject<void>();
 
   public constructor(private formBuilder: FormBuilder) {
     this.bugsForm = this.formBuilder.group({
