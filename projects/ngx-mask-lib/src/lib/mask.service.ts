@@ -70,6 +70,9 @@ export class MaskService extends MaskApplierService {
             : null
           : null
         : (actualResult = []);
+      if (this.showMaskTyped) {
+        inputValue = this.removeMask(inputValue);
+      }
       // tslint:enable no-unused-expression
       newInputValue =
         this.actualValue.length && actualResult.length <= inputValue.length
