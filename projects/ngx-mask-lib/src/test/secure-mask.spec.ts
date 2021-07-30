@@ -122,4 +122,26 @@ describe('Directive: Mask (Secure)', () => {
       expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
     });
   });
+
+  it('should not keep shadow copy when form reset', () => {
+    component.hiddenInput = true;
+    component.mask = 'XXX/X0/0000';
+    equal('54321', '***/*1', fixture);
+    typeTest('1', fixture);
+    expect(component.form.value).toBe('1');
+    component.form.reset();
+    expect(component.form.value).toBe(null);
+    equal('2', '*', fixture);
+    expect(component.form.value).toBe('2');
+  });
+
+  it('mask changes should work with null input', () => {
+    component.hiddenInput = true;
+    component.mask = '000/00/0000';
+    equal('987654321', '987/65/4321', fixture);
+    component.form.reset();
+    component.mask = 'XXX/X0/0000';
+    equal('54321', '***/*1', fixture);
+    expect(component.form.value).toBe('54321');
+  });
 });

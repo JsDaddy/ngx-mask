@@ -246,6 +246,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     this._justPasted = true;
   }
 
+  @HostListener('ngModelChange', ['$event'])
+  public onModelChange(value: any): void {
+    // on form reset we need to update the actualValue
+    if (!value && this._maskService.actualValue) {
+      this._maskService.actualValue = this._maskService.getActualValue('');
+    }
+  }
+
   @HostListener('input', ['$event'])
   public onInput(e: CustomKeyboardEvent): void {
     const el: HTMLInputElement = e.target as HTMLInputElement;
@@ -438,13 +446,14 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       inputValue = inputValue.value;
     }
 
-    if (inputValue === undefined) {
-      inputValue = '';
-    }
     if (typeof inputValue === 'number') {
       inputValue = String(inputValue);
       inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
       this._maskService.isNumberValue = true;
+    }
+
+    if (typeof inputValue !== 'string') {
+      inputValue = '';
     }
 
     this._inputValue = inputValue;

@@ -54,14 +54,14 @@ export class MaskApplierService {
   }
 
   public applyMask(
-    inputValue: string,
+    inputValue: string | object | boolean | null | undefined,
     maskExpression: string,
     position: number = 0,
     justPasted: boolean = false,
     backspaced: boolean = false,
     cb: Function = () => {}
   ): string {
-    if (inputValue === undefined || inputValue === null || maskExpression === undefined) {
+    if (!maskExpression || typeof inputValue !== 'string') {
       return '';
     }
     let cursor = 0;
