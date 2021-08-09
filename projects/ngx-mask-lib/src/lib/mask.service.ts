@@ -220,6 +220,18 @@ export class MaskService extends MaskApplierService {
 		return newInputValue.join('');
 	}
 
+  /**
+   * Convert number value to string
+   * 3.1415 -> '3.1415'
+   * 1e-7 -> '0.0000001'
+   */
+  public numberToString(value: number | string): string {
+    if (!value && value !== 0) {
+      return String(value);
+    }
+    return Number(value).toLocaleString('fullwide', { useGrouping: false, maximumFractionDigits: 20 })
+  }
+
 	public showMaskInInput(inputVal?: string): string {
 		if (this.showMaskTyped && !!this.shownMaskExpression) {
 			if (this.maskExpression.length !== this.shownMaskExpression.length) {
