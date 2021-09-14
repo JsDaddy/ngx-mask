@@ -17,6 +17,9 @@
 You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
 You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
 
+## Notes
+This is fork from ngx-mask. Fixed an issue where active elements within a shadowRoot would not found by the mask service or directive, causing backspace to be handled improperly.
+
 ### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples
 
 ## Installing
