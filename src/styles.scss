@@ -1,16 +1,16 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 @import 'assets/styles/variables';
 @import 'assets/styles/loader';
-@include mat-core();
-$candy-app-primary: mat-palette($mat-cyan);
-$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$candy-app-warn: mat-palette($mat-red);
-$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
-@include angular-material-theme($candy-app-theme);
+@include mat.core();
+$candy-app-primary: mat.define-palette(mat.$cyan-palette);
+$candy-app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$candy-app-warn: mat.define-palette(mat.$red-palette);
+$candy-app-theme: mat.define-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+@include mat.all-component-themes($candy-app-theme);
 
 @mixin ngmask-input-theme($theme) {
   $foreground: map-get($theme, foreground);
-  $input-placeholder-color: mat-color($foreground, secondary-text);
+  $input-placeholder-color: mat.get-color-from-palette($foreground, secondary-text);
   mat-input-container {
     mat-hint {
       color: $input-placeholder-color;
