@@ -240,6 +240,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     }
     return null;
   }
+
   @HostListener('paste')
   public onPaste() {
     this._justPasted = true;
@@ -299,7 +300,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
   }
 
   @HostListener('click', ['$event'])
-  public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
+  public onClick(e: MouseEvent | CustomKeyboardEvent): void {
     if (!this._maskValue) {
       return;
     }
@@ -377,7 +378,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
           ? this.specialCharacters
           : this._config.specialCharacters;
         if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
-          el.setSelectionRange(this.prefix.length, this.prefix.length);
+          el.setSelectionRange(this.prefix.length, el.selectionEnd);
         } else {
           if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
             while (
@@ -385,13 +386,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
               ((this.prefix.length >= 1 && (el.selectionStart as number) > this.prefix.length) ||
                 this.prefix.length === 0)
             ) {
-              el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
+              el.setSelectionRange((el.selectionStart as number) - 1, el.selectionEnd);
             }
           }
-          this.suffixCheckOnPressDelete(e.keyCode, el);
         }
       }
-      this.suffixCheckOnPressDelete(e.keyCode, el);
+      this.checkSelectionOnDeletion(e.keyCode, el);
       if (
         this._maskService.prefix.length &&
         (el.selectionStart as number) <= this._maskService.prefix.length &&
@@ -477,20 +477,15 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     this.onTouch = fn;
   }
 
-  public suffixCheckOnPressDelete(keyCode: number, el: HTMLInputElement): void {
-    if (keyCode === 46 && this.suffix.length > 0) {
-      if (this._inputValue.length - this.suffix.length <= (el.selectionStart as number)) {
-        el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-      }
-    }
-    if (keyCode === 8) {
-      if (this.suffix.length > 1 && this._inputValue.length - this.suffix.length < (el.selectionStart as number)) {
-        el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-      }
-      if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
-        el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
-      }
-    }
+  public checkSelectionOnDeletion(keyCode: number, el: HTMLInputElement): void {
+    el.selectionStart = Math.min(
+      Math.max(this.prefix.length, el.selectionStart as number),
+      this._inputValue.length - this.suffix.length
+    );
+    el.selectionEnd = Math.min(
+      Math.max(this.prefix.length, el.selectionEnd as number),
+      this._inputValue.length - this.suffix.length
+    );
   }
 
   /** It disables the input element */
