@@ -1,8 +1,5 @@
-import { Component, Input, NgModule } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { CommonModule } from '@angular/common';
-import { NgxMaskModule } from 'ngx-mask';
+import { Component, Input } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'mask-cypress-test-mask',
@@ -14,10 +11,3 @@ export class CypressTestMaskComponent {
   @Input() public prefix: string = '';
   public form: FormControl = new FormControl('');
 }
-
-@NgModule({
-  imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskModule.forRoot()],
-  declarations: [CypressTestMaskComponent],
-  exports: [CypressTestMaskComponent],
-})
-export class CypressTestMaskModule {}

@@ -1,13 +1,21 @@
-import { mount } from '@jscutlery/cypress-angular/mount';
-import { CypressTestMaskComponent, CypressTestMaskModule } from './utils/cypress-test-component.component';
+import { initEnv, mount } from 'cypress-angular-unit-test';
+import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskModule } from '../lib/ngx-mask.module';
 
 describe('Directive: Mask (Delete)', () => {
+  beforeEach(() => {
+    initEnv(CypressTestMaskComponent, {
+      imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskModule.forRoot()],
+    });
+  });
+
   it('should delete character in input', () => {
     mount(CypressTestMaskComponent, {
-      inputs: {
-        mask: '00/00/0000',
-      },
-      imports: [CypressTestMaskModule],
+      mask: '00/00/0000',
+      hiddenInput: true,
+      prefix: '',
     });
 
     const inputTarget = cy.get('input');
@@ -21,10 +29,7 @@ describe('Directive: Mask (Delete)', () => {
 
   it('should not delete special mask character', () => {
     mount(CypressTestMaskComponent, {
-      inputs: {
-        mask: '00/00/0000',
-      },
-      imports: [CypressTestMaskModule],
+      mask: '00/00/0000',
     });
 
     const inputTarget = cy.get('input');
@@ -38,11 +43,8 @@ describe('Directive: Mask (Delete)', () => {
 
   it('should delete secure character', () => {
     mount(CypressTestMaskComponent, {
-      inputs: {
-        mask: 'XXX/X0/0000',
-        hiddenInput: true,
-      },
-      imports: [CypressTestMaskModule],
+      mask: 'XXX/X0/0000',
+      hiddenInput: true,
     });
 
     const inputTarget = cy.get('input');
@@ -56,11 +58,8 @@ describe('Directive: Mask (Delete)', () => {
 
   it('should not delete prefix', () => {
     mount(CypressTestMaskComponent, {
-      inputs: {
-        mask: '(00) 00',
-        prefix: '+1 ',
-      },
-      imports: [CypressTestMaskModule],
+      mask: '(00) 00',
+      prefix: '+1 ',
     });
 
     const inputTarget = cy.get('input');
@@ -74,10 +73,7 @@ describe('Directive: Mask (Delete)', () => {
 
   it('should delete selection', () => {
     mount(CypressTestMaskComponent, {
-      inputs: {
-        mask: '000 000 000',
-      },
-      imports: [CypressTestMaskModule],
+      mask: '000 000 000',
     });
 
     const inputTarget = cy.get('input');

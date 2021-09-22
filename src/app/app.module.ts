@@ -20,9 +20,17 @@ import { AppRoutingModule } from './app.routes';
 import { BugsComponent } from './bugs/bugs.component';
 import { ShowcaseComponent } from './showcase/showcase.component';
 import { ErrorComponent } from './error/error.component';
+import { CypressTestMaskComponent } from '../../projects/ngx-mask-lib/src/test/utils/cypress-test-component.component';
 
 @NgModule({
-  declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent],
+  declarations: [
+    AppComponent,
+    BugsComponent,
+    ErrorComponent,
+    ShowcaseComponent,
+    TestMaskComponent,
+    CypressTestMaskComponent,
+  ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
