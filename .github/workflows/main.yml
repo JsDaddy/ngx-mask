@@ -1,6 +1,8 @@
-name: Mask CI
+name: CI
 
 on:
+  push:
+  workflow_dispatch:
   pull_request:
     branches:
     - develop
