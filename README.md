@@ -28,6 +28,20 @@ This is fork from ngx-mask. Fixed an issue where active elements within a shadow
 $ npm install --save ngx-mask
 ```
 
+## Build and publish
+
+To locally build run `npm install` and `npm run build:lib`.
+
+To publish new version make sure to edit version [here](./projects/ngx-mask-lib/package.json) and create the tag with the same version.
+
+`git tag -a <version> -m "<My message>"`
+
+e.g. `git tag -a v0.9.9 -m "New version"`
+
+To kickstart the pipeline push changes and tag to GitHub.
+
+`git push origin develop --tags`
+
 ## Quickstart
 
 Import **ngx-mask** module in Angular app.
