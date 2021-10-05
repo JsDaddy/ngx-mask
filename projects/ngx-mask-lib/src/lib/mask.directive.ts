@@ -34,7 +34,7 @@ import { MaskService } from './mask.service';
 export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
   @Input('mask') public maskExpression: string = '';
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
-  @Input() public patterns: IConfig['patterns'] = {};
+  @Input() public patterns?: IConfig['patterns'];
   @Input() public prefix: IConfig['prefix'] = '';
   @Input() public suffix: IConfig['suffix'] = '';
   @Input() public thousandSeparator: IConfig['thousandSeparator'] = ' ';
