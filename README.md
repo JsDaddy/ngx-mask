@@ -114,6 +114,8 @@ For separator you can add thousandSeparator
 | 000.000.000-99 | 048.457.987-98 |
 | AAAA           | 0F6g           |
 | SSSS           | asDF           |
+| UUUU           | ASDF           |
+| SSSS           | asdf           |
 
 ## Mask Options
 
