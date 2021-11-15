@@ -115,7 +115,7 @@ For separator you can add thousandSeparator
 | AAAA           | 0F6g           |
 | SSSS           | asDF           |
 | UUUU           | ASDF           |
-| SSSS           | asdf           |
+| LLLL           | asdf           |
 
 ## Mask Options
 
