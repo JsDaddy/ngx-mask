@@ -446,7 +446,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       inputValue = inputValue.value;
     }
 
-    if (typeof inputValue === 'number') {
+    if (typeof inputValue === 'number' || this._maskValue.startsWith('separator')) {
       inputValue = String(inputValue);
       inputValue = this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
       this._maskService.isNumberValue = true;
