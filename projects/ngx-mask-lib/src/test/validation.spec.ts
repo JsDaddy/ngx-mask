@@ -6,7 +6,7 @@ import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { equal } from './utils/test-functions.component';
 
 @Component({
-  selector: 'mask-test-no-validation-attr',
+  selector: 'ngx-mask-test-no-validation-attr',
   template: ` <input id="maska" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskNoValidationAttributeComponent {
@@ -14,11 +14,12 @@ export class TestMaskNoValidationAttributeComponent {
 }
 
 @Component({
-  selector: 'mask-test-validation-attr',
+  selector: 'ngx-mask-test-validation-attr',
   template: ` <input id="maska" mask="0000" [validation]="validate" [formControl]="form" /> `,
 })
 export class TestMaskValidationAttributeComponent {
   public form: FormControl = new FormControl('');
+
   public validate: boolean = true;
 }
 

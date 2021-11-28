@@ -1,29 +1,51 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,no-param-reassign */
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
 
 @Injectable()
 export class MaskApplierService {
   public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
+
   public hiddenInput: IConfig['hiddenInput'];
+
   public showTemplate!: IConfig['showTemplate'];
+
   public clearIfNotMatch!: IConfig['clearIfNotMatch'];
+
   public maskExpression: string = '';
+
   public actualValue: string = '';
+
   public shownMaskExpression: string = '';
+
   public maskSpecialCharacters!: IConfig['specialCharacters'];
+
   public maskAvailablePatterns!: IConfig['patterns'];
+
   public prefix!: IConfig['prefix'];
+
   public suffix!: IConfig['suffix'];
+
   public thousandSeparator!: IConfig['thousandSeparator'];
+
   public decimalMarker!: IConfig['decimalMarker'];
+
   public customPattern!: IConfig['patterns'];
+
   public ipError?: boolean;
+
   public cpfCnpjError?: boolean;
+
   public showMaskTyped!: IConfig['showMaskTyped'];
+
   public placeHolderCharacter!: IConfig['placeHolderCharacter'];
+
   public validation: IConfig['validation'];
+
   public separatorLimit: IConfig['separatorLimit'];
+
   public allowNegativeNumbers: IConfig['allowNegativeNumbers'];
+
   public leadZeroDateTime: IConfig['leadZeroDateTime'];
 
   private _shift!: Set<number>;
@@ -83,8 +105,8 @@ export class MaskApplierService {
     }
     const arr: string[] = [];
     for (let i = 0; i < inputValue.length; i++) {
-      if (inputValue[i].match('\\d')) {
-        arr.push(inputValue[i]);
+      if (inputValue[i]?.match('\\d')) {
+        arr.push(inputValue[i]!);
       }
     }
     if (maskExpression === 'CPF_CNPJ') {
@@ -171,34 +193,34 @@ export class MaskApplierService {
     } else {
       for (
         // tslint:disable-next-line
-        let i: number = 0, inputSymbol: string = inputArray[0];
+        let i: number = 0, inputSymbol: string = inputArray[0]!;
         i < inputArray.length;
-        i++, inputSymbol = inputArray[i]
+        i++, inputSymbol = inputArray[i]!
       ) {
         if (cursor === maskExpression.length) {
           break;
         }
-        if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '?') {
+        if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]!) && maskExpression[cursor + 1] === '?') {
           result += inputSymbol;
           cursor += 2;
         } else if (
           maskExpression[cursor + 1] === '*' &&
           multi &&
-          this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
+          this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2]!)
         ) {
           result += inputSymbol;
           cursor += 3;
           multi = false;
-        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]) && maskExpression[cursor + 1] === '*') {
+        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]!) && maskExpression[cursor + 1] === '*') {
           result += inputSymbol;
           multi = true;
         } else if (
           maskExpression[cursor + 1] === '?' &&
-          this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2])
+          this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2]!)
         ) {
           result += inputSymbol;
           cursor += 3;
-        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor])) {
+        } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor]!)) {
           if (maskExpression[cursor] === 'H') {
             if (Number(inputSymbol) > 2) {
               cursor += 1;
@@ -312,15 +334,15 @@ export class MaskApplierService {
           }
           result += inputSymbol;
           cursor++;
-        } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]) !== -1) {
+        } else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]!) !== -1) {
           result += maskExpression[cursor];
           cursor++;
           this._shiftStep(maskExpression, cursor, inputArray.length);
           i--;
         } else if (
           this.maskSpecialCharacters.indexOf(inputSymbol) > -1 &&
-          this.maskAvailablePatterns[maskExpression[cursor]] &&
-          this.maskAvailablePatterns[maskExpression[cursor]].optional
+          this.maskAvailablePatterns[maskExpression[cursor]!] &&
+          this.maskAvailablePatterns[maskExpression[cursor]!]?.optional
         ) {
           if (
             !!inputArray[cursor] &&
@@ -334,7 +356,7 @@ export class MaskApplierService {
           i--;
         } else if (
           this.maskExpression[cursor + 1] === '*' &&
-          this._findSpecialChar(this.maskExpression[cursor + 2]) &&
+          this._findSpecialChar(this.maskExpression[cursor + 2]!) &&
           this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
           multi
         ) {
@@ -342,7 +364,7 @@ export class MaskApplierService {
           result += inputSymbol;
         } else if (
           this.maskExpression[cursor + 1] === '?' &&
-          this._findSpecialChar(this.maskExpression[cursor + 2]) &&
+          this._findSpecialChar(this.maskExpression[cursor + 2]!) &&
           this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
           multi
         ) {
@@ -359,7 +381,7 @@ export class MaskApplierService {
     }
     if (
       result.length + 1 === maskExpression.length &&
-      this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]) !== -1
+      this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1]!) !== -1
     ) {
       result += maskExpression[maskExpression.length - 1];
     }
@@ -398,9 +420,9 @@ export class MaskApplierService {
   protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
     this.maskAvailablePatterns = this.customPattern ? this.customPattern : this.maskAvailablePatterns;
     return (
-      this.maskAvailablePatterns[maskSymbol] &&
-      this.maskAvailablePatterns[maskSymbol].pattern &&
-      this.maskAvailablePatterns[maskSymbol].pattern.test(inputSymbol)
+      this.maskAvailablePatterns[maskSymbol]! &&
+      this.maskAvailablePatterns[maskSymbol]?.pattern! &&
+      this.maskAvailablePatterns[maskSymbol]?.pattern?.test(inputSymbol)!
     );
   }
 
@@ -412,7 +434,7 @@ export class MaskApplierService {
   ) => {
     const x: string[] = str.split(decimalChar);
     const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
-    let res: string = x[0];
+    let res: string = x[0]!;
     const separatorLimit: string = this.separatorLimit.replace(/\s/g, '');
     if (separatorLimit && +separatorLimit) {
       if (res[0] === '-') {
@@ -470,8 +492,8 @@ export class MaskApplierService {
       const precisionRegEx: RegExp = new RegExp(this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`);
 
       const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
-      if (precisionMatch && precisionMatch[0].length - 1 > precision) {
-        const diff = precisionMatch[0].length - 1 - precision;
+      if (precisionMatch && precisionMatch[0]!.length - 1 > precision) {
+        const diff = precisionMatch[0]!.length - 1 - precision;
         inputValue = inputValue.substring(0, inputValue.length - diff);
       }
       if (precision === 0 && inputValue.endsWith(decimalMarker)) {

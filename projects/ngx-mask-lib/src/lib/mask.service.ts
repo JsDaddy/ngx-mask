@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
@@ -6,11 +7,16 @@ import { MaskApplierService } from './mask-applier.service';
 
 @Injectable()
 export class MaskService extends MaskApplierService {
-  public maskExpression: string = '';
+  public override maskExpression: string = '';
+
   public isNumberValue: boolean = false;
-  public placeHolderCharacter: string = '_';
+
+  public override placeHolderCharacter: string = '_';
+
   public maskIsShown: string = '';
+
   public selStart: number | null = null;
+
   public selEnd: number | null = null;
 
   /**
@@ -18,13 +24,14 @@ export class MaskService extends MaskApplierService {
    * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
    */
   public writingValue: boolean = false;
+
   public maskChanged: boolean = false;
 
   public onChange = (_: any) => {};
 
   public constructor(
     @Inject(DOCUMENT) private document: any,
-    @Inject(config) protected _config: IConfig,
+    @Inject(config) protected override _config: IConfig,
     private _elementRef: ElementRef,
     private _renderer: Renderer2
   ) {
@@ -32,7 +39,7 @@ export class MaskService extends MaskApplierService {
   }
 
   // tslint:disable-next-line:cyclomatic-complexity
-  public applyMask(
+  public override applyMask(
     inputValue: string,
     maskExpression: string,
     position: number = 0,
@@ -54,7 +61,8 @@ export class MaskService extends MaskApplierService {
       this.formControlResult(this.prefix);
       return this.prefix + this.maskIsShown;
     }
-    const getSymbol: string = !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
+    const getSymbol: string | undefined =
+      !!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
     let newInputValue = '';
     if (this.hiddenInput && !this.writingValue) {
       let actualResult: string[] = this.actualValue.split('');
@@ -62,7 +70,7 @@ export class MaskService extends MaskApplierService {
       inputValue !== '' && actualResult.length
         ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
           ? inputValue.length > actualResult.length
-            ? actualResult.splice(this.selStart, 0, getSymbol)
+            ? actualResult.splice(this.selStart, 0, getSymbol ?? '')
             : inputValue.length < actualResult.length
             ? actualResult.length - inputValue.length === 1
               ? actualResult.splice(this.selStart - 1, 1)
@@ -71,6 +79,7 @@ export class MaskService extends MaskApplierService {
           : null
         : (actualResult = []);
       if (this.showMaskTyped) {
+        // eslint-disable-next-line no-param-reassign
         inputValue = this.removeMask(inputValue);
       }
       // tslint:enable no-unused-expression
@@ -146,10 +155,10 @@ export class MaskService extends MaskApplierService {
       .map((curr: string, index: number) => {
         if (
           this.maskAvailablePatterns &&
-          this.maskAvailablePatterns[maskExpression[index]] &&
-          this.maskAvailablePatterns[maskExpression[index]].symbol
+          this.maskAvailablePatterns[maskExpression[index]!] &&
+          this.maskAvailablePatterns[maskExpression[index]!]?.symbol
         ) {
-          return this.maskAvailablePatterns[maskExpression[index]].symbol;
+          return this.maskAvailablePatterns[maskExpression[index]!]?.symbol;
         }
         return curr;
       })
@@ -162,8 +171,8 @@ export class MaskService extends MaskApplierService {
       .split('')
       .filter(
         (symbol: string, i: number) =>
-          this._checkSymbolMask(symbol, this.maskExpression[i]) ||
-          (this.maskSpecialCharacters.includes(this.maskExpression[i]) && symbol === this.maskExpression[i])
+          this._checkSymbolMask(symbol, this.maskExpression[i] ?? '') ||
+          (this.maskSpecialCharacters.includes(this.maskExpression[i] ?? '') && symbol === this.maskExpression[i])
       );
     if (compare.join('') === res) {
       return compare.join('');
@@ -173,11 +182,11 @@ export class MaskService extends MaskApplierService {
 
   public shiftTypedSymbols(inputValue: string): string {
     let symbolToReplace = '';
-    const newInputValue: string[] =
+    const newInputValue: (string | undefined)[] =
       (inputValue &&
         inputValue.split('').map((currSymbol: string, index: number) => {
           if (
-            this.maskSpecialCharacters.includes(inputValue[index + 1]) &&
+            this.maskSpecialCharacters.includes(inputValue[index + 1]!) &&
             inputValue[index + 1] !== this.maskExpression[index + 1]
           ) {
             symbolToReplace = currSymbol;
@@ -249,8 +258,8 @@ export class MaskService extends MaskApplierService {
     }
     const arr: string[] = [];
     for (let i = 0; i < inputVal.length; i++) {
-      if (inputVal[i].match('\\d')) {
-        arr.push(inputVal[i]);
+      if (inputVal[i]?.match('\\d')) {
+        arr.push(inputVal[i]!);
       }
     }
     if (arr.length <= 3) {
@@ -286,8 +295,8 @@ export class MaskService extends MaskApplierService {
     }
     const arr: string[] = [];
     for (let i = 0; i < inputVal.length; i++) {
-      if (inputVal[i].match('\\d')) {
-        arr.push(inputVal[i]);
+      if (inputVal[i]?.match('\\d')) {
+        arr.push(inputVal[i]!);
       }
     }
     if (arr.length <= 3) {

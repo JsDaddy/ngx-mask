@@ -396,13 +396,13 @@ describe('Directive: Mask', () => {
     inputTarget.selectionEnd = 6;
 
     const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
-    spyOn(directiveInstance['_maskService'], 'applyMask');
+    spyOn(directiveInstance._maskService, 'applyMask');
     debugElement.triggerEventHandler('keydown', {
       code: 'Backspace',
       keyCode: 8,
       target: inputTarget,
     });
-    expect(directiveInstance['_maskService'].applyMask).toHaveBeenCalled();
+    expect(directiveInstance._maskService.applyMask).toHaveBeenCalled();
   });
 
   it('should not apply mask on backspace for readonly inputs when all text is selected', () => {
@@ -418,13 +418,13 @@ describe('Directive: Mask', () => {
     inputTarget.selectionEnd = 6;
 
     const directiveInstance: MaskDirective = debugElement.injector.get<MaskDirective>(MaskDirective);
-    spyOn(directiveInstance['_maskService'], 'applyMask');
+    spyOn(directiveInstance._maskService, 'applyMask');
     debugElement.triggerEventHandler('keydown', {
       code: 'Backspace',
       keyCode: 8,
       target: inputTarget,
     });
-    expect(directiveInstance['_maskService'].applyMask).not.toHaveBeenCalled();
+    expect(directiveInstance._maskService.applyMask).not.toHaveBeenCalled();
   });
 
   it('should right work with {value, disable}', async (done) => {
@@ -437,7 +437,7 @@ describe('Directive: Mask', () => {
     fixture.detectChanges();
     const inputEl = fixture.debugElement.query(By.css('input'));
     Promise.resolve().then(() => {
-      expect(inputEl.properties.disabled).toEqual(true);
+      expect(inputEl.properties['disabled']).toEqual(true);
       done();
     });
   });
