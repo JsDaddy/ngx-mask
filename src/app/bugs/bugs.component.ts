@@ -8,8 +8,11 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class BugsComponent implements OnInit, OnDestroy {
   public bugsForm: FormGroup;
+
   public submitted: boolean = false;
+
   public mask = 'XXX-XX-XXXX';
+
   // Can be used as a takeUntil for any observables this component may subscribe to. e.g. a form control valueChanges
   private onDestroy$ = new Subject<void>();
 
@@ -24,16 +27,16 @@ export class BugsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
   }
 
-  ngOnInit(): void {
+  public ngOnInit(): void {
     this.bugsForm
       .get('SecureInput')
       ?.valueChanges.pipe(takeUntil(this.onDestroy$))
-      .subscribe((value) => {
+      .subscribe(() => {
         if (this.bugsForm.get('SecureInput')?.valid) {
           this.mask = '000-00-0000';
         } else {
@@ -42,11 +45,11 @@ export class BugsComponent implements OnInit, OnDestroy {
       });
   }
 
-  submitForm(): void {
+  public submitForm(): void {
     this.submitted = true;
   }
 
-  resetForm(): void {
+  public resetForm(): void {
     this.bugsForm.reset({
       PrePopulate: 2000,
     });

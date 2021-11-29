@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 
 type SN = string | number;
 
-interface Pattern {
+interface IPattern {
   [character: string]: {
     pattern: RegExp;
   };
@@ -14,34 +14,58 @@ interface Pattern {
 })
 export class ShowcaseComponent {
   public mask: string = '';
+
   public phone: number = 123456789;
-  public customMaska: [string, Pattern];
+
+  public customMask: [string, IPattern];
+
   public pipeSeparatorValue: string = '123456789';
 
   public form: FormControl;
+
   public form1: FormControl;
+
   public formDate: FormControl;
+
   public ipFormControl: FormControl;
+
   public cpfFormControl: FormControl;
+
   public cpfCnpjFormControl: FormControl;
+
   public cpfCnpjDynamicFormControl: FormControl;
+
   public phoneBrFormControl: FormControl;
+
   public clearIfNotMatch: FormControl;
+
   public numberOrStringForm: FormControl;
+
   public suffixForm: FormControl;
+
   public repeatForm: FormControl;
+
   public emptyMaskForm: FormControl;
+
   public separatorForm: FormControl;
+
   public percent: FormControl;
+
   public formSecureInput: FormControl;
+
   public customPatternForm: FormControl;
+
   public hourTimeForm: FormControl;
+
   public hourForm: FormControl;
+
   public hour24Form: FormControl;
+
   public mixedTypeForm: FormControl;
+
   public dateMonthForm: FormControl;
 
-  public pattern: Pattern = {
+  public pattern: IPattern = {
     P: {
       pattern: new RegExp('\\d'),
     },
@@ -50,45 +74,85 @@ export class ShowcaseComponent {
   public surnamePattern = { N: { pattern: new RegExp(`[A-Za-z '-]`) } };
 
   public numberOrStringFormModel: SN = '';
+
   public clearIfNotMatchModel: SN = '';
+
   public formModelDate: SN = '';
+
   public secureMask: SN = '';
+
   public ipModel: SN = '';
+
   public cpfModel: SN = '';
+
   public cpfCnpjModel: SN = '';
+
   public cpfCnpjDynamicModel: SN = '';
+
   public phoneBrModel: SN = '';
+
   public dateModel: SN = '';
+
   public showMaskModel: SN = '';
+
   public suf: string = '+7';
+
   public suffixModel!: SN;
+
   public repeatFormModel!: SN;
+
   public emptyMaskFormModel!: SN;
+
   public customPatternFormModel!: SN;
+
   public separatorFormModel!: SN;
+
   public separatorPrecisionSeparatorFormModel!: SN;
+
   public separatorZeroPrecisionSeparatorFormModel!: SN;
+
   public dotSeparatorFormModel!: string;
+
   public dotPrecisionSeparatorFormModel: SN = '';
+
   public dotZeroPrecisionSeparatorFormModel!: SN;
+
   public commaSeparatorFormModel!: SN;
+
   public spacebarSeparatorFormModel!: SN;
+
   public emptySeparatorFormModel!: SN;
+
   public commaPrecisionSeparatorFormModel: SN = '';
+
   public spacebarPrecisionSeparatorFormModel: SN = '';
+
   public commaZeroPrecisionSeparatorFormModel!: SN;
+
   public spacebarZeroPrecisionSeparatorFormModel!: SN;
+
   public separatorPrecisionSeparatorForm: FormControl;
+
   public separatorZeroPrecisionSeparatorForm: FormControl;
+
   public dotSeparatorForm!: FormControl;
+
   public dotPrecisionSeparatorForm!: FormControl;
+
   public dotZeroPrecisionSeparatorForm!: FormControl;
+
   public commaSeparatorForm!: FormControl;
+
   public spacebarSeparatorForm!: FormControl;
+
   public emptySeparatorForm!: FormControl;
+
   public commaPrecisionSeparatorForm!: FormControl;
+
   public spacebarPrecisionSeparatorForm!: FormControl;
+
   public commaZeroPrecisionSeparatorForm!: FormControl;
+
   public spacebarZeroPrecisionSeparatorForm!: FormControl;
 
   public constructor() {
@@ -127,6 +191,6 @@ export class ShowcaseComponent {
     this.mixedTypeForm = new FormControl('');
     this.dateMonthForm = new FormControl('');
 
-    this.customMaska = ['PPP-PPP-PPP', this.pattern];
+    this.customMask = ['PPP-PPP-PPP', this.pattern];
   }
 }
