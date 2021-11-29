@@ -147,6 +147,20 @@ describe('Separator: Mask', () => {
     equal('1000000', '1000000', fixture);
   });
 
+  it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = '.';
+    component.decimalMarker = ',';
+    equal('12.345,67', '12.345,67', fixture);
+  });
+
+  it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
+    component.mask = 'separator.2';
+    component.thousandSeparator = '.';
+    component.decimalMarker = ',';
+    equal('12345,67', '12.345,67', fixture);
+  });
+
   it('should not accept more than one minus signal at the beginning of input for separator thousandSeparator . for --1000', () => {
     component.mask = 'separator';
     component.thousandSeparator = '.';
