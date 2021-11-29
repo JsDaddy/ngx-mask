@@ -5,6 +5,16 @@ import { MaskApplierService } from './mask-applier.service';
 import { MaskDirective } from './mask.directive';
 import { MaskPipe } from './mask.pipe';
 
+/**
+ * @internal
+ */
+export function _configFactory(
+  initConfig: optionsConfig,
+  configValue: optionsConfig | (() => optionsConfig)
+): optionsConfig {
+  return configValue instanceof Function ? { ...initConfig, ...configValue() } : { ...initConfig, ...configValue };
+}
+
 @NgModule({
   exports: [MaskDirective, MaskPipe],
   declarations: [MaskDirective, MaskPipe],
@@ -31,19 +41,10 @@ export class NgxMaskModule {
       ],
     };
   }
+
   public static forChild(): ModuleWithProviders<NgxMaskModule> {
     return {
       ngModule: NgxMaskModule,
     };
   }
-}
-
-/**
- * @internal
- */
-export function _configFactory(
-  initConfig: optionsConfig,
-  configValue: optionsConfig | (() => optionsConfig)
-): optionsConfig {
-  return configValue instanceof Function ? { ...initConfig, ...configValue() } : { ...initConfig, ...configValue };
 }

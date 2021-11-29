@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions,no-param-reassign */
 import {
   ControlValueAccessor,
   FormControl,
@@ -32,40 +33,67 @@ import { MaskService } from './mask.service';
   ],
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
+  // eslint-disable-next-line @angular-eslint/no-input-rename
   @Input('mask') public maskExpression: string = '';
+
   @Input() public specialCharacters: IConfig['specialCharacters'] = [];
+
   @Input() public patterns: IConfig['patterns'] = {};
+
   @Input() public prefix: IConfig['prefix'] = '';
+
   @Input() public suffix: IConfig['suffix'] = '';
+
   @Input() public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+
   @Input() public decimalMarker: IConfig['decimalMarker'] = '.';
+
   @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
+
   @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
+
   @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
+
   @Input() public placeHolderCharacter: IConfig['placeHolderCharacter'] | null = null;
+
   @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
+
   @Input() public showTemplate: IConfig['showTemplate'] | null = null;
+
   @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
+
   @Input() public validation: IConfig['validation'] | null = null;
+
   @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
+
   @Input() public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | null = null;
+
   @Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
+
   private _maskValue: string = '';
+
   private _inputValue!: string;
+
   private _position: number | null = null;
+
   private _start!: number;
+
   private _end!: number;
+
   private _code!: string;
+
   private _maskExpressionArray: string[] = [];
+
   private _justPasted: boolean = false;
 
   public constructor(
     @Inject(DOCUMENT) private document: any,
-    private _maskService: MaskService,
+    public _maskService: MaskService,
     @Inject(config) protected _config: IConfig
   ) {}
 
   public onChange = (_: any) => {};
+
   public onTouch = () => {};
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -98,9 +126,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
         this._maskExpressionArray = maskExpression.currentValue.split('||').sort((a: string, b: string) => {
           return a.length - b.length;
         });
-        this._maskValue = this._maskExpressionArray[0];
-        this.maskExpression = this._maskExpressionArray[0];
-        this._maskService.maskExpression = this._maskExpressionArray[0];
+        this._maskValue = this._maskExpressionArray[0] ?? '';
+        this.maskExpression = this._maskExpressionArray[0] ?? '';
+        this._maskService.maskExpression = this._maskExpressionArray[0] ?? '';
       }
     }
     if (specialCharacters) {
@@ -194,8 +222,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       let counterOfOpt = 0;
       for (const key in this._maskService.maskAvailablePatterns) {
         if (
-          this._maskService.maskAvailablePatterns[key].optional &&
-          this._maskService.maskAvailablePatterns[key].optional === true
+          this._maskService.maskAvailablePatterns[key]?.optional &&
+          this._maskService.maskAvailablePatterns[key]?.optional === true
         ) {
           if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
             const opt: string = this._maskValue
@@ -216,7 +244,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       }
       if (
         this._maskValue.indexOf('{') === 1 &&
-        value.toString().length === this._maskValue.length + Number(this._maskValue.split('{')[1].split('}')[0]) - 4
+        value.toString().length === this._maskValue.length + Number(this._maskValue.split('{')[1]?.split('}')[0]) - 4
       ) {
         return null;
       }
@@ -240,6 +268,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     }
     return null;
   }
+
   @HostListener('paste')
   public onPaste() {
     this._justPasted = true;
@@ -389,7 +418,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
         } else {
           if (this._inputValue.length !== (el.selectionStart as number) && (el.selectionStart as number) !== 1) {
             while (
-              this.specialCharacters.includes(this._inputValue[(el.selectionStart as number) - 1].toString()) &&
+              this.specialCharacters.includes((this._inputValue[(el.selectionStart as number) - 1] ?? '').toString()) &&
               ((this.prefix.length >= 1 && (el.selectionStart as number) > this.prefix.length) ||
                 this.prefix.length === 0)
             ) {
@@ -427,8 +456,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
     ) {
       el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
     } else if (
-      (e.keyCode === 65 && e.ctrlKey === true) || // Ctrl+ A
-      (e.keyCode === 65 && e.metaKey === true) // Cmd + A (Mac)
+      (e.keyCode === 65 && e.ctrlKey) ||
+      (e.keyCode === 65 && e.metaKey) // Cmd + A (Mac)
     ) {
       el.setSelectionRange(0, this._getActualInputLength());
       e.preventDefault();
@@ -540,7 +569,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
       return null; // Don't validate empty values to allow for optional form control
     }
 
-    if ((+value[value.length - 1] === 0 && value.length < rowMaskLen) || value.length <= rowMaskLen - 2) {
+    if ((+(value[value.length - 1] ?? '') === 0 && value.length < rowMaskLen) || value.length <= rowMaskLen - 2) {
       return this._createValidationError(value);
     }
 
@@ -564,7 +593,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
   private _setMask() {
     if (this._maskExpressionArray.length > 0) {
-      this._maskExpressionArray.some((mask) => {
+      this._maskExpressionArray.some((mask: string) => {
         const test =
           this._maskService.removeMask(this._inputValue)?.length <= this._maskService.removeMask(mask)?.length;
         if (this._inputValue && test) {
@@ -573,9 +602,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
           this._maskService.maskExpression = mask;
           return test;
         } else {
-          this._maskValue = this._maskExpressionArray[this._maskExpressionArray.length - 1];
-          this.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1];
-          this._maskService.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1];
+          this._maskValue = this._maskExpressionArray[this._maskExpressionArray.length - 1]!;
+          this.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1]!;
+          this._maskService.maskExpression = this._maskExpressionArray[this._maskExpressionArray.length - 1]!;
+          return;
         }
       });
     }
