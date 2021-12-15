@@ -4,7 +4,7 @@
   "description": "awesome ngx mask",
   "license": "MIT",
   "engines": {
-    "node": ">=15.0.0"
+    "node": ">=16.0.0"
   },
   "angular-cli": {},
   "keywords": [
