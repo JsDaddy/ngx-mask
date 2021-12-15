@@ -22,28 +22,28 @@ import { ShowcaseComponent } from './showcase/showcase.component';
 import { ErrorComponent } from './error/error.component';
 
 @NgModule({
-  declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ReactiveFormsModule,
-    AppRoutingModule,
-    MatGridListModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgxMaskModule.forRoot({
-      validation: true,
-    }),
-    MatIconModule,
-    MatListModule,
-    MatCardModule,
-    FormsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent],
+	declarations: [AppComponent, BugsComponent, ErrorComponent, ShowcaseComponent, TestMaskComponent],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		ReactiveFormsModule,
+		AppRoutingModule,
+		MatGridListModule,
+		MatSidenavModule,
+		MatToolbarModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatFormFieldModule,
+		MatInputModule,
+		NgxMaskModule.forRoot({
+			validation: true,
+		}),
+		MatIconModule,
+		MatListModule,
+		MatCardModule,
+		FormsModule,
+	],
+	providers: [],
+	bootstrap: [AppComponent],
 })
 export class AppModule {}
