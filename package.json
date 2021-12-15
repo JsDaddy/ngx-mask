@@ -19,12 +19,6 @@
     "ng2mask",
     "jsdaddy"
   ],
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "npm run precommit-msg && npm run lint && npm run test"
-    }
-  },
   "private": true,
   "scripts": {
     "ng": "ng",
