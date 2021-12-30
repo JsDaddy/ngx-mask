@@ -1,10 +1,23 @@
+<a name="13.1.0"></a>
+
+# 13.1.0 (2021-12-30)
+
+### Features
+
+- Enable non-zero-selections
+- Deletion of special mask character moves just the cursor instead of deleting the character next to it
+
+### Test/CI fixes
+
+- Enable cypress component testing
+  
 <a name="13.0.1"></a>
 
 # 13.0.1 (2021-12-15)
 
 ### Test/CI fixes
 
-- the same that in 13.0.0 
+- the same that in 13.0.0
 - fix test
 - fix CI
 
