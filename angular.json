@@ -148,6 +148,14 @@
               "projects/ngx-mask-lib/**/*.html"
             ]
           }
+        },
+        "ct": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "projects/ngx-mask-lib/cypress.json",
+            "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
+            "testingType": "component"
+          }
         }
       }
     }
