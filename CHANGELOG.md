@@ -1,3 +1,12 @@
+<a name="13.1.1"></a>
+
+# 13.1.1 (2022-01-12)
+
+### Fixes
+
+- Revision for separator logic.
+- Set default decimalMarker to [".",","] instead "."
+
 <a name="13.1.0"></a>
 
 # 13.1.0 (2021-12-30)

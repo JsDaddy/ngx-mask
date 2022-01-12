@@ -475,4 +475,10 @@ describe('Separator: Mask', () => {
 
 		expect(inputTarget.selectionStart).toEqual(0);
 	});
+
+	it('Should work right when reset decimalMarker', () => {
+		component.mask = 'separator.2';
+		component.decimalMarker = ',';
+		equal('1000000,00', '1 000 000,00', fixture);
+	});
 });
