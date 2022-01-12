@@ -108,12 +108,11 @@ export class MaskService extends MaskApplierService {
 		// b) remove decimal marker from list of special characters to mask
 		if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
 			this.maskSpecialCharacters = this.maskSpecialCharacters.filter(
-				(item: string) => item !== this.decimalMarker,
+				(item: string) =>
+					!this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator), //item !== this.decimalMarker, // !
 			);
 		}
-
 		this.formControlResult(result);
-
 		if (!this.showMaskTyped) {
 			if (this.hiddenInput) {
 				return result && result.length ? this.hideInput(result, this.maskExpression) : result;
@@ -420,7 +419,8 @@ export class MaskService extends MaskApplierService {
 
 		const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
 		let separatorValue: string = this._retrieveSeparatorValue(result);
-		if (this.decimalMarker !== '.') {
+
+		if (this.decimalMarker !== '.' && !Array.isArray(this.decimalMarker)) {
 			separatorValue = separatorValue.replace(this.decimalMarker, '.');
 		}
 

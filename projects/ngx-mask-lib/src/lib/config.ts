@@ -4,7 +4,7 @@ export interface IConfig {
 	suffix: string;
 	prefix: string;
 	thousandSeparator: string;
-	decimalMarker: '.' | ',';
+	decimalMarker: '.' | ',' | ['.', ','];
 	clearIfNotMatch: boolean;
 	showTemplate: boolean;
 	showMaskTyped: boolean;
@@ -35,7 +35,7 @@ export const initialConfig: IConfig = {
 	suffix: '',
 	prefix: '',
 	thousandSeparator: ' ',
-	decimalMarker: '.',
+	decimalMarker: ['.', ','],
 	clearIfNotMatch: false,
 	showTemplate: false,
 	showMaskTyped: false,
