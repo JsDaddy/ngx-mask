@@ -75,6 +75,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
 	@Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
 
+	@Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
+
 	private _maskValue: string = '';
 
 	private _inputValue!: string;
@@ -121,6 +123,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			separatorLimit,
 			allowNegativeNumbers,
 			leadZeroDateTime,
+			triggerOnMaskChange,
 		} = changes;
 		if (maskExpression) {
 			if (
@@ -204,6 +207,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 		}
 		if (leadZeroDateTime) {
 			this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
+		}
+		if (triggerOnMaskChange) {
+			this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
 		}
 		this._applyMask();
 	}

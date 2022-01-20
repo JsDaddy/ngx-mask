@@ -26,6 +26,8 @@ export class MaskService extends MaskApplierService {
 
 	public maskChanged: boolean = false;
 
+	public triggerOnMaskChange: boolean = false;
+
 	public onChange = (_: any) => {};
 
 	public constructor(
@@ -352,7 +354,7 @@ export class MaskService extends MaskApplierService {
 	 * @param inputValue the current form input value
 	 */
 	private formControlResult(inputValue: string): void {
-		if (this.writingValue || this.maskChanged) {
+		if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
 			this.maskChanged = false;
 			return;
 		}

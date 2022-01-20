@@ -155,6 +155,12 @@ export class ShowcaseComponent {
 
 	public spacebarZeroPrecisionSeparatorForm!: FormControl;
 
+	public triggerSelectFormControl!: FormControl;
+
+	public triggerInputFormControl!: FormControl;
+
+	public triggerMask = '';
+
 	public constructor() {
 		this.form = new FormControl('');
 		this.form1 = new FormControl('');
@@ -190,6 +196,11 @@ export class ShowcaseComponent {
 		this.hour24Form = new FormControl('');
 		this.mixedTypeForm = new FormControl('');
 		this.dateMonthForm = new FormControl('');
+		this.triggerSelectFormControl = new FormControl('de');
+		this.triggerSelectFormControl.valueChanges.subscribe((value) => {
+			this.triggerMask = value === 'de' ? '' : '00 000 00 00';
+		});
+		this.triggerInputFormControl = new FormControl('123456789');
 
 		this.customMaska = ['PPP-PPP-PPP', this.pattern];
 	}

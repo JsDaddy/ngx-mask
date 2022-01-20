@@ -24,6 +24,7 @@ import { IConfig } from '../../lib/config';
 			[hiddenInput]="hiddenInput"
 			[allowNegativeNumbers]="allowNegativeNumbers"
 			[leadZeroDateTime]="leadZeroDateTime"
+			[triggerOnMaskChange]="triggerOnMaskChange"
 		/>
 	`,
 })
@@ -59,4 +60,6 @@ export class TestMaskComponent {
 	public allowNegativeNumbers: IConfig['allowNegativeNumbers'] = false;
 
 	public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
+
+	public triggerOnMaskChange: IConfig['triggerOnMaskChange'] = false;
 }
