@@ -328,7 +328,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			},
 		);
 		// only set the selection if the element is active
-		if (this.document.activeElement !== el) {
+		if (this._getActiveElement() !== el) {
 			return;
 		}
 		this._position = this._position === 1 && this._inputValue.length === 1 ? null : this._position;
@@ -654,4 +654,16 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			});
 		}
 	}
+
+  /**
+  * Recursively determine the current active element by navigating the Shadow DOM until the Active Element is found.
+  */
+  private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
+    const shadowRootEl = document?.activeElement?.shadowRoot;
+    if (!shadowRootEl?.activeElement) {
+      return document.activeElement;
+    } else {
+      return this._getActiveElement(shadowRootEl);
+    }
+  }
 }
