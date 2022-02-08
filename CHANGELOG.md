@@ -1,3 +1,46 @@
+<a name="13.1.1"></a>
+
+# 13.1.1 (2022-01-12)
+
+### Fixes
+
+- Revision for separator logic.
+- Set default decimalMarker to [".",","] instead "."
+
+<a name="13.1.0"></a>
+
+# 13.1.0 (2021-12-30)
+
+### Features
+
+- Enable non-zero-selections
+- Deletion of special mask character moves just the cursor instead of deleting the character next to it
+
+### Test/CI fixes
+
+- Enable cypress component testing
+  
+<a name="13.0.1"></a>
+
+# 13.0.1 (2021-12-15)
+
+### Test/CI fixes
+
+- the same that in 13.0.0
+- fix test
+- fix CI
+
+<a name="13.0.0"></a>
+
+# 13.0.0 (2021-11-28)
+
+### Angular 13 release
+
+- up all dependencies to latest
+- move from tslint to eslint
+- add more strict rules for tsconfig and code quality config
+- build library with IVY and new angular package structure
+
 <a name="12.0.0"></a>
 
 # 12.0.0 (2021-05-19)

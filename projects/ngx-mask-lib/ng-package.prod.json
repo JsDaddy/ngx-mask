@@ -2,8 +2,7 @@
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
   "dest": "../../dist/ngx-mask-lib",
   "lib": {
-    "entryFile": "src/index.ts",
-    "umdModuleIds": {}
+    "entryFile": "src/index.ts"
   },
   "allowedNonPeerDependencies": []
 }
