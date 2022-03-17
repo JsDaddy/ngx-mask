@@ -1053,3 +1053,45 @@
     </div>
   </div>
 </div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="mat-card-wr">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Trigger onChange on mask change</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="flex-row">
+              <div class="flex-cell">
+                <mat-form-field class="">
+                  <mat-label>Phone prefix</mat-label>
+                  <mat-select [formControl]="triggerSelectFormControl">
+                    <mat-option value="ch">+41</mat-option>
+                    <mat-option value="de">+49</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Phone number</mat-label>
+                  <input
+                    matInput
+                    [mask]="triggerMask"
+                    [formControl]="triggerInputFormControl"
+                    [triggerOnMaskChange]="true"
+                  />
+                  <mat-hint><b>Mask:</b>{{ triggerMask ?? 'Empty' }}</mat-hint>
+                </mat-form-field>
+              </div>
+              <div class="flex-cell">
+                <p>
+                  <b>FormControl:</b> {{ triggerInputFormControl.value ?? 'Empty' }}
+                </p>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

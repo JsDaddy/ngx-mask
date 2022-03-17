@@ -17,6 +17,7 @@ export interface IConfig {
 	separatorLimit: string;
 	allowNegativeNumbers: boolean;
 	leadZeroDateTime: boolean;
+	triggerOnMaskChange: boolean;
 	patterns: {
 		[character: string]: {
 			pattern: RegExp;
@@ -49,6 +50,7 @@ export const initialConfig: IConfig = {
 	// eslint-disable-next-line @typescript-eslint/quotes
 	specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
 	leadZeroDateTime: false,
+	triggerOnMaskChange: false,
 	patterns: {
 		'0': {
 			pattern: new RegExp('\\d'),
