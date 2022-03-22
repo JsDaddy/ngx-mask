@@ -1,3 +1,12 @@
+<a name="13.2.0"></a>
+
+# 13.2.0 (2022-02-23)
+
+### Feature
+
+- Function done is added
+- Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+
 <a name="13.1.2"></a>
 
 # 13.1.2 (2022-01-20)
@@ -27,7 +36,7 @@
 ### Test/CI fixes
 
 - Enable cypress component testing
-  
+
 <a name="13.0.1"></a>
 
 # 13.0.1 (2021-12-15)

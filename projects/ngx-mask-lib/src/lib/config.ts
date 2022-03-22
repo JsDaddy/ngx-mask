@@ -1,4 +1,4 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, EventEmitter } from '@angular/core';
 
 export interface IConfig {
 	suffix: string;
@@ -18,6 +18,7 @@ export interface IConfig {
 	allowNegativeNumbers: boolean;
 	leadZeroDateTime: boolean;
 	triggerOnMaskChange: boolean;
+	done: EventEmitter<void>;
 	patterns: {
 		[character: string]: {
 			pattern: RegExp;
@@ -51,6 +52,7 @@ export const initialConfig: IConfig = {
 	specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
 	leadZeroDateTime: false,
 	triggerOnMaskChange: false,
+	done: new EventEmitter<void>(),
 	patterns: {
 		'0': {
 			pattern: new RegExp('\\d'),
