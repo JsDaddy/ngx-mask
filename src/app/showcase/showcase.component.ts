@@ -21,6 +21,8 @@ export class ShowcaseComponent {
 
 	public pipeSeparatorValue: string = '123456789';
 
+	public cControl = new FormControl(1);
+
 	public form: FormControl;
 
 	public form1: FormControl;

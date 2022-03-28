@@ -36,6 +36,7 @@ import { MaskService } from './mask.service';
 		},
 		MaskService,
 	],
+	exportAs: 'mask,ngxMask',
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
 	// eslint-disable-next-line @angular-eslint/no-input-rename
@@ -401,7 +402,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			!el.value || el.value === this._maskService.prefix
 				? this._maskService.prefix + this._maskService.maskIsShown
 				: el.value;
-
 		/** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
 		if (el.value !== nextValue) {
 			el.value = nextValue;
@@ -415,7 +415,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			el.selectionStart = this._maskService.prefix.length;
 			return;
 		}
-
+		console.log(el.selectionEnd, this._getActualInputLength());
 		/** select only inserted text */
 		if ((el.selectionEnd as number) > this._getActualInputLength()) {
 			el.selectionEnd = this._getActualInputLength();
