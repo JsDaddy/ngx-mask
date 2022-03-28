@@ -1,3 +1,5 @@
+
+
 <div class="container">
   <div class="row">
     <div class="col-12">
@@ -897,7 +899,7 @@
   [patterns]="surnamePattern"
   formControlName="surname" /&gt;
 </pre
-        >
+>
       </div>
     </div>
   </div>
@@ -1080,7 +1082,7 @@
                     [formControl]="triggerInputFormControl"
                     [triggerOnMaskChange]="true"
                   />
-                  <mat-hint><b>Mask:</b>{{ triggerMask ?? 'Empty' }}</mat-hint>
+                  <mat-hint><b>Mask:</b>{{ triggerMask || 'Empty' }}</mat-hint>
                 </mat-form-field>
               </div>
               <div class="flex-cell">

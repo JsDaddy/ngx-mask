@@ -1,3 +1,13 @@
+<a name="13.1.3"></a>
+
+# 13.1.3 (2022-03-28)
+
+### Features and fixes
+
+feature ([#940](https://github.com/JsDaddy/ngx-mask/issues/940))
+Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
+
+
 <a name="13.1.2"></a>
 
 # 13.1.2 (2022-01-20)
