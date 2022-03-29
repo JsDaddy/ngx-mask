@@ -189,10 +189,10 @@ You can define custom pattern and specify symbol to be rendered in input field.
 
 ```typescript
 pattern = {
-  B: {
-    pattern: new RegExp('\\d'),
-    symbol: 'X',
-  },
+	B: {
+		pattern: new RegExp('\\d'),
+		symbol: 'X',
+	},
 };
 ```
 
@@ -290,9 +290,9 @@ and in your component
 customMask: [string, pattern];
 
 pattern = {
-  P: {
-    pattern: new RegExp('\\d'),
-  },
+	P: {
+		pattern: new RegExp('\\d'),
+	},
 };
 
 this.customMask = ['PPP-PPP', this.pattern];
@@ -477,4 +477,12 @@ You can pass into mask pattern with `||`.
 
 ```html
 <input mask="(00) 0000-0000||(00) 0 0000-0000" />
+```
+
+### Function done
+
+#### Usage
+
+```html
+<input mask="0000" (done)="done()" />
 ```
