@@ -7,7 +7,7 @@ import { IConfig } from '../../lib/config';
 	selector: 'mask-test-mask',
 	template: `
 		<input
-			id="maska"
+			id="mask"
 			[mask]="mask"
 			[clearIfNotMatch]="clearIfNotMatch"
 			[dropSpecialCharacters]="dropSpecialCharacters"

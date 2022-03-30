@@ -1,11 +1,20 @@
-<a name="13.2.0"></a>
+<a name="13.1.4"></a>
 
-# 13.2.0 (2022-02-23)
+# 13.1.4 (2022-02-23)
 
 ### Feature
 
 - Function done is added
 - Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+
+<a name="13.1.3"></a>
+
+# 13.1.3 (2022-03-28)
+
+### Features and fixes
+
+feature ([#940](https://github.com/JsDaddy/ngx-mask/issues/940))
+Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.1.2"></a>
 

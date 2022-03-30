@@ -146,7 +146,7 @@ export class MaskService extends MaskApplierService {
 	}
 
 	public applyValueChanges(
-		position: number = 0,
+		position: number,
 		justPasted: boolean,
 		backspaced: boolean,
 		cb: Function = () => {},
