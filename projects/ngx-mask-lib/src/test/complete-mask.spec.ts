@@ -5,22 +5,22 @@ import { NgxMaskModule } from '../lib/ngx-mask.module';
 
 @Component({
 	selector: 'mask-test',
-	template: ` <input (done)="done()" mask="0000" [formControl]="form" /> `,
+	template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskComponent {
 	public form: FormControl = new FormControl('');
 
-	public isDone = false;
+	public isMaskFilled = false;
 
-	public done(): void {
-		this.isDone = true;
+	public maskFilled(): void {
+		this.isMaskFilled = true;
 	}
 }
 
-describe('Directive: Mask (Function done)', () => {
+describe('Directive: Mask (Function maskFilled)', () => {
 	let fixture: ComponentFixture<TestMaskComponent>;
 	let component: TestMaskComponent;
-	let doneSpy: jasmine.Spy<jasmine.Func>;
+	let maskFilledSpy: jasmine.Spy<jasmine.Func>;
 
 	beforeEach(() => {
 		TestBed.configureTestingModule({
@@ -30,15 +30,15 @@ describe('Directive: Mask (Function done)', () => {
 		fixture = TestBed.createComponent(TestMaskComponent);
 		component = fixture.componentInstance;
 		fixture.detectChanges();
-		doneSpy = spyOn(component, 'done').and.callThrough();
+		maskFilledSpy = spyOn(component, 'maskFilled').and.callThrough();
 	});
-	it('should call function done and isDone should be true', () => {
+	it('should call function maskFilled and isMaskFilled should be true', () => {
 		component.form.setValue('9999');
-		expect(component.isDone).toBeTrue();
-		expect(doneSpy).toHaveBeenCalledOnceWith();
+		expect(component.isMaskFilled).toBeTrue();
+		expect(maskFilledSpy).toHaveBeenCalledOnceWith();
 	});
-	it('isDone should be false', () => {
+	it('isMaskFilled should be false', () => {
 		component.form.setValue('999');
-		expect(component.isDone).toBeFalse();
+		expect(component.isMaskFilled).toBeFalse();
 	});
 });

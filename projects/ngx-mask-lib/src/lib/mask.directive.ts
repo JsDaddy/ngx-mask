@@ -80,7 +80,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
 	@Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
 
-	@Output() public done: IConfig['done'] = new EventEmitter<void>();
+	@Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
 	private _maskValue: string = '';
 
@@ -296,7 +296,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			}
 		}
 		if (value) {
-			this.done.emit();
+			this.maskFilled.emit();
 			return null;
 		}
 		return null;

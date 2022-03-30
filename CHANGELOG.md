@@ -1,10 +1,10 @@
 <a name="13.1.4"></a>
 
-# 13.1.4 (2022-02-23)
+# 13.1.4 (2022-03-30)
 
 ### Feature
 
-- Function done is added
+- Function maskFilled is added
 - Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
 
 <a name="13.1.3"></a>

@@ -18,7 +18,7 @@ export interface IConfig {
 	allowNegativeNumbers: boolean;
 	leadZeroDateTime: boolean;
 	triggerOnMaskChange: boolean;
-	done: EventEmitter<void>;
+	maskFilled: EventEmitter<void>;
 	patterns: {
 		[character: string]: {
 			pattern: RegExp;
@@ -54,7 +54,7 @@ export const initialConfig: IConfig = {
 	specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
 	leadZeroDateTime: false,
 	triggerOnMaskChange: false,
-	done: new EventEmitter<void>(),
+	maskFilled: new EventEmitter<void>(),
 	patterns: {
 		'0': {
 			pattern: new RegExp('\\d'),
