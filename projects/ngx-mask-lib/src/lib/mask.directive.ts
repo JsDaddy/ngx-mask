@@ -8,11 +8,13 @@ import {
 } from '@angular/forms';
 import {
 	Directive,
+	EventEmitter,
 	forwardRef,
 	HostListener,
 	Inject,
 	Input,
 	OnChanges,
+	Output,
 	SimpleChanges,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -77,6 +79,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	@Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
 
 	@Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
+
+	@Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
 	private _maskValue: string = '';
 
@@ -290,6 +294,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 					return this._createValidationError(value);
 				}
 			}
+		}
+		if (value) {
+			this.maskFilled.emit();
+			return null;
 		}
 		return null;
 	}

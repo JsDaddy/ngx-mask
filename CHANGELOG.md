@@ -1,3 +1,12 @@
+<a name="13.1.4"></a>
+
+# 13.1.4 (2022-03-30)
+
+### Feature
+
+- Function maskFilled is added
+- Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+
 <a name="13.1.3"></a>
 
 # 13.1.3 (2022-03-28)
@@ -6,7 +15,6 @@
 
 feature ([#940](https://github.com/JsDaddy/ngx-mask/issues/940))
 Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
-
 
 <a name="13.1.2"></a>
 
@@ -37,7 +45,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 ### Test/CI fixes
 
 - Enable cypress component testing
-  
+
 <a name="13.0.1"></a>
 
 # 13.0.1 (2021-12-15)

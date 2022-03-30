@@ -478,3 +478,11 @@ You can pass into mask pattern with `||`.
 ```html
 <input mask="(00) 0000-0000||(00) 0 0000-0000" />
 ```
+
+### Function maskFilled
+
+#### Usage
+
+```html
+<input mask="0000" (maskFilled)="maskFilled()" />
+```
