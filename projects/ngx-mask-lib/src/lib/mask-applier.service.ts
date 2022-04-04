@@ -410,7 +410,8 @@ export class MaskApplierService {
 						!!inputArray[cursor] &&
 						maskExpression !== '099.099.099.099' &&
 						maskExpression !== '000.000.000-00' &&
-						maskExpression !== '00.000.000/0000-00'
+						maskExpression !== '00.000.000/0000-00' &&
+						!maskExpression.match(/^9+\.0+$/)
 					) {
 						result += inputArray[cursor];
 					}

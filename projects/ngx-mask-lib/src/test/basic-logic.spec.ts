@@ -278,6 +278,19 @@ describe('Directive: Mask', () => {
 		equal('ab(ds123da-s_d4567dasds8901', '(12) 3 4567-8901', fixture);
 	});
 
+	it('Mask with optional numbers and 2 decimals', () => {
+		component.mask = '9999.00';
+		equal('.', '.', fixture);
+		equal('1.23', '1.23', fixture);
+		equal('.23', '.23', fixture);
+		equal('1', '1', fixture);
+		equal('12', '12', fixture);
+		equal('123', '123', fixture);
+		equal('1234', '1234', fixture);
+		equal('12345', '1234.5', fixture);
+		equal('123456', '1234.56', fixture);
+	});
+
 	it('Masks with numbers, strings e special characters #2 ', () => {
 		component.mask = 'AAA 000-S0S';
 		equal('1', '1', fixture);
