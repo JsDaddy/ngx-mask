@@ -457,4 +457,13 @@ describe('Directive: Mask', () => {
 		});
 		equal('(', '', fixture);
 	});
+
+	it('should remove ghost character on toggling mask', () => {
+		component.mask = '0000';
+		component.form.setValue('1111a');
+		equal('1111a', '1111', fixture);
+		expect(component.form.value).toBe('1111');
+		component.mask = undefined!;
+		expect(component.form.value).toBe('1111');
+	});
 });
