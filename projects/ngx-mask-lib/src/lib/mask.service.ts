@@ -49,7 +49,7 @@ export class MaskService extends MaskApplierService {
 		cb: Function = () => {},
 	): string {
 		if (!maskExpression) {
-			return inputValue;
+			return inputValue !== this.actualValue ? this.actualValue : inputValue;
 		}
 		this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
 		if (this.maskExpression === 'IP' && this.showMaskTyped) {
@@ -91,6 +91,7 @@ export class MaskService extends MaskApplierService {
 					: inputValue;
 		}
 		newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+
 		const result: string = super.applyMask(
 			newInputValue,
 			maskExpression,
@@ -99,8 +100,8 @@ export class MaskService extends MaskApplierService {
 			backspaced,
 			cb,
 		);
-		this.actualValue = this.getActualValue(result);
 
+		this.actualValue = this.getActualValue(result);
 		// handle some separator implications:
 		// a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
 		if (this.thousandSeparator === '.' && this.decimalMarker === '.') {

@@ -1,3 +1,12 @@
+<a name="13.1.6"></a>
+
+# 13.1.6 (2022-04-04)
+
+### Fix
+
+- Ghost characters shown in input when toggling mask on/off
+- Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
+
 <a name="13.1.5"></a>
 
 # 13.1.5 (2022-04-03)
