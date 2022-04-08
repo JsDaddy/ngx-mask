@@ -1,3 +1,12 @@
+<a name="13.1.7"></a>
+
+# 13.1.7 (2022-04-08)
+
+### Feature
+
+- Added lowercase and uppercase mask support
+- Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
+
 <a name="13.1.6"></a>
 
 # 13.1.6 (2022-04-04)

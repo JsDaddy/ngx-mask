@@ -165,6 +165,8 @@ We have next default patterns:
 | **9** | digits (like 0 to 9 numbers), but optional  |
 | **A** | letters (uppercase or lowercase) and digits |
 | **S** | only letters (uppercase or lowercase)       |
+| **U** | only letters uppercase                      |
+| **L** | only letters lowercase                      |
 
 ##### Usage
 
