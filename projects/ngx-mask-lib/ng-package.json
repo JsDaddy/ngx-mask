@@ -3,8 +3,7 @@
   "dest": "../../dist/ngx-mask-lib",
   "deleteDestPath": false,
   "lib": {
-    "entryFile": "src/index.ts",
-    "umdModuleIds": {}
+    "entryFile": "src/index.ts"
   },
   "allowedNonPeerDependencies": []
 }

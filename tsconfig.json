@@ -19,6 +19,23 @@
       //      "ngx-mask/*": ["dist/ngx-mask-lib/*"]
       "ngx-mask": ["projects/ngx-mask-lib/src"],
       "ngx-mask/*": ["projects/ngx-mask-lib/src"]
-    }
+    },
+    /* Additional Checks */
+    "noUnusedLocals": true,                      /* Report errors on unused locals. */
+    "noUnusedParameters": true,                  /* Report errors on unused parameters. */
+    "noImplicitReturns": true,                   /* Report error when not all code paths in function return a value. */
+    "noFallthroughCasesInSwitch": true,          /* Report errors for fallthrough cases in switch statement. */
+    "noUncheckedIndexedAccess": true,            /* Include 'undefined' in index signature results */
+    "noImplicitOverride": true,                  /* Ensure overriding members in derived classes are marked with an 'override' modifier. */
+    "noPropertyAccessFromIndexSignature": true,  /*  Require undeclared properties from index signatures to use element accesses. */
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "preserveWhitespaces": true,
+    "fullTemplateTypeCheck": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
   }
+
 }
