@@ -479,4 +479,22 @@ describe('Directive: Mask', () => {
 		component.mask = undefined!;
 		expect(component.form.value).toBe('1111');
 	});
+
+	it('Masks with letters uppercase', () => {
+		component.mask = 'UUUU';
+		fixture.detectChanges();
+		equal('A', 'A', fixture);
+		equal('AB', 'AB', fixture);
+		equal('ABC', 'ABC', fixture);
+		equal('ABCD', 'ABCD', fixture);
+	});
+
+	it('Masks with letters lowercase', () => {
+		component.mask = 'LLLL';
+		fixture.detectChanges();
+		equal('a', 'a', fixture);
+		equal('ab', 'ab', fixture);
+		equal('abc', 'abc', fixture);
+		equal('abcd', 'abcd', fixture);
+	});
 });
