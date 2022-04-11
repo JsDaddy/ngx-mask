@@ -8,11 +8,13 @@ import {
 } from '@angular/forms';
 import {
 	Directive,
+	EventEmitter,
 	forwardRef,
 	HostListener,
 	Inject,
 	Input,
 	OnChanges,
+	Output,
 	SimpleChanges,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -36,6 +38,7 @@ import { MaskService } from './mask.service';
 		},
 		MaskService,
 	],
+	exportAs: 'mask,ngxMask',
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
 	// eslint-disable-next-line @angular-eslint/no-input-rename
@@ -74,6 +77,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	@Input() public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | null = null;
 
 	@Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
+
+	@Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
+
+	@Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
 	private _maskValue: string = '';
 
@@ -121,6 +128,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			separatorLimit,
 			allowNegativeNumbers,
 			leadZeroDateTime,
+			triggerOnMaskChange,
 		} = changes;
 		if (maskExpression) {
 			if (
@@ -129,7 +137,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			) {
 				this._maskService.maskChanged = true;
 			}
-			this._maskValue = maskExpression.currentValue || '';
 			if (maskExpression.currentValue && maskExpression.currentValue.split('||').length > 1) {
 				this._maskExpressionArray = maskExpression.currentValue
 					.split('||')
@@ -139,6 +146,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 				this._maskValue = this._maskExpressionArray[0]!;
 				this.maskExpression = this._maskExpressionArray[0]!;
 				this._maskService.maskExpression = this._maskExpressionArray[0]!;
+			} else {
+				this._maskExpressionArray = [];
+				this._maskValue = maskExpression.currentValue || '';
+				this._maskService.maskExpression = this._maskValue;
 			}
 		}
 		if (specialCharacters) {
@@ -201,6 +212,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 		}
 		if (leadZeroDateTime) {
 			this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
+		}
+		if (triggerOnMaskChange) {
+			this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
 		}
 		this._applyMask();
 	}
@@ -281,6 +295,10 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 				}
 			}
 		}
+		if (value) {
+			this.maskFilled.emit();
+			return null;
+		}
 		return null;
 	}
 
@@ -351,7 +369,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	}
 
 	@HostListener('click', ['$event'])
-	public onFocus(e: MouseEvent | CustomKeyboardEvent): void {
+	public onClick(e: MouseEvent | CustomKeyboardEvent): void {
 		if (!this._maskValue) {
 			return;
 		}
@@ -392,7 +410,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			!el.value || el.value === this._maskService.prefix
 				? this._maskService.prefix + this._maskService.maskIsShown
 				: el.value;
-
 		/** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
 		if (el.value !== nextValue) {
 			el.value = nextValue;
@@ -406,7 +423,6 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 			el.selectionStart = this._maskService.prefix.length;
 			return;
 		}
-
 		/** select only inserted text */
 		if ((el.selectionEnd as number) > this._getActualInputLength()) {
 			el.selectionEnd = this._getActualInputLength();
@@ -438,7 +454,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 					? this.specialCharacters
 					: this._config.specialCharacters;
 				if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
-					el.setSelectionRange(this.prefix.length, this.prefix.length);
+					el.setSelectionRange(this.prefix.length, el.selectionEnd);
 				} else {
 					if (
 						this._inputValue.length !== (el.selectionStart as number) &&
@@ -451,16 +467,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 							((this.prefix.length >= 1 && (el.selectionStart as number) > this.prefix.length) ||
 								this.prefix.length === 0)
 						) {
-							el.setSelectionRange(
-								(el.selectionStart as number) - 1,
-								(el.selectionStart as number) - 1,
-							);
+							el.setSelectionRange((el.selectionStart as number) - 1, el.selectionEnd);
 						}
 					}
-					this.suffixCheckOnPressDelete(e.keyCode, el);
 				}
 			}
-			this.suffixCheckOnPressDelete(e.keyCode, el);
+			this.checkSelectionOnDeletion(el);
 			if (
 				this._maskService.prefix.length &&
 				(el.selectionStart as number) <= this._maskService.prefix.length &&
@@ -515,10 +527,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
 		if (typeof inputValue === 'number') {
 			// eslint-disable-next-line no-param-reassign
-      inputValue = this._maskService.numberToString(inputValue);
-			// eslint-disable-next-line no-param-reassign
-			inputValue =
-				this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
+			inputValue = this._maskService.numberToString(inputValue);
+			if (!Array.isArray(this.decimalMarker)) {
+				// eslint-disable-next-line no-param-reassign
+				inputValue =
+					this.decimalMarker !== '.' ? inputValue.replace('.', this.decimalMarker) : inputValue;
+			}
 			this._maskService.isNumberValue = true;
 		}
 
@@ -558,23 +572,15 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 		this.onTouch = fn;
 	}
 
-	public suffixCheckOnPressDelete(keyCode: number, el: HTMLInputElement): void {
-		if (keyCode === 46 && this.suffix.length > 0) {
-			if (this._inputValue.length - this.suffix.length <= (el.selectionStart as number)) {
-				el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-			}
-		}
-		if (keyCode === 8) {
-			if (
-				this.suffix.length > 1 &&
-				this._inputValue.length - this.suffix.length < (el.selectionStart as number)
-			) {
-				el.setSelectionRange(this._inputValue.length - this.suffix.length, this._inputValue.length);
-			}
-			if (this.suffix.length === 1 && this._inputValue.length === (el.selectionStart as number)) {
-				el.setSelectionRange((el.selectionStart as number) - 1, (el.selectionStart as number) - 1);
-			}
-		}
+	public checkSelectionOnDeletion(el: HTMLInputElement): void {
+		el.selectionStart = Math.min(
+			Math.max(this.prefix.length, el.selectionStart as number),
+			this._inputValue.length - this.suffix.length,
+		);
+		el.selectionEnd = Math.min(
+			Math.max(this.prefix.length, el.selectionEnd as number),
+			this._inputValue.length - this.suffix.length,
+		);
 	}
 
 	/** It disables the input element */

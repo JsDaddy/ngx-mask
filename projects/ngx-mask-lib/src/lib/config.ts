@@ -1,10 +1,10 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, EventEmitter } from '@angular/core';
 
 export interface IConfig {
 	suffix: string;
 	prefix: string;
 	thousandSeparator: string;
-	decimalMarker: '.' | ',';
+	decimalMarker: '.' | ',' | ['.', ','];
 	clearIfNotMatch: boolean;
 	showTemplate: boolean;
 	showMaskTyped: boolean;
@@ -17,6 +17,8 @@ export interface IConfig {
 	separatorLimit: string;
 	allowNegativeNumbers: boolean;
 	leadZeroDateTime: boolean;
+	triggerOnMaskChange: boolean;
+	maskFilled: EventEmitter<void>;
 	patterns: {
 		[character: string]: {
 			pattern: RegExp;
@@ -27,15 +29,17 @@ export interface IConfig {
 }
 
 export type optionsConfig = Partial<IConfig>;
-export const config: InjectionToken<IConfig> = new InjectionToken('config');
-export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('NEW_CONFIG');
-export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken('INITIAL_CONFIG');
+export const config: InjectionToken<IConfig> = new InjectionToken('ngx-mask config');
+export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('new ngx-mask config');
+export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken(
+	'initial ngx-mask config',
+);
 
 export const initialConfig: IConfig = {
 	suffix: '',
 	prefix: '',
 	thousandSeparator: ' ',
-	decimalMarker: '.',
+	decimalMarker: ['.', ','],
 	clearIfNotMatch: false,
 	showTemplate: false,
 	showMaskTyped: false,
@@ -49,6 +53,8 @@ export const initialConfig: IConfig = {
 	// eslint-disable-next-line @typescript-eslint/quotes
 	specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
 	leadZeroDateTime: false,
+	triggerOnMaskChange: false,
+	maskFilled: new EventEmitter<void>(),
 	patterns: {
 		'0': {
 			pattern: new RegExp('\\d'),
@@ -66,6 +72,12 @@ export const initialConfig: IConfig = {
 		},
 		S: {
 			pattern: new RegExp('[a-zA-Z]'),
+		},
+		U: {
+			pattern: new RegExp('[A-Z]'),
+		},
+		L: {
+			pattern: new RegExp('[a-z]'),
 		},
 		d: {
 			pattern: new RegExp('\\d'),

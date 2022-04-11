@@ -21,6 +21,8 @@ export class ShowcaseComponent {
 
 	public pipeSeparatorValue: string = '123456789';
 
+	public cControl = new FormControl(1);
+
 	public form: FormControl;
 
 	public form1: FormControl;
@@ -34,6 +36,8 @@ export class ShowcaseComponent {
 	public cpfCnpjFormControl: FormControl;
 
 	public cpfCnpjDynamicFormControl: FormControl;
+
+	public textFormControl: FormControl;
 
 	public phoneBrFormControl: FormControl;
 
@@ -88,6 +92,8 @@ export class ShowcaseComponent {
 	public cpfCnpjModel: SN = '';
 
 	public cpfCnpjDynamicModel: SN = '';
+
+	public textModel: SN = '';
 
 	public phoneBrModel: SN = '';
 
@@ -155,6 +161,12 @@ export class ShowcaseComponent {
 
 	public spacebarZeroPrecisionSeparatorForm!: FormControl;
 
+	public triggerSelectFormControl!: FormControl;
+
+	public triggerInputFormControl!: FormControl;
+
+	public triggerMask = '';
+
 	public constructor() {
 		this.form = new FormControl('');
 		this.form1 = new FormControl('');
@@ -164,6 +176,7 @@ export class ShowcaseComponent {
 		this.cpfFormControl = new FormControl();
 		this.cpfCnpjFormControl = new FormControl();
 		this.cpfCnpjDynamicFormControl = new FormControl();
+		this.textFormControl = new FormControl();
 		this.phoneBrFormControl = new FormControl();
 		this.clearIfNotMatch = new FormControl();
 		this.numberOrStringForm = new FormControl();
@@ -190,6 +203,11 @@ export class ShowcaseComponent {
 		this.hour24Form = new FormControl('');
 		this.mixedTypeForm = new FormControl('');
 		this.dateMonthForm = new FormControl('');
+		this.triggerSelectFormControl = new FormControl('de');
+		this.triggerSelectFormControl.valueChanges.subscribe((value) => {
+			this.triggerMask = value === 'de' ? '' : '00 000 00 00';
+		});
+		this.triggerInputFormControl = new FormControl('123456789');
 
 		this.customMaska = ['PPP-PPP-PPP', this.pattern];
 	}

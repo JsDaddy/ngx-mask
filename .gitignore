@@ -46,5 +46,6 @@ test-reports/
 
 /projects/ngx-mask-lib/cypress/videos
 /projects/ngx-mask-lib/cypress/screenshots
+/projects/ngx-mask-lib/coverage
 
 .angular

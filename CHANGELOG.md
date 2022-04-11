@@ -1,10 +1,84 @@
+<a name="13.1.8"></a>
+
+# 13.1.8 (2022-04-08)
+
+### Feature
+
+- Added lowercase and uppercase mask support
+- Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
+
+<a name="13.1.6"></a>
+
+# 13.1.6 (2022-04-04)
+
+### Fix
+
+- Ghost characters shown in input when toggling mask on/off
+- Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
+
+<a name="13.1.5"></a>
+
+# 13.1.5 (2022-04-03)
+
+### Fix
+
+- Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
+
+<a name="13.1.4"></a>
+
+# 13.1.4 (2022-03-30)
+
+### Feature
+
+- Function maskFilled is added
+- Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+
+<a name="13.1.3"></a>
+
+# 13.1.3 (2022-03-28)
+
+### Features and fixes
+
+feature ([#940](https://github.com/JsDaddy/ngx-mask/issues/940))
+Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
+
+<a name="13.1.2"></a>
+
+# 13.1.2 (2022-01-20)
+
+### Features
+
+- added triggerOnMaskChange, allow mask change to trigger onChange
+
+<a name="13.1.1"></a>
+
+# 13.1.1 (2022-01-12)
+
+### Fixes
+
+- Revision for separator logic.
+- Set default decimalMarker to [".",","] instead "."
+
+<a name="13.1.0"></a>
+
+# 13.1.0 (2021-12-30)
+
+### Features
+
+- Enable non-zero-selections
+- Deletion of special mask character moves just the cursor instead of deleting the character next to it
+
+### Test/CI fixes
+
+- Enable cypress component testing
+
 <a name="13.0.1"></a>
 
 # 13.0.1 (2021-12-15)
 
 ### Test/CI fixes
 
-- the same that in 13.0.0 
+- the same that in 13.0.0
 - fix test
 - fix CI
 

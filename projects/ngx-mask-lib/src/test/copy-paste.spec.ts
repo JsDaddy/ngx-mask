@@ -23,7 +23,7 @@ describe('Event: paste', () => {
 		component.mask = '00 - 0000 - 00000';
 		fixture.detectChanges();
 
-		const inputDebuggerElement = fixture.debugElement.query(By.css('#maska'));
+		const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
 
 		const pasteData = new DataTransfer();
 		pasteData.setData('text', '123456789');

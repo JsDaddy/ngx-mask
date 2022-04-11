@@ -26,6 +26,8 @@ export class MaskService extends MaskApplierService {
 
 	public maskChanged: boolean = false;
 
+	public triggerOnMaskChange: boolean = false;
+
 	public onChange = (_: any) => {};
 
 	public constructor(
@@ -47,7 +49,7 @@ export class MaskService extends MaskApplierService {
 		cb: Function = () => {},
 	): string {
 		if (!maskExpression) {
-			return inputValue;
+			return inputValue !== this.actualValue ? this.actualValue : inputValue;
 		}
 		this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
 		if (this.maskExpression === 'IP' && this.showMaskTyped) {
@@ -89,6 +91,7 @@ export class MaskService extends MaskApplierService {
 					: inputValue;
 		}
 		newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+
 		const result: string = super.applyMask(
 			newInputValue,
 			maskExpression,
@@ -97,8 +100,8 @@ export class MaskService extends MaskApplierService {
 			backspaced,
 			cb,
 		);
-		this.actualValue = this.getActualValue(result);
 
+		this.actualValue = this.getActualValue(result);
 		// handle some separator implications:
 		// a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
 		if (this.thousandSeparator === '.' && this.decimalMarker === '.') {
@@ -108,12 +111,11 @@ export class MaskService extends MaskApplierService {
 		// b) remove decimal marker from list of special characters to mask
 		if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
 			this.maskSpecialCharacters = this.maskSpecialCharacters.filter(
-				(item: string) => item !== this.decimalMarker,
+				(item: string) =>
+					!this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator), //item !== this.decimalMarker, // !
 			);
 		}
-
 		this.formControlResult(result);
-
 		if (!this.showMaskTyped) {
 			if (this.hiddenInput) {
 				return result && result.length ? this.hideInput(result, this.maskExpression) : result;
@@ -145,7 +147,7 @@ export class MaskService extends MaskApplierService {
 	}
 
 	public applyValueChanges(
-		position: number = 0,
+		position: number,
 		justPasted: boolean,
 		backspaced: boolean,
 		cb: Function = () => {},
@@ -365,7 +367,7 @@ export class MaskService extends MaskApplierService {
 	 * @param inputValue the current form input value
 	 */
 	private formControlResult(inputValue: string): void {
-		if (this.writingValue || this.maskChanged) {
+		if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
 			this.maskChanged = false;
 			return;
 		}
@@ -432,7 +434,8 @@ export class MaskService extends MaskApplierService {
 
 		const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
 		let separatorValue: string = this._retrieveSeparatorValue(result);
-		if (this.decimalMarker !== '.') {
+
+		if (this.decimalMarker !== '.' && !Array.isArray(this.decimalMarker)) {
 			separatorValue = separatorValue.replace(this.decimalMarker, '.');
 		}
 
