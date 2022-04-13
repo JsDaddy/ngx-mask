@@ -527,7 +527,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
 		if (typeof inputValue === 'number') {
 			// eslint-disable-next-line no-param-reassign
-			inputValue = String(inputValue);
+			inputValue = this._maskService.numberToString(inputValue);
 			if (!Array.isArray(this.decimalMarker)) {
 				// eslint-disable-next-line no-param-reassign
 				inputValue =

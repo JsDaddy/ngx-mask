@@ -165,6 +165,31 @@
   <div class="container box">
     <div class="row">
       <div class="col-12">
+        <label for="ScientificNotation">Correctly display numbers in scientific notation, e.g. 5e-7</label>
+        <div>
+          <p>
+            <input
+              type="text"
+              mask="separator.7"
+              thousandSeparator=" "
+              decimalMarker=","
+              formControlName="ScientificNotation"
+              id="ScientificNotation"
+            />
+          </p>
+          <p>
+            Valid: {{ bugsForm.controls['ScientificNotation']?.valid }}<br />
+            Value: {{ bugsForm.controls['ScientificNotation']?.value }}<br />
+            Errors: {{ bugsForm.controls['ScientificNotation']?.errors | json }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container box">
+    <div class="row">
+      <div class="col-12">
         <button type="submit" mat-raised-button color="primary">Submit</button>
         <button type="reset" mat-raised-button color="accent">Native Reset</button>
         <button type="button" mat-raised-button color="accent" (click)="resetForm()">Angular Reset</button>

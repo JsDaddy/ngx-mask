@@ -1,3 +1,11 @@
+<a name="13.1.9"></a>
+
+# 13.1.9 (2022-04-13)
+
+### Fix
+
+- Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
+
 <a name="13.1.8"></a>
 
 # 13.1.8 (2022-04-08)
