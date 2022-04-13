@@ -178,9 +178,9 @@
             />
           </p>
           <p>
-            Valid: {{ bugsForm.controls.ScientificNotation.valid }}<br />
-            Value: {{ bugsForm.controls.ScientificNotation.value }}<br />
-            Errors: {{ bugsForm.controls.ScientificNotation.errors | json }}
+            Valid: {{ bugsForm.controls['ScientificNotation']?.valid }}<br />
+            Value: {{ bugsForm.controls['ScientificNotation']?.value }}<br />
+            Errors: {{ bugsForm.controls['ScientificNotation']?.errors | json }}
           </p>
         </div>
       </div>

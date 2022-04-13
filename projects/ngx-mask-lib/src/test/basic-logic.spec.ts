@@ -497,4 +497,11 @@ describe('Directive: Mask', () => {
 		equal('abc', 'abc', fixture);
 		equal('abcd', 'abcd', fixture);
 	});
+	it('0.0000004 after writeValue should be 0.0000004', () => {
+		component.mask = 'separator.7';
+		fixture.detectChanges();
+		component.form.setValue(0.0000004);
+		equal('0.0000004', '0.0000004', fixture);
+		expect(component.form.value).toBe(0.0000004);
+	});
 });
