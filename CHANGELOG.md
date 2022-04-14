@@ -1,12 +1,46 @@
-<a name="13.1.5"></a>
+<a name="13.1.10"></a>
 
-# 13.1.5 (2022-04-14)
+# 13.1.10 (2022-04-14)
 
 ### Fix
 
 - Fixed issue where active elements within a shadowRoot would not be found by mask
 - Fix ([#909](https://github.com/JsDaddy/ngx-mask/issues/909))
-  <a name="13.1.4"></a>
+<a name="13.1.9"></a>
+
+# 13.1.9 (2022-04-13)
+
+### Fix
+
+- Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
+
+<a name="13.1.8"></a>
+
+# 13.1.8 (2022-04-08)
+
+### Feature
+
+- Added lowercase and uppercase mask support
+- Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
+
+<a name="13.1.6"></a>
+
+# 13.1.6 (2022-04-04)
+
+### Fix
+
+- Ghost characters shown in input when toggling mask on/off
+- Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
+
+<a name="13.1.5"></a>
+
+# 13.1.5 (2022-04-03)
+
+### Fix
+
+- Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
+
+<a name="13.1.4"></a>
 
 # 13.1.4 (2022-03-30)
 

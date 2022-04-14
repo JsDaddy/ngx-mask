@@ -112,6 +112,8 @@ For separator you can add thousandSeparator
 | 000.000.000-99 | 048.457.987-98 |
 | AAAA           | 0F6g           |
 | SSSS           | asDF           |
+| UUUU           | ASDF           |
+| LLLL           | asdf           |
 
 ## Mask Options
 
@@ -163,6 +165,8 @@ We have next default patterns:
 | **9** | digits (like 0 to 9 numbers), but optional  |
 | **A** | letters (uppercase or lowercase) and digits |
 | **S** | only letters (uppercase or lowercase)       |
+| **U** | only letters uppercase                      |
+| **L** | only letters lowercase                      |
 
 ##### Usage
 

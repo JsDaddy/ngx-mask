@@ -49,7 +49,7 @@ export class MaskService extends MaskApplierService {
 		cb: Function = () => {},
 	): string {
 		if (!maskExpression) {
-			return inputValue;
+			return inputValue !== this.actualValue ? this.actualValue : inputValue;
 		}
 		this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
 		if (this.maskExpression === 'IP' && this.showMaskTyped) {
@@ -91,6 +91,7 @@ export class MaskService extends MaskApplierService {
 					: inputValue;
 		}
 		newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+
 		const result: string = super.applyMask(
 			newInputValue,
 			maskExpression,
@@ -99,8 +100,8 @@ export class MaskService extends MaskApplierService {
 			backspaced,
 			cb,
 		);
-		this.actualValue = this.getActualValue(result);
 
+		this.actualValue = this.getActualValue(result);
 		// handle some separator implications:
 		// a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
 		if (this.thousandSeparator === '.' && this.decimalMarker === '.') {
@@ -219,6 +220,21 @@ export class MaskService extends MaskApplierService {
 				})) ||
 			[];
 		return newInputValue.join('');
+	}
+
+	/**
+	 * Convert number value to string
+	 * 3.1415 -> '3.1415'
+	 * 1e-7 -> '0.0000001'
+	 */
+	public numberToString(value: number | string): string {
+		if (!value && value !== 0) {
+			return String(value);
+		}
+		return Number(value).toLocaleString('fullwide', {
+			useGrouping: false,
+			maximumFractionDigits: 20,
+		});
 	}
 
 	public showMaskInInput(inputVal?: string): string {
