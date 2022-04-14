@@ -1,3 +1,11 @@
+<a name="13.1.5"></a>
+
+# 13.1.5 (2022-04-14)
+
+### Feature
+
+- Fixed issue where active elements within a shadowRoot would not be found by mask
+- Fix ([#917](https://github.com/JsDaddy/ngx-mask/issues/909))
 <a name="13.1.4"></a>
 
 # 13.1.4 (2022-03-30)

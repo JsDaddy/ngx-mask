@@ -160,7 +160,7 @@ export class MaskService extends MaskApplierService {
 			backspaced,
 			cb,
 		);
-		if (formElement === this.document.activeElement) {
+		if (formElement === this._getActiveElement()) {
 			return;
 		}
 		this.clearIfNotMatchFn();
@@ -344,6 +344,18 @@ export class MaskService extends MaskApplierService {
 			return cnpj.slice(arr.length + 4, cnpj.length);
 		}
 		return '';
+	}
+
+	/**
+	 * Recursively determine the current active element by navigating the Shadow DOM until the Active Element is found.
+	 */
+	private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
+		const shadowRootEl = document?.activeElement?.shadowRoot;
+		if (!shadowRootEl?.activeElement) {
+			return document.activeElement;
+		} else {
+			return this._getActiveElement(shadowRootEl);
+		}
 	}
 
 	/**
