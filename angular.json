@@ -17,8 +17,14 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/assets", "src/favicon.ico"],
-            "styles": ["node_modules/bootstrap/dist/css/bootstrap-grid.min.css", "src/styles.scss"],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico"
+            ],
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+              "src/styles.scss"
+            ],
             "scripts": [],
             "vendorChunk": true,
             "extractLicenses": false,
@@ -78,8 +84,14 @@
             "codeCoverage": true,
             "sourceMap": true,
             "scripts": [],
-            "styles": ["node_modules/bootstrap/dist/css/bootstrap-grid.css", "src/styles.scss"],
-            "assets": ["src/assets", "src/favicon.ico"]
+            "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap-grid.css",
+              "src/styles.scss"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico"
+            ]
           }
         },
         "lint": {
@@ -92,6 +104,11 @@
           }
         }
       }
+    },
+    "showcase-e2e": {
+      "root": "",
+      "sourceRoot": "",
+      "projectType": "application"
     },
     "ngx-mask-lib": {
       "root": "projects/ngx-mask-lib",
@@ -130,6 +147,14 @@
               "projects/ngx-mask-lib/**/*.ts",
               "projects/ngx-mask-lib/**/*.html"
             ]
+          }
+        },
+        "ct": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "projects/ngx-mask-lib/cypress.json",
+            "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
+            "testingType": "component"
           }
         }
       }

@@ -2,17 +2,15 @@
   <h1 align="center">ngx-mask</h1>
 </a>
 
-[![Build Status](https://img.shields.io/travis/JsDaddy/ngx-mask.svg?branch=develop)](https://travis-ci.org/JsDaddy/ngx-mask)
+[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
 [![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
-<a href="https://npmjs.org/ngx-mask">
-<img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads">
-</a>
+[![npm downloads](https://img.shields.io/npm/dt/ngx-mask.svg)](https://npmjs.org/ngx-mask)
 
 [![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 
-[![GitHub contributors](https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat-square)](https://github.com/JSDaddy/ngx-mask)
+[![GitHub contributors](https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat)](https://github.com/JSDaddy/ngx-mask)
 
-[![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat-square)](https://github.com/JSDaddy/ngx-mask)
+[![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat)](https://github.com/JSDaddy/ngx-mask)
 
 You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
 You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
@@ -114,6 +112,8 @@ For separator you can add thousandSeparator
 | 000.000.000-99 | 048.457.987-98 |
 | AAAA           | 0F6g           |
 | SSSS           | asDF           |
+| UUUU           | ASDF           |
+| LLLL           | asdf           |
 
 ## Mask Options
 
@@ -165,6 +165,8 @@ We have next default patterns:
 | **9** | digits (like 0 to 9 numbers), but optional  |
 | **A** | letters (uppercase or lowercase) and digits |
 | **S** | only letters (uppercase or lowercase)       |
+| **U** | only letters uppercase                      |
+| **L** | only letters lowercase                      |
 
 ##### Usage
 
@@ -479,4 +481,12 @@ You can pass into mask pattern with `||`.
 
 ```html
 <input mask="(00) 0000-0000||(00) 0 0000-0000" />
+```
+
+### Function maskFilled
+
+#### Usage
+
+```html
+<input mask="0000" (maskFilled)="maskFilled()" />
 ```

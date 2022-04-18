@@ -4,193 +4,211 @@ import { FormControl } from '@angular/forms';
 type SN = string | number;
 
 interface IPattern {
-  [character: string]: {
-    pattern: RegExp;
-  };
+	[character: string]: {
+		pattern: RegExp;
+	};
 }
 
 @Component({
-  templateUrl: './showcase.component.html',
+	templateUrl: './showcase.component.html',
 })
 export class ShowcaseComponent {
-  public mask: string = '';
+	public mask: string = '';
 
-  public phone: number = 123456789;
+	public phone: number = 123456789;
 
-  public customMask: [string, IPattern];
+	public customMaska: [string, IPattern];
 
-  public pipeSeparatorValue: string = '123456789';
+	public pipeSeparatorValue: string = '123456789';
 
-  public form: FormControl;
+	public cControl = new FormControl(1);
 
-  public form1: FormControl;
+	public form: FormControl;
 
-  public formDate: FormControl;
+	public form1: FormControl;
 
-  public ipFormControl: FormControl;
+	public formDate: FormControl;
 
-  public cpfFormControl: FormControl;
+	public ipFormControl: FormControl;
 
-  public cpfCnpjFormControl: FormControl;
+	public cpfFormControl: FormControl;
 
-  public cpfCnpjDynamicFormControl: FormControl;
+	public cpfCnpjFormControl: FormControl;
 
-  public phoneBrFormControl: FormControl;
+	public cpfCnpjDynamicFormControl: FormControl;
 
-  public clearIfNotMatch: FormControl;
+	public textFormControl: FormControl;
 
-  public numberOrStringForm: FormControl;
+	public phoneBrFormControl: FormControl;
 
-  public suffixForm: FormControl;
+	public clearIfNotMatch: FormControl;
 
-  public repeatForm: FormControl;
+	public numberOrStringForm: FormControl;
 
-  public emptyMaskForm: FormControl;
+	public suffixForm: FormControl;
 
-  public separatorForm: FormControl;
+	public repeatForm: FormControl;
 
-  public percent: FormControl;
+	public emptyMaskForm: FormControl;
 
-  public formSecureInput: FormControl;
+	public separatorForm: FormControl;
 
-  public customPatternForm: FormControl;
+	public percent: FormControl;
 
-  public hourTimeForm: FormControl;
+	public formSecureInput: FormControl;
 
-  public hourForm: FormControl;
+	public customPatternForm: FormControl;
 
-  public hour24Form: FormControl;
+	public hourTimeForm: FormControl;
 
-  public mixedTypeForm: FormControl;
+	public hourForm: FormControl;
 
-  public dateMonthForm: FormControl;
+	public hour24Form: FormControl;
 
-  public pattern: IPattern = {
-    P: {
-      pattern: new RegExp('\\d'),
-    },
-  };
+	public mixedTypeForm: FormControl;
 
-  public surnamePattern = { N: { pattern: new RegExp(`[A-Za-z '-]`) } };
+	public dateMonthForm: FormControl;
 
-  public numberOrStringFormModel: SN = '';
+	public pattern: IPattern = {
+		P: {
+			pattern: new RegExp('\\d'),
+		},
+	};
 
-  public clearIfNotMatchModel: SN = '';
+	public surnamePattern = { N: { pattern: new RegExp(`[A-Za-z '-]`) } };
 
-  public formModelDate: SN = '';
+	public numberOrStringFormModel: SN = '';
 
-  public secureMask: SN = '';
+	public clearIfNotMatchModel: SN = '';
 
-  public ipModel: SN = '';
+	public formModelDate: SN = '';
 
-  public cpfModel: SN = '';
+	public secureMask: SN = '';
 
-  public cpfCnpjModel: SN = '';
+	public ipModel: SN = '';
 
-  public cpfCnpjDynamicModel: SN = '';
+	public cpfModel: SN = '';
 
-  public phoneBrModel: SN = '';
+	public cpfCnpjModel: SN = '';
 
-  public dateModel: SN = '';
+	public cpfCnpjDynamicModel: SN = '';
 
-  public showMaskModel: SN = '';
+	public textModel: SN = '';
 
-  public suf: string = '+7';
+	public phoneBrModel: SN = '';
 
-  public suffixModel!: SN;
+	public dateModel: SN = '';
 
-  public repeatFormModel!: SN;
+	public showMaskModel: SN = '';
 
-  public emptyMaskFormModel!: SN;
+	public suf: string = '+7';
 
-  public customPatternFormModel!: SN;
+	public suffixModel!: SN;
 
-  public separatorFormModel!: SN;
+	public repeatFormModel!: SN;
 
-  public separatorPrecisionSeparatorFormModel!: SN;
+	public emptyMaskFormModel!: SN;
 
-  public separatorZeroPrecisionSeparatorFormModel!: SN;
+	public customPatternFormModel!: SN;
 
-  public dotSeparatorFormModel!: string;
+	public separatorFormModel!: SN;
 
-  public dotPrecisionSeparatorFormModel: SN = '';
+	public separatorPrecisionSeparatorFormModel!: SN;
 
-  public dotZeroPrecisionSeparatorFormModel!: SN;
+	public separatorZeroPrecisionSeparatorFormModel!: SN;
 
-  public commaSeparatorFormModel!: SN;
+	public dotSeparatorFormModel!: string;
 
-  public spacebarSeparatorFormModel!: SN;
+	public dotPrecisionSeparatorFormModel: SN = '';
 
-  public emptySeparatorFormModel!: SN;
+	public dotZeroPrecisionSeparatorFormModel!: SN;
 
-  public commaPrecisionSeparatorFormModel: SN = '';
+	public commaSeparatorFormModel!: SN;
 
-  public spacebarPrecisionSeparatorFormModel: SN = '';
+	public spacebarSeparatorFormModel!: SN;
 
-  public commaZeroPrecisionSeparatorFormModel!: SN;
+	public emptySeparatorFormModel!: SN;
 
-  public spacebarZeroPrecisionSeparatorFormModel!: SN;
+	public commaPrecisionSeparatorFormModel: SN = '';
 
-  public separatorPrecisionSeparatorForm: FormControl;
+	public spacebarPrecisionSeparatorFormModel: SN = '';
 
-  public separatorZeroPrecisionSeparatorForm: FormControl;
+	public commaZeroPrecisionSeparatorFormModel!: SN;
 
-  public dotSeparatorForm!: FormControl;
+	public spacebarZeroPrecisionSeparatorFormModel!: SN;
 
-  public dotPrecisionSeparatorForm!: FormControl;
+	public separatorPrecisionSeparatorForm: FormControl;
 
-  public dotZeroPrecisionSeparatorForm!: FormControl;
+	public separatorZeroPrecisionSeparatorForm: FormControl;
 
-  public commaSeparatorForm!: FormControl;
+	public dotSeparatorForm!: FormControl;
 
-  public spacebarSeparatorForm!: FormControl;
+	public dotPrecisionSeparatorForm!: FormControl;
 
-  public emptySeparatorForm!: FormControl;
+	public dotZeroPrecisionSeparatorForm!: FormControl;
 
-  public commaPrecisionSeparatorForm!: FormControl;
+	public commaSeparatorForm!: FormControl;
 
-  public spacebarPrecisionSeparatorForm!: FormControl;
+	public spacebarSeparatorForm!: FormControl;
 
-  public commaZeroPrecisionSeparatorForm!: FormControl;
+	public emptySeparatorForm!: FormControl;
 
-  public spacebarZeroPrecisionSeparatorForm!: FormControl;
+	public commaPrecisionSeparatorForm!: FormControl;
 
-  public constructor() {
-    this.form = new FormControl('');
-    this.form1 = new FormControl('');
-    this.formDate = new FormControl('');
-    this.formSecureInput = new FormControl('');
-    this.ipFormControl = new FormControl();
-    this.cpfFormControl = new FormControl();
-    this.cpfCnpjFormControl = new FormControl();
-    this.cpfCnpjDynamicFormControl = new FormControl();
-    this.phoneBrFormControl = new FormControl();
-    this.clearIfNotMatch = new FormControl();
-    this.numberOrStringForm = new FormControl();
-    this.suffixForm = new FormControl('');
-    this.repeatForm = new FormControl('');
-    this.emptyMaskForm = new FormControl('');
-    this.separatorForm = new FormControl('');
-    this.separatorPrecisionSeparatorForm = new FormControl('');
-    this.separatorZeroPrecisionSeparatorForm = new FormControl('');
-    this.dotSeparatorForm = new FormControl('');
-    this.dotPrecisionSeparatorForm = new FormControl(0);
-    this.dotZeroPrecisionSeparatorForm = new FormControl('');
-    this.commaSeparatorForm = new FormControl('');
-    this.spacebarSeparatorForm = new FormControl('');
-    this.emptySeparatorForm = new FormControl('');
-    this.commaPrecisionSeparatorForm = new FormControl(0);
-    this.spacebarPrecisionSeparatorForm = new FormControl(0);
-    this.commaZeroPrecisionSeparatorForm = new FormControl('');
-    this.spacebarZeroPrecisionSeparatorForm = new FormControl('');
-    this.percent = new FormControl('');
-    this.customPatternForm = new FormControl('');
-    this.hourTimeForm = new FormControl('');
-    this.hourForm = new FormControl('');
-    this.hour24Form = new FormControl('');
-    this.mixedTypeForm = new FormControl('');
-    this.dateMonthForm = new FormControl('');
+	public spacebarPrecisionSeparatorForm!: FormControl;
 
-    this.customMask = ['PPP-PPP-PPP', this.pattern];
-  }
+	public commaZeroPrecisionSeparatorForm!: FormControl;
+
+	public spacebarZeroPrecisionSeparatorForm!: FormControl;
+
+	public triggerSelectFormControl!: FormControl;
+
+	public triggerInputFormControl!: FormControl;
+
+	public triggerMask = '';
+
+	public constructor() {
+		this.form = new FormControl('');
+		this.form1 = new FormControl('');
+		this.formDate = new FormControl('');
+		this.formSecureInput = new FormControl('');
+		this.ipFormControl = new FormControl();
+		this.cpfFormControl = new FormControl();
+		this.cpfCnpjFormControl = new FormControl();
+		this.cpfCnpjDynamicFormControl = new FormControl();
+		this.textFormControl = new FormControl();
+		this.phoneBrFormControl = new FormControl();
+		this.clearIfNotMatch = new FormControl();
+		this.numberOrStringForm = new FormControl();
+		this.suffixForm = new FormControl('');
+		this.repeatForm = new FormControl('');
+		this.emptyMaskForm = new FormControl('');
+		this.separatorForm = new FormControl('');
+		this.separatorPrecisionSeparatorForm = new FormControl('');
+		this.separatorZeroPrecisionSeparatorForm = new FormControl('');
+		this.dotSeparatorForm = new FormControl('');
+		this.dotPrecisionSeparatorForm = new FormControl(0);
+		this.dotZeroPrecisionSeparatorForm = new FormControl('');
+		this.commaSeparatorForm = new FormControl('');
+		this.spacebarSeparatorForm = new FormControl('');
+		this.emptySeparatorForm = new FormControl('');
+		this.commaPrecisionSeparatorForm = new FormControl(0);
+		this.spacebarPrecisionSeparatorForm = new FormControl(0);
+		this.commaZeroPrecisionSeparatorForm = new FormControl('');
+		this.spacebarZeroPrecisionSeparatorForm = new FormControl('');
+		this.percent = new FormControl('');
+		this.customPatternForm = new FormControl('');
+		this.hourTimeForm = new FormControl('');
+		this.hourForm = new FormControl('');
+		this.hour24Form = new FormControl('');
+		this.mixedTypeForm = new FormControl('');
+		this.dateMonthForm = new FormControl('');
+		this.triggerSelectFormControl = new FormControl('de');
+		this.triggerSelectFormControl.valueChanges.subscribe((value) => {
+			this.triggerMask = value === 'de' ? '' : '00 000 00 00';
+		});
+		this.triggerInputFormControl = new FormControl('123456789');
+
+		this.customMaska = ['PPP-PPP-PPP', this.pattern];
+	}
 }

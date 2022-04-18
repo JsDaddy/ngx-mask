@@ -17,7 +17,7 @@
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": "ngx-mask",
+            "prefix": "mask",
             "style": "kebab-case",
             "type": "element"
           }
@@ -68,13 +68,6 @@
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {}
-    },
-    {
-      "files": ["*.component.html"],
-      "extends": ["plugin:@angular-eslint/template/recommended"],
-      "rules": {
-        "@angular-eslint/template/no-negated-async": "off"
-      }
     },
     {
       "files": ["*.js"],
