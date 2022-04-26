@@ -1,8 +1,27 @@
 import { mount } from '@jscutlery/cypress-angular/mount';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { CypressTestMaskShadowDomComponent } from './utils/cypress-test-shadow-dom.component';
 import { CypressTestMaskModule } from './utils/cypress-test.module';
 
 describe('Directive: Mask (Delete)', () => {
+	it('cursor should correct delete with ViewEncapsulation.ShadowDom showMaskTyped=true', () => {
+		mount(CypressTestMaskShadowDomComponent, {
+			inputs: {
+				showMaskTyped: true,
+				mask: '(000) 000-0000',
+			},
+			imports: [CypressTestMaskModule],
+		});
+
+		cy.get('input#masked')
+			.type('1231231234')
+			.focus()
+			.setSelectionRange(9, 1)
+			.type('{backspace}')
+			.type('{backspace}')
+			.should('have.value', '12312312');
+	});
+
 	it('should delete character in input', () => {
 		mount(CypressTestMaskComponent, {
 			inputs: {
