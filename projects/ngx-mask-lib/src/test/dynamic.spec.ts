@@ -94,4 +94,37 @@ describe('Directive: Mask (Dynamic)', () => {
 			expect(inputEl.nativeElement.value).toEqual('12-34-56-78');
 		});
 	});
+
+	it('The input value when set by the FormControl should be masked accordingly the dynamic mask', async () => {
+		let inputEl: any;
+		component.mask = 'separator.2';
+		component.thousandSeparator = '.';
+		component.decimalMarker = ',';
+
+		fixture.detectChanges();
+
+		component.form.setValue({
+			value: 12345.67,
+		});
+
+		fixture.detectChanges();
+		inputEl = fixture.debugElement.query(By.css('input'));
+		Promise.resolve().then(() => {
+			expect(inputEl.nativeElement.value).toEqual('12.345,67');
+		});
+
+		component.form.setValue({
+			value: '12345.67',
+		});
+
+		fixture.detectChanges();
+		inputEl = fixture.debugElement.query(By.css('input'));
+		Promise.resolve().then(() => {
+			expect(inputEl.nativeElement.value).toEqual('12.345,67');
+		});
+
+		component.form.setValue({
+			value: '12345.67',
+		});
+	});
 });
