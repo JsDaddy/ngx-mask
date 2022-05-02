@@ -310,7 +310,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	@HostListener('ngModelChange', ['$event'])
 	public onModelChange(value: any): void {
 		// on form reset we need to update the actualValue
-		if (!value && this._maskService.actualValue) {
+		if ((value === '' || value === null || value === undefined) && this._maskService.actualValue) {
 			this._maskService.actualValue = this._maskService.getActualValue('');
 		}
 	}
