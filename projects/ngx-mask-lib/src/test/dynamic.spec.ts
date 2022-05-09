@@ -54,8 +54,6 @@ describe('Directive: Mask (Dynamic)', () => {
 	it('The input value when set by the FormControl should be masked accordingly the dynamic mask', async () => {
 		function getMask(): string {
 			if (component.form.value?.value) {
-				console.log(component.form.value);
-
 				return '0000 0000 0000 0000||0000 0000 0000 0000 000';
 			}
 			return '';
