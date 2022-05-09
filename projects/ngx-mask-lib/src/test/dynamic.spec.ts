@@ -51,6 +51,31 @@ describe('Directive: Mask (Dynamic)', () => {
 		});
 	});
 
+	it('The input value when set by the FormControl should be masked accordingly the dynamic mask', async () => {
+		function getMask(): string {
+			if (component.form.value?.value) {
+				console.log(component.form.value);
+
+				return '0000 0000 0000 0000||0000 0000 0000 0000 000';
+			}
+			return '';
+		}
+
+		component.mask = '';
+		fixture.detectChanges();
+
+		component.form.setValue({
+			value: 9000000000000000000,
+		});
+		component.mask = getMask();
+		fixture.detectChanges();
+
+		let inputEl = fixture.debugElement.query(By.css('input'));
+		Promise.resolve().then(() => {
+			expect(inputEl.nativeElement.value).toEqual('9000 0000 0000 0000 000');
+		});
+	});
+
 	it('Change mask dynamically from mask several masks to one', async () => {
 		component.mask = '(000)0000-000||(000)0000-0000||00-00000-00000'; // China phone formats
 		fixture.detectChanges();
