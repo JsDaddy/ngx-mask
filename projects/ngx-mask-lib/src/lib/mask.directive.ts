@@ -143,9 +143,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 					.sort((a: string, b: string) => {
 						return a.length - b.length;
 					});
-				this._maskValue = this._maskExpressionArray[0]!;
-				this.maskExpression = this._maskExpressionArray[0]!;
-				this._maskService.maskExpression = this._maskExpressionArray[0]!;
+				this._setMask();
 			} else {
 				this._maskExpressionArray = [];
 				this._maskValue = maskExpression.currentValue || '';
