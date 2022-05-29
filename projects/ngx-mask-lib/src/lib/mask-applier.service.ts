@@ -396,6 +396,9 @@ export class MaskApplierService {
 					}
 					result += inputSymbol;
 					cursor++;
+				} else if (inputSymbol === ' ' && maskExpression[cursor] === ' ') {
+					result += inputSymbol;
+					cursor++;
 				} else if (this.maskSpecialCharacters.indexOf(maskExpression[cursor]!) !== -1) {
 					result += maskExpression[cursor];
 					cursor++;
