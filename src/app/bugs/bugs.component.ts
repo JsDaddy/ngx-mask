@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 	templateUrl: './bugs.component.html',
 })
 export class BugsComponent implements OnInit, OnDestroy {
-	public bugsForm: FormGroup;
+	public bugsForm: UntypedFormGroup;
 
 	public submitted: boolean = false;
 
@@ -16,7 +16,7 @@ export class BugsComponent implements OnInit, OnDestroy {
 	// Can be used as a takeUntil for any observables this component may subscribe to. e.g. a form control valueChanges
 	private onDestroy$ = new Subject<void>();
 
-	public constructor(private formBuilder: FormBuilder) {
+	public constructor(private formBuilder: UntypedFormBuilder) {
 		this.bugsForm = this.formBuilder.group({
 			MonStart: [],
 			PrePopulate: [123456],

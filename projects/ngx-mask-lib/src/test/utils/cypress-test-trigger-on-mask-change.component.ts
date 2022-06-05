@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
@@ -37,9 +37,9 @@ import { Subject, takeUntil } from 'rxjs';
 export class CypressTestTriggerOnMaskChangeComponent implements OnInit, OnDestroy {
 	public mask: string = '';
 
-	public form: FormControl = new FormControl('');
+	public form: UntypedFormControl = new UntypedFormControl('');
 
-	public radio: FormControl = new FormControl('de');
+	public radio: UntypedFormControl = new UntypedFormControl('de');
 
 	private destroyed = new Subject<void>();
 
