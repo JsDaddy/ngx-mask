@@ -160,7 +160,6 @@
       }
     }
   },
-  "defaultProject": "showcase",
   "cli": {
     "warnings": {
       "typescriptMismatch": false

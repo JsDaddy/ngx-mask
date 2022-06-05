@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { UntypedFormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from '../lib/ngx-mask.module';
 
 @Component({
@@ -8,7 +8,7 @@ import { NgxMaskModule } from '../lib/ngx-mask.module';
 	template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskComponent {
-	public form: FormControl = new FormControl('');
+	public form: UntypedFormControl = new UntypedFormControl('');
 
 	public isMaskFilled = false;
 

@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 
 @Component({
 	encapsulation: ViewEncapsulation.ShadowDom,
@@ -21,5 +21,5 @@ export class CypressTestMaskShadowDomComponent {
 
 	@Input() public prefix: string = '';
 
-	public form: FormControl = new FormControl('');
+	public form: UntypedFormControl = new UntypedFormControl('');
 }
