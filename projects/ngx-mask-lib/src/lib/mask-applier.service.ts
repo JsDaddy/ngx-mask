@@ -104,8 +104,8 @@ export class MaskApplierService {
 		}
 		const inputArray: string[] = inputValue.toString().split('');
 		if (maskExpression === 'IP') {
-			this.ipError =
-				inputArray.filter((i: string) => i === '.').length < 3 && inputArray.length < 7;
+			const valuesIP = inputValue.split('.');
+			this.ipError = this._validIP(valuesIP);
 			// eslint-disable-next-line no-param-reassign
 			maskExpression = '099.099.099.099';
 		}
@@ -639,5 +639,17 @@ export class MaskApplierService {
 		return Array.isArray(comparedValue)
 			? comparedValue.filter((v) => v !== excludedValue).includes(value)
 			: value === comparedValue;
+	}
+
+	private _validIP(valuesIP: string[]): boolean {
+		return !(
+			valuesIP.length === 4 &&
+			!valuesIP.some((value: string, index: number) => {
+				if (valuesIP.length !== index + 1) {
+					return value === '' || Number(value) > 255;
+				}
+				return value === '' || Number(value.substring(0, 3)) > 255;
+			})
+		);
 	}
 }
