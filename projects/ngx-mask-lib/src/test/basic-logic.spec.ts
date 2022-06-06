@@ -124,13 +124,46 @@ describe('Directive: Mask', () => {
 		equal('(123) 456-ABCDE', '(123) 456-ABCD', fixture);
 		equal('(123) 456-ABCD1', '(123) 456-ABCD', fixture);
 	});
-
-	it('Masks with ip', () => {
-		component.mask = '099.099.099.099';
-		equal('1.1.1.1', '1.1.1.1', fixture);
-		equal('12.1.12.1', '12.1.12.1', fixture);
-		equal('127.001.1.1', '127.001.1.1', fixture);
-		equal('192.168.1.78', '192.168.1.78', fixture);
+	describe('Masks with ip', () => {
+		it('should correct', () => {
+			component.mask = 'IP';
+			equal('1.1.1.1', '1.1.1.1', fixture);
+			equal('12.1.12.1', '12.1.12.1', fixture);
+			equal('127.001.1.1', '127.001.1.1', fixture);
+			equal('192.168.1.78', '192.168.1.78', fixture);
+		});
+		it('form should be invalid', () => {
+			component.mask = 'IP';
+			equal('192.168.1.78', '192.168.1.78', fixture);
+			expect(component.form.valid).toBeTrue();
+			equal('127.001.1.1', '127.001.1.1', fixture);
+			expect(component.form.valid).toBeTrue();
+			equal('12.1.12.1', '12.1.12.1', fixture);
+			expect(component.form.valid).toBeTrue();
+			equal('1.1.1.1', '1.1.1.1', fixture);
+			expect(component.form.valid).toBeTrue();
+		});
+		it('form should be valid', () => {
+			component.mask = 'IP';
+			equal('1.1.1.', '1.1.1.', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('12.1.12', '12.1.12', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('127.1.', '127.1.', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('192.168', '192.168', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('192', '192', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('1', '1', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('', '', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('256.2.3.1', '256.2.3.1', fixture);
+			expect(component.form.valid).toBeFalse();
+			equal('255.900.300.1', '255.900.300.1', fixture);
+			expect(component.form.valid).toBeFalse();
+		});
 	});
 
 	it('Masks with cpf', () => {
