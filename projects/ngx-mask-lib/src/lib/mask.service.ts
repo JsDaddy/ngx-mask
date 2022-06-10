@@ -65,7 +65,7 @@ export class MaskService extends MaskApplierService {
 		const getSymbol: string | undefined =
 			!!inputValue && typeof this.selStart === 'number' ? inputValue[this.selStart] : '';
 		let newInputValue = '';
-		if (this.hiddenInput && !this.writingValue) {
+		if (this.hiddenInput !== undefined && !this.writingValue) {
 			let actualResult: string[] = this.actualValue.split('');
 			// eslint-disable  @typescript-eslint/no-unused-expressions
 			// eslint-disable-next-line @typescript-eslint/no-unused-expressions

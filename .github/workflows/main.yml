@@ -5,11 +5,10 @@ on:
   workflow_dispatch:
   pull_request:
     branches:
-    - develop
+      - develop
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -17,15 +16,15 @@ jobs:
         node-version: [16.x]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and test
-      run: |
-        npm install
-        npm run lint
-        npm test
-      env:
-        CI: true
+      - uses: actions/checkout@v1
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: npm install, build, and test
+        run: |
+          npm ci --legacy-peer-deps
+          npm run lint
+          npm test
+        env:
+          CI: true
