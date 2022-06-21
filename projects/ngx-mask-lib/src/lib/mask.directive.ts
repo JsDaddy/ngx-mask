@@ -1,10 +1,10 @@
 import {
 	ControlValueAccessor,
-	UntypedFormControl,
 	NG_VALIDATORS,
 	NG_VALUE_ACCESSOR,
 	ValidationErrors,
 	Validator,
+	FormControl,
 } from '@angular/forms';
 import {
 	Directive,
@@ -218,7 +218,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	}
 
 	// eslint-disable-next-line complexity
-	public validate({ value }: UntypedFormControl): ValidationErrors | null {
+	public validate({ value }: FormControl): ValidationErrors | null {
 		if (!this._maskService.validation || !this._maskValue) {
 			return null;
 		}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 import { IConfig } from '../../lib/config';
 
@@ -31,7 +31,7 @@ import { IConfig } from '../../lib/config';
 export class TestMaskComponent {
 	public mask!: string;
 
-	public form: UntypedFormControl = new UntypedFormControl(null);
+	public form: FormControl = new FormControl(null);
 
 	public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
 
