@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 type SN = string | number;
 
@@ -21,53 +21,53 @@ export class ShowcaseComponent {
 
 	public pipeSeparatorValue: string = '123456789';
 
-	public cControl = new UntypedFormControl(1);
+	public cControl = new FormControl(1);
 
-	public form: UntypedFormControl;
+	public form: FormControl;
 
-	public form1: UntypedFormControl;
+	public form1: FormControl;
 
-	public formDate: UntypedFormControl;
+	public formDate: FormControl;
 
-	public ipFormControl: UntypedFormControl;
+	public ipFormControl: FormControl;
 
-	public cpfFormControl: UntypedFormControl;
+	public cpfFormControl: FormControl;
 
-	public cpfCnpjFormControl: UntypedFormControl;
+	public cpfCnpjFormControl: FormControl;
 
-	public cpfCnpjDynamicFormControl: UntypedFormControl;
+	public cpfCnpjDynamicFormControl: FormControl;
 
-	public textFormControl: UntypedFormControl;
+	public textFormControl: FormControl;
 
-	public phoneBrFormControl: UntypedFormControl;
+	public phoneBrFormControl: FormControl;
 
-	public clearIfNotMatch: UntypedFormControl;
+	public clearIfNotMatch: FormControl;
 
-	public numberOrStringForm: UntypedFormControl;
+	public numberOrStringForm: FormControl;
 
-	public suffixForm: UntypedFormControl;
+	public suffixForm: FormControl;
 
-	public repeatForm: UntypedFormControl;
+	public repeatForm: FormControl;
 
-	public emptyMaskForm: UntypedFormControl;
+	public emptyMaskForm: FormControl;
 
-	public separatorForm: UntypedFormControl;
+	public separatorForm: FormControl;
 
-	public percent: UntypedFormControl;
+	public percent: FormControl;
 
-	public formSecureInput: UntypedFormControl;
+	public formSecureInput: FormControl;
 
-	public customPatternForm: UntypedFormControl;
+	public customPatternForm: FormControl;
 
-	public hourTimeForm: UntypedFormControl;
+	public hourTimeForm: FormControl;
 
-	public hourForm: UntypedFormControl;
+	public hourForm: FormControl;
 
-	public hour24Form: UntypedFormControl;
+	public hour24Form: FormControl;
 
-	public mixedTypeForm: UntypedFormControl;
+	public mixedTypeForm: FormControl;
 
-	public dateMonthForm: UntypedFormControl;
+	public dateMonthForm: FormControl;
 
 	public pattern: IPattern = {
 		P: {
@@ -137,77 +137,77 @@ export class ShowcaseComponent {
 
 	public spacebarZeroPrecisionSeparatorFormModel!: SN;
 
-	public separatorPrecisionSeparatorForm: UntypedFormControl;
+	public separatorPrecisionSeparatorForm: FormControl;
 
-	public separatorZeroPrecisionSeparatorForm: UntypedFormControl;
+	public separatorZeroPrecisionSeparatorForm: FormControl;
 
-	public dotSeparatorForm!: UntypedFormControl;
+	public dotSeparatorForm!: FormControl;
 
-	public dotPrecisionSeparatorForm!: UntypedFormControl;
+	public dotPrecisionSeparatorForm!: FormControl;
 
-	public dotZeroPrecisionSeparatorForm!: UntypedFormControl;
+	public dotZeroPrecisionSeparatorForm!: FormControl;
 
-	public commaSeparatorForm!: UntypedFormControl;
+	public commaSeparatorForm!: FormControl;
 
-	public spacebarSeparatorForm!: UntypedFormControl;
+	public spacebarSeparatorForm!: FormControl;
 
-	public emptySeparatorForm!: UntypedFormControl;
+	public emptySeparatorForm!: FormControl;
 
-	public commaPrecisionSeparatorForm!: UntypedFormControl;
+	public commaPrecisionSeparatorForm!: FormControl;
 
-	public spacebarPrecisionSeparatorForm!: UntypedFormControl;
+	public spacebarPrecisionSeparatorForm!: FormControl;
 
-	public commaZeroPrecisionSeparatorForm!: UntypedFormControl;
+	public commaZeroPrecisionSeparatorForm!: FormControl;
 
-	public spacebarZeroPrecisionSeparatorForm!: UntypedFormControl;
+	public spacebarZeroPrecisionSeparatorForm!: FormControl;
 
-	public triggerSelectFormControl!: UntypedFormControl;
+	public triggerSelectFormControl!: FormControl;
 
-	public triggerInputFormControl!: UntypedFormControl;
+	public triggerInputFormControl!: FormControl;
 
 	public triggerMask = '';
 
 	public constructor() {
-		this.form = new UntypedFormControl('');
-		this.form1 = new UntypedFormControl('');
-		this.formDate = new UntypedFormControl('');
-		this.formSecureInput = new UntypedFormControl('');
-		this.ipFormControl = new UntypedFormControl();
-		this.cpfFormControl = new UntypedFormControl();
-		this.cpfCnpjFormControl = new UntypedFormControl();
-		this.cpfCnpjDynamicFormControl = new UntypedFormControl();
-		this.textFormControl = new UntypedFormControl();
-		this.phoneBrFormControl = new UntypedFormControl();
-		this.clearIfNotMatch = new UntypedFormControl();
-		this.numberOrStringForm = new UntypedFormControl();
-		this.suffixForm = new UntypedFormControl('');
-		this.repeatForm = new UntypedFormControl('');
-		this.emptyMaskForm = new UntypedFormControl('');
-		this.separatorForm = new UntypedFormControl('');
-		this.separatorPrecisionSeparatorForm = new UntypedFormControl('');
-		this.separatorZeroPrecisionSeparatorForm = new UntypedFormControl('');
-		this.dotSeparatorForm = new UntypedFormControl('');
-		this.dotPrecisionSeparatorForm = new UntypedFormControl(0);
-		this.dotZeroPrecisionSeparatorForm = new UntypedFormControl('');
-		this.commaSeparatorForm = new UntypedFormControl('');
-		this.spacebarSeparatorForm = new UntypedFormControl('');
-		this.emptySeparatorForm = new UntypedFormControl('');
-		this.commaPrecisionSeparatorForm = new UntypedFormControl(0);
-		this.spacebarPrecisionSeparatorForm = new UntypedFormControl(0);
-		this.commaZeroPrecisionSeparatorForm = new UntypedFormControl('');
-		this.spacebarZeroPrecisionSeparatorForm = new UntypedFormControl('');
-		this.percent = new UntypedFormControl('');
-		this.customPatternForm = new UntypedFormControl('');
-		this.hourTimeForm = new UntypedFormControl('');
-		this.hourForm = new UntypedFormControl('');
-		this.hour24Form = new UntypedFormControl('');
-		this.mixedTypeForm = new UntypedFormControl('');
-		this.dateMonthForm = new UntypedFormControl('');
-		this.triggerSelectFormControl = new UntypedFormControl('de');
+		this.form = new FormControl('');
+		this.form1 = new FormControl('');
+		this.formDate = new FormControl('');
+		this.formSecureInput = new FormControl('');
+		this.ipFormControl = new FormControl();
+		this.cpfFormControl = new FormControl();
+		this.cpfCnpjFormControl = new FormControl();
+		this.cpfCnpjDynamicFormControl = new FormControl();
+		this.textFormControl = new FormControl();
+		this.phoneBrFormControl = new FormControl();
+		this.clearIfNotMatch = new FormControl();
+		this.numberOrStringForm = new FormControl();
+		this.suffixForm = new FormControl('');
+		this.repeatForm = new FormControl('');
+		this.emptyMaskForm = new FormControl('');
+		this.separatorForm = new FormControl('');
+		this.separatorPrecisionSeparatorForm = new FormControl('');
+		this.separatorZeroPrecisionSeparatorForm = new FormControl('');
+		this.dotSeparatorForm = new FormControl('');
+		this.dotPrecisionSeparatorForm = new FormControl(0);
+		this.dotZeroPrecisionSeparatorForm = new FormControl('');
+		this.commaSeparatorForm = new FormControl('');
+		this.spacebarSeparatorForm = new FormControl('');
+		this.emptySeparatorForm = new FormControl('');
+		this.commaPrecisionSeparatorForm = new FormControl(0);
+		this.spacebarPrecisionSeparatorForm = new FormControl(0);
+		this.commaZeroPrecisionSeparatorForm = new FormControl('');
+		this.spacebarZeroPrecisionSeparatorForm = new FormControl('');
+		this.percent = new FormControl('');
+		this.customPatternForm = new FormControl('');
+		this.hourTimeForm = new FormControl('');
+		this.hourForm = new FormControl('');
+		this.hour24Form = new FormControl('');
+		this.mixedTypeForm = new FormControl('');
+		this.dateMonthForm = new FormControl('');
+		this.triggerSelectFormControl = new FormControl('de');
 		this.triggerSelectFormControl.valueChanges.subscribe((value) => {
 			this.triggerMask = value === 'de' ? '' : '00 000 00 00';
 		});
-		this.triggerInputFormControl = new UntypedFormControl('123456789');
+		this.triggerInputFormControl = new FormControl('123456789');
 
 		this.customMaska = ['PPP-PPP-PPP', this.pattern];
 	}

@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { UntypedFormControl } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
 	selector: 'mask-cypress-test-mask',
@@ -20,5 +20,5 @@ export class CypressTestMaskComponent {
 
 	@Input() public prefix: string = '';
 
-	public form: UntypedFormControl = new UntypedFormControl('');
+	public form: FormControl = new FormControl('');
 }

@@ -1,5 +1,13 @@
 ### Fix
 
+- Fix ([#1017](https://github.com/JsDaddy/ngx-mask/issues/1017))
+
+<a name="14.0.3"></a>
+
+# 14.0.3(2022-06-21)
+
+### Fix
+
 - Fix ([#1008](https://github.com/JsDaddy/ngx-mask/issues/1008))
 
 <a name="14.0.2"></a>

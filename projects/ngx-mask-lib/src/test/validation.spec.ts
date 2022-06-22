@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl } from '@angular/forms';
 
 import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { equal } from './utils/test-functions.component';
@@ -10,7 +10,7 @@ import { equal } from './utils/test-functions.component';
 	template: ` <input id="maska" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskNoValidationAttributeComponent {
-	public form: UntypedFormControl = new UntypedFormControl('');
+	public form: FormControl = new FormControl('');
 }
 
 @Component({
@@ -18,7 +18,7 @@ export class TestMaskNoValidationAttributeComponent {
 	template: ` <input id="maska" mask="0000" [validation]="validate" [formControl]="form" /> `,
 })
 export class TestMaskValidationAttributeComponent {
-	public form: UntypedFormControl = new UntypedFormControl('');
+	public form: FormControl = new FormControl('');
 
 	public validate: boolean = true;
 }
