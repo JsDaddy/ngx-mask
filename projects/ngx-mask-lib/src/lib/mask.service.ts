@@ -442,17 +442,21 @@ export class MaskService extends MaskApplierService {
 		);
 	}
 
+	private _replaceDecimalMarkerToDot(value: string): string {
+		const markers = Array.isArray(this.decimalMarker) ? this.decimalMarker : [this.decimalMarker];
+
+		return value.replace(this._regExpForRemove(markers), '.');
+	}
+
 	private _checkSymbols(result: string): string | number | undefined | null {
 		if (result === '') {
 			return result;
 		}
 
 		const separatorPrecision: number | null = this._retrieveSeparatorPrecision(this.maskExpression);
-		let separatorValue: string = this._retrieveSeparatorValue(result);
-
-		if (this.decimalMarker !== '.' && !Array.isArray(this.decimalMarker)) {
-			separatorValue = separatorValue.replace(this.decimalMarker, '.');
-		}
+		const separatorValue: string = this._replaceDecimalMarkerToDot(
+			this._retrieveSeparatorValue(result),
+		);
 
 		if (!this.isNumberValue) {
 			return separatorValue;
