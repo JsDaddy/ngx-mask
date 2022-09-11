@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "14.2.0",
+  "version": "14.2.1",
   "description": "awesome ngx mask",
   "keywords": [
     "ng2-mask",
@@ -27,10 +27,6 @@
   "bugs": {
     "url": "https://github.com/JsDaddy/ngx-mask/issues"
   },
-  "main": "./bundles/ngx-mask.umd.js",
-  "module": "./esm5/ngx-mask.js",
-  "es2015": "./esm2015/ngx-mask.js",
-  "typings": "./ngx-mask.d.ts",
   "peerDependencies": {
     "@angular/common": ">=10.0.0",
     "@angular/core": ">=10.0.0",

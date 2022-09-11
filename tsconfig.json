@@ -8,18 +8,19 @@
     "sourceMap": true,
     "declaration": false,
     "module": "esnext",
-    "moduleResolution": "node",
     "experimentalDecorators": true,
     "strict": true,
-    "target": "es2020",
+    "target": "es2017",
     "typeRoots": ["node_modules/@types"],
-    "lib": ["es2017", "dom"],
+    "lib": ["es2020", "dom"],
     "paths": {
       //      "ngx-mask": ["dist/ngx-mask-lib"],
       //      "ngx-mask/*": ["dist/ngx-mask-lib/*"]
       "ngx-mask": ["projects/ngx-mask-lib/src"],
       "ngx-mask/*": ["projects/ngx-mask-lib/src"]
     },
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
     /* Additional Checks */
     "noUnusedLocals": true,                      /* Report errors on unused locals. */
     "noUnusedParameters": true,                  /* Report errors on unused parameters. */
