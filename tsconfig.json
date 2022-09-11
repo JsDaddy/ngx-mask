@@ -27,7 +27,7 @@
     "noFallthroughCasesInSwitch": true,          /* Report errors for fallthrough cases in switch statement. */
     "noUncheckedIndexedAccess": true,            /* Include 'undefined' in index signature results */
     "noImplicitOverride": true,                  /* Ensure overriding members in derived classes are marked with an 'override' modifier. */
-    "noPropertyAccessFromIndexSignature": true,  /*  Require undeclared properties from index signatures to use element accesses. */
+    "noPropertyAccessFromIndexSignature": true  /*  Require undeclared properties from index signatures to use element accesses. */
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -35,7 +35,17 @@
     "preserveWhitespaces": true,
     "fullTemplateTypeCheck": true,
     "strictInputAccessModifiers": true,
-    "strictTemplates": true
+    "strictTemplates": true,
+    "extendedDiagnostics": {
+      // The categories to use for specific diagnostics.
+      "checks": {
+        // Maps check name to its category.
+        "invalidBananaInBox": "error",
+        "nullishCoalescingNotNullable": "warning"
+      },
+      // The category to use for any diagnostics not listed in `checks` above.
+      "defaultCategory": "suppress"
+    }
   }
 
 }
