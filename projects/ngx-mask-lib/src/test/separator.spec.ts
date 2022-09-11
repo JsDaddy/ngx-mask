@@ -4,7 +4,7 @@ import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, typeTest } from './utils/test-functions.component';
 
 describe('Separator: Mask', () => {
 	let fixture: ComponentFixture<TestMaskComponent>;
@@ -528,5 +528,26 @@ describe('Separator: Mask', () => {
 		component.thousandSeparator = '.';
 		component.decimalMarker = ',';
 		equal('12345,67', '12.345,67', fixture);
+	});
+
+	it('check formControl value to be number when decimalMarker is comma', () => {
+		component.mask = 'separator.2';
+		component.thousandSeparator = ' ';
+		component.decimalMarker = ',';
+
+		typeTest('12 345,67', fixture);
+		expect(component.form.value).toBe('12345.67');
+	});
+
+	it('check formControl value to be number when decimalMarker is array', () => {
+		component.mask = 'separator.2';
+		component.thousandSeparator = ' ';
+		component.decimalMarker = ['.', ','];
+
+		typeTest('12 345,67', fixture);
+		expect(component.form.value).toBe('12345.67');
+
+		typeTest('123 456.78', fixture);
+		expect(component.form.value).toBe('123456.78');
 	});
 });
