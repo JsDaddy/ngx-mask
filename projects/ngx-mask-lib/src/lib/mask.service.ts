@@ -90,6 +90,12 @@ export class MaskService extends MaskApplierService {
 					? this.shiftTypedSymbols(actualResult.join(''))
 					: inputValue;
 		}
+
+		if (this.showMaskTyped) {
+			// eslint-disable-next-line no-param-reassign
+			inputValue = this.removeMask(inputValue);
+		}
+
 		newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
 
 		const result: string = super.applyMask(

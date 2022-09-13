@@ -42,7 +42,9 @@ describe('Directive: Mask (Time)', () => {
 	it('Hours', () => {
 		component.showMaskTyped = true;
 		component.mask = 'Hh:m0';
-		equal('3__:__', '3:__', fixture);
+		equal('3__:__', '3_:__', fixture);
+		equal('33:__', '3:3_', fixture);
+		equal('33__:__', '3:3_', fixture);
 	});
 
 	it('Hours (lead zero)', () => {
