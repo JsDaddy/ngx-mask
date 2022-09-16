@@ -38,4 +38,18 @@ describe('Directive: Mask', () => {
 		equal('aaa', 'aaa__-__', fixture);
 		equal('aaaaaaa', 'aaaaa-aa', fixture);
 	});
+
+	// TODO(inepipenko) for issue #880
+	xit('should work right with security input', () => {
+		component.mask = '000-0X-XXXX';
+		component.showMaskTyped = true;
+		equal('', '___-__-____', fixture);
+		equal('123', '123-__-____', fixture);
+		equal('12345', '123-4*-____', fixture);
+		equal('123456', '123-4*-*___', fixture);
+		equal('1234567', '123-4*-**__', fixture);
+		equal('12345678', '123-4*-***_', fixture);
+		equal('12345679', '123-4*-****', fixture);
+		equal('123456791', '123-4*-****', fixture);
+	});
 });

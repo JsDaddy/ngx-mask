@@ -160,13 +160,15 @@ export class MaskApplierService {
 				// eslint-disable-next-line no-param-reassign
 				inputValue = this._stripToDecimal(inputValue);
 			}
+
 			// eslint-disable-next-line no-param-reassign
 			inputValue =
 				inputValue.length > 1 &&
 				inputValue[0] === '0' &&
+				inputValue[1] !== this.thousandSeparator &&
 				!this._compareOrIncludes(inputValue[1], this.decimalMarker, this.thousandSeparator) &&
 				!backspaced
-					? inputValue.slice(1, inputValue.length)
+					? inputValue.slice(0, inputValue.length - 1)
 					: inputValue;
 
 			if (backspaced) {
@@ -608,11 +610,15 @@ export class MaskApplierService {
 		return str
 			.split('')
 			.filter((i: string, idx: number) => {
+				const isDecimalMarker =
+					typeof this.decimalMarker === 'string'
+						? i === this.decimalMarker
+						: // TODO (inepipenko) use utility type
+						  this.decimalMarker.includes(i as ',' | '.');
 				return (
 					i.match('^-?\\d') ||
-					i.match('\\s') ||
-					i === '.' ||
-					i === ',' ||
+					i === this.thousandSeparator ||
+					isDecimalMarker ||
 					(i === '-' && idx === 0 && this.allowNegativeNumbers)
 				);
 			})
