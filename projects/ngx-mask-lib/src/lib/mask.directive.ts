@@ -562,8 +562,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 	}
 
 	public registerOnChange(fn: any): void {
-		this.onChange = fn;
-		this._maskService.onChange = this.onChange;
+		this._maskService.onChange = this.onChange = fn;
 	}
 
 	public registerOnTouched(fn: any): void {

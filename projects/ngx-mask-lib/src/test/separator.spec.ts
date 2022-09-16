@@ -550,4 +550,33 @@ describe('Separator: Mask', () => {
 		typeTest('123 456.78', fixture);
 		expect(component.form.value).toBe('123456.78');
 	});
+
+	it('right handle character after first 0 value', () => {
+		component.mask = 'separator';
+		component.decimalMarker = ',';
+		equal('0', '0', fixture);
+		equal('0,', '0,', fixture);
+		equal('0 ', '0', fixture);
+		equal('01', '0', fixture);
+		equal('0s', '0', fixture);
+		equal('0@', '0', fixture);
+		// TODO(inepipenko): strange thet return 0.
+		// equal('0.', '0', fixture);
+		component.decimalMarker = '.';
+		equal('0', '0', fixture);
+		equal('0.', '0.', fixture);
+		equal('0 ', '0', fixture);
+		equal('01', '0', fixture);
+		equal('0s', '0', fixture);
+		equal('0@', '0', fixture);
+		equal('0,', '0', fixture);
+		component.decimalMarker = ['.', ','];
+		equal('0', '0', fixture);
+		equal('0.', '0.', fixture);
+		equal('0,', '0,', fixture);
+		equal('0 ', '0', fixture);
+		equal('01', '0', fixture);
+		equal('0s', '0', fixture);
+		equal('0@', '0', fixture);
+	});
 });
