@@ -31,7 +31,7 @@ describe('Directive: Mask (Add suffix)', () => {
 		equal('y', 'y.sh', fixture);
 	});
 
-	it('should have a suffix if first charachter entered same as last letter of suffix', () => {
+	it('should have a suffix if the first character entered same as the last letter of the suffix', () => {
 		component.mask = 'L{80}';
 		component.suffix = '.sh';
 		equal('h', 'h.sh', fixture);
