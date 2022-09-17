@@ -561,6 +561,7 @@ export class MaskApplierService {
 			const substr = this.suffix.substr(i, this.suffix?.length);
 			if (
 				inputValue.includes(substr) &&
+				i !== this.suffix?.length - 1 &&
 				(i - 1 < 0 || !inputValue.includes(this.suffix.substr(i - 1, this.suffix?.length)))
 			) {
 				return inputValue.replace(substr, '');
