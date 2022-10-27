@@ -5,7 +5,7 @@
         "selector-type-no-unknown": [
             true,
             {
-                "ignoreTypes": ["/^sentryx-/", ":host", ":root"]
+                "ignoreTypes": ["/^mat-/", ":host", ":root"]
             }
         ]
     }

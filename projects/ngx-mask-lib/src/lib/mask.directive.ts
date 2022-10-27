@@ -42,7 +42,7 @@ import { MaskService } from './mask.service';
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
     // eslint-disable-next-line @angular-eslint/no-input-rename
-    @Input('mask') public maskExpression = '';
+    @Input('mask') public maskExpression: string | undefined | null = '';
 
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
 
@@ -567,7 +567,7 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
             (this._maskService.maskExpression &&
                 (this._maskService.prefix || this._maskService.showMaskTyped))
         ) {
-            // Let the service we know we are writing value so that triggering onChange function wont happen during applyMask
+            // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
             this._maskService.writingValue = true;
             this._maskService.formElementProperty = [
                 'value',
@@ -619,12 +619,12 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
                     .split('')
-                    .reduce((accum: string, currval: string, index: number): string => {
-                        this._start = currval === '{' ? index : this._start;
+                    .reduce((accum: string, currVal: string, index: number): string => {
+                        this._start = currVal === '{' ? index : this._start;
 
-                        if (currval !== '}') {
-                            return this._maskService._findSpecialChar(currval)
-                                ? accum + currval
+                        if (currVal !== '}') {
+                            return this._maskService._findSpecialChar(currVal)
+                                ? accum + currVal
                                 : accum;
                         }
                         this._end = index;

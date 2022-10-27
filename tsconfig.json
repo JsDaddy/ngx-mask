@@ -14,21 +14,18 @@
         "typeRoots": ["node_modules/@types"],
         "lib": ["es2020", "dom"],
         "paths": {
-            //      "ngx-mask": ["dist/ngx-mask-lib"],
-            //      "ngx-mask/*": ["dist/ngx-mask-lib/*"]
             "ngx-mask": ["projects/ngx-mask-lib/src"],
             "ngx-mask/*": ["projects/ngx-mask-lib/src"]
         },
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
-        /* Additional Checks */
-        "noUnusedLocals": true /* Report errors on unused locals. */,
-        "noUnusedParameters": true /* Report errors on unused parameters. */,
-        "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
-        "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
-        "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
-        "noImplicitOverride": true /* Ensure overriding members in derived classes are marked with an 'override' modifier. */,
-        "noPropertyAccessFromIndexSignature": true /*  Require undeclared properties from index signatures to use element accesses. */
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noPropertyAccessFromIndexSignature": true
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
@@ -38,13 +35,10 @@
         "strictInputAccessModifiers": true,
         "strictTemplates": true,
         "extendedDiagnostics": {
-            // The categories to use for specific diagnostics.
             "checks": {
-                // Maps check name to its category.
                 "invalidBananaInBox": "error",
                 "nullishCoalescingNotNullable": "warning"
             },
-            // The category to use for any diagnostics not listed in `checks` above.
             "defaultCategory": "suppress"
         }
     }

@@ -1,36 +1,36 @@
 {
-  "name": "ngx-mask",
-  "version": "14.2.3",
-  "description": "awesome ngx mask",
-  "keywords": [
-    "ng2-mask",
-    "ngx-mask",
-    "ng2",
-    "angular-mask",
-    "mask",
-    "angular",
-    "angular2",
-    "angular2-mask",
-    "ng2mask",
-    "jsdaddy"
-  ],
-  "license": "MIT",
-  "author": "ngx-mask",
-  "contributors": [
-    "ngx-mask"
-  ],
-  "homepage": "https://github.com/JsDaddy/ngx-mask",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:JsDaddy/ngx-mask.git"
-  },
-  "bugs": {
-    "url": "https://github.com/JsDaddy/ngx-mask/issues"
-  },
-  "peerDependencies": {
-    "@angular/common": ">=10.0.0",
-    "@angular/core": ">=10.0.0",
-    "@angular/forms": ">=10.0.0"
-  },
-  "dependencies": {}
+    "name": "ngx-mask",
+    "version": "14.2.4",
+    "description": "awesome ngx mask",
+    "keywords": [
+        "ng2-mask",
+        "ngx-mask",
+        "ng2",
+        "angular-mask",
+        "mask",
+        "angular",
+        "angular2",
+        "angular2-mask",
+        "ng2mask",
+        "jsdaddy"
+    ],
+    "license": "MIT",
+    "author": "ngx-mask",
+    "contributors": [
+        "ngx-mask"
+    ],
+    "homepage": "https://github.com/JsDaddy/ngx-mask",
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:JsDaddy/ngx-mask.git"
+    },
+    "bugs": {
+        "url": "https://github.com/JsDaddy/ngx-mask/issues"
+    },
+    "peerDependencies": {
+        "@angular/common": ">=10.0.0",
+        "@angular/core": ">=10.0.0",
+        "@angular/forms": ">=10.0.0"
+    },
+    "dependencies": {}
 }

@@ -129,7 +129,8 @@ export class MaskApplierService {
         if (maskExpression.startsWith('percent')) {
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
-                inputValue.match(/[-!$%^&*()_+|~=`{}\\]:";'<>?,\/.]/)
+                // eslint-disable-next-line no-useless-escape
+                inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/.]/)
             ) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);

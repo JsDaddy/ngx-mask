@@ -1,17 +1,18 @@
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
 @import 'assets/styles/variables';
 @import 'assets/styles/loader';
 
 @include mat-core();
-$candy-app-primary: mat-palette($mat-cyan);
-$candy-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$candy-app-warn: mat-palette($mat-red);
-$candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent, $candy-app-warn);
+
+$candy-app-primary: mat.define-palette($mat-cyan);
+$candy-app-accent: mat.define-palette($mat-pink, A200, A100, A400);
+$candy-app-warn: mat.define-palette($mat-red);
+$candy-app-theme: mat.define-palette($candy-app-primary, $candy-app-accent, $candy-app-warn);
 @include angular-material-theme($candy-app-theme);
 
 @mixin ngmask-input-theme($theme) {
-    $foreground: map-get($theme, foreground);
-    $input-placeholder-color: mat-color($foreground, secondary-text);
+    $foreground: mat.get-color-from-palette($theme, foreground);
+    $input-placeholder-color: mat.get-color-from-palette($foreground, secondary-text);
     mat-input-container {
         mat-hint {
             color: $input-placeholder-color;
@@ -37,7 +38,7 @@ mat-card {
 }
 
 .material-icons {
-    font-family: 'Material Icons';
+    font-family: 'Material Icons', sans-serif;
     font-weight: normal;
     font-style: normal;
     font-size: 24px;
@@ -90,6 +91,22 @@ body {
 
     span {
         font-size: 24px;
+    }
+}
+
+.git-link {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+    transition: $transition-default;
+
+    img {
+        max-width: 30px;
+        opacity: 0.9;
+    }
+
+    &:hover {
+        opacity: 0.8;
     }
 }
 
@@ -169,26 +186,25 @@ header {
         width: 100%;
     }
 
+    .mat-card-subtitle,
+    .mat-card-content,
+    .mat-card-title {
+        font-size: 16px;
+        margin-bottom: 15px;
+        padding: 0;
+    }
+
     .mat-card-header .mat-card-subtitle:not(:first-child) {
         font-weight: normal;
     }
 
-    .mat-card-subtitle,
-    .mat-card-content,
-    .mat-card-header .mat-card-title {
+    .mat-card-header {
         font-size: 16px;
     }
 
-    .mat-card-header .mat-card-subtitle:not(:first-child) {
-        margin: 0;
-    }
-
-    .mat-card-actions,
-    .mat-card-content,
-    .mat-card-subtitle,
-    .mat-card-title {
+    .mat-card-actions {
         margin-bottom: 15px;
-        padding: 0px;
+        padding: 0;
     }
 
     .mat-card-content > :last-child:not(.mat-card-footer),
@@ -241,22 +257,6 @@ header {
 
     .mat-form-wr {
         margin-right: 60px;
-    }
-}
-
-.git-link {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-    transition: $transition-default;
-
-    img {
-        max-width: 30px;
-        opacity: 0.9;
-    }
-
-    &:hover {
-        opacity: 0.8;
     }
 }
 
