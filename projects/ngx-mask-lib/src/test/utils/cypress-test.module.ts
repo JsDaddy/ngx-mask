@@ -7,16 +7,16 @@ import { CypressTestMaskComponent } from './cypress-test-component.component';
 import { CypressTestMaskShadowDomComponent } from './cypress-test-shadow-dom.component';
 
 @NgModule({
-	imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskModule.forRoot()],
-	declarations: [
-		CypressTestMaskShadowDomComponent,
-		CypressTestMaskComponent,
-		CypressTestTriggerOnMaskChangeComponent,
-	],
-	exports: [
-		CypressTestMaskShadowDomComponent,
-		CypressTestMaskComponent,
-		CypressTestTriggerOnMaskChangeComponent,
-	],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskModule.forRoot()],
+    declarations: [
+        CypressTestMaskShadowDomComponent,
+        CypressTestMaskComponent,
+        CypressTestTriggerOnMaskChangeComponent,
+    ],
+    exports: [
+        CypressTestMaskShadowDomComponent,
+        CypressTestMaskComponent,
+        CypressTestTriggerOnMaskChangeComponent,
+    ],
 })
 export class CypressTestMaskModule {}

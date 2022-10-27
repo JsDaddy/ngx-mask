@@ -1,223 +1,216 @@
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-grid-wr">
-				<mat-grid-list cols="1" rowHeight="55px">
-					<mat-grid-tile>
-						<mat-toolbar>
-							<span>Bugs Testing Page</span>
-						</mat-toolbar>
-					</mat-grid-tile>
-				</mat-grid-list>
-				<a routerLink="/">Back to showcase</a>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-grid-wr">
+                <mat-grid-list cols="1" rowHeight="55px">
+                    <mat-grid-tile>
+                        <mat-toolbar>
+                            <span>Bugs Testing Page</span>
+                        </mat-toolbar>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <a routerLink="/">Back to showcase</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <form [formGroup]="bugsForm" (submit)="submitForm()">
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="MonStart">Time validation test</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							[showMaskTyped]="true"
-							[dropSpecialCharacters]="false"
-							mask="Hh:m0"
-							formControlName="MonStart"
-							id="MonStart"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['MonStart']?.valid }}<br />
-						Value: {{ bugsForm.controls['MonStart']?.value }}<br />
-						Errors: {{ bugsForm.controls['MonStart']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="MonStart">Time validation test</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            [showMaskTyped]="true"
+                            [dropSpecialCharacters]="false"
+                            mask="Hh:m0"
+                            formControlName="MonStart"
+                            id="MonStart" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['MonStart']?.valid }}<br />
+                        Value: {{ bugsForm.controls['MonStart']?.value }}<br />
+                        Errors: {{ bugsForm.controls['MonStart']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="PrePopulate">Separator 2 Decimal Places Pre Populate Test</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							mask="separator.2"
-							[thousandSeparator]="','"
-							formControlName="PrePopulate"
-							id="PrePopulate"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['PrePopulate']?.valid }}<br />
-						Value: {{ bugsForm.controls['PrePopulate']?.value }}<br />
-						Errors: {{ bugsForm.controls['PrePopulate']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Comma</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							mask="separator.2"
-							thousandSeparator="."
-							decimalMarker=","
-							formControlName="DecMarkerComma"
-							id="DecMarkerComma"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['DecMarkerComma']?.valid }}<br />
-						Value: {{ bugsForm.controls['DecMarkerComma']?.value }}<br />
-						Errors: {{ bugsForm.controls['DecMarkerComma']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="PrePopulate">Separator 2 Decimal Places Pre Populate Test</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            mask="separator.2"
+                            [thousandSeparator]="','"
+                            formControlName="PrePopulate"
+                            id="PrePopulate" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['PrePopulate']?.valid }}<br />
+                        Value: {{ bugsForm.controls['PrePopulate']?.value }}<br />
+                        Errors: {{ bugsForm.controls['PrePopulate']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Comma</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            mask="separator.2"
+                            thousandSeparator="."
+                            decimalMarker=","
+                            formControlName="DecMarkerComma"
+                            id="DecMarkerComma" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['DecMarkerComma']?.valid }}<br />
+                        Value: {{ bugsForm.controls['DecMarkerComma']?.value }}<br />
+                        Errors: {{ bugsForm.controls['DecMarkerComma']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Dot</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							mask="separator.2"
-							thousandSeparator=","
-							decimalMarker="."
-							formControlName="DecMarkerDot"
-							id="DecMarkerDot"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['DecMarkerDot']?.valid }}<br />
-						Value: {{ bugsForm.controls['DecMarkerDot']?.value }}<br />
-						Errors: {{ bugsForm.controls['DecMarkerDot']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="DecMarkerComma">Separator 2 Decimal Places Decimal Marker Dot</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            mask="separator.2"
+                            thousandSeparator=","
+                            decimalMarker="."
+                            formControlName="DecMarkerDot"
+                            id="DecMarkerDot" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['DecMarkerDot']?.valid }}<br />
+                        Value: {{ bugsForm.controls['DecMarkerDot']?.value }}<br />
+                        Errors: {{ bugsForm.controls['DecMarkerDot']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="CorrectRemovingSpace">Correctly removing a space delimited value</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							mask="separator.2"
-							thousandSeparator=" "
-							suffix="$"
-							formControlName="CorrectRemovingSpace"
-							id="CorrectRemovingSpace"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['CorrectRemovingSpace']?.valid }}<br />
-						Value: {{ bugsForm.controls['CorrectRemovingSpace']?.value }}<br />
-						Errors: {{ bugsForm.controls['CorrectRemovingSpace']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="CorrectRemovingSpace">Correctly removing a space delimited value</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            mask="separator.2"
+                            thousandSeparator=" "
+                            suffix="$"
+                            formControlName="CorrectRemovingSpace"
+                            id="CorrectRemovingSpace" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['CorrectRemovingSpace']?.valid }}<br />
+                        Value: {{ bugsForm.controls['CorrectRemovingSpace']?.value }}<br />
+                        Errors: {{ bugsForm.controls['CorrectRemovingSpace']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<mask-shadow-dom></mask-shadow-dom>
-	</div>
+    <div class="container box">
+        <mask-shadow-dom></mask-shadow-dom>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="SecureInput">Form reset on hidden mask</label>
-				<div>
-					<p>
-						<input
-							type="text"
-							placeholder="Secure input"
-							[hiddenInput]="true"
-							[mask]="mask"
-							formControlName="SecureInput"
-							id="SecureInput"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['SecureInput']?.valid }}<br />
-						Value: {{ bugsForm.controls['SecureInput']?.value }}<br />
-						Errors: {{ bugsForm.controls['SecureInput']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="SecureInput">Form reset on hidden mask</label>
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            placeholder="Secure input"
+                            [hiddenInput]="true"
+                            [mask]="mask"
+                            formControlName="SecureInput"
+                            id="SecureInput" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['SecureInput']?.valid }}<br />
+                        Value: {{ bugsForm.controls['SecureInput']?.value }}<br />
+                        Errors: {{ bugsForm.controls['SecureInput']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<label for="ScientificNotation"
-					>Correctly display numbers in scientific notation, e.g. 5e-7</label
-				>
-				<div>
-					<p>
-						<input
-							type="text"
-							mask="separator.7"
-							thousandSeparator=" "
-							decimalMarker=","
-							formControlName="ScientificNotation"
-							id="ScientificNotation"
-						/>
-					</p>
-					<p>
-						Valid: {{ bugsForm.controls['ScientificNotation']?.valid }}<br />
-						Value: {{ bugsForm.controls['ScientificNotation']?.value }}<br />
-						Errors: {{ bugsForm.controls['ScientificNotation']?.errors | json }}
-					</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <label for="ScientificNotation"
+                    >Correctly display numbers in scientific notation, e.g. 5e-7</label
+                >
+                <div>
+                    <p>
+                        <input
+                            type="text"
+                            mask="separator.7"
+                            thousandSeparator=" "
+                            decimalMarker=","
+                            formControlName="ScientificNotation"
+                            id="ScientificNotation" />
+                    </p>
+                    <p>
+                        Valid: {{ bugsForm.controls['ScientificNotation']?.valid }}<br />
+                        Value: {{ bugsForm.controls['ScientificNotation']?.value }}<br />
+                        Errors: {{ bugsForm.controls['ScientificNotation']?.errors | json }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<button type="submit" mat-raised-button color="primary">Submit</button>
-				<button type="reset" mat-raised-button color="accent">Native Reset</button>
-				<button type="button" mat-raised-button color="accent" (click)="resetForm()">
-					Angular Reset
-				</button>
-			</div>
-		</div>
-		<div class="row" *ngIf="submitted">
-			<div class="col-12">
-				<h4>Form successfully submitted</h4>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <button type="submit" mat-raised-button color="primary">Submit</button>
+                <button type="reset" mat-raised-button color="accent">Native Reset</button>
+                <button type="button" mat-raised-button color="accent" (click)="resetForm()">
+                    Angular Reset
+                </button>
+            </div>
+        </div>
+        <div class="row" *ngIf="submitted">
+            <div class="col-12">
+                <h4>Form successfully submitted</h4>
+            </div>
+        </div>
+    </div>
 
-	<div class="container box">
-		<div class="row">
-			<div class="col-12">
-				<h3>Current form values</h3>
-				<pre>{{ bugsForm.value | json }}</pre>
-			</div>
-		</div>
-	</div>
+    <div class="container box">
+        <div class="row">
+            <div class="col-12">
+                <h3>Current form values</h3>
+                <pre>{{ bugsForm.value | json }}</pre>
+            </div>
+        </div>
+    </div>
 </form>

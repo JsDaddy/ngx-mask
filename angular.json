@@ -1,178 +1,166 @@
 {
-  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1,
-  "newProjectRoot": "projects",
-  "projects": {
-    "showcase": {
-      "root": "",
-      "sourceRoot": "src",
-      "projectType": "application",
-      "schematics": {},
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:browser",
-          "options": {
-            "outputPath": "dist/showcase",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "vendorChunk": true,
-            "extractLicenses": false,
-            "buildOptimizer": false,
-            "sourceMap": true,
-            "optimization": false,
-            "namedChunks": true
-          },
-          "configurations": {
-            "production": {
-              "budgets": [
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "6kb"
+    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+    "version": 1,
+    "newProjectRoot": "projects",
+    "projects": {
+        "showcase": {
+            "root": "",
+            "sourceRoot": "src",
+            "projectType": "application",
+            "schematics": {},
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:browser",
+                    "options": {
+                        "outputPath": "dist/showcase",
+                        "index": "src/index.html",
+                        "main": "src/main.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "src/tsconfig.app.json",
+                        "assets": ["src/assets", "src/favicon.ico"],
+                        "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+                            "src/styles.scss"
+                        ],
+                        "scripts": [],
+                        "vendorChunk": true,
+                        "extractLicenses": false,
+                        "buildOptimizer": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
+                    },
+                    "configurations": {
+                        "production": {
+                            "budgets": [
+                                {
+                                    "type": "anyComponentStyle",
+                                    "maximumWarning": "6kb"
+                                }
+                            ],
+                            "optimization": true,
+                            "outputHashing": "all",
+                            "sourceMap": false,
+                            "namedChunks": false,
+                            "extractLicenses": true,
+                            "vendorChunk": false,
+                            "buildOptimizer": true,
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.prod.ts"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "serve": {
+                    "builder": "@angular-devkit/build-angular:dev-server",
+                    "options": {
+                        "browserTarget": "showcase:build"
+                    },
+                    "configurations": {
+                        "production": {
+                            "browserTarget": "showcase:build:production"
+                        }
+                    }
+                },
+                "extract-i18n": {
+                    "builder": "@angular-devkit/build-angular:extract-i18n",
+                    "options": {
+                        "browserTarget": "showcase:build"
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "src/test.ts",
+                        "karmaConfig": "src/karma.conf.js",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "src/tsconfig.spec.json",
+                        "codeCoverage": true,
+                        "sourceMap": true,
+                        "scripts": [],
+                        "styles": [
+                            "node_modules/bootstrap/dist/css/bootstrap-grid.css",
+                            "src/styles.scss"
+                        ],
+                        "assets": ["src/assets", "src/favicon.ico"]
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": ["src/**/*.ts", "src/**/*.html"]
+                    }
                 }
-              ],
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+            }
+        },
+        "showcase-e2e": {
+            "root": "",
+            "sourceRoot": "",
+            "projectType": "application"
+        },
+        "ngx-mask-lib": {
+            "root": "projects/ngx-mask-lib",
+            "sourceRoot": "projects/ngx-mask-lib/src",
+            "projectType": "library",
+            "prefix": "app",
+            "architect": {
+                "build": {
+                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "options": {
+                        "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json",
+                        "project": "projects/ngx-mask-lib/ng-package.json"
+                    },
+                    "configurations": {
+                        "production": {
+                            "project": "projects/ngx-mask-lib/ng-package.prod.json",
+                            "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.prod.json"
+                        }
+                    }
+                },
+                "test": {
+                    "builder": "@angular-devkit/build-angular:karma",
+                    "options": {
+                        "main": "projects/ngx-mask-lib/src/test.ts",
+                        "polyfills": "src/polyfills.ts",
+                        "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
+                        "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
+                        "codeCoverage": true,
+                        "sourceMap": true
+                    }
+                },
+                "lint": {
+                    "builder": "@angular-eslint/builder:lint",
+                    "options": {
+                        "lintFilePatterns": ["**/*.js", "**/*.ts", "**/*.html"]
+                    }
+                },
+                "ct": {
+                    "builder": "@nrwl/cypress:cypress",
+                    "options": {
+                        "cypressConfig": "projects/ngx-mask-lib/cypress.json",
+                        "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
+                        "testingType": "component"
+                    }
                 }
-              ]
             }
-          }
-        },
-        "serve": {
-          "builder": "@angular-devkit/build-angular:dev-server",
-          "options": {
-            "browserTarget": "showcase:build"
-          },
-          "configurations": {
-            "production": {
-              "browserTarget": "showcase:build:production"
-            }
-          }
-        },
-        "extract-i18n": {
-          "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "browserTarget": "showcase:build"
-          }
-        },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "src/test.ts",
-            "karmaConfig": "src/karma.conf.js",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "codeCoverage": true,
-            "sourceMap": true,
-            "scripts": [],
-            "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap-grid.css",
-              "src/styles.scss"
-            ],
-            "assets": [
-              "src/assets",
-              "src/favicon.ico"
-            ]
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "src/**/*.ts",
-              "src/**/*.html"
-            ]
-          }
         }
-      }
     },
-    "showcase-e2e": {
-      "root": "",
-      "sourceRoot": "",
-      "projectType": "application"
+    "cli": {
+        "warnings": {
+            "typescriptMismatch": false
+        },
+        "analytics": "682218d2-280d-47b1-b385-b2c8c903f9a9"
     },
-    "ngx-mask-lib": {
-      "root": "projects/ngx-mask-lib",
-      "sourceRoot": "projects/ngx-mask-lib/src",
-      "projectType": "library",
-      "prefix": "app",
-      "architect": {
-        "build": {
-          "builder": "@angular-devkit/build-angular:ng-packagr",
-          "options": {
-            "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json",
-            "project": "projects/ngx-mask-lib/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "project": "projects/ngx-mask-lib/ng-package.prod.json",
-              "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.prod.json"
-            }
-          }
+    "schematics": {
+        "@schematics/angular:component": {
+            "prefix": "app",
+            "style": "scss"
         },
-        "test": {
-          "builder": "@angular-devkit/build-angular:karma",
-          "options": {
-            "main": "projects/ngx-mask-lib/src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
-            "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
-            "codeCoverage": true,
-            "sourceMap": true
-          }
-        },
-        "lint": {
-          "builder": "@angular-eslint/builder:lint",
-          "options": {
-            "lintFilePatterns": [
-              "projects/ngx-mask-lib/**/*.ts",
-              "projects/ngx-mask-lib/**/*.html"
-            ]
-          }
-        },
-        "ct": {
-          "builder": "@nrwl/cypress:cypress",
-          "options": {
-            "cypressConfig": "projects/ngx-mask-lib/cypress.json",
-            "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
-            "testingType": "component"
-          }
+        "@schematics/angular:directive": {
+            "prefix": "app"
         }
-      }
     }
-  },
-  "cli": {
-    "warnings": {
-      "typescriptMismatch": false
-    },
-    "analytics": "682218d2-280d-47b1-b385-b2c8c903f9a9"
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "app",
-      "style": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "app"
-    }
-  }
 }

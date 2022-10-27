@@ -1,0 +1,21 @@
+# Compiled output
+/dist
+/tmp
+/out-tsc
+/bazel-out
+/.angular
+/test-reports
+/src/coverage
+/projects/ngx-mask-lib/coverage
+
+# Node
+/node_modules
+
+# IDEs and editors
+.idea/
+
+# Visual Studio Code
+.vscode
+.history
+
+# Miscellaneous

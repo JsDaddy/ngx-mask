@@ -6,60 +6,60 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
 
 describe('Event: paste', () => {
-	let fixture: ComponentFixture<TestMaskComponent>;
-	let component: TestMaskComponent;
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
 
-	beforeEach(() => {
-		TestBed.configureTestingModule({
-			declarations: [TestMaskComponent],
-			imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
-		});
-		fixture = TestBed.createComponent(TestMaskComponent);
-		component = fixture.componentInstance;
-		fixture.detectChanges();
-	});
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestMaskComponent],
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-	it('After paste to control cursor should be on the end of input)', () => {
-		component.mask = '00 - 0000 - 00000';
-		fixture.detectChanges();
+    it('After paste to control cursor should be on the end of input)', () => {
+        component.mask = '00 - 0000 - 00000';
+        fixture.detectChanges();
 
-		const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
+        const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
 
-		const pasteData = new DataTransfer();
-		pasteData.setData('text', '123456789');
-		inputDebuggerElement.triggerEventHandler('paste', pasteData);
+        const pasteData = new DataTransfer();
+        pasteData.setData('text', '123456789');
+        inputDebuggerElement.triggerEventHandler('paste', pasteData);
 
-		inputDebuggerElement.nativeElement.value = pasteData.getData('text/plain');
-		inputDebuggerElement.triggerEventHandler('input', {
-			target: inputDebuggerElement.nativeElement,
-		});
+        inputDebuggerElement.nativeElement.value = pasteData.getData('text/plain');
+        inputDebuggerElement.triggerEventHandler('input', {
+            target: inputDebuggerElement.nativeElement,
+        });
 
-		fixture.detectChanges();
+        fixture.detectChanges();
 
-		expect(inputDebuggerElement.nativeElement.value).toBe('12 - 3456 - 789');
+        expect(inputDebuggerElement.nativeElement.value).toBe('12 - 3456 - 789');
 
-		expect(inputDebuggerElement.nativeElement.selectionStart).toBe(15);
-	});
-	it('After paste to control cursor should be on the end of input for mask with separator', () => {
-		component.mask = 'separator.0';
-		component.thousandSeparator = ',';
-		fixture.detectChanges();
+        expect(inputDebuggerElement.nativeElement.selectionStart).toBe(15);
+    });
+    it('After paste to control cursor should be on the end of input for mask with separator', () => {
+        component.mask = 'separator.0';
+        component.thousandSeparator = ',';
+        fixture.detectChanges();
 
-		const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
+        const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
 
-		const pasteData = new DataTransfer();
-		pasteData.setData('text', '1234567');
-		inputDebuggerElement.triggerEventHandler('paste', pasteData);
+        const pasteData = new DataTransfer();
+        pasteData.setData('text', '1234567');
+        inputDebuggerElement.triggerEventHandler('paste', pasteData);
 
-		inputDebuggerElement.nativeElement.value = pasteData.getData('text/plain');
-		inputDebuggerElement.triggerEventHandler('input', {
-			target: inputDebuggerElement.nativeElement,
-		});
+        inputDebuggerElement.nativeElement.value = pasteData.getData('text/plain');
+        inputDebuggerElement.triggerEventHandler('input', {
+            target: inputDebuggerElement.nativeElement,
+        });
 
-		fixture.detectChanges();
+        fixture.detectChanges();
 
-		expect(inputDebuggerElement.nativeElement.value).toBe('1,234,567');
+        expect(inputDebuggerElement.nativeElement.value).toBe('1,234,567');
 
-		expect(inputDebuggerElement.nativeElement.selectionStart).toBe(9);
-	});
+        expect(inputDebuggerElement.nativeElement.selectionStart).toBe(9);
+    });
 });

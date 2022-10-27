@@ -2,24 +2,23 @@ import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-	encapsulation: ViewEncapsulation.ShadowDom,
-	selector: 'mask-cypress-test-mask',
-	template: `
-		<input
-			id="masked"
-			[formControl]="form"
-			[mask]="mask"
-			[hiddenInput]="hiddenInput"
-			[prefix]="prefix"
-		/>
-	`,
+    encapsulation: ViewEncapsulation.ShadowDom,
+    selector: 'mask-cypress-test-mask',
+    template: `
+        <input
+            id="masked"
+            [formControl]="form"
+            [mask]="mask"
+            [hiddenInput]="hiddenInput"
+            [prefix]="prefix" />
+    `,
 })
 export class CypressTestMaskShadowDomComponent {
-	@Input() public mask!: string | null;
+    @Input() public mask!: string | null;
 
-	@Input() public hiddenInput: boolean = false;
+    @Input() public hiddenInput = false;
 
-	@Input() public prefix: string = '';
+    @Input() public prefix = '';
 
-	public form: FormControl = new FormControl('');
+    public form: FormControl = new FormControl('');
 }

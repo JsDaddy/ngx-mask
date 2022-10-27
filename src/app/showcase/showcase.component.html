@@ -1,982 +1,1062 @@
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-grid-wr">
-				<mat-grid-list cols="2" rowHeight="55px">
-					<mat-grid-tile>
-						<mat-toolbar>
-							<span>Examples</span>
-						</mat-toolbar>
-					</mat-grid-tile>
-					<a routerLink="/bugs">Bug Testing</a>
-				</mat-grid-list>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-grid-wr">
+                <mat-grid-list cols="2" rowHeight="55px">
+                    <mat-grid-tile>
+                        <mat-toolbar>
+                            <span>Examples</span>
+                        </mat-toolbar>
+                    </mat-grid-tile>
+                    <a routerLink="/bugs">Bug Testing</a>
+                </mat-grid-list>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Mask common case</mat-card-title>
-						<mat-card-subtitle>Secure Input</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<br />
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Secure input"
-										[hiddenInput]="true"
-										mask="XXX/X0/0000"
-										[(ngModel)]="secureMask"
-										[formControl]="formSecureInput"
-									/>
-									<mat-hint><b>Mask:</b> "XXX/X0/0000"</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>NgModel:</b> {{ secureMask ? secureMask : 'Empty' }}</p>
-								<p>
-									<b>FormControl:</b>
-									{{ formSecureInput.value ? formSecureInput.value : 'Empty' }}
-								</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Mask common case</mat-card-title>
+                        <mat-card-subtitle>Secure Input</mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <br />
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Secure input"
+                                        [hiddenInput]="true"
+                                        mask="XXX/X0/0000"
+                                        [(ngModel)]="secureMask"
+                                        [formControl]="formSecureInput" />
+                                    <mat-hint><b>Mask:</b> "XXX/X0/0000"</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p><b>NgModel:</b> {{ secureMask ? secureMask : 'Empty' }}</p>
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ formSecureInput.value ? formSecureInput.value : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Other common cases</mat-card-title>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="row">
-							<div class="col-mat-3">
-								<div class="mat-form-wr">
-									<mat-form-field>
-										<input
-											matInput
-											placeholder="Date and Hour"
-											mask="00/00/00 00:00:00"
-											[formControl]="hourTimeForm"
-										/>
-										<mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
-									</mat-form-field>
-								</div>
-							</div>
-							<div class="col-mat-3">
-								<div class="mat-form-wr">
-									<mat-form-field>
-										<input matInput placeholder="Hour" mask="00:00:00" [formControl]="hourForm" />
-										<mat-hint><b>Mask:</b> 00:00:00</mat-hint>
-									</mat-form-field>
-								</div>
-							</div>
-							<div class="col-mat-3">
-								<div class="mat-form-wr">
-									<mat-form-field>
-										<input
-											matInput
-											placeholder="Valid 24 hour format"
-											mask="Hh:m0:s0"
-											[formControl]="hour24Form"
-										/>
-										<mat-hint><b>Mask:</b> Hh:m0:s0</mat-hint>
-									</mat-form-field>
-								</div>
-							</div>
-							<div class="col-mat-3">
-								<div class="mat-form-wr">
-									<mat-form-field>
-										<input
-											matInput
-											placeholder="Mixed Type"
-											mask="AAA 000-S0S"
-											[formControl]="mixedTypeForm"
-										/>
-										<mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
-									</mat-form-field>
-								</div>
-							</div>
-							<div class="col-mat-3">
-								<div class="mat-form-wr">
-									<mat-form-field>
-										<input
-											matInput
-											placeholder="Valid date and month"
-											mask="d0/M0/0000"
-											[dropSpecialCharacters]="true"
-											[formControl]="dateMonthForm"
-										/>
-										<mat-hint><b>Mask:</b> d0/M0/0000</mat-hint>
-									</mat-form-field>
-								</div>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Other common cases</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-mat-3">
+                                <div class="mat-form-wr">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            placeholder="Date and Hour"
+                                            mask="00/00/00 00:00:00"
+                                            [formControl]="hourTimeForm" />
+                                        <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-mat-3">
+                                <div class="mat-form-wr">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            placeholder="Hour"
+                                            mask="00:00:00"
+                                            [formControl]="hourForm" />
+                                        <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-mat-3">
+                                <div class="mat-form-wr">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            placeholder="Valid 24 hour format"
+                                            mask="Hh:m0:s0"
+                                            [formControl]="hour24Form" />
+                                        <mat-hint><b>Mask:</b> Hh:m0:s0</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-mat-3">
+                                <div class="mat-form-wr">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            placeholder="Mixed Type"
+                                            mask="AAA 000-S0S"
+                                            [formControl]="mixedTypeForm" />
+                                        <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="col-mat-3">
+                                <div class="mat-form-wr">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            placeholder="Valid date and month"
+                                            mask="d0/M0/0000"
+                                            [dropSpecialCharacters]="true"
+                                            [formControl]="dateMonthForm" />
+                                        <mat-hint><b>Mask:</b> d0/M0/0000</mat-hint>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Masks and special characters</mat-card-title>
-						<mat-card-subtitle>
-							You could define if you want special characters propagate to the model or not with the
-							attribute
-							<b>dropSpecialCharacters</b>.
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="CPF"
-										[dropSpecialCharacters]="true"
-										mask="000.000.000-00"
-										[formControl]="cpfFormControl"
-										[(ngModel)]="cpfModel"
-									/>
-									<mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b> {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Masks and special characters</mat-card-title>
+                        <mat-card-subtitle>
+                            You could define if you want special characters propagate to the model
+                            or not with the attribute
+                            <b>dropSpecialCharacters</b>.
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="CPF"
+                                        [dropSpecialCharacters]="true"
+                                        mask="000.000.000-00"
+                                        [formControl]="cpfFormControl"
+                                        [(ngModel)]="cpfModel" />
+                                    <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}
+                                </p>
+                                <p><b>NgModel:</b> {{ cpfModel ? cpfModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Clear if not match</mat-card-title>
-						<mat-card-subtitle>
-							You could clear the input if the value not match the mask, you'll just need to set
-							<b>clearIfNotMatch</b>
-							attribute.
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Clear if not match"
-										[clearIfNotMatch]="true"
-										mask="000.000 0"
-										[showMaskTyped]="true"
-										[formControl]="clearIfNotMatch"
-										[(ngModel)]="clearIfNotMatchModel"
-									/>
-									<mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ clearIfNotMatch.value ? clearIfNotMatch.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Clear if not match</mat-card-title>
+                        <mat-card-subtitle>
+                            You could clear the input if the value not match the mask, you'll just
+                            need to set
+                            <b>clearIfNotMatch</b>
+                            attribute.
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Clear if not match"
+                                        [clearIfNotMatch]="true"
+                                        mask="000.000 0"
+                                        [showMaskTyped]="true"
+                                        [formControl]="clearIfNotMatch"
+                                        [(ngModel)]="clearIfNotMatchModel" />
+                                    <mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ clearIfNotMatch.value ? clearIfNotMatch.value : 'Empty' }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ clearIfNotMatchModel ? clearIfNotMatchModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Percent mask</mat-card-title>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Percent mask"
-										mask="percent"
-										suffix="%"
-										[formControl]="percent"
-									/>
-									<mat-hint><b>Mask:</b>percent</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ percent.value ? percent.value : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Percent mask</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Percent mask"
+                                        mask="percent"
+                                        suffix="%"
+                                        [formControl]="percent" />
+                                    <mat-hint><b>Mask:</b>percent</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ percent.value ? percent.value : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Phone number</mat-card-title>
-						<mat-card-subtitle> You can add prefix to you masked value </mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Phone number"
-										mask="(000) 000-0000"
-										prefix="+7 "
-										[formControl]="form"
-										[(ngModel)]="dateModel"
-									/>
-									<mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Phone number</mat-card-title>
+                        <mat-card-subtitle>
+                            You can add prefix to you masked value
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Phone number"
+                                        mask="(000) 000-0000"
+                                        prefix="+7 "
+                                        [formControl]="form"
+                                        [(ngModel)]="dateModel" />
+                                    <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</p>
+                                <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Phone number</mat-card-title>
-						<mat-card-subtitle>
-							You can add 'showMaskTyped' property to see maskExpression with underscores while
-							typing
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Phone number"
-										mask="(000) 000-0000"
-										[formControl]="form1"
-										prefix="+5 "
-										[(ngModel)]="showMaskModel"
-										[showMaskTyped]="true"
-									/>
-									<mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Phone number</mat-card-title>
+                        <mat-card-subtitle>
+                            You can add 'showMaskTyped' property to see maskExpression with
+                            underscores while typing
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Phone number"
+                                        mask="(000) 000-0000"
+                                        [formControl]="form1"
+                                        prefix="+5 "
+                                        [(ngModel)]="showMaskModel"
+                                        [showMaskTyped]="true" />
+                                    <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
+                                <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Phone number</mat-card-title>
-						<mat-card-subtitle>
-							You can add 'placeHolderCharacter' property to changed the placeholder character used
-							when displaying the mask.
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Phone number"
-										mask="(000) 000-0000"
-										[formControl]="form1"
-										prefix="+5 "
-										[(ngModel)]="showMaskModel"
-										[showMaskTyped]="true"
-										placeHolderCharacter="*"
-									/>
-									<mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Phone number</mat-card-title>
+                        <mat-card-subtitle>
+                            You can add 'placeHolderCharacter' property to changed the placeholder
+                            character used when displaying the mask.
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Phone number"
+                                        mask="(000) 000-0000"
+                                        [formControl]="form1"
+                                        prefix="+5 "
+                                        [(ngModel)]="showMaskModel"
+                                        [showMaskTyped]="true"
+                                        placeHolderCharacter="*" />
+                                    <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
+                                <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>suffix</mat-card-title>
-						<mat-card-subtitle> You can add 'suffix' property </mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Sum"
-										mask="0000.00"
-										suffix=" $"
-										[formControl]="suffixForm"
-										[(ngModel)]="suffixModel"
-									/>
-									<mat-hint><b>Mask: </b>0000.00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ suffixForm.value ? suffixForm.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ suffixModel ? suffixModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>suffix</mat-card-title>
+                        <mat-card-subtitle> You can add 'suffix' property </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Sum"
+                                        mask="0000.00"
+                                        suffix=" $"
+                                        [formControl]="suffixForm"
+                                        [(ngModel)]="suffixModel" />
+                                    <mat-hint><b>Mask: </b>0000.00</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ suffixForm.value ? suffixForm.value : 'Empty' }}
+                                </p>
+                                <p><b>NgModel:</b> {{ suffixModel ? suffixModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Number or string</mat-card-title>
-						<mat-card-subtitle> You can pass in value of type number or string </mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Type number or string"
-										mask="000.00"
-										[formControl]="numberOrStringForm"
-										[(ngModel)]="numberOrStringFormModel"
-									/>
-									<mat-hint><b>Mask: </b>000.00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ numberOrStringForm.value ? numberOrStringForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{ numberOrStringFormModel ? numberOrStringFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Number or string</mat-card-title>
+                        <mat-card-subtitle>
+                            You can pass in value of type number or string
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Type number or string"
+                                        mask="000.00"
+                                        [formControl]="numberOrStringForm"
+                                        [(ngModel)]="numberOrStringFormModel" />
+                                    <mat-hint><b>Mask: </b>000.00</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        numberOrStringForm.value
+                                            ? numberOrStringForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        numberOrStringFormModel ? numberOrStringFormModel : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Repeat mask</mat-card-title>
-						<mat-card-subtitle> You can pass into mask pattern with brackets </mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Repeat mask"
-										mask="A{5}"
-										[formControl]="repeatForm"
-										[(ngModel)]="repeatFormModel"
-									/>
-									<mat-hint><b>Mask: </b>00000</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ repeatForm.value ? repeatForm.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ repeatFormModel ? repeatFormModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Repeat mask</mat-card-title>
+                        <mat-card-subtitle>
+                            You can pass into mask pattern with brackets
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Repeat mask"
+                                        mask="A{5}"
+                                        [formControl]="repeatForm"
+                                        [(ngModel)]="repeatFormModel" />
+                                    <mat-hint><b>Mask: </b>00000</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ repeatForm.value ? repeatForm.value : 'Empty' }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ repeatFormModel ? repeatFormModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Thousand separator mask</mat-card-title>
-						<mat-card-subtitle> You can divide your input by thousands </mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator"
-										[formControl]="separatorForm"
-										[(ngModel)]="separatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ separatorForm.value ? separatorForm.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ separatorFormModel ? separatorFormModel : 'Empty' }}</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										type="text"
-										placeholder="Separator"
-										mask="separator"
-										thousandSeparator="."
-										[dropSpecialCharacters]="true"
-										[formControl]="dotSeparatorForm"
-										[(ngModel)]="dotSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator <b>thousandSeparator: </b>.</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ dotSeparatorForm.value ? dotSeparatorForm.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ dotSeparatorFormModel ? dotSeparatorFormModel : 'Empty' }}</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator"
-										thousandSeparator=","
-										[formControl]="commaSeparatorForm"
-										[(ngModel)]="commaSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator <b>thousandSeparator: </b>,</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ commaSeparatorForm.value ? commaSeparatorForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{ commaSeparatorFormModel ? commaSeparatorFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Spacebar separator"
-										mask="separator"
-										thousandSeparator=" "
-										[formControl]="spacebarSeparatorForm"
-										[(ngModel)]="spacebarSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator <b>thousandSeparator: </b>spacebar</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ spacebarSeparatorForm.value ? spacebarSeparatorForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{ spacebarSeparatorFormModel ? spacebarSeparatorFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="No Separator"
-										mask="separator"
-										thousandSeparator=""
-										[formControl]="emptySeparatorForm"
-										[(ngModel)]="emptySeparatorFormModel"
-									/>
-									<mat-hint
-										><b>Mask: </b>separator <b>thousandSeparator: </b>(empty string)</mat-hint
-									>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ emptySeparatorForm.value ? emptySeparatorForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{ emptySeparatorFormModel ? emptySeparatorFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Thousand separator mask</mat-card-title>
+                        <mat-card-subtitle>
+                            You can divide your input by thousands
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator"
+                                        [formControl]="separatorForm"
+                                        [(ngModel)]="separatorFormModel" />
+                                    <mat-hint><b>Mask: </b>separator</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ separatorForm.value ? separatorForm.value : 'Empty' }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ separatorFormModel ? separatorFormModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        type="text"
+                                        placeholder="Separator"
+                                        mask="separator"
+                                        thousandSeparator="."
+                                        [dropSpecialCharacters]="true"
+                                        [formControl]="dotSeparatorForm"
+                                        [(ngModel)]="dotSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator
+                                        <b>thousandSeparator: </b>.</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ dotSeparatorForm.value ? dotSeparatorForm.value : 'Empty' }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ dotSeparatorFormModel ? dotSeparatorFormModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator"
+                                        thousandSeparator=","
+                                        [formControl]="commaSeparatorForm"
+                                        [(ngModel)]="commaSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator
+                                        <b>thousandSeparator: </b>,</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        commaSeparatorForm.value
+                                            ? commaSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        commaSeparatorFormModel ? commaSeparatorFormModel : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Spacebar separator"
+                                        mask="separator"
+                                        thousandSeparator=" "
+                                        [formControl]="spacebarSeparatorForm"
+                                        [(ngModel)]="spacebarSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator
+                                        <b>thousandSeparator: </b>spacebar</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        spacebarSeparatorForm.value
+                                            ? spacebarSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        spacebarSeparatorFormModel
+                                            ? spacebarSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="No Separator"
+                                        mask="separator"
+                                        thousandSeparator=""
+                                        [formControl]="emptySeparatorForm"
+                                        [(ngModel)]="emptySeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator <b>thousandSeparator: </b>(empty
+                                        string)</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        emptySeparatorForm.value
+                                            ? emptySeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        emptySeparatorFormModel ? emptySeparatorFormModel : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Separator precision</mat-card-title>
-						<mat-card-subtitle>
-							You can set the precision for dot and comma separators
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										[dropSpecialCharacters]="true"
-										mask="separator.2"
-										[formControl]="separatorPrecisionSeparatorForm"
-										[(ngModel)]="separatorPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.2</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										separatorPrecisionSeparatorForm.value
-											? separatorPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										separatorPrecisionSeparatorFormModel
-											? separatorPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Separator precision</mat-card-title>
+                        <mat-card-subtitle>
+                            You can set the precision for dot and comma separators
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        [dropSpecialCharacters]="true"
+                                        mask="separator.2"
+                                        [formControl]="separatorPrecisionSeparatorForm"
+                                        [(ngModel)]="separatorPrecisionSeparatorFormModel" />
+                                    <mat-hint><b>Mask: </b>separator.2</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        separatorPrecisionSeparatorForm.value
+                                            ? separatorPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        separatorPrecisionSeparatorFormModel
+                                            ? separatorPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										[dropSpecialCharacters]="true"
-										mask="separator.2"
-										thousandSeparator="."
-										[formControl]="dotPrecisionSeparatorForm"
-										[(ngModel)]="dotPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.2 <b>thousandSeparator: </b>.</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ dotPrecisionSeparatorForm.value ? dotPrecisionSeparatorForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{ dotPrecisionSeparatorFormModel ? dotPrecisionSeparatorFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        [dropSpecialCharacters]="true"
+                                        mask="separator.2"
+                                        thousandSeparator="."
+                                        [formControl]="dotPrecisionSeparatorForm"
+                                        [(ngModel)]="dotPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.2
+                                        <b>thousandSeparator: </b>.</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        dotPrecisionSeparatorForm.value
+                                            ? dotPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        dotPrecisionSeparatorFormModel
+                                            ? dotPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										[dropSpecialCharacters]="true"
-										[dropSpecialCharacters]="[',']"
-										mask="separator.2"
-										thousandSeparator=","
-										[formControl]="commaPrecisionSeparatorForm"
-										[(ngModel)]="commaPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.2 <b>thousandSeparator: </b>,</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										commaPrecisionSeparatorForm.value ? commaPrecisionSeparatorForm.value : 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										commaPrecisionSeparatorFormModel ? commaPrecisionSeparatorFormModel : 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        [dropSpecialCharacters]="true"
+                                        [dropSpecialCharacters]="[',']"
+                                        mask="separator.2"
+                                        thousandSeparator=","
+                                        [formControl]="commaPrecisionSeparatorForm"
+                                        [(ngModel)]="commaPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.2
+                                        <b>thousandSeparator: </b>,</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        commaPrecisionSeparatorForm.value
+                                            ? commaPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        commaPrecisionSeparatorFormModel
+                                            ? commaPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator.2"
-										thousandSeparator=" "
-										[formControl]="spacebarPrecisionSeparatorForm"
-										[(ngModel)]="spacebarPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.2 <b>thousandSeparator: </b>spacebar</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										spacebarPrecisionSeparatorForm.value
-											? spacebarPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										spacebarPrecisionSeparatorFormModel
-											? spacebarPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator.2"
+                                        thousandSeparator=" "
+                                        [formControl]="spacebarPrecisionSeparatorForm"
+                                        [(ngModel)]="spacebarPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.2
+                                        <b>thousandSeparator: </b>spacebar</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        spacebarPrecisionSeparatorForm.value
+                                            ? spacebarPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        spacebarPrecisionSeparatorFormModel
+                                            ? spacebarPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										[dropSpecialCharacters]="true"
-										mask="separator.0"
-										[formControl]="separatorZeroPrecisionSeparatorForm"
-										[(ngModel)]="separatorZeroPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.0</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										separatorZeroPrecisionSeparatorForm.value
-											? separatorZeroPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										separatorZeroPrecisionSeparatorFormModel
-											? separatorZeroPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        [dropSpecialCharacters]="true"
+                                        mask="separator.0"
+                                        [formControl]="separatorZeroPrecisionSeparatorForm"
+                                        [(ngModel)]="separatorZeroPrecisionSeparatorFormModel" />
+                                    <mat-hint><b>Mask: </b>separator.0</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        separatorZeroPrecisionSeparatorForm.value
+                                            ? separatorZeroPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        separatorZeroPrecisionSeparatorFormModel
+                                            ? separatorZeroPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator.0"
-										thousandSeparator="."
-										[formControl]="dotZeroPrecisionSeparatorForm"
-										[(ngModel)]="dotZeroPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.0 <b>thousandSeparator: </b>.</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										dotZeroPrecisionSeparatorForm.value
-											? dotZeroPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										dotZeroPrecisionSeparatorFormModel
-											? dotZeroPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator.0"
+                                        thousandSeparator="."
+                                        [formControl]="dotZeroPrecisionSeparatorForm"
+                                        [(ngModel)]="dotZeroPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.0
+                                        <b>thousandSeparator: </b>.</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        dotZeroPrecisionSeparatorForm.value
+                                            ? dotZeroPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        dotZeroPrecisionSeparatorFormModel
+                                            ? dotZeroPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator.0"
-										thousandSeparator=","
-										[formControl]="commaZeroPrecisionSeparatorForm"
-										[(ngModel)]="commaZeroPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.0 <b>thousandSeparator: </b>,</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										commaZeroPrecisionSeparatorForm.value
-											? commaZeroPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										commaZeroPrecisionSeparatorFormModel
-											? commaZeroPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator.0"
+                                        thousandSeparator=","
+                                        [formControl]="commaZeroPrecisionSeparatorForm"
+                                        [(ngModel)]="commaZeroPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.0
+                                        <b>thousandSeparator: </b>,</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        commaZeroPrecisionSeparatorForm.value
+                                            ? commaZeroPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        commaZeroPrecisionSeparatorFormModel
+                                            ? commaZeroPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
 
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Separator"
-										mask="separator.0"
-										thousandSeparator=" "
-										[formControl]="spacebarZeroPrecisionSeparatorForm"
-										[(ngModel)]="spacebarZeroPrecisionSeparatorFormModel"
-									/>
-									<mat-hint><b>Mask: </b>separator.0 <b>thousandSeparator: </b>spacebar</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{
-										spacebarZeroPrecisionSeparatorForm.value
-											? spacebarZeroPrecisionSeparatorForm.value
-											: 'Empty'
-									}}
-								</p>
-								<p>
-									<b>NgModel:</b>
-									{{
-										spacebarZeroPrecisionSeparatorFormModel
-											? spacebarZeroPrecisionSeparatorFormModel
-											: 'Empty'
-									}}
-								</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        mask="separator.0"
+                                        thousandSeparator=" "
+                                        [formControl]="spacebarZeroPrecisionSeparatorForm"
+                                        [(ngModel)]="spacebarZeroPrecisionSeparatorFormModel" />
+                                    <mat-hint
+                                        ><b>Mask: </b>separator.0
+                                        <b>thousandSeparator: </b>spacebar</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        spacebarZeroPrecisionSeparatorForm.value
+                                            ? spacebarZeroPrecisionSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        spacebarZeroPrecisionSeparatorFormModel
+                                            ? spacebarZeroPrecisionSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Custom Pattern and mask in pipe</mat-card-title>
-						<mat-card-subtitle>
-							You can pass array of maskExpression and CustomPattern into pipe
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<span>{{ phone | mask: customMaska }}</span>
-								<br /><br />
-								<mat-hint>Mask: PPP-PPP-PPP</mat-hint>
-							</div>
-						</div>
-					</mat-card-content>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<span>{{ pipeSeparatorValue | mask: 'separator':',' }}</span>
-								<br /><br />
-								<mat-hint>Mask: mask:'separator' : ','</mat-hint>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Custom Pattern and mask in pipe</mat-card-title>
+                        <mat-card-subtitle>
+                            You can pass array of maskExpression and CustomPattern into pipe
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <span>{{ phone | mask: customMaska }}</span>
+                                <br /><br />
+                                <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <span>{{ pipeSeparatorValue | mask: 'separator':',' }}</span>
+                                <br /><br />
+                                <mat-hint>Mask: mask:'separator' : ','</mat-hint>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Custom Pattern with special characters</mat-card-title>
-						<mat-card-subtitle>
-							You may want to use a custom pattern that also includes special characters that are
-							allowed to be typed and deleted. In this case you should set the specialCharacters to
-							an empty array. The example below is for a 'Surname' field where you want to allow
-							a-z, hyphen, spaces and apostrophes.
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Surname"
-										mask="N*"
-										[specialCharacters]="[]"
-										[patterns]="surnamePattern"
-										[formControl]="customPatternForm"
-										[(ngModel)]="customPatternFormModel"
-									/>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ customPatternForm.value ? customPatternForm.value : 'Empty' }}
-								</p>
-								<p>
-									<b>NgModel:</b> {{ customPatternFormModel ? customPatternFormModel : 'Empty' }}
-								</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-				<h4>Example code (Reactive Forms)</h4>
-				<pre>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Custom Pattern with special characters</mat-card-title>
+                        <mat-card-subtitle>
+                            You may want to use a custom pattern that also includes special
+                            characters that are allowed to be typed and deleted. In this case you
+                            should set the specialCharacters to an empty array. The example below is
+                            for a 'Surname' field where you want to allow a-z, hyphen, spaces and
+                            apostrophes.
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Surname"
+                                        mask="N*"
+                                        [specialCharacters]="[]"
+                                        [patterns]="surnamePattern"
+                                        [formControl]="customPatternForm"
+                                        [(ngModel)]="customPatternFormModel" />
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        customPatternForm.value ? customPatternForm.value : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ customPatternFormModel ? customPatternFormModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+                <h4>Example code (Reactive Forms)</h4>
+                <pre>
 // In component
           {{ "public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z '-]') } };" }}
 
@@ -986,287 +1066,315 @@
   [patterns]="surnamePattern"
   formControlName="surname" /&gt;
 </pre
-				>
-			</div>
-		</div>
-	</div>
+                >
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Empty mask</mat-card-title>
-						<mat-card-subtitle>
-							If you are conditioanlly setting the value of the mask, it should do nothing at all
-							when the mask is set as empty
-						</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell-padding">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="Empty mask"
-										mask=""
-										[formControl]="emptyMaskForm"
-										[(ngModel)]="emptyMaskFormModel"
-									/>
-									<mat-hint><b>Mask: </b>(empty string)</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ emptyMaskForm.value ? emptyMaskForm.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ emptyMaskFormModel ? emptyMaskFormModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Empty mask</mat-card-title>
+                        <mat-card-subtitle>
+                            If you are conditioanlly setting the value of the mask, it should do
+                            nothing at all when the mask is set as empty
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Empty mask"
+                                        mask=""
+                                        [formControl]="emptyMaskForm"
+                                        [(ngModel)]="emptyMaskFormModel" />
+                                    <mat-hint><b>Mask: </b>(empty string)</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ emptyMaskForm.value ? emptyMaskForm.value : 'Empty' }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ emptyMaskFormModel ? emptyMaskFormModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Patterns Masks</mat-card-title>
-						<mat-card-subtitle>
-							You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>.</mat-card-subtitle
-						>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="IP"
-										mask="IP"
-										[showMaskTyped]="true"
-										[formControl]="ipFormControl"
-										[(ngModel)]="ipModel"
-									/>
-									<mat-hint><b>Mask:</b> IP</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ ipFormControl.value ? ipFormControl.value : 'Empty' }}</p>
-								<p><b>NgModel:</b> {{ ipModel ? ipModel : 'Empty' }}</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="CPF_CNPJ"
-										mask="CPF_CNPJ"
-										[formControl]="cpfCnpjFormControl"
-										[(ngModel)]="cpfCnpjModel"
-										[showMaskTyped]="true"
-									/>
-									<mat-hint><b>Mask:</b> CPF_CNPJ</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ cpfCnpjFormControl.value ? cpfCnpjFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ cpfCnpjModel ? cpfCnpjModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Patterns Masks</mat-card-title>
+                        <mat-card-subtitle>
+                            You could define the pattern masks <b>IP</b> or
+                            <b>CPF_CNPJ</b>.</mat-card-subtitle
+                        >
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="IP"
+                                        mask="IP"
+                                        [showMaskTyped]="true"
+                                        [formControl]="ipFormControl"
+                                        [(ngModel)]="ipModel" />
+                                    <mat-hint><b>Mask:</b> IP</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ ipFormControl.value ? ipFormControl.value : 'Empty' }}
+                                </p>
+                                <p><b>NgModel:</b> {{ ipModel ? ipModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="CPF_CNPJ"
+                                        mask="CPF_CNPJ"
+                                        [formControl]="cpfCnpjFormControl"
+                                        [(ngModel)]="cpfCnpjModel"
+                                        [showMaskTyped]="true" />
+                                    <mat-hint><b>Mask:</b> CPF_CNPJ</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        cpfCnpjFormControl.value
+                                            ? cpfCnpjFormControl.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p><b>NgModel:</b> {{ cpfCnpjModel ? cpfCnpjModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Dynamics Masks</mat-card-title>
-						<mat-card-subtitle> You can pass into mask pattern with <b>||</b>.</mat-card-subtitle>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="CPF_CNPJ"
-										mask="000.000.000-00||00.000.000/0000-00"
-										[formControl]="cpfCnpjDynamicFormControl"
-										[(ngModel)]="cpfCnpjDynamicModel"
-										[showMaskTyped]="true"
-									/>
-									<mat-hint><b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ cpfCnpjDynamicFormControl.value ? cpfCnpjDynamicFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ cpfCnpjDynamicModel ? cpfCnpjDynamicModel : 'Empty' }}</p>
-							</div>
-						</div>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="PHONE_BR"
-										mask="(00) 0000-0000||(00) 0 0000-0000"
-										[formControl]="phoneBrFormControl"
-										[(ngModel)]="phoneBrModel"
-										[showMaskTyped]="true"
-										prefix="+55 "
-									/>
-									<mat-hint><b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b>
-									{{ phoneBrFormControl.value ? phoneBrFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ phoneBrModel ? phoneBrModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Dynamics Masks</mat-card-title>
+                        <mat-card-subtitle>
+                            You can pass into mask pattern with <b>||</b>.</mat-card-subtitle
+                        >
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="CPF_CNPJ"
+                                        mask="000.000.000-00||00.000.000/0000-00"
+                                        [formControl]="cpfCnpjDynamicFormControl"
+                                        [(ngModel)]="cpfCnpjDynamicModel"
+                                        [showMaskTyped]="true" />
+                                    <mat-hint
+                                        ><b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        cpfCnpjDynamicFormControl.value
+                                            ? cpfCnpjDynamicFormControl.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{ cpfCnpjDynamicModel ? cpfCnpjDynamicModel : 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="PHONE_BR"
+                                        mask="(00) 0000-0000||(00) 0 0000-0000"
+                                        [formControl]="phoneBrFormControl"
+                                        [(ngModel)]="phoneBrModel"
+                                        [showMaskTyped]="true"
+                                        prefix="+55 " />
+                                    <mat-hint
+                                        ><b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000</mat-hint
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        phoneBrFormControl.value
+                                            ? phoneBrFormControl.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p><b>NgModel:</b> {{ phoneBrModel ? phoneBrModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Trigger onChange on mask change</mat-card-title>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field class="">
-									<mat-label>Phone prefix</mat-label>
-									<mat-select [formControl]="triggerSelectFormControl">
-										<mat-option value="ch">+41</mat-option>
-										<mat-option value="de">+49</mat-option>
-									</mat-select>
-								</mat-form-field>
-								<mat-form-field>
-									<mat-label>Phone number</mat-label>
-									<input
-										matInput
-										[mask]="triggerMask"
-										[formControl]="triggerInputFormControl"
-										[triggerOnMaskChange]="true"
-									/>
-									<mat-hint><b>Mask:</b>{{ triggerMask || 'Empty' }}</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p><b>FormControl:</b> {{ triggerInputFormControl.value ?? 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Trigger onChange on mask change</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field class="">
+                                    <mat-label>Phone prefix</mat-label>
+                                    <mat-select [formControl]="triggerSelectFormControl">
+                                        <mat-option value="ch">+41</mat-option>
+                                        <mat-option value="de">+49</mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <mat-label>Phone number</mat-label>
+                                    <input
+                                        matInput
+                                        [mask]="triggerMask"
+                                        [formControl]="triggerInputFormControl"
+                                        [triggerOnMaskChange]="true" />
+                                    <mat-hint><b>Mask:</b>{{ triggerMask || 'Empty' }}</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ triggerInputFormControl.value ?? 'Empty' }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Uppercase Masks</mat-card-title>
-						<mat-card-subtitle>
-							You can create inputs that only accepts uppercase.</mat-card-subtitle
-						>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="text"
-										mask="UUUUU"
-										[formControl]="textFormControl"
-										[(ngModel)]="textModel"
-										[showMaskTyped]="true"
-									/>
-									<mat-hint><b>Mask:</b> UUUUU</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b> {{ textFormControl.value ? textFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ textModel ? textModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Uppercase Masks</mat-card-title>
+                        <mat-card-subtitle>
+                            You can create inputs that only accepts uppercase.</mat-card-subtitle
+                        >
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="text"
+                                        mask="UUUUU"
+                                        [formControl]="textFormControl"
+                                        [(ngModel)]="textModel"
+                                        [showMaskTyped]="true" />
+                                    <mat-hint><b>Mask:</b> UUUUU</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ textFormControl.value ? textFormControl.value : 'Empty' }}
+                                </p>
+                                <p><b>NgModel:</b> {{ textModel ? textModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="container">
-	<div class="row">
-		<div class="col-12">
-			<div class="mat-card-wr">
-				<mat-card>
-					<mat-card-header>
-						<mat-card-title>Lowercase Masks</mat-card-title>
-						<mat-card-subtitle>
-							You can create inputs that only accepts lowercase.</mat-card-subtitle
-						>
-					</mat-card-header>
-					<mat-card-content>
-						<div class="flex-row">
-							<div class="flex-cell">
-								<mat-form-field>
-									<input
-										matInput
-										placeholder="text"
-										mask="LLLLL"
-										[formControl]="textFormControl"
-										[(ngModel)]="textModel"
-										[showMaskTyped]="true"
-									/>
-									<mat-hint><b>Mask:</b> LLLLL</mat-hint>
-								</mat-form-field>
-							</div>
-							<div class="flex-cell">
-								<p>
-									<b>FormControl:</b> {{ textFormControl.value ? textFormControl.value : 'Empty' }}
-								</p>
-								<p><b>NgModel:</b> {{ textModel ? textModel : 'Empty' }}</p>
-							</div>
-						</div>
-					</mat-card-content>
-				</mat-card>
-			</div>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>Lowercase Masks</mat-card-title>
+                        <mat-card-subtitle>
+                            You can create inputs that only accepts lowercase.</mat-card-subtitle
+                        >
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="text"
+                                        mask="LLLLL"
+                                        [formControl]="textFormControl"
+                                        [(ngModel)]="textModel"
+                                        [showMaskTyped]="true" />
+                                    <mat-hint><b>Mask:</b> LLLLL</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{ textFormControl.value ? textFormControl.value : 'Empty' }}
+                                </p>
+                                <p><b>NgModel:</b> {{ textModel ? textModel : 'Empty' }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
 </div>

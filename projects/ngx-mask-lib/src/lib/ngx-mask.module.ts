@@ -8,45 +8,45 @@ import { MaskPipe } from './mask.pipe';
  * @internal
  */
 export function _configFactory(
-	initConfig: optionsConfig,
-	configValue: optionsConfig | (() => optionsConfig),
+    initConfig: optionsConfig,
+    configValue: optionsConfig | (() => optionsConfig)
 ): optionsConfig {
-	return configValue instanceof Function
-		? { ...initConfig, ...configValue() }
-		: { ...initConfig, ...configValue };
+    return configValue instanceof Function
+        ? { ...initConfig, ...configValue() }
+        : { ...initConfig, ...configValue };
 }
 @NgModule({
-	exports: [MaskDirective, MaskPipe],
-	declarations: [MaskDirective, MaskPipe],
+    exports: [MaskDirective, MaskPipe],
+    declarations: [MaskDirective, MaskPipe],
 })
 export class NgxMaskModule {
-	public static forRoot(
-		configValue?: optionsConfig | (() => optionsConfig),
-	): ModuleWithProviders<NgxMaskModule> {
-		return {
-			ngModule: NgxMaskModule,
-			providers: [
-				{
-					provide: NEW_CONFIG,
-					useValue: configValue,
-				},
-				{
-					provide: INITIAL_CONFIG,
-					useValue: initialConfig,
-				},
-				{
-					provide: config,
-					useFactory: _configFactory,
-					deps: [INITIAL_CONFIG, NEW_CONFIG],
-				},
-				MaskApplierService,
-			],
-		};
-	}
+    public static forRoot(
+        configValue?: optionsConfig | (() => optionsConfig)
+    ): ModuleWithProviders<NgxMaskModule> {
+        return {
+            ngModule: NgxMaskModule,
+            providers: [
+                {
+                    provide: NEW_CONFIG,
+                    useValue: configValue,
+                },
+                {
+                    provide: INITIAL_CONFIG,
+                    useValue: initialConfig,
+                },
+                {
+                    provide: config,
+                    useFactory: _configFactory,
+                    deps: [INITIAL_CONFIG, NEW_CONFIG],
+                },
+                MaskApplierService,
+            ],
+        };
+    }
 
-	public static forChild(): ModuleWithProviders<NgxMaskModule> {
-		return {
-			ngModule: NgxMaskModule,
-		};
-	}
+    public static forChild(): ModuleWithProviders<NgxMaskModule> {
+        return {
+            ngModule: NgxMaskModule,
+        };
+    }
 }
