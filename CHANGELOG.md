@@ -1,3 +1,11 @@
+<a name="14.2.4"></a>
+
+# 14.2.4(2022-10-27)
+
+### Fix
+- Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
+- new code and styles linting rules formatting 
+
 <a name="14.2.3"></a>
 
 # 14.2.3(2022-09-16)

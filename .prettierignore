@@ -1,6 +1,0 @@
-dist/
-test-reports/
-projects/ngx-mask-lib/coverage/
-src/coverage/
-build
-node_modules
