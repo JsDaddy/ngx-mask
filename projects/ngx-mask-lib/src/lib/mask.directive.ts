@@ -545,10 +545,11 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
             // eslint-disable-next-line no-param-reassign
             inputValue = this._maskService.numberToString(inputValue);
             if (!Array.isArray(this.decimalMarker)) {
+                const localeDecimalMarker = this._currentLocaleDecimalMarker();
                 // eslint-disable-next-line no-param-reassign
                 inputValue =
-                    this.decimalMarker !== '.'
-                        ? inputValue.replace('.', this.decimalMarker)
+                    this.decimalMarker !== localeDecimalMarker
+                        ? inputValue.replace(localeDecimalMarker, this.decimalMarker)
                         : inputValue;
             }
             this._maskService.isNumberValue = true;
@@ -702,5 +703,9 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
                 }
             });
         }
+    }
+
+    private _currentLocaleDecimalMarker(): string {
+        return (1.1).toLocaleString().substring(1, 2);
     }
 }

@@ -21,6 +21,56 @@
             <div class="mat-card-wr">
                 <mat-card>
                     <mat-card-header>
+                        <mat-card-title>Decimal separator with existing value</mat-card-title>
+                        <mat-card-subtitle></mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="flex-row">
+                            <div class="flex-cell-padding">
+                                <mat-form-field>
+                                    <input
+                                        matInput
+                                        placeholder="Separator"
+                                        [dropSpecialCharacters]="true"
+                                        mask="separator.2"
+                                        decimalMarker="."
+                                        [formControl]="initializedDecimalSeparatorForm"
+                                        [(ngModel)]="initializedDecimalSeparatorFormModel" />
+                                    <mat-hint><b>Mask: </b>separator.2, decimalMarker '.'</mat-hint>
+                                </mat-form-field>
+                            </div>
+                            <div class="flex-cell">
+                                <p>
+                                    <b>FormControl:</b>
+                                    {{
+                                        initializedDecimalSeparatorForm.value
+                                            ? initializedDecimalSeparatorForm.value
+                                            : 'Empty'
+                                    }}
+                                </p>
+                                <p>
+                                    <b>NgModel:</b>
+                                    {{
+                                        initializedDecimalSeparatorFormModel
+                                            ? initializedDecimalSeparatorFormModel
+                                            : 'Empty'
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="mat-card-wr">
+                <mat-card>
+                    <mat-card-header>
                         <mat-card-title>Mask common case</mat-card-title>
                         <mat-card-subtitle>Secure Input</mat-card-subtitle>
                     </mat-card-header>

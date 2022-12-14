@@ -51,6 +51,8 @@ export class ShowcaseComponent {
 
     public emptyMaskForm: FormControl;
 
+    public initializedDecimalSeparatorForm: FormControl;
+
     public separatorForm: FormControl;
 
     public percent: FormControl;
@@ -112,6 +114,8 @@ export class ShowcaseComponent {
     public customPatternFormModel!: SN;
 
     public separatorFormModel!: SN;
+
+    public initializedDecimalSeparatorFormModel = 1234.56;
 
     public separatorPrecisionSeparatorFormModel!: SN;
 
@@ -184,6 +188,7 @@ export class ShowcaseComponent {
         this.repeatForm = new FormControl('');
         this.emptyMaskForm = new FormControl('');
         this.separatorForm = new FormControl('');
+        this.initializedDecimalSeparatorForm = new FormControl('');
         this.separatorPrecisionSeparatorForm = new FormControl('');
         this.separatorZeroPrecisionSeparatorForm = new FormControl('');
         this.dotSeparatorForm = new FormControl('');
