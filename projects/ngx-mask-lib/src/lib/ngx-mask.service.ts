@@ -1,11 +1,11 @@
 import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import { config, IConfig } from './config';
-import { MaskApplierService } from './mask-applier.service';
+import { CONFIG, IConfig } from './config';
+import { NgxMaskApplierService } from './ngx-mask-applier.service';
 
 @Injectable()
-export class MaskService extends MaskApplierService {
+export class NgxMaskService extends NgxMaskApplierService {
     public override maskExpression = '';
 
     public isNumberValue = false;
@@ -33,7 +33,7 @@ export class MaskService extends MaskApplierService {
 
     public constructor(
         @Inject(DOCUMENT) private document: Document,
-        @Inject(config) protected override _config: IConfig,
+        @Inject(CONFIG) protected override _config: IConfig,
         private _elementRef: ElementRef,
         private _renderer: Renderer2
     ) {

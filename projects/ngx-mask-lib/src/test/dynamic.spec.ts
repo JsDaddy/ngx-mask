@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { By } from '@angular/platform-browser';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { DebugElement } from '@angular/core';
+import { provideNgxMask } from '../lib/ngx-mask.providers';
+import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 describe('Directive: Mask (Dynamic)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -13,7 +14,8 @@ describe('Directive: Mask (Dynamic)', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

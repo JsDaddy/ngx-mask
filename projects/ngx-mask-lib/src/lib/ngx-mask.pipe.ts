@@ -1,14 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { MaskApplierService } from './mask-applier.service';
+import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { IConfig } from './config';
 
 @Pipe({
     name: 'mask',
     pure: true,
+    standalone: true,
 })
-export class MaskPipe implements PipeTransform {
-    public constructor(private _maskService: MaskApplierService) {}
+export class NgxMaskPipe implements PipeTransform {
+    public constructor(private _maskService: NgxMaskApplierService) {}
 
     public transform(
         value: string | number,

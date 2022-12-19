@@ -1,13 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskModule } from 'ngx-mask';
 import { CypressTestTriggerOnMaskChangeComponent } from './cypress-test-trigger-on-mask-change.component';
 import { CypressTestMaskComponent } from './cypress-test-component.component';
 import { CypressTestMaskShadowDomComponent } from './cypress-test-shadow-dom.component';
+import { provideNgxMask } from '../../lib/ngx-mask.providers';
+import { NgxMaskDirective } from '../../lib/ngx-mask.directive';
 
 @NgModule({
-    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskModule.forRoot()],
+    imports: [CommonModule, ReactiveFormsModule, FormsModule, NgxMaskDirective],
     declarations: [
         CypressTestMaskShadowDomComponent,
         CypressTestMaskComponent,
@@ -18,5 +19,6 @@ import { CypressTestMaskShadowDomComponent } from './cypress-test-shadow-dom.com
         CypressTestMaskComponent,
         CypressTestTriggerOnMaskChangeComponent,
     ],
+    providers: [provideNgxMask()],
 })
 export class CypressTestMaskModule {}

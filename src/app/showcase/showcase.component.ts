@@ -1,5 +1,14 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatCardModule } from '@angular/material/card';
+import { MatOptionModule } from '@angular/material/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { JsonPipe } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 type SN = string | number;
 
@@ -11,6 +20,21 @@ interface IPattern {
 
 @Component({
     templateUrl: './showcase.component.html',
+    standalone: true,
+    imports: [
+        JsonPipe,
+        ReactiveFormsModule,
+        FormsModule,
+        MatCardModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatOptionModule,
+        MatToolbarModule,
+        MatGridListModule,
+        MatInputModule,
+        NgxMaskDirective,
+        NgxMaskPipe,
+    ],
 })
 export class ShowcaseComponent {
     public mask = '';

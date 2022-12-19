@@ -1,14 +1,20 @@
 import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-
-import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { routes } from './app/app.routes';
+import { provideNgxMask } from 'ngx-mask';
 
 if (environment.production) {
     enableProdMode();
 }
 
-/* eslint-disable no-console */
-platformBrowserDynamic()
-    .bootstrapModule(AppModule)
-    .catch((err) => console.log(err));
+bootstrapApplication(AppComponent, {
+    providers: [
+        provideAnimations(),
+        provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'top' })),
+        provideNgxMask(),
+    ],
+}).catch((err) => console.error(err));

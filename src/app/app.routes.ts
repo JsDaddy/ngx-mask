@@ -1,35 +1,26 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { ShowcaseComponent } from './showcase/showcase.component';
-import { BugsComponent } from './bugs/bugs.component';
-import { ErrorComponent } from './error/error.component';
+import { Routes } from '@angular/router';
 
-const APP_ROUTES: Routes = [
-    { path: '', redirectTo: 'showcase', pathMatch: 'full' },
+export const routes: Routes = [
+    {
+        path: '',
+        redirectTo: 'showcase',
+        pathMatch: 'full',
+    },
     {
         path: 'showcase',
-        component: ShowcaseComponent,
+        loadComponent: () =>
+            import('./showcase/showcase.component').then((mod) => mod.ShowcaseComponent),
     },
     {
         path: 'bugs',
-        component: BugsComponent,
+        loadComponent: () => import('./bugs/bugs.component').then((mod) => mod.BugsComponent),
     },
     {
         path: 'error',
-        component: ErrorComponent,
+        loadComponent: () => import('./error/error.component').then((mod) => mod.ErrorComponent),
     },
-    { path: '**', redirectTo: '/error' },
+    {
+        path: '**',
+        redirectTo: '/error',
+    },
 ];
-
-@NgModule({
-    imports: [
-        RouterModule.forRoot(APP_ROUTES, {
-            scrollPositionRestoration: 'enabled',
-            anchorScrolling: 'enabled',
-            relativeLinkResolution: 'legacy',
-        }),
-    ],
-    exports: [RouterModule],
-})
-/* istanbul ignore next */
-export class AppRoutingModule {}

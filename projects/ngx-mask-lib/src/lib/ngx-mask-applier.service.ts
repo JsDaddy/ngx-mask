@@ -1,8 +1,8 @@
 import { Inject, Injectable } from '@angular/core';
-import { config, IConfig } from './config';
+import { CONFIG, IConfig } from './config';
 
 @Injectable()
-export class MaskApplierService {
+export class NgxMaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
 
     public hiddenInput: IConfig['hiddenInput'];
@@ -49,7 +49,7 @@ export class MaskApplierService {
 
     private _shift!: Set<number>;
 
-    public constructor(@Inject(config) protected _config: IConfig) {
+    public constructor(@Inject(CONFIG) protected _config: IConfig) {
         this._shift = new Set();
         this.clearIfNotMatch = this._config.clearIfNotMatch;
         this.dropSpecialCharacters = this._config.dropSpecialCharacters;

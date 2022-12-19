@@ -36,10 +36,10 @@
                                         mask="XXX/X0/0000"
                                         [(ngModel)]="secureMask"
                                         [formControl]="formSecureInput" />
-                                    <mat-hint><b>Mask:</b> "XXX/X0/0000"</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> XXX/X0/0000</p>
                                 <p><b>NgModel:</b> {{ secureMask ? secureMask : 'Empty' }}</p>
                                 <p>
                                     <b>FormControl:</b>
@@ -64,56 +64,64 @@
                     </mat-card-header>
                     <mat-card-content>
                         <div class="row">
-                            <div class="col-mat-3">
-                                <div class="mat-form-wr">
+                            <div class="flex-row">
+                                <div class="flex-cell">
                                     <mat-form-field>
                                         <input
                                             matInput
                                             placeholder="Date and Hour"
                                             mask="00/00/00 00:00:00"
                                             [formControl]="hourTimeForm" />
-                                        <mat-hint><b>Mask:</b> 00/00/00 00:00:00</mat-hint>
                                     </mat-form-field>
                                 </div>
+                                <div class="flex-cell">
+                                    <p><b>Mask:</b> 00/00/00 00:00:00</p>
+                                </div>
                             </div>
-                            <div class="col-mat-3">
-                                <div class="mat-form-wr">
+                            <div class="flex-row">
+                                <div class="flex-cell">
                                     <mat-form-field>
                                         <input
                                             matInput
                                             placeholder="Hour"
                                             mask="00:00:00"
                                             [formControl]="hourForm" />
-                                        <mat-hint><b>Mask:</b> 00:00:00</mat-hint>
                                     </mat-form-field>
                                 </div>
+                                <div class="flex-cell">
+                                    <p><b>Mask:</b> 00:00:00</p>
+                                </div>
                             </div>
-                            <div class="col-mat-3">
-                                <div class="mat-form-wr">
+                            <div class="flex-row">
+                                <div class="flex-cell">
                                     <mat-form-field>
                                         <input
                                             matInput
                                             placeholder="Valid 24 hour format"
                                             mask="Hh:m0:s0"
                                             [formControl]="hour24Form" />
-                                        <mat-hint><b>Mask:</b> Hh:m0:s0</mat-hint>
                                     </mat-form-field>
                                 </div>
+                                <div class="flex-cell">
+                                    <p><b>Mask:</b> Hh:m0:s0</p>
+                                </div>
                             </div>
-                            <div class="col-mat-3">
-                                <div class="mat-form-wr">
+                            <div class="flex-row">
+                                <div class="flex-cell">
                                     <mat-form-field>
                                         <input
                                             matInput
                                             placeholder="Mixed Type"
                                             mask="AAA 000-S0S"
                                             [formControl]="mixedTypeForm" />
-                                        <mat-hint><b>Mask:</b> AAA 000-S0S</mat-hint>
                                     </mat-form-field>
                                 </div>
+                                <div class="flex-cell">
+                                    <p><b>Mask:</b> AAA 000-S0S</p>
+                                </div>
                             </div>
-                            <div class="col-mat-3">
-                                <div class="mat-form-wr">
+                            <div class="flex-row">
+                                <div class="flex-cell">
                                     <mat-form-field>
                                         <input
                                             matInput
@@ -121,8 +129,10 @@
                                             mask="d0/M0/0000"
                                             [dropSpecialCharacters]="true"
                                             [formControl]="dateMonthForm" />
-                                        <mat-hint><b>Mask:</b> d0/M0/0000</mat-hint>
                                     </mat-form-field>
+                                </div>
+                                <div class="flex-cell">
+                                    <p><b>Mask:</b> d0/M0/0000</p>
                                 </div>
                             </div>
                         </div>
@@ -157,10 +167,10 @@
                                         mask="000.000.000-00"
                                         [formControl]="cpfFormControl"
                                         [(ngModel)]="cpfModel" />
-                                    <mat-hint><b>Mask:</b> 000.000.000-00</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> 000.000.000-00</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ cpfFormControl.value ? cpfFormControl.value : 'Empty' }}
@@ -201,10 +211,10 @@
                                         [showMaskTyped]="true"
                                         [formControl]="clearIfNotMatch"
                                         [(ngModel)]="clearIfNotMatchModel" />
-                                    <mat-hint><b>Mask:</b>000.000 0*.00</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b>000.000 0*.00</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ clearIfNotMatch.value ? clearIfNotMatch.value : 'Empty' }}
@@ -240,10 +250,10 @@
                                         mask="percent"
                                         suffix="%"
                                         [formControl]="percent" />
-                                    <mat-hint><b>Mask:</b>percent</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b>percent</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ percent.value ? percent.value : 'Empty' }}
@@ -279,10 +289,10 @@
                                         prefix="+7 "
                                         [formControl]="form"
                                         [(ngModel)]="dateModel" />
-                                    <mat-hint><b>Mask: </b>+7 (000) 000 00 00</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>+7 (000) 000 00 00</p>
                                 <p><b>FormControl:</b> {{ form.value ? form.value : 'Empty' }}</p>
                                 <p><b>NgModel:</b> {{ dateModel ? dateModel : 'Empty' }}</p>
                             </div>
@@ -318,10 +328,10 @@
                                         prefix="+5 "
                                         [(ngModel)]="showMaskModel"
                                         [showMaskTyped]="true" />
-                                    <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>+5 (000) 000 0000</p>
                                 <p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
                                 <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
                             </div>
@@ -358,10 +368,10 @@
                                         [(ngModel)]="showMaskModel"
                                         [showMaskTyped]="true"
                                         placeHolderCharacter="*" />
-                                    <mat-hint><b>Mask: </b>+5 (000) 000 0000</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>+5 (000) 000 0000</p>
                                 <p><b>FormControl:</b> {{ form1.value ? form1.value : 'Empty' }}</p>
                                 <p><b>NgModel:</b> {{ showMaskModel ? showMaskModel : 'Empty' }}</p>
                             </div>
@@ -380,7 +390,7 @@
                 <mat-card>
                     <mat-card-header>
                         <mat-card-title>suffix</mat-card-title>
-                        <mat-card-subtitle> You can add 'suffix' property </mat-card-subtitle>
+                        <mat-card-subtitle> You can add 'suffix' property</mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <div class="flex-row">
@@ -393,10 +403,10 @@
                                         suffix=" $"
                                         [formControl]="suffixForm"
                                         [(ngModel)]="suffixModel" />
-                                    <mat-hint><b>Mask: </b>0000.00</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>0000.00</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ suffixForm.value ? suffixForm.value : 'Empty' }}
@@ -432,10 +442,10 @@
                                         mask="000.00"
                                         [formControl]="numberOrStringForm"
                                         [(ngModel)]="numberOrStringFormModel" />
-                                    <mat-hint><b>Mask: </b>000.00</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>000.00</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -480,10 +490,10 @@
                                         mask="A{5}"
                                         [formControl]="repeatForm"
                                         [(ngModel)]="repeatFormModel" />
-                                    <mat-hint><b>Mask: </b>00000</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>00000</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ repeatForm.value ? repeatForm.value : 'Empty' }}
@@ -522,10 +532,10 @@
                                         mask="separator"
                                         [formControl]="separatorForm"
                                         [(ngModel)]="separatorFormModel" />
-                                    <mat-hint><b>Mask: </b>separator</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ separatorForm.value ? separatorForm.value : 'Empty' }}
@@ -548,13 +558,10 @@
                                         [dropSpecialCharacters]="true"
                                         [formControl]="dotSeparatorForm"
                                         [(ngModel)]="dotSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator
-                                        <b>thousandSeparator: </b>.</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator <b>thousandSeparator: </b>.</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ dotSeparatorForm.value ? dotSeparatorForm.value : 'Empty' }}
@@ -575,13 +582,10 @@
                                         thousandSeparator=","
                                         [formControl]="commaSeparatorForm"
                                         [(ngModel)]="commaSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator
-                                        <b>thousandSeparator: </b>,</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator <b>thousandSeparator: </b>,</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -608,13 +612,10 @@
                                         thousandSeparator=" "
                                         [formControl]="spacebarSeparatorForm"
                                         [(ngModel)]="spacebarSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator
-                                        <b>thousandSeparator: </b>spacebar</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator <b>thousandSeparator: </b>spacebar</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -643,13 +644,12 @@
                                         thousandSeparator=""
                                         [formControl]="emptySeparatorForm"
                                         [(ngModel)]="emptySeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator <b>thousandSeparator: </b>(empty
-                                        string)</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p>
+                                    <b>Mask: </b>separator <b>thousandSeparator: </b>(empty string)
+                                </p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -695,10 +695,10 @@
                                         mask="separator.2"
                                         [formControl]="separatorPrecisionSeparatorForm"
                                         [(ngModel)]="separatorPrecisionSeparatorFormModel" />
-                                    <mat-hint><b>Mask: </b>separator.2</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.2</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -729,13 +729,10 @@
                                         thousandSeparator="."
                                         [formControl]="dotPrecisionSeparatorForm"
                                         [(ngModel)]="dotPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.2
-                                        <b>thousandSeparator: </b>.</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.2 <b>thousandSeparator: </b>.</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -767,13 +764,10 @@
                                         thousandSeparator=","
                                         [formControl]="commaPrecisionSeparatorForm"
                                         [(ngModel)]="commaPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.2
-                                        <b>thousandSeparator: </b>,</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.2 <b>thousandSeparator: </b>,</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -803,13 +797,10 @@
                                         thousandSeparator=" "
                                         [formControl]="spacebarPrecisionSeparatorForm"
                                         [(ngModel)]="spacebarPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.2
-                                        <b>thousandSeparator: </b>spacebar</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.2 <b>thousandSeparator: </b>spacebar</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -839,10 +830,10 @@
                                         mask="separator.0"
                                         [formControl]="separatorZeroPrecisionSeparatorForm"
                                         [(ngModel)]="separatorZeroPrecisionSeparatorFormModel" />
-                                    <mat-hint><b>Mask: </b>separator.0</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.0</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -872,13 +863,10 @@
                                         thousandSeparator="."
                                         [formControl]="dotZeroPrecisionSeparatorForm"
                                         [(ngModel)]="dotZeroPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.0
-                                        <b>thousandSeparator: </b>.</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.0 <b>thousandSeparator: </b>.</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -908,13 +896,10 @@
                                         thousandSeparator=","
                                         [formControl]="commaZeroPrecisionSeparatorForm"
                                         [(ngModel)]="commaZeroPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.0
-                                        <b>thousandSeparator: </b>,</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.0 <b>thousandSeparator: </b>,</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -944,13 +929,10 @@
                                         thousandSeparator=" "
                                         [formControl]="spacebarZeroPrecisionSeparatorForm"
                                         [(ngModel)]="spacebarZeroPrecisionSeparatorFormModel" />
-                                    <mat-hint
-                                        ><b>Mask: </b>separator.0
-                                        <b>thousandSeparator: </b>spacebar</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>separator.0 <b>thousandSeparator: </b>spacebar</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -990,7 +972,7 @@
                     <mat-card-content>
                         <div class="flex-row">
                             <div class="flex-cell-padding">
-                                <span>{{ phone | mask: customMaska }}</span>
+                                <span>{{ phone | mask : customMaska }}</span>
                                 <br /><br />
                                 <mat-hint>Mask: PPP-PPP-PPP</mat-hint>
                             </div>
@@ -999,7 +981,7 @@
                     <mat-card-content>
                         <div class="flex-row">
                             <div class="flex-cell-padding">
-                                <span>{{ pipeSeparatorValue | mask: 'separator':',' }}</span>
+                                <span>{{ pipeSeparatorValue | mask : 'separator' : ',' }}</span>
                                 <br /><br />
                                 <mat-hint>Mask: mask:'separator' : ','</mat-hint>
                             </div>
@@ -1058,10 +1040,10 @@
                 <h4>Example code (Reactive Forms)</h4>
                 <pre>
 // In component
-          {{ "public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z '-]') } };" }}
+  {{ "public surnamePattern = { 'N': { pattern: new RegExp('[A-Za-z '-]') } };" }}
 
-          // In template
-&lt;input mask="N*"
+// In template
+  &lt;input mask="N*"
   [specialCharacters]="[]"
   [patterns]="surnamePattern"
   formControlName="surname" /&gt;
@@ -1094,10 +1076,10 @@
                                         mask=""
                                         [formControl]="emptyMaskForm"
                                         [(ngModel)]="emptyMaskFormModel" />
-                                    <mat-hint><b>Mask: </b>(empty string)</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask: </b>(empty string)</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ emptyMaskForm.value ? emptyMaskForm.value : 'Empty' }}
@@ -1123,9 +1105,8 @@
                     <mat-card-header>
                         <mat-card-title>Patterns Masks</mat-card-title>
                         <mat-card-subtitle>
-                            You could define the pattern masks <b>IP</b> or
-                            <b>CPF_CNPJ</b>.</mat-card-subtitle
-                        >
+                            You could define the pattern masks <b>IP</b> or <b>CPF_CNPJ</b>.
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <div class="flex-row">
@@ -1138,10 +1119,10 @@
                                         [showMaskTyped]="true"
                                         [formControl]="ipFormControl"
                                         [(ngModel)]="ipModel" />
-                                    <mat-hint><b>Mask:</b> IP</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> IP</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ ipFormControl.value ? ipFormControl.value : 'Empty' }}
@@ -1159,10 +1140,10 @@
                                         [formControl]="cpfCnpjFormControl"
                                         [(ngModel)]="cpfCnpjModel"
                                         [showMaskTyped]="true" />
-                                    <mat-hint><b>Mask:</b> CPF_CNPJ</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> CPF_CNPJ</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -1189,8 +1170,8 @@
                     <mat-card-header>
                         <mat-card-title>Dynamics Masks</mat-card-title>
                         <mat-card-subtitle>
-                            You can pass into mask pattern with <b>||</b>.</mat-card-subtitle
-                        >
+                            You can pass into mask pattern with <b>||</b>.
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <div class="flex-row">
@@ -1203,12 +1184,10 @@
                                         [formControl]="cpfCnpjDynamicFormControl"
                                         [(ngModel)]="cpfCnpjDynamicModel"
                                         [showMaskTyped]="true" />
-                                    <mat-hint
-                                        ><b>Mask:</b> 000.000.000-00||00.000.000/0000-00</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> 000.000.000-00||00.000.000/0000-00</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -1234,12 +1213,10 @@
                                         [(ngModel)]="phoneBrModel"
                                         [showMaskTyped]="true"
                                         prefix="+55 " />
-                                    <mat-hint
-                                        ><b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000</mat-hint
-                                    >
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> (00) 0000-0000||(00) 0 0000-0000</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{
@@ -1283,10 +1260,8 @@
                                         [mask]="triggerMask"
                                         [formControl]="triggerInputFormControl"
                                         [triggerOnMaskChange]="true" />
-                                    <mat-hint><b>Mask:</b>{{ triggerMask || 'Empty' }}</mat-hint>
                                 </mat-form-field>
-                            </div>
-                            <div class="flex-cell">
+                                <p><b>Mask:</b>{{ triggerMask || 'Empty' }}</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ triggerInputFormControl.value ?? 'Empty' }}
@@ -1299,6 +1274,7 @@
         </div>
     </div>
 </div>
+
 <div class="container">
     <div class="row">
         <div class="col-12">
@@ -1307,8 +1283,8 @@
                     <mat-card-header>
                         <mat-card-title>Uppercase Masks</mat-card-title>
                         <mat-card-subtitle>
-                            You can create inputs that only accepts uppercase.</mat-card-subtitle
-                        >
+                            You can create inputs that only accepts uppercase.
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <div class="flex-row">
@@ -1321,10 +1297,10 @@
                                         [formControl]="textFormControl"
                                         [(ngModel)]="textModel"
                                         [showMaskTyped]="true" />
-                                    <mat-hint><b>Mask:</b> UUUUU</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> UUUUU</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ textFormControl.value ? textFormControl.value : 'Empty' }}
@@ -1347,8 +1323,8 @@
                     <mat-card-header>
                         <mat-card-title>Lowercase Masks</mat-card-title>
                         <mat-card-subtitle>
-                            You can create inputs that only accepts lowercase.</mat-card-subtitle
-                        >
+                            You can create inputs that only accepts lowercase.
+                        </mat-card-subtitle>
                     </mat-card-header>
                     <mat-card-content>
                         <div class="flex-row">
@@ -1361,10 +1337,10 @@
                                         [formControl]="textFormControl"
                                         [(ngModel)]="textModel"
                                         [showMaskTyped]="true" />
-                                    <mat-hint><b>Mask:</b> LLLLL</mat-hint>
                                 </mat-form-field>
                             </div>
                             <div class="flex-cell">
+                                <p><b>Mask:</b> LLLLL</p>
                                 <p>
                                     <b>FormControl:</b>
                                     {{ textFormControl.value ? textFormControl.value : 'Empty' }}
