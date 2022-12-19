@@ -1,10 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ShadowDomComponent } from './shadow-dom/shadow-dom.component';
+import { JsonPipe } from '@angular/common';
+import { NgxMaskDirective } from 'ngx-mask';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
     templateUrl: './bugs.component.html',
+    standalone: true,
+    imports: [
+        JsonPipe,
+        ReactiveFormsModule,
+        MatToolbarModule,
+        MatGridListModule,
+        ShadowDomComponent,
+        NgxMaskDirective,
+    ],
 })
 export class BugsComponent implements OnInit, OnDestroy {
     public bugsForm: UntypedFormGroup;

@@ -1,3 +1,9 @@
+# 15.0.0(2022-19-12)
+
+### Fix
+- update ng 15.x
+- usage new standalone API
+
 <a name="14.2.4"></a>
 
 # 14.2.4(2022-10-27)
@@ -620,9 +626,9 @@ Fixed writeValue in directive
 
 <a name="6.2.8"></a>
 
-# [6.2.8 support for Mask Pipe/MaskService](2018-01-10)
+# [6.2.8 support for Mask Pipe/NgxMaskService](2018-01-10)
 
-Added ability to use MaskPipe/MaskService inside component
+Added ability to use MaskPipe/NgxMaskService inside component
 
 <a name="6.2.5"></a>
 

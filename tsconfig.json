@@ -10,7 +10,7 @@
         "module": "esnext",
         "experimentalDecorators": true,
         "strict": true,
-        "target": "es2020",
+        "target": "ES2022",
         "typeRoots": ["node_modules/@types"],
         "lib": ["es2020", "dom"],
         "paths": {
@@ -25,7 +25,8 @@
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
         "noImplicitOverride": true,
-        "noPropertyAccessFromIndexSignature": true
+        "noPropertyAccessFromIndexSignature": true,
+        "useDefineForClassFields": false
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

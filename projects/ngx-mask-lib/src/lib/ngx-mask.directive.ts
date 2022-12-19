@@ -9,7 +9,6 @@ import {
 import {
     Directive,
     EventEmitter,
-    forwardRef,
     HostListener,
     Inject,
     Input,
@@ -20,27 +19,28 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { config, IConfig, timeMasks, withoutValidation } from './config';
-import { MaskService } from './mask.service';
+import { CONFIG, IConfig, timeMasks, withoutValidation } from './config';
+import { NgxMaskService } from './ngx-mask.service';
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
+    standalone: true,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => MaskDirective),
+            useExisting: NgxMaskDirective,
             multi: true,
         },
         {
             provide: NG_VALIDATORS,
-            useExisting: forwardRef(() => MaskDirective),
+            useExisting: NgxMaskDirective,
             multi: true,
         },
-        MaskService,
+        NgxMaskService,
     ],
     exportAs: 'mask,ngxMask',
 })
-export class MaskDirective implements ControlValueAccessor, OnChanges, Validator {
+export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
     // eslint-disable-next-line @angular-eslint/no-input-rename
     @Input('mask') public maskExpression: string | undefined | null = '';
 
@@ -100,8 +100,8 @@ export class MaskDirective implements ControlValueAccessor, OnChanges, Validator
 
     public constructor(
         @Inject(DOCUMENT) private document: Document,
-        public _maskService: MaskService,
-        @Inject(config) protected _config: IConfig
+        public _maskService: NgxMaskService,
+        @Inject(CONFIG) protected _config: IConfig
     ) {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any

@@ -23,8 +23,64 @@ You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste
 $ npm install --save ngx-mask
 ```
 
-## Quickstart
+## Quickstart if ngx-mask version >= 15.0.0
 
+Import **ngx-mask** directive, pipe and provide NgxMask providers with  `provideNgxMask` function.
+
+### With default mask config options
+
+```typescript
+import { NgxMaskDirective, NgxMaskPipe, provideNgxMask, IConfig } from 'ngx-mask'
+
+export const options: Partial<null|IConfig> | (() => Partial<IConfig>) = null;
+
+@NgModule({
+  imports: [
+      NgxMaskDirective, NgxMaskPipe
+  ],
+  providers: [provideNgxMask()]
+})
+```
+
+### Passing in your own mask config options
+
+```typescript
+import { NgxMaskModule, IConfig } from 'ngx-mask'
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
+};
+
+@NgModule({
+  imports: [
+      NgxMaskDirective, NgxMaskPipe
+  ], 
+  providers: [provideNgxMask(maskConfig)]  
+})
+```
+
+Or using a function to get the config:
+
+```typescript
+const maskConfigFunction: () => Partial<IConfig> = () => {
+  return {
+    validation: false,
+  };
+};
+
+@NgModule({
+  imports: [
+        NgxMaskDirective, NgxMaskPipe
+  ],
+  providers: [provideNgxMask(maskConfigFunction)]
+})
+```
+
+Then, just define masks in inputs.
+
+## Quickstart if ngx-mask version < 15.0.0
+
+For version ngx-mask < 15.0.0 
 Import **ngx-mask** module in Angular app.
 
 ### With default mask config options
@@ -75,7 +131,7 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
 
 Then, just define masks in inputs.
 
-### Usage
+## Usage
 
 ```html
 <input type="text" mask="<here goes your mask>" />
@@ -89,21 +145,17 @@ or
 
 Also, you can use mask pipe.
 
-### Usage
-
 ```html
 <span>{{phone | mask: '(000) 000-0000'}}</span>
 ```
 
 For separator you can add thousandSeparator
 
-### Usage
-
 ```html
 <span>{{value | mask: 'separator':','}}</span>
 ```
 
-#### Examples
+### Examples
 
 | mask           | example        |
 | -------------- | -------------- |

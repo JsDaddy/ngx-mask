@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
+import { provideNgxMask } from '../lib/ngx-mask.providers';
+import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 @Component({
     selector: 'mask-test',
@@ -25,7 +26,8 @@ describe('Directive: Mask (Function maskFilled)', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

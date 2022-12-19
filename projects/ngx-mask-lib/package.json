@@ -1,6 +1,6 @@
 {
     "name": "ngx-mask",
-    "version": "14.2.4",
+    "version": "15.0.0",
     "description": "awesome ngx mask",
     "keywords": [
         "ng2-mask",
@@ -28,9 +28,9 @@
         "url": "https://github.com/JsDaddy/ngx-mask/issues"
     },
     "peerDependencies": {
-        "@angular/common": ">=10.0.0",
-        "@angular/core": ">=10.0.0",
-        "@angular/forms": ">=10.0.0"
+        "@angular/common": ">=14.0.0",
+        "@angular/core": ">=14.0.0",
+        "@angular/forms": ">=14.0.0"
     },
     "dependencies": {}
 }

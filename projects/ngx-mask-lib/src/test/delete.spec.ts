@@ -3,9 +3,10 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
+import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { provideNgxMask } from '../lib/ngx-mask.providers';
 
 describe('Directive: Mask (Delete)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -14,7 +15,8 @@ describe('Directive: Mask (Delete)', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

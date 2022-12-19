@@ -3,10 +3,10 @@ import { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
-import { MaskDirective } from '../lib/mask.directive';
+import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { provideNgxMask } from '../lib/ngx-mask.providers';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -15,7 +15,8 @@ describe('Directive: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;
@@ -441,8 +442,8 @@ describe('Directive: Mask', () => {
         inputTarget.selectionStart = 0;
         inputTarget.selectionEnd = 6;
 
-        const directiveInstance: MaskDirective =
-            debugElement.injector.get<MaskDirective>(MaskDirective);
+        const directiveInstance: NgxMaskDirective =
+            debugElement.injector.get<NgxMaskDirective>(NgxMaskDirective);
         spyOn(directiveInstance._maskService, 'applyMask');
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
@@ -464,8 +465,8 @@ describe('Directive: Mask', () => {
         inputTarget.selectionStart = 0;
         inputTarget.selectionEnd = 6;
 
-        const directiveInstance: MaskDirective =
-            debugElement.injector.get<MaskDirective>(MaskDirective);
+        const directiveInstance: NgxMaskDirective =
+            debugElement.injector.get<NgxMaskDirective>(NgxMaskDirective);
         spyOn(directiveInstance._maskService, 'applyMask');
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
