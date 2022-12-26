@@ -6,7 +6,7 @@
   NGX MASK is the best directive to solve masking input with needed pattern
 </p>
 
-[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
+[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
 [![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 [![npm downloads](https://img.shields.io/npm/dt/ngx-mask.svg)](https://npmjs.org/ngx-mask)
 
@@ -16,10 +16,10 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat)](https://github.com/JSDaddy/ngx-mask)
 
-You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
-You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
+You can also try our NGX LOADER INDICATOR [check](https://www.npmjs.com/package/ngx-loader-indicator).
+You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-copypaste).
 
-### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples
+### You can try live  [demo](https://jsdaddy.github.io/ngx-mask/) with examples
 
 ## Installing
 
