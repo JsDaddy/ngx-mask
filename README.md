@@ -16,10 +16,10 @@
 
 [![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat)](https://github.com/JSDaddy/ngx-mask)
 
-You can also try our [NGX LOADER INDICATOR](https://www.npmjs.com/package/ngx-loader-indicator).
-You can also try our [NGX COPYPASTE](https://www.npmjs.com/package/ngx-copypaste).
+You can also try our NGX LOADER INDICATOR [check](https://www.npmjs.com/package/ngx-loader-indicator).
+You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-copypaste).
 
-### You can see the full [documentation](https://jsdaddy.github.io/ngx-mask-page/) with examples
+### You can try live  [demo](https://jsdaddy.github.io/ngx-mask/) with examples
 
 ## Installing
 
