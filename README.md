@@ -6,7 +6,7 @@
   NGX MASK is the best directive to solve masking input with needed pattern
 </p>
 
-[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
+[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
 [![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
 [![npm downloads](https://img.shields.io/npm/dt/ngx-mask.svg)](https://npmjs.org/ngx-mask)
 
