@@ -5,7 +5,7 @@
 /bazel-out
 /.angular
 /test-reports
-/src/coverage
+/coverage
 /projects/ngx-mask-lib/coverage
 
 # Node
