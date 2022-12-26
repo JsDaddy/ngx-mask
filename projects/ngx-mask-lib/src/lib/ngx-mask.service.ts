@@ -1,7 +1,7 @@
-import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import { CONFIG, IConfig } from './config';
+import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 
 @Injectable()
@@ -31,14 +31,13 @@ export class NgxMaskService extends NgxMaskApplierService {
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
-    public constructor(
-        @Inject(DOCUMENT) private document: Document,
-        @Inject(CONFIG) protected override _config: IConfig,
-        private _elementRef: ElementRef,
-        private _renderer: Renderer2
-    ) {
-        super(_config);
-    }
+    private readonly document = inject(DOCUMENT);
+
+    protected override _config = inject<IConfig>(NGX_MASK_CONFIG);
+
+    private readonly _elementRef = inject(ElementRef);
+
+    private readonly _renderer = inject(Renderer2);
 
     // eslint-disable-next-line complexity
     public override applyMask(

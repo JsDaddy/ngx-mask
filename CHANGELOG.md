@@ -1,3 +1,10 @@
+# 15.0.1(2022-26-12)
+
+### Fix
+- separate `provideEnvironmentNgxMask` and `provideNgxMask`
+
+<a name="15.0.1"></a>
+
 # 15.0.0(2022-19-12)
 
 ### Fix

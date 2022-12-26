@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -21,7 +21,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
     ],
 })
 export class BugsComponent implements OnInit, OnDestroy {
-    public bugsForm: UntypedFormGroup;
+    public bugsForm!: UntypedFormGroup;
 
     public submitted = false;
 
@@ -30,7 +30,14 @@ export class BugsComponent implements OnInit, OnDestroy {
     // Can be used as a takeUntil for any observables this component may subscribe to. e.g. a form control valueChanges
     private onDestroy$ = new Subject<void>();
 
-    public constructor(private formBuilder: UntypedFormBuilder) {
+    private formBuilder = inject(UntypedFormBuilder);
+
+    public ngOnDestroy(): void {
+        this.onDestroy$.next();
+        this.onDestroy$.complete();
+    }
+
+    public ngOnInit(): void {
         this.bugsForm = this.formBuilder.group({
             MonStart: [],
             PrePopulate: [123456],
@@ -40,14 +47,6 @@ export class BugsComponent implements OnInit, OnDestroy {
             SecureInput: [987654321],
             ScientificNotation: [0.0000005],
         });
-    }
-
-    public ngOnDestroy(): void {
-        this.onDestroy$.next();
-        this.onDestroy$.complete();
-    }
-
-    public ngOnInit(): void {
         this.bugsForm
             .get('SecureInput')
             ?.valueChanges.pipe(takeUntil(this.onDestroy$))

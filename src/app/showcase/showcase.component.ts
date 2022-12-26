@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -36,62 +36,62 @@ interface IPattern {
         NgxMaskPipe,
     ],
 })
-export class ShowcaseComponent {
+export class ShowcaseComponent implements OnInit {
     public mask = '';
 
     public phone = 123456789;
 
-    public customMaska: [string, IPattern];
+    public customMask!: [string, IPattern];
 
     public pipeSeparatorValue = '123456789';
 
     public cControl = new FormControl(1);
 
-    public form: FormControl;
+    public form!: FormControl;
 
-    public form1: FormControl;
+    public form1!: FormControl;
 
-    public formDate: FormControl;
+    public formDate!: FormControl;
 
-    public ipFormControl: FormControl;
+    public ipFormControl!: FormControl;
 
-    public cpfFormControl: FormControl;
+    public cpfFormControl!: FormControl;
 
-    public cpfCnpjFormControl: FormControl;
+    public cpfCnpjFormControl!: FormControl;
 
-    public cpfCnpjDynamicFormControl: FormControl;
+    public cpfCnpjDynamicFormControl!: FormControl;
 
-    public textFormControl: FormControl;
+    public textFormControl!: FormControl;
 
-    public phoneBrFormControl: FormControl;
+    public phoneBrFormControl!: FormControl;
 
-    public clearIfNotMatch: FormControl;
+    public clearIfNotMatch!: FormControl;
 
-    public numberOrStringForm: FormControl;
+    public numberOrStringForm!: FormControl;
 
-    public suffixForm: FormControl;
+    public suffixForm!: FormControl;
 
-    public repeatForm: FormControl;
+    public repeatForm!: FormControl;
 
-    public emptyMaskForm: FormControl;
+    public emptyMaskForm!: FormControl;
 
-    public separatorForm: FormControl;
+    public separatorForm!: FormControl;
 
-    public percent: FormControl;
+    public percent!: FormControl;
 
-    public formSecureInput: FormControl;
+    public formSecureInput!: FormControl;
 
-    public customPatternForm: FormControl;
+    public customPatternForm!: FormControl;
 
-    public hourTimeForm: FormControl;
+    public hourTimeForm!: FormControl;
 
-    public hourForm: FormControl;
+    public hourForm!: FormControl;
 
-    public hour24Form: FormControl;
+    public hour24Form!: FormControl;
 
-    public mixedTypeForm: FormControl;
+    public mixedTypeForm!: FormControl;
 
-    public dateMonthForm: FormControl;
+    public dateMonthForm!: FormControl;
 
     public pattern: IPattern = {
         P: {
@@ -161,9 +161,9 @@ export class ShowcaseComponent {
 
     public spacebarZeroPrecisionSeparatorFormModel!: SN;
 
-    public separatorPrecisionSeparatorForm: FormControl;
+    public separatorPrecisionSeparatorForm!: FormControl;
 
-    public separatorZeroPrecisionSeparatorForm: FormControl;
+    public separatorZeroPrecisionSeparatorForm!: FormControl;
 
     public dotSeparatorForm!: FormControl;
 
@@ -191,7 +191,7 @@ export class ShowcaseComponent {
 
     public triggerMask = '';
 
-    public constructor() {
+    public ngOnInit() {
         this.form = new FormControl('');
         this.form1 = new FormControl('');
         this.formDate = new FormControl('');
@@ -233,6 +233,6 @@ export class ShowcaseComponent {
         });
         this.triggerInputFormControl = new FormControl('123456789');
 
-        this.customMaska = ['PPP-PPP-PPP', this.pattern];
+        this.customMask = ['PPP-PPP-PPP', this.pattern];
     }
 }
