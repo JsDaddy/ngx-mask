@@ -1,48 +1,37 @@
-<header>
-    <div class="container">
-        <div class="row">
-            <div class="col-7">
-                <div class="logo align-middle">
-                    <a target="_blank" href="http://jsdaddy.io/"
-                        ><img src="assets/img/logo.png" alt="jsdaddy"
-                    /></a>
-                </div>
-            </div>
-            <div class="col-5">
-                <h1 class="title">
-                    <span class="jq-label">Angular</span>
-                    <span class="plugin-name">Mask Plugin</span>
-                </h1>
-                <span class="subtitle"
-                    >Angular Plugin to make masks on form fields and html elements.</span
-                >
-            </div>
-        </div>
-    </div>
-</header>
-
-<router-outlet></router-outlet>
-
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="mat-grid-wr">
-                <mat-grid-list cols="1" rowHeight="55px">
-                    <mat-grid-tile>
-                        <mat-toolbar>
-                            <span
-                                >Documentation - see docs on
-                                <a
-                                    class="git-link"
-                                    target="_blank"
-                                    href="https://github.com/JsDaddy/ngx-mask">
-                                    <img src="assets/img/github.png" alt="Github" />
-                                </a>
-                            </span>
-                        </mat-toolbar>
-                    </mat-grid-tile>
-                </mat-grid-list>
-            </div>
-        </div>
-    </div>
+<div class="content-wrapper">
+    <ngx-mask-demo-header></ngx-mask-demo-header>
+    <section class="mask-wrap">
+        <mat-drawer-container>
+            <mat-drawer mode="side" opened>
+                <mat-accordion>
+                    <mat-expansion-panel *ngFor="let list of lists" [expanded]="list.id === 1">
+                        <mat-expansion-panel-header (click)="switchDoc(list.id)">
+                            <mat-panel-title
+                                [ngStyle]="{ color: list.id === chosenList ? '#ffcc00' : 'black' }"
+                                >{{ list.header }}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <mat-nav-list *ngFor="let item of list.text">
+                            <button
+                                mat-button
+                                [ngStyle]="{ color: item.id === chosenItem ? '#ffcc00' : 'black' }"
+                                class="date"
+                                id="{{ item.id }}"
+                                (click)="handleClick(item.id, item.scrollTo)"
+                                [routerLink]="[]"
+                                fragment="{{ item.scrollTo }}">
+                                {{ item.content }}
+                            </button>
+                        </mat-nav-list>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-drawer>
+            <mat-drawer-content>
+                <ngx-mask-demo-options
+                    [choose]="chosenItem"
+                    [docs]="inputVal.docs"
+                    [examples]="inputVal.examples"></ngx-mask-demo-options>
+            </mat-drawer-content>
+        </mat-drawer-container>
+    </section>
 </div>

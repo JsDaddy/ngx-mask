@@ -1,26 +1,29 @@
-@use '@angular/material' as mat;
-@import 'assets/styles/variables';
-@import 'assets/styles/loader';
+/* You can add global styles to this file, and also import other style files */
+@import 'assets/style/variables';
 
-@include mat.core();
-
-$candy-app-primary: mat.define-palette(mat.$cyan-palette);
-$candy-app-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$candy-app-warn: mat.define-palette(mat.$red-palette);
-//$candy-app-theme: mat.define-palette($candy-app-primary, $candy-app-accent, $candy-app-warn);
-//@include angular-material-theme($candy-app-theme);
-
-@mixin ngmask-input-theme($theme) {
-    $foreground: mat.get-color-from-palette($theme, foreground);
-    $input-placeholder-color: mat.get-color-from-palette($foreground, secondary-text);
-    mat-input-container {
-        mat-hint {
-            color: $input-placeholder-color;
-        }
-    }
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
-//@include ngmask-input-theme($candy-app-theme);
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol' !important;
+    font-size: 16px;
+    background: #f5f5f5;
+}
+
+code {
+    background: #f7f7f7 !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar,
+.mat-tab-nav-bar.mat-primary .mat-ink-bar {
+    background-color: #fc0 !important;
+}
+
 mat-card {
     mat-card-content {
         padding-left: 10px;
@@ -28,258 +31,17 @@ mat-card {
     }
 }
 
-@font-face {
-    font-family: 'Material Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: local('Material Icons'), local('MaterialIcons-Regular'),
-        url(https://fonts.gstatic.com/s/materialicons/v22/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2)
-            format('woff2');
+.mat-focused .mat-form-field-label {
+    /*change color of label*/
+    color: #fc0 !important;
 }
 
-.material-icons {
-    font-family: 'Material Icons', sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
+.mat-form-field-underline {
+    /*change color of underline*/
+    background-color: #fc0 !important;
 }
 
-mat-input-container {
-    width: 100%;
-}
-
-mat-sidenav {
-    display: flex;
-    overflow: visible;
-}
-
-body {
-    font-family: sans-serif;
-    padding: 0 0 25px 0;
-    margin: 0;
-    position: relative;
-}
-
-.mat-drawer-container {
-    background-color: #fff;
-}
-
-.mat-grid-list,
-.mat-grid-tile,
-.mat-grid-tile-content,
-.mat-grid-tile .mat-figure {
-    position: inherit !important;
-}
-
-.mat-toolbar {
-    background-color: #fff;
-    color: $black;
-}
-
-.mat-toolbar-row,
-.mat-toolbar-single-row {
-    padding: 0 !important;
-
-    span {
-        font-size: 24px;
-    }
-}
-
-.git-link {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-    transition: $transition-default;
-
-    img {
-        max-width: 30px;
-        opacity: 0.9;
-    }
-
-    &:hover {
-        opacity: 0.8;
-    }
-}
-
-.mat-grid-wr {
-    padding-top: 40px;
-    padding-bottom: 35px;
-}
-
-header {
-    padding: 10px 0;
-    background-color: #f8f8f8;
-
-    .logo {
-        display: flex;
-        align-items: center;
-        height: 100%;
-        padding-top: 6px;
-
-        a {
-            display: block;
-
-            img {
-                width: 100%;
-                max-width: 140px;
-            }
-        }
-    }
-
-    .title {
-        padding: 0;
-        margin: 0;
-
-        .plugin-name {
-            font-size: 60px;
-            color: $yellow;
-        }
-
-        .jq-label {
-            font-size: 26px;
-            line-height: 30px;
-            color: $black;
-            display: block;
-        }
-    }
-
-    span.subtitle {
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-}
-
-.mat-card:not([class*='mat-elevation-z']) {
-    box-shadow: none !important;
-}
-
-.mat-card-wr {
-    font-family: 'Lato', sans-serif;
-    padding: 1.2rem;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-
-    .mat-card {
-        border-radius: 0;
-        padding: 0;
-        font-family: 'Lato', sans-serif;
-        color: $black;
-    }
-
-    .mat-drawer-container {
-        color: $black;
-    }
-
-    .mat-card-header-text {
-        padding: 0 0 25px 0;
-        margin: 0;
-        width: 100%;
-    }
-
-    .mat-card-subtitle,
-    .mat-card-content,
-    .mat-card-title {
-        font-size: 16px;
-        margin-bottom: 15px;
-        padding: 0;
-    }
-
-    .mat-card-header .mat-card-subtitle:not(:first-child) {
-        font-weight: normal;
-    }
-
-    .mat-card-header {
-        font-size: 16px;
-    }
-
-    .mat-card-actions {
-        margin-bottom: 15px;
-        padding: 0;
-    }
-
-    .mat-card-content > :last-child:not(.mat-card-footer),
-    .mat-card > :last-child:not(.mat-card-footer) {
-        margin: 0;
-        padding: 0;
-    }
-
-    .mat-form-field.mat-focused {
-        .mat-form-field-ripple {
-            background-color: $yellow;
-        }
-
-        .mat-form-field-label {
-            color: $black;
-        }
-    }
-
-    .form-control {
-        padding-right: 20px;
-    }
-
-    .flex-row {
-        display: flex;
-        width: 100%;
-        align-items: center;
-
-        &:not(:last-child) {
-            margin-bottom: 1.4rem;
-        }
-
-        .flex-cell {
-            &:last-child {
-                width: 100%;
-                padding-left: 40px;
-            }
-
-            b {
-                display: inline-block;
-                padding-right: 10px;
-            }
-        }
-
-        p {
-            display: inline-block;
-            vertical-align: middle;
-            padding-right: 30px;
-        }
-    }
-
-    .mat-form-wr {
-        margin-right: 60px;
-    }
-}
-
-.box {
-    padding: 1.2rem;
-    border: 1px solid #eee;
-    border-radius: 4px;
-    margin-bottom: 1.5rem;
-
-    input {
-        height: 2.5em;
-        font-size: 1em;
-        border-radius: 2px;
-        box-shadow: none;
-        border: 1px solid #d4d4d4;
-        width: 100%;
-    }
-
-    button {
-        margin-right: 1em;
-    }
-
-    label {
-        color: $black;
-    }
+.mat-form-field-ripple {
+    /*change color of underline when focused*/
+    background-color: #fc0 !important;
 }
