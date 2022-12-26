@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { IConfig } from '../../lib/config';
+import { IConfig } from '../../lib/ngx-mask.config';
 
 @Component({
-    selector: 'mask-test-mask',
+    selector: 'ngx-mask-demo-test',
     template: `
         <input
             id="mask"

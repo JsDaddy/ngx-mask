@@ -1,6 +1,10 @@
-<a href="https://jsdaddy.github.io/ngx-mask">
-  <h1 align="center">ngx-mask</h1>
+<a href="http://jsdaddy.io/img/logo.png">
+  <h1 align="center">NGX MASK</h1>
 </a>
+
+<p align="center">
+  NGX MASK is the best directive to solve masking input with needed pattern
+</p>
 
 [![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
 [![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
@@ -27,39 +31,37 @@ $ npm install --save ngx-mask
 
 Import **ngx-mask** directive, pipe and provide NgxMask providers with  `provideNgxMask` function.
 
-### With default mask config options
+### With default  config options application level
 
 ```typescript
-import { NgxMaskDirective, NgxMaskPipe, provideNgxMask, IConfig } from 'ngx-mask'
+bootstrapApplication(AppComponent, {
+    providers: [
+        (...)
+        provideEnvironmentNgxMask(),
+        (...)
+    ],
+}).catch((err) => console.error(err));
+````
 
-export const options: Partial<null|IConfig> | (() => Partial<IConfig>) = null;
-
-@NgModule({
-  imports: [
-      NgxMaskDirective, NgxMaskPipe
-  ],
-  providers: [provideNgxMask()]
-})
-```
-
-### Passing in your own mask config options
+### Passing your own mask config options
 
 ```typescript
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { IConfig } from 'ngx-mask'
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
 };
 
-@NgModule({
-  imports: [
-      NgxMaskDirective, NgxMaskPipe
-  ], 
-  providers: [provideNgxMask(maskConfig)]  
-})
+bootstrapApplication(AppComponent, {
+    providers: [
+        (...)
+        provideEnvironmentNgxMask(maskConfig),
+        (...)
+    ],
+}).catch((err) => console.error(err));
 ```
 
-Or using a function to get the config:
+### Using a function to configure:
 
 ```typescript
 const maskConfigFunction: () => Partial<IConfig> = () => {
@@ -68,15 +70,43 @@ const maskConfigFunction: () => Partial<IConfig> = () => {
   };
 };
 
-@NgModule({
-  imports: [
-        NgxMaskDirective, NgxMaskPipe
-  ],
-  providers: [provideNgxMask(maskConfigFunction)]
-})
+bootstrapApplication(AppComponent, {
+    providers: [
+         (...)
+         provideEnvironmentNgxMask(maskConfigFunction),
+         (...)
+],
+}).catch((err) => console.error(err));
 ```
 
-Then, just define masks in inputs.
+### With config options feature level 
+```typescript
+@Component({
+    selector: 'my-feature',
+    templateUrl: './my-feature.component.html',
+    styleUrls: ['./my-feature.component.css'],
+    standalone: true,
+    imports: [NgxMaskDirective, (...)],
+    providers: [
+          (...)
+          provideNgxMask(),
+          (...)
+    ],
+})
+export class MyFeatureComponent {}
+```
+
+Then, import directive, pipe to needed standalone component and just define masks in inputs.
+### With Angular modules 
+
+```typescript
+@NgModule({
+  imports: [
+      NgxMaskDirective, NgxMaskPipe
+  ],
+  providers: [provideNgxMask()]
+})
+```
 
 ## Quickstart if ngx-mask version < 15.0.0
 

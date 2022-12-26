@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
-import { IConfig } from './config';
+import { IConfig } from './ngx-mask.config';
 
 @Pipe({
     name: 'mask',
@@ -9,7 +9,8 @@ import { IConfig } from './config';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    public constructor(private _maskService: NgxMaskApplierService) {}
+    //TODO(inepipepnko): need use inject fn but problem with error in test
+    public constructor(private readonly _maskService: NgxMaskApplierService) {}
 
     public transform(
         value: string | number,

@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 
 @Component({
     encapsulation: ViewEncapsulation.ShadowDom,
-    selector: 'mask-cypress-test-mask',
+    selector: 'ngx-mask-demo-test',
     template: `
         <input
             id="masked"

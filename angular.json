@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "showcase": {
+        "ngx-mask": {
             "root": "",
             "sourceRoot": "src",
             "projectType": "application",
@@ -12,14 +12,15 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "outputPath": "dist/showcase",
+                        "outputPath": "dist/ngx-mask",
                         "index": "src/index.html",
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": ["src/assets", "src/favicon.ico"],
                         "styles": [
-                            "node_modules/bootstrap/dist/css/bootstrap-grid.min.css",
+                            "@angular/material/prebuilt-themes/indigo-pink.css",
+                            "node_modules/highlight.js/styles/github.css",
                             "src/styles.scss"
                         ],
                         "scripts": [],
@@ -57,18 +58,18 @@
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
                     "options": {
-                        "browserTarget": "showcase:build"
+                        "browserTarget": "ngx-mask:build"
                     },
                     "configurations": {
                         "production": {
-                            "browserTarget": "showcase:build:production"
+                            "browserTarget": "ngx-mask:build:production"
                         }
                     }
                 },
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "showcase:build"
+                        "browserTarget": "ngx-mask:build"
                     }
                 },
                 "test": {
@@ -95,11 +96,6 @@
                     }
                 }
             }
-        },
-        "showcase-e2e": {
-            "root": "",
-            "sourceRoot": "",
-            "projectType": "application"
         },
         "ngx-mask-lib": {
             "root": "projects/ngx-mask-lib",
@@ -153,14 +149,5 @@
             "typescriptMismatch": false
         },
         "analytics": "682218d2-280d-47b1-b385-b2c8c903f9a9"
-    },
-    "schematics": {
-        "@schematics/angular:component": {
-            "prefix": "app",
-            "style": "scss"
-        },
-        "@schematics/angular:directive": {
-            "prefix": "app"
-        }
     }
 }

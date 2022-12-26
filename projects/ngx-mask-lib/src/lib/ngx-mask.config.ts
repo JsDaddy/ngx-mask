@@ -29,7 +29,7 @@ export interface IConfig {
 }
 
 export type optionsConfig = Partial<IConfig>;
-export const CONFIG: InjectionToken<IConfig> = new InjectionToken('ngx-mask config');
+export const NGX_MASK_CONFIG: InjectionToken<IConfig> = new InjectionToken('ngx-mask config');
 export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('new ngx-mask config');
 export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken(
     'initial ngx-mask config'

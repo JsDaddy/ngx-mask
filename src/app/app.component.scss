@@ -1,0 +1,27 @@
+.content-wrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+
+    .mask-wrap {
+        height: calc(100% - 64px);
+        overflow: auto;
+
+        mat-drawer-container {
+            height: 100%;
+            overflow: hidden;
+
+            mat-expansion-panel {
+                mat-nav-list {
+                    button {
+                        width: 100%;
+                    }
+                }
+            }
+
+            mat-drawer {
+                width: 250px;
+            }
+        }
+    }
+}

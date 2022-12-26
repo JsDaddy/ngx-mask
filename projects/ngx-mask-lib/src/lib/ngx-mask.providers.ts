@@ -1,24 +1,28 @@
-import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
+import { EnvironmentProviders, inject, makeEnvironmentProviders, Provider } from '@angular/core';
 
-import { CONFIG, INITIAL_CONFIG, initialConfig, NEW_CONFIG, optionsConfig } from './config';
+import {
+    NGX_MASK_CONFIG,
+    INITIAL_CONFIG,
+    initialConfig,
+    NEW_CONFIG,
+    optionsConfig,
+} from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 
 /**
  * @internal
  */
-function _configFactory(
-    initConfig: optionsConfig,
-    configValue: optionsConfig | (() => optionsConfig)
-): optionsConfig {
+function _configFactory(): optionsConfig {
+    const initConfig = inject<optionsConfig>(INITIAL_CONFIG);
+    const configValue = inject<optionsConfig | (() => optionsConfig)>(NEW_CONFIG);
+
     return configValue instanceof Function
         ? { ...initConfig, ...configValue() }
         : { ...initConfig, ...configValue };
 }
 
-export function provideNgxMask(
-    configValue?: optionsConfig | (() => optionsConfig)
-): EnvironmentProviders {
-    return makeEnvironmentProviders([
+export function provideNgxMask(configValue?: optionsConfig | (() => optionsConfig)): Provider[] {
+    return [
         {
             provide: NEW_CONFIG,
             useValue: configValue,
@@ -28,10 +32,15 @@ export function provideNgxMask(
             useValue: initialConfig,
         },
         {
-            provide: CONFIG,
+            provide: NGX_MASK_CONFIG,
             useFactory: _configFactory,
-            deps: [INITIAL_CONFIG, NEW_CONFIG],
         },
         NgxMaskApplierService,
-    ]);
+    ];
+}
+
+export function provideEnvironmentNgxMask(
+    configValue?: optionsConfig | (() => optionsConfig)
+): EnvironmentProviders {
+    return makeEnvironmentProviders(provideNgxMask(configValue));
 }

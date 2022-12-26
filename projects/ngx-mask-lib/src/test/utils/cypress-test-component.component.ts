@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'mask-cypress-test-mask',
+    selector: 'ngx-mask-demo-test',
     template: `
         <input
             id="masked"

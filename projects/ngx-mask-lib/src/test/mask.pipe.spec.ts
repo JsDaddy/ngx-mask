@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { NgxMaskApplierService } from '../lib/ngx-mask-applier.service';
-import { IConfig } from '../lib/config';
+import { IConfig } from '../lib/ngx-mask.config';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskPipe } from '../lib/ngx-mask.pipe';
+import { NgxMaskApplierService } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
@@ -12,9 +12,6 @@ describe('Pipe: Mask', () => {
             imports: [NgxMaskPipe],
             providers: [provideNgxMask()],
         });
-    });
-
-    beforeEach(() => {
         const service: NgxMaskApplierService =
             TestBed.inject<NgxMaskApplierService>(NgxMaskApplierService);
         maskPipe = new NgxMaskPipe(service);

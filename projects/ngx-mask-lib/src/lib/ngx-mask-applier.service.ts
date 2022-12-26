@@ -1,15 +1,48 @@
-import { Inject, Injectable } from '@angular/core';
-import { CONFIG, IConfig } from './config';
+import { inject, Injectable } from '@angular/core';
+import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
 
 @Injectable()
 export class NgxMaskApplierService {
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
+    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    public hiddenInput: IConfig['hiddenInput'];
+    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] =
+        this._config.dropSpecialCharacters;
+
+    public hiddenInput: IConfig['hiddenInput'] = this._config.hiddenInput;
 
     public showTemplate!: IConfig['showTemplate'];
 
-    public clearIfNotMatch!: IConfig['clearIfNotMatch'];
+    public clearIfNotMatch: IConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
+
+    public maskSpecialCharacters: IConfig['specialCharacters'] = this._config.specialCharacters;
+
+    public maskAvailablePatterns: IConfig['patterns'] = this._config.patterns;
+
+    public prefix: IConfig['prefix'] = this._config.prefix;
+
+    public suffix: IConfig['suffix'] = this._config.suffix;
+
+    public thousandSeparator: IConfig['thousandSeparator'] = this._config.thousandSeparator;
+
+    public decimalMarker: IConfig['decimalMarker'] = this._config.decimalMarker;
+
+    public customPattern!: IConfig['patterns'];
+
+    public showMaskTyped: IConfig['showMaskTyped'] = this._config.showMaskTyped;
+
+    public placeHolderCharacter: IConfig['placeHolderCharacter'] =
+        this._config.placeHolderCharacter;
+
+    public validation: IConfig['validation'] = this._config.validation;
+
+    public separatorLimit: IConfig['separatorLimit'] = this._config.separatorLimit;
+
+    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] =
+        this._config.allowNegativeNumbers;
+
+    public leadZeroDateTime: IConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
+
+    private _shift: Set<number> = new Set();
 
     public maskExpression = '';
 
@@ -17,57 +50,9 @@ export class NgxMaskApplierService {
 
     public shownMaskExpression = '';
 
-    public maskSpecialCharacters!: IConfig['specialCharacters'];
-
-    public maskAvailablePatterns!: IConfig['patterns'];
-
-    public prefix!: IConfig['prefix'];
-
-    public suffix!: IConfig['suffix'];
-
-    public thousandSeparator!: IConfig['thousandSeparator'];
-
-    public decimalMarker!: IConfig['decimalMarker'];
-
-    public customPattern!: IConfig['patterns'];
-
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
-
-    public showMaskTyped!: IConfig['showMaskTyped'];
-
-    public placeHolderCharacter!: IConfig['placeHolderCharacter'];
-
-    public validation: IConfig['validation'];
-
-    public separatorLimit: IConfig['separatorLimit'];
-
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'];
-
-    public leadZeroDateTime: IConfig['leadZeroDateTime'];
-
-    private _shift!: Set<number>;
-
-    public constructor(@Inject(CONFIG) protected _config: IConfig) {
-        this._shift = new Set();
-        this.clearIfNotMatch = this._config.clearIfNotMatch;
-        this.dropSpecialCharacters = this._config.dropSpecialCharacters;
-        this.maskSpecialCharacters = this._config.specialCharacters;
-        this.maskAvailablePatterns = this._config.patterns;
-        this.prefix = this._config.prefix;
-        this.suffix = this._config.suffix;
-        this.thousandSeparator = this._config.thousandSeparator;
-        this.decimalMarker = this._config.decimalMarker;
-        this.hiddenInput = this._config.hiddenInput;
-        this.showMaskTyped = this._config.showMaskTyped;
-        this.placeHolderCharacter = this._config.placeHolderCharacter;
-        this.validation = this._config.validation;
-        this.separatorLimit = this._config.separatorLimit;
-        this.allowNegativeNumbers = this._config.allowNegativeNumbers;
-        this.leadZeroDateTime = this._config.leadZeroDateTime;
-    }
-
     public applyMaskWithPattern(
         inputValue: string,
         maskAndPattern: [string, IConfig['patterns']]

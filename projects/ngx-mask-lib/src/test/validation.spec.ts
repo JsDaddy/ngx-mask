@@ -7,7 +7,7 @@ import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 @Component({
-    selector: 'mask-test-no-validation-attr',
+    selector: 'ngx-mask-demo-test',
     template: ` <input id="maska" mask="0000" [formControl]="form" /> `,
 })
 export class TestMaskNoValidationAttributeComponent {
@@ -15,7 +15,7 @@ export class TestMaskNoValidationAttributeComponent {
 }
 
 @Component({
-    selector: 'mask-test-validation-attr',
+    selector: 'ngx-mask-demo-test',
     template: ` <input id="maska" mask="0000" [validation]="validate" [formControl]="form" /> `,
 })
 export class TestMaskValidationAttributeComponent {

@@ -1,0 +1,75 @@
+<section class="content">
+    <div class="doc-with-example" *ngFor="let tile of docs; index as i">
+        <mat-card id="{{ tile.anchor }}">
+            <mat-card-header>
+                <mat-card-title
+                    [ngStyle]="{
+                        color: checkChoose(choose, tile.id) ? '#ffcc00' : 'black'
+                    }"
+                    >{{ tile.header }}
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <p>{{ tile.text }}</p>
+                <p>Usage</p>
+                <pre><code [highlight]="tile.code"></code></pre>
+            </mat-card-content>
+        </mat-card>
+
+        <ng-container
+            *ngTemplateOutlet="exampleTmpl; context: { $implicit: examples[i] }"></ng-container>
+    </div>
+</section>
+
+<ng-template #exampleTmpl let-ex>
+    <mat-card>
+        <mat-card-content *ngIf="!ex._pipe; else pipeView">
+            <div class="input-wrap">
+                <mat-form-field>
+                    <input
+                        matInput
+                        placeholder="{{ ex._placeholder }}"
+                        prefix="{{ ex._prefix }}"
+                        suffix="{{ ex._suffix }}"
+                        [dropSpecialCharacters]="ex._dropSpecialCharacters || ''"
+                        mask="{{ ex._mask || '' }}"
+                        thousandSeparator="{{ ex._thousandSeparator || ' ' }}"
+                        [formControl]="ex.control.form"
+                        [(ngModel)]="ex.control.model"
+                        [validation]="ex._validation || null"
+                        [showMaskTyped]="ex._showMaskTyped || null"
+                        [clearIfNotMatch]="ex._clearIfNotMatch || null"
+                        [hiddenInput]="ex._hiddenInput" />
+                </mat-form-field>
+            </div>
+            <div *ngIf="!ex._validation; else validView">
+                <div class="model-wrap">
+                    <div class="values">
+                        <p>
+                            FormControl:
+                            {{ ex.control.form.value ? ex.control.form.value : 'Empty' }}
+                        </p>
+                        <p>NgModel: {{ ex.control.model ? ex.control.model : 'Empty' }}</p>
+                    </div>
+                    <mat-hint>Mask: {{ ex._mask }}</mat-hint>
+                </div>
+            </div>
+            <ng-template #validView>
+                <div class="model-wrap">
+                    <div class="values">
+                        <p>FormControl: {{ ex.control.form.errors | json }}</p>
+                    </div>
+                    <mat-hint>Mask: {{ ex._mask }}</mat-hint>
+                </div>
+            </ng-template>
+        </mat-card-content>
+    </mat-card>
+</ng-template>
+
+<ng-template #pipeView>
+    <mat-card-content>
+        <p>{{ phone | mask : '(000) 000-0000' }}</p>
+        <p>Mask: (000) 000-0000</p>
+        <p>Value: 123456789</p>
+    </mat-card-content>
+</ng-template>

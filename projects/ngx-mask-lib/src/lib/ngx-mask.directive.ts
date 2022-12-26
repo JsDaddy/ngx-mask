@@ -10,7 +10,7 @@ import {
     Directive,
     EventEmitter,
     HostListener,
-    Inject,
+    inject,
     Input,
     OnChanges,
     Output,
@@ -19,7 +19,7 @@ import {
 import { DOCUMENT } from '@angular/common';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { CONFIG, IConfig, timeMasks, withoutValidation } from './config';
+import { NGX_MASK_CONFIG, IConfig, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 
 @Directive({
@@ -98,11 +98,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _justPasted = false;
 
-    public constructor(
-        @Inject(DOCUMENT) private document: Document,
-        public _maskService: NgxMaskService,
-        @Inject(CONFIG) protected _config: IConfig
-    ) {}
+    private readonly document = inject(DOCUMENT);
+
+    public _maskService = inject(NgxMaskService);
+
+    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
