@@ -4,7 +4,7 @@ import { IComDoc, IMaskOptions, TExample } from './content.interfaces';
 export const SepDocs: IComDoc[] = [
     {
         header: 'Thousand separator',
-        text: 'You can devide your input by thousands',
+        text: 'You can divide your input by thousands',
         code: `<input type='text' mask="separator">`,
         id: 1,
         anchor: 'sep',
