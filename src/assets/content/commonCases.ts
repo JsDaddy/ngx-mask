@@ -44,6 +44,13 @@ export const ComDocs: IComDoc[] = [
         id: 6,
         anchor: 'validdate',
     },
+    {
+        header: 'Dynamic mask',
+        text: '',
+        code: `<input type='text' mask="(00) 00000000||+00 (00) 00000000" >`,
+        id: 7,
+        anchor: 'dynamic-mask',
+    },
 ];
 
 export const ComExamples: TExample<IMaskOptions>[] = [
@@ -77,4 +84,9 @@ export const ComExamples: TExample<IMaskOptions>[] = [
         _mask: 'd0/M0/0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
+    {
+        _placeholder: 'Dynamic',
+        _mask: '(00) 00000000||+00 (00) 00000000',
+        control: { form: new UntypedFormControl(''), model: '' },
+    }
 ];

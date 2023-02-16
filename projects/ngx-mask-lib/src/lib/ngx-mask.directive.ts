@@ -330,7 +330,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             this.onChange(el.value);
             return;
         }
-        const position: number =
+        let position: number =
             el.selectionStart === 1
                 ? (el.selectionStart as number) + this._maskService.prefix.length
                 : (el.selectionStart as number);
@@ -350,6 +350,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (this._getActiveElement() !== el) {
             return;
         }
+
+        // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
+        if (this._maskExpressionArray.length) {
+            position =
+                el.selectionStart === 1
+                    ? (el.selectionStart as number) + this._maskService.prefix.length
+                    : (el.selectionStart as number);
+        }
+
         this._position =
             this._position === 1 && this._inputValue.length === 1 ? null : this._position;
         let positionToApply: number = this._position
