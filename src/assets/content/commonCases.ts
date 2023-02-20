@@ -88,5 +88,5 @@ export const ComExamples: TExample<IMaskOptions>[] = [
         _placeholder: 'Dynamic',
         _mask: '(00) 00000000||+00 (00) 00000000',
         control: { form: new UntypedFormControl(''), model: '' },
-    }
+    },
 ];
