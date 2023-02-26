@@ -1,9 +1,25 @@
+<a name="15.0.3"></a>
+
+# 15.0.3(2023-02-20)
+
+### Fix
+- Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
+
+<a name="15.0.2"></a>
+
+# 15.0.2(2022-12-26)
+
+### Fix
+- Fix README.md
+
+<a name="15.0.1">
+
 # 15.0.1(2022-26-12)
 
 ### Fix
 - separate `provideEnvironmentNgxMask` and `provideNgxMask`
 
-<a name="15.0.1"></a>
+<a name="15.0.0"></a>
 
 # 15.0.0(2022-19-12)
 
@@ -17,7 +33,7 @@
 
 ### Fix
 - Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
-- new code and styles linting rules formatting 
+- new code and styles linting rules formatting
 
 <a name="14.2.3"></a>
 
@@ -41,7 +57,7 @@
 # 14.2.1(2022-09-11)
 
 ### Fix
-- package build process 
+- package build process
 
 
 <a name="14.2.0"></a>
