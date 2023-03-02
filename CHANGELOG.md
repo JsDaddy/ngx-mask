@@ -1,10 +1,17 @@
+<a name="14.2.5"></a>
+
+# 14.2.5(2023-03-02)
+
+### Fix
+- Patch Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
+
 <a name="14.2.4"></a>
 
 # 14.2.4(2022-10-27)
 
 ### Fix
 - Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
-- new code and styles linting rules formatting 
+- new code and styles linting rules formatting
 
 <a name="14.2.3"></a>
 
@@ -28,7 +35,7 @@
 # 14.2.1(2022-09-11)
 
 ### Fix
-- package build process 
+- package build process
 
 
 <a name="14.2.0"></a>

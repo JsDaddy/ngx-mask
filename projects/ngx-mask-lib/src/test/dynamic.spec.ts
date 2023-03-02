@@ -151,4 +151,31 @@ describe('Directive: Mask (Dynamic)', () => {
             value: '12345.67',
         });
     });
+
+    it('Should update position to the end of input when mask changes while typing', async () => {
+        component.mask = '(00) 00000000||+00 (00) 00000000';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        inputTarget.value = '5549362216';
+        inputTarget.selectionStart = 13;
+        inputTarget.selectionEnd = 13;
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).toBe('(55) 49362216');
+        expect(inputTarget.selectionStart).toEqual(13);
+
+        debugElement.nativeElement.value += '8';
+
+        debugElement.triggerEventHandler('input', {
+            target: debugElement.nativeElement,
+        });
+
+        fixture.detectChanges();
+
+        expect(inputTarget.value).toBe('+55 (49) 3622168');
+        expect(inputTarget.selectionStart).toEqual(16);
+    });
 });
