@@ -352,7 +352,6 @@ Fix for #721 - prevent entering dots when decimal marker is comma
 # [9.0.1 Bugfix](2020-04-08)
 
 Fix for #715 - mark fields as touched on blur on form fields with an empty mask
-
 Fix for #711 - stop fields being marked as dirty after a form reset
 
 <a name="9.0.0"></a>
@@ -360,11 +359,8 @@ Fix for #711 - stop fields being marked as dirty after a form reset
 # [9.0.0 Update to Angular 9](2020-04-08)
 
 Feature: Library updated to Angular 9
-
 Feature: Can pass empty string for thousandSeparator if do not want any separation
-
 Fix: allowNegativeNumbers works correctly when set as true or false. If false, entering a hyphen will not be allowed
-
 Fix: stop cursor jumping around when mask is set as empty
 
 <a name="8.2.0"></a>
@@ -372,11 +368,8 @@ Fix: stop cursor jumping around when mask is set as empty
 # [8.2.0 bugfix and breaking change](2020-01-17)
 
 Fix for #657 - showMaskTyped option now works correctly when set in the config
-
 Fix for #665 - validateTime mark field as invalid immediately if value is null
-
 Feature: Added new error page for handling 404's, and new bugs page for being a playground for bug fixing
-
 Breaking change: Made validation error return an object named mask. If you were previously checking for a
 validation error named 'Mask error' then it will need changing to just 'mask'.
 
@@ -385,7 +378,6 @@ validation error named 'Mask error' then it will need changing to just 'mask'.
 # [8.1.7 bugfix](2019-12-27)
 
 Fix for #369 - add thousandSeparator to separator pipe
-
 Fix for #381 - add support to negative number in separator mask
 
 <a name="8.1.6"></a>
@@ -393,9 +385,7 @@ Fix for #381 - add support to negative number in separator mask
 # [8.1.6 bugfix](2019-10-30)
 
 Fix for #560 - do not overwrite the mask available patterns when patterns attribute passed in value is a falsey value i.e null/undefined/false
-
 Fix for #620 - allow delete button to work when at beginning of input and no prefix exists
-
 Fix for #621 - validation config value now works correctly
 
 <a name="8.1.5"></a>
@@ -409,7 +399,6 @@ Fix for #614 - export everything from config
 # [8.1.4 bugfix](2019-10-23)
 
 Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
-
 Project folder structure converted over to follow Angular CLI way of libraries
 
 <a name="8.1.3"></a>
@@ -441,11 +430,13 @@ update separator
 # [8.0.8 bugfix](2019-10-07)
 
 bugs fix [refs: #554, #580, #582]
+
 <a name="8.0.8"></a>
 
 # [8.0.7 bugfix](2019-10-04)
 
 bugs fix [refs: #579, #576, #561]
+
 <a name="8.0.7"></a>
 
 # [8.0.7 update date and time](2019-10-02)
@@ -529,6 +520,7 @@ Secure input and bugs fix
 # [7.6.6 coma_separator](2019-03-18)
 
 Bugs fix
+
 <a name="7.6.4"></a>
 
 # [7.6.4 coma_separator] (2019-03-13)
