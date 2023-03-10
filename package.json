@@ -1,6 +1,10 @@
 {
     "name": "ngx-mask",
+<<<<<<< HEAD
     "version": "15.1.0",
+=======
+    "version": "15.0.3",
+>>>>>>> origin/master
     "description": "Awesome ngx mask",
     "license": "MIT",
     "engines": {

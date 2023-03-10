@@ -21,6 +21,7 @@ You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-cop
 
 ### You can try live [demo](https://jsdaddy.github.io/ngx-mask/) with examples
 
+
 ## Installing
 
 ```bash
