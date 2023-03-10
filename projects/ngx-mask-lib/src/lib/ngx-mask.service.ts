@@ -6,11 +6,7 @@ import { NgxMaskApplierService } from './ngx-mask-applier.service';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
-    public override maskExpression = '';
-
     public isNumberValue = false;
-
-    public override placeHolderCharacter = '_';
 
     public maskIsShown = '';
 
@@ -35,9 +31,9 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     protected override _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    private readonly _elementRef = inject(ElementRef);
+    private readonly _elementRef = inject(ElementRef, { optional: true });
 
-    private readonly _renderer = inject(Renderer2);
+    private readonly _renderer = inject(Renderer2, { optional: true });
 
     // eslint-disable-next-line complexity
     public override applyMask(
@@ -119,7 +115,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         // b) remove decimal marker from list of special characters to mask
         if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
-            this.maskSpecialCharacters = this.maskSpecialCharacters.filter(
+            this.specialCharacters = this.specialCharacters.filter(
                 (item: string) =>
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
             );
@@ -164,7 +160,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
         cb: (...args: any[]) => any = () => {}
     ): void {
-        const formElement = this._elementRef.nativeElement;
+        const formElement = this._elementRef?.nativeElement;
+        if (!formElement) {
+            return;
+        }
         formElement.value = this.applyMask(
             formElement.value,
             this.maskExpression,
@@ -184,11 +183,11 @@ export class NgxMaskService extends NgxMaskApplierService {
             .split('')
             .map((curr: string, index: number) => {
                 if (
-                    this.maskAvailablePatterns &&
-                    this.maskAvailablePatterns[maskExpression[index] ?? ''] &&
-                    this.maskAvailablePatterns[maskExpression[index] ?? '']?.symbol
+                    this.patterns &&
+                    this.patterns[maskExpression[index] ?? ''] &&
+                    this.patterns[maskExpression[index] ?? '']?.symbol
                 ) {
-                    return this.maskAvailablePatterns[maskExpression[index] ?? '']?.symbol;
+                    return this.patterns[maskExpression[index] ?? '']?.symbol;
                 }
                 return curr;
             })
@@ -201,7 +200,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             const maskChar = this.maskExpression[i] ?? '';
             return (
                 this._checkSymbolMask(symbol, maskChar) ||
-                (this.maskSpecialCharacters.includes(maskChar) && symbol === maskChar)
+                (this.specialCharacters.includes(maskChar) && symbol === maskChar)
             );
         });
         if (compare.join('') === res) {
@@ -216,7 +215,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             (inputValue &&
                 inputValue.split('').map((currSymbol: string, index: number) => {
                     if (
-                        this.maskSpecialCharacters.includes(inputValue[index + 1] ?? '') &&
+                        this.specialCharacters.includes(inputValue[index + 1] ?? '') &&
                         inputValue[index + 1] !== this.maskExpression[index + 1]
                     ) {
                         symbolToReplace = currSymbol;
@@ -270,7 +269,10 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     public clearIfNotMatchFn(): void {
-        const formElement = this._elementRef.nativeElement;
+        const formElement = this._elementRef?.nativeElement;
+        if (!formElement) {
+            return;
+        }
         if (
             this.clearIfNotMatch &&
             this.prefix.length + this.maskExpression.length + this.suffix.length !==
@@ -282,8 +284,11 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     public set formElementProperty([name, value]: [string, string | boolean]) {
+        if (!this._renderer || !this._elementRef) {
+            return;
+        }
         Promise.resolve().then(() =>
-            this._renderer.setProperty(this._elementRef.nativeElement, name, value)
+            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
         );
     }
 
@@ -297,7 +302,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     public removeMask(inputValue: string): string {
         return this._removeMask(
             this._removeSuffix(this._removePrefix(inputValue)),
-            this.maskSpecialCharacters.concat('_').concat(this.placeHolderCharacter)
+            this.specialCharacters.concat('_').concat(this.placeHolderCharacter)
         );
     }
 
@@ -452,7 +457,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     private _retrieveSeparatorValue(result: string): string {
         return this._removeMask(
             this._removeSuffix(this._removePrefix(result)),
-            this.maskSpecialCharacters
+            this.specialCharacters
         );
     }
 

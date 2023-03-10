@@ -1,8 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { IConfig } from '../lib/ngx-mask.config';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskPipe } from '../lib/ngx-mask.pipe';
-import { NgxMaskApplierService } from 'ngx-mask';
+import { IConfig } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
@@ -11,10 +10,9 @@ describe('Pipe: Mask', () => {
         TestBed.configureTestingModule({
             imports: [NgxMaskPipe],
             providers: [provideNgxMask()],
+        }).runInInjectionContext(() => {
+            maskPipe = new NgxMaskPipe();
         });
-        const service: NgxMaskApplierService =
-            TestBed.inject<NgxMaskApplierService>(NgxMaskApplierService);
-        maskPipe = new NgxMaskPipe(service);
     });
 
     it('should mask a string', () => {
@@ -35,12 +33,12 @@ describe('Pipe: Mask', () => {
     });
 
     it('should custom pattern', () => {
-        const patttern: IConfig['patterns'] = {
+        const patterns: IConfig['patterns'] = {
             P: {
                 pattern: new RegExp('\\d'),
             },
         };
-        const maskedNumber: string = maskPipe.transform(123456789, ['PPP-PP-PPP', patttern]);
+        const maskedNumber: string = maskPipe.transform(123456789, 'PPP-PP-PPP', { patterns });
         expect(maskedNumber).toEqual('123-45-678');
     });
 
@@ -55,17 +53,61 @@ describe('Pipe: Mask', () => {
     });
 
     it('should mask separator with thousandSeparator .', () => {
-        const value: string | number = maskPipe.transform('123123123', 'separator.0', '.');
+        const value: string | number = maskPipe.transform('123123123', 'separator.0', {
+            thousandSeparator: '.',
+        });
         expect(value).toEqual('123.123.123');
     });
 
     it('should mask separator with thousandSeparator ,', () => {
-        const value: string | number = maskPipe.transform('123123123', 'separator.0', ',');
+        const value: string | number = maskPipe.transform('123123123', 'separator.0', {
+            thousandSeparator: ',',
+        });
         expect(value).toEqual('123,123,123');
     });
 
     it('should mask separator.2 with thousandSeparator ,', () => {
-        const value: string | number = maskPipe.transform('12312312.3', 'separator.2', ',');
+        const value: string | number = maskPipe.transform('12312312.3', 'separator.2', {
+            thousandSeparator: ',',
+        });
         expect(value).toEqual('12,312,312.3');
     });
+
+    it('should work with *', () => {
+        let value: string | number = maskPipe.transform("11'1", "0*'09");
+        expect(value).toEqual("11'1");
+        value = maskPipe.transform('111111', "0*'09");
+        expect(value).toEqual('111111');
+    });
+
+    it('should work with suffix', () => {
+        const value: string | number = maskPipe.transform("11'1", "0*'09", { suffix: ' sm' });
+        expect(value).toEqual("11'1 sm");
+    });
+
+    it('should work with suffix', () => {
+        const value: string | number = maskPipe.transform("11'111", '00-00', {
+            dropSpecialCharacters: true,
+        });
+        expect(value).toEqual('11-11');
+    });
+    it('should work with showMaskTyped', () => {
+        const value: string | number = maskPipe.transform('11', '00-00', {
+            showMaskTyped: true,
+        });
+        expect(value).toEqual('11-__');
+    });
+    it('should work with showMaskTyped', () => {
+        const value: string | number = maskPipe.transform('12312312', '(000)-00-00', {
+            prefix: '+380 ',
+        });
+        expect(value).toEqual('+380 (123)-12-31');
+    });
+    it('should work with shownMaskExpression', () => {
+        const value: string | number = maskPipe.transform('12312312', '(000)-00-00', {
+            prefix: '+380 ',
+        });
+        expect(value).toEqual('+380 (123)-12-31');
+    });
+    //TODO(inepipepnko): need cover all config options
 });

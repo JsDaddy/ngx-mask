@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 
-import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { IConfig } from './ngx-mask.config';
+import { NgxMaskService } from './ngx-mask.service';
 
 @Pipe({
     name: 'mask',
@@ -9,23 +9,28 @@ import { IConfig } from './ngx-mask.config';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    //TODO(inepipepnko): need use inject fn but problem with error in test
-    public constructor(private readonly _maskService: NgxMaskApplierService) {}
+    private readonly defaultOptions: Partial<IConfig> = {};
+
+    private readonly _maskService = inject(NgxMaskService);
 
     public transform(
         value: string | number,
-        mask: string | [string, IConfig['patterns']],
-        thousandSeparator: string | null = null
+        mask: string,
+        { patterns, ...config }: Partial<IConfig> = {} as Partial<IConfig>
     ): string {
-        if (!value && typeof value !== 'number') {
-            return '';
-        }
-        if (thousandSeparator) {
-            this._maskService.thousandSeparator = thousandSeparator;
-        }
-        if (typeof mask === 'string') {
-            return this._maskService.applyMask(`${value}`, mask);
-        }
-        return this._maskService.applyMaskWithPattern(`${value}`, mask);
+        const currentConfig = {
+            maskExpression: mask,
+            ...this.defaultOptions,
+            ...config,
+            patterns: {
+                ...this._maskService.patterns,
+                ...patterns,
+            },
+        };
+        Object.entries(currentConfig).forEach(([key, value]) => {
+            //eslint-disable-next-line  @typescript-eslint/no-explicit-any
+            (this._maskService as any)[key] = value;
+        });
+        return this._maskService.applyMask(`${value}`, mask);
     }
 }

@@ -7,7 +7,7 @@ import {
     NEW_CONFIG,
     optionsConfig,
 } from './ngx-mask.config';
-import { NgxMaskApplierService } from './ngx-mask-applier.service';
+import { NgxMaskService } from './ngx-mask.service';
 
 /**
  * @internal
@@ -35,7 +35,7 @@ export function provideNgxMask(configValue?: optionsConfig | (() => optionsConfi
             provide: NGX_MASK_CONFIG,
             useFactory: _configFactory,
         },
-        NgxMaskApplierService,
+        NgxMaskService,
     ];
 }
 

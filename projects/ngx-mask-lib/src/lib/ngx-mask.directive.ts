@@ -100,7 +100,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private readonly document = inject(DOCUMENT);
 
-    public _maskService = inject(NgxMaskService);
+    public _maskService = inject(NgxMaskService, { self: true });
 
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
@@ -156,12 +156,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
                 return;
             } else {
-                this._maskService.maskSpecialCharacters = specialCharacters.currentValue || [];
+                this._maskService.specialCharacters = specialCharacters.currentValue || [];
             }
         }
         // Only overwrite the mask available patterns if a pattern has actually been passed in
         if (patterns && patterns.currentValue) {
-            this._maskService.maskAvailablePatterns = patterns.currentValue;
+            this._maskService.patterns = patterns.currentValue;
         }
         if (prefix) {
             this._maskService.prefix = prefix.currentValue;
@@ -205,8 +205,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (allowNegativeNumbers) {
             this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
             if (this._maskService.allowNegativeNumbers) {
-                this._maskService.maskSpecialCharacters =
-                    this._maskService.maskSpecialCharacters.filter((c: string) => c !== '-');
+                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
+                    (c: string) => c !== '-'
+                );
             }
         }
         if (leadZeroDateTime) {
@@ -243,8 +244,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (value && value.toString().length >= 1) {
             let counterOfOpt = 0;
-            for (const key in this._maskService.maskAvailablePatterns) {
-                if (this._maskService.maskAvailablePatterns[key]?.optional) {
+            for (const key in this._maskService.patterns) {
+                if (this._maskService.patterns[key]?.optional) {
                     if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
                         const opt: string = this._maskValue
                             .split('')
