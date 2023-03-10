@@ -28,6 +28,14 @@
 
 ### Fix
 
+-   Fix README.md
+
+<a name="15.0.0"></a>
+
+# 15.0.1(2022-26-12)
+
+### Fix
+
 -   separate `provideEnvironmentNgxMask` and `provideNgxMask`
 
 <a name="15.0.0"></a>
