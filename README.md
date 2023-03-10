@@ -19,7 +19,8 @@
 You can also try our NGX LOADER INDICATOR [check](https://www.npmjs.com/package/ngx-loader-indicator).
 You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-copypaste).
 
-### You can try live  [demo](https://jsdaddy.github.io/ngx-mask/) with examples
+### You can try live [demo](https://jsdaddy.github.io/ngx-mask/) with examples
+
 
 ## Installing
 
@@ -29,9 +30,9 @@ $ npm install --save ngx-mask
 
 ## Quickstart if ngx-mask version >= 15.0.0
 
-Import **ngx-mask** directive, pipe and provide NgxMask providers with  `provideNgxMask` function.
+Import **ngx-mask** directive, pipe and provide NgxMask providers with `provideNgxMask` function.
 
-### With default  config options application level
+### With default config options application level
 
 ```typescript
 bootstrapApplication(AppComponent, {
@@ -41,7 +42,7 @@ bootstrapApplication(AppComponent, {
         (...)
     ],
 }).catch((err) => console.error(err));
-````
+```
 
 ### Passing your own mask config options
 
@@ -79,7 +80,8 @@ bootstrapApplication(AppComponent, {
 }).catch((err) => console.error(err));
 ```
 
-### With config options feature level 
+### With config options feature level
+
 ```typescript
 @Component({
     selector: 'my-feature',
@@ -97,7 +99,8 @@ export class MyFeatureComponent {}
 ```
 
 Then, import directive, pipe to needed standalone component and just define masks in inputs.
-### With Angular modules 
+
+### With Angular modules
 
 ```typescript
 @NgModule({
@@ -110,7 +113,7 @@ Then, import directive, pipe to needed standalone component and just define mask
 
 ## Quickstart if ngx-mask version < 15.0.0
 
-For version ngx-mask < 15.0.0 
+For version ngx-mask < 15.0.0
 Import **ngx-mask** module in Angular app.
 
 ### With default mask config options
@@ -179,10 +182,10 @@ Also, you can use mask pipe.
 <span>{{phone | mask: '(000) 000-0000'}}</span>
 ```
 
-For separator you can add thousandSeparator
+You could path any valid config options, for example thousandSeparator and suffix
 
 ```html
-<span>{{value | mask: 'separator':','}}</span>
+<span>{{value | mask: 'separator': {thousandSeparator: ',', suffix: ' sm'}}</span>
 ```
 
 ### Examples
@@ -275,10 +278,10 @@ You can define custom pattern and specify symbol to be rendered in input field.
 
 ```typescript
 pattern = {
-  B: {
-    pattern: new RegExp('\\d'),
-    symbol: 'X',
-  },
+    B: {
+        pattern: new RegExp('\\d'),
+        symbol: 'X',
+    },
 };
 ```
 
@@ -376,9 +379,9 @@ and in your component
 customMask: [string, pattern];
 
 pattern = {
-  P: {
-    pattern: new RegExp('\\d'),
-  },
+    P: {
+        pattern: new RegExp('\\d'),
+    },
 };
 
 this.customMask = ['PPP-PPP', this.pattern];

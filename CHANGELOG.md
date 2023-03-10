@@ -1,73 +1,87 @@
+<a name="15.1.0"></a>
+
+# 15.1.0(2023-03-10)
+
+### Fix
+
+-   Fix ([#1077](https://github.com/JsDaddy/ngx-mask/issues/1077))
+
 <a name="15.0.3"></a>
 
 # 15.0.3(2023-02-20)
 
 ### Fix
-- Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
+
+-   Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
 
 <a name="15.0.2"></a>
 
 # 15.0.2(2022-12-26)
 
 ### Fix
-- Fix README.md
 
-<a name="15.0.1">
+-   Fix README.md
+
+<a name="15.0.0"></a>
 
 # 15.0.1(2022-26-12)
 
 ### Fix
-- separate `provideEnvironmentNgxMask` and `provideNgxMask`
+
+-   separate `provideEnvironmentNgxMask` and `provideNgxMask`
 
 <a name="15.0.0"></a>
 
 # 15.0.0(2022-19-12)
 
 ### Fix
-- update ng 15.x
-- usage new standalone API
+
+-   update ng 15.x
+-   usage new standalone API
 
 <a name="14.2.4"></a>
 
 # 14.2.4(2022-10-27)
 
 ### Fix
-- Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
-- new code and styles linting rules formatting
+
+-   Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
+-   new code and styles linting rules formatting
 
 <a name="14.2.3"></a>
 
 # 14.2.3(2022-09-16)
 
 ### Fix
-- Fix ([#1030](https://github.com/JsDaddy/ngx-mask/issues/1030))
 
+-   Fix ([#1030](https://github.com/JsDaddy/ngx-mask/issues/1030))
 
 <a name="14.2.2"></a>
 
 # 14.2.2(2022-09-13)
 
 ### Fix
-- Fix ([#960](https://github.com/JsDaddy/ngx-mask/issues/960))
-- Fix ([#946](https://github.com/JsDaddy/ngx-mask/issues/946))
-- Fix ([#1027](https://github.com/JsDaddy/ngx-mask/issues/1027))
+
+-   Fix ([#960](https://github.com/JsDaddy/ngx-mask/issues/960))
+-   Fix ([#946](https://github.com/JsDaddy/ngx-mask/issues/946))
+-   Fix ([#1027](https://github.com/JsDaddy/ngx-mask/issues/1027))
 
 <a name="14.2.1"></a>
 
 # 14.2.1(2022-09-11)
 
 ### Fix
-- package build process
 
+-   package build process
 
 <a name="14.2.0"></a>
 
 # 14.2.0(2022-09-11)
 
 ### Fix
-- update ng 14.2.1
-- Fix ([#1029](https://github.com/JsDaddy/ngx-mask/issues/1029))
 
+-   update ng 14.2.1
+-   Fix ([#1029](https://github.com/JsDaddy/ngx-mask/issues/1029))
 
 <a name="14.0.3"></a>
 
@@ -75,14 +89,14 @@
 
 ### Fix
 
-- Fix ([#1017](https://github.com/JsDaddy/ngx-mask/issues/1017))
-- Fix ([#1008](https://github.com/JsDaddy/ngx-mask/issues/1008))
+-   Fix ([#1017](https://github.com/JsDaddy/ngx-mask/issues/1017))
+-   Fix ([#1008](https://github.com/JsDaddy/ngx-mask/issues/1008))
 
 <a name="14.0.2"></a>
 
 # 14.0.2(2022-06-09)
 
-- Fix ([#688](https://github.com/JsDaddy/ngx-mask/issues/688))
+-   Fix ([#688](https://github.com/JsDaddy/ngx-mask/issues/688))
 
 <a name="14.0.1"></a>
 
@@ -94,7 +108,7 @@
 
 ### Feature
 
-- Update to Angular 14
+-   Update to Angular 14
 
 <a name="13.1.15"></a>
 
@@ -102,7 +116,7 @@
 
 ### Fix
 
-- Fix ([#648](https://github.com/JsDaddy/ngx-mask/issues/648))
+-   Fix ([#648](https://github.com/JsDaddy/ngx-mask/issues/648))
 
 <a name="13.1.14"></a>
 
@@ -110,7 +124,7 @@
 
 ### Fix
 
-- Fix ([#984](https://github.com/JsDaddy/ngx-mask/issues/984))
+-   Fix ([#984](https://github.com/JsDaddy/ngx-mask/issues/984))
 
 <a name="13.1.13"></a>
 
@@ -118,7 +132,7 @@
 
 ### Fix
 
-- Fix ([#915](https://github.com/JsDaddy/ngx-mask/issues/915))
+-   Fix ([#915](https://github.com/JsDaddy/ngx-mask/issues/915))
 
 <a name="13.1.12"></a>
 
@@ -126,8 +140,8 @@
 
 ### Fix
 
-- Fixed issue where active elements within a shadowRoot would not be found by mask
-- Fix ([#909](https://github.com/JsDaddy/ngx-mask/issues/909))
+-   Fixed issue where active elements within a shadowRoot would not be found by mask
+-   Fix ([#909](https://github.com/JsDaddy/ngx-mask/issues/909))
 
 <a name="13.1.11"></a>
 
@@ -135,7 +149,7 @@
 
 ### Fix
 
-- Fix ([#1000](https://github.com/JsDaddy/ngx-mask/issues/1000))
+-   Fix ([#1000](https://github.com/JsDaddy/ngx-mask/issues/1000))
 
 <a name="13.1.10"></a>
 
@@ -143,7 +157,7 @@
 
 ### Fix
 
-- Fix ([#948](https://github.com/JsDaddy/ngx-mask/issues/948))
+-   Fix ([#948](https://github.com/JsDaddy/ngx-mask/issues/948))
 
 <a name="13.1.9"></a>
 
@@ -151,7 +165,7 @@
 
 ### Fix
 
-- Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
+-   Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
 
 <a name="13.1.8"></a>
 
@@ -159,8 +173,8 @@
 
 ### Feature
 
-- Added lowercase and uppercase mask support
-- Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
+-   Added lowercase and uppercase mask support
+-   Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
 
 <a name="13.1.6"></a>
 
@@ -168,8 +182,8 @@
 
 ### Fix
 
-- Ghost characters shown in input when toggling mask on/off
-- Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
+-   Ghost characters shown in input when toggling mask on/off
+-   Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
 
 <a name="13.1.5"></a>
 
@@ -177,7 +191,7 @@
 
 ### Fix
 
-- Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
+-   Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
 
 <a name="13.1.4"></a>
 
@@ -185,8 +199,8 @@
 
 ### Feature
 
-- Function maskFilled is added
-- Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+-   Function maskFilled is added
+-   Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
 
 <a name="13.1.3"></a>
 
@@ -203,7 +217,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Features
 
-- added triggerOnMaskChange, allow mask change to trigger onChange
+-   added triggerOnMaskChange, allow mask change to trigger onChange
 
 <a name="13.1.1"></a>
 
@@ -211,8 +225,8 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Fixes
 
-- Revision for separator logic.
-- Set default decimalMarker to [".",","] instead "."
+-   Revision for separator logic.
+-   Set default decimalMarker to [".",","] instead "."
 
 <a name="13.1.0"></a>
 
@@ -220,12 +234,12 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Features
 
-- Enable non-zero-selections
-- Deletion of special mask character moves just the cursor instead of deleting the character next to it
+-   Enable non-zero-selections
+-   Deletion of special mask character moves just the cursor instead of deleting the character next to it
 
 ### Test/CI fixes
 
-- Enable cypress component testing
+-   Enable cypress component testing
 
 <a name="13.0.1"></a>
 
@@ -233,9 +247,9 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Test/CI fixes
 
-- the same that in 13.0.0
-- fix test
-- fix CI
+-   the same that in 13.0.0
+-   fix test
+-   fix CI
 
 <a name="13.0.0"></a>
 
@@ -243,10 +257,10 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Angular 13 release
 
-- up all dependencies to latest
-- move from tslint to eslint
-- add more strict rules for tsconfig and code quality config
-- build library with IVY and new angular package structure
+-   up all dependencies to latest
+-   move from tslint to eslint
+-   add more strict rules for tsconfig and code quality config
+-   build library with IVY and new angular package structure
 
 <a name="12.0.0"></a>
 
@@ -338,7 +352,6 @@ Fix for #721 - prevent entering dots when decimal marker is comma
 # [9.0.1 Bugfix](2020-04-08)
 
 Fix for #715 - mark fields as touched on blur on form fields with an empty mask
-
 Fix for #711 - stop fields being marked as dirty after a form reset
 
 <a name="9.0.0"></a>
@@ -346,11 +359,8 @@ Fix for #711 - stop fields being marked as dirty after a form reset
 # [9.0.0 Update to Angular 9](2020-04-08)
 
 Feature: Library updated to Angular 9
-
 Feature: Can pass empty string for thousandSeparator if do not want any separation
-
 Fix: allowNegativeNumbers works correctly when set as true or false. If false, entering a hyphen will not be allowed
-
 Fix: stop cursor jumping around when mask is set as empty
 
 <a name="8.2.0"></a>
@@ -358,11 +368,8 @@ Fix: stop cursor jumping around when mask is set as empty
 # [8.2.0 bugfix and breaking change](2020-01-17)
 
 Fix for #657 - showMaskTyped option now works correctly when set in the config
-
 Fix for #665 - validateTime mark field as invalid immediately if value is null
-
 Feature: Added new error page for handling 404's, and new bugs page for being a playground for bug fixing
-
 Breaking change: Made validation error return an object named mask. If you were previously checking for a
 validation error named 'Mask error' then it will need changing to just 'mask'.
 
@@ -371,7 +378,6 @@ validation error named 'Mask error' then it will need changing to just 'mask'.
 # [8.1.7 bugfix](2019-12-27)
 
 Fix for #369 - add thousandSeparator to separator pipe
-
 Fix for #381 - add support to negative number in separator mask
 
 <a name="8.1.6"></a>
@@ -379,9 +385,7 @@ Fix for #381 - add support to negative number in separator mask
 # [8.1.6 bugfix](2019-10-30)
 
 Fix for #560 - do not overwrite the mask available patterns when patterns attribute passed in value is a falsey value i.e null/undefined/false
-
 Fix for #620 - allow delete button to work when at beginning of input and no prefix exists
-
 Fix for #621 - validation config value now works correctly
 
 <a name="8.1.5"></a>
@@ -395,7 +399,6 @@ Fix for #614 - export everything from config
 # [8.1.4 bugfix](2019-10-23)
 
 Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
-
 Project folder structure converted over to follow Angular CLI way of libraries
 
 <a name="8.1.3"></a>
@@ -427,11 +430,13 @@ update separator
 # [8.0.8 bugfix](2019-10-07)
 
 bugs fix [refs: #554, #580, #582]
+
 <a name="8.0.8"></a>
 
 # [8.0.7 bugfix](2019-10-04)
 
 bugs fix [refs: #579, #576, #561]
+
 <a name="8.0.7"></a>
 
 # [8.0.7 update date and time](2019-10-02)
@@ -515,6 +520,7 @@ Secure input and bugs fix
 # [7.6.6 coma_separator](2019-03-18)
 
 Bugs fix
+
 <a name="7.6.4"></a>
 
 # [7.6.4 coma_separator] (2019-03-13)

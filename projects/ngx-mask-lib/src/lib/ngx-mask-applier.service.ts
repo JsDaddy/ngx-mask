@@ -14,9 +14,9 @@ export class NgxMaskApplierService {
 
     public clearIfNotMatch: IConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
 
-    public maskSpecialCharacters: IConfig['specialCharacters'] = this._config.specialCharacters;
+    public specialCharacters: IConfig['specialCharacters'] = this._config.specialCharacters;
 
-    public maskAvailablePatterns: IConfig['patterns'] = this._config.patterns;
+    public patterns: IConfig['patterns'] = this._config.patterns;
 
     public prefix: IConfig['prefix'] = this._config.prefix;
 
@@ -400,17 +400,15 @@ export class NgxMaskApplierService {
                 } else if (inputSymbol === ' ' && maskExpression[cursor] === ' ') {
                     result += inputSymbol;
                     cursor++;
-                } else if (
-                    this.maskSpecialCharacters.indexOf(maskExpression[cursor] ?? '') !== -1
-                ) {
+                } else if (this.specialCharacters.indexOf(maskExpression[cursor] ?? '') !== -1) {
                     result += maskExpression[cursor];
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                     i--;
                 } else if (
-                    this.maskSpecialCharacters.indexOf(inputSymbol) > -1 &&
-                    this.maskAvailablePatterns[maskExpression[cursor] ?? ''] &&
-                    this.maskAvailablePatterns[maskExpression[cursor] ?? '']?.optional
+                    this.specialCharacters.indexOf(inputSymbol) > -1 &&
+                    this.patterns[maskExpression[cursor] ?? ''] &&
+                    this.patterns[maskExpression[cursor] ?? '']?.optional
                 ) {
                     if (
                         !!inputArray[cursor] &&
@@ -441,7 +439,7 @@ export class NgxMaskApplierService {
                     result += inputSymbol;
                 } else if (
                     this.showMaskTyped &&
-                    this.maskSpecialCharacters.indexOf(inputSymbol) < 0 &&
+                    this.specialCharacters.indexOf(inputSymbol) < 0 &&
                     inputSymbol !== this.placeHolderCharacter
                 ) {
                     stepBack = true;
@@ -450,8 +448,7 @@ export class NgxMaskApplierService {
         }
         if (
             result.length + 1 === maskExpression.length &&
-            this.maskSpecialCharacters.indexOf(maskExpression[maskExpression.length - 1] ?? '') !==
-                -1
+            this.specialCharacters.indexOf(maskExpression[maskExpression.length - 1] ?? '') !== -1
         ) {
             result += maskExpression[maskExpression.length - 1];
         }
@@ -479,7 +476,7 @@ export class NgxMaskApplierService {
         }
         let onlySpecial = false;
         if (backspaced) {
-            onlySpecial = inputArray.every((char) => this.maskSpecialCharacters.includes(char));
+            onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
         let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
         if (result.length === 0) {
@@ -489,16 +486,14 @@ export class NgxMaskApplierService {
     }
 
     public _findSpecialChar(inputSymbol: string): undefined | string {
-        return this.maskSpecialCharacters.find((val: string) => val === inputSymbol);
+        return this.specialCharacters.find((val: string) => val === inputSymbol);
     }
 
     protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-        this.maskAvailablePatterns = this.customPattern
-            ? this.customPattern
-            : this.maskAvailablePatterns;
+        this.patterns = this.customPattern ? this.customPattern : this.patterns;
         return (
-            (this.maskAvailablePatterns[maskSymbol]?.pattern &&
-                this.maskAvailablePatterns[maskSymbol]?.pattern.test(inputSymbol)) ??
+            (this.patterns[maskSymbol]?.pattern &&
+                this.patterns[maskSymbol]?.pattern.test(inputSymbol)) ??
             false
         );
     }
@@ -589,8 +584,8 @@ export class NgxMaskApplierService {
                 this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`
             );
 
-            const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx) ?? [];
-            const precisionMatchLength: number = precisionMatch[0]?.length ?? 0;
+            const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
+            const precisionMatchLength: number = (precisionMatch && precisionMatch[0]?.length) ?? 0;
             if (precisionMatchLength - 1 > precision) {
                 const diff = precisionMatchLength - 1 - precision;
                 // eslint-disable-next-line no-param-reassign
