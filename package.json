@@ -1,6 +1,6 @@
 {
     "name": "ngx-mask",
-    "version": "15.0.3",
+    "version": "15.1.0",
     "description": "Awesome ngx mask",
     "license": "MIT",
     "engines": {
@@ -92,7 +92,7 @@
         "angular-cli-ghpages": "1.0.5",
         "angular-http-server": "1.11.1",
         "cypress": "12.7.0",
-        "eslint": "8.35.0",
+        "eslint": "8.36.0",
         "eslint-config-prettier": "8.7.0",
         "eslint-plugin-json": "^3.1.0",
         "eslint-plugin-prettier": "4.2.1",
