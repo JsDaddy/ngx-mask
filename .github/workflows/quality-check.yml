@@ -20,7 +20,7 @@ jobs:
           node-version: 18
       - name: Check quality
         run: |
-          npm ci --force
+          npm ci --legacy-peer-deps
           npm run lint
           npm test
           npm run build
