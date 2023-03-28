@@ -1,0 +1,18 @@
+@import "src/assets/style/variables";
+.chips-block {
+  display: flex;
+  flex-wrap: wrap;
+  .chips {
+    background: $chip-bg;
+    color: $orange;
+    padding: 0 10px;
+    gap: 10px;
+    height: 21px;
+    border-radius: 25px;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+    display: inline-flex;
+    align-items: center;
+  }
+}

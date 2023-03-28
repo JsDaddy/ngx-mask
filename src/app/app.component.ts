@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -6,13 +6,15 @@ import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from './header/header.component';
-import { NgForOf, NgStyle } from '@angular/common';
+import {NgForOf, NgOptimizedImage, NgStyle} from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { MatListModule } from '@angular/material/list';
 import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
+import { ChipsComponent } from './shared/chips/chips.component';
+import { AssetPipe } from './shared/asset/asset.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-root',
@@ -29,9 +31,12 @@ import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/co
         MatSidenavModule,
         OptionsComponent,
         HeaderComponent,
+        ChipsComponent,
+        NgOptimizedImage,
+        AssetPipe,
     ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
     public inputVal!: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
@@ -42,6 +47,13 @@ export class AppComponent implements OnInit {
     public chosenList!: number;
 
     public lists!: IListItem[];
+
+    public chips = ['Angular', 'TypeScript',  'Web', 'Input', 'Pipe', 'Show-Masks'];
+
+    @ViewChildren('accordion', { read: ElementRef }) accordion!: QueryList<ElementRef>;
+
+    @ViewChildren('panel', { read: ElementRef }) panel!: QueryList<ElementRef>;
+
 
     public switchDoc(idList: number): void {
         switch (idList) {
@@ -89,4 +101,29 @@ export class AppComponent implements OnInit {
         this.chosenList = 1;
         this.lists = lists;
     }
+
+    public toggle(index: number): void {
+        this.accordion.get(index)?.nativeElement.classList.toggle("active");
+        const panel = this.panel.get(index)?.nativeElement;
+        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+        const accordionsArray = this.accordion.toArray().map((el) => el.nativeElement.classList);
+        accordionsArray.map((el, i ) => {
+            if (index !== i && el.contains("active")) {
+                this.accordion.get(i)?.nativeElement.classList.remove("active");
+                const closePanel = this.panel.get(i)?.nativeElement;
+                closePanel.style.maxHeight = null;
+            }
+        })
+    }
+
+    public openFirstAccordion(): void {
+        this.accordion.first.nativeElement.classList.toggle("active");
+        const panel = this.accordion.first.nativeElement.nextElementSibling;
+        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+    }
+
+    public ngAfterViewInit() {
+        this.openFirstAccordion();
+    }
+
 }

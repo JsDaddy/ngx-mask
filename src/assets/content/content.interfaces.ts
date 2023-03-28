@@ -29,6 +29,8 @@ export interface IListItem {
     header: string;
     id: number;
     text: ITextContent[];
+    defaultSvg?: string;
+    activeSvg?: string;
 }
 
 export interface IMaskOptions {

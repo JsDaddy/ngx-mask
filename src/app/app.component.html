@@ -3,28 +3,29 @@
     <section class="mask-wrap">
         <mat-drawer-container>
             <mat-drawer mode="side" opened>
-                <mat-accordion>
-                    <mat-expansion-panel *ngFor="let list of lists" [expanded]="list.id === 1">
-                        <mat-expansion-panel-header (click)="switchDoc(list.id)">
-                            <mat-panel-title
-                                [ngStyle]="{ color: list.id === chosenList ? '#ffcc00' : 'black' }"
-                                >{{ list.header }}
-                            </mat-panel-title>
-                        </mat-expansion-panel-header>
-                        <mat-nav-list *ngFor="let item of list.text">
-                            <button
-                                mat-button
-                                [ngStyle]="{ color: item.id === chosenItem ? '#ffcc00' : 'black' }"
-                                class="date"
-                                id="{{ item.id }}"
-                                (click)="handleClick(item.id, item.scrollTo)"
-                                [routerLink]="[]"
-                                fragment="{{ item.scrollTo }}">
-                                {{ item.content }}
-                            </button>
-                        </mat-nav-list>
-                    </mat-expansion-panel>
-                </mat-accordion>
+              <div *ngFor="let list of lists;let i = index;">
+                <div class="accordion" (click)="toggle(i); switchDoc(list.id)"
+                     [ngStyle]="{ color: list.id === chosenItem ? '#ffcc00' : '#FFFFFF' }"
+                     id="{{ list.id }}"
+                     #accordion
+                >
+                  <img width="32" height="32" [ngSrc]="list.defaultSvg | asset" class="left-side-accordion" alt=""/>
+                  <button class="accordion-btn"> {{ list.header }} </button>
+                </div>
+                <div class="panel" #panel>
+                  <p *ngFor="let item of list.text"
+                     class="accordion-box"
+                     [ngStyle]="{ color: item.id === chosenItem ? '#ffcc00' : '#FFFFFF' }"
+                     id="{{ item.id }}"
+                     (click)="handleClick(item.id, item.scrollTo)"
+                     [routerLink]="[]"
+                     fragment="{{ item.scrollTo }}">
+                    {{ item.content }} </p>
+                </div>
+              </div>
+              <div class="visit-btn">
+                <button class="color-btn">Visit WebSite</button>
+              </div>
             </mat-drawer>
             <mat-drawer-content>
                 <ngx-mask-demo-options

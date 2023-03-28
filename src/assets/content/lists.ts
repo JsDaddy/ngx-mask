@@ -4,6 +4,8 @@ export const lists: IListItem[] = [
     {
         header: 'Common cases',
         id: 1,
+        defaultSvg: 'common_cases',
+        activeSvg: 'common_cases_active',
         text: [
             {
                 content: 'Date',
@@ -40,6 +42,8 @@ export const lists: IListItem[] = [
     {
         header: 'Options',
         id: 2,
+        defaultSvg: 'options',
+        activeSvg: 'options',
         text: [
             {
                 content: 'Prefix',
@@ -76,6 +80,8 @@ export const lists: IListItem[] = [
     {
         header: 'Separators',
         id: 3,
+        defaultSvg: 'separator',
+        activeSvg: 'separator',
         text: [
             {
                 content: 'Separator',
@@ -97,6 +103,8 @@ export const lists: IListItem[] = [
     {
         header: 'Other',
         id: 4,
+        defaultSvg: 'other',
+        activeSvg: 'other',
         text: [
             {
                 content: 'Secure input',
