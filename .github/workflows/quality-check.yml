@@ -1,6 +1,6 @@
 name: build and quality
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   quality-check:
