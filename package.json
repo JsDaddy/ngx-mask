@@ -110,7 +110,7 @@
         "ng-packagr": "15.2.2",
         "postcss-scss": "4.0.6",
         "prettier": "2.8.7",
-        "puppeteer": "19.8.1",
+        "puppeteer": "^19.8.2",
         "stylelint": "15.3.0",
         "stylelint-config-prettier": "9.0.5",
         "stylelint-config-recommended-scss": "9.0.1",
