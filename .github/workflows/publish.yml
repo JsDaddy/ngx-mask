@@ -16,7 +16,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Build library
         run: |
-          npm ci --legacy-peer-deps
+          npm ci --force
           npm run build:lib
       - name: Publish library
         run: npm run publish:lib

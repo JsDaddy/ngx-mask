@@ -1,4 +1,11 @@
-import {AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChildren} from '@angular/core';
+import {
+    AfterViewInit,
+    Component,
+    ElementRef,
+    OnInit,
+    QueryList,
+    ViewChildren,
+} from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -6,7 +13,7 @@ import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from './header/header.component';
-import {NgForOf, NgOptimizedImage, NgStyle} from '@angular/common';
+import { NgForOf, NgOptimizedImage, NgStyle } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,12 +55,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public lists!: IListItem[];
 
-    public chips = ['Angular', 'TypeScript',  'Web', 'Input', 'Pipe', 'Show-Masks'];
+    public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    @ViewChildren('accordion', { read: ElementRef }) accordion!: QueryList<ElementRef>;
+    @ViewChildren('accordion', { read: ElementRef })
+    public accordion!: QueryList<ElementRef>;
 
-    @ViewChildren('panel', { read: ElementRef }) panel!: QueryList<ElementRef>;
-
+    @ViewChildren('panel', { read: ElementRef })
+    public panel!: QueryList<ElementRef>;
 
     public switchDoc(idList: number): void {
         switch (idList) {
@@ -103,27 +111,26 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     public toggle(index: number): void {
-        this.accordion.get(index)?.nativeElement.classList.toggle("active");
+        this.accordion.get(index)?.nativeElement.classList.toggle('active');
         const panel = this.panel.get(index)?.nativeElement;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
         const accordionsArray = this.accordion.toArray().map((el) => el.nativeElement.classList);
-        accordionsArray.map((el, i ) => {
-            if (index !== i && el.contains("active")) {
-                this.accordion.get(i)?.nativeElement.classList.remove("active");
+        accordionsArray.map((el, i) => {
+            if (index !== i && el.contains('active')) {
+                this.accordion.get(i)?.nativeElement.classList.remove('active');
                 const closePanel = this.panel.get(i)?.nativeElement;
                 closePanel.style.maxHeight = null;
             }
-        })
+        });
     }
 
     public openFirstAccordion(): void {
-        this.accordion.first.nativeElement.classList.toggle("active");
+        this.accordion.first.nativeElement.classList.toggle('active');
         const panel = this.accordion.first.nativeElement.nextElementSibling;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
     }
 
     public ngAfterViewInit() {
         this.openFirstAccordion();
     }
-
 }

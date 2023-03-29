@@ -1,5 +1,5 @@
-@import "src/assets/style/variables";
-@import "src/styles";
+@import 'src/assets/style/variables';
+@import 'src/styles';
 .content-wrapper {
     display: flex;
     height: 100%;
@@ -12,7 +12,7 @@
         mat-drawer-container {
             height: 100%;
             overflow: hidden;
-            mat-expansion-panel  {
+            mat-expansion-panel {
                 mat-nav-list {
                     align-self: flex-start;
                     button {
@@ -42,7 +42,7 @@
                     }
 
                     .color-btn:after {
-                        content: url("~src/assets/img/chevron-right-white.svg");
+                        content: url('~src/assets/img/chevron-right-white.svg');
                         width: 20px;
                         height: 20px;
                         background: $default-btn-active-bg;
@@ -57,8 +57,6 @@
         }
     }
 }
-
-
 
 .accordion {
     cursor: pointer;
@@ -87,17 +85,16 @@
         color: white;
         cursor: pointer;
     }
-
 }
 
 .accordion:hover {
-    color: #FFD64D;
+    color: #ffd64d;
     border-width: 2px 0;
     border-style: solid;
     border-color: $yellow-bg;
     border-radius: 10px;
     &.accordion:after {
-        content: url("~src/assets/img/chevron_right_24px.svg");
+        content: url('~src/assets/img/chevron_right_24px.svg');
     }
     .left-side-accordion {
         color: $yellow-bg;
@@ -107,9 +104,8 @@
     }
 }
 
-
 .accordion:after {
-    content: url("~src/assets/img/chevron_right_24px white.svg");
+    content: url('~src/assets/img/chevron_right_24px white.svg');
     margin-left: auto;
     margin-right: 19px;
 }
@@ -124,12 +120,10 @@
         }
     }
     &.accordion:after {
-        content: url("~src/assets/img/chevron_right_24px.svg");
+        content: url('~src/assets/img/chevron_right_24px.svg');
         transform: rotate(180deg);
     }
 }
-
-
 
 .panel {
     padding: 0 18px;
