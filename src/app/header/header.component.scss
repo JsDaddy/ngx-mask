@@ -1,6 +1,7 @@
+@import "src/styles";
 :host {
     display: block;
-    height: 64px;
+    height: 68px;
 }
 .header {
     position: fixed;
@@ -10,22 +11,69 @@
     right: 0;
     display: flex;
     flex-direction: row;
-    background-color: whitesmoke;
+    align-items: center;
+    background: $white;
+    border-right: 1px solid $grey-header;
+    height: 68px;
 
-    mat-toolbar-row {
+    a {
+        text-decoration: none;
+        color: $black;
+        font-weight: bold;
+    }
+
+    .left-side {
         justify-content: flex-start;
-        width: 5%;
-        padding: 0 56px;
-
-        a {
-            text-decoration: none;
-            color: black;
-            font-weight: bold;
-        }
-
+        width: 310px;
+        height: 68px;
         .logo {
-            width: 75px;
-            height: 35px;
+            padding: 20px 0 19px 20px;
         }
+    }
+    .center-side {
+        display: flex;
+        align-items: center;
+        .default-btn, .active-btn {
+            border-radius: 9px;
+            @include btn-text;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 5px 23px;
+            gap: 10px;
+            height: 31px;
+            cursor: pointer;
+        }
+        .active-btn {
+            color: $default-btn-active-text;
+            background: $default-btn-active-bg;
+            border: 1px solid $grey-header;
+        }
+        .default-btn {
+            color: $default-btn-active-bg;
+            border: none;
+        }
+    }
+    .quit-logo {
+        margin-left: auto;
+        padding: 10px 10px 11px 0;
+        content: url("~src/assets/img/button_exit.svg");
+        width: 48px;
+        height: 48px;
+    }
+    .mrl-20 {
+        margin-left: 20px;
+    }
+    .mr-5 {
+        margin: 0 5px;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .quit-logo {
+        content: url("~src/assets/img/buttor_exit.svg") !important;
+    }
+    .center-side {
+        display: none !important;
     }
 }

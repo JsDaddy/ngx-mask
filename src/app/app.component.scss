@@ -1,5 +1,5 @@
-@import 'src/assets/style/variables';
 @import 'src/styles';
+
 .content-wrapper {
     display: flex;
     height: 100%;
@@ -9,23 +9,131 @@
         height: calc(100% - 64px);
         overflow: auto;
 
-        mat-drawer-container {
-            height: 100%;
+        .drawer-container {
+            display: flex;
             overflow: hidden;
-            mat-expansion-panel {
-                mat-nav-list {
-                    align-self: flex-start;
-                    button {
-                        width: 100%;
-                    }
-                }
-            }
 
-            mat-drawer {
+            .drawer {
+                position: fixed;
+                z-index: 2;
+                height: 100%;
+                top: 68px;
+                left: 0;
+                right: 0;
                 width: 310px;
                 background: $text-color-black;
+                padding-top: 22px;
+
+                .accordion-block {
+                    .accordion {
+                        cursor: pointer;
+                        text-align: left;
+                        outline: none;
+                        font-size: 15px;
+                        transition: 0.4s;
+                        width: 262px;
+                        height: 50px;
+                        background: #191919;
+                        margin: 10px 24px;
+                        border-width: 2px 0;
+                        border-style: solid;
+                        border-color: $accordion-border;
+                        border-radius: 10px;
+                        align-items: center;
+                        display: flex;
+
+                        .left-side-accordion {
+                            border-radius: 50%;
+                            margin: 9px 15px 9px 10px;
+                            background: rgba(255, 255, 255, 0.05);
+                        }
+
+                        .accordion-btn {
+                            background: #191919;
+                            border: none;
+                            color: white;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .accordion:hover {
+                        color: #ffd64d;
+                        border-width: 2px 0;
+                        border-style: solid;
+                        border-color: $yellow-bg;
+                        border-radius: 10px;
+
+                        &.accordion:after {
+                            content: url('~src/assets/img/chevron_right_24px.svg');
+                        }
+
+                        .left-side-accordion {
+                            color: $yellow-bg;
+                        }
+
+                        .accordion-btn {
+                            color: $yellow-bg;
+                        }
+                    }
+
+                    .accordion:after {
+                        content: url('~src/assets/img/chevron_right_24px white.svg');
+                        margin-left: auto;
+                        margin-right: 19px;
+                    }
+
+                    .active {
+                        &.accordion {
+                            border-width: 2px 0 0 0;
+                            transition: 0ms;
+                            border-color: $yellow-bg;
+
+                            .accordion-btn {
+                                color: $yellow-bg;
+                            }
+                        }
+
+                        &.accordion:after {
+                            content: url('~src/assets/img/chevron_right_24px.svg');
+                            transform: rotate(180deg);
+                        }
+                    }
+
+                    .panel {
+                        padding: 0 24px;
+                        background-color: #191919;
+                        max-height: 0;
+                        overflow: hidden;
+                        transition: max-height 0.2s ease-out;
+                        @include regular-text;
+                        color: $white;
+
+                        .accordion-box {
+                            height: 21px;
+                            padding: 10px 0 0 60px;
+                        }
+
+                        .accordion-box:hover {
+                            cursor: pointer;
+                        }
+
+                        .accordion-box:active {
+                            color: $yellow-bg;
+                        }
+
+                        .accordion-box:last-child {
+                            border-width: 0 0 2px 0;
+                            border-color: $yellow-bg;
+                            border-style: solid;
+                            border-radius: 10px;
+                            padding: 10px 0 26px 60px;
+                        }
+                    }
+                }
+
                 .visit-btn {
-                    padding: 20px 24px;
+                    padding: 80px 24px 0 24px;
+
                     .color-btn {
                         display: flex;
                         flex-direction: row;
@@ -54,100 +162,45 @@
                     }
                 }
             }
+            .right-section {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-left: 310px;
+            }
         }
     }
 }
-
-.accordion {
-    cursor: pointer;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
-    width: 262px;
-    height: 50px;
-    background: #191919;
-    margin: 10px 24px;
-    border-width: 2px 0;
-    border-style: solid;
-    border-color: $accordion-border;
-    border-radius: 10px;
-    align-items: center;
-    display: flex;
-    .left-side-accordion {
-        border-radius: 50%;
-        margin: 9px 15px 9px 10px;
-        background: rgba(255, 255, 255, 0.05);
+@media screen and (max-width: 400px) {
+    .drawer {
+        display: none !important;
     }
-    .accordion-btn {
-        background: #191919;
-        border: none;
-        color: white;
-        cursor: pointer;
+    .right-section {
+        padding: 0 !important;
+        margin-top: 55px;
     }
-}
-
-.accordion:hover {
-    color: #ffd64d;
-    border-width: 2px 0;
-    border-style: solid;
-    border-color: $yellow-bg;
-    border-radius: 10px;
-    &.accordion:after {
-        content: url('~src/assets/img/chevron_right_24px.svg');
-    }
-    .left-side-accordion {
-        color: $yellow-bg;
-    }
-    .accordion-btn {
-        color: $yellow-bg;
-    }
-}
-
-.accordion:after {
-    content: url('~src/assets/img/chevron_right_24px white.svg');
-    margin-left: auto;
-    margin-right: 19px;
-}
-
-.active {
-    &.accordion {
-        border-width: 2px 0 0 0;
-        transition: 0ms;
-        border-color: $yellow-bg;
-        .accordion-btn {
-            color: $yellow-bg;
+    .navigation {
+        height: 55px;
+        background: $text-color-black;
+        width: 100%;
+        color: $white;
+        position: fixed;
+        z-index: 2;
+        top: 68px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .navigation-text {
+            @include font-s16;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: $white;
+            padding-left: 20px;
         }
-    }
-    &.accordion:after {
-        content: url('~src/assets/img/chevron_right_24px.svg');
-        transform: rotate(180deg);
-    }
-}
-
-.panel {
-    padding: 0 18px;
-    background-color: #191919;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    @include regular-text;
-    color: $white;
-    .accordion-box {
-        height: 21px;
-        padding: 10px 0 0 68px;
-    }
-    .accordion-box:hover {
-        cursor: pointer;
-    }
-    .accordion-box:active {
-        color: $yellow-bg;
-    }
-    .accordion-box:last-child {
-        border-width: 0 0 2px 0;
-        border-color: $yellow-bg;
-        border-style: solid;
-        border-radius: 10px;
-        padding: 10px 0 26px 68px;
+        img {
+            padding-right: 20px;
+        }
     }
 }

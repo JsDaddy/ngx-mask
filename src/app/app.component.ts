@@ -14,14 +14,10 @@ import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from './header/header.component';
 import { NgForOf, NgOptimizedImage, NgStyle } from '@angular/common';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
 import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
-import { ChipsComponent } from './shared/chips/chips.component';
 import { AssetPipe } from './shared/asset/asset.pipe';
+import { SubHeaderComponent } from './sub-header/sub-header.component';
 
 @Component({
     selector: 'ngx-mask-demo-root',
@@ -32,15 +28,11 @@ import { AssetPipe } from './shared/asset/asset.pipe';
         NgStyle,
         NgForOf,
         RouterLink,
-        MatButtonModule,
-        MatListModule,
-        MatExpansionModule,
-        MatSidenavModule,
         OptionsComponent,
         HeaderComponent,
-        ChipsComponent,
         NgOptimizedImage,
         AssetPipe,
+        SubHeaderComponent,
     ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -55,13 +47,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public lists!: IListItem[];
 
-    public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
+    @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
 
-    @ViewChildren('accordion', { read: ElementRef })
-    public accordion!: QueryList<ElementRef>;
-
-    @ViewChildren('panel', { read: ElementRef })
-    public panel!: QueryList<ElementRef>;
+    @ViewChildren('panel', { read: ElementRef }) public panel!: QueryList<ElementRef>;
 
     public switchDoc(idList: number): void {
         switch (idList) {

@@ -1,0 +1,14 @@
+@import "variables";
+@mixin border-bottom-yellow {
+  border-width: 0 0 2px 0;
+  border-style: solid;
+  border-color: $yellow-bg;
+  border-radius: 10px;
+}
+
+@mixin border-bottom-grey {
+  border-width: 0 0 2px 0 ;
+  border-style: solid;
+  border-color: $grey-header;
+  border-radius: 10px;
+}

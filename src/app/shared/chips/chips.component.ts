@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { NgForOf } from '@angular/common';
 
 @Component({
-    selector: 'ngx-mask-demo-chips',
+    selector: 'ngx-mask-chips',
     templateUrl: './chips.component.html',
     styleUrls: ['./chips.component.scss'],
     standalone: true,

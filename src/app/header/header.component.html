@@ -1,19 +1,27 @@
-<mat-toolbar class="header mat-elevation-z6">
-    <mat-toolbar-row>
+<div class="header">
+    <div class="left-side">
         <span class="logo">
             <a href="https://github.com/JsDaddy" target="_blank">
-                <img src="assets/img/logo.png" alt="jsdaddy" class="logo"
+                <img width="34" height="29" [ngSrc]="'new_logo' | asset" alt="jsdaddy" class="logo"
             /></a>
         </span>
-    </mat-toolbar-row>
-    <mat-toolbar-row>
-        <span>
-            <a mat-button href="https://jsdaddy.github.io/ngx-copypaste/">Ngx-copypaste </a>
-        </span>
-        <span>
-            <a mat-button class="loader" href="https://jsdaddy.github.io/ngx-loader-indicator/">
-                Ngx-loader-indicator
+    </div>
+    <div class="center-side">
+        <span class="mrl-20">
+            <a href="https://jsdaddy.github.io/ngx-copypaste/">
+                <button class="active-btn">Ngx-mask</button>
             </a>
         </span>
-    </mat-toolbar-row>
-</mat-toolbar>
+        <span class="mr-5">
+            <a href="https://jsdaddy.github.io/ngx-copypaste/">
+                <button class="default-btn">Ngx-copypaste</button>
+            </a>
+        </span>
+        <span>
+            <a class="loader" href="https://jsdaddy.github.io/ngx-loader-indicator/">
+                <button class="default-btn">Ngx-loader-indicator</button>
+            </a>
+        </span>
+    </div>
+    <div class="quit-logo"></div>
+</div>

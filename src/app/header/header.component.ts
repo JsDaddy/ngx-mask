@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatButtonModule } from '@angular/material/button';
+import { AssetPipe } from '../shared/asset/asset.pipe';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
     selector: 'ngx-mask-demo-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
     standalone: true,
-    imports: [MatToolbarModule, MatButtonModule],
+    imports: [AssetPipe, NgOptimizedImage],
 })
 export class HeaderComponent {}

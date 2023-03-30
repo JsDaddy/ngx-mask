@@ -1,0 +1,24 @@
+<div class="sub-header">
+    <div class="title">
+        <h3>{{ title }}</h3>
+        <div class="title-btn">
+            <button class="github-btn">
+                <img width="16" height="16" [ngSrc]="'github_star' | asset" alt="github" />
+                <span class="github-text">GitHub Stars</span>
+                <img
+                    width="8"
+                    height="8"
+                    [ngSrc]="'rectangle' | asset"
+                    alt="rectangle"
+                    class="rectangle" />
+            </button>
+            <button class="stars-btn">1,131</button>
+        </div>
+    </div>
+    <div class="sub-title span">
+        {{ subtitle }}
+    </div>
+    <div class="chips">
+        <ngx-mask-chips [chips]="chips"></ngx-mask-chips>
+    </div>
+</div>

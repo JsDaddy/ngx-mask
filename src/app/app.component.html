@@ -1,9 +1,13 @@
 <div class="content-wrapper">
     <ngx-mask-demo-header></ngx-mask-demo-header>
     <section class="mask-wrap">
-        <mat-drawer-container>
-            <mat-drawer mode="side" opened>
-                <div *ngFor="let list of lists; let i = index">
+        <div class="drawer-container">
+            <div class="navigation">
+                <span class="navigation-text">Navigation</span>
+                <img width="18" height="18" [ngSrc]="'navigation_chevron_white' | asset" alt="navigation">
+            </div>
+            <div class="drawer">
+                <div *ngFor="let list of lists; let i = index" class="accordion-block">
                     <div
                         class="accordion"
                         (click)="toggle(i); switchDoc(list.id)"
@@ -34,13 +38,14 @@
                 <div class="visit-btn">
                     <button class="color-btn">Visit WebSite</button>
                 </div>
-            </mat-drawer>
-            <mat-drawer-content>
+            </div>
+            <div class="right-section">
+                <ngx-mask-sub-header></ngx-mask-sub-header>
                 <ngx-mask-demo-options
                     [choose]="chosenItem"
                     [docs]="inputVal.docs"
                     [examples]="inputVal.examples"></ngx-mask-demo-options>
-            </mat-drawer-content>
-        </mat-drawer-container>
+            </div>
+        </div>
     </section>
 </div>

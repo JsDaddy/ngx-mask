@@ -2,7 +2,9 @@
 @import 'src/assets/fonts/fonts';
 @import 'src/app/shared/media-breakpoints/media-breakpoints';
 @import 'src/app/shared/typography/typography.mixin';
-
+@import 'src/assets/style/variables';
+@import "src/assets/style/border-mixin";
+@import "src/assets/style/font-mixin";
 :root {
     --yellowHover: #f4c529;
     --black: #191919;
@@ -290,31 +292,4 @@ h5,
 
 code {
     background: #f7f7f7 !important;
-}
-
-.mat-tab-group.mat-primary .mat-ink-bar,
-.mat-tab-nav-bar.mat-primary .mat-ink-bar {
-    background-color: #fc0 !important;
-}
-
-mat-card {
-    mat-card-content {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-}
-
-.mat-focused .mat-form-field-label {
-    /*change color of label*/
-    color: #fc0 !important;
-}
-
-.mat-form-field-underline {
-    /*change color of underline*/
-    background-color: #fc0 !important;
-}
-
-.mat-form-field-ripple {
-    /*change color of underline when focused*/
-    background-color: #fc0 !important;
 }

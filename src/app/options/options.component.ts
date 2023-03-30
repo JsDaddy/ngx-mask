@@ -1,12 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
-import { MatCardModule } from '@angular/material/card';
-import { JsonPipe, NgForOf, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {
+    JsonPipe,
+    NgForOf,
+    NgIf,
+    NgOptimizedImage,
+    NgStyle,
+    NgTemplateOutlet,
+} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HighlightModule } from 'ngx-highlightjs';
-import { MatInputModule } from '@angular/material/input';
 import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.interfaces';
+import { AssetPipe } from '../shared/asset/asset.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-options',
@@ -21,12 +26,11 @@ import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.in
         NgTemplateOutlet,
         FormsModule,
         ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatCardModule,
         HighlightModule,
         NgxMaskDirective,
         NgxMaskPipe,
+        NgOptimizedImage,
+        AssetPipe,
     ],
     providers: [],
 })
