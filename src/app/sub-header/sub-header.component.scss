@@ -1,19 +1,10 @@
 @import "src/styles";
 
 .sub-header {
-  display: flex;
-  flex-direction: column;
   padding: 20px 20px 20px 30px;
-  background: $grey-header;
   .title {
-    display: flex;
-    justify-content: space-between;
     padding-bottom: 10px;
-    h3 {
-      @include h3-text;
-    }
     .title-btn {
-      display: flex;
       .github-btn {
         width: 119px;
         margin-right: 7px;
@@ -23,23 +14,11 @@
           top: 6px;
         }
       }
-      .stars-btn {
-
-      }
       .github-btn, .stars-btn {
-        display: flex;
-        flex-direction: row;
         padding: 3px 10px;
         gap: 10px;
-        isolation: isolate;
         height: 27px;
-        font-style: normal;
-        font-weight: 400;
-        font-size: 12px;
-        line-height: 21px;
-        color: #FFFFFF;
-        background: #191919;
-        border: 1px solid #191919;
+        border: 1px solid var(--black);
         border-radius: 4px;
       }
     }

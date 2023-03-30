@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AssetPipe } from '../shared/asset/asset.pipe';
 import { NgOptimizedImage } from '@angular/common';
+import { AssetPipe } from '../shared/asset/asset.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-header',

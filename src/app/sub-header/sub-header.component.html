@@ -1,9 +1,9 @@
-<div class="sub-header">
-    <div class="title">
-        <h3>{{ title }}</h3>
-        <div class="title-btn">
-            <button class="github-btn">
-                <img width="16" height="16" [ngSrc]="'github_star' | asset" alt="github" />
+<div class="sub-header column white">
+    <div class="title row jc-sb">
+        <h3 class="h3-text">{{ title }}</h3>
+        <div class="title-btn row">
+            <button class="github-btn row git-btn bg-black">
+                <img width="16" height="16" [ngSrc]="'github-star' | asset" alt="github" />
                 <span class="github-text">GitHub Stars</span>
                 <img
                     width="8"
@@ -12,12 +12,12 @@
                     alt="rectangle"
                     class="rectangle" />
             </button>
-            <button class="stars-btn">1,131</button>
+            <button class="stars-btn row git-btn bg-black">1,131</button>
         </div>
     </div>
-    <div class="sub-title span">
+    <span class="sub-title span">
         {{ subtitle }}
-    </div>
+    </span>
     <div class="chips">
         <ngx-mask-chips [chips]="chips"></ngx-mask-chips>
     </div>

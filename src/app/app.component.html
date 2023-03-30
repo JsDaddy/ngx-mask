@@ -1,15 +1,15 @@
-<div class="content-wrapper">
+<div class="content-wrapper column">
     <ngx-mask-demo-header></ngx-mask-demo-header>
     <section class="mask-wrap">
-        <div class="drawer-container">
+        <div class="drawer-container row">
             <div class="navigation">
                 <span class="navigation-text">Navigation</span>
-                <img width="18" height="18" [ngSrc]="'navigation_chevron_white' | asset" alt="navigation">
+                <img width="18" height="18" [ngSrc]="'navigation-chevron-white' | asset" alt="navigation">
             </div>
-            <div class="drawer">
+            <div class="drawer bg-black">
                 <div *ngFor="let list of lists; let i = index" class="accordion-block">
                     <div
-                        class="accordion"
+                        class="accordion row ai-c bg-black fs-white-14 pointer"
                         (click)="toggle(i); switchDoc(list.id)"
                         [ngStyle]="{ color: list.id === chosenItem ? '#ffcc00' : '#FFFFFF' }"
                         id="{{ list.id }}"
