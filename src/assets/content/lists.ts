@@ -4,8 +4,8 @@ export const lists: IListItem[] = [
     {
         header: 'Common cases',
         id: 1,
-        defaultSvg: 'common_cases',
-        activeSvg: 'common_cases_active',
+        defaultSvg: 'common-cases',
+        activeSvg: 'common-cases-active',
         text: [
             {
                 content: 'Date',

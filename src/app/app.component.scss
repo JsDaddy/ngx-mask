@@ -9,6 +9,9 @@
         overflow: auto;
         .drawer-container {
             overflow: hidden;
+            .navigation {
+                display: none;
+            }
             .drawer {
                 position: fixed;
                 z-index: 2;
@@ -23,146 +26,88 @@
                         width: 262px;
                         height: 50px;
                         margin: 10px 24px;
-                        border-width: 2px 0;
-                        border-style: solid;
-                        border-color: $accordion-border;
-                        border-radius: 10px;
-                        //align-items: center;
-                        //display: flex;
-
+                        &:after {
+                            content: url('/assets/img/chevron-right-24px-white.svg');
+                            margin-left: auto;
+                            margin-right: 19px;
+                        }
+                        &:hover {
+                            color: var(--yellow);
+                            @include border-accordion-tb-yellow;
+                            &.accordion:after {
+                                content: url('/assets/img/chevron-right-24px.svg');
+                            }
+                            .left-side-accordion {
+                                color: var(--yellow);
+                            }
+                            .accordion-btn {
+                                color: var(--yellow);
+                            }
+                        }
                         .left-side-accordion {
                             border-radius: 50%;
                             margin: 9px 15px 9px 10px;
-                            background: rgba(255, 255, 255, 0.05);
-                        }
-
-                        .accordion-btn {
-                            background: #191919;
-                            border: none;
-                            color: white;
-                            cursor: pointer;
                         }
                     }
-
-                    .accordion:hover {
-                        color: #ffd64d;
-                        border-width: 2px 0;
-                        border-style: solid;
-                        border-color: $yellow-bg;
-                        border-radius: 10px;
-
-                        &.accordion:after {
-                            content: url('~src/assets/img/chevron_right_24px.svg');
-                        }
-
-                        .left-side-accordion {
-                            color: $yellow-bg;
-                        }
-
-                        .accordion-btn {
-                            color: $yellow-bg;
-                        }
-                    }
-
-                    .accordion:after {
-                        content: url('~src/assets/img/chevron_right_24px white.svg');
-                        margin-left: auto;
-                        margin-right: 19px;
-                    }
-
                     .active {
                         &.accordion {
                             border-width: 2px 0 0 0;
                             transition: 0ms;
-                            border-color: $yellow-bg;
-
+                            border-color: var(--yellow);
+                            &:after {
+                                content: url('/assets/img/chevron-right-24px.svg');
+                                transform: rotate(180deg);
+                            }
                             .accordion-btn {
-                                color: $yellow-bg;
+                                color: var(--yellow);
                             }
                         }
-
-                        &.accordion:after {
-                            content: url('~src/assets/img/chevron_right_24px.svg');
-                            transform: rotate(180deg);
-                        }
                     }
-
                     .panel {
                         padding: 0 24px;
-                        background-color: #191919;
                         max-height: 0;
                         overflow: hidden;
                         transition: max-height 0.2s ease-out;
-                        @include regular-text;
-                        color: $white;
-
                         .accordion-box {
                             height: 21px;
                             padding: 10px 0 0 60px;
                         }
-
-                        .accordion-box:hover {
-                            cursor: pointer;
-                        }
-
-                        .accordion-box:active {
-                            color: $yellow-bg;
-                        }
-
                         .accordion-box:last-child {
-                            border-width: 0 0 2px 0;
-                            border-color: $yellow-bg;
-                            border-style: solid;
-                            border-radius: 10px;
+                            @include border-bottom-yellow;
                             padding: 10px 0 26px 60px;
                         }
                     }
                 }
-
                 .visit-btn {
                     padding: 80px 24px 0 24px;
-
                     .color-btn {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
                         padding: 15px 32px;
                         gap: 76px;
-                        background: $yellow-bg;
                         width: 262px;
                         height: 45px;
-                        @include regular-text;
-                        text-transform: capitalize;
-                        color: $text-color-black;
                         border-radius: 10px;
-                    }
-
-                    .color-btn:after {
-                        content: url('~src/assets/img/chevron-right-white.svg');
-                        width: 20px;
-                        height: 20px;
-                        background: $default-btn-active-bg;
-                        border-radius: 15px;
-                        color: $white;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
+                        &:after {
+                            content: url('/assets/img/chevron-right-white.svg');
+                            width: 20px;
+                            height: 20px;
+                            background: var(--black);
+                            border-radius: 15px;
+                            color: var(--full-white);
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                        }
                     }
                 }
             }
             .right-section {
                 width: 100%;
-                display: flex;
-                flex-direction: column;
                 padding-left: 310px;
             }
         }
     }
 }
-.navigation {
-    display: none;
-}
-@media screen and (max-width: 400px) {
+@media screen and (max-width: $mobileWidth) {
     .drawer {
         display: none !important;
     }
@@ -171,23 +116,15 @@
         margin-top: 55px;
     }
     .navigation {
+        display: flex !important;
         height: 55px;
-        background: $text-color-black;
         width: 100%;
-        color: $white;
         position: fixed;
         z-index: 2;
         top: 68px;
         left: 0;
         right: 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         .navigation-text {
-            @include font-s16;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: $white;
             padding-left: 20px;
         }
         img {

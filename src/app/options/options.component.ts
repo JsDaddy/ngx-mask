@@ -1,17 +1,18 @@
 import { Component, Input } from '@angular/core';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import {
     JsonPipe,
+    NgClass,
     NgForOf,
     NgIf,
     NgOptimizedImage,
-    NgStyle,
     NgTemplateOutlet,
 } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.interfaces';
 import { AssetPipe } from '../shared/asset/asset.pipe';
+import { IsEmptyPipe } from '../shared/asset/is-empty.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-options',
@@ -19,7 +20,6 @@ import { AssetPipe } from '../shared/asset/asset.pipe';
     styleUrls: ['./options.component.scss'],
     standalone: true,
     imports: [
-        NgStyle,
         JsonPipe,
         NgForOf,
         NgIf,
@@ -31,6 +31,8 @@ import { AssetPipe } from '../shared/asset/asset.pipe';
         NgxMaskPipe,
         NgOptimizedImage,
         AssetPipe,
+        NgClass,
+        IsEmptyPipe,
     ],
     providers: [],
 })

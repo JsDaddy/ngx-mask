@@ -1,10 +1,7 @@
-@import 'assets/style/variables';
 @import 'src/assets/fonts/fonts';
 @import 'src/app/shared/media-breakpoints/media-breakpoints';
 @import 'src/app/shared/typography/typography.mixin';
-@import 'src/assets/style/variables';
 @import "src/assets/style/border-mixin";
-@import "src/assets/style/font-mixin";
 :root {
     --yellowHover: #f4c529;
     --black: #191919;
@@ -14,7 +11,20 @@
     --full-white: #fff;
     --red: #e35353;
     --orangeYellow: linear-gradient(269.31deg, var(--orange) 19.29%, var(--yellow) 71.73%);
+    --ligth-grey: rgba(255, 255, 255, 0.05);
 }
+
+.border-accordion-tb-def {
+    border-width: 2px 0;
+    border-style: solid;
+    border-color: var(--ligth-grey);
+    border-radius: 10px;
+}
+
+.bg-light-grey-accordion {
+    background-color: var(--ligth-grey);
+}
+
 button {
     background: none;
     color: inherit;
@@ -102,6 +112,7 @@ h5,
     color: var(--black);
     letter-spacing: 0.05em;
 }
+
 .git-btn {
     font-style: normal;
     font-weight: 400;
@@ -111,12 +122,18 @@ h5,
 }
 
 .fs-white-14 {
-    font-family: 'Varela';
     font-style: normal;
     font-weight: 400;
     font-size: 14px;
     line-height: 21px;
     color: var(--full-white);
+}
+
+.fs-16 {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
 }
 
 .ls-25 {

@@ -6,6 +6,8 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
+import { NgClass, NgForOf, NgOptimizedImage } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -13,8 +15,6 @@ import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from './header/header.component';
-import { NgForOf, NgOptimizedImage, NgStyle } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
 import { AssetPipe } from './shared/asset/asset.pipe';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
@@ -25,7 +25,6 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
-        NgStyle,
         NgForOf,
         RouterLink,
         OptionsComponent,
@@ -33,6 +32,7 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
         NgOptimizedImage,
         AssetPipe,
         SubHeaderComponent,
+        NgClass,
     ],
 })
 export class AppComponent implements OnInit, AfterViewInit {

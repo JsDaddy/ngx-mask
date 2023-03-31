@@ -1,175 +1,107 @@
 @import "src/styles";
 .content {
-    display: flex;
-    flex-direction: column;
-    background: $white;
     gap: 16px;
     padding: 16px;
-    border-top: 1px solid $default-btn-hover-bg;
+    border-top: 1px solid rgba(25, 25, 25, 0.05);
     box-sizing: border-box;
-
-    .doc-with-example {
-        display: flex;
-        gap: 16px;
-
-        mat-card {
-            flex: 50%;
-        }
-    }
-
     .card {
         padding: 10px;
         gap: 10px;
         background: rgba(25, 25, 25, 0.02);
         border-radius: 15px;
-        .title {
-            @include font-s10;
+        .mr-title {
             margin: 10px 0 10px 26px;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: $text-color-black;
         }
-
         .cards-block {
-            display: flex;
-
             .light-card {
                 flex: 50%;
                 height: 202px;
-                background: $white;
                 border-radius: 10px;
                 .light-title {
-                    display: flex;
                     margin-bottom: 20px;
-                    align-items: center;
-
                     span {
-                        @include font-s16;
                         margin-left: 10px;
                         color: rgba(25, 25, 25, 0.25);
                     }
                 }
-
                 .source {
-                    @include font-s14;
-                    letter-spacing: 0.25em;
-                    text-transform: uppercase;
-                    color: $upper-case-text;
+                    color: rgba(25, 25, 25, 0.45);
                     margin-bottom: 10px;
                 }
                 .white-input {
                     display: block;
                     margin-right: 15px;
                     .input-view {
-                        display: flex;
-                        align-items: center;
                         width: 100%;
                         height: 21px;
                         cursor: text;
                         padding-left: 15px;
-                        background: $grey-header;
                         border-radius: 10px;
                         border: none;
-                    }
-
-                    .input-view:after {
-                        align-self: center;
-                        margin-left: auto;
-                        position: relative;
-                        top: 2px;
-                        margin-right: 15px;
-                        content: url('~src/assets/img/input_vector.svg');
+                        &:after {
+                            align-self: center;
+                            margin-left: auto;
+                            position: relative;
+                            top: 2px;
+                            margin-right: 15px;
+                            content: url('/assets/img/input-vector.svg');
+                        }
                     }
                 }
             }
-
             .dark-card {
                 flex: 50%;
-                background: $text-color-black;
                 border-radius: 10px;
                 margin-left: 30px;
                 .dark-input {
                     .customDarkInput {
                         @include border-bottom-grey;
-                        background: $text-color-black;
                         height: 51px;
                         width: 100%;
-                        @include font-s14;
-                        color: $white;
                         padding: 12px 20px;
                         box-sizing: border-box;
                         -webkit-transition: 0.5s;
                         transition: 0.5s;
                         outline: none;
+                        &:hover {
+                            @include border-bottom-yellow;
+                        }
+                        &[type=text]:focus {
+                            @include border-bottom-yellow;
+                        }
+                        &[type=number]:focus {
+                            @include border-bottom-yellow;
+                        }
                     }
-
-                    .customDarkInput[type=text]:focus {
-                        border: none;
-                        color: $white;
-                        @include font-s14;
-                        @include border-bottom-yellow;
-                        outline: none;
-                    }
-                    .customDarkInput[type=number]:focus {
-                        border: none;
-                        color: $white;
-                        @include font-s14;
-                        @include border-bottom-yellow;
-                        outline: none;
-                    }
-                    .customDarkInput:hover {
-                        @include border-bottom-yellow;
-                    }
-                }
-
-                .card-content {
-                    display: flex;
                 }
                 .card-text {
-                    display: flex;
-                    flex-direction: column;
                     .sub-text {
                         margin-bottom: 5px;
-                        @include font-s10;
-                        letter-spacing: 0.25em;
-                        color: $white;
                     }
-                    .yellowView {
-                        color: $yellow-bg;
-
+                    .green-view {
+                        color: #1AB77E;
                     }
-
-                    .greenVIew {
-                        color: $green;
-                    }
-
-                    .greenVIew, .yellowView {
+                    .green-view, .yellow-view {
                         display: contents;
-                        flex-direction: row;
-                        align-items: flex-start;
                         padding: 0 5px;
                         gap: 10px;
                         height: 21px;
                         background: rgba(248, 248, 248, 0.05);
                         border-radius: 5px;
-                        @include font-s14;
                     }
                 }
             }
         }
     }
 }
-
 .pd-15 {
     padding: 15px;
 }
 .mrl-50 {
     margin-left: 50px;
 }
-
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: $desktopWidth) {
     .cards-block {
-        display: flex;
         flex-direction: column;
         .dark-card {
             flex: 100%;
@@ -180,5 +112,4 @@
             margin-bottom: 10px;
         }
     }
-
 }

@@ -1,19 +1,19 @@
-<section class="content">
+<section class="content column bg-full-white">
     <div class="card" *ngFor="let tile of docs; index as i">
         <div
-            class="title row"
-            [ngStyle]="{ color: checkChoose(choose, tile.id) ? '#ffcc00' : 'black' }">
+            class="mr-title title row uppercase ls-25"
+            [ngClass]="checkChoose(choose, tile.id) ? 'yellow' : 'black'">
             {{ tile.header }}
         </div>
-        <div class="cards-block" id="{{ tile.anchor }}">
-            <div class="light-card pd-15">
-                <div class="light-title">
-                    <img width="20" height="20" [ngSrc]="'handbox' | asset" alt="handbox" />
-                    <span>Usage</span>
+        <div class="cards-block row" id="{{ tile.anchor }}">
+            <div class="light-card bg-full-white pd-15">
+                <div class="light-title row ai-c">
+                    <img width="20" height="20" [ngSrc]="'hand-box' | asset" alt="hand-box" />
+                    <span class="fs-16">Usage</span>
                 </div>
-                <div class="source">Source code</div>
+                <span class="source uppercase ls-25 fs-white-14">Source code</span>
                 <div class="white-input">
-                    <pre><code type="text" [highlight]="tile.code" class="input-view"></code></pre>
+                    <pre><code type="text" [highlight]="tile.code" class="input-view row ai-c bg-white"></code></pre>
                     <i class="icon"></i>
                 </div>
             </div>
@@ -24,7 +24,7 @@
 </section>
 
 <ng-template #exampleTmpl let-ex>
-    <div class="dark-card" *ngIf="!ex._pipe; else pipeView">
+    <div class="dark-card bg-black" *ngIf="!ex._pipe; else pipeView">
         <div class="dark-input pd-15">
             <input
                 prefix="{{ ex._prefix }}"
@@ -38,53 +38,55 @@
                 [showMaskTyped]="ex._showMaskTyped || null"
                 [clearIfNotMatch]="ex._clearIfNotMatch || null"
                 [hiddenInput]="ex._hiddenInput"
-                class="customDarkInput" />
+                class="customDarkInput bg-black fs-white-14" />
         </div>
         <div *ngIf="!ex._validation; else validView">
-            <div class="card-content">
-                <div class="card-text pd-15">
-                    <span class="sub-text">Form Control:</span>
-                    <span class="yellowView">{{
-                        ex.control.form.value ? ex.control.form.value : 'Empty'
+            <div class="card-content row">
+                <div class="card-text column pd-15">
+                    <span class="sub-text full-white title ls-25">Form Control:</span>
+                    <span class="yellow-view ai-start span yellow">{{
+                        ex.control.form.value | isEmpty
                     }}</span>
                 </div>
-                <div class="card-text mrl-50 pd-15">
-                    <span class="sub-text">Ng Model:</span>
-                    <span class="yellowView">{{
-                        ex.control.model ? ex.control.model : 'Empty'
+                <div class="card-text column mrl-50 pd-15">
+                    <span class="sub-text full-white title ls-25">Ng Model:</span>
+                    <span class="yellow-view ai-start span yellow">{{
+                        ex.control.model | isEmpty
                     }}</span>
                 </div>
             </div>
-            <div class="card-text pd-15">
-                <div class="sub-text row">Mask:</div>
-                <span class="greenVIew">{{ ex._mask }}</span>
+            <div class="card-text column pd-15">
+                <span class="sub-text row full-white title ls-25">Mask:</span>
+                <span class="green-view ai-start span">{{ ex._mask }}</span>
             </div>
         </div>
     </div>
     <ng-template #validView>
-        <div class="card-text pd-15">
-            <span class="sub-text">Form Control:</span>
-            <span class="yellowView">{{ ex.control.form.errors | json }}</span>
+        <div class="card-text column pd-15">
+            <span class="sub-text full-white title ls-25">Form Control:</span>
+            <span class="yellow-view ai-start span yellow">{{ ex.control.form.errors | json }}</span>
         </div>
-        <div class="card-text pd-15">
-            <div class="sub-text">mask</div>
-            <span class="greenVIew">{{ ex._mask }}</span>
+        <div class="card-text column pd-15">
+            <span class="sub-text full-white title ls-25">mask</span>
+            <span class="green-view ai-start span">{{ ex._mask }}</span>
         </div>
     </ng-template>
 </ng-template>
 
 <ng-template #pipeView>
-    <div class="dark-card">
-        <div class="card-text pd-15">
-            <span class="sub-text">{{ phone | mask : '(000) 000-0000' }}</span>
+    <div class="dark-card bg-black">
+        <div class="card-text column pd-15">
+            <span class="sub-text full-white title ls-25">{{
+                phone | mask : '(000) 000-0000'
+            }}</span>
         </div>
-        <div class="card-text pd-15">
-            <div class="sub-text">Mask:</div>
-            <span class="greenVIew">(000) 000-0000</span>
+        <div class="card-text column pd-15">
+            <span class="sub-text full-white title ls-25">Mask:</span>
+            <span class="green-view ai-start span">(000) 000-0000</span>
         </div>
-        <div class="card-text pd-15">
-            <div class="sub-text">Value:</div>
-            <span class="greenVIew">123456789</span>
+        <div class="card-text column pd-15">
+            <span class="sub-text full-white title ls-25">Value:</span>
+            <span class="green-view ai-start span">123456789</span>
         </div>
     </div>
 </ng-template>
