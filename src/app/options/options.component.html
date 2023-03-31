@@ -2,7 +2,7 @@
     <div class="card" *ngFor="let tile of docs; index as i">
         <div
             class="mr-title title row uppercase ls-25"
-            [ngClass]="checkChoose(choose, tile.id) ? 'yellow' : 'black'">
+            [ngClass]="checkChoose(choose, tile.id) | color">
             {{ tile.header }}
         </div>
         <div class="cards-block row" id="{{ tile.anchor }}">

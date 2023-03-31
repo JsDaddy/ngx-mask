@@ -13,6 +13,7 @@ import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.interfaces';
 import { AssetPipe } from '../shared/asset/asset.pipe';
 import { IsEmptyPipe } from '../shared/asset/is-empty.pipe';
+import { ColorPipe } from '../shared/asset/color.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-options',
@@ -33,6 +34,7 @@ import { IsEmptyPipe } from '../shared/asset/is-empty.pipe';
         AssetPipe,
         NgClass,
         IsEmptyPipe,
+        ColorPipe,
     ],
     providers: [],
 })

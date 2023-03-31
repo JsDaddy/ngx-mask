@@ -11,7 +11,6 @@
                     <div
                         class="accordion row ai-c bg-black fs-white-14 pointer border-accordion-tb-def"
                         (click)="toggle(i); switchDoc(list.id)"
-                        [ngClass]="list.id === chosenItem ? 'yellow' : 'full-white'"
                         id="{{ list.id }}"
                         #accordion>
                         <img
