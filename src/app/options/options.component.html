@@ -9,9 +9,9 @@
             <div class="light-card bg-full-white pd-15">
                 <div class="light-title row ai-c">
                     <img width="20" height="20" [ngSrc]="'hand-box' | asset" alt="hand-box" />
-                    <span class="fs-16">Usage</span>
+                    <span class="span">Usage</span>
                 </div>
-                <span class="source uppercase ls-25 fs-white-14">Source code</span>
+                <span class="source uppercase ls-25 full-white span">Source code</span>
                 <div class="white-input">
                     <pre><code type="text" [highlight]="tile.code" class="input-view row ai-c bg-white"></code></pre>
                     <i class="icon"></i>
@@ -38,7 +38,7 @@
                 [showMaskTyped]="ex._showMaskTyped || null"
                 [clearIfNotMatch]="ex._clearIfNotMatch || null"
                 [hiddenInput]="ex._hiddenInput"
-                class="customDarkInput bg-black fs-white-14" />
+                class="customDarkInput bg-black white span" />
         </div>
         <div *ngIf="!ex._validation; else validView">
             <div class="card-content row">

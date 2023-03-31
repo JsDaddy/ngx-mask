@@ -6,7 +6,7 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import { NgClass, NgForOf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
@@ -25,14 +25,15 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
+        NgClass,
+        NgIf,
         NgForOf,
+        NgOptimizedImage,
         RouterLink,
         OptionsComponent,
         HeaderComponent,
-        NgOptimizedImage,
         AssetPipe,
         SubHeaderComponent,
-        NgClass,
     ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -46,6 +47,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     public chosenList!: number;
 
     public lists!: IListItem[];
+
+    public toggledIndex!: number;
+
+    public showNav = false;
 
     @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
 
@@ -99,6 +104,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     public toggle(index: number): void {
+        this.toggledIndex = index;
         this.accordion.get(index)?.nativeElement.classList.toggle('active');
         const panel = this.panel.get(index)?.nativeElement;
         panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
@@ -118,7 +124,11 @@ export class AppComponent implements OnInit, AfterViewInit {
         panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
     }
 
-    public ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.openFirstAccordion();
+    }
+
+    public showNavBlock(): void {
+        this.showNav = !this.showNav;
     }
 }

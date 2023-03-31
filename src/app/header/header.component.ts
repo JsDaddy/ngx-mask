@@ -7,6 +7,6 @@ import { AssetPipe } from '../shared/asset/asset.pipe';
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
     standalone: true,
-    imports: [AssetPipe, NgOptimizedImage],
+    imports: [NgOptimizedImage, AssetPipe],
 })
 export class HeaderComponent {}

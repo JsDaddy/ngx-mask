@@ -100,7 +100,35 @@
 .mrl-50 {
     margin-left: 50px;
 }
-@media screen and (max-width: $desktopWidth) {
+
+@media screen and (min-width: 850px)  and (max-width: 1200px) {
+    .cards-block {
+        flex-direction: column;
+        .dark-card {
+            flex: 100%;
+            margin-left: 10px !important;
+        }
+        .light-card {
+            flex: 100%;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .cards-block {
+        .dark-card {
+            flex: 50%;
+            margin-left: 10px !important;
+        }
+        .light-card {
+            flex: 50%;
+            margin-bottom: 10px;
+        }
+    }
+}
+
+@media screen and (max-width: $mobileWidth) {
     .cards-block {
         flex-direction: column;
         .dark-card {

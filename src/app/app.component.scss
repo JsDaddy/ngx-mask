@@ -37,12 +37,6 @@
                             &.accordion:after {
                                 content: url('/assets/img/chevron-right-24px.svg');
                             }
-                            .left-side-accordion {
-                                color: var(--yellow);
-                            }
-                            .accordion-btn {
-                                color: var(--yellow);
-                            }
                         }
                         .left-side-accordion {
                             border-radius: 50%;
@@ -107,9 +101,61 @@
         }
     }
 }
+
+.show {
+    .navigation-text {
+        color: var(--yellow);
+    }
+    img {
+        content: url('/assets/img/chevron-right-24px.svg');
+    }
+}
+.none {
+    .navigation-text {
+        color: var(--full-white);
+    }
+    img {
+        content: url('/assets/img/navigation-chevron-white.svg');
+    }
+}
+.navigation {
+    &:hover {
+        .navigation-text {
+            color: var(--yellow);
+        }
+        img {
+            content: url('/assets/img/chevron-right-24px.svg');
+        }
+    }
+}
+
 @media screen and (max-width: $mobileWidth) {
+    .right-section {
+        padding: 0 !important;
+        margin-top: 55px;
+    }
+    .navigation {
+        display: flex !important;
+        height: 55px;
+        width: 100%;
+        position: fixed;
+        z-index: 2;
+        top: 68px;
+        left: 0;
+        right: 0;
+        .navigation-text {
+            padding-left: 20px;
+        }
+        img {
+            padding-right: 20px;
+        }
+    }
+}
+
+@media screen and (max-width: 850px) {
     .drawer {
-        display: none !important;
+        //display: none;
+        top: 122px !important;
     }
     .right-section {
         padding: 0 !important;

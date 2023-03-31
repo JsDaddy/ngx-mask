@@ -42,11 +42,23 @@
         margin: 0 5px;
     }
 }
+@media screen and (max-width: 920px) {
+    .quit-logo {
+        content: url("/assets/img/button-exit.svg") !important;
+    }
+    .left-side {
+        width: 100px !important;
+    }
+}
+
 @media screen and (max-width: $mobileWidth) {
     .quit-logo {
         content: url("/assets/img/buttor-exit.svg") !important;
     }
     .center-side {
         display: none !important;
+    }
+    .left-side {
+        width: 100px !important;
     }
 }
