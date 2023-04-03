@@ -1,4 +1,4 @@
-@import "src/styles";
+@import 'src/styles';
 .content {
     gap: 16px;
     padding: 16px;
@@ -66,10 +66,10 @@
                         &:hover {
                             @include border-bottom-yellow;
                         }
-                        &[type=text]:focus {
+                        &[type='text']:focus {
                             @include border-bottom-yellow;
                         }
-                        &[type=number]:focus {
+                        &[type='number']:focus {
                             @include border-bottom-yellow;
                         }
                     }
@@ -79,9 +79,10 @@
                         margin-bottom: 5px;
                     }
                     .green-view {
-                        color: #1AB77E;
+                        color: #1ab77e;
                     }
-                    .green-view, .yellow-view {
+                    .green-view,
+                    .yellow-view {
                         display: contents;
                         padding: 0 5px;
                         gap: 10px;

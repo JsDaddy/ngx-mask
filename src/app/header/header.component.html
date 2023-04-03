@@ -23,18 +23,18 @@
             </a>
         </span>
     </div>
-    <div class="quit-logo">
+    <div class="quit-logo pointer">
         <img width="48" height="48" [ngSrc]="'button-exit' | asset" alt="quit-logo" />
     </div>
-    <div class="open-nav">
+    <div class="open-nav pointer" (click)="showNavBlock()">
         <img width="48" height="48" [ngSrc]="'buttor-exit' | asset" alt="quit-logo" />
     </div>
-    <div class="nav-section">
-        <h3>Repositories</h3>
-        <div>
-            <button>Ngx-Mask</button>
-            <button>Ngx-Loader Indicator</button>
-            <button>Ngx-CopyPaste</button>
+    <div class="nav-section bg-black" [ngClass]="showNav | hide">
+        <h3 class="full-white text uppercase ls-25">Repositories</h3>
+        <div class="column ai-start nav-buttons">
+            <button class="row btn yellow bg-light-grey-accordion">Ngx-Mask</button>
+            <button class="row btn full-white">Ngx-Loader Indicator</button>
+            <button class="row btn full-white">Ngx-CopyPaste</button>
             <button>Visit WebSite</button>
         </div>
     </div>

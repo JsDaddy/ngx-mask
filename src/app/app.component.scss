@@ -20,6 +20,16 @@
                     }
                 }
             }
+            .yellow {
+                .navigation {
+                    .navigation-text {
+                        color: var(--yellow);
+                    }
+                    img {
+                        content: url('/assets/img/chevron-right-24px.svg');
+                    }
+                }
+            }
             .drawer {
                 position: fixed;
                 z-index: 2;
@@ -34,6 +44,16 @@
                         width: 262px;
                         height: 50px;
                         margin: 10px 24px;
+                        .left-side-accordion {
+                            border-radius: 50%;
+                            margin: 9px 15px 9px 10px;
+                            .default-svg {
+                                display: block;
+                            }
+                            .active-svg {
+                                display: none;
+                            }
+                        }
                         &:after {
                             content: url('/assets/img/chevron-right-24px-white.svg');
                             margin-left: auto;
@@ -52,16 +72,6 @@
                                 .active-svg {
                                     display: block;
                                 }
-                            }
-                        }
-                        .left-side-accordion {
-                            border-radius: 50%;
-                            margin: 9px 15px 9px 10px;
-                            .default-svg {
-                                display: block;
-                            }
-                            .active-svg {
-                                display: none;
                             }
                         }
                     }
@@ -133,33 +143,21 @@
         }
     }
 }
-
 .show {
     display: block;
 }
 .hide {
-  display: none;
-}
-
-.yellow {
-    &.navigation {
-        .navigation-text {
-            color: var(--yellow);
-        }
-        img {
-            content: url('/assets/img/chevron-right-24px.svg');
-        }
-    }
+    display: none;
 }
 @media screen and (max-width: 850px) {
     .drawer {
         top: 122px !important;
         width: 375px !important;
-            .accordion-block {
-                .accordion {
-                    width: 87% !important;
-                }
+        .accordion-block {
+            .accordion {
+                width: 87% !important;
             }
+        }
         .visit-btn {
             display: none;
         }

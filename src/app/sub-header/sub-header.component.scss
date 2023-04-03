@@ -1,46 +1,47 @@
-@import "src/styles";
+@import 'src/styles';
 
 .sub-header {
-  padding: 20px 20px 20px 30px;
-  .title {
-    padding-bottom: 10px;
-    .title-btn {
-      .github-btn {
-        width: 119px;
-        margin-right: 7px;
-        .rectangle {
-          position: relative;
-          left: 15px;
-          top: 6px;
+    padding: 20px 20px 20px 30px;
+    .title {
+        padding-bottom: 10px;
+        .title-btn {
+            .github-btn {
+                width: 119px;
+                margin-right: 7px;
+                .rectangle {
+                    position: relative;
+                    left: 15px;
+                    top: 6px;
+                }
+            }
+            .github-btn,
+            .stars-btn {
+                padding: 3px 10px;
+                gap: 10px;
+                height: 27px;
+                border: 1px solid var(--black);
+                border-radius: 4px;
+            }
         }
-      }
-      .github-btn, .stars-btn {
-        padding: 3px 10px;
-        gap: 10px;
-        height: 27px;
-        border: 1px solid var(--black);
-        border-radius: 4px;
-      }
     }
-  }
-  .sub-title {
-    padding-bottom: 10px;
-  }
+    .sub-title {
+        padding-bottom: 10px;
+    }
 }
 
 @media screen and (max-width: $mobileWidth) {
-  .title-btn {
-    position: relative;
-    top: -35px;
-  }
-  .git-text {
-    display: block !important;
-  }
-  .sub-text {
-    position: relative;
-    top: 30px;
-  }
-  .sub-header {
-    padding: 35px 20px 20px 20px;
-  }
+    .title-btn {
+        position: relative;
+        top: -35px;
+    }
+    .git-text {
+        display: block !important;
+    }
+    .sub-text {
+        position: relative;
+        top: 30px;
+    }
+    .sub-header {
+        padding: 35px 20px 20px 20px;
+    }
 }

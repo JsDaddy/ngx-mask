@@ -1,4 +1,4 @@
-@import "src/styles";
+@import 'src/styles';
 :host {
     display: block;
     height: 68px;
@@ -17,7 +17,8 @@
         }
     }
     .center-side {
-        .default-btn, .active-btn {
+        .default-btn,
+        .active-btn {
             border-radius: 9px;
             padding: 5px 23px;
             gap: 10px;
@@ -34,6 +35,9 @@
         width: 48px;
         height: 48px;
     }
+    .open-nav {
+        display: none;
+    }
     .nav-section {
         display: none;
     }
@@ -43,6 +47,17 @@
     .mr-5 {
         margin: 0 5px;
     }
+}
+
+.show {
+    display: block;
+}
+.hide {
+    &.nav-section {
+        display: none !important;
+    }
+    display: none !important;
+    background: red !important;
 }
 @media screen and (max-width: 920px) {
     .left-side {
@@ -54,10 +69,31 @@
     .quit-logo {
         display: none;
     }
-    .nav-section{
-        display: block;
+    .open-nav {
+        display: block !important;
+        margin-left: auto;
+    }
+    .nav-section {
+        display: block !important;
+        position: fixed;
+        z-index: 2;
+        height: 100%;
+        top: 68px;
+        left: 0;
+        right: 0;
+        width: 100%;
+        padding: 15px 20px;
     }
     .center-side {
         display: none !important;
+    }
+    .nav-buttons {
+        padding-top: 45px;
+        button {
+            padding: 5px 0 5px 15px;
+            margin: 10px;
+            width: 100%;
+            border-radius: 9px;
+        }
     }
 }

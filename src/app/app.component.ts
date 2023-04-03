@@ -20,6 +20,7 @@ import { AssetPipe } from './shared/asset/asset.pipe';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { HidePipe } from './shared/asset/hide.pipe';
 import { ColorPipe } from './shared/asset/color.pipe';
+import { HideService } from './shared/services/hide.service';
 
 @Component({
     selector: 'ngx-mask-demo-root',
@@ -52,11 +53,13 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public lists!: IListItem[];
 
-    public showNav = true;
+    public showNav!: boolean;
 
     @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
 
     @ViewChildren('panel', { read: ElementRef }) public panel!: QueryList<ElementRef>;
+
+    public constructor(private hideService: HideService) {}
 
     public switchDoc(idList: number): void {
         switch (idList) {
@@ -96,6 +99,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     public ngOnInit(): void {
+        this.showNavBlock();
         this.inputVal = {
             docs: ComDocs,
             examples: ComExamples,
@@ -130,6 +134,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     public showNavBlock(): void {
-        this.showNav = !this.showNav;
+        console.log(this.showNav);
+        this.showNav = this.hideService.showAccordion;
+        this.hideService.showAccordionBlock();
     }
 }

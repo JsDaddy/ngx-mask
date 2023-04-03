@@ -4,7 +4,7 @@ import { ChipsComponent } from '../shared/chips/chips.component';
 import { AssetPipe } from '../shared/asset/asset.pipe';
 
 @Component({
-    selector: 'ngx-mask-sub-header',
+    selector: 'ngx-mask-demo-sub-header',
     templateUrl: './sub-header.component.html',
     styleUrls: ['./sub-header.component.scss'],
     standalone: true,
