@@ -35,6 +35,9 @@
         width: 48px;
         height: 48px;
     }
+    .nav-section {
+        display: none;
+    }
     .mrl-20 {
         margin-left: 20px;
     }
@@ -43,9 +46,6 @@
     }
 }
 @media screen and (max-width: 920px) {
-    .quit-logo {
-        content: url("/assets/img/button-exit.svg") !important;
-    }
     .left-side {
         width: 100px !important;
     }
@@ -57,8 +57,5 @@
     }
     .center-side {
         display: none !important;
-    }
-    .left-side {
-        width: 100px !important;
     }
 }

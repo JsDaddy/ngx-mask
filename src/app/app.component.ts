@@ -18,6 +18,8 @@ import { HeaderComponent } from './header/header.component';
 import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
 import { AssetPipe } from './shared/asset/asset.pipe';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
+import { HidePipe } from './shared/asset/hide.pipe';
+import { ColorPipe } from './shared/asset/color.pipe';
 
 @Component({
     selector: 'ngx-mask-demo-root',
@@ -34,6 +36,8 @@ import { SubHeaderComponent } from './sub-header/sub-header.component';
         HeaderComponent,
         AssetPipe,
         SubHeaderComponent,
+        HidePipe,
+        ColorPipe,
     ],
 })
 export class AppComponent implements OnInit, AfterViewInit {
@@ -48,9 +52,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
     public lists!: IListItem[];
 
-    public toggledIndex!: number;
-
-    public showNav = false;
+    public showNav = true;
 
     @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
 
@@ -104,7 +106,6 @@ export class AppComponent implements OnInit, AfterViewInit {
     }
 
     public toggle(index: number): void {
-        this.toggledIndex = index;
         this.accordion.get(index)?.nativeElement.classList.toggle('active');
         const panel = this.panel.get(index)?.nativeElement;
         panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';

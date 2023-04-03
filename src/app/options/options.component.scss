@@ -101,7 +101,7 @@
     margin-left: 50px;
 }
 
-@media screen and (min-width: 850px)  and (max-width: 1200px) {
+@media screen and (max-width: $desktopWidth) {
     .cards-block {
         flex-direction: column;
         .dark-card {
@@ -117,6 +117,7 @@
 
 @media screen and (max-width: 850px) {
     .cards-block {
+        flex-direction: unset !important;
         .dark-card {
             flex: 50%;
             margin-left: 10px !important;
@@ -130,7 +131,7 @@
 
 @media screen and (max-width: $mobileWidth) {
     .cards-block {
-        flex-direction: column;
+        flex-direction: column !important;
         .dark-card {
             flex: 100%;
             margin-left: 0 !important;
