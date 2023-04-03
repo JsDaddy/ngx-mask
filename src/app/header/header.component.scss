@@ -31,7 +31,6 @@
     .quit-logo {
         margin-left: auto;
         padding: 10px 10px 11px 0;
-        content: url("/assets/img/button-exit.svg");
         width: 48px;
         height: 48px;
     }
@@ -53,7 +52,10 @@
 
 @media screen and (max-width: $mobileWidth) {
     .quit-logo {
-        content: url("/assets/img/buttor-exit.svg") !important;
+        display: none;
+    }
+    .nav-section{
+        display: block;
     }
     .center-side {
         display: none !important;
