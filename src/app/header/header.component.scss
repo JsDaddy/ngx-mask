@@ -59,7 +59,7 @@
     display: none !important;
     background: red !important;
 }
-@media screen and (max-width: 920px) {
+@media screen and (max-width: $desktopWidth) {
     .left-side {
         width: 100px !important;
     }

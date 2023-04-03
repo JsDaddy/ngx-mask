@@ -11,7 +11,12 @@
             overflow: hidden;
             .navigation {
                 display: none;
-                &:hover {
+            }
+            .show {
+                &.drawer {
+                    display: block;
+                }
+                &.navigation {
                     .navigation-text {
                         color: var(--yellow);
                     }
@@ -20,13 +25,19 @@
                     }
                 }
             }
-            .yellow {
-                .navigation {
+            .hide {
+                &.drawer {
+                    display: none;
+                }
+                &.navigation {
                     .navigation-text {
-                        color: var(--yellow);
+                        color: var(--full-white);
                     }
                     img {
-                        content: url('/assets/img/chevron-right-24px.svg');
+                        content: url('/assets/img/chevron-right-24px-white.svg');
+                    }
+                    .navigation:hover {
+                        background: red;
                     }
                 }
             }
@@ -143,17 +154,13 @@
         }
     }
 }
-.show {
-    display: block;
-}
-.hide {
-    display: none;
-}
-@media screen and (max-width: 850px) {
+
+@media screen and (max-width: $desktopWidth) {
     .drawer {
         top: 122px !important;
-        width: 375px !important;
+        width: 355px !important;
         .accordion-block {
+            width: 100%;
             .accordion {
                 width: 87% !important;
             }

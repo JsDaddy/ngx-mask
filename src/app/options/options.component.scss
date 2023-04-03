@@ -15,7 +15,6 @@
         .cards-block {
             .light-card {
                 flex: 50%;
-                height: 202px;
                 border-radius: 10px;
                 .light-title {
                     margin-bottom: 20px;
@@ -116,7 +115,7 @@
     }
 }
 
-@media screen and (max-width: 850px) {
+@media screen and (min-width: $mobileWidth) and (max-width: $desktopWidth) {
     .cards-block {
         flex-direction: unset !important;
         .dark-card {
@@ -125,7 +124,7 @@
         }
         .light-card {
             flex: 50%;
-            margin-bottom: 10px;
+            margin-bottom: 0 !important;
         }
     }
 }

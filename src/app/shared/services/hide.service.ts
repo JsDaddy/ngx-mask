@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
     providedIn: 'root',
 })
 export class HideService {
-    public showAccordion = true;
+    public showAccordion = false;
     public showHeaderButtons = false;
 
     public showAccordionBlock(): void {
