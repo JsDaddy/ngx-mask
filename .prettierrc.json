@@ -7,7 +7,7 @@
     "trailingComma": "es5",
     "bracketSameLine": true,
     "printWidth": 100,
-    "endOfLine": "auto",
+    "endOfLine": "lf",
     "overrides": [
         {
             "files": "*.html",
