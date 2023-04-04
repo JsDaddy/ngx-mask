@@ -17,16 +17,29 @@
         }
     }
     .center-side {
-        .default-btn,
-        .active-btn {
+        .yellow {
+            button {
+                background: var(--black);
+                color: var(--yellow);
+            }
+        }
+        .black {
+            button {
+                color: var(--black);
+                &:hover {
+                    background: rgba(25, 25, 25, 0.05);
+                }
+                &:active {
+                    background: var(--black);
+                    color: var(--yellow);
+                }
+            }
+        }
+        .center-buttons {
             border-radius: 9px;
             padding: 5px 23px;
             gap: 10px;
             height: 31px;
-            cursor: pointer;
-        }
-        .active-btn {
-            border: 1px solid var(--white);
         }
     }
     .quit-logo {
@@ -51,17 +64,44 @@
 
 .show {
     display: block;
+    &.header {
+        display: flex;
+        background: black;
+        .left-side {
+            .logo {
+                padding: 20px 0 0 20px !important;
+                content: url('/assets/img/logo-white.svg');
+            }
+        }
+        .open-nav {
+            img {
+                width: 68px;
+                height: 68px;
+                position: relative;
+                top: 1px;
+                content: url('/assets/img/close.svg');
+            }
+        }
+        .btn-bottom {
+            position: absolute;
+            bottom: 125px;
+        }
+    }
 }
 .hide {
+    &.header {
+        display: flex !important;
+    }
     &.nav-section {
         display: none !important;
     }
-    display: none !important;
-    background: red !important;
 }
 @media screen and (max-width: $desktopWidth) {
     .left-side {
         width: 100px !important;
+        .logo {
+            padding: 20px 0 0 10px !important;
+        }
     }
 }
 
@@ -88,12 +128,33 @@
         display: none !important;
     }
     .nav-buttons {
-        padding-top: 45px;
+        padding: 45px 20px 0 0;
+        width: 180px;
         button {
+            width: 100%;
             padding: 5px 0 5px 15px;
             margin: 10px;
-            width: 100%;
             border-radius: 9px;
+        }
+        .yellow {
+            button {
+                color: var(--yellow);
+                background: var(--ligth-grey);
+            }
+        }
+        .black {
+            button {
+                color: var(--full-white);
+                background: none;
+                &:hover {
+                    color: var(--yellow);
+                    background: var(--ligth-grey);
+                }
+                &:active {
+                    color: var(--yellow);
+                    background: var(--ligth-grey);
+                }
+            }
         }
     }
 }

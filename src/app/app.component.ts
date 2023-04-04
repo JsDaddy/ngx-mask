@@ -1,11 +1,4 @@
-import {
-    AfterViewInit,
-    Component,
-    ElementRef,
-    OnInit,
-    QueryList,
-    ViewChildren,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
@@ -20,6 +13,8 @@ import { AssetPipe } from './shared/asset/asset.pipe';
 import { SubHeaderComponent } from './sub-header/sub-header.component';
 import { HidePipe } from './shared/asset/hide.pipe';
 import { ColorPipe } from './shared/asset/color.pipe';
+import { VisitBtnComponent } from './shared/buttons/visit-btn/visit-btn.component';
+import { AccordionComponent } from './shared/accordion/accordion.component';
 
 @Component({
     selector: 'ngx-mask-demo-root',
@@ -38,25 +33,30 @@ import { ColorPipe } from './shared/asset/color.pipe';
         SubHeaderComponent,
         HidePipe,
         ColorPipe,
+        VisitBtnComponent,
+        AccordionComponent,
     ],
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit {
     public inputVal!: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
     };
 
     public chosenItem!: number;
-
     public chosenList!: number;
-
     public lists!: IListItem[];
+    public title = 'Ngx-Mask';
+    public subtitle = 'Angular plugin to make masks on form fields and html elements';
+    public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    public showNav = true;
-
-    @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
-
-    @ViewChildren('panel', { read: ElementRef }) public panel!: QueryList<ElementRef>;
+    public ngOnInit(): void {
+        this.inputVal = {
+            docs: ComDocs,
+            examples: ComExamples,
+        };
+        this.lists = lists;
+    }
 
     public switchDoc(idList: number): void {
         switch (idList) {
@@ -82,55 +82,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.chosenList = idList;
     }
 
-    public handleClick(idItem: number, scrollTo: string | undefined): void {
-        this.chosenItem = idItem;
-        setTimeout(() => {
-            if (!scrollTo) {
-                return;
-            }
-            const anchor: HTMLElement | null = document.getElementById(scrollTo);
-            if (anchor) {
-                anchor.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        });
-    }
-
-    public ngOnInit(): void {
-        this.inputVal = {
-            docs: ComDocs,
-            examples: ComExamples,
-        };
-        this.chosenItem = 1;
-        this.chosenList = 1;
-        this.lists = lists;
-    }
-
-    public toggle(index: number): void {
-        this.accordion.get(index)?.nativeElement.classList.toggle('active');
-        const panel = this.panel.get(index)?.nativeElement;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
-        const accordionsArray = this.accordion.toArray().map((el) => el.nativeElement.classList);
-        accordionsArray.map((el, i) => {
-            if (index !== i && el.contains('active')) {
-                this.accordion.get(i)?.nativeElement.classList.remove('active');
-                const closePanel = this.panel.get(i)?.nativeElement;
-                closePanel.style.maxHeight = null;
-            }
-        });
-    }
-
-    public openFirstAccordion(): void {
-        this.accordion.first.nativeElement.classList.toggle('active');
-        const panel = this.accordion.first.nativeElement.nextElementSibling;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
-    }
-
-    public ngAfterViewInit(): void {
-        this.openFirstAccordion();
-    }
-
-    public showNavBlock(): void {
-        this.showNav = !this.showNav;
-        console.log(this.showNav);
+    public chosenItemS(itemId: number): void {
+        this.chosenItem = itemId;
     }
 }

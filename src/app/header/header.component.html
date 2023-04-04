@@ -1,4 +1,4 @@
-<div class="header row ai-c bg-full-white">
+<div class="header row ai-c bg-full-white" [ngClass]="showNav | hide">
     <div class="left-side">
         <span class="logo">
             <a href="https://github.com/JsDaddy" target="_blank">
@@ -6,20 +6,12 @@
             </a>
         </span>
     </div>
-    <div class="center-side row ai-c">
-        <span class="mrl-20">
-            <a href="https://jsdaddy.github.io/ngx-copypaste/">
-                <button class="active-btn row ai-c yellow bg-black">Ngx-mask</button>
-            </a>
-        </span>
-        <span class="mr-5">
-            <a href="https://jsdaddy.github.io/ngx-copypaste/">
-                <button class="default-btn row ai-c text button">Ngx-copypaste</button>
-            </a>
-        </span>
-        <span>
-            <a class="loader" href="https://jsdaddy.github.io/ngx-loader-indicator/">
-                <button class="default-btn row ai-c text button">Ngx-loader-indicator</button>
+    <div class="center-side row ai-c" *ngFor="let items of headerDoc">
+        <span class="mrl-20" [ngClass]="checkIsActive === items.link | color">
+            <a [href]="items.link">
+                <button class="center-buttons row ai-c pointer">
+                    {{ items.title }}
+                </button>
             </a>
         </span>
     </div>
@@ -31,11 +23,17 @@
     </div>
     <div class="nav-section bg-black" [ngClass]="showNav | hide">
         <h3 class="full-white text uppercase ls-25">Repositories</h3>
-        <div class="column ai-start nav-buttons">
-            <button class="row btn yellow bg-light-grey-accordion">Ngx-Mask</button>
-            <button class="row btn full-white">Ngx-Loader Indicator</button>
-            <button class="row btn full-white">Ngx-CopyPaste</button>
-            <button>Visit WebSite</button>
+        <div class="nav-buttons">
+            <div *ngFor="let items of headerDoc" [ngClass]="checkIsActive === items.link | color">
+                <a [href]="items.link">
+                    <button class="row">
+                        {{ items.title }}
+                    </button>
+                </a>
+            </div>
+            <div class="btn-bottom">
+                <ngx-mask-demo-visit-btn></ngx-mask-demo-visit-btn>
+            </div>
         </div>
     </div>
 </div>
