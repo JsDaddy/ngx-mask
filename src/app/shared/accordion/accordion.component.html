@@ -37,9 +37,7 @@
                     class="accordion-box pointer"
                     [ngClass]="item.id === chosenItem | color"
                     id="{{ item.id }}"
-                    (click)="handleClick(item.id, item.scrollTo)"
-                    [routerLink]="[]"
-                    fragment="{{ item.scrollTo }}">
+                    (click)="handleClick(item.id, item.scrollTo)">
                     {{ item.content }}
                 </p>
             </div>

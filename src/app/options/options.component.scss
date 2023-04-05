@@ -101,44 +101,20 @@
     margin-left: 50px;
 }
 
-@media screen and (max-width: $desktopWidth) {
-    .cards-block {
-        flex-direction: column;
-        .dark-card {
-            flex: 100%;
-            margin-left: 10px !important;
-        }
-        .light-card {
-            flex: 100%;
-            margin-bottom: 10px;
-        }
-    }
-}
-
-@media screen and (min-width: $mobileWidth) and (max-width: $desktopWidth) {
-    .cards-block {
-        flex-direction: unset !important;
-        .dark-card {
-            flex: 50%;
-            margin-left: 10px !important;
-        }
-        .light-card {
-            flex: 50%;
-            margin-bottom: 0 !important;
-        }
-    }
-}
-
 @media screen and (max-width: $mobileWidth) {
-    .cards-block {
-        flex-direction: column !important;
-        .dark-card {
-            flex: 100%;
-            margin-left: 0 !important;
-        }
-        .light-card {
-            flex: 100%;
-            margin-bottom: 10px;
+    .content {
+        .card {
+            .cards-block {
+                flex-direction: column;
+                .dark-card {
+                    flex: 100%;
+                    margin-left: 0;
+                }
+                .light-card {
+                    flex: 100%;
+                    margin-bottom: 10px;
+                }
+            }
         }
     }
 }

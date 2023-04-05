@@ -30,18 +30,18 @@
 }
 
 @media screen and (max-width: $mobileWidth) {
-    .title-btn {
-        position: relative;
-        top: -35px;
-    }
-    .git-text {
-        display: block !important;
-    }
-    .sub-text {
-        position: relative;
-        top: 30px;
-    }
     .sub-header {
         padding: 35px 20px 20px 20px;
+        .git-text {
+            display: block;
+            .title-btn {
+                position: relative;
+                top: -35px;
+            }
+        }
+        .sub-text {
+            position: relative;
+            top: 30px;
+        }
     }
 }
