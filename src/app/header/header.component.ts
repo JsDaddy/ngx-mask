@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { AssetPipe } from '../shared/asset/asset.pipe';
 import { ColorPipe } from '../shared/asset/color.pipe';
 import { HidePipe } from '../shared/asset/hide.pipe';
 import { VisitBtnComponent } from '../shared/buttons/visit-btn/visit-btn.component';
+import { IHeader } from '../../assets/content/header.interface';
 
 @Component({
     selector: 'ngx-mask-demo-header',
@@ -21,8 +22,8 @@ import { VisitBtnComponent } from '../shared/buttons/visit-btn/visit-btn.compone
         VisitBtnComponent,
     ],
 })
-export class HeaderComponent implements OnInit {
-    public headerDoc = [
+export class HeaderComponent {
+    public headerDoc: IHeader[] = [
         {
             title: 'Ngx-Mask',
             link: 'https://jsdaddy.github.io/ngx-mask/',
@@ -39,13 +40,9 @@ export class HeaderComponent implements OnInit {
 
     public showNav = false;
 
-    public checkIsActive!: string;
+    public checkIsActive = window.location.href;
 
-    public ngOnInit(): void {
-        this.checkIsActive = window.location.href;
-    }
-
-    public showNavBlock(): void {
+    public toggleNavBlock(): void {
         this.showNav = !this.showNav;
     }
 }

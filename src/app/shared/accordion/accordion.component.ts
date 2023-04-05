@@ -4,14 +4,12 @@ import {
     ElementRef,
     EventEmitter,
     Input,
-    OnInit,
     Output,
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import { IListItem } from '../../../assets/content/content.interfaces';
-import { RouterLink } from '@angular/router';
 import { NgClass, NgForOf, NgOptimizedImage, NgStyle } from '@angular/common';
+import { IListItem } from '../../../assets/content/content.interfaces';
 import { AssetPipe } from '../asset/asset.pipe';
 import { HidePipe } from '../asset/hide.pipe';
 import { VisitBtnComponent } from '../buttons/visit-btn/visit-btn.component';
@@ -22,7 +20,6 @@ import { ColorPipe } from '../asset/color.pipe';
     templateUrl: './accordion.component.html',
     styleUrls: ['./accordion.component.scss'],
     imports: [
-        RouterLink,
         NgClass,
         NgForOf,
         NgStyle,
@@ -34,10 +31,10 @@ import { ColorPipe } from '../asset/color.pipe';
     ],
     standalone: true,
 })
-export class AccordionComponent implements OnInit, AfterViewInit {
+export class AccordionComponent implements AfterViewInit {
     public showNav = true;
-    public chosenItem!: number;
-    public chosenList!: number;
+    public chosenItem = 1;
+    public chosenList = 1;
 
     @Input() public lists!: IListItem[];
     @Output() public itemAccordion = new EventEmitter<number>();
@@ -45,19 +42,8 @@ export class AccordionComponent implements OnInit, AfterViewInit {
     @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
     @ViewChildren('panel', { read: ElementRef }) public panel!: QueryList<ElementRef>;
 
-    public ngOnInit(): void {
-        this.chosenItem = 1;
-        this.chosenList = 1;
-    }
-
     public ngAfterViewInit(): void {
         this.openFirstAccordion();
-    }
-
-    public openFirstAccordion(): void {
-        this.accordion.first.nativeElement.classList.toggle('active');
-        const panel = this.accordion.first.nativeElement.nextElementSibling;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
     }
 
     public showNavBlock(): void {
@@ -71,15 +57,13 @@ export class AccordionComponent implements OnInit, AfterViewInit {
     public handleClick(idItem: number, scrollTo: string | undefined): void {
         this.chosenItem = idItem;
         this.itemInAccordion.emit(idItem);
-        setTimeout(() => {
-            if (!scrollTo) {
-                return;
-            }
-            const anchor: HTMLElement | null = document.getElementById(scrollTo);
-            if (anchor) {
-                anchor.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        });
+        if (!scrollTo) {
+            return;
+        }
+        const anchor: HTMLElement | null = document.getElementById(scrollTo);
+        if (anchor) {
+            anchor.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
     }
 
     public toggle(index: number): void {
@@ -94,5 +78,11 @@ export class AccordionComponent implements OnInit, AfterViewInit {
                 closePanel.style.maxHeight = null;
             }
         });
+    }
+
+    public openFirstAccordion(): void {
+        this.accordion.first.nativeElement.classList.toggle('active');
+        const panel = this.accordion.first.nativeElement.nextElementSibling;
+        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
     }
 }

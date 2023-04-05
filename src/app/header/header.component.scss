@@ -4,6 +4,7 @@
     height: 68px;
 }
 .header {
+    height: 68px;
     position: fixed;
     z-index: 2;
     top: 0;
@@ -11,9 +12,8 @@
     right: 0;
     .left-side {
         width: 310px;
-        height: 68px;
         .logo {
-            padding: 20px;
+            padding-left: 10px;
         }
     }
     .center-side {
@@ -69,7 +69,7 @@
         background: black;
         .left-side {
             .logo {
-                padding: 20px 0 0 20px !important;
+                margin-left: 10px;
                 content: url('/assets/img/logo-white.svg');
             }
         }
@@ -90,69 +90,75 @@
 }
 .hide {
     &.header {
-        display: flex !important;
-    }
-    &.nav-section {
-        display: none !important;
+        display: flex;
+        .nav-section {
+            display: none;
+        }
     }
 }
 @media screen and (max-width: $desktopWidth) {
-    .left-side {
-        width: 100px !important;
-        .logo {
-            padding: 20px 0 0 10px !important;
+    .header {
+        .left-side {
+            width: 100px;
         }
     }
 }
 
 @media screen and (max-width: $mobileWidth) {
-    .quit-logo {
-        display: none;
-    }
-    .open-nav {
-        display: block !important;
-        margin-left: auto;
-    }
-    .nav-section {
-        display: block !important;
-        position: fixed;
-        z-index: 2;
-        height: 100%;
-        top: 68px;
-        left: 0;
-        right: 0;
-        width: 100%;
-        padding: 15px 20px;
-    }
-    .center-side {
-        display: none !important;
-    }
-    .nav-buttons {
-        padding: 45px 20px 0 0;
-        width: 180px;
-        button {
+    .header {
+        .quit-logo {
+            display: none;
+        }
+        .open-nav {
+            display: block;
+            margin-left: auto;
+        }
+        .center-side {
+            display: none;
+        }
+        .nav-section {
+            display: block;
+            position: fixed;
+            z-index: 2;
+            height: 100%;
+            top: 68px;
+            left: 0;
+            right: 0;
             width: 100%;
-            padding: 5px 0 5px 15px;
-            margin: 10px;
-            border-radius: 9px;
-        }
-        .yellow {
-            button {
-                color: var(--yellow);
-                background: var(--ligth-grey);
-            }
-        }
-        .black {
-            button {
-                color: var(--full-white);
-                background: none;
-                &:hover {
-                    color: var(--yellow);
-                    background: var(--ligth-grey);
+            padding: 15px 20px;
+            .nav-buttons {
+                padding: 45px 20px 0 0;
+                width: 180px;
+
+                button {
+                    width: 100%;
+                    padding: 5px 0 5px 15px;
+                    margin: 10px;
+                    border-radius: 9px;
                 }
-                &:active {
-                    color: var(--yellow);
-                    background: var(--ligth-grey);
+
+                .yellow {
+                    button {
+                        color: var(--yellow);
+                        background: var(--ligth-grey);
+                    }
+                }
+
+                .black {
+                    button {
+                        color: var(--full-white);
+                        background: none;
+
+                        &:hover {
+                            color: var(--yellow);
+                            background: var(--ligth-grey);
+                        }
+
+                        &:active {
+                            color: var(--yellow);
+                            background: var(--ligth-grey);
+                        }
+                    }
                 }
             }
         }

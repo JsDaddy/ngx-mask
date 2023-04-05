@@ -2,39 +2,38 @@
 :host {
     display: block;
     height: 100%;
-}
-
-.show {
-    &.navigation {
-        .navigation-text {
-            color: var(--yellow);
-        }
-        img {
-            content: url('/assets/img/chevron-right-24px.svg');
-        }
-    }
-    &.drawer-container {
-        display: block;
-    }
-}
-
-.hide {
-    &.drawer-container {
-        display: none;
-    }
-    &.navigation {
-        .navigation-text {
-            color: var(--full-white);
-        }
-        img {
-            content: url('/assets/img/chevron-right-24px-white.svg');
-        }
-        &:hover {
+    .show {
+        &.navigation {
             .navigation-text {
                 color: var(--yellow);
             }
             img {
                 content: url('/assets/img/chevron-right-24px.svg');
+            }
+        }
+        &.drawer-container {
+            display: block;
+        }
+    }
+
+    .hide {
+        &.drawer-container {
+            display: none;
+        }
+        &.navigation {
+            .navigation-text {
+                color: var(--full-white);
+            }
+            img {
+                content: url('/assets/img/chevron-right-24px-white.svg');
+            }
+            &:hover {
+                .navigation-text {
+                    color: var(--yellow);
+                }
+                img {
+                    content: url('/assets/img/chevron-right-24px.svg');
+                }
             }
         }
     }
@@ -156,36 +155,53 @@
 }
 
 @media screen and (max-width: $desktopWidth) {
-    .drawer-container {
-        top: 122px !important;
-        width: 375px !important;
-
-        .accordion-block {
-            width: 100%;
-
-            .accordion {
-                width: 87% !important;
-            }
-        }
-
-        .visit-btn {
-            display: none;
-        }
-    }
     .navigation {
-        display: flex !important;
+        display: flex;
         height: 55px;
         width: 100%;
         position: fixed;
         top: 68px;
-
         .navigation-text {
             padding-left: 20px;
             color: var(--full-white);
         }
-
         img {
             padding-right: 20px;
+        }
+    }
+    .drawer-container {
+        top: 122px;
+        width: 375px;
+        .drawer {
+            .accordion-block {
+                width: 100%;
+                .accordion {
+                    width: 87%;
+                }
+            }
+        }
+        .visit-btn {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: $mobileWidth) {
+    .drawer-container {
+        width: 100%;
+        .drawer {
+            padding: 0 25px;
+            .accordion-block {
+                width: 100%;
+                .panel {
+                    .accordion-box {
+                        width: 84%;
+                    }
+                }
+            }
+        }
+        .visit-btn {
+            display: none;
         }
     }
 }

@@ -15,8 +15,12 @@
 }
 
 @media screen and (max-width: $desktopWidth) {
-    .right-section {
-        padding: 0 !important;
-        margin-top: 55px;
+    .content-wrapper {
+        .mask-wrap {
+            .right-section {
+                padding: 0;
+                margin-top: 55px;
+            }
+        }
     }
 }
