@@ -4,7 +4,7 @@ import { AssetPipe } from '../shared/asset/asset.pipe';
 import { ColorPipe } from '../shared/asset/color.pipe';
 import { HidePipe } from '../shared/asset/hide.pipe';
 import { VisitBtnComponent } from '../shared/buttons/visit-btn/visit-btn.component';
-import { IHeader } from '../../assets/content/header.interface';
+import { IHeaderITem } from '../../assets/content/header.interface';
 
 @Component({
     selector: 'ngx-mask-demo-header',
@@ -23,7 +23,7 @@ import { IHeader } from '../../assets/content/header.interface';
     ],
 })
 export class HeaderComponent {
-    public headerDoc: IHeader[] = [
+    public headerDoc: IHeaderITem[] = [
         {
             title: 'Ngx-Mask',
             link: 'https://jsdaddy.github.io/ngx-mask/',

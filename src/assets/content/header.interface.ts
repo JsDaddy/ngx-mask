@@ -1,4 +1,4 @@
-export interface IHeader {
+export interface IHeaderITem {
     title: string;
     link: string;
 }
