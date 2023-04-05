@@ -52,6 +52,53 @@
     width: 310px;
     padding-top: 22px;
     .drawer {
+        .accordion-block {
+            .accordion {
+                width: 262px;
+                height: 50px;
+                margin: 10px 24px;
+                .left-side-accordion {
+                    border-radius: 50%;
+                    margin: 9px 15px 9px 10px;
+
+                    .default-svg {
+                        display: block;
+                    }
+
+                    .active-svg {
+                        display: none;
+                    }
+                }
+
+                &:after {
+                    content: url('/assets/img/chevron-right-24px-white.svg');
+                    margin-left: auto;
+                    margin-right: 19px;
+                }
+
+                &:hover {
+                    color: var(--yellow);
+                    @include border-accordion-tb-yellow;
+
+                    &.accordion:after {
+                        content: url('/assets/img/chevron-right-24px.svg');
+                    }
+
+                    .left-side-accordion {
+                        .default-svg {
+                            display: none;
+                        }
+
+                        .active-svg {
+                            display: block;
+                        }
+                    }
+                }
+            }
+            .panel {
+                display: none;
+            }
+        }
         .active {
             &.accordion-block {
                 .accordion {
@@ -101,54 +148,6 @@
                 }
             }
         }
-        .accordion-block {
-            .accordion {
-                width: 262px;
-                height: 50px;
-                margin: 10px 24px;
-                .left-side-accordion {
-                    border-radius: 50%;
-                    margin: 9px 15px 9px 10px;
-
-                    .default-svg {
-                        display: block;
-                    }
-
-                    .active-svg {
-                        display: none;
-                    }
-                }
-
-                &:after {
-                    content: url('/assets/img/chevron-right-24px-white.svg');
-                    margin-left: auto;
-                    margin-right: 19px;
-                }
-
-                &:hover {
-                    color: var(--yellow);
-                    @include border-accordion-tb-yellow;
-
-                    &.accordion:after {
-                        content: url('/assets/img/chevron-right-24px.svg');
-                    }
-
-                    .left-side-accordion {
-                        .default-svg {
-                            display: none;
-                        }
-
-                        .active-svg {
-                            display: block;
-                        }
-                    }
-                }
-            }
-            .panel {
-                display: none;
-            }
-        }
-
         .visit-btn {
             padding: 40px 24px 0 24px;
             position: absolute;
