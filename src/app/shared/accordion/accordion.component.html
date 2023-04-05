@@ -7,12 +7,14 @@
 </div>
 <div class="drawer-container column bg-black" [ngClass]="showNav | hide">
     <div class="drawer bg-black">
-        <div *ngFor="let list of lists; let i = index" class="accordion-block">
+        <div
+            *ngFor="let list of lists; let i = index"
+            class="non-active accordion-block"
+            #accordion>
             <div
                 class="accordion row ai-c bg-black fs-white-14 pointer border-accordion-tb-def"
                 (click)="toggle(i); switchDoc(list.id)"
-                id="{{ list.id }}"
-                #accordion>
+                id="{{ list.id }}">
                 <div class="left-side-accordion row ai-c bg-light-grey-accordion">
                     <img
                         width="32"
@@ -31,7 +33,7 @@
                     {{ list.header }}
                 </button>
             </div>
-            <div class="panel full-white text bg-black" #panel>
+            <div class="panel full-white text bg-black">
                 <p
                     *ngFor="let item of list.text"
                     class="accordion-box pointer"

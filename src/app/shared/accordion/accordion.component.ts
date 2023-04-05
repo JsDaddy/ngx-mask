@@ -35,12 +35,10 @@ export class AccordionComponent implements AfterViewInit {
     public showNav = true;
     public chosenItem = 1;
     public chosenList = 1;
-
     @Input() public lists!: IListItem[];
     @Output() public itemAccordion = new EventEmitter<number>();
     @Output() public itemInAccordion = new EventEmitter<number>();
     @ViewChildren('accordion', { read: ElementRef }) public accordion!: QueryList<ElementRef>;
-    @ViewChildren('panel', { read: ElementRef }) public panel!: QueryList<ElementRef>;
 
     public ngAfterViewInit(): void {
         this.openFirstAccordion();
@@ -68,21 +66,15 @@ export class AccordionComponent implements AfterViewInit {
 
     public toggle(index: number): void {
         this.accordion.get(index)?.nativeElement.classList.toggle('active');
-        const panel = this.panel.get(index)?.nativeElement;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
         const accordionsArray = this.accordion.toArray().map((el) => el.nativeElement.classList);
-        accordionsArray.map((el, i) => {
+        accordionsArray.forEach((el, i) => {
             if (index !== i && el.contains('active')) {
                 this.accordion.get(i)?.nativeElement.classList.remove('active');
-                const closePanel = this.panel.get(i)?.nativeElement;
-                closePanel.style.maxHeight = null;
             }
         });
     }
 
     public openFirstAccordion(): void {
         this.accordion.first.nativeElement.classList.toggle('active');
-        const panel = this.accordion.first.nativeElement.nextElementSibling;
-        panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + 'px';
     }
 }
