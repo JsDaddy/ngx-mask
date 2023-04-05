@@ -65,7 +65,7 @@ export class AccordionComponent implements AfterViewInit {
     }
 
     public toggle(index: number): void {
-        this.accordion.map((_el, i) => {
+        this.accordion.forEach((_el, i) => {
             index !== i
                 ? this.accordion.get(i)?.nativeElement.classList.remove('active')
                 : this.accordion.get(index)?.nativeElement.classList.toggle('active');
