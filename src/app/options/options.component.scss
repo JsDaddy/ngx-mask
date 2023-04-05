@@ -4,6 +4,12 @@
     padding: 16px;
     border-top: 1px solid rgba(25, 25, 25, 0.05);
     box-sizing: border-box;
+    .yellow {
+        &.card {
+            background: rgba(255, 214, 77, 0.05);
+            border: 1px solid var(--yellow);
+        }
+    }
     .card {
         padding: 10px;
         gap: 10px;

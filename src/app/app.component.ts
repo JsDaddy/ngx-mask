@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
@@ -37,26 +37,20 @@ import { AccordionComponent } from './shared/accordion/accordion.component';
         AccordionComponent,
     ],
 })
-export class AppComponent implements OnInit {
-    public inputVal!: {
+export class AppComponent {
+    public inputVal: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
+    } = {
+        docs: ComDocs,
+        examples: ComExamples,
     };
 
-    public chosenItem!: number;
-    public chosenList!: number;
-    public lists!: IListItem[];
+    public chosenItem = 1;
+    public lists: IListItem[] = lists;
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
-
-    public ngOnInit(): void {
-        this.inputVal = {
-            docs: ComDocs,
-            examples: ComExamples,
-        };
-        this.lists = lists;
-    }
 
     public switchDoc(idList: number): void {
         switch (idList) {
@@ -79,7 +73,6 @@ export class AppComponent implements OnInit {
             default:
                 break;
         }
-        this.chosenList = idList;
     }
 
     public chosenItemS(itemId: number): void {
