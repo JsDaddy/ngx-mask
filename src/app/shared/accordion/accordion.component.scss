@@ -4,6 +4,7 @@
     height: 100%;
     .show {
         &.navigation {
+            transition: all 0.5s;
             .navigation-text {
                 color: var(--yellow);
             }
@@ -12,15 +13,19 @@
             }
         }
         &.drawer-container {
-            display: block;
+            opacity: 1;
+            transition: all 1s;
         }
     }
 
     .hide {
         &.drawer-container {
-            display: none;
+            opacity: 0;
+            transition: all 1s;
+            transform: rotateX(45deg);
         }
         &.navigation {
+            transition: all 0.5s;
             .navigation-text {
                 color: var(--full-white);
             }
@@ -128,7 +133,7 @@
                     }
                 }
                 .panel {
-                    display: block !important;
+                    display: block;
                     padding: 0 24px;
                     height: auto;
                     overflow: hidden;
@@ -161,14 +166,15 @@
         display: flex;
         height: 55px;
         width: 100%;
+        z-index: 1;
         position: fixed;
         top: 68px;
         .navigation-text {
-            padding-left: 20px;
+            padding-right: 20px;
             color: var(--full-white);
         }
         img {
-            padding-right: 20px;
+            padding-left: 20px;
         }
     }
     .drawer-container {

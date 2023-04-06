@@ -14,6 +14,7 @@ import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.in
 import { AssetPipe } from '../shared/asset/asset.pipe';
 import { IsEmptyPipe } from '../shared/asset/is-empty.pipe';
 import { ColorPipe } from '../shared/asset/color.pipe';
+import { CardContentComponent } from '../shared/card-content/card-content.component';
 
 @Component({
     selector: 'ngx-mask-demo-options',
@@ -35,6 +36,7 @@ import { ColorPipe } from '../shared/asset/color.pipe';
         AssetPipe,
         IsEmptyPipe,
         ColorPipe,
+        CardContentComponent,
     ],
     providers: [],
 })
