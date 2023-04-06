@@ -1,8 +1,9 @@
 <section class="content column bg-full-white">
-    <div class="card" *ngFor="let tile of docs; index as i">
-        <div
-            class="mr-title title row uppercase ls-25"
-            [ngClass]="checkChoose(choose, tile.id) | color">
+    <div
+        class="card"
+        *ngFor="let tile of docs; index as i"
+        [ngClass]="checkChoose(choose, tile.id) | color">
+        <div class="mr-title title row uppercase ls-25">
             {{ tile.header }}
         </div>
         <div class="cards-block row" id="{{ tile.anchor }}">
