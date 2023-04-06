@@ -95,22 +95,26 @@
                     }
                 }
             }
-
-            .active {
-                &.accordion {
+            .panel {
+                display: none;
+            }
+        }
+        .active {
+            &.accordion-block {
+                .accordion {
                     border-width: 2px 0 0 0;
                     transition: 0ms;
                     border-color: var(--yellow);
-
+                    &:hover {
+                        border-width: 2px 0 0 0;
+                    }
                     &:after {
                         content: url('/assets/img/chevron-right-24px.svg');
                         transform: rotate(180deg);
                     }
-
                     .accordion-btn {
                         color: var(--yellow);
                     }
-
                     .left-side-accordion {
                         border-radius: 50%;
                         margin: 9px 15px 9px 10px;
@@ -118,34 +122,32 @@
                         .default-svg {
                             display: none;
                         }
-
                         .active-svg {
                             display: block;
                         }
                     }
                 }
-            }
+                .panel {
+                    display: block !important;
+                    padding: 0 24px;
+                    height: auto;
+                    overflow: hidden;
+                    transition: max-height 0.2s ease-out;
 
-            .panel {
-                padding: 0 24px;
-                max-height: 0;
-                overflow: hidden;
-                transition: max-height 0.2s ease-out;
-
-                .accordion-box {
-                    height: 21px;
-                    padding: 10px 0 0 60px;
-                }
-                .black {
-                    color: var(--full-white);
-                }
-                .accordion-box:last-child {
-                    @include border-bottom-yellow;
-                    padding: 10px 0 26px 60px;
+                    .accordion-box {
+                        height: 21px;
+                        padding: 10px 0 0 60px;
+                    }
+                    .black {
+                        color: var(--full-white);
+                    }
+                    .accordion-box:last-child {
+                        @include border-bottom-yellow;
+                        padding: 10px 0 26px 60px;
+                    }
                 }
             }
         }
-
         .visit-btn {
             padding: 40px 24px 0 24px;
             position: absolute;
