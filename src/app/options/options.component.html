@@ -1,7 +1,7 @@
 <section class="content column bg-full-white">
     <div
         class="card"
-        *ngFor="let tile of docs; index as i"
+        *ngFor="let tile of docs; let i = index; trackBy: trackByPath"
         [ngClass]="checkChoose(choose, tile.id) | color">
         <div class="mr-title title row uppercase ls-25">
             {{ tile.header }}

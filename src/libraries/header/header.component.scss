@@ -1,0 +1,156 @@
+@import '../../styles';
+:host {
+    display: block;
+    height: 68px;
+}
+.header {
+    height: 68px;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    right: 0;
+    .left-side {
+        width: 310px;
+        .logo {
+            padding-left: 10px;
+        }
+    }
+    .center-side {
+        .yellow {
+            button {
+                background: var(--black);
+                color: var(--yellow);
+            }
+        }
+        .black {
+            button {
+                color: var(--black);
+                &:hover {
+                    background: rgba(25, 25, 25, 0.05);
+                }
+                &:active {
+                    background: var(--black);
+                    color: var(--yellow);
+                }
+            }
+        }
+        .center-buttons {
+            border-radius: 9px;
+            padding: 5px 23px;
+            gap: 10px;
+            height: 31px;
+        }
+    }
+    .open-nav {
+        display: none;
+    }
+    .nav-section {
+        display: none;
+    }
+    .mrl-20 {
+        margin-left: 20px;
+    }
+    .mr-5 {
+        margin: 0 5px;
+    }
+}
+
+.show {
+    display: block;
+    &.header {
+        display: flex;
+        background: black;
+        .left-side {
+            .logo {
+                margin-left: 10px;
+                content: url('/assets/img/logo-white.svg');
+            }
+        }
+        .open-nav {
+            img {
+                width: 68px;
+                height: 68px;
+                position: relative;
+                top: 1px;
+                content: url('/assets/img/close.svg');
+            }
+        }
+        .btn-bottom {
+            position: absolute;
+            bottom: 125px;
+        }
+    }
+}
+.hide {
+    &.header {
+        display: flex;
+        .nav-section {
+            display: none;
+        }
+    }
+}
+@media screen and (max-width: $desktopWidth) {
+    .header {
+        .left-side {
+            width: 100px;
+        }
+    }
+}
+
+@media screen and (max-width: $mobileWidth) {
+    .header {
+        .open-nav {
+            display: block;
+            margin-left: auto;
+        }
+        .center-side {
+            display: none;
+        }
+        .nav-section {
+            display: block;
+            position: fixed;
+            z-index: 2;
+            height: 100%;
+            top: 68px;
+            left: 0;
+            right: 0;
+            width: 100%;
+            padding: 15px 20px;
+            .nav-buttons {
+                padding: 45px 60px 0 0;
+
+                button {
+                    width: 100%;
+                    padding: 5px 0 5px 15px;
+                    margin: 10px;
+                    border-radius: 9px;
+                }
+
+                .yellow {
+                    button {
+                        color: var(--yellow);
+                        background: var(--ligth-grey);
+                    }
+                }
+
+                .black {
+                    button {
+                        color: var(--full-white);
+                        background: none;
+
+                        &:hover {
+                            color: var(--yellow);
+                            background: var(--ligth-grey);
+                        }
+
+                        &:active {
+                            color: var(--yellow);
+                            background: var(--ligth-grey);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

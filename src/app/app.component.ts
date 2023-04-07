@@ -7,14 +7,14 @@ import { SepDocs, SepExamples } from 'src/assets/content/separators';
 import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
-import { HeaderComponent } from './header/header.component';
+import { HeaderComponent } from '../libraries/header/header.component';
 import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
-import { AssetPipe } from './shared/asset/asset.pipe';
-import { SubHeaderComponent } from './sub-header/sub-header.component';
-import { HidePipe } from './shared/asset/hide.pipe';
-import { ColorPipe } from './shared/asset/color.pipe';
-import { VisitBtnComponent } from './shared/buttons/visit-btn/visit-btn.component';
-import { AccordionComponent } from './shared/accordion/accordion.component';
+import { AssetPipe } from '../libraries/asset/asset.pipe';
+import { SubHeaderComponent } from '../libraries/sub-header/sub-header.component';
+import { HidePipe } from '../libraries/hide/hide.pipe';
+import { ColorPipe } from '../libraries/color/color.pipe';
+import { VisitBtnComponent } from '../libraries/visit-btn/visit-btn.component';
+import { AccordionComponent } from '../libraries/accordion/accordion.component';
 
 @Component({
     selector: 'ngx-mask-demo-root',
