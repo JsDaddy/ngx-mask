@@ -43,43 +43,49 @@
         </div>
         <div *ngIf="!ex._validation; else validView">
             <div class="card-content row">
-                <ngx-mask-demo-card-content
+                <jsdaddy-open-source-card-content
                     value="{{ ex.control.form.value | isEmpty }}"
                     title="Form Control:"
                     color="yellow-view">
-                </ngx-mask-demo-card-content>
-                <ngx-mask-demo-card-content
+                </jsdaddy-open-source-card-content>
+                <jsdaddy-open-source-card-content
                     value="{{ ex.control.model | isEmpty }}"
                     title="Ng Model:"
                     color="yellow-view">
-                </ngx-mask-demo-card-content>
+                </jsdaddy-open-source-card-content>
             </div>
-            <ngx-mask-demo-card-content value="{{ ex._mask }}" title="Mask:" color="green-view">
-            </ngx-mask-demo-card-content>
+            <jsdaddy-open-source-card-content
+                value="{{ ex._mask }}"
+                title="Mask:"
+                color="green-view">
+            </jsdaddy-open-source-card-content>
         </div>
     </div>
     <ng-template #validView>
-        <ngx-mask-demo-card-content
+        <jsdaddy-open-source-card-content
             value="{{ ex.control.form.errors | json }}"
             title="Form Control:"
             color="yellow-view">
-        </ngx-mask-demo-card-content>
-        <ngx-mask-demo-card-content
+        </jsdaddy-open-source-card-content>
+        <jsdaddy-open-source-card-content
             value="{{ ex.control.form.errors | json }}"
             title="Mask:"
             color="green-view">
-        </ngx-mask-demo-card-content>
+        </jsdaddy-open-source-card-content>
     </ng-template>
 </ng-template>
 
 <ng-template #pipeView>
     <div class="dark-card bg-black">
-        <ngx-mask-demo-card-content value="{{ phone | mask : '(000) 000-0000' }}" title="" color="">
-        </ngx-mask-demo-card-content>
-        <ngx-mask-demo-card-content value="(000) 000-0000" title="Mask:" color="green-view">
-        </ngx-mask-demo-card-content>
-        <ngx-mask-demo-card-content value="123456789" title="Value:" color="green-view">
-        </ngx-mask-demo-card-content>
+        <jsdaddy-open-source-card-content
+            value="{{ phone | mask : '(000) 000-0000' }}"
+            title=""
+            color="">
+        </jsdaddy-open-source-card-content>
+        <jsdaddy-open-source-card-content value="(000) 000-0000" title="Mask:" color="green-view">
+        </jsdaddy-open-source-card-content>
+        <jsdaddy-open-source-card-content value="123456789" title="Value:" color="green-view">
+        </jsdaddy-open-source-card-content>
     </div>
 </ng-template>
 <div class="all-rights row jc-c">

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
@@ -7,24 +7,29 @@ import { SepDocs, SepExamples } from 'src/assets/content/separators';
 import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
-import { HeaderComponent } from '../libraries/header/header.component';
-import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
-import { AssetPipe } from '../libraries/asset/asset.pipe';
-import { SubHeaderComponent } from '../libraries/sub-header/sub-header.component';
-import { HidePipe } from '../libraries/hide/hide.pipe';
-import { ColorPipe } from '../libraries/color/color.pipe';
-import { VisitBtnComponent } from '../libraries/visit-btn/visit-btn.component';
-import { AccordionComponent } from '../libraries/accordion/accordion.component';
+import { HeaderComponent } from '@open-source/header/header.component';
+import {
+    IComDoc,
+    IListItem,
+    IMaskOptions,
+    TExample,
+} from '@open-source/accordion/content-interface/content.interfaces';
+import { AssetPipe } from '@libraries/asset/asset.pipe';
+import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
+import { HidePipe } from '@open-source/hide/hide.pipe';
+import { ColorPipe } from '@open-source/color/color.pipe';
+import { VisitBtnComponent } from '@open-source/visit-btn/visit-btn.component';
+import { AccordionComponent } from '@open-source/accordion/accordion.component';
 
 @Component({
-    selector: 'ngx-mask-demo-root',
+    selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
         NgClass,
         NgIf,
-        NgForOf,
+        NgFor,
         NgOptimizedImage,
         RouterLink,
         OptionsComponent,

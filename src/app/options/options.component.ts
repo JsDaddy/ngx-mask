@@ -2,7 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import {
     JsonPipe,
     NgClass,
-    NgForOf,
+    NgFor,
     NgIf,
     NgOptimizedImage,
     NgTemplateOutlet,
@@ -10,21 +10,25 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
-import { IComDoc, IMaskOptions, TExample } from '../../assets/content/content.interfaces';
-import { AssetPipe } from '../../libraries/asset/asset.pipe';
-import { IsEmptyPipe } from '../../libraries/is-empty/is-empty.pipe';
-import { ColorPipe } from '../../libraries/color/color.pipe';
+import {
+    IComDoc,
+    IMaskOptions,
+    TExample,
+} from '@open-source/accordion/content-interface/content.interfaces';
+import { AssetPipe } from '@libraries/asset/asset.pipe';
+import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
+import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
-import { TrackByService } from '../../libraries/track-by/track-by.service';
+import { TrackByService } from '@libraries/track-by/track-by.service';
 
 @Component({
-    selector: 'ngx-mask-demo-options',
+    selector: 'jsdaddy-open-source-options',
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss'],
     standalone: true,
     imports: [
         JsonPipe,
-        NgForOf,
+        NgFor,
         NgIf,
         NgClass,
         NgOptimizedImage,

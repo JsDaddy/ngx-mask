@@ -1,4 +1,4 @@
-import { IListItem } from './content.interfaces';
+import { IListItem } from '@open-source/accordion/content-interface/content.interfaces';
 
 export const lists: IListItem[] = [
     {

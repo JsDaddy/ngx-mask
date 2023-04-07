@@ -1,20 +1,20 @@
 <div class="content-wrapper column">
-    <ngx-mask-demo-header></ngx-mask-demo-header>
+    <jsdaddy-open-source-header></jsdaddy-open-source-header>
     <section class="mask-wrap row">
         <div class="drawer-container column">
-            <ngx-mask-demo-accordion
+            <jsdaddy-open-source-accordion
                 [lists]="lists"
                 (itemAccordion)="switchDoc($event)"
                 (itemInAccordion)="chosenItemS($event)">
-            </ngx-mask-demo-accordion>
+            </jsdaddy-open-source-accordion>
         </div>
         <div class="right-section column">
-            <ngx-mask-demo-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips">
-            </ngx-mask-demo-sub-header>
-            <ngx-mask-demo-options
+            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips">
+            </jsdaddy-open-source-sub-header>
+            <jsdaddy-open-source-options
                 [choose]="chosenItem"
                 [docs]="inputVal.docs"
-                [examples]="inputVal.examples"></ngx-mask-demo-options>
+                [examples]="inputVal.examples"></jsdaddy-open-source-options>
         </div>
     </section>
 </div>
