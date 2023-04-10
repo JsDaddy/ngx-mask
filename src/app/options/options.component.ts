@@ -10,11 +10,7 @@ import {
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
-import {
-    IComDoc,
-    IMaskOptions,
-    TExample,
-} from '@open-source/accordion/content-interface/content.interfaces';
+import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';

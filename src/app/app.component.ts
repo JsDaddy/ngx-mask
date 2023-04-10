@@ -13,7 +13,7 @@ import {
     IListItem,
     IMaskOptions,
     TExample,
-} from '@open-source/accordion/content-interface/content.interfaces';
+} from '@open-source/accordion/content.interfaces';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { HidePipe } from '@open-source/hide/hide.pipe';
