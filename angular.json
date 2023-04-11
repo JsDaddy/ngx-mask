@@ -19,7 +19,6 @@
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": ["src/assets", "src/favicon.ico"],
                         "styles": [
-                            "@angular/material/prebuilt-themes/indigo-pink.css",
                             "node_modules/highlight.js/styles/github.css",
                             "src/styles.scss"
                         ],

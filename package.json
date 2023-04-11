@@ -80,7 +80,6 @@
         "@angular/cli": "15.2.4",
         "@angular/compiler-cli": "15.2.4",
         "@angular/language-service": "15.2.4",
-        "@angular/material": "15.2.4",
         "@commitlint/cli": "17.5.1",
         "@commitlint/config-conventional": "17.4.4",
         "@nrwl/cypress": "15.8.9",
