@@ -6,7 +6,7 @@
         <div class="mr-title title row uppercase ls-25">
             {{ tile.header }}
         </div>
-        <div class="cards-block row" id="{{ tile.anchor }}">
+        <div class="cards-block row" [id]="tile.anchor">
             <div class="light-card bg-full-white pd-15">
                 <div class="light-title row ai-c">
                     <img width="20" height="20" [ngSrc]="'hand-box' | asset" alt="hand-box" />

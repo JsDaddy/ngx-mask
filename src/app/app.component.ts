@@ -1,6 +1,4 @@
 import { Component } from '@angular/core';
-import { NgClass, NgFor, NgIf, NgOptimizedImage } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -14,11 +12,7 @@ import {
     IMaskOptions,
     TExample,
 } from '@open-source/accordion/content.interfaces';
-import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
-import { HidePipe } from '@open-source/hide/hide.pipe';
-import { ColorPipe } from '@open-source/color/color.pipe';
-import { VisitBtnComponent } from '@open-source/visit-btn/visit-btn.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 
 @Component({
@@ -26,21 +20,7 @@ import { AccordionComponent } from '@open-source/accordion/accordion.component';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    imports: [
-        NgClass,
-        NgIf,
-        NgFor,
-        NgOptimizedImage,
-        RouterLink,
-        OptionsComponent,
-        HeaderComponent,
-        AssetPipe,
-        SubHeaderComponent,
-        HidePipe,
-        ColorPipe,
-        VisitBtnComponent,
-        AccordionComponent,
-    ],
+    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
 })
 export class AppComponent {
     public inputVal: {
