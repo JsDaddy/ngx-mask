@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 @Component({
-    selector: 'ngx-mask-demo-test',
+    selector: 'jsdaddy-open-source-test',
     template: `
         <input
             id="masked"

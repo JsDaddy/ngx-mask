@@ -1,41 +1,26 @@
 import { Component } from '@angular/core';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
-import { RouterLink } from '@angular/router';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
 import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
-import { HeaderComponent } from './header/header.component';
-import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
-import { AssetPipe } from './shared/asset/asset.pipe';
-import { SubHeaderComponent } from './sub-header/sub-header.component';
-import { HidePipe } from './shared/asset/hide.pipe';
-import { ColorPipe } from './shared/asset/color.pipe';
-import { VisitBtnComponent } from './shared/buttons/visit-btn/visit-btn.component';
-import { AccordionComponent } from './shared/accordion/accordion.component';
+import { HeaderComponent } from '@open-source/header/header.component';
+import {
+    IComDoc,
+    IListItem,
+    IMaskOptions,
+    TExample,
+} from '@open-source/accordion/content.interfaces';
+import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
+import { AccordionComponent } from '@open-source/accordion/accordion.component';
 
 @Component({
-    selector: 'ngx-mask-demo-root',
+    selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    imports: [
-        NgClass,
-        NgIf,
-        NgForOf,
-        NgOptimizedImage,
-        RouterLink,
-        OptionsComponent,
-        HeaderComponent,
-        AssetPipe,
-        SubHeaderComponent,
-        HidePipe,
-        ColorPipe,
-        VisitBtnComponent,
-        AccordionComponent,
-    ],
+    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
 })
 export class AppComponent {
     public inputVal: {

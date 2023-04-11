@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'ngx-mask-demo-test',
+    selector: 'jsdaddy-open-source-test',
     styles: [
         'code { border: 1px solid #ddd; background-color: #eee; padding: 0 5px; border-radius: 3px; }',
     ],
