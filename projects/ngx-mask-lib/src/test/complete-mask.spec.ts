@@ -5,7 +5,7 @@ import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 @Component({
-    selector: 'ngx-mask-demo-test',
+    selector: 'jsdaddy-open-source-test',
     template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 class TestMaskComponent {

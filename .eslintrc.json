@@ -20,7 +20,7 @@
                 "@angular-eslint/component-selector": [
                     "error",
                     {
-                        "prefix": "ngx-mask-demo",
+                        "prefix": "jsdaddy",
                         "style": "kebab-case",
                         "type": "element"
                     }

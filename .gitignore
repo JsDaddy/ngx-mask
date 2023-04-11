@@ -18,6 +18,7 @@
 
 # misc
 /.angular/cache
+/.cache
 /.sass-cache
 /connect.lock
 /coverage/*
