@@ -1,11 +1,11 @@
-import { IListItem } from './content.interfaces';
+import { IListItem } from '@open-source/accordion/content.interfaces';
 
 export const lists: IListItem[] = [
     {
         header: 'Common cases',
         id: 1,
-        defaultSvg: 'common_cases',
-        activeSvg: 'common_cases_active',
+        defaultSvg: 'common-cases',
+        activeSvg: 'common-cases-active',
         text: [
             {
                 content: 'Date',
@@ -43,7 +43,7 @@ export const lists: IListItem[] = [
         header: 'Options',
         id: 2,
         defaultSvg: 'options',
-        activeSvg: 'options',
+        activeSvg: 'options-active',
         text: [
             {
                 content: 'Prefix',
@@ -81,7 +81,7 @@ export const lists: IListItem[] = [
         header: 'Separators',
         id: 3,
         defaultSvg: 'separator',
-        activeSvg: 'separator',
+        activeSvg: 'separator-active',
         text: [
             {
                 content: 'Separator',
@@ -104,7 +104,7 @@ export const lists: IListItem[] = [
         header: 'Other',
         id: 4,
         defaultSvg: 'other',
-        activeSvg: 'other',
+        activeSvg: 'other-active',
         text: [
             {
                 content: 'Secure input',

@@ -4,7 +4,7 @@ import { FormControl } from '@angular/forms';
 import { IConfig } from '../../lib/ngx-mask.config';
 
 @Component({
-    selector: 'ngx-mask-demo-test',
+    selector: 'jsdaddy-open-source-test',
     template: `
         <input
             id="mask"

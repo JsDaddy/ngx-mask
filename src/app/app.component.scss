@@ -1,153 +1,26 @@
-@import 'src/assets/style/variables';
 @import 'src/styles';
-.content-wrapper {
-    display: flex;
+:host {
+    display: block;
     height: 100%;
-    flex-direction: column;
-
+}
+.content-wrapper {
     .mask-wrap {
         height: calc(100% - 64px);
         overflow: auto;
-
-        mat-drawer-container {
-            height: 100%;
-            overflow: hidden;
-            mat-expansion-panel {
-                mat-nav-list {
-                    align-self: flex-start;
-                    button {
-                        width: 100%;
-                    }
-                }
-            }
-
-            mat-drawer {
-                width: 310px;
-                background: $text-color-black;
-                .visit-btn {
-                    padding: 20px 24px;
-                    .color-btn {
-                        display: flex;
-                        flex-direction: row;
-                        align-items: center;
-                        padding: 15px 32px;
-                        gap: 76px;
-                        background: $yellow-bg;
-                        width: 262px;
-                        height: 45px;
-                        @include regular-text;
-                        text-transform: capitalize;
-                        color: $text-color-black;
-                        border-radius: 10px;
-                    }
-
-                    .color-btn:after {
-                        content: url('~src/assets/img/chevron-right-white.svg');
-                        width: 20px;
-                        height: 20px;
-                        background: $default-btn-active-bg;
-                        border-radius: 15px;
-                        color: $white;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-            }
+        .right-section {
+            width: 100%;
+            padding-left: 310px;
         }
     }
 }
 
-.accordion {
-    cursor: pointer;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
-    width: 262px;
-    height: 50px;
-    background: #191919;
-    margin: 10px 24px;
-    border-width: 2px 0;
-    border-style: solid;
-    border-color: $accordion-border;
-    border-radius: 10px;
-    align-items: center;
-    display: flex;
-    .left-side-accordion {
-        border-radius: 50%;
-        margin: 9px 15px 9px 10px;
-        background: rgba(255, 255, 255, 0.05);
-    }
-    .accordion-btn {
-        background: #191919;
-        border: none;
-        color: white;
-        cursor: pointer;
-    }
-}
-
-.accordion:hover {
-    color: #ffd64d;
-    border-width: 2px 0;
-    border-style: solid;
-    border-color: $yellow-bg;
-    border-radius: 10px;
-    &.accordion:after {
-        content: url('~src/assets/img/chevron_right_24px.svg');
-    }
-    .left-side-accordion {
-        color: $yellow-bg;
-    }
-    .accordion-btn {
-        color: $yellow-bg;
-    }
-}
-
-.accordion:after {
-    content: url('~src/assets/img/chevron_right_24px white.svg');
-    margin-left: auto;
-    margin-right: 19px;
-}
-
-.active {
-    &.accordion {
-        border-width: 2px 0 0 0;
-        transition: 0ms;
-        border-color: $yellow-bg;
-        .accordion-btn {
-            color: $yellow-bg;
+@media screen and (max-width: $desktopWidth) {
+    .content-wrapper {
+        .mask-wrap {
+            .right-section {
+                padding: 0;
+                margin-top: 55px;
+            }
         }
-    }
-    &.accordion:after {
-        content: url('~src/assets/img/chevron_right_24px.svg');
-        transform: rotate(180deg);
-    }
-}
-
-.panel {
-    padding: 0 18px;
-    background-color: #191919;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.2s ease-out;
-    @include regular-text;
-    color: $white;
-    .accordion-box {
-        height: 21px;
-        padding: 10px 0 0 68px;
-    }
-    .accordion-box:hover {
-        cursor: pointer;
-    }
-    .accordion-box:active {
-        color: $yellow-bg;
-    }
-    .accordion-box:last-child {
-        border-width: 0 0 2px 0;
-        border-color: $yellow-bg;
-        border-style: solid;
-        border-radius: 10px;
-        padding: 10px 0 26px 68px;
     }
 }

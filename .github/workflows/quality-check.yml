@@ -15,7 +15,9 @@ jobs:
       - name: Check quality
         run: |
           npm ci --legacy-peer-deps
+          git submodule update --init --recursive --remote
           npm run lint
           npm test
           npm run build
           npm run build:lib
+        

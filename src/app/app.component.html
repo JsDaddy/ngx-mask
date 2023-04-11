@@ -1,46 +1,20 @@
-<div class="content-wrapper">
-    <ngx-mask-demo-header></ngx-mask-demo-header>
-    <section class="mask-wrap">
-        <mat-drawer-container>
-            <mat-drawer mode="side" opened>
-                <div *ngFor="let list of lists; let i = index">
-                    <div
-                        class="accordion"
-                        (click)="toggle(i); switchDoc(list.id)"
-                        [ngStyle]="{ color: list.id === chosenItem ? '#ffcc00' : '#FFFFFF' }"
-                        id="{{ list.id }}"
-                        #accordion>
-                        <img
-                            width="32"
-                            height="32"
-                            [ngSrc]="list.defaultSvg | asset"
-                            class="left-side-accordion"
-                            alt="" />
-                        <button class="accordion-btn">{{ list.header }}</button>
-                    </div>
-                    <div class="panel" #panel>
-                        <p
-                            *ngFor="let item of list.text"
-                            class="accordion-box"
-                            [ngStyle]="{ color: item.id === chosenItem ? '#ffcc00' : '#FFFFFF' }"
-                            id="{{ item.id }}"
-                            (click)="handleClick(item.id, item.scrollTo)"
-                            [routerLink]="[]"
-                            fragment="{{ item.scrollTo }}">
-                            {{ item.content }}
-                        </p>
-                    </div>
-                </div>
-                <div class="visit-btn">
-                    <button class="color-btn">Visit WebSite</button>
-                </div>
-            </mat-drawer>
-            <mat-drawer-content>
-                <ngx-mask-demo-options
-                    [choose]="chosenItem"
-                    [docs]="inputVal.docs"
-                    [examples]="inputVal.examples"></ngx-mask-demo-options>
-            </mat-drawer-content>
-        </mat-drawer-container>
+<div class="content-wrapper column">
+    <jsdaddy-open-source-header></jsdaddy-open-source-header>
+    <section class="mask-wrap row">
+        <div class="drawer-container column">
+            <jsdaddy-open-source-accordion
+                [lists]="lists"
+                (itemAccordion)="switchDoc($event)"
+                (itemInAccordion)="chosenItemS($event)">
+            </jsdaddy-open-source-accordion>
+        </div>
+        <div class="right-section column">
+            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips">
+            </jsdaddy-open-source-sub-header>
+            <jsdaddy-open-source-options
+                [choose]="chosenItem"
+                [docs]="inputVal.docs"
+                [examples]="inputVal.examples"></jsdaddy-open-source-options>
+        </div>
     </section>
 </div>
