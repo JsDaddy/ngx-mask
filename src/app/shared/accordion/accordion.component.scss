@@ -4,12 +4,14 @@
     height: 100%;
     .show {
         &.navigation {
-            transition: all 0.5s;
             .navigation-text {
                 color: var(--yellow);
             }
             img {
+                transition: all 0.5s;
                 content: url('/assets/img/chevron-right-24px.svg');
+                transform: rotate(180deg);
+                margin-left: 20px;
             }
         }
         &.drawer-container {
@@ -25,11 +27,11 @@
             transform: rotateX(45deg);
         }
         &.navigation {
-            transition: all 0.5s;
             .navigation-text {
                 color: var(--full-white);
             }
             img {
+                transition: all 0.5s;
                 content: url('/assets/img/chevron-right-24px-white.svg');
             }
             &:hover {
