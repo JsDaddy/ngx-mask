@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
-import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
+import { ComDocs, ComExamples } from 'src/assets/content/common-cases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from '@open-source/header/header.component';
