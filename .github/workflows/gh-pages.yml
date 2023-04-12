@@ -18,6 +18,7 @@ jobs:
       - name: Build demo
         run: |
           npm ci --legacy-peer-deps
+          git submodule update --init --recursive --remote
           npm run build
       - name: Deploy demo
         uses: peaceiris/actions-gh-pages@v3
