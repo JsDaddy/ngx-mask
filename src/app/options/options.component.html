@@ -14,20 +14,26 @@
                 </div>
                 <span class="source uppercase ls-25 full-white span">Source code</span>
                 <div class="white-input">
-                    <pre><code type="text" [highlight]="tile.code" class="input-view row ai-c bg-white"></code></pre>
-                    <i class="icon"></i>
+                    <pre class="row">
+                        <code type="text" [highlight]="tile.code" class="input-view bg-white"></code>
+                        <img height="18" width="13" [ngSrc]="'input-vector' | asset" class="input-img ais-c" alt="input-vector" />
+                    </pre>
                 </div>
             </div>
             <ng-container
-                *ngTemplateOutlet="exampleTmpl; context: { $implicit: examples[i] }"></ng-container>
+                *ngTemplateOutlet="
+                    exampleTmpl;
+                    context: { $implicit: examples[i], placeholder: tile.header }
+                "></ng-container>
         </div>
     </div>
 </section>
 
-<ng-template #exampleTmpl let-ex>
+<ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     <div class="dark-card bg-black" *ngIf="!ex._pipe; else pipeView">
         <div class="dark-input pd-15">
             <input
+                [placeholder]="placeholder"
                 prefix="{{ ex._prefix }}"
                 suffix="{{ ex._suffix }}"
                 [dropSpecialCharacters]="ex._dropSpecialCharacters || ''"
