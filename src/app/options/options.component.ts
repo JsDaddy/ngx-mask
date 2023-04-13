@@ -32,6 +32,7 @@ import { Router } from '@angular/router';
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss'],
     standalone: true,
+    providers: [ScrollService],
     imports: [
         JsonPipe,
         NgFor,
@@ -52,14 +53,16 @@ import { Router } from '@angular/router';
 })
 export class OptionsComponent {
     public phone = '123456789';
-    public readonly scrollService = inject(ScrollService);
     public readonly trackByPath = inject(TrackByService).trackBy('text');
+    private readonly scrollService = inject(ScrollService);
+    private readonly renderer = inject(Renderer2);
+    private readonly route = inject(Router);
     @Input() public docs!: IComDoc[];
     @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
     @Input() public choose!: number;
-    @ViewChildren('elm1') public elms!: QueryList<ElementRef>;
+    @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
 
-    public constructor(private renderer: Renderer2, private route: Router) {
+    public constructor() {
         this.renderer.listen('window', 'scroll', this.scrollCard.bind(this));
     }
 
@@ -69,7 +72,7 @@ export class OptionsComponent {
 
     public scrollCard(): void {
         const detectedElms: string[] = [];
-        this.elms.forEach((elm) => {
+        this.cardIds.forEach((elm) => {
             if (this.scrollService.isInViewport(elm.nativeElement)) {
                 detectedElms.push(elm.nativeElement.id);
                 this.route.navigate(['/'], { fragment: detectedElms[1] });

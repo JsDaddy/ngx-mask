@@ -4,7 +4,7 @@
         *ngFor="let tile of docs; let i = index; trackBy: trackByPath"
         [ngClass]="checkChoose(choose, tile.id) | color"
         [id]="tile.id"
-        #elm1>
+        #cards>
         <div class="mr-title title row uppercase ls-25 something">
             {{ tile.header }}
         </div>
