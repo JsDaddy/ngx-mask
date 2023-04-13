@@ -1,5 +1,6 @@
 import {
-    Component, ElementRef,
+    Component,
+    ElementRef,
     inject,
     Input,
     QueryList,
@@ -23,8 +24,8 @@ import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { TrackByService } from '@libraries/track-by/track-by.service';
-import {ScrollService} from "@open-source/service/scroll.service";
-import {Router} from "@angular/router";
+import { ScrollService } from '@open-source/service/scroll.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -67,7 +68,7 @@ export class OptionsComponent {
     }
 
     public scrollCard(): void {
-        const detectedElms: any[] = [];
+        const detectedElms: string[] = [];
         this.elms.forEach((elm) => {
             if (this.scrollService.isInViewport(elm.nativeElement)) {
                 detectedElms.push(elm.nativeElement.id);
