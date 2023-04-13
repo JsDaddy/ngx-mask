@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 
 @Component({
     selector: 'jsdaddy-open-source-card-content[title][color][value]',
     templateUrl: './card-content.component.html',
     styleUrls: ['./card-content.component.scss'],
     standalone: true,
-    imports: [NgClass],
+    imports: [NgClass, NgStyle],
 })
 export class CardContentComponent {
     @Input() public color!: string;

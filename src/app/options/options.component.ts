@@ -1,4 +1,11 @@
-import { Component, inject, Input } from '@angular/core';
+import {
+    Component, ElementRef,
+    inject,
+    Input,
+    QueryList,
+    Renderer2,
+    ViewChildren,
+} from '@angular/core';
 import {
     JsonPipe,
     NgClass,
@@ -16,6 +23,8 @@ import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { TrackByService } from '@libraries/track-by/track-by.service';
+import {ScrollService} from "@open-source/service/scroll.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -39,22 +48,31 @@ import { TrackByService } from '@libraries/track-by/track-by.service';
         ColorPipe,
         CardContentComponent,
     ],
-    providers: [],
 })
 export class OptionsComponent {
-    @Input()
-    public docs!: IComDoc[];
-
-    @Input()
-    public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
-
-    @Input()
-    public choose!: number;
     public phone = '123456789';
+    public readonly scrollService = inject(ScrollService);
     public readonly trackByPath = inject(TrackByService).trackBy('text');
-    public customPatterns = { '0': { pattern: new RegExp('[a-zA-Z]') } };
+    @Input() public docs!: IComDoc[];
+    @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
+    @Input() public choose!: number;
+    @ViewChildren('elm1') public elms!: QueryList<ElementRef>;
+
+    public constructor(private renderer: Renderer2, private route: Router) {
+        this.renderer.listen('window', 'scroll', this.scrollCard.bind(this));
+    }
 
     public checkChoose(input: number, curr: number): boolean {
         return input === curr;
+    }
+
+    public scrollCard(): void {
+        const detectedElms: any[] = [];
+        this.elms.forEach((elm) => {
+            if (this.scrollService.isInViewport(elm.nativeElement)) {
+                detectedElms.push(elm.nativeElement.id);
+                this.route.navigate(['/'], { fragment: detectedElms[1] });
+            }
+        });
     }
 }
