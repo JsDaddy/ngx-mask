@@ -36,7 +36,7 @@ export class AppComponent {
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
-    public startScrolling!: string;
+
     public switchDoc(idList: number): void {
         switch (idList) {
             case 1:
