@@ -16,7 +16,6 @@ import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { BaseHttpService } from '@libraries/base-http/base-http.service';
 import { DOMAIN } from '@libraries/token/token';
-import { environment } from '../environments/environment';
 import { GithubStarsService } from '@libraries/github-stars/github-stars.service';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -30,7 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
         GithubStarsService,
         {
             provide: DOMAIN,
-            useValue: [`${environment.serverDomain}`, `${environment.clientDomain}`],
+            useValue: [BaseHttpService],
         },
     ],
     imports: [
