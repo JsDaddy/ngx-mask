@@ -1,5 +1,3 @@
-import { IEnv } from './environment.interface';
-
-export const environment: IEnv = {
+export const environment = {
     production: true,
 };

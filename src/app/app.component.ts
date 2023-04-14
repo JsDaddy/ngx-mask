@@ -14,13 +14,32 @@ import {
 } from '@open-source/accordion/content.interfaces';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
+import { BaseHttpService } from '@libraries/base-http/base-http.service';
+import { DOMAIN } from '@libraries/token/token';
+import { environment } from '../environments/environment';
+import { GithubStarsService } from '@libraries/github-stars/github-stars.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
+    providers: [
+        BaseHttpService,
+        GithubStarsService,
+        {
+            provide: DOMAIN,
+            useValue: [`${environment.serverDomain}`, `${environment.clientDomain}`],
+        },
+    ],
+    imports: [
+        OptionsComponent,
+        HeaderComponent,
+        SubHeaderComponent,
+        AccordionComponent,
+        HttpClientModule,
+    ],
 })
 export class AppComponent {
     public inputVal: {
@@ -30,7 +49,7 @@ export class AppComponent {
         docs: ComDocs,
         examples: ComExamples,
     };
-
+    public showNav = false;
     public chosenItem = 1;
     public lists: IListItem[] = lists;
     public title = 'Ngx-Mask';
