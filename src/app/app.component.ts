@@ -14,31 +14,13 @@ import {
 } from '@open-source/accordion/content.interfaces';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
-import { BaseHttpService } from '@libraries/base-http/base-http.service';
-import { DOMAIN } from '@libraries/token/token';
-import { GithubStarsService } from '@libraries/github-stars/github-stars.service';
-import { HttpClientModule } from '@angular/common/http';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    providers: [
-        BaseHttpService,
-        GithubStarsService,
-        {
-            provide: DOMAIN,
-            useValue: [BaseHttpService],
-        },
-    ],
-    imports: [
-        OptionsComponent,
-        HeaderComponent,
-        SubHeaderComponent,
-        AccordionComponent,
-        HttpClientModule,
-    ],
+    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
 })
 export class AppComponent {
     public inputVal: {
