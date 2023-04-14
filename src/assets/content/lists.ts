@@ -6,6 +6,8 @@ export const lists: IListItem[] = [
         id: 1,
         defaultSvg: 'common-cases',
         activeSvg: 'common-cases-active',
+        whiteChevron: 'white-chevron-down',
+        yellowChevron: 'yellow-chevron-down',
         text: [
             {
                 content: 'Date',
@@ -44,6 +46,8 @@ export const lists: IListItem[] = [
         id: 2,
         defaultSvg: 'options',
         activeSvg: 'options-active',
+        whiteChevron: 'white-chevron-down',
+        yellowChevron: 'yellow-chevron-down',
         text: [
             {
                 content: 'Prefix',
@@ -82,6 +86,8 @@ export const lists: IListItem[] = [
         id: 3,
         defaultSvg: 'separator',
         activeSvg: 'separator-active',
+        whiteChevron: 'white-chevron-down',
+        yellowChevron: 'yellow-chevron-down',
         text: [
             {
                 content: 'Separator',
@@ -105,6 +111,8 @@ export const lists: IListItem[] = [
         id: 4,
         defaultSvg: 'other',
         activeSvg: 'other-active',
+        whiteChevron: 'white-chevron-down',
+        yellowChevron: 'yellow-chevron-down',
         text: [
             {
                 content: 'Secure input',

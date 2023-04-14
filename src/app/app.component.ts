@@ -30,7 +30,7 @@ export class AppComponent {
         docs: ComDocs,
         examples: ComExamples,
     };
-
+    public showNav = false;
     public chosenItem = 1;
     public lists: IListItem[] = lists;
     public title = 'Ngx-Mask';
