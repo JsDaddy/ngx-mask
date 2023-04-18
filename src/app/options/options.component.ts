@@ -3,6 +3,7 @@ import {
     ElementRef,
     inject,
     Input,
+    OnDestroy,
     OnInit,
     QueryList,
     ViewChildren,
@@ -26,7 +27,7 @@ import { CardContentComponent } from '../shared/card-content/card-content.compon
 import { TrackByService } from '@libraries/track-by/track-by.service';
 import { ScrollService } from '@open-source/service/scroll.service';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { debounceTime, fromEvent } from 'rxjs';
+import { debounceTime, fromEvent, Subscription } from 'rxjs';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -54,12 +55,12 @@ import { debounceTime, fromEvent } from 'rxjs';
         RouterLink,
     ],
 })
-export class OptionsComponent implements OnInit {
+export class OptionsComponent implements OnInit, OnDestroy {
     public phone = '123456789';
     public readonly trackByPath = inject(TrackByService).trackBy('text');
+    private scroll!: Subscription;
     private readonly scrollService = inject(ScrollService);
     private readonly route = inject(Router);
-    private scroll = fromEvent(document, 'scroll').pipe(debounceTime(100));
     @Input() public docs!: IComDoc[];
     @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
     @Input() public choose!: number;
@@ -70,11 +71,21 @@ export class OptionsComponent implements OnInit {
     }
 
     public ngOnInit(): void {
-        this.scroll.subscribe(() => {
-            this.route.navigate(['/'], {
-                fragment: this.cardIds.find((e) => this.scrollService.isInViewport(e.nativeElement))
-                    ?.nativeElement.id,
+        this.scroll = fromEvent(document, 'scroll')
+            .pipe(debounceTime(100))
+            .subscribe(() => {
+                const scrollIdCard = this.cardIds.find((e) =>
+                    this.scrollService.isInViewport(e.nativeElement)
+                )?.nativeElement.id;
+                if (this.choose != scrollIdCard) {
+                    this.route.navigate(['/'], {
+                        fragment: scrollIdCard,
+                    });
+                }
             });
-        });
+    }
+
+    public ngOnDestroy(): void {
+        this.scroll.unsubscribe();
     }
 }
