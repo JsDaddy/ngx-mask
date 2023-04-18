@@ -77,7 +77,7 @@ export class OptionsComponent implements OnInit, OnDestroy {
                 const scrollIdCard = this.cardIds.find((e) =>
                     this.scrollService.isInViewport(e.nativeElement)
                 )?.nativeElement.id;
-                if (this.choose != scrollIdCard) {
+                if (this.choose !== +scrollIdCard) {
                     this.route.navigate(['/'], {
                         fragment: scrollIdCard,
                     });
