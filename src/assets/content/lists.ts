@@ -39,6 +39,11 @@ export const lists: IListItem[] = [
                 id: 6,
                 scrollTo: 'validdate',
             },
+            {
+                content: 'Dynamic mask',
+                id: 7,
+                scrollTo: 'dynamic-mask',
+            },
         ],
     },
     {

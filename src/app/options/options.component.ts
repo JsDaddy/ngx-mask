@@ -3,8 +3,8 @@ import {
     ElementRef,
     inject,
     Input,
+    OnInit,
     QueryList,
-    Renderer2,
     ViewChildren,
 } from '@angular/core';
 import {
@@ -25,7 +25,8 @@ import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { TrackByService } from '@libraries/track-by/track-by.service';
 import { ScrollService } from '@open-source/service/scroll.service';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { debounceTime, fromEvent } from 'rxjs';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -49,34 +50,31 @@ import { Router } from '@angular/router';
         IsEmptyPipe,
         ColorPipe,
         CardContentComponent,
+        RouterLinkActive,
+        RouterLink,
     ],
 })
-export class OptionsComponent {
+export class OptionsComponent implements OnInit {
     public phone = '123456789';
     public readonly trackByPath = inject(TrackByService).trackBy('text');
     private readonly scrollService = inject(ScrollService);
-    private readonly renderer = inject(Renderer2);
     private readonly route = inject(Router);
+    private scroll = fromEvent(document, 'scroll').pipe(debounceTime(100));
     @Input() public docs!: IComDoc[];
     @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
     @Input() public choose!: number;
     @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
 
-    public constructor() {
-        this.renderer.listen('window', 'scroll', this.scrollCard.bind(this));
-    }
-
     public checkChoose(input: number, curr: number): boolean {
         return input === curr;
     }
 
-    public scrollCard(): void {
-        const detectedElms: string[] = [];
-        this.cardIds.forEach((elm) => {
-            if (this.scrollService.isInViewport(elm.nativeElement)) {
-                detectedElms.push(elm.nativeElement.id);
-                this.route.navigate(['/'], { fragment: detectedElms[1] });
-            }
+    public ngOnInit(): void {
+        this.scroll.subscribe(() => {
+            this.route.navigate(['/'], {
+                fragment: this.cardIds.find((e) => this.scrollService.isInViewport(e.nativeElement))
+                    ?.nativeElement.id,
+            });
         });
     }
 }
