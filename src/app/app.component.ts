@@ -31,7 +31,6 @@ export class AppComponent {
         examples: ComExamples,
     };
     public showNav = false;
-    public test1 = false;
     public chosenItem = 1;
     public lists: IListItem[] = lists;
     public title = 'Ngx-Mask';
