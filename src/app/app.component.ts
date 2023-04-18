@@ -63,8 +63,4 @@ export class AppComponent {
     public chosenItemS(itemId: number): void {
         this.chosenItem = itemId;
     }
-
-    public test(event: boolean): void {
-        this.test1 = event;
-    }
 }
