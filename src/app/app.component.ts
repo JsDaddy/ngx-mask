@@ -14,13 +14,20 @@ import {
 } from '@open-source/accordion/content.interfaces';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
+import { FooterComponent } from '@open-source/footer/footer.component';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
+    imports: [
+        OptionsComponent,
+        HeaderComponent,
+        SubHeaderComponent,
+        AccordionComponent,
+        FooterComponent,
+    ],
 })
 export class AppComponent {
     public inputVal: {

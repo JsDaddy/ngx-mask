@@ -12,12 +12,12 @@ export const lists: IListItem[] = [
             {
                 content: 'Date',
                 id: 1,
-                scrollTo: 'prefix',
+                scrollTo: 'date',
             },
             {
                 content: 'Date and hour',
                 id: 2,
-                scrollTo: 'date',
+                scrollTo: 'date-and-hour',
             },
             {
                 content: 'Hour',
@@ -122,14 +122,17 @@ export const lists: IListItem[] = [
             {
                 content: 'Secure input',
                 id: 1,
+                scrollTo: 'secure',
             },
             {
                 content: 'Pipe',
                 id: 2,
+                scrollTo: 'pipe',
             },
             {
                 content: 'specialCharacters',
                 id: 3,
+                scrollTo: 'special',
             },
         ],
     },

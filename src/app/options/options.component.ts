@@ -66,10 +66,6 @@ export class OptionsComponent implements OnInit, OnDestroy {
     @Input() public choose!: number;
     @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
 
-    public checkChoose(input: number, curr: number): boolean {
-        return input === curr;
-    }
-
     public ngOnInit(): void {
         this.scroll = fromEvent(document, 'scroll')
             .pipe(debounceTime(100))
