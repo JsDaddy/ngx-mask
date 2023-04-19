@@ -32,6 +32,7 @@ export class AppComponent {
     };
     public chosenItem = 1;
     public lists: IListItem[] = lists;
+    public activeLink = 'https://jsdaddy.github.io/ngx-mask/';
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];

@@ -19,6 +19,7 @@
             margin: 10px 0 10px 26px;
         }
         .cards-block {
+            scroll-margin-top: 150px;
             .light-card {
                 flex: 50%;
                 border-radius: 10px;
@@ -108,6 +109,6 @@
 }
 
 .all-rights {
-    height: 200px;
-    padding: 120px 0 40px 0;
+    height: 300px;
+    padding: 250px 0 40px;
 }
