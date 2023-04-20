@@ -1,5 +1,5 @@
 import {
-    AfterViewInit, ChangeDetectorRef,
+    AfterViewInit,
     Component,
     ElementRef,
     inject,
@@ -66,9 +66,6 @@ export class OptionsComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public docs!: IComDoc[];
     @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
     @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
-
-    public constructor(public cd: ChangeDetectorRef) {
-    }
 
     public ngOnInit(): void {
         this.scroll = fromEvent(document, 'scroll')
