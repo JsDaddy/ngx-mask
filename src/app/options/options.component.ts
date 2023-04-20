@@ -1,4 +1,5 @@
 import {
+    AfterViewInit, ChangeDetectorRef,
     Component,
     ElementRef,
     inject,
@@ -55,16 +56,19 @@ import { debounceTime, fromEvent, Subscription } from 'rxjs';
         RouterLink,
     ],
 })
-export class OptionsComponent implements OnInit, OnDestroy {
+export class OptionsComponent implements OnInit, OnDestroy, AfterViewInit {
     public phone = '123456789';
+    public choose = 1;
     public readonly trackByPath = inject(TrackByService).trackBy('text');
     private scroll!: Subscription;
     private readonly scrollService = inject(ScrollService);
     private readonly route = inject(Router);
     @Input() public docs!: IComDoc[];
     @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
-    @Input() public choose!: number;
     @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
+
+    public constructor(public cd: ChangeDetectorRef) {
+    }
 
     public ngOnInit(): void {
         this.scroll = fromEvent(document, 'scroll')
@@ -74,11 +78,26 @@ export class OptionsComponent implements OnInit, OnDestroy {
                     this.scrollService.isInViewport(e.nativeElement)
                 )?.nativeElement.id;
                 if (this.choose !== +scrollIdCard) {
+                    this.choose = +scrollIdCard;
                     this.route.navigate(['/'], {
                         fragment: scrollIdCard,
                     });
                 }
             });
+    }
+
+    public ngAfterViewInit(): void {
+        this.cardIds.changes.subscribe((elementRef) => {
+            this.route.navigate(['/'], {
+                fragment: '1',
+            });
+            const anchor: HTMLElement | null = document.getElementById(
+                elementRef.first.nativeElement.id
+            );
+            if (anchor) {
+                anchor.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        });
     }
 
     public ngOnDestroy(): void {

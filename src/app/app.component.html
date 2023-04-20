@@ -2,20 +2,16 @@
     <jsdaddy-open-source-header [githubMaskLink]="githubMaskLink"></jsdaddy-open-source-header>
     <section class="mask-wrap row">
         <div class="drawer-container column">
-            <jsdaddy-open-source-accordion
-                [lists]="lists"
-                (itemAccordion)="switchDoc($event)"
-                (itemInAccordion)="chosenItemS($event)">
+            <jsdaddy-open-source-accordion [lists]="lists" (itemAccordion)="switchDoc($event)">
             </jsdaddy-open-source-accordion>
         </div>
         <div class="right-section column">
             <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips">
             </jsdaddy-open-source-sub-header>
             <jsdaddy-open-source-options
-                [choose]="chosenItem"
                 [docs]="inputVal.docs"
                 [examples]="inputVal.examples"></jsdaddy-open-source-options>
-            <jsdaddy-open-source-footer></jsdaddy-open-source-footer>
+            <jsdaddy-open-source-footer />
         </div>
     </section>
 </div>

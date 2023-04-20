@@ -37,7 +37,6 @@ export class AppComponent {
         docs: ComDocs,
         examples: ComExamples,
     };
-    public chosenItem = 1;
     public lists: IListItem[] = lists;
     public githubMaskLink = 'https://jsdaddy.github.io/ngx-mask/';
     public title = 'Ngx-Mask';
@@ -65,9 +64,5 @@ export class AppComponent {
             default:
                 break;
         }
-    }
-
-    public chosenItemS(itemId: number): void {
-        this.chosenItem = itemId;
     }
 }
