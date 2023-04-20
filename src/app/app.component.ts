@@ -15,6 +15,7 @@ import {
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
+import {LinkPath} from "@libraries/link/link.path";
 
 @Component({
     selector: 'jsdaddy-open-source-root',
@@ -30,7 +31,7 @@ import { FooterComponent } from '@open-source/footer/footer.component';
     ],
 })
 export class AppComponent {
-    public inputVal: {
+    public cards: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
     } = {
@@ -38,28 +39,28 @@ export class AppComponent {
         examples: ComExamples,
     };
     public lists: IListItem[] = lists;
-    public githubMaskLink = 'https://jsdaddy.github.io/ngx-mask/';
+    public githubMaskLink = LinkPath.NGX_MASK;
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    public switchDoc(idList: number): void {
-        switch (idList) {
+    public switchCards(cardId: number): void {
+        switch (cardId) {
             case 1:
-                this.inputVal.docs = ComDocs;
-                this.inputVal.examples = ComExamples;
+                this.cards.docs = ComDocs;
+                this.cards.examples = ComExamples;
                 break;
             case 2:
-                this.inputVal.docs = OptDocs;
-                this.inputVal.examples = OptExamples;
+                this.cards.docs = OptDocs;
+                this.cards.examples = OptExamples;
                 break;
             case 3:
-                this.inputVal.docs = SepDocs;
-                this.inputVal.examples = SepExamples;
+                this.cards.docs = SepDocs;
+                this.cards.examples = SepExamples;
                 break;
             case 4:
-                this.inputVal.docs = OthDocs;
-                this.inputVal.examples = OthExamples;
+                this.cards.docs = OthDocs;
+                this.cards.examples = OthExamples;
                 break;
             default:
                 break;

@@ -1,16 +1,14 @@
 <div class="content-wrapper column">
-    <jsdaddy-open-source-header [githubMaskLink]="githubMaskLink"></jsdaddy-open-source-header>
+    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />
     <section class="mask-wrap row">
         <div class="drawer-container column">
-            <jsdaddy-open-source-accordion [lists]="lists" (itemAccordion)="switchDoc($event)">
-            </jsdaddy-open-source-accordion>
+            <jsdaddy-open-source-accordion [lists]="lists" (switchCards)="switchCards($event)" />
         </div>
         <div class="right-section column">
-            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips">
-            </jsdaddy-open-source-sub-header>
+            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />
             <jsdaddy-open-source-options
-                [docs]="inputVal.docs"
-                [examples]="inputVal.examples"></jsdaddy-open-source-options>
+                [cardsDocs]="cards.docs"
+                [cardsExamples]="cards.examples" />
             <jsdaddy-open-source-footer />
         </div>
     </section>
