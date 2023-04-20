@@ -14,53 +14,56 @@ import {
 } from '@open-source/accordion/content.interfaces';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
+import { FooterComponent } from '@open-source/footer/footer.component';
+import { LinkPath } from '@libraries/link/link.path';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
-    imports: [OptionsComponent, HeaderComponent, SubHeaderComponent, AccordionComponent],
+    imports: [
+        OptionsComponent,
+        HeaderComponent,
+        SubHeaderComponent,
+        AccordionComponent,
+        FooterComponent,
+    ],
 })
 export class AppComponent {
-    public inputVal: {
+    public card: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
     } = {
         docs: ComDocs,
         examples: ComExamples,
     };
-    public chosenItem = 1;
     public lists: IListItem[] = lists;
-    public githubMaskLink = 'https://jsdaddy.github.io/ngx-mask/';
+    public githubMaskLink = LinkPath.NGX_MASK;
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    public switchDoc(idList: number): void {
-        switch (idList) {
+    public switchCard(cardId: number): void {
+        switch (cardId) {
             case 1:
-                this.inputVal.docs = ComDocs;
-                this.inputVal.examples = ComExamples;
+                this.card.docs = ComDocs;
+                this.card.examples = ComExamples;
                 break;
             case 2:
-                this.inputVal.docs = OptDocs;
-                this.inputVal.examples = OptExamples;
+                this.card.docs = OptDocs;
+                this.card.examples = OptExamples;
                 break;
             case 3:
-                this.inputVal.docs = SepDocs;
-                this.inputVal.examples = SepExamples;
+                this.card.docs = SepDocs;
+                this.card.examples = SepExamples;
                 break;
             case 4:
-                this.inputVal.docs = OthDocs;
-                this.inputVal.examples = OthExamples;
+                this.card.docs = OthDocs;
+                this.card.examples = OthExamples;
                 break;
             default:
                 break;
         }
-    }
-
-    public chosenItemS(itemId: number): void {
-        this.chosenItem = itemId;
     }
 }

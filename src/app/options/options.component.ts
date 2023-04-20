@@ -1,10 +1,9 @@
 import {
+    AfterViewInit,
     Component,
     ElementRef,
     inject,
     Input,
-    OnDestroy,
-    OnInit,
     QueryList,
     ViewChildren,
 } from '@angular/core';
@@ -26,8 +25,9 @@ import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { TrackByService } from '@libraries/track-by/track-by.service';
 import { ScrollService } from '@open-source/service/scroll.service';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { debounceTime, fromEvent, takeUntil } from 'rxjs';
+import { UnSubscriber } from '@libraries/unsubscriber/unsubscriber.service';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -51,41 +51,45 @@ import { debounceTime, fromEvent, Subscription } from 'rxjs';
         IsEmptyPipe,
         ColorPipe,
         CardContentComponent,
-        RouterLinkActive,
-        RouterLink,
     ],
 })
-export class OptionsComponent implements OnInit, OnDestroy {
+export class OptionsComponent extends UnSubscriber implements AfterViewInit {
+    @Input() public cardDocs!: IComDoc[];
+    @Input() public cardExamples!: (TExample<IMaskOptions> | { _pipe: string })[];
+
+    @ViewChildren('cards') public cards!: QueryList<ElementRef>;
+
     public phone = '123456789';
-    public readonly trackByPath = inject(TrackByService).trackBy('text');
-    private scroll!: Subscription;
+    public activeCardId = 1;
+    public readonly trackByPath = inject(TrackByService).trackBy('id');
+
     private readonly scrollService = inject(ScrollService);
-    private readonly route = inject(Router);
-    @Input() public docs!: IComDoc[];
-    @Input() public examples!: (TExample<IMaskOptions> | { _pipe: string })[];
-    @Input() public choose!: number;
-    @ViewChildren('cards') public cardIds!: QueryList<ElementRef>;
+    private readonly router = inject(Router);
 
-    public checkChoose(input: number, curr: number): boolean {
-        return input === curr;
-    }
-
-    public ngOnInit(): void {
-        this.scroll = fromEvent(document, 'scroll')
-            .pipe(debounceTime(100))
+    public ngAfterViewInit(): void {
+        fromEvent(document, 'scroll')
+            .pipe(takeUntil(this.unsubscribe$$), debounceTime(100))
             .subscribe(() => {
-                const scrollIdCard = this.cardIds.find((e) =>
+                const scrollIdCard = this.cards.find((e) =>
                     this.scrollService.isInViewport(e.nativeElement)
                 )?.nativeElement.id;
-                if (this.choose !== +scrollIdCard) {
-                    this.route.navigate(['/'], {
+                if (this.activeCardId !== Number(scrollIdCard)) {
+                    this.activeCardId = Number(scrollIdCard);
+                    this.router.navigate(['/'], {
                         fragment: scrollIdCard,
                     });
                 }
             });
-    }
-
-    public ngOnDestroy(): void {
-        this.scroll.unsubscribe();
+        this.cards.changes.pipe(takeUntil(this.unsubscribe$$)).subscribe((elementRef) => {
+            this.router.navigate(['/'], {
+                fragment: '1',
+            });
+            const firstNativeElement: HTMLElement | null = document.getElementById(
+                elementRef.first.nativeElement.id
+            );
+            if (firstNativeElement) {
+                firstNativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }
+        });
     }
 }
