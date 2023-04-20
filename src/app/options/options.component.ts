@@ -4,7 +4,6 @@ import {
     ElementRef,
     inject,
     Input,
-    OnDestroy,
     QueryList,
     ViewChildren,
 } from '@angular/core';
@@ -27,7 +26,8 @@ import { CardContentComponent } from '../shared/card-content/card-content.compon
 import { TrackByService } from '@libraries/track-by/track-by.service';
 import { ScrollService } from '@open-source/service/scroll.service';
 import { Router } from '@angular/router';
-import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { debounceTime, fromEvent, takeUntil } from 'rxjs';
+import { UnSubscriber } from '@libraries/unsubscriber/unsubscriber.service';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -53,9 +53,9 @@ import { debounceTime, fromEvent, Subscription } from 'rxjs';
         CardContentComponent,
     ],
 })
-export class OptionsComponent implements OnDestroy, AfterViewInit {
-    @Input() public cardsDocs!: IComDoc[];
-    @Input() public cardsExamples!: (TExample<IMaskOptions> | { _pipe: string })[];
+export class OptionsComponent extends UnSubscriber implements AfterViewInit {
+    @Input() public cardDocs!: IComDoc[];
+    @Input() public cardExamples!: (TExample<IMaskOptions> | { _pipe: string })[];
 
     @ViewChildren('cards') public cards!: QueryList<ElementRef>;
 
@@ -63,13 +63,12 @@ export class OptionsComponent implements OnDestroy, AfterViewInit {
     public activeCardId = 1;
     public readonly trackByPath = inject(TrackByService).trackBy('id');
 
-    private scroll!: Subscription;
     private readonly scrollService = inject(ScrollService);
     private readonly router = inject(Router);
 
     public ngAfterViewInit(): void {
-        this.scroll = fromEvent(document, 'scroll')
-            .pipe(debounceTime(100))
+        fromEvent(document, 'scroll')
+            .pipe(takeUntil(this.unsubscribe$$), debounceTime(100))
             .subscribe(() => {
                 const scrollIdCard = this.cards.find((e) =>
                     this.scrollService.isInViewport(e.nativeElement)
@@ -81,7 +80,7 @@ export class OptionsComponent implements OnDestroy, AfterViewInit {
                     });
                 }
             });
-        this.cards.changes.subscribe((elementRef) => {
+        this.cards.changes.pipe(takeUntil(this.unsubscribe$$)).subscribe((elementRef) => {
             this.router.navigate(['/'], {
                 fragment: '1',
             });
@@ -92,10 +91,5 @@ export class OptionsComponent implements OnDestroy, AfterViewInit {
                 firstNativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
             }
         });
-    }
-
-    public ngOnDestroy(): void {
-        this.scroll.unsubscribe();
-        this.cards.destroy();
     }
 }

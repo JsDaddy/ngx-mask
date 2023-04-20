@@ -15,7 +15,7 @@ import {
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
-import {LinkPath} from "@libraries/link/link.path";
+import { LinkPath } from '@libraries/link/link.path';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
@@ -31,7 +31,7 @@ import {LinkPath} from "@libraries/link/link.path";
     ],
 })
 export class AppComponent {
-    public cards: {
+    public card: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
     } = {
@@ -44,23 +44,23 @@ export class AppComponent {
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    public switchCards(cardId: number): void {
+    public switchCard(cardId: number): void {
         switch (cardId) {
             case 1:
-                this.cards.docs = ComDocs;
-                this.cards.examples = ComExamples;
+                this.card.docs = ComDocs;
+                this.card.examples = ComExamples;
                 break;
             case 2:
-                this.cards.docs = OptDocs;
-                this.cards.examples = OptExamples;
+                this.card.docs = OptDocs;
+                this.card.examples = OptExamples;
                 break;
             case 3:
-                this.cards.docs = SepDocs;
-                this.cards.examples = SepExamples;
+                this.card.docs = SepDocs;
+                this.card.examples = SepExamples;
                 break;
             case 4:
-                this.cards.docs = OthDocs;
-                this.cards.examples = OthExamples;
+                this.card.docs = OthDocs;
+                this.card.examples = OthExamples;
                 break;
             default:
                 break;

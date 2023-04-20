@@ -1,7 +1,7 @@
 <section class="content column bg-full-white">
     <div
         class="card"
-        *ngFor="let tile of cardsDocs; let i = index; trackBy: trackByPath"
+        *ngFor="let tile of cardDocs; let i = index; trackBy: trackByPath"
         [ngClass]="activeCardId === tile.id | color"
         [id]="tile.id"
         #cards>
@@ -25,7 +25,7 @@
             <ng-container
                 *ngTemplateOutlet="
                     exampleTmpl;
-                    context: { $implicit: cardsExamples[i], placeholder: tile.header }
+                    context: { $implicit: cardExamples[i], placeholder: tile.header }
                 "></ng-container>
         </div>
     </div>
