@@ -39,7 +39,6 @@
         "release:minor": "npm run version:minor && npm run build:lib && npm run pack:lib && npm run publish:lib",
         "release:patch": "npm run version:patch && npm run build:lib && npm run pack:lib && npm run publish:lib",
         "start": "ng serve --hmr",
-        "local": "ng serve --host 192.168.0.105",
         "start-prod": "angular-http-server --path dist/ngx-mask --p 3000 --silent",
         "test": "npm run test:lib",
         "test:all": "npm run test:app && npm run test:lib",
