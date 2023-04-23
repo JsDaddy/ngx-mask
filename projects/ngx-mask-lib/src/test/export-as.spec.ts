@@ -6,7 +6,7 @@ import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 @Component({
-    selector: 'ngx-mask-demo-test',
+    selector: 'jsdaddy-open-source-test',
     template: ` <input mask="" #refMask="mask" /> <input mask="" #refNgxMask="ngxMask" /> `,
 })
 export class TestMaskComponent {

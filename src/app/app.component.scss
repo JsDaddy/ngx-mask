@@ -1,26 +1,25 @@
-.content-wrapper {
-    display: flex;
+@import 'src/styles';
+:host {
+    display: block;
     height: 100%;
-    flex-direction: column;
-
+}
+.content-wrapper {
     .mask-wrap {
         height: calc(100% - 64px);
         overflow: auto;
+        .right-section {
+            width: 100%;
+            padding-left: 310px;
+        }
+    }
+}
 
-        mat-drawer-container {
-            height: 100%;
-            overflow: hidden;
-
-            mat-expansion-panel {
-                mat-nav-list {
-                    button {
-                        width: 100%;
-                    }
-                }
-            }
-
-            mat-drawer {
-                width: 250px;
+@media screen and (max-width: $desktopWidth) {
+    .content-wrapper {
+        .mask-wrap {
+            .right-section {
+                padding: 0;
+                margin-top: 55px;
             }
         }
     }

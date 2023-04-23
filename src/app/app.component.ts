@@ -1,92 +1,69 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
-import { ComDocs, ComExamples } from 'src/assets/content/commonCases';
+import { ComDocs, ComExamples } from 'src/assets/content/common-cases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
-import { HeaderComponent } from './header/header.component';
-import { NgForOf, NgStyle } from '@angular/common';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatButtonModule } from '@angular/material/button';
-import { RouterLink } from '@angular/router';
-import { MatListModule } from '@angular/material/list';
-import { IComDoc, IListItem, IMaskOptions, TExample } from '../assets/content/content.interfaces';
+import { HeaderComponent } from '@open-source/header/header.component';
+import {
+    IComDoc,
+    IListItem,
+    IMaskOptions,
+    TExample,
+} from '@open-source/accordion/content.interfaces';
+import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
+import { AccordionComponent } from '@open-source/accordion/accordion.component';
+import { FooterComponent } from '@open-source/footer/footer.component';
+import { LinkPath } from '@libraries/link/link.path';
 
 @Component({
-    selector: 'ngx-mask-demo-root',
+    selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
-        NgStyle,
-        NgForOf,
-        RouterLink,
-        MatButtonModule,
-        MatListModule,
-        MatExpansionModule,
-        MatSidenavModule,
         OptionsComponent,
         HeaderComponent,
+        SubHeaderComponent,
+        AccordionComponent,
+        FooterComponent,
     ],
 })
-export class AppComponent implements OnInit {
-    public inputVal!: {
+export class AppComponent {
+    public card: {
         docs: IComDoc[];
         examples: (TExample<IMaskOptions> | { _pipe: string })[];
+    } = {
+        docs: ComDocs,
+        examples: ComExamples,
     };
+    public lists: IListItem[] = lists;
+    public githubMaskLink = LinkPath.NGX_MASK;
+    public title = 'Ngx-Mask';
+    public subtitle = 'Angular plugin to make masks on form fields and html elements';
+    public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    public chosenItem!: number;
-
-    public chosenList!: number;
-
-    public lists!: IListItem[];
-
-    public switchDoc(idList: number): void {
-        switch (idList) {
+    public switchCard(cardId: number): void {
+        switch (cardId) {
             case 1:
-                this.inputVal.docs = ComDocs;
-                this.inputVal.examples = ComExamples;
+                this.card.docs = ComDocs;
+                this.card.examples = ComExamples;
                 break;
             case 2:
-                this.inputVal.docs = OptDocs;
-                this.inputVal.examples = OptExamples;
+                this.card.docs = OptDocs;
+                this.card.examples = OptExamples;
                 break;
             case 3:
-                this.inputVal.docs = SepDocs;
-                this.inputVal.examples = SepExamples;
+                this.card.docs = SepDocs;
+                this.card.examples = SepExamples;
                 break;
             case 4:
-                this.inputVal.docs = OthDocs;
-                this.inputVal.examples = OthExamples;
+                this.card.docs = OthDocs;
+                this.card.examples = OthExamples;
                 break;
             default:
                 break;
         }
-        this.chosenList = idList;
-    }
-
-    public handleClick(idItem: number, scrollTo: string | undefined): void {
-        this.chosenItem = idItem;
-        setTimeout(() => {
-            if (!scrollTo) {
-                return;
-            }
-            const anchor: HTMLElement | null = document.getElementById(scrollTo);
-            if (anchor) {
-                anchor.scrollIntoView({ behavior: 'smooth', block: 'end' });
-            }
-        });
-    }
-
-    public ngOnInit(): void {
-        this.inputVal = {
-            docs: ComDocs,
-            examples: ComExamples,
-        };
-        this.chosenItem = 1;
-        this.chosenList = 1;
-        this.lists = lists;
     }
 }

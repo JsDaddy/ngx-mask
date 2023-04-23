@@ -1,5 +1,5 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from './content.interfaces';
+import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 
 export const SepDocs: IComDoc[] = [
     {
@@ -20,19 +20,19 @@ export const SepDocs: IComDoc[] = [
         header: 'Dot separator',
         text: `For limiting decimal precision add ',' and the precision you want to limit too on the input. 2 is useful for currency. 0 will prevent decimals completely.`,
         code: `<input type='text' mask="separator.2" thousandSeparator="."/>`,
-        id: 3,
+        id: 2,
     },
     {
         header: 'Dot separator',
         text: 'without decimal part',
         code: `<input type='text' mask="separator.0" thousandSeparator="."/>`,
-        id: 4,
+        id: 2,
     },
     {
         header: 'Comma separator',
         text: `For separate input with commas`,
         code: `<input type='text' mask="separator" thousandSeparator=","/>`,
-        id: 5,
+        id: 3,
         anchor: 'comma_sep',
     },
     {

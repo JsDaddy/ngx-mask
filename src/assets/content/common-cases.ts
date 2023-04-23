@@ -1,5 +1,5 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from './content.interfaces';
+import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 
 export const ComDocs: IComDoc[] = [
     {
@@ -7,14 +7,14 @@ export const ComDocs: IComDoc[] = [
         text: '',
         code: `<input matInput mask="00/00/0000"/>`,
         id: 1,
-        anchor: 'prefix',
+        anchor: 'date',
     },
     {
         header: 'Date and hour',
         text: '',
         code: `<input matInput mask="00/00/00 00:00:00" />`,
         id: 2,
-        anchor: 'date',
+        anchor: 'date-and-hour',
     },
     {
         header: 'Hour',

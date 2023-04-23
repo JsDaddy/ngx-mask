@@ -1,0 +1,27 @@
+@import 'src/styles';
+.card-text {
+    .sub-text {
+        margin-bottom: 5px;
+    }
+    .green-view,
+    .yellow-view {
+        padding: 0 5px;
+        gap: 10px;
+        height: 21px;
+        width: fit-content;
+        border-radius: 5px;
+    }
+    .green-view {
+        color: var(--green);
+        background: rgba(26, 183, 126, 0.05);
+    }
+    .yellow-view {
+        background: rgba(248, 248, 248, 0.05);
+    }
+}
+.pd-15 {
+    padding: 15px;
+}
+.mrl-50 {
+    margin-left: 50px;
+}

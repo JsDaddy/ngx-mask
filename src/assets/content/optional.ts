@@ -1,5 +1,5 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from './content.interfaces';
+import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 
 export const OptDocs: IComDoc[] = [
     {

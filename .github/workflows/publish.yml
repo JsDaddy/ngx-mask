@@ -17,6 +17,7 @@ jobs:
       - name: Build library
         run: |
           npm ci --legacy-peer-deps
+          git submodule update --init --recursive --remote
           npm run build:lib
       - name: Publish library
         run: npm run publish:lib
