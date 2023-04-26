@@ -1,24 +1,28 @@
-<section class="content column bg-full-white">
+<section class="content column bg-full-white" *ngIf="activeCardId$ | async as activeCardId">
     <div
         class="card"
         *ngFor="let tile of cardDocs; let i = index; trackBy: trackByPath"
-        [ngClass]="activeCardId === tile.id | color"
+        [ngClass]="activeCardId | color : tile.id"
         [id]="tile.id"
         #cards>
-        <div class="mr-title title row uppercase ls-25 something">
+        <div class="mr-title title row uppercase ls-25">
             {{ tile.header }}
         </div>
         <div class="cards-block row" [id]="tile.anchor">
             <div class="light-card bg-full-white pd-15">
                 <div class="light-title row ai-c">
-                    <img width="20" height="20" [ngSrc]="'hand-box' | asset" alt="hand-box" />
+                    <img
+                        width="20"
+                        height="20"
+                        [ngSrc]="'hand-box' | asset : openSourcePath"
+                        alt="Hand with box" />
                     <span class="span">Usage</span>
                 </div>
                 <span class="source uppercase ls-25 full-white span">Source code</span>
                 <div class="white-input">
                     <pre class="row">
                         <code type="text" [highlight]="tile.code" class="input-view bg-white"></code>
-                        <img height="18" width="13" [ngSrc]="'input-vector' | asset" class="input-img ais-c" alt="input-vector" />
+                        <img height="18" width="13" [ngSrc]="'input-vector' | asset : openSourcePath" class="input-img ais-c" alt="Input vector" />
                     </pre>
                 </div>
             </div>
