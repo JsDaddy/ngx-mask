@@ -28,14 +28,14 @@ import { TrackByService } from '@libraries/track-by/track-by.service';
 import { Observable } from 'rxjs';
 import { ScrollService } from '@open-source/scroll/scroll.service';
 import { OpenSourcePath } from '@open-source/path/open-source.path';
-import { ChangeAccordionService } from '@open-source/accordion/change-accordion.service';
+import { AccordionService } from '@open-source/accordion/accordion.service';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss'],
     standalone: true,
-    providers: [ScrollService, ChangeAccordionService],
+    providers: [ScrollService, AccordionService],
     imports: [
         JsonPipe,
         NgFor,
@@ -64,13 +64,13 @@ export class OptionsComponent implements AfterViewInit {
     public readonly phone = '123456789';
     public readonly trackByPath = inject(TrackByService).trackBy('id');
     public readonly activeCardId$: Observable<number> = inject(ScrollService).activeCard$;
-    public readonly openSourcePath = OpenSourcePath.OPTIONS;
+    public readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
 
     private readonly scrollService = inject(ScrollService);
-    private readonly changeAccordionService = inject(ChangeAccordionService);
+    private readonly accordionService = inject(AccordionService);
 
     public ngAfterViewInit(): void {
         this.scrollService.onScroll(this.cards);
-        this.changeAccordionService.onChangeAccordion(this.cards);
+        this.accordionService.onChangeAccordion(this.cards);
     }
 }
