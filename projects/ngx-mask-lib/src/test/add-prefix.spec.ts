@@ -59,4 +59,11 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('097', '+7 09-7', fixture);
         expect(component.form.value).toEqual('+7 09-7');
     });
+    it('dropSpecialCharacters false should return value with suffix', () => {
+        component.mask = '00';
+        component.dropSpecialCharacters = false;
+        component.suffix = '$';
+        equal('97', '97$', fixture);
+        expect(component.form.value).toEqual('97$');
+    });
 });
