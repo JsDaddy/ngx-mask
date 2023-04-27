@@ -16,7 +16,6 @@ import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
 import { LinkPath } from '@libraries/link/link.path';
-import { NgStyle } from '@angular/common';
 import { ScrollbarComponent } from '@libraries/open-source/scrollbar/scrollbar.component';
 
 @Component({
@@ -30,7 +29,6 @@ import { ScrollbarComponent } from '@libraries/open-source/scrollbar/scrollbar.c
         SubHeaderComponent,
         AccordionComponent,
         FooterComponent,
-        NgStyle,
         ScrollbarComponent,
     ],
 })
