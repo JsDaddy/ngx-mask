@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { IConfig } from '../../lib/ngx-mask.config';
@@ -61,4 +61,6 @@ export class TestMaskComponent {
     public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
 
     public triggerOnMaskChange: IConfig['triggerOnMaskChange'] = false;
+
+    public cdr = inject(ChangeDetectorRef);
 }
