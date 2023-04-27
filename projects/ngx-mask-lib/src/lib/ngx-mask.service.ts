@@ -415,16 +415,22 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 this._toNumber(
-                    this._removeMask(
-                        this._removeSuffix(this._removePrefix(inputValue)),
-                        this.dropSpecialCharacters
+                    this._checkSymbols(
+                        this._removeMask(
+                            this._removeSuffix(this._removePrefix(inputValue)),
+                            this.dropSpecialCharacters
+                        )
                     )
                 )
             );
         } else if (this.dropSpecialCharacters) {
-            this.onChange(this._toNumber(this._checkSymbols(inputValue)));
+            this.onChange(
+                this._toNumber(
+                    this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                )
+            );
         } else {
-            this.onChange(this._removeSuffix(inputValue));
+            this.onChange(this._toNumber(inputValue));
         }
     }
 
@@ -455,10 +461,12 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _retrieveSeparatorValue(result: string): string {
-        return this._removeMask(
-            this._removeSuffix(this._removePrefix(result)),
-            this.specialCharacters
-        );
+        const specialCharacters = Array.isArray(this.dropSpecialCharacters)
+            ? this.specialCharacters.filter((v) => {
+                  return (this.dropSpecialCharacters as string[]).includes(v);
+              })
+            : this.specialCharacters;
+        return this._removeMask(result, specialCharacters);
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
@@ -497,7 +505,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
             return this._checkPrecision(this.maskExpression, separatorValue);
         } else {
-            return Number(separatorValue);
+            return separatorValue;
         }
     }
 

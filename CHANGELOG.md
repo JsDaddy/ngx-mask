@@ -1,3 +1,11 @@
+<a name="15.1.2"></a>
+
+# 15.1.2(2023-03-27)
+
+### Fix
+
+-   Fix ([#1101](https://github.com/JsDaddy/ngx-mask/issues/1101))
+
 <a name="15.1.1"></a>
 
 # 15.1.1(2023-04-23)
