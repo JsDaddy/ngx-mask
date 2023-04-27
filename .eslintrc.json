@@ -28,7 +28,7 @@
                 "@angular-eslint/directive-selector": [
                     "error",
                     {
-                        "prefix": "mask",
+                        "prefix": ["mask" , "jsdaddy"],
                         "style": "camelCase",
                         "type": "attribute"
                     }
