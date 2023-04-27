@@ -5,6 +5,7 @@
 ### Fix
 
 -   Fix ([#1101](https://github.com/JsDaddy/ngx-mask/issues/1101))
+-   Fix ([#1009](https://github.com/JsDaddy/ngx-mask/issues/1009))
 
 <a name="15.1.1"></a>
 
