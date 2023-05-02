@@ -626,6 +626,9 @@ export class NgxMaskApplierService {
     }
 
     private _charToRegExpExpression(char: string): string {
+        // if (Array.isArray(char)) {
+        // 	return char.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|');
+        // }
         if (char) {
             const charsToEscape = '[\\^$.|?*+()';
             return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? `\\${char}` : char;
