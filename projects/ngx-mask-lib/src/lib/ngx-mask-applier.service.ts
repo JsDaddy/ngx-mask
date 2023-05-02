@@ -150,7 +150,6 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
-
             // eslint-disable-next-line no-param-reassign
             inputValue =
                 inputValue.length > 1 &&
@@ -164,7 +163,6 @@ export class NgxMaskApplierService {
                 !backspaced
                     ? inputValue.slice(0, inputValue.length - 1)
                     : inputValue;
-
             if (backspaced) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
@@ -405,6 +403,8 @@ export class NgxMaskApplierService {
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                     i--;
+                } else if (maskExpression[cursor] === '9' && this.showMaskTyped) {
+                    this._shiftStep(maskExpression, cursor, inputArray.length);
                 } else if (
                     this.specialCharacters.indexOf(inputSymbol) > -1 &&
                     this.patterns[maskExpression[cursor] ?? ''] &&
@@ -626,9 +626,6 @@ export class NgxMaskApplierService {
     }
 
     private _charToRegExpExpression(char: string): string {
-        // if (Array.isArray(char)) {
-        // 	return char.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|');
-        // }
         if (char) {
             const charsToEscape = '[\\^$.|?*+()';
             return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? `\\${char}` : char;

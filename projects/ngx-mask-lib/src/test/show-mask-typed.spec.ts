@@ -41,6 +41,20 @@ describe('Directive: Mask', () => {
         equal('aaaaaaa', 'aaaaa-aa', fixture);
     });
 
+    it('Mask with optional pattern 9999', () => {
+        component.mask = '(000) 000-0000 ext. 999999';
+        component.showMaskTyped = true;
+        component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
+        equal('2222222222 ext. 222222', '(222) 222-2222 ext. 222222', fixture);
+    });
+
+    it('Mask with pattern 0000', () => {
+        component.mask = '(000) 000-0000 ext. 000000';
+        component.showMaskTyped = true;
+        component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
+        equal('0000000000 ext. 000000', '(000) 000-0000 ext. 000000', fixture);
+    });
+
     // TODO(inepipenko) for issue #880
     xit('should work right with security input', () => {
         component.mask = '000-0X-XXXX';
