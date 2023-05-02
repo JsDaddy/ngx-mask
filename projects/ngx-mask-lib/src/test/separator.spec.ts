@@ -581,4 +581,27 @@ describe('Separator: Mask', () => {
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
     });
+
+    it('Separator should add zeros to the end Separator.3', () => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = ' ';
+        component.decimalMarker = ',';
+
+        equal('17', '1,700', fixture);
+        equal('170', '1,700', fixture);
+        equal('1700', '1,700', fixture);
+        equal('11700', '11,700', fixture);
+        equal('1', '1,000', fixture);
+    });
+    it('Separator should add zeros to the end Separator.4', () => {
+        component.mask = 'separator.4';
+        component.thousandSeparator = ' ';
+        component.decimalMarker = ',';
+
+        equal('2', '2,000', fixture);
+        equal('22', '2,200', fixture);
+        equal('270', '2,700', fixture);
+        equal('2700', '2,700', fixture);
+        equal('21700', '21,700', fixture);
+    });
 });

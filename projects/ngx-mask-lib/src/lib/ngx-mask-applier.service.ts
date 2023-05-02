@@ -150,7 +150,19 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
-
+            if (maskExpression === 'separator.3' || maskExpression === 'separator.4') {
+                if (position <= 3) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue =
+                        position === 1
+                            ? inputValue + '000'
+                            : position === 2
+                            ? inputValue + '00'
+                            : inputValue + '0';
+                }
+                // eslint-disable-next-line no-param-reassign
+                inputValue = inputValue.replace(/(\d{1,3}(?=(?:\d\d\d)+(?!\d)))/g, '$1' + ',');
+            }
             // eslint-disable-next-line no-param-reassign
             inputValue =
                 inputValue.length > 1 &&
@@ -185,7 +197,7 @@ export class NgxMaskApplierService {
                 thousandSeparatorCharEscaped,
                 ''
             );
-            //.replace(decimalMarkerEscaped, '');
+            // .replace(decimalMarkerEscaped, '');
             if (Array.isArray(this.decimalMarker)) {
                 for (const marker of this.decimalMarker) {
                     invalidChars = invalidChars.replace(this._charToRegExpExpression(marker), '');
