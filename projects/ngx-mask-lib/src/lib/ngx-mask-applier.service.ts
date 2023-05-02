@@ -405,6 +405,7 @@ export class NgxMaskApplierService {
                     i--;
                 } else if (maskExpression[cursor] === '9' && this.showMaskTyped) {
                     this._shiftStep(maskExpression, cursor, inputArray.length);
+                    // console.log('INPUT', result)
                 } else if (
                     this.specialCharacters.indexOf(inputSymbol) > -1 &&
                     this.patterns[maskExpression[cursor] ?? ''] &&

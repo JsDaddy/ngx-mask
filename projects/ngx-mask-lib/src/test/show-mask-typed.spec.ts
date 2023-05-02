@@ -46,13 +46,47 @@ describe('Directive: Mask', () => {
         component.showMaskTyped = true;
         component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
         equal('2222222222 ext. 222222', '(222) 222-2222 ext. 222222', fixture);
+
+        component.mask = '(000) 000-0000 testing. 999999';
+        component.showMaskTyped = true;
+        component.specialCharacters = ['t', 'e', 's', 't', 'i', 'n', 'g', ' ', '(', ')', '-', '.'];
+        equal('1234567890 testing. 123456', '(123) 456-7890 testing. 123456', fixture);
+
+        component.mask = '(000) 000-0000 prefix. 999';
+        component.showMaskTyped = true;
+        component.prefix = '+7';
+        component.specialCharacters = ['p', 'r', 'e', 'f', 'i', 'x', ' ', '(', ')', '-', '.'];
+        equal('1234567890 prefix. 345', '+7(123) 456-7890 prefix. 345', fixture);
+
+        component.mask = '(000) 000-0000 cv. 999';
+        component.showMaskTyped = true;
+        component.prefix = 'card. ';
+        component.specialCharacters = ['c', 'v', ' ', '(', ')', '-', '.'];
+        equal('1234567890 cv. 345', 'card. (123) 456-7890 cv. 345', fixture);
     });
 
-    it('Mask with pattern 0000', () => {
+    it('Mask with optional pattern 00000', () => {
         component.mask = '(000) 000-0000 ext. 000000';
         component.showMaskTyped = true;
         component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
         equal('0000000000 ext. 000000', '(000) 000-0000 ext. 000000', fixture);
+
+        component.mask = '(000) 000-0000 testing. 00000';
+        component.showMaskTyped = true;
+        component.specialCharacters = ['t', 'e', 's', 't', 'i', 'n', 'g', ' ', '(', ')', '-', '.'];
+        equal('1234567890 testing. 12345', '(123) 456-7890 testing. 12345', fixture);
+
+        component.mask = '(000) 000-0000 prefix. 000';
+        component.showMaskTyped = true;
+        component.prefix = '+7';
+        component.specialCharacters = ['p', 'r', 'e', 'f', 'i', 'x', ' ', '(', ')', '-', '.'];
+        equal('1234567890 prefix. 345', '+7(123) 456-7890 prefix. 345', fixture);
+
+        component.mask = '(000) 000-0000 cv. 000';
+        component.showMaskTyped = true;
+        component.prefix = 'card. ';
+        component.specialCharacters = ['c', 'v', ' ', '(', ')', '-', '.'];
+        equal('1234567890 cv. 134', 'card. (123) 456-7890 cv. 134', fixture);
     });
 
     // TODO(inepipenko) for issue #880
