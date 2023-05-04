@@ -45,7 +45,7 @@ describe('Directive: Mask', () => {
         component.mask = '(000) 000-0000 ext. 999999';
         component.showMaskTyped = true;
         component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
-        equal('2222222222 ext. 222222', '(222) 222-2222 ext. 222222', fixture);
+        equal('9871234223 ext. 123022', '(987) 123-4223 ext. 123022', fixture);
 
         component.mask = '(000) 000-0000 testing. 999999';
         component.showMaskTyped = true;
@@ -69,7 +69,7 @@ describe('Directive: Mask', () => {
         component.mask = '(000) 000-0000 ext. 000000';
         component.showMaskTyped = true;
         component.specialCharacters = ['e', 'x', 't', ' ', '(', ')', '-', '.'];
-        equal('0000000000 ext. 000000', '(000) 000-0000 ext. 000000', fixture);
+        equal('9871234223 ext. 123022', '(987) 123-4223 ext. 123022', fixture);
 
         component.mask = '(000) 000-0000 testing. 00000';
         component.showMaskTyped = true;
