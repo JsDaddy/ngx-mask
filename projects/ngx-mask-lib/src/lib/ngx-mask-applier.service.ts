@@ -340,6 +340,7 @@ export class NgxMaskApplierService {
                         }
                     }
                     if (maskExpression[cursor] === 'M') {
+                        console.log(inputValue)
                         const monthsCount = 12;
                         // mask without day
                         const withoutDays: boolean =

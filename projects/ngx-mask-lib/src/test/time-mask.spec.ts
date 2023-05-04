@@ -154,4 +154,14 @@ describe('Directive: Mask (Time)', () => {
         component.mask = 'd0/M0/0000';
         equal('421234', '04/02/1234', fixture);
     });
+
+    it('Date ', () => {
+        component.mask = '0000.M0.d0';
+        equal('9999999', '9999.6', fixture);
+        equal('9999999', '6666.6.6', fixture);
+        equal('9999999', '7777.7.7', fixture);
+        equal('9999999', '8888.8.8', fixture);
+        equal('9999999', '8888.8.8', fixture);
+        equal('9999999', '9999.9.9', fixture);
+    });
 });
