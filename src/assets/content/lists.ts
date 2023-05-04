@@ -134,6 +134,11 @@ export const lists: IListItem[] = [
                 id: 3,
                 scrollTo: 'special',
             },
+            {
+                content: 'SpecialCharacters Mask',
+                id: 4,
+                scrollTo: 'mask-specialCharacters',
+            },
         ],
     },
 ];
