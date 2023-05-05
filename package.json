@@ -23,7 +23,6 @@
     "scripts": {
         "ng": "ng",
         "build": "ng build --base-href /ngx-mask/  --configuration production",
-        "tel": "ng serve --host 192.168.0.105",
         "build:lib": "ng build --configuration production ngx-mask-lib && npm run copy-libdocs",
         "ci": "npm run lint && npm run build:lib && npm run test:all && npm run build",
         "copy-libdocs": "cp README.md LICENSE dist/ngx-mask-lib",
