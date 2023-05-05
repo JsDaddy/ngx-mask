@@ -24,18 +24,6 @@ export const OthDocs: IComDoc[] = [
         id: 3,
         anchor: 'special',
     },
-    {
-        header: 'Mask with specialCharacters',
-        text: '',
-        code: `<input
-        showMaskTyped="true"
-        [specialCharacters]="['e', 'x', 't', ' ', '(', ')', '-', '.']"
-        shownMaskExpression="'(___) ___-____ ext. ______'"
-        mask="(000) 000-0000 ext. 000000"
-        >`,
-        id: 4,
-        anchor: 'mask-specialCharacters',
-    },
 ];
 
 export const OthExamples: (TExample<IMaskOptions> | { _pipe: string })[] = [
@@ -52,14 +40,6 @@ export const OthExamples: (TExample<IMaskOptions> | { _pipe: string })[] = [
         _placeholder: 'specialCharacters',
         _specialCharacters: `[ '[' ,']' , '\\' ]`,
         _mask: '[00][000]',
-        control: { form: new UntypedFormControl(''), model: '' },
-    },
-    {
-        _placeholder: 'Mask with specialCharacters',
-        _mask: '(000) 000-0000 ext. 000000',
-        _showMaskTyped: true,
-        _shownMaskExpression: '(___) ___-____ ext. ______',
-        _specialCharacters: ['e', 'x', 't', ' ', '(', ')', '-', '.'],
         control: { form: new UntypedFormControl(''), model: '' },
     },
 ];
