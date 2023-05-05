@@ -385,16 +385,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     // IME starts
     @HostListener('compositionstart', ['$event'])
-    public onCompositionUpdate(): void {
+    public onCompositionStart(): void {
         this._isComposing = true;
     }
 
     // IME completes
     @HostListener('compositionend', ['$event'])
-    public onCompositionEnd(e: Event): void {
+    public onCompositionEnd(e: CustomKeyboardEvent): void {
         this._isComposing = false;
         this._justPasted = true;
-        this.onInput(e as CustomKeyboardEvent);
+        this.onInput(e);
     }
 
     @HostListener('blur')
@@ -477,11 +477,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         if (this._isComposing) {
             // User finalize their choice from IME composition, so trigger onInput() for the composed text.
-            if (e.key === 'Enter') {
-                this._isComposing = false;
-                this._justPasted = true;
-                this.onInput(e);
-            }
+            if (e.key === 'Enter') this.onCompositionEnd(e);
             return;
         }
 
