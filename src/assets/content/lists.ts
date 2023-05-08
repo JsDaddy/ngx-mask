@@ -40,8 +40,13 @@ export const lists: IListItem[] = [
                 scrollTo: 'validdate',
             },
             {
-                content: 'Dynamic mask',
+                content: 'SpecialCharacters Mask',
                 id: 7,
+                scrollTo: 'mask-specialCharacters',
+            },
+            {
+                content: 'Dynamic mask',
+                id: 8,
                 scrollTo: 'dynamic-mask',
             },
         ],

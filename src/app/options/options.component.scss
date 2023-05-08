@@ -21,7 +21,7 @@
         .cards-block {
             scroll-margin-top: 185px;
             .light-card {
-                flex: 50%;
+                flex: 55%;
                 border-radius: 10px;
                 .light-title {
                     margin-bottom: 20px;
@@ -55,12 +55,14 @@
                 }
             }
             .dark-card {
-                flex: 50%;
+                flex: 45%;
                 border-radius: 10px;
                 margin-left: 30px;
                 .dark-input {
                     .customDarkInput {
                         @include border-bottom-grey;
+                        border-top-left-radius: 0;
+                        border-top-right-radius: 0;
                         height: 51px;
                         width: 100%;
                         padding: 12px 20px;
@@ -70,12 +72,15 @@
                         outline: none;
                         &:hover {
                             @include border-bottom-yellow;
+                            background: var(--ligth-grey);
                         }
                         &[type='text']:focus {
                             @include border-bottom-yellow;
+                            background: var(--ligth-grey);
                         }
                         &[type='number']:focus {
                             @include border-bottom-yellow;
+                            background: var(--ligth-grey);
                         }
                     }
                 }
