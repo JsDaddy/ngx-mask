@@ -45,10 +45,22 @@ export const ComDocs: IComDoc[] = [
         anchor: 'validdate',
     },
     {
+        header: 'Mask with specialCharacters',
+        text: '',
+        code: `<input
+        showMaskTyped="true"
+        [specialCharacters]="['e', 'x', 't', ' ', '(', ')', '-', '.']"
+        shownMaskExpression="'(___) ___-____ ext. ______'"
+        mask="(000) 000-0000 ext. 000000"
+        >`,
+        id: 7,
+        anchor: 'mask-specialCharacters',
+    },
+    {
         header: 'Dynamic mask',
         text: '',
         code: `<input type='text' mask="(00) 00000000||+00 (00) 00000000" >`,
-        id: 7,
+        id: 8,
         anchor: 'dynamic-mask',
     },
 ];
@@ -82,6 +94,14 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Valid date and month',
         _mask: 'd0/M0/0000',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Mask with specialCharacters',
+        _mask: '(000) 000-0000 ext. 000000',
+        _showMaskTyped: true,
+        _shownMaskExpression: '(___) ___-____ ext. ______',
+        _specialCharacters: ['e', 'x', 't', ' ', '(', ')', '-', '.'],
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {

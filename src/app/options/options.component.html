@@ -46,6 +46,7 @@
                 mask="{{ ex._mask || '' }}"
                 thousandSeparator="{{ ex._thousandSeparator || ' ' }}"
                 [formControl]="ex.control.form"
+                [specialCharacters]="ex._specialCharacters || null"
                 [(ngModel)]="ex.control.model"
                 [validation]="ex._validation || null"
                 [showMaskTyped]="ex._showMaskTyped || null"
