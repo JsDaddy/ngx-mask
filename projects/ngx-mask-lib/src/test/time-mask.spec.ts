@@ -155,13 +155,35 @@ describe('Directive: Mask (Time)', () => {
         equal('421234', '04/02/1234', fixture);
     });
 
-    it('Date ', () => {
+    it('Date (years, month, day , lead zero', () => {
         component.mask = '0000.M0.d0';
-        equal('9999999', '9999.6', fixture);
-        equal('9999999', '6666.6.6', fixture);
-        equal('9999999', '7777.7.7', fixture);
-        equal('9999999', '8888.8.8', fixture);
-        equal('9999999', '8888.8.8', fixture);
+        component.leadZeroDateTime = true;
+        equal('9999999', '9999.09.09', fixture);
+        equal('8888888', '8888.08.08', fixture);
+        equal('7777777', '7777.07.07', fixture);
+        equal('6666666', '6666.06.06', fixture);
+        equal('5555555', '5555.05.05', fixture);
+        equal('4444444', '4444.04.04', fixture);
+    });
+
+    it('Date (years, month, day , lead zero', () => {
+        component.mask = '0000/M0/d0';
+        component.leadZeroDateTime = true;
+        equal('9999999', '9999/09/09', fixture);
+        equal('8888888', '8888/08/08', fixture);
+        equal('7777777', '7777/07/07', fixture);
+        equal('6666666', '6666/06/06', fixture);
+        equal('5555555', '5555/05/05', fixture);
+        equal('4444444', '4444/04/04', fixture);
+    });
+
+    it('Date (years, month, day', () => {
+        component.mask = '0000.M0.d0';
         equal('9999999', '9999.9.9', fixture);
+        equal('8888888', '8888.8.8', fixture);
+        equal('7777777', '7777.7.7', fixture);
+        equal('6666666', '6666.6.6', fixture);
+        equal('5555555', '5555.5.5', fixture);
+        equal('4444444', '4444.4.4', fixture);
     });
 });

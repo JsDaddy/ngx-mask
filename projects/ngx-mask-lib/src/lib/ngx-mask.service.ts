@@ -105,7 +105,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
-
+        if (maskExpression === '0000.M0.d0') {
+            console.log(result)
+        }
         this.actualValue = this.getActualValue(result);
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot

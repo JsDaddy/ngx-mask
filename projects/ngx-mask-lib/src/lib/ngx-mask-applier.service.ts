@@ -283,6 +283,10 @@ export class NgxMaskApplierService {
                     result += inputSymbol;
                     cursor += 3;
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '')) {
+                    // if (maskExpression === '0000.M0.d0') {
+                    //     this._shiftStep(maskExpression, cursor, inputArray.length);
+                    //     console.log(result)
+                    // }
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
                             cursor += 1;
@@ -325,6 +329,10 @@ export class NgxMaskApplierService {
                     }
                     const daysCount = 31;
                     if (maskExpression[cursor] === 'd') {
+                        // if (maskExpression === '0000.M0.d0') {
+                        //     this._shiftStep(maskExpression, cursor, inputArray.length);
+                        //     console.log(result)
+                        // }
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
@@ -340,7 +348,6 @@ export class NgxMaskApplierService {
                         }
                     }
                     if (maskExpression[cursor] === 'M') {
-                        console.log(inputValue)
                         const monthsCount = 12;
                         // mask without day
                         const withoutDays: boolean =
