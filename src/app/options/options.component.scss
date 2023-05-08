@@ -61,6 +61,8 @@
                 .dark-input {
                     .customDarkInput {
                         @include border-bottom-grey;
+                        border-top-left-radius: 0;
+                        border-top-right-radius: 0;
                         height: 51px;
                         width: 100%;
                         padding: 12px 20px;
