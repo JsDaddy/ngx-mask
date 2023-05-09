@@ -40,8 +40,18 @@ export const lists: IListItem[] = [
                 scrollTo: 'validdate',
             },
             {
-                content: 'Dynamic mask',
+                content: 'Valid date start with years',
+                id: 9,
+                scrollTo: 'startWithYears',
+            },
+            {
+                content: 'SpecialCharacters Mask',
                 id: 7,
+                scrollTo: 'mask-specialCharacters',
+            },
+            {
+                content: 'Dynamic mask',
+                id: 8,
                 scrollTo: 'dynamic-mask',
             },
         ],

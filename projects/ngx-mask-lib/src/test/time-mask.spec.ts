@@ -177,13 +177,17 @@ describe('Directive: Mask (Time)', () => {
         equal('4444444', '4444/04/04', fixture);
     });
 
-    it('Date (years, month, day', () => {
+    it('Date (years, month, day mask 0000.M0.d0', () => {
         component.mask = '0000.M0.d0';
-        equal('9999999', '9999.9.9', fixture);
-        equal('8888888', '8888.8.8', fixture);
-        equal('7777777', '7777.7.7', fixture);
-        equal('6666666', '6666.6.6', fixture);
-        equal('5555555', '5555.5.5', fixture);
-        equal('4444444', '4444.4.4', fixture);
+        equal('999999', '9999.9.9', fixture);
+        equal('888888', '8888.8.8', fixture);
+        equal('777777', '7777.7.7', fixture);
+        equal('666666', '6666.6.6', fixture);
+        equal('555555', '5555.5.5', fixture);
+        equal('444444', '4444.4.4', fixture);
+        equal('333333', '3333.3.3', fixture);
+        equal('2222222', '2222.2.22', fixture);
+        equal('11111111', '1111.11.11', fixture);
+        equal('202344', '2023.4.4', fixture);
     });
 });
