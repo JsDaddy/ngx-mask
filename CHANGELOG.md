@@ -4,7 +4,7 @@
 
 ### Fix
 
--   Fix - Fix ([#1078](https://github.com/JsDaddy/ngx-mask/issues/1078))
+-   Fix - Fix ([#1078](https://github.com/JsDaddy/ngx-mask/issues/1078)
 -   Fix - Fix ([#816](https://github.com/JsDaddy/ngx-mask/issues/816)
 -   Fix - Fix ([#925](https://github.com/JsDaddy/ngx-mask/issues/925)
 -   Fix - Fix ([#837](https://github.com/JsDaddy/ngx-mask/issues/837)
