@@ -327,7 +327,8 @@ export class NgxMaskApplierService {
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
                             Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
-                            inputValue[cursor + 1] === '/'
+                            inputValue[cursor + 1] === '/' ||
+                            inputValue[cursor + 1] === '-'
                         ) {
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -353,17 +354,20 @@ export class NgxMaskApplierService {
                                 Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
                                 inputValue[cursor] !== '/') ||
                                 inputValue[cursor] === '/' ||
+                                inputValue[cursor] === '-' ||
                                 (inputValue[cursor - 3] === '/' &&
                                     Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
                                     inputValue[cursor - 1] !== '/') ||
-                                inputValue[cursor - 1] === '/');
+                                inputValue[cursor - 1] === '/' ||
+                                inputValue[cursor - 1] === '-');
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
                             !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            inputValue[cursor - 1] === '/' &&
+                            (inputValue[cursor - 1] === '/' || inputValue[cursor - 1] === '-') &&
                             (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
-                                inputValue[cursor + 1] === '/');
+                                inputValue[cursor + 1] === '/' ||
+                                inputValue[cursor + 1] === '-');
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
                             (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount &&
