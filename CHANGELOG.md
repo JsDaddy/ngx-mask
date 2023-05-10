@@ -10,8 +10,6 @@
 -   Fix - Fix ([#837](https://github.com/JsDaddy/ngx-mask/issues/837)
 -   Fix - Fix ([#811](https://github.com/JsDaddy/ngx-mask/issues/811)
 
--   Fix - Fix ( https://github.com/JsDaddy/ngx-mask/issues/687
-
 <a name="15.1.3></a>
 
 # 15.1.3(2023-05-02)
