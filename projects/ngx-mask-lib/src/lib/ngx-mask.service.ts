@@ -105,7 +105,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
-
         this.actualValue = this.getActualValue(result);
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
