@@ -46,7 +46,6 @@
                 mask="{{ ex._mask || '' }}"
                 thousandSeparator="{{ ex._thousandSeparator || ' ' }}"
                 [formControl]="ex.control.form"
-                [leadZeroDateTime]="ex._leadZeroDateTime || null"
                 [specialCharacters]="ex._specialCharacters || null"
                 [(ngModel)]="ex.control.model"
                 [validation]="ex._validation || null"
