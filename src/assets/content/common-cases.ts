@@ -45,6 +45,13 @@ export const ComDocs: IComDoc[] = [
         anchor: 'validdate',
     },
     {
+        header: 'Valid date start with years',
+        text: '',
+        code: `<input matInput mask="0000.M0.d0" />`,
+        id: 9,
+        anchor: 'startWithYears',
+    },
+    {
         header: 'Mask with specialCharacters',
         text: '',
         code: `<input
@@ -94,6 +101,11 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Valid date and month',
         _mask: 'd0/M0/0000',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Valid date start with years',
+        _mask: '0000.M0.d0',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
