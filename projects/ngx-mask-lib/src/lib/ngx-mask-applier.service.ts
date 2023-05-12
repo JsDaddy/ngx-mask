@@ -392,7 +392,9 @@ export class NgxMaskApplierService {
                         const day2monthInputDot: boolean =
                             (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount &&
                                 cursor === 5) ||
-                            inputValue[cursor + 1] === '.';
+                            inputValue[cursor + 1] === '.' ||
+                            inputValue[cursor + 1] === '-' ||
+                            inputValue[cursor + 1] === '/';
                         // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
