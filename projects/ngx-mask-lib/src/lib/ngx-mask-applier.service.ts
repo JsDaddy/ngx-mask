@@ -323,12 +323,32 @@ export class NgxMaskApplierService {
                     }
                     const daysCount = 31;
                     if (maskExpression[cursor] === 'd') {
+                        const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
+                        const startWithMonthInput: boolean =
+                            maskExpression.slice(0, 2) === 'M0' &&
+                            (inputValue[cursor - 2] === '/' ||
+                                inputValue[cursor - 2] === '.' ||
+                                inputValue[cursor - 2] === '-');
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
-                            Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
-                            Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
-                            inputValue[cursor + 1] === '/' ||
-                            inputValue[cursor + 1] === '-'
+                            (!maskStartWithMonth &&
+                                (Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
+                                    Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
+                                    inputValue[cursor + 1] === '/' ||
+                                    inputValue[cursor + 1] === '-')) ||
+                            (startWithMonthInput
+                                ? Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
+                                  (inputValue[cursor] !== '/' &&
+                                      (inputValue[cursor + 2] === '.' ||
+                                          inputValue[cursor + 2] === '/' ||
+                                          inputValue[cursor + 2] === '-')) ||
+                                  inputValue[cursor] === '.' ||
+                                  inputValue[cursor] === '/' ||
+                                  inputValue[cursor] === '-'
+                                : Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
+                                  inputValue[cursor + 1] === '/' ||
+                                  inputValue[cursor + 1] === '-' ||
+                                  inputValue[cursor + 1] === '.')
                         ) {
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -389,9 +409,9 @@ export class NgxMaskApplierService {
                             (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
                             withoutDays ||
                             day1monthInput ||
-                            day2monthInput ||
-                            day1monthPaste ||
                             day2monthPaste ||
+                            day1monthPaste ||
+                            day2monthInput ||
                             day2monthInputDot
                         ) {
                             cursor += 1;
