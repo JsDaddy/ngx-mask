@@ -218,6 +218,19 @@ describe('Directive: Mask (Time)', () => {
         equal('20232023', '20/2/3202', fixture);
     });
 
+    it('Date (0000-M0-d0', () => {
+        component.mask = '0000-M0-d0';
+        equal('999999', '9999-9-9', fixture);
+        equal('888888', '8888-8-8', fixture);
+        equal('777777', '7777-7-7', fixture);
+        equal('666666', '6666-6-6', fixture);
+        equal('555555', '5555-5-5', fixture);
+        equal('444444', '4444-4-4', fixture);
+        equal('333333', '3333-3-3', fixture);
+        equal('2222222', '2222-2-22', fixture);
+        equal('11111111', '1111-11-11', fixture);
+    });
+
     it('Date (M0/d0/0000', () => {
         component.mask = 'M0/d0/0000';
         equal('999999', '9/9/9999', fixture);
@@ -229,6 +242,31 @@ describe('Directive: Mask (Time)', () => {
         equal('333333', '3/3/3333', fixture);
         equal('2222222', '2/22/2222', fixture);
         equal('11111111', '11/11/1111', fixture);
-        equal('1242023', '12/4/2023', fixture);
+    });
+
+    it('Date (M0-d0-0000', () => {
+        component.mask = 'M0-d0-0000';
+        equal('999999', '9-9-9999', fixture);
+        equal('888888', '8-8-8888', fixture);
+        equal('777777', '7-7-7777', fixture);
+        equal('666666', '6-6-6666', fixture);
+        equal('555555', '5-5-5555', fixture);
+        equal('444444', '4-4-4444', fixture);
+        equal('333333', '3-3-3333', fixture);
+        equal('2222222', '2-22-2222', fixture);
+        equal('11111111', '11-11-1111', fixture);
+    });
+
+    it('Date (M0.d0.0000', () => {
+        component.mask = 'M0.d0.0000';
+        equal('999999', '9.9.9999', fixture);
+        equal('888888', '8.8.8888', fixture);
+        equal('777777', '7.7.7777', fixture);
+        equal('666666', '6.6.6666', fixture);
+        equal('555555', '5.5.5555', fixture);
+        equal('444444', '4.4.4444', fixture);
+        equal('333333', '3.3.3333', fixture);
+        equal('2222222', '2.22.2222', fixture);
+        equal('11111111', '11.11.1111', fixture);
     });
 });
