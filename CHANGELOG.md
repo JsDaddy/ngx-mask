@@ -1,15 +1,44 @@
-<a name="15.1.3></a>
+<a name=16.0.0></a>
+
+# 16.0.0(2023-05-13)
+
+### Feature
+
+- update ng 16.x
+
+<a name=15.1.5></a>
+
+# 15.1.5(2023-05-12)
+
+### Fix
+
+-   Fix ([#837](https://github.com/JsDaddy/ngx-mask/issues/837))
+
+<a name=15.1.4></a>
+
+# 15.1.4(2023-05-09)
+
+### Fix
+
+-   Fix ([#1078](https://github.com/JsDaddy/ngx-mask/issues/1078))
+-   Fix ([#816](https://github.com/JsDaddy/ngx-mask/issues/816))
+-   Fix ([#925](https://github.com/JsDaddy/ngx-mask/issues/925))
+-   Fix ([#811](https://github.com/JsDaddy/ngx-mask/issues/811))
+
+<a name=15.1.3></a>
 
 # 15.1.3(2023-05-02)
 
 ### Fix
-- Fix -   Fix ([#1103](https://github.com/JsDaddy/ngx-mask/issues/1103))
+
+-   Fix ([#1103](https://github.com/JsDaddy/ngx-mask/issues/1103))
 
 <a name="15.1.2"></a>
 
 # 15.1.2(2023-03-27)
 
 ### Fix
+
 -   Fix ([#1101](https://github.com/JsDaddy/ngx-mask/issues/1101))
 -   Fix ([#1009](https://github.com/JsDaddy/ngx-mask/issues/1009))
 

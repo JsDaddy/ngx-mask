@@ -1,4 +1,6 @@
-@import 'src/styles';
+@import '../../libraries/styles/border-mixin';
+@import '../../libraries/styles/media-breakpoints';
+
 .content {
     gap: 16px;
     padding: 16px;

@@ -154,4 +154,119 @@ describe('Directive: Mask (Time)', () => {
         component.mask = 'd0/M0/0000';
         equal('421234', '04/02/1234', fixture);
     });
+
+    it('Date (years, month, day , lead zero', () => {
+        component.mask = '0000.M0.d0';
+        component.leadZeroDateTime = true;
+        equal('9999999', '9999.09.09', fixture);
+        equal('8888888', '8888.08.08', fixture);
+        equal('7777777', '7777.07.07', fixture);
+        equal('6666666', '6666.06.06', fixture);
+        equal('5555555', '5555.05.05', fixture);
+        equal('4444444', '4444.04.04', fixture);
+    });
+
+    it('Date (years, month, day , lead zero', () => {
+        component.mask = '0000/M0/d0';
+        component.leadZeroDateTime = true;
+        equal('9999999', '9999/09/09', fixture);
+        equal('8888888', '8888/08/08', fixture);
+        equal('7777777', '7777/07/07', fixture);
+        equal('6666666', '6666/06/06', fixture);
+        equal('5555555', '5555/05/05', fixture);
+        equal('4444444', '4444/04/04', fixture);
+    });
+
+    it('Date (years, month, day mask 0000.M0.d0', () => {
+        component.mask = '0000.M0.d0';
+        equal('999999', '9999.9.9', fixture);
+        equal('888888', '8888.8.8', fixture);
+        equal('777777', '7777.7.7', fixture);
+        equal('666666', '6666.6.6', fixture);
+        equal('555555', '5555.5.5', fixture);
+        equal('444444', '4444.4.4', fixture);
+        equal('333333', '3333.3.3', fixture);
+        equal('2222222', '2222.2.22', fixture);
+        equal('11111111', '1111.11.11', fixture);
+        equal('202344', '2023.4.4', fixture);
+    });
+    it('Date (d0-M0-0000', () => {
+        component.mask = 'd0-M0-0000';
+        equal('999999', '9-9-9999', fixture);
+        equal('888888', '8-8-8888', fixture);
+        equal('777777', '7-7-7777', fixture);
+        equal('666666', '6-6-6666', fixture);
+        equal('555555', '5-5-5555', fixture);
+        equal('444444', '4-4-4444', fixture);
+        equal('333333', '3-3-3333', fixture);
+        equal('2222222', '22-2-2222', fixture);
+        equal('11111111', '11-11-1111', fixture);
+        equal('20232023', '20-2-3202', fixture);
+    });
+
+    it('Date (m0/d0/0000', () => {
+        component.mask = 'm0/d0/0000';
+        equal('999999', '9/9/9999', fixture);
+        equal('888888', '8/8/8888', fixture);
+        equal('777777', '7/7/7777', fixture);
+        equal('666666', '6/6/6666', fixture);
+        equal('5555555', '55/5/5555', fixture);
+        equal('4444444', '44/4/4444', fixture);
+        equal('3333333', '33/3/3333', fixture);
+        equal('22222222', '22/22/2222', fixture);
+        equal('11111111', '11/11/1111', fixture);
+        equal('20232023', '20/2/3202', fixture);
+    });
+
+    it('Date (0000-M0-d0', () => {
+        component.mask = '0000-M0-d0';
+        equal('999999', '9999-9-9', fixture);
+        equal('888888', '8888-8-8', fixture);
+        equal('777777', '7777-7-7', fixture);
+        equal('666666', '6666-6-6', fixture);
+        equal('555555', '5555-5-5', fixture);
+        equal('444444', '4444-4-4', fixture);
+        equal('333333', '3333-3-3', fixture);
+        equal('2222222', '2222-2-22', fixture);
+        equal('11111111', '1111-11-11', fixture);
+    });
+
+    it('Date (M0/d0/0000', () => {
+        component.mask = 'M0/d0/0000';
+        equal('999999', '9/9/9999', fixture);
+        equal('888888', '8/8/8888', fixture);
+        equal('777777', '7/7/7777', fixture);
+        equal('666666', '6/6/6666', fixture);
+        equal('555555', '5/5/5555', fixture);
+        equal('444444', '4/4/4444', fixture);
+        equal('333333', '3/3/3333', fixture);
+        equal('2222222', '2/22/2222', fixture);
+        equal('11111111', '11/11/1111', fixture);
+    });
+
+    it('Date (M0-d0-0000', () => {
+        component.mask = 'M0-d0-0000';
+        equal('999999', '9-9-9999', fixture);
+        equal('888888', '8-8-8888', fixture);
+        equal('777777', '7-7-7777', fixture);
+        equal('666666', '6-6-6666', fixture);
+        equal('555555', '5-5-5555', fixture);
+        equal('444444', '4-4-4444', fixture);
+        equal('333333', '3-3-3333', fixture);
+        equal('2222222', '2-22-2222', fixture);
+        equal('11111111', '11-11-1111', fixture);
+    });
+
+    it('Date (M0.d0.0000', () => {
+        component.mask = 'M0.d0.0000';
+        equal('999999', '9.9.9999', fixture);
+        equal('888888', '8.8.8888', fixture);
+        equal('777777', '7.7.7777', fixture);
+        equal('666666', '6.6.6666', fixture);
+        equal('555555', '5.5.5555', fixture);
+        equal('444444', '4.4.4444', fixture);
+        equal('333333', '3.3.3333', fixture);
+        equal('2222222', '2.22.2222', fixture);
+        equal('11111111', '11.11.1111', fixture);
+    });
 });

@@ -7,15 +7,7 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import {
-    AsyncPipe,
-    JsonPipe,
-    NgClass,
-    NgFor,
-    NgIf,
-    NgOptimizedImage,
-    NgTemplateOutlet,
-} from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -41,7 +33,6 @@ import { AccordionService } from '@open-source/accordion/accordion.service';
         NgFor,
         NgIf,
         NgClass,
-        NgOptimizedImage,
         NgTemplateOutlet,
         FormsModule,
         ReactiveFormsModule,
