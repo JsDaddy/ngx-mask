@@ -89,6 +89,10 @@ export class NgxMaskApplierService {
             inputValue = this.checkAndRemoveSuffix(inputValue);
         }
         const inputArray: string[] = inputValue.toString().split('');
+        if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
+            // eslint-disable-next-line no-param-reassign
+            result += inputValue.slice(cursor, cursor + 1);
+        }
         if (maskExpression === 'IP') {
             const valuesIP = inputValue.split('.');
             this.ipError = this._validIP(valuesIP);
@@ -112,6 +116,7 @@ export class NgxMaskApplierService {
             }
         }
         if (maskExpression.startsWith('percent')) {
+            //ogranich posle tochki
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
                 // eslint-disable-next-line no-useless-escape
@@ -127,14 +132,21 @@ export class NgxMaskApplierService {
                 inputValue.indexOf('.') > 0 &&
                 !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))
             ) {
-                const base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
+                let base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
+                if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
+                    base = inputValue.substring(0, inputValue.indexOf('.'));
+                }
                 // eslint-disable-next-line no-param-reassign
                 inputValue = `${base}${inputValue.substring(
                     inputValue.indexOf('.'),
                     inputValue.length
                 )}`;
             }
-            if (this.percentage(inputValue)) {
+            let value = '';
+            this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-'
+                ? (value = inputValue.slice(cursor + 1, cursor + inputValue.length))
+                : (value = inputValue);
+            if (this.percentage(value)) {
                 result = inputValue;
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
@@ -484,7 +496,6 @@ export class NgxMaskApplierService {
         ) {
             result += maskExpression[maskExpression.length - 1];
         }
-
         let newPosition: number = position + 1;
 
         while (this._shift.has(newPosition)) {

@@ -54,6 +54,16 @@ export const lists: IListItem[] = [
                 id: 8,
                 scrollTo: 'dynamic-mask',
             },
+            {
+                content: 'Optional mask',
+                id: 12,
+                scrollTo: 'optional-mask',
+            },
+            {
+                content: 'allowNegativeNumber',
+                id: 11,
+                scrollTo: 'allowMask',
+            },
         ],
     },
     {
