@@ -1,4 +1,14 @@
-<a name=16.0.0></a>
+# 16.0.1(2023-05-16)
+
+### Fix
+
+-   Fix ([#871](https://github.com/JsDaddy/ngx-mask/issues/871))
+-   Fix ([#920](https://github.com/JsDaddy/ngx-mask/issues/920))
+-   Fix ([#785](https://github.com/JsDaddy/ngx-mask/issues/785))
+-   Fix ([#718](https://github.com/JsDaddy/ngx-mask/issues/718))
+-   Fix ([725](https://github.com/JsDaddy/ngx-mask/issues/725))
+-   Fix ([#903](https://github.com/JsDaddy/ngx-mask/issues/903))
+-   Fix ([#860](https://github.com/JsDaddy/ngx-mask/issues/860))
 
 # 16.0.0(2023-05-13)
 
