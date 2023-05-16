@@ -139,6 +139,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             ) {
                 this._maskService.maskChanged = true;
             }
+            if (allowNegativeNumbers) {
+                this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
+                if (this._maskService.allowNegativeNumbers) {
+                    this._maskService.specialCharacters =
+                        this._maskService.specialCharacters.filter((c: string) => c !== '-');
+                }
+            }
             if (maskExpression.currentValue && maskExpression.currentValue.split('||').length > 1) {
                 this._maskExpressionArray = maskExpression.currentValue
                     .split('||')
@@ -202,20 +209,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (separatorLimit) {
             this._maskService.separatorLimit = separatorLimit.currentValue;
         }
-        if (allowNegativeNumbers) {
-            this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
-            if (this._maskService.allowNegativeNumbers) {
-                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
-                    (c: string) => c !== '-'
-                );
-            }
-        }
         if (leadZeroDateTime) {
             this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
         }
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
         }
+
         this._applyMask();
     }
 
