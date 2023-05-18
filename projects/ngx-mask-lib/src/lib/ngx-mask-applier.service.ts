@@ -306,10 +306,6 @@ export class NgxMaskApplierService {
                         }
                     }
                     if (maskExpression[cursor] === 'h') {
-                        // if (Number(inputValue) > 24 && position === 2) {
-                        //     // eslint-disable-next-line no-param-reassign
-                        //     position = position + 1;
-                        // }
                         if (result === '2' && Number(inputSymbol) > 3) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
@@ -331,19 +327,6 @@ export class NgxMaskApplierService {
                             continue;
                         }
                     }
-                    // if (maskExpression[cursor] === 's') {
-                    //     if (Number(inputSymbol) > 5) {
-                    //         // eslint-disable-next-line no-param-reassign
-                    //         position = position + 1;
-                    //         cursor += 1;
-                    //         this._shiftStep(maskExpression, cursor, inputArray.length);
-                    //         i--;
-                    //         if (this.leadZeroDateTime) {
-                    //             result += '0';
-                    //         }
-                    //         continue;
-                    //     }
-                    // }
                     const daysCount = 31;
                     if (maskExpression[cursor] === 'd') {
                         const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
