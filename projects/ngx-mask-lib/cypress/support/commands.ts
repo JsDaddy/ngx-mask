@@ -1,6 +1,6 @@
 //TODO(inepipenko): need revision fof Cypress
 /* eslint-disable */
-
+import 'projects/ngx-mask-lib/cypress/support/commands';
 import Chainable = Cypress.Chainable;
 
 declare global {
