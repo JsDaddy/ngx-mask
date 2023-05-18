@@ -1,14 +1,5 @@
 //TODO(inepipenko): need revision fof Cypress
 /* eslint-disable */
-// declare global {
-//     namespace Cypress {
-//         interface Chainable {
-//             mount: typeof mount;
-//         }
-//     }
-// }
-//
-// Cypress.Commands.add('mount', mount);
 
 import Chainable = Cypress.Chainable;
 
