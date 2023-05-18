@@ -554,12 +554,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (typeof inputValue === 'number' || this._maskValue.startsWith('separator')) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this._maskService.numberToString(inputValue);
-            if (!Array.isArray(this.decimalMarker)) {
+            if (!Array.isArray(this._maskService.decimalMarker)) {
                 const localeDecimalMarker = this._currentLocaleDecimalMarker();
                 // eslint-disable-next-line no-param-reassign
                 inputValue =
-                    this.decimalMarker !== localeDecimalMarker
-                        ? inputValue.replace(localeDecimalMarker, this.decimalMarker)
+                    this._maskService.decimalMarker !== localeDecimalMarker
+                        ? inputValue.replace(localeDecimalMarker, this._maskService.decimalMarker)
                         : inputValue;
             }
             this._maskService.isNumberValue = true;

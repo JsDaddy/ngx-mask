@@ -30,37 +30,37 @@ import { IConfig } from '../../lib/ngx-mask.config';
 export class TestMaskComponent {
     public mask!: string | undefined;
 
-    public form: FormControl = new FormControl(null);
+    public form: FormControl = new FormControl();
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
+    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | undefined;
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
+    public clearIfNotMatch: IConfig['clearIfNotMatch'] | undefined;
 
-    public patterns!: IConfig['patterns'];
+    public patterns: IConfig['patterns'] | undefined;
 
     public prefix: IConfig['prefix'] = '';
 
-    public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+    public thousandSeparator: IConfig['thousandSeparator'] | undefined;
 
-    public decimalMarker: IConfig['decimalMarker'] = ',';
+    public decimalMarker: IConfig['decimalMarker'] | undefined;
 
     public suffix: IConfig['suffix'] = '';
 
-    public specialCharacters!: IConfig['specialCharacters'];
+    public specialCharacters: IConfig['specialCharacters'] | undefined;
 
-    public showMaskTyped: IConfig['showMaskTyped'] = false;
+    public showMaskTyped: IConfig['showMaskTyped'] | undefined;
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] = '_';
+    public placeHolderCharacter: IConfig['placeHolderCharacter'] | undefined;
 
-    public hiddenInput: IConfig['hiddenInput'] = false;
+    public hiddenInput: IConfig['hiddenInput'] | undefined;
 
     public separatorLimit: IConfig['separatorLimit'] = '';
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] = false;
+    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | undefined;
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
+    public leadZeroDateTime: IConfig['leadZeroDateTime'] | undefined;
 
-    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] = false;
+    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
 
     public cdr = inject(ChangeDetectorRef);
 }
