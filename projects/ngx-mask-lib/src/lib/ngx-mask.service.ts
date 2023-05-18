@@ -442,6 +442,9 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
+        if (this.maskExpression.startsWith('percent') && value.includes('.')) {
+            return value;
+        }
         return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
     }
 

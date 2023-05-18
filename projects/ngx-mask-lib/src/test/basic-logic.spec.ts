@@ -576,4 +576,18 @@ describe('Directive: Mask', () => {
             fixture
         );
     });
+
+    it('Mask with optional parameter', () => {
+        component.mask = '9999 999 999';
+        equal('3', '3', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1234', fixture);
+        equal('12345', '1234 5', fixture);
+        equal('123456', '1234 56', fixture);
+        equal('1234567', '1234 567', fixture);
+        equal('12345678', '1234 567 8', fixture);
+        equal('123456789', '1234 567 89', fixture);
+        equal('1234567890', '1234 567 890', fixture);
+    });
 });
