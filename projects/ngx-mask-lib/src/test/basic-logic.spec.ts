@@ -447,6 +447,7 @@ describe('Directive: Mask', () => {
         spyOn(directiveInstance._maskService, 'applyMask');
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
