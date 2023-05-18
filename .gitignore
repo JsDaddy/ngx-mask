@@ -49,4 +49,7 @@ test-reports/
 /projects/ngx-mask-lib/cypress/screenshots
 /projects/ngx-mask-lib/coverage
 
+
+/cypress
+
 .angular
