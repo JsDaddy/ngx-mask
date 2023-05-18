@@ -28,11 +28,7 @@
 npm-debug.log
 testem.log
 /typings
-/cypress/videos
-/cypress/screenshots
-/cypress/support
-/cypress/fixtures
-/cypress
+/cypress/*
 # e2e
 /e2e/*.js
 /e2e/*.map
