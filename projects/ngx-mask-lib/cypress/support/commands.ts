@@ -1,13 +1,27 @@
 //TODO(inepipenko): need revision fof Cypress
 /* eslint-disable */
-declare namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    interface Chainable {
-        setSelectionRange(
-            start: number,
-            end: number,
-            options?: Partial<Loggable & Timeoutable>
-        ): Chainable<JQuery<HTMLInputElement>>;
+// declare global {
+//     namespace Cypress {
+//         interface Chainable {
+//             mount: typeof mount;
+//         }
+//     }
+// }
+//
+// Cypress.Commands.add('mount', mount);
+
+import Chainable = Cypress.Chainable;
+
+declare global {
+    namespace Cypress {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        interface Chainable {
+            setSelectionRange(
+                start: number,
+                end: number,
+                options?: Partial<Loggable & Timeoutable>
+            ): Chainable;
+        }
     }
 }
 

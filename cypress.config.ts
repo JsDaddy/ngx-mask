@@ -9,9 +9,4 @@ export default defineConfig({
         },
         specPattern: 'projects/ngx-mask-lib/src/test/**/*.cy-spec.ts',
     },
-    e2e: {
-        setupNodeEvents(on, config) {
-            // implement node event listeners here
-        },
-    },
 });
