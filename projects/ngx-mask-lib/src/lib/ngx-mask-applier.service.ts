@@ -395,50 +395,29 @@ export class NgxMaskApplierService {
                         console.log(this.specialCharacters.includes(inputValue[cursor - 2] as string));
 
                         // day<10 && month<12 for input
-                        const day1monthInput: boolean =
-                            (
-                                // inputValue.slice(cursor - 3, cursor - 1).includes(this.specialCharacters.toString()) ||
-                                // this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor -1) as string)
-                                inputValue.slice(cursor - 3, cursor - 1).includes('/') ||
-                                inputValue.slice(cursor - 3, cursor - 1).includes('-') ||
-                                inputValue.slice(cursor - 3, cursor - 1).includes('.')
-                    ) &&
-                            (
-                                 this.specialCharacters.includes(inputValue[cursor - 2] as string)
-                                    // (inputValue[cursor - 2] === '/' ||
-                                // inputValue[cursor - 2] === '-' ||
-                                // inputValue[cursor - 2] === '.')
-                                    &&
-                                Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
-                                    !this.specialCharacters.includes(inputValue[cursor] as  string)
-
-                                    // (inputValue[cursor] !== '/' ||
-                                    // inputValue[cursor] !== '.' ||
-                                    // inputValue[cursor] !== '-'))
-                                ||
-                                this.specialCharacters.includes(inputValue[cursor] as string) ||
-
-                                    // inputValue[cursor] === '/' ||
-                                    //         inputValue[cursor] === '.' ||
-                                    //         inputValue[cursor] === '-' ||
-                                this.specialCharacters.includes(inputValue[cursor - 3] as  string)
-                                    // (inputValue[cursor - 3] === '/' ||
-                                    // inputValue[cursor - 3] === '-' ||
-                                    // inputValue[cursor - 3] === '.')
-
-                                    &&
-                                    Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
-
-                                    !this.specialCharacters.includes(inputValue[cursor - 1] as string))
-                                    // (inputValue[cursor - 1] !== '/' ||
-                                    //     inputValue[cursor - 1] !== '-' ||
-                                    //     inputValue[cursor - 1] !== '.'))
-                                ||
-                                this.specialCharacters.includes(inputValue[cursor - 1] as string);
-                        //
-                        // inputValue[cursor - 1] === '/' ||
-                        //         inputValue[cursor - 1] === '.' ||
+                        // const day1monthInput: boolean =
+                        //     inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                        //     ((inputValue[cursor - 2] === '/' &&
+                        //             Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
+                        //             inputValue[cursor] !== '/') ||
+                        //         inputValue[cursor] === '/' ||
+                        //         inputValue[cursor] === '-' ||
+                        //         (inputValue[cursor - 3] === '/' &&
+                        //             Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
+                        //             inputValue[cursor - 1] !== '/') ||
+                        //         inputValue[cursor - 1] === '/' ||
                         //         inputValue[cursor - 1] === '-');
+                        const day1monthInput: boolean =
+                            // this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor -1) as string)
+                                inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            (this.specialCharacters.includes(inputValue[cursor - 2] as string) &&
+                                Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
+                                    !this.specialCharacters.includes(inputValue[cursor] as  string)) ||
+                                this.specialCharacters.includes(inputValue[cursor] as string) ||
+                            (this.specialCharacters.includes(inputValue[cursor - 3] as  string) &&
+                                    Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
+                                    !this.specialCharacters.includes(inputValue[cursor - 1] as string)) ||
+                                this.specialCharacters.includes(inputValue[cursor - 1] as string);
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
@@ -469,6 +448,7 @@ export class NgxMaskApplierService {
                         inputValue[cursor + 1] === '.' ||
                             inputValue[cursor + 1] === '-' ||
                             inputValue[cursor + 1] === '/';
+
                         // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
