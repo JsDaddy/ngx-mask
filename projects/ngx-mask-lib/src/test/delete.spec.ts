@@ -35,6 +35,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 1;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -56,6 +57,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -78,6 +80,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 7;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -99,6 +102,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 1;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -120,6 +124,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 4;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 46,
             target: inputTarget,
         });
@@ -132,6 +137,7 @@ describe('Directive: Mask (Delete)', () => {
 
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -153,6 +159,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 1;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -175,6 +182,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 1;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -197,6 +205,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
             // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -219,6 +228,7 @@ describe('Directive: Mask (Delete)', () => {
         inputTarget.selectionEnd = 4;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
             // eslint-disable-next-line @typescript-eslint/no-empty-function

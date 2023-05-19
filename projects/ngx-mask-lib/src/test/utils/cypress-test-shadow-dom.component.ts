@@ -14,7 +14,7 @@ import { FormControl } from '@angular/forms';
     `,
 })
 export class CypressTestMaskShadowDomComponent {
-    @Input() public mask!: string | null;
+    @Input() public mask = '';
 
     @Input() public hiddenInput = false;
 

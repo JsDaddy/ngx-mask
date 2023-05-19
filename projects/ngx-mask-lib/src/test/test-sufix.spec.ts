@@ -68,6 +68,7 @@ describe('Directive: Mask (Suffix)', () => {
         inputTarget.selectionEnd = 5;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -107,6 +108,7 @@ describe('Directive: Mask (Suffix)', () => {
         inputTarget.selectionEnd = 10;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });

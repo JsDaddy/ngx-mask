@@ -1,9 +1,9 @@
 {
-  "fixturesFolder": "./src/test/utils",
-  "pluginsFile": "./cypress/plugins/index.ts",
-  "supportFile": "./cypress/support/index.ts",
-  "component": {
-    "testFiles": "**/*.cy-spec.{js,ts,jsx,tsx}",
-    "componentFolder": "./src"
-  }
+    "fixturesFolder": "./src/test/utils",
+    "pluginsFile": "./cypress/plugins/index.ts",
+    "supportFile": "./cypress/support/index.ts",
+    "component": {
+        "testFiles": "**/*.cy-spec.{js,ts,jsx,tsx}",
+        "componentFolder": "./src"
+    }
 }

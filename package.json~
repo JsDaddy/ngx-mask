@@ -42,7 +42,7 @@
     "start-prod": "angular-http-server --path dist/ngx-mask --p 3000 --silent",
     "test": "npm run test:lib",
     "cypress:open": "cypress open",
-    "cypress:bash": "npx cypress run --component",
+    "cypress": "npx cypress run --component",
     "test:all": "npm run test:app && npm run test:lib",
     "test:app": "ng test ngx-mask",
     "test:lib": "ng test ngx-mask-lib",
