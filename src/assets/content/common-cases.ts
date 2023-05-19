@@ -103,7 +103,7 @@ export const ComDocs: IComDoc[] = [
 export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Date',
-        _mask: 'd0.M0.0000',
+        _mask: 'd0@M0:0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
