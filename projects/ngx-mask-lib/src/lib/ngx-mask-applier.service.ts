@@ -433,31 +433,50 @@ export class NgxMaskApplierService {
                         //     (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
                         //         this.specialCharacters.includes(inputValue[cursor + 1] as string));
                         // cursor === 5 && without days
+                        // const day2monthInputDot: boolean =
+                        //     (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount &&
+                        //         cursor === 5) ||
+                        //     // this.specialCharacters.includes(inputValue[cursor + 1] as string)
+                        //
+                        // inputValue[cursor + 1] === '.' ||
+                        //     inputValue[cursor + 1] === '-' ||
+                        //     inputValue[cursor + 1] === '/';
+                        //
+                        // // day<10 && month<12 for paste whole data
+                        // const day1monthPaste: boolean =
+                        //     Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
+                        //     !this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor - 1) as string) &&
+                        // // !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                        //     !this.specialCharacters.includes(inputValue.slice(cursor - 2, cursor) as string) &&
+                        // // !inputValue.slice(cursor - 2, cursor).includes('/') &&
+                        //     Number(inputValue.slice(cursor - 2, cursor)) > monthsCount;
+                        // // 10<day<31 && month<12 for paste whole data
+                        // const day2monthPaste: boolean =
+                        //     Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
+                        //     !this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor - 1) as string) &&
+                        //     !this.specialCharacters.includes(inputValue[cursor - 1] as string) &&
+                        //
+                        //     // !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                        //     // inputValue[cursor - 1] !== '/' &&
+                        //     Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount;
+                        // cursor === 5 && without days
                         const day2monthInputDot: boolean =
                             (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount &&
                                 cursor === 5) ||
-                            // this.specialCharacters.includes(inputValue[cursor + 1] as string)
-
-                        inputValue[cursor + 1] === '.' ||
+                            inputValue[cursor + 1] === '.' ||
                             inputValue[cursor + 1] === '-' ||
                             inputValue[cursor + 1] === '/';
-
                         // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
-                            !this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor - 1) as string) &&
-                        // !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            !this.specialCharacters.includes(inputValue.slice(cursor - 2, cursor) as string) &&
-                        // !inputValue.slice(cursor - 2, cursor).includes('/') &&
+                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            !inputValue.slice(cursor - 2, cursor).includes('/') &&
                             Number(inputValue.slice(cursor - 2, cursor)) > monthsCount;
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
-                            !this.specialCharacters.includes(inputValue.slice(cursor - 3, cursor - 1) as string) &&
-                            !this.specialCharacters.includes(inputValue[cursor - 1] as string) &&
-
-                            // !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            // inputValue[cursor - 1] !== '/' &&
+                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
+                            inputValue[cursor - 1] !== '/' &&
                             Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount;
                         if (
                             (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
