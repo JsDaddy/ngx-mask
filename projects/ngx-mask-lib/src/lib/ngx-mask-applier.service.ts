@@ -306,7 +306,15 @@ export class NgxMaskApplierService {
                         }
                     }
                     if (maskExpression[cursor] === 'h') {
-                        if (result === '2' && Number(inputSymbol) > 3) {
+                        if (
+                            (result === '2' && Number(inputSymbol) > 3) ||
+                            ((result.slice(cursor - 2, cursor) === '2' ||
+                                result.slice(cursor - 3, cursor) === '2' ||
+                                result.slice(cursor - 4, cursor) === '2' ||
+                                result.slice(cursor - 1, cursor) === '2') &&
+                                Number(inputSymbol) > 3 &&
+                                cursor > 10)
+                        ) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
                             cursor += 1;
@@ -377,24 +385,41 @@ export class NgxMaskApplierService {
                                 inputValue[cursor + 1] === '/');
                         // day<10 && month<12 for input
                         const day1monthInput: boolean =
-                            inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            ((inputValue[cursor - 2] === '/' &&
+                            (inputValue.slice(cursor - 3, cursor - 1).includes('/') ||
+                                inputValue.slice(cursor - 3, cursor - 1).includes('-') ||
+                                inputValue.slice(cursor - 3, cursor - 1).includes('.')) &&
+                            (((inputValue[cursor - 2] === '/' ||
+                                inputValue[cursor - 2] === '-' ||
+                                inputValue[cursor - 2] === '.') &&
                                 Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
-                                inputValue[cursor] !== '/') ||
+                                (inputValue[cursor] !== '/' ||
+                                    inputValue[cursor] !== '.' ||
+                                    inputValue[cursor] !== '-')) ||
                                 inputValue[cursor] === '/' ||
+                                inputValue[cursor] === '.' ||
                                 inputValue[cursor] === '-' ||
-                                (inputValue[cursor - 3] === '/' &&
+                                ((inputValue[cursor - 3] === '/' ||
+                                    inputValue[cursor - 3] === '-' ||
+                                    inputValue[cursor - 3] === '.') &&
                                     Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
-                                    inputValue[cursor - 1] !== '/') ||
+                                    (inputValue[cursor - 1] !== '/' ||
+                                        inputValue[cursor - 1] !== '-' ||
+                                        inputValue[cursor - 1] !== '.')) ||
                                 inputValue[cursor - 1] === '/' ||
+                                inputValue[cursor - 1] === '.' ||
                                 inputValue[cursor - 1] === '-');
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
-                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            (inputValue[cursor - 1] === '/' || inputValue[cursor - 1] === '-') &&
+                            (!inputValue.slice(cursor - 3, cursor - 1).includes('/') ||
+                                !inputValue.slice(cursor - 3, cursor - 1).includes('-') ||
+                                !inputValue.slice(cursor - 3, cursor - 1).includes('.')) &&
+                            (inputValue[cursor - 1] === '/' ||
+                                inputValue[cursor - 1] === '-' ||
+                                inputValue[cursor - 1] === '.') &&
                             (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
                                 inputValue[cursor + 1] === '/' ||
+                                inputValue[cursor + 1] === '.' ||
                                 inputValue[cursor + 1] === '-');
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
