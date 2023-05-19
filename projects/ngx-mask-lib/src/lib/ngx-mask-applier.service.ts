@@ -383,7 +383,6 @@ export class NgxMaskApplierService {
                             (inputValue.slice(cursor - 3, cursor - 1).includes('/') ||
                                 inputValue.slice(cursor - 3, cursor - 1).includes('-') ||
                                 inputValue.slice(cursor - 3, cursor - 1).includes('.')) &&
-                            // this.specialCharacters.includes(specialCharacter) &&
                             ((this.specialCharacters.includes(inputValue[cursor - 2] as string) &&
                                 Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
                                 !this.specialCharacters.includes(inputValue[cursor] as string)) ||
