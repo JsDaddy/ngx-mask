@@ -1,25 +1,25 @@
-import {
-    ControlValueAccessor,
-    NG_VALIDATORS,
-    NG_VALUE_ACCESSOR,
-    ValidationErrors,
-    Validator,
-    FormControl,
-} from '@angular/forms';
+import { DOCUMENT } from '@angular/common';
 import {
     Directive,
     EventEmitter,
     HostListener,
-    inject,
     Input,
     OnChanges,
     Output,
     SimpleChanges,
+    inject,
 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import {
+    ControlValueAccessor,
+    FormControl,
+    NG_VALIDATORS,
+    NG_VALUE_ACCESSOR,
+    ValidationErrors,
+    Validator,
+} from '@angular/forms';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { NGX_MASK_CONFIG, IConfig, timeMasks, withoutValidation } from './ngx-mask.config';
+import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 
 @Directive({
@@ -97,6 +97,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private _maskExpressionArray: string[] = [];
 
     private _justPasted = false;
+
+    /**For IME composition event */
+    private _isComposing = false;
 
     private readonly document = inject(DOCUMENT);
 
@@ -322,6 +325,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @HostListener('input', ['$event'])
     public onInput(e: CustomKeyboardEvent): void {
+        // If IME is composing text, we wait for the composed text.
+        if (this._isComposing) return;
+
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
 
@@ -335,6 +341,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             el.selectionStart === 1
                 ? (el.selectionStart as number) + this._maskService.prefix.length
                 : (el.selectionStart as number);
+
         let caretShift = 0;
         let backspaceShift = false;
         this._maskService.applyValueChanges(
@@ -362,6 +369,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         this._position =
             this._position === 1 && this._inputValue.length === 1 ? null : this._position;
+
         let positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
@@ -373,6 +381,20 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         el.setSelectionRange(positionToApply, positionToApply);
         this._position = null;
+    }
+
+    // IME starts
+    @HostListener('compositionstart', ['$event'])
+    public onCompositionStart(): void {
+        this._isComposing = true;
+    }
+
+    // IME completes
+    @HostListener('compositionend', ['$event'])
+    public onCompositionEnd(e: CustomKeyboardEvent): void {
+        this._isComposing = false;
+        this._justPasted = true;
+        this.onInput(e);
     }
 
     @HostListener('blur')
@@ -452,20 +474,28 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (!this._maskValue) {
             return;
         }
+
+        if (this._isComposing) {
+            // User finalize their choice from IME composition, so trigger onInput() for the composed text.
+            if (e.key === 'Enter') this.onCompositionEnd(e);
+            return;
+        }
+
         this._code = e.code ? e.code : e.key;
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
 
         this._setMask();
 
-        if (e.keyCode === 38) {
+        if (e.key === 'ArrowUp') {
             e.preventDefault();
         }
-        if (e.keyCode === 37 || e.keyCode === 8 || e.keyCode === 46) {
-            if (e.keyCode === 8 && el.value.length === 0) {
+
+        if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'Delete') {
+            if (e.key === 'Backspace' && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;
             }
-            if (e.keyCode === 8 && (el.selectionStart as number) !== 0) {
+            if (e.key === 'Backspace' && (el.selectionStart as number) !== 0) {
                 // If specialChars is false, (shouldn't ever happen) then set to the defaults
                 this.specialCharacters = this.specialCharacters?.length
                     ? this.specialCharacters
@@ -505,7 +535,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             const cursorStart: number | null = el.selectionStart;
             if (
-                e.keyCode === 8 &&
+                e.key === 'Backspace' &&
                 !el.readOnly &&
                 cursorStart === 0 &&
                 el.selectionEnd === el.value.length &&
@@ -529,8 +559,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._inputValue.length
             );
         } else if (
-            (e.keyCode === 65 && e.ctrlKey) ||
-            (e.keyCode === 65 && e.metaKey) // Cmd + A (Mac)
+            (e.code === 'KeyA' && e.ctrlKey) ||
+            (e.code === 'KeyA' && e.metaKey) // Cmd + A (Mac)
         ) {
             el.setSelectionRange(0, this._getActualInputLength());
             e.preventDefault();
@@ -554,12 +584,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (typeof inputValue === 'number' || this._maskValue.startsWith('separator')) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this._maskService.numberToString(inputValue);
-            if (!Array.isArray(this.decimalMarker)) {
+            if (!Array.isArray(this._maskService.decimalMarker)) {
                 const localeDecimalMarker = this._currentLocaleDecimalMarker();
                 // eslint-disable-next-line no-param-reassign
                 inputValue =
-                    this.decimalMarker !== localeDecimalMarker
-                        ? inputValue.replace(localeDecimalMarker, this.decimalMarker)
+                    this._maskService.decimalMarker !== localeDecimalMarker
+                        ? inputValue.replace(localeDecimalMarker, this._maskService.decimalMarker)
                         : inputValue;
             }
             this._maskService.isNumberValue = true;

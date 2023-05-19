@@ -1,13 +1,18 @@
 //TODO(inepipenko): need revision fof Cypress
 /* eslint-disable */
-declare namespace Cypress {
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    interface Chainable {
-        setSelectionRange(
-            start: number,
-            end: number,
-            options?: Partial<Loggable & Timeoutable>
-        ): Chainable<JQuery<HTMLInputElement>>;
+import 'projects/ngx-mask-lib/cypress/support/commands';
+import Chainable = Cypress.Chainable;
+
+declare global {
+    namespace Cypress {
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        interface Chainable {
+            setSelectionRange(
+                start: number,
+                end: number,
+                options?: Partial<Loggable & Timeoutable>
+            ): Chainable;
+        }
     }
 }
 

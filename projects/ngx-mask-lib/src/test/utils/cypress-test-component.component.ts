@@ -13,7 +13,7 @@ import { FormControl } from '@angular/forms';
     `,
 })
 export class CypressTestMaskComponent {
-    @Input() public mask!: string | null;
+    @Input() public mask = '';
 
     @Input() public hiddenInput = false;
 

@@ -360,6 +360,7 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 6;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -381,6 +382,7 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 6;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -403,6 +405,7 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 8;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -424,6 +427,7 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 8;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });
@@ -446,6 +450,7 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 2;
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
+            key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
         });

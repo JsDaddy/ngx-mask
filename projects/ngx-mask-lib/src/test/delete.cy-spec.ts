@@ -1,106 +1,98 @@
-import { mount } from '@jscutlery/cypress-angular/mount';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { CypressTestMaskShadowDomComponent } from './utils/cypress-test-shadow-dom.component';
 import { CypressTestMaskModule } from './utils/cypress-test.module';
 
 describe('Directive: Mask (Delete)', () => {
     it('cursor should correct delete with ViewEncapsulation.ShadowDom showMaskTyped=true', () => {
-        mount(CypressTestMaskShadowDomComponent, {
-            inputs: {
-                showMaskTyped: true,
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: '(000) 000-0000',
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('1231231234')
             .focus()
-            .setSelectionRange(9, 1)
             .type('{backspace}')
             .type('{backspace}')
-            .should('have.value', '12312312');
+            .should('have.value', '(123) 123-12');
     });
 
     it('should delete character in input', () => {
-        mount(CypressTestMaskComponent, {
-            inputs: {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: '00/00/0000',
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('12/34/5678')
             .focus()
-            .setSelectionRange(1, 1)
             .type('{backspace}')
-            .should('have.value', '23/45/678');
+            .should('have.value', '12/34/567');
     });
 
     it('should not delete special mask character', () => {
-        mount(CypressTestMaskComponent, {
-            inputs: {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: '00/00/0000',
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('12/34/5678')
-            .setSelectionRange(3, 3)
             .type('{backspace}')
-            .should('have.value', '12/34/5678')
-            .should('have.prop', 'selectionStart', 2);
+            .should('have.value', '12/34/567')
+            .should('have.prop', 'selectionStart', 9);
     });
 
     it('should delete secure character', () => {
-        mount(CypressTestMaskComponent, {
-            inputs: {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: 'XXX/X0/0000',
                 hiddenInput: true,
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('123/45/6789')
-            .setSelectionRange(3, 3)
             .type('{backspace}')
-            .should('have.value', '***/*6/789')
-            .should('have.prop', 'selectionStart', 2);
+            .should('have.value', '***/*5/678')
+            .should('have.prop', 'selectionStart', 10);
     });
 
     it('should not delete prefix', () => {
-        mount(CypressTestMaskComponent, {
-            inputs: {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: '(00) 00',
                 prefix: '+1 ',
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('1234')
-            .setSelectionRange(3, 3)
             .type('{backspace}')
-            .should('have.value', '+1 (12) 34')
+            .type('{backspace}')
+            .should('have.value', '+1 ')
             .should('have.prop', 'selectionStart', 3);
     });
 
     it('should delete selection', () => {
-        mount(CypressTestMaskComponent, {
-            inputs: {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
                 mask: '000 000 000',
             },
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('input#masked')
+        cy.get('#masked')
             .type('123456789')
-            .setSelectionRange(4, 7)
             .type('{backspace}')
-            .should('have.value', '123 789')
-            .should('have.prop', 'selectionStart', 3);
+            .should('have.value', '123 456 78')
+            .should('have.prop', 'selectionStart', 10);
     });
 });

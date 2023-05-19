@@ -116,7 +116,6 @@ export class NgxMaskApplierService {
             }
         }
         if (maskExpression.startsWith('percent')) {
-            //ogranich posle tochki
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
                 // eslint-disable-next-line no-useless-escape
@@ -295,6 +294,8 @@ export class NgxMaskApplierService {
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '')) {
                     if (maskExpression[cursor] === 'H') {
                         if (Number(inputSymbol) > 2) {
+                            // eslint-disable-next-line no-param-reassign
+                            position = position + 1;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -306,24 +307,17 @@ export class NgxMaskApplierService {
                     }
                     if (maskExpression[cursor] === 'h') {
                         if (result === '2' && Number(inputSymbol) > 3) {
+                            // eslint-disable-next-line no-param-reassign
+                            position = position + 1;
                             cursor += 1;
                             i--;
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'm') {
+                    if (maskExpression[cursor] === 'm' || maskExpression[cursor] === 's') {
                         if (Number(inputSymbol) > 5) {
-                            cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
-                            i--;
-                            if (this.leadZeroDateTime) {
-                                result += '0';
-                            }
-                            continue;
-                        }
-                    }
-                    if (maskExpression[cursor] === 's') {
-                        if (Number(inputSymbol) > 5) {
+                            // eslint-disable-next-line no-param-reassign
+                            position = position + 1;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -362,6 +356,8 @@ export class NgxMaskApplierService {
                                   inputValue[cursor + 1] === '-' ||
                                   inputValue[cursor + 1] === '.')
                         ) {
+                            // eslint-disable-next-line no-param-reassign
+                            position = position + 1;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -428,6 +424,8 @@ export class NgxMaskApplierService {
                             day2monthInput ||
                             day2monthInputDot
                         ) {
+                            // eslint-disable-next-line no-param-reassign
+                            position = position + 1;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
