@@ -379,10 +379,9 @@ export class NgxMaskApplierService {
                                 Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
                                 this.specialCharacters.includes(inputValue[cursor + 1] as string));
                         // day<10 && month<12 for input
+                        const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                         const day1monthInput: boolean =
-                            (inputValue.slice(cursor - 3, cursor - 1).includes('/') ||
-                                inputValue.slice(cursor - 3, cursor - 1).includes('-') ||
-                                inputValue.slice(cursor - 3, cursor - 1).includes('.')) &&
+                            inputValue.slice(cursor - 3, cursor - 1).includes(specialChart) &&
                             ((this.specialCharacters.includes(inputValue[cursor - 2] as string) &&
                                 Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
                                 !this.specialCharacters.includes(inputValue[cursor] as string)) ||
@@ -437,6 +436,13 @@ export class NgxMaskApplierService {
                             day2monthInput ||
                             day2monthInputDot
                         ) {
+                            console.log(
+                                day1monthInput,
+                                day2monthPaste,
+                                day1monthPaste,
+                                day2monthInput,
+                                day2monthInputDot
+                            );
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
                             cursor += 1;
