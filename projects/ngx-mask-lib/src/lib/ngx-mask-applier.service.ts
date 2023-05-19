@@ -390,7 +390,12 @@ export class NgxMaskApplierService {
                             cursor === 0 &&
                             (Number(inputSymbol) > 2 ||
                                 Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
-                                this.specialCharacters.includes(inputValue[cursor + 1] as string));
+                                inputValue[cursor + 1] === '/');
+                        // const withoutDays: boolean =
+                        //     cursor === 0 &&
+                        //     (Number(inputSymbol) > 2 ||
+                        //         Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
+                        //         this.specialCharacters.includes(inputValue[cursor + 1] as string));
                                 // inputValue[cursor + 1] === '/');
                         console.log(this.specialCharacters.includes(inputValue[cursor - 2] as string));
 
