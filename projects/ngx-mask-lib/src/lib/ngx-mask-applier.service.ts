@@ -436,13 +436,6 @@ export class NgxMaskApplierService {
                             day2monthInput ||
                             day2monthInputDot
                         ) {
-                            console.log(
-                                day1monthInput,
-                                day2monthPaste,
-                                day1monthPaste,
-                                day2monthInput,
-                                day2monthInputDot
-                            );
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
                             cursor += 1;
