@@ -204,6 +204,20 @@ describe('Directive: Mask (Time)', () => {
         equal('20232023', '20-2-3202', fixture);
     });
 
+    it('Date (d0/M0:0000', () => {
+        component.mask = 'd0/M0:0000';
+        equal('999999', '9/9:9999', fixture);
+        equal('888888', '8/8:8888', fixture);
+        equal('777777', '7/7:7777', fixture);
+        equal('666666', '6/6:6666', fixture);
+        equal('555555', '5/5:5555', fixture);
+        equal('444444', '4/4:4444', fixture);
+        equal('333333', '3/3:3333', fixture);
+        equal('2222222', '22/2:2222', fixture);
+        equal('11111111', '11/11:1111', fixture);
+        equal('20232023', '20/2:3202', fixture);
+    });
+
     it('Date (m0/d0/0000', () => {
         component.mask = 'm0/d0/0000';
         equal('999999', '9/9/9999', fixture);
@@ -244,6 +258,58 @@ describe('Directive: Mask (Time)', () => {
         equal('11111111', '11/11/1111', fixture);
     });
 
+    it('Date (M0+d0+0000', () => {
+        component.mask = 'M0+d0+0000';
+        equal('999999', '9+9+9999', fixture);
+        equal('888888', '8+8+8888', fixture);
+        equal('777777', '7+7+7777', fixture);
+        equal('666666', '6+6+6666', fixture);
+        equal('555555', '5+5+5555', fixture);
+        equal('444444', '4+4+4444', fixture);
+        equal('333333', '3+3+3333', fixture);
+        equal('2222222', '2+22+2222', fixture);
+        equal('11111111', '11+11+1111', fixture);
+    });
+
+    it('Date (M0@d0@0000', () => {
+        component.mask = 'M0@d0@0000';
+        equal('999999', '9@9@9999', fixture);
+        equal('888888', '8@8@8888', fixture);
+        equal('777777', '7@7@7777', fixture);
+        equal('666666', '6@6@6666', fixture);
+        equal('555555', '5@5@5555', fixture);
+        equal('444444', '4@4@4444', fixture);
+        equal('333333', '3@3@3333', fixture);
+        equal('2222222', '2@22@2222', fixture);
+        equal('11111111', '11@11@1111', fixture);
+    });
+
+    it('Date (M0@d0/0000', () => {
+        component.mask = 'M0@d0/0000';
+        equal('999999', '9@9/9999', fixture);
+        equal('888888', '8@8/8888', fixture);
+        equal('777777', '7@7/7777', fixture);
+        equal('666666', '6@6/6666', fixture);
+        equal('555555', '5@5/5555', fixture);
+        equal('444444', '4@4/4444', fixture);
+        equal('333333', '3@3/3333', fixture);
+        equal('2222222', '2@22/2222', fixture);
+        equal('11111111', '11@11/1111', fixture);
+    });
+
+    it('Date (M0:d0/0000', () => {
+        component.mask = 'M0:d0/0000';
+        equal('999999', '9:9/9999', fixture);
+        equal('888888', '8:8/8888', fixture);
+        equal('777777', '7:7/7777', fixture);
+        equal('666666', '6:6/6666', fixture);
+        equal('555555', '5:5/5555', fixture);
+        equal('444444', '4:4/4444', fixture);
+        equal('333333', '3:3/3333', fixture);
+        equal('2222222', '2:22/2222', fixture);
+        equal('11111111', '11:11/1111', fixture);
+    });
+
     it('Date (M0-d0-0000', () => {
         component.mask = 'M0-d0-0000';
         equal('999999', '9-9-9999', fixture);
@@ -268,5 +334,27 @@ describe('Directive: Mask (Time)', () => {
         equal('333333', '3.3.3333', fixture);
         equal('2222222', '2.22.2222', fixture);
         equal('11111111', '11.11.1111', fixture);
+    });
+
+    it('Date (d0.M0.0000 Hh:m0:s0', () => {
+        component.mask = 'd0.M0.0000 Hh:m0:s0';
+        equal('992023999', '9.9.2023 9:9:9', fixture);
+        equal('882023292030', '8.8.2023 2:9:20', fixture);
+        equal('11111111 2420', '11.11.1111 2:42:0', fixture);
+        equal('31122023 235049', '31.12.2023 23:50:49', fixture);
+        equal('11119999 242020', '11.11.9999 2:42:02', fixture);
+        equal('1199999 232020', '11.9.9999 23:20:20', fixture);
+    });
+
+    it('Date (d0.M0.0000 Hh:m0 - Hh:m0', () => {
+        component.mask = 'd0.M0.0000 Hh:m0 - Hh:m0';
+        equal('11111111 1111 1111', '11.11.1111 11:11 - 11:11', fixture);
+        equal('31122023 2359 1211', '31.12.2023 23:59 - 12:11', fixture);
+        equal('1223333 29 299', '12.2.3333 2:9 - 2:9', fixture);
+        equal('992023999', '9.9.2023 9:9 - 9', fixture);
+        equal('992023999', '9.9.2023 9:9 - 9', fixture);
+        equal('882023292030', '8.8.2023 2:9 - 20:30', fixture);
+        equal('11111111 2422920', '11.11.1111 2:42 - 2:9', fixture);
+        equal('11119999 242022420', '11.11.9999 2:42 - 02:24', fixture);
     });
 });

@@ -306,7 +306,15 @@ export class NgxMaskApplierService {
                         }
                     }
                     if (maskExpression[cursor] === 'h') {
-                        if (result === '2' && Number(inputSymbol) > 3) {
+                        if (
+                            (result === '2' && Number(inputSymbol) > 3) ||
+                            ((result.slice(cursor - 2, cursor) === '2' ||
+                                result.slice(cursor - 3, cursor) === '2' ||
+                                result.slice(cursor - 4, cursor) === '2' ||
+                                result.slice(cursor - 1, cursor) === '2') &&
+                                Number(inputSymbol) > 3 &&
+                                cursor > 10)
+                        ) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
                             cursor += 1;
@@ -328,33 +336,37 @@ export class NgxMaskApplierService {
                         }
                     }
                     const daysCount = 31;
+                    const inputValueCursor = inputValue[cursor] as string;
+                    const inputValueCursorPlusOne = inputValue[cursor + 1] as string;
+                    const inputValueCursorPlusTwo = inputValue[cursor + 2] as string;
+                    const inputValueCursorMinusOne = inputValue[cursor - 1] as string;
+                    const inputValueCursorMinusTwo = inputValue[cursor - 2] as string;
+                    const inputValueCursorMinusThree = inputValue[cursor - 3] as string;
+                    const inputValueSliceMinusThreeMinusOne = inputValue.slice(
+                        cursor - 3,
+                        cursor - 1
+                    );
+                    const inputValueSliceMinusOnePlusOne = inputValue.slice(cursor - 1, cursor + 1);
+                    const inputValueSliceCursorPlusTwo = inputValue.slice(cursor, cursor + 2);
+                    const inputValueSliceMinusTwoCursor = inputValue.slice(cursor - 2, cursor);
                     if (maskExpression[cursor] === 'd') {
                         const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
                         const startWithMonthInput: boolean =
                             maskExpression.slice(0, 2) === 'M0' &&
-                            (inputValue[cursor - 2] === '/' ||
-                                inputValue[cursor - 2] === '.' ||
-                                inputValue[cursor - 2] === '-');
+                            this.specialCharacters.includes(inputValueCursorMinusTwo);
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             (!maskStartWithMonth &&
-                                (Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
-                                    Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
-                                    inputValue[cursor + 1] === '/' ||
-                                    inputValue[cursor + 1] === '-')) ||
+                                (Number(inputValueSliceCursorPlusTwo) > daysCount ||
+                                    Number(inputValueSliceMinusOnePlusOne) > daysCount ||
+                                    this.specialCharacters.includes(inputValueCursorPlusOne))) ||
                             (startWithMonthInput
-                                ? Number(inputValue.slice(cursor - 1, cursor + 1)) > daysCount ||
-                                  (inputValue[cursor] !== '/' &&
-                                      (inputValue[cursor + 2] === '.' ||
-                                          inputValue[cursor + 2] === '/' ||
-                                          inputValue[cursor + 2] === '-')) ||
-                                  inputValue[cursor] === '.' ||
-                                  inputValue[cursor] === '/' ||
-                                  inputValue[cursor] === '-'
-                                : Number(inputValue.slice(cursor, cursor + 2)) > daysCount ||
-                                  inputValue[cursor + 1] === '/' ||
-                                  inputValue[cursor + 1] === '-' ||
-                                  inputValue[cursor + 1] === '.')
+                                ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
+                                  (!this.specialCharacters.includes(inputValueCursor) &&
+                                      this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
+                                  this.specialCharacters.includes(inputValueCursor)
+                                : Number(inputValueSliceCursorPlusTwo) > daysCount ||
+                                  this.specialCharacters.includes(inputValueCursorPlusOne))
                         ) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
@@ -373,48 +385,52 @@ export class NgxMaskApplierService {
                         const withoutDays: boolean =
                             cursor === 0 &&
                             (Number(inputSymbol) > 2 ||
-                                Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
-                                inputValue[cursor + 1] === '/');
+                                Number(inputValueSliceCursorPlusTwo) > monthsCount ||
+                                this.specialCharacters.includes(inputValueCursorPlusOne));
                         // day<10 && month<12 for input
+                        const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                         const day1monthInput: boolean =
-                            inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            ((inputValue[cursor - 2] === '/' &&
-                                Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount &&
-                                inputValue[cursor] !== '/') ||
-                                inputValue[cursor] === '/' ||
-                                inputValue[cursor] === '-' ||
-                                (inputValue[cursor - 3] === '/' &&
-                                    Number(inputValue.slice(cursor - 2, cursor)) > monthsCount &&
-                                    inputValue[cursor - 1] !== '/') ||
-                                inputValue[cursor - 1] === '/' ||
-                                inputValue[cursor - 1] === '-');
+                            inputValueSliceMinusThreeMinusOne.includes(specialChart) &&
+                            ((this.specialCharacters.includes(inputValueCursorMinusTwo) &&
+                                Number(inputValueSliceMinusOnePlusOne) > monthsCount &&
+                                !this.specialCharacters.includes(inputValueCursor)) ||
+                                this.specialCharacters.includes(inputValueCursor) ||
+                                (this.specialCharacters.includes(inputValueCursorMinusThree) &&
+                                    Number(inputValueSliceMinusTwoCursor) > monthsCount &&
+                                    !this.specialCharacters.includes(inputValueCursorMinusOne)) ||
+                                this.specialCharacters.includes(inputValueCursorMinusOne));
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
-                            Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
-                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            (inputValue[cursor - 1] === '/' || inputValue[cursor - 1] === '-') &&
-                            (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount ||
-                                inputValue[cursor + 1] === '/' ||
-                                inputValue[cursor + 1] === '-');
+                            Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
+                            !this.specialCharacters.includes(
+                                inputValueSliceMinusThreeMinusOne as string
+                            ) &&
+                            this.specialCharacters.includes(inputValueCursorMinusOne) &&
+                            (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
+                                this.specialCharacters.includes(inputValueCursorPlusOne));
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
-                            (Number(inputValue.slice(cursor, cursor + 2)) > monthsCount &&
-                                cursor === 5) ||
-                            inputValue[cursor + 1] === '.' ||
-                            inputValue[cursor + 1] === '-' ||
-                            inputValue[cursor + 1] === '/';
-                        // day<10 && month<12 for paste whole data
+                            (Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5) ||
+                            (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                cursor === 5);
+                        // // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
-                            Number(inputValue.slice(cursor - 3, cursor - 1)) > daysCount &&
-                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            !inputValue.slice(cursor - 2, cursor).includes('/') &&
-                            Number(inputValue.slice(cursor - 2, cursor)) > monthsCount;
+                            Number(inputValueSliceMinusThreeMinusOne) > daysCount &&
+                            !this.specialCharacters.includes(
+                                inputValueSliceMinusThreeMinusOne as string
+                            ) &&
+                            !this.specialCharacters.includes(
+                                inputValueSliceMinusTwoCursor as string
+                            ) &&
+                            Number(inputValueSliceMinusTwoCursor) > monthsCount;
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
-                            Number(inputValue.slice(cursor - 3, cursor - 1)) <= daysCount &&
-                            !inputValue.slice(cursor - 3, cursor - 1).includes('/') &&
-                            inputValue[cursor - 1] !== '/' &&
-                            Number(inputValue.slice(cursor - 1, cursor + 1)) > monthsCount;
+                            Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
+                            !this.specialCharacters.includes(
+                                inputValueSliceMinusThreeMinusOne as string
+                            ) &&
+                            !this.specialCharacters.includes(inputValueCursorMinusOne) &&
+                            Number(inputValueSliceMinusOnePlusOne) > monthsCount;
                         if (
                             (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
                             withoutDays ||
