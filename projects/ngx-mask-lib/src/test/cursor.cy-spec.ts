@@ -104,7 +104,7 @@ describe('Test Date Hh:m0', () => {
     it('Mask (00) 90000-0000 check cursor and value', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 90000-0000',
+                mask: '(00) 00009-0000',
             },
             imports: [CypressTestMaskModule],
         });
@@ -136,5 +136,25 @@ describe('Test Date Hh:m0', () => {
             .type('2')
             .should('have.prop', 'selectionStart', 15)
             .should('have.value', '(91) 02232-5552');
+    });
+
+    it('Mask 099.09 check cursor and value', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '099.09',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('910')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '910')
+            .type('2')
+            .should('have.value', '910.2')
+            .should('have.prop', 'selectionStart', 5)
+            .type('3')
+            .should('have.value', '910.23')
+            .should('have.prop', 'selectionStart', 6)
+            .clear();
     });
 });
