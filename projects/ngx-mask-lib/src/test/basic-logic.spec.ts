@@ -590,4 +590,39 @@ describe('Directive: Mask', () => {
         equal('123456789', '1234 567 89', fixture);
         equal('1234567890', '1234 567 890', fixture);
     });
+
+    it('Mask 099.09', () => {
+        component.mask = '099.09';
+        equal('1.23', '1.23', fixture);
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '123.4', fixture);
+        equal('12345', '123.45', fixture);
+        equal('1.2', '1.2', fixture);
+        equal('1.23', '1.23', fixture);
+        equal('12.2', '12.2', fixture);
+        equal('12.23', '12.23', fixture);
+    });
+
+    it('Mask 09/09/0099', () => {
+        component.mask = '09/09/0099';
+        equal('1123', '11/23', fixture);
+        equal('1/2', '1/2', fixture);
+        equal('12/2/2020', '12/2/2020', fixture);
+        equal('12345', '12/34/5', fixture);
+        equal('1234', '12/34', fixture);
+        equal('1/2/345', '1/2/345', fixture);
+        equal('11/2', '11/2', fixture);
+        equal('22222222', '22/22/2222', fixture);
+        equal('12/2/2222', '12/2/2222', fixture);
+        equal('1/23/2000', '1/23/2000', fixture);
+    });
+
+    it('Mask 099.00099999999999', () => {
+        component.mask = '099.00099999999999';
+        equal('1.2222222', '1.2222222', fixture);
+        equal('111111111111', '111.111111111', fixture);
+        equal('11.11111111111', '11.11111111111', fixture);
+    });
 });
