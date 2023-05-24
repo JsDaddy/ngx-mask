@@ -100,4 +100,41 @@ describe('Test Date Hh:m0', () => {
             .should('have.prop', 'selectionStart', 7)
             .should('have.value', '9:10:31');
     });
+
+    it('Mask (00) 90000-0000 check cursor and value', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(00) 90000-0000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('910')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '(91) 0')
+            .type('2')
+            .should('have.prop', 'selectionStart', 7)
+            .should('have.value', '(91) 02')
+            .type('2')
+            .should('have.prop', 'selectionStart', 8)
+            .should('have.value', '(91) 022')
+            .type('3')
+            .should('have.prop', 'selectionStart', 9)
+            .should('have.value', '(91) 0223')
+            .type('2')
+            .should('have.prop', 'selectionStart', 10)
+            .should('have.value', '(91) 02232')
+            .type('5')
+            .should('have.prop', 'selectionStart', 12)
+            .should('have.value', '(91) 02232-5')
+            .type('5')
+            .should('have.prop', 'selectionStart', 13)
+            .should('have.value', '(91) 02232-55')
+            .type('5')
+            .should('have.prop', 'selectionStart', 14)
+            .should('have.value', '(91) 02232-555')
+            .type('2')
+            .should('have.prop', 'selectionStart', 15)
+            .should('have.value', '(91) 02232-5552');
+    });
 });

@@ -461,7 +461,13 @@ export class NgxMaskApplierService {
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                     i--;
-                } else if (maskExpression[cursor] === '9' && this.showMaskTyped) {
+                } else if (
+                    maskExpression[cursor] === '9' &&
+                    maskExpression !== '099.099.099.099' &&
+                    maskExpression !== '000.000.000-00' &&
+                    maskExpression !== '00.000.000/0000-00' &&
+                    maskExpression !== '9999.00'
+                ) {
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                 } else if (
                     this.specialCharacters.indexOf(inputSymbol) > -1 &&
