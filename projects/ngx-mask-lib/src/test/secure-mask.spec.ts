@@ -146,4 +146,13 @@ describe('Directive: Mask (Secure)', () => {
         equal('54321', '***/*1', fixture);
         expect(component.form.value).toBe('54321');
     });
+
+    it('it checks secure input functionality on reset then typed', () => {
+        component.mask = 'XXX/X0/0000';
+        component.hiddenInput = true;
+        component.showMaskTyped = true;
+        equal('98765', '***/*5', fixture);
+        equal('1234', '***/*', fixture);
+        equal('', '___/__/____', fixture);
+    });
 });
