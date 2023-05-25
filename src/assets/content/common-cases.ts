@@ -5,7 +5,7 @@ export const ComDocs: IComDoc[] = [
     {
         header: 'Date',
         text: '',
-        code: `<input mask="d0/M0/0000"/>`,
+        code: `<input mask="d0/M0/0000" />`,
         id: 1,
         anchor: 'date',
     },
