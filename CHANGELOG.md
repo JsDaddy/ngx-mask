@@ -12,7 +12,6 @@
 -   Fix ([#850](https://github.com/JsDaddy/ngx-mask/issues/850))
 -   Fix ([#786](https://github.com/JsDaddy/ngx-mask/issues/786))
 
-  https://github.com/JsDaddy/ngx-mask/issues/786
 # 16.0.4(2023-05-19)
 
 ### Fix
