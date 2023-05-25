@@ -80,8 +80,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                     : null
                 : (actualResult = []);
             if (this.showMaskTyped) {
-                // eslint-disable-next-line no-param-reassign
-                inputValue = this.removeMask(inputValue);
+                if (!this.hiddenInput) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = this.removeMask(inputValue);
+                }
             }
             // eslint-enable  @typescript-eslint/no-unused-expressions
             newInputValue =
@@ -120,7 +122,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
         this.formControlResult(result);
-        if (!this.showMaskTyped) {
+        if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 return result && result.length
                     ? this.hideInput(result, this.maskExpression)
