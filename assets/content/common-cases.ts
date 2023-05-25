@@ -5,23 +5,16 @@ export const ComDocs: IComDoc[] = [
     {
         header: 'Date',
         text: '',
-        code: `<input mask="00/00/0000"/>`,
+        code: `<input mask="d0/M0/0000" />`,
         id: 1,
         anchor: 'date',
     },
     {
         header: 'Date and hour',
         text: '',
-        code: `<input mask="00/00/00 00:00:00" />`,
+        code: `<input mask="d0/M0/0000 Hh:m0:s0" />`,
         id: 2,
         anchor: 'date-and-hour',
-    },
-    {
-        header: 'Hour',
-        text: '',
-        code: `<input mask="00:00:00" />`,
-        id: 3,
-        anchor: 'hour',
     },
     {
         header: 'Valid 24 hour format',
@@ -36,13 +29,6 @@ export const ComDocs: IComDoc[] = [
         code: `<input mask="AAA 000-S0S" />`,
         id: 5,
         anchor: 'mixed',
-    },
-    {
-        header: 'Valid date and month',
-        text: '',
-        code: `<input mask="d0/M0/0000" />`,
-        id: 6,
-        anchor: 'validdate',
     },
     {
         header: 'Valid date start with years',
@@ -103,17 +89,12 @@ export const ComDocs: IComDoc[] = [
 export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Date',
-        _mask: '00/00/0000',
+        _mask: 'd0/M0/0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'Date and Hour',
-        _mask: '00/00/00 00:00:00',
-        control: { form: new UntypedFormControl(''), model: '' },
-    },
-    {
-        _placeholder: 'Hour',
-        _mask: '00:00:00',
+        _mask: 'd0/M0/0000 Hh:m0:s0',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
@@ -124,11 +105,6 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Mixed Type',
         _mask: 'AAA 000-S0S',
-        control: { form: new UntypedFormControl(''), model: '' },
-    },
-    {
-        _placeholder: 'Valid date and month',
-        _mask: 'd0/M0/0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
