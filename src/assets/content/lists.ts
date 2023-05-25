@@ -35,11 +35,6 @@ export const lists: IListItem[] = [
                 scrollTo: 'mixed',
             },
             {
-                content: 'Valid date and month',
-                id: 6,
-                scrollTo: 'validdate',
-            },
-            {
                 content: 'Valid date start with years',
                 id: 9,
                 scrollTo: 'startWithYears',
