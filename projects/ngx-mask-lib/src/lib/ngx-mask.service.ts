@@ -424,7 +424,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                     )
                 )
             );
-        } else if (this.dropSpecialCharacters) {
+        } else if (
+            this.dropSpecialCharacters ||
+            (!this.dropSpecialCharacters && this.prefix === inputValue)
+        ) {
             this.onChange(
                 this._toNumber(
                     this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
