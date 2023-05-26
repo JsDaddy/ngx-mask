@@ -474,7 +474,8 @@ export class NgxMaskApplierService {
                         maskExpression !== '000.000.000-00' &&
                         maskExpression !== '00.000.000/0000-00' &&
                         !maskExpression.match(/^9+\.0+$/) &&
-                        maskExpression[cursor] !== '9'
+                        // maskExpression[cursor] !== '9'
+                        !this.patterns[maskExpression[cursor] ?? '']?.optional
                     ) {
                         result += inputArray[cursor];
                     }

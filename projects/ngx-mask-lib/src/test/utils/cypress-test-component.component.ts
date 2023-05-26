@@ -8,8 +8,8 @@ import { FormControl } from '@angular/forms';
             id="masked"
             [formControl]="form"
             [mask]="mask"
-            [hiddenInput]="hiddenInput"
-            [prefix]="prefix" />
+            [prefix]="prefix"
+            [hiddenInput]="hiddenInput" />
     `,
 })
 export class CypressTestMaskComponent {
