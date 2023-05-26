@@ -1,0 +1,21 @@
+<div [formGroup]="form">
+    <div>
+        <input
+            [mask]="mask"
+            [prefix]="prefix"
+            [patterns]="patterns"
+            formControlName="test1"
+            [(ngModel)]="tr1" />
+        {{ tr1 }}
+        <br />
+        <input
+            [mask]="mask"
+            [prefix]="prefix"
+            [patterns]="patterns"
+            [dropSpecialCharacters]="false"
+            formControlName="test2"
+            [(ngModel)]="tr2" />
+        {{ tr2 }}
+    </div>
+    <button [disabled]="!form.valid" class="btn">Submit</button>
+</div>

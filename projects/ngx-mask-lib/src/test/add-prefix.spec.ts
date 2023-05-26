@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import {equal, typeTest} from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
@@ -65,5 +65,16 @@ describe('Directive: Mask (Add prefix)', () => {
         component.suffix = '$';
         equal('97', '97$', fixture);
         expect(component.form.value).toEqual('97$');
+    });
+
+    it('should delete prefix when value  === null', () => {
+        component.dropSpecialCharacters = false;
+        component.mask = '0000';
+        component.prefix = 'foo/';
+        equal('5432', 'foo/5432', fixture);
+        typeTest('1', fixture);
+        expect(component.form.value).toBe('foo/1');
+        component.form.reset();
+        expect(component.form.value).toBe(null);
     });
 });
