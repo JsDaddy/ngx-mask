@@ -16,7 +16,6 @@ import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
 import { LinkPath } from '@libraries/link/link.path';
-import {TestComponent} from "./test/test.component";
 
 @Component({
     selector: 'jsdaddy-open-source-root',
@@ -29,7 +28,6 @@ import {TestComponent} from "./test/test.component";
         SubHeaderComponent,
         AccordionComponent,
         FooterComponent,
-        TestComponent,
     ],
 })
 export class AppComponent {
