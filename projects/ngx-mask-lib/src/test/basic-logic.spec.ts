@@ -625,4 +625,67 @@ describe('Directive: Mask', () => {
         equal('111111111111', '111.111111111', fixture);
         equal('11.11111111111', '11.11111111111', fixture);
     });
+
+    it('dropSpecialCharacter should return prefix or delete it value', () => {
+        component.mask = '0000';
+        component.prefix = 'foo/';
+        component.dropSpecialCharacters = false;
+        equal('2574', 'foo/2574', fixture);
+        expect(component.form.value).toBe('foo/2574');
+
+        equal('2', 'foo/2', fixture);
+        expect(component.form.value).toBe('foo/2');
+
+        equal('25', 'foo/25', fixture);
+        expect(component.form.value).toBe('foo/25');
+
+        equal('257', 'foo/257', fixture);
+        expect(component.form.value).toBe('foo/257');
+
+        equal('', 'foo/', fixture);
+        expect(component.form.value).toBe('');
+    });
+
+    it('Should be not valid if length of input doesnt match mask', () => {
+        component.mask = '000 000-00-00';
+        component.prefix = '+7 ';
+        equal('2', '+7 2', fixture);
+        expect(component.form.value).toBe('2');
+        expect(component.form.valid).toBeFalse();
+        equal('23', '+7 23', fixture);
+        expect(component.form.value).toBe('23');
+        expect(component.form.valid).toBeFalse();
+
+        equal('234', '+7 234', fixture);
+        expect(component.form.value).toBe('234');
+        expect(component.form.valid).toBeFalse();
+
+        equal('2234', '+7 223 4', fixture);
+        expect(component.form.value).toBe('2234');
+        expect(component.form.valid).toBeFalse();
+
+        equal('22345', '+7 223 45', fixture);
+        expect(component.form.value).toBe('22345');
+        expect(component.form.valid).toBeFalse();
+
+        equal('223456', '+7 223 456', fixture);
+        expect(component.form.value).toBe('223456');
+        expect(component.form.valid).toBeFalse();
+
+        equal('2234562', '+7 223 456-2', fixture);
+        expect(component.form.value).toBe('2234562');
+        expect(component.form.valid).toBeFalse();
+
+        equal('22345622', '+7 223 456-22', fixture);
+        expect(component.form.value).toBe('22345622');
+        expect(component.form.valid).toBeFalse();
+
+        equal('223456223', '+7 223 456-22-3', fixture);
+        expect(component.form.value).toBe('223456223');
+        expect(component.form.valid).toBeFalse();
+
+        equal('2234562233', '+7 223 456-22-33', fixture);
+        expect(component.form.value).toBe('2234562233');
+        expect(component.form.valid).toBeTruthy();
+    });
 });
