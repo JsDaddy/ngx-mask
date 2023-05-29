@@ -1,0 +1,9 @@
+.btn:disabled {
+    background: grey;
+    color: black;
+}
+
+.btn:valid {
+    background: #191919;
+    color: white;
+}
