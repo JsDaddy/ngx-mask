@@ -294,6 +294,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     ? this._maskValue.length -
                       this._maskService.checkSpecialCharAmount(this._maskValue) -
                       counterOfOpt
+                    : this.prefix
+                    ? this._maskValue.length + this.prefix.length - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
                 if (value.toString().length < length) {
                     return this._createValidationError(value);
