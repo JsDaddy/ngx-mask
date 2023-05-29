@@ -632,15 +632,19 @@ describe('Directive: Mask', () => {
         component.dropSpecialCharacters = false;
         equal('2574', 'foo/2574', fixture);
         expect(component.form.value).toBe('foo/2574');
+        expect(component.form.valid).toBeTruthy();
 
         equal('2', 'foo/2', fixture);
         expect(component.form.value).toBe('foo/2');
+        expect(component.form.valid).toBeFalse();
 
         equal('25', 'foo/25', fixture);
         expect(component.form.value).toBe('foo/25');
+        expect(component.form.valid).toBeFalse();
 
         equal('257', 'foo/257', fixture);
         expect(component.form.value).toBe('foo/257');
+        expect(component.form.valid).toBeFalse();
 
         equal('', 'foo/', fixture);
         expect(component.form.value).toBe('');
