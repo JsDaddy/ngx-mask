@@ -21,9 +21,9 @@ export class NgxMaskService extends NgxMaskApplierService {
     public writingValue = false;
 
     public maskChanged = false;
+    public _maskExpressionArray: string[] = [];
 
     public triggerOnMaskChange = false;
-
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
@@ -68,17 +68,22 @@ export class NgxMaskService extends NgxMaskApplierService {
             let actualResult: string[] = this.actualValue.split('');
             // eslint-disable  @typescript-eslint/no-unused-expressions
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            inputValue !== '' && actualResult.length
-                ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
-                    ? inputValue.length > actualResult.length
-                        ? actualResult.splice(this.selStart, 0, getSymbol)
-                        : inputValue.length < actualResult.length
-                        ? actualResult.length - inputValue.length === 1
-                            ? actualResult.splice(this.selStart - 1, 1)
-                            : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+            if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
+                this.selStart = Number(this.selStart);
+                this.selEnd = Number(this.selEnd);
+            } else {
+                inputValue !== '' && actualResult.length
+                    ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
+                        ? inputValue.length > actualResult.length
+                            ? actualResult.splice(this.selStart, 0, getSymbol)
+                            : inputValue.length < actualResult.length
+                            ? actualResult.length - inputValue.length === 1
+                                ? actualResult.splice(this.selStart - 1, 1)
+                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                            : null
                         : null
-                    : null
-                : (actualResult = []);
+                    : (actualResult = []);
+            }
             if (this.showMaskTyped) {
                 if (!this.hiddenInput) {
                     // eslint-disable-next-line no-param-reassign
@@ -107,6 +112,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
+
         this.actualValue = this.getActualValue(result);
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
@@ -122,6 +128,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
         this.formControlResult(result);
+
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 return result && result.length

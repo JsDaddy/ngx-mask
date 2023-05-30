@@ -218,7 +218,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
         }
-
         this._applyMask();
     }
 
@@ -334,7 +333,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._inputValue = el.value;
 
         this._setMask();
-
         if (!this._maskValue) {
             this.onChange(el.value);
             return;
@@ -657,7 +655,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    private _repeatPatternSymbols(maskExp: string): string {
+    public _repeatPatternSymbols(maskExp: string): string {
         return (
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
@@ -731,9 +729,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (this._inputValue && test) {
-                    this._maskValue = mask;
-                    this.maskExpression = mask;
-                    this._maskService.maskExpression = mask;
+                    if (mask.includes('{')) {
+                        this._maskValue = this._repeatPatternSymbols(mask);
+                        this.maskExpression = this._repeatPatternSymbols(mask);
+                        this._maskService.maskExpression = this._repeatPatternSymbols(mask);
+                    } else {
+                        this._maskValue = mask;
+                        this.maskExpression = mask;
+                        this._maskService.maskExpression = mask;
+                    }
                     return test;
                 } else {
                     const expression =
@@ -741,7 +745,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskValue =
                         this.maskExpression =
                         this._maskService.maskExpression =
-                            expression;
+                            expression.includes('{')
+                                ? this._repeatPatternSymbols(expression)
+                                : expression;
                 }
             });
         }

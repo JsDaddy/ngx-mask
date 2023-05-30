@@ -1,0 +1,18 @@
+<!--<input-->
+<!--    type="text"-->
+<!--    [(ngModel)]="ssnValue"-->
+<!--    [hiddenInput]="true"-->
+<!--    [patterns]="SSN_PATTERNS"-->
+<!--    [mask]="SSN_MASK" />-->
+
+<!--<span class="value">{{-->
+<!--    ssnValue | mask : SSN_MASK : { hiddenInput: true, patterns: SSN_PATTERNS }-->
+<!--}}</span>-->
+
+<input mask="XX0000||XXX0000||XXXXXX0000||XXXXXXX0000" />
+
+
+
+<span class="value">{{
+    ssnValue
+    }}</span>

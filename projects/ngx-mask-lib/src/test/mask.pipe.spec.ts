@@ -109,5 +109,131 @@ describe('Pipe: Mask', () => {
         });
         expect(value).toEqual('+380 (123)-12-31');
     });
+    it('should work with dynamicMask 0,00||00,00||000,00||0000,00||00.000,00', () => {
+        const value: string | number = maskPipe.transform(
+            '123',
+            '0,00||00,00||000,00||0000,00||00.000,00'
+        );
+        const value1: string | number = maskPipe.transform(
+            '1232',
+            '0,00||00,00||000,00||0000,00||00.000,00'
+        );
+        const value2: string | number = maskPipe.transform(
+            '12322',
+            '0,00||00,00||000,00||0000,00||00.000,00'
+        );
+        const value3: string | number = maskPipe.transform(
+            '123222',
+            '0,00||00,00||000,00||0000,00||00.000,00'
+        );
+        const value4: string | number = maskPipe.transform(
+            '1232222',
+            '0,00||00,00||000,00||0000,00||00.000,00'
+        );
+        expect(value).toEqual('1,23');
+        expect(value1).toEqual('12,32');
+        expect(value2).toEqual('123,22');
+        expect(value3).toEqual('1232,22');
+        expect(value4).toEqual('12.322,22');
+    });
+
+    it('should work with dynamicMask 0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000', () => {
+        const value: string | number = maskPipe.transform(
+            '1234 1234 1234 1234',
+            '0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000'
+        );
+        const value1: string | number = maskPipe.transform(
+            '1234 1234 1234 1234 12',
+            '0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000'
+        );
+        const value2: string | number = maskPipe.transform(
+            '1234 1234 1234 1234 123',
+            '0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000'
+        );
+
+        expect(value).toEqual('1234 1234 1234 1234');
+        expect(value1).toEqual('1234 1234 1234 1234 12');
+        expect(value2).toEqual('1234 1234 1234 1234 123');
+    });
+
+    it('should work with dynamicMask (00) 0000-0000||(00) 00000-0000', () => {
+        const value: string | number = maskPipe.transform(
+            '1234123412',
+            '(00) 0000-0000||(00) 00000-0000'
+        );
+        const value1: string | number = maskPipe.transform(
+            '12341234123',
+            '(00) 0000-0000||(00) 00000-0000'
+        );
+
+        expect(value).toEqual('(12) 3412-3412');
+        expect(value1).toEqual('(12) 34123-4123');
+    });
+
+    it('should work with custom pattern and hideInput', () => {
+        const SSN_PATTERNS: IConfig['patterns'] = {
+            0: { pattern: new RegExp('\\d') },
+            A: { pattern: new RegExp('\\d'), symbol: '●' },
+        };
+        const value: string | number = maskPipe.transform('1234122', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value1: string | number = maskPipe.transform('123412', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value2: string | number = maskPipe.transform('12341', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value3: string | number = maskPipe.transform('1234', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value4: string | number = maskPipe.transform('123', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value5: string | number = maskPipe.transform('12', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        const value6: string | number = maskPipe.transform('1', 'AAA - AA - 0000', {
+            hiddenInput: true,
+            patterns: SSN_PATTERNS,
+        });
+        expect(value).toEqual('●●● - ●● - 22');
+        expect(value1).toEqual('●●● - ●● - 2');
+        expect(value2).toEqual('●●● - ●●');
+        expect(value3).toEqual('●●● - ●');
+        expect(value4).toEqual('●●●');
+        expect(value5).toEqual('●●');
+        expect(value6).toEqual('●');
+    });
+
+    it('should work with repeatMask A{4}', () => {
+        const value: string | number = maskPipe.transform(
+            '1234',
+            'A{4}'
+        );
+        const value1: string | number = maskPipe.transform(
+            '1',
+            'A{4}'
+        );
+        const value2: string | number = maskPipe.transform(
+            '12',
+            'A{4}'
+        );
+        const value3: string | number = maskPipe.transform(
+            '123',
+            'A{4}'
+        );
+
+        expect(value).toEqual('1234');
+        expect(value1).toEqual('1');
+        expect(value2).toEqual('12');
+        expect(value3).toEqual('123');
+    });
     //TODO(inepipepnko): need cover all config options
 });
