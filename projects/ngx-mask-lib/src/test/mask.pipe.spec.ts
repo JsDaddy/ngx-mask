@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskPipe } from '../lib/ngx-mask.pipe';
-import { IConfig } from 'ngx-mask';
+import { IConfig, NgxMaskDirective } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
@@ -9,7 +9,7 @@ describe('Pipe: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [NgxMaskPipe],
-            providers: [provideNgxMask()],
+            providers: [provideNgxMask(), NgxMaskDirective],
         }).runInInjectionContext(() => {
             maskPipe = new NgxMaskPipe();
         });
@@ -213,27 +213,44 @@ describe('Pipe: Mask', () => {
     });
 
     it('should work with repeatMask A{4}', () => {
-        const value: string | number = maskPipe.transform(
-            '1234',
-            'A{4}'
-        );
-        const value1: string | number = maskPipe.transform(
-            '1',
-            'A{4}'
-        );
-        const value2: string | number = maskPipe.transform(
-            '12',
-            'A{4}'
-        );
-        const value3: string | number = maskPipe.transform(
-            '123',
-            'A{4}'
-        );
+        const value: string | number = maskPipe.transform('1234', 'A{4}');
+        const value1: string | number = maskPipe.transform('1', 'A{4}');
+        const value2: string | number = maskPipe.transform('12', 'A{4}');
+        const value3: string | number = maskPipe.transform('123', 'A{4}');
 
         expect(value).toEqual('1234');
         expect(value1).toEqual('1');
         expect(value2).toEqual('12');
         expect(value3).toEqual('123');
     });
+
+    it('should work with repeatMask A{4}', () => {
+        const value: string | number = maskPipe.transform('1234', 'A{4}');
+        const value1: string | number = maskPipe.transform('1', 'A{4}');
+        const value2: string | number = maskPipe.transform('12', 'A{4}');
+        const value3: string | number = maskPipe.transform('123', 'A{4}');
+
+        expect(value).toEqual('1234');
+        expect(value1).toEqual('1');
+        expect(value2).toEqual('12');
+        expect(value3).toEqual('123');
+    });
+
+    it('should work with repeatMask SS0{4}', () => {
+        const value: string | number = maskPipe.transform('d', 'SS0{4}');
+        const value1: string | number = maskPipe.transform('dd', 'SS0{4}');
+        const value2: string | number = maskPipe.transform('dd1', 'SS0{4}');
+        const value3: string | number = maskPipe.transform('dd12', 'SS0{4}');
+        const value4: string | number = maskPipe.transform('dd123', 'SS0{4}');
+        const value5: string | number = maskPipe.transform('dd1234', 'SS0{4}');
+
+        expect(value).toEqual('d');
+        expect(value1).toEqual('dd');
+        expect(value2).toEqual('dd1');
+        expect(value3).toEqual('dd12');
+        expect(value4).toEqual('dd123');
+        expect(value5).toEqual('dd1234');
+    });
+
     //TODO(inepipepnko): need cover all config options
 });

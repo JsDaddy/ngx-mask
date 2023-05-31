@@ -79,4 +79,14 @@ describe('Directive: Mask (Repeat)', () => {
         equal('12345', '12345', fixture);
         equal('123456', '123456', fixture);
     });
+
+    it('should repeat digits only and work with dynamicMask', () => {
+        component.mask = 'SS0{4}';
+        equal('d', 'd', fixture);
+        equal('dd', 'dd', fixture);
+        equal('dd1', 'dd1', fixture);
+        equal('aa22', 'aa22', fixture);
+        equal('aa222', 'aa222', fixture);
+        equal('dd2134', 'dd2134', fixture);
+    });
 });

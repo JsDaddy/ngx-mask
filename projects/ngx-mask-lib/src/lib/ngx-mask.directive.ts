@@ -656,13 +656,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public _repeatPatternSymbols(maskExp: string): string {
+        // console.log(maskExp)
         return (
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
                     .split('')
                     .reduce((accum: string, currVal: string, index: number): string => {
                         this._start = currVal === '{' ? index : this._start;
-
                         if (currVal !== '}') {
                             return this._maskService._findSpecialChar(currVal)
                                 ? accum + currVal
@@ -673,7 +673,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         const replaceWith: string = new Array(repeatNumber + 1).join(
                             maskExp[this._start - 1]
                         );
-                        return accum + replaceWith;
+                        if (maskExp.slice(0, this._start).length > 1 && maskExp.includes('S')) {
+                            const symbols = maskExp.slice(0, this._start - 1);
+                            return symbols + accum + replaceWith;
+                        } else {
+                            return accum + replaceWith;
+                        }
                     }, '')) ||
             maskExp
         );
@@ -729,15 +734,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (this._inputValue && test) {
-                    if (mask.includes('{')) {
-                        this._maskValue = this._repeatPatternSymbols(mask);
-                        this.maskExpression = this._repeatPatternSymbols(mask);
-                        this._maskService.maskExpression = this._repeatPatternSymbols(mask);
-                    } else {
-                        this._maskValue = mask;
-                        this.maskExpression = mask;
-                        this._maskService.maskExpression = mask;
-                    }
+                    this._maskValue =
+                        this.maskExpression =
+                        this._maskService.maskExpression =
+                            mask.includes('{') ? this._repeatPatternSymbols(mask) : mask;
                     return test;
                 } else {
                     const expression =
