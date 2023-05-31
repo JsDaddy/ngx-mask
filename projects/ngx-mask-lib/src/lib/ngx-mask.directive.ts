@@ -656,7 +656,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public _repeatPatternSymbols(maskExp: string): string {
-        // console.log(maskExp)
         return (
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
