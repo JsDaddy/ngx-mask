@@ -21,9 +21,13 @@ export class NgxMaskService extends NgxMaskApplierService {
     public writingValue = false;
 
     public maskChanged = false;
+    public _maskExpressionArray: string[] = [];
 
     public triggerOnMaskChange = false;
 
+    private _start!: number;
+
+    private _end!: number;
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
@@ -68,17 +72,22 @@ export class NgxMaskService extends NgxMaskApplierService {
             let actualResult: string[] = this.actualValue.split('');
             // eslint-disable  @typescript-eslint/no-unused-expressions
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-            inputValue !== '' && actualResult.length
-                ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
-                    ? inputValue.length > actualResult.length
-                        ? actualResult.splice(this.selStart, 0, getSymbol)
-                        : inputValue.length < actualResult.length
-                        ? actualResult.length - inputValue.length === 1
-                            ? actualResult.splice(this.selStart - 1, 1)
-                            : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+            if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
+                this.selStart = Number(this.selStart);
+                this.selEnd = Number(this.selEnd);
+            } else {
+                inputValue !== '' && actualResult.length
+                    ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
+                        ? inputValue.length > actualResult.length
+                            ? actualResult.splice(this.selStart, 0, getSymbol)
+                            : inputValue.length < actualResult.length
+                            ? actualResult.length - inputValue.length === 1
+                                ? actualResult.splice(this.selStart - 1, 1)
+                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                            : null
                         : null
-                    : null
-                : (actualResult = []);
+                    : (actualResult = []);
+            }
             if (this.showMaskTyped) {
                 if (!this.hiddenInput) {
                     // eslint-disable-next-line no-param-reassign
@@ -107,6 +116,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
+
         this.actualValue = this.getActualValue(result);
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
@@ -122,6 +132,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
         this.formControlResult(result);
+
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 return result && result.length
@@ -529,5 +540,31 @@ export class NgxMaskService extends NgxMaskApplierService {
             return Number(separatorValue).toFixed(2);
         }
         return Number(separatorValue);
+    }
+
+    public _repeatPatternSymbols(maskExp: string): string {
+        return (
+            (maskExp.match(/{[0-9]+}/) &&
+                maskExp
+                    .split('')
+                    .reduce((accum: string, currVal: string, index: number): string => {
+                        this._start = currVal === '{' ? index : this._start;
+                        if (currVal !== '}') {
+                            return this._findSpecialChar(currVal) ? accum + currVal : accum;
+                        }
+                        this._end = index;
+                        const repeatNumber = Number(maskExp.slice(this._start + 1, this._end));
+                        const replaceWith: string = new Array(repeatNumber + 1).join(
+                            maskExp[this._start - 1]
+                        );
+                        if (maskExp.slice(0, this._start).length > 1 && maskExp.includes('S')) {
+                            const symbols = maskExp.slice(0, this._start - 1);
+                            return symbols + accum + replaceWith;
+                        } else {
+                            return accum + replaceWith;
+                        }
+                    }, '')) ||
+            maskExp
+        );
     }
 }

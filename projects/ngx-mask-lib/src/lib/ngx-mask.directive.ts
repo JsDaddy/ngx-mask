@@ -88,10 +88,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _position: number | null = null;
 
-    private _start!: number;
-
-    private _end!: number;
-
     private _code!: string;
 
     private _maskExpressionArray: string[] = [];
@@ -218,7 +214,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
         }
-
         this._applyMask();
     }
 
@@ -334,7 +329,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._inputValue = el.value;
 
         this._setMask();
-
         if (!this._maskValue) {
             this.onChange(el.value);
             return;
@@ -657,33 +651,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    private _repeatPatternSymbols(maskExp: string): string {
-        return (
-            (maskExp.match(/{[0-9]+}/) &&
-                maskExp
-                    .split('')
-                    .reduce((accum: string, currVal: string, index: number): string => {
-                        this._start = currVal === '{' ? index : this._start;
-
-                        if (currVal !== '}') {
-                            return this._maskService._findSpecialChar(currVal)
-                                ? accum + currVal
-                                : accum;
-                        }
-                        this._end = index;
-                        const repeatNumber = Number(maskExp.slice(this._start + 1, this._end));
-                        const replaceWith: string = new Array(repeatNumber + 1).join(
-                            maskExp[this._start - 1]
-                        );
-                        return accum + replaceWith;
-                    }, '')) ||
-            maskExp
-        );
-    }
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _applyMask(): any {
-        this._maskService.maskExpression = this._repeatPatternSymbols(this._maskValue || '');
+        this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
+            this._maskValue || ''
+        );
         this._maskService.formElementProperty = [
             'value',
             this._maskService.applyMask(this._inputValue, this._maskService.maskExpression),
@@ -731,9 +703,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (this._inputValue && test) {
-                    this._maskValue = mask;
-                    this.maskExpression = mask;
-                    this._maskService.maskExpression = mask;
+                    this._maskValue =
+                        this.maskExpression =
+                        this._maskService.maskExpression =
+                            mask.includes('{')
+                                ? this._maskService._repeatPatternSymbols(mask)
+                                : mask;
                     return test;
                 } else {
                     const expression =
@@ -741,7 +716,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskValue =
                         this.maskExpression =
                         this._maskService.maskExpression =
-                            expression;
+                            expression.includes('{')
+                                ? this._maskService._repeatPatternSymbols(expression)
+                                : expression;
                 }
             });
         }
