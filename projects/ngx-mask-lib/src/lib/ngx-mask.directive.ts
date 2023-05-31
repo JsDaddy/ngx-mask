@@ -87,10 +87,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private _inputValue!: string;
 
     private _position: number | null = null;
-    //
-    // private _start!: number;
-    //
-    // private _end!: number;
 
     private _code!: string;
 
@@ -654,34 +650,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public setDisabledState(isDisabled: boolean): void {
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
-
-    // public _repeatPatternSymbols(maskExp: string): string {
-    //     return (
-    //         (maskExp.match(/{[0-9]+}/) &&
-    //             maskExp
-    //                 .split('')
-    //                 .reduce((accum: string, currVal: string, index: number): string => {
-    //                     this._start = currVal === '{' ? index : this._start;
-    //                     if (currVal !== '}') {
-    //                         return this._maskService._findSpecialChar(currVal)
-    //                             ? accum + currVal
-    //                             : accum;
-    //                     }
-    //                     this._end = index;
-    //                     const repeatNumber = Number(maskExp.slice(this._start + 1, this._end));
-    //                     const replaceWith: string = new Array(repeatNumber + 1).join(
-    //                         maskExp[this._start - 1]
-    //                     );
-    //                     if (maskExp.slice(0, this._start).length > 1 && maskExp.includes('S')) {
-    //                         const symbols = maskExp.slice(0, this._start - 1);
-    //                         return symbols + accum + replaceWith;
-    //                     } else {
-    //                         return accum + replaceWith;
-    //                     }
-    //                 }, '')) ||
-    //         maskExp
-    //     );
-    // }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _applyMask(): any {
