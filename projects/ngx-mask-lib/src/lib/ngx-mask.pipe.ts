@@ -2,7 +2,6 @@ import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { IConfig } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
-import { NgxMaskDirective } from './ngx-mask.directive';
 
 @Pipe({
     name: 'mask',
@@ -13,9 +12,9 @@ export class NgxMaskPipe implements PipeTransform {
     private readonly defaultOptions: Partial<IConfig> = {};
 
     private readonly _maskService = inject(NgxMaskService);
-    private readonly _maskDerective = inject(NgxMaskDirective);
 
     private _maskExpressionArray: string[] = [];
+
     private mask = '';
 
     public transform(
@@ -51,7 +50,7 @@ export class NgxMaskPipe implements PipeTransform {
         if (mask.includes('{')) {
             return this._maskService.applyMask(
                 `${value}`,
-                this._maskDerective._repeatPatternSymbols(mask)
+                this._maskService._repeatPatternSymbols(mask)
             );
         }
         return this._maskService.applyMask(`${value}`, mask);
