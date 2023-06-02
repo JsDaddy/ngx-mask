@@ -88,6 +88,14 @@ export class NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.checkAndRemoveSuffix(inputValue);
         }
+        if (inputValue === '(' && this.prefix) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = '';
+        }
+        if (!!this.prefix && inputValue?.length > 0) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = this.checkAndRemovePrefix(inputValue);
+        }
         const inputArray: string[] = inputValue.toString().split('');
         if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
             // eslint-disable-next-line no-param-reassign
@@ -539,7 +547,7 @@ export class NgxMaskApplierService {
         }
         let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
         if (result.length === 0) {
-            res = `${this.prefix}${result}`;
+            !this.dropSpecialCharacters ? (res = `${this.prefix}${result}`) : (res = `${result}`);
         }
         return res;
     }
@@ -620,6 +628,21 @@ export class NgxMaskApplierService {
                 i !== this.suffix?.length - 1 &&
                 (i - 1 < 0 ||
                     !inputValue.includes(this.suffix.substring(i - 1, this.suffix?.length)))
+            ) {
+                return inputValue.replace(substr, '');
+            }
+        }
+        return inputValue;
+    };
+
+    private checkAndRemovePrefix = (inputValue: string): string => {
+        for (let i = this.prefix?.length - 1; i >= 0; i--) {
+            const substr = this.prefix.substring(i, this.prefix?.length);
+            if (
+                inputValue.includes(substr) &&
+                i !== this.prefix?.length - 1 &&
+                (i - 1 < 0 ||
+                    !inputValue.includes(this.suffix.substring(i - 1, this.prefix?.length)))
             ) {
                 return inputValue.replace(substr, '');
             }

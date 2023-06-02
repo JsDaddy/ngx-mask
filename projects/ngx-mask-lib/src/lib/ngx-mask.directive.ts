@@ -441,7 +441,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         const nextValue: string | null =
             el &&
-            (!el.value || el.value === this._maskService.prefix
+            (el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
                 : el.value);
         /** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
