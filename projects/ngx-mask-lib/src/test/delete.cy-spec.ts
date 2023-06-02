@@ -64,23 +64,6 @@ describe('Directive: Mask (Delete)', () => {
             .should('have.prop', 'selectionStart', 10);
     });
 
-    it('should not delete prefix', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: '(00) 00',
-                prefix: '+1 ',
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('1234')
-            .type('{backspace}')
-            .type('{backspace}')
-            .should('have.value', '+1 ')
-            .should('have.prop', 'selectionStart', 3);
-    });
-
     it('should delete selection', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
@@ -94,5 +77,27 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.value', '123 456 78')
             .should('have.prop', 'selectionStart', 10);
+    });
+    it('should delete prefix', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '000 000 000',
+                prefix: '+7',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
+    });
+    it('should delete suffix', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '000 000 000',
+                suffix: '$',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
     });
 });

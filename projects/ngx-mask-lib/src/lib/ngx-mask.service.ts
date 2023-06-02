@@ -63,6 +63,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
+
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? ''
