@@ -59,6 +59,11 @@ export const lists: IListItem[] = [
                 id: 11,
                 scrollTo: 'allowMask',
             },
+            {
+                content: 'Parser and format',
+                id: 11,
+                scrollTo: 'parser-and-format',
+            },
         ],
     },
     {

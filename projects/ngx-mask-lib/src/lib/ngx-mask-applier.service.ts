@@ -8,6 +8,12 @@ export class NgxMaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'] =
         this._config.dropSpecialCharacters;
 
+    public parser: IConfig['parser'] =
+        this._config.parser;
+
+    public format: IConfig['format'] =
+        this._config.format;
+
     public hiddenInput: IConfig['hiddenInput'] = this._config.hiddenInput;
 
     public showTemplate!: IConfig['showTemplate'];

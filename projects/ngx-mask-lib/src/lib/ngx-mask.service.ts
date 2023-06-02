@@ -424,6 +424,12 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.maskChanged = false;
             return;
         }
+        if (this.parser){
+            this.onChange(
+                this.parser(inputValue)
+            );
+            return;
+        }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 this._toNumber(

@@ -19,6 +19,8 @@ export interface IConfig {
     leadZeroDateTime: boolean;
     triggerOnMaskChange: boolean;
     maskFilled: EventEmitter<void>;
+    parser?: ((value: any) => any )| null;
+    format?: ((value: any) => any) | null;
     patterns: {
         [character: string]: {
             pattern: RegExp;

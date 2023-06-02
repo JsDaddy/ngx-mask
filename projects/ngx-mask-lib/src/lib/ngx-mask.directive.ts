@@ -80,6 +80,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
 
+    @Input() public parser: IConfig['parser'] | null = null;
+
+    @Input() public format: IConfig['format'] | null = null;
+
     @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
@@ -130,6 +134,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             allowNegativeNumbers,
             leadZeroDateTime,
             triggerOnMaskChange,
+            parser,
+            format
         } = changes;
         if (maskExpression) {
             if (
@@ -213,6 +219,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
+        }
+        if (parser) {
+            this._maskService.parser = parser?.currentValue;
+        }
+        if (format) {
+            this._maskService.format = format?.currentValue;
         }
         this._applyMask();
     }

@@ -84,6 +84,13 @@ export const ComDocs: IComDoc[] = [
         id: 11,
         anchor: 'allowPercent',
     },
+    {
+        header: 'Allow parser and format valueeee ',
+        text: 'You can parser and format the value',
+        code: ` <input mask="Hh:m0">`,
+        id: 13,
+        anchor: 'parser-and-format',
+    },
 ];
 
 export const ComExamples: TExample<IMaskOptions>[] = [
@@ -148,4 +155,26 @@ export const ComExamples: TExample<IMaskOptions>[] = [
         _mask: 'percent.2',
         control: { form: new UntypedFormControl(''), model: '' },
     },
+    {
+        _placeholder: "'hh:mm'",
+        _mask: 'Hh:m0',
+        _showMaskTyped: true,
+        _leadZeroDateTime: true,
+        _dropSpecialCharacters: false,
+        control: { form: new UntypedFormControl(''), model: '' },
+        _parser: (value: string) => {
+            console.log('===>  pasaaas ');
+            const date = new Date();
+            const values = value.split(':');
+            const hour = +values[0]!;
+            const minuts = +values[1]!;
+
+            date.setHours(hour);
+            date.setMinutes(minuts);
+            date.setSeconds(0);
+            console.log('===> date ', date);
+            return date;
+        },
+    },
+
 ];
