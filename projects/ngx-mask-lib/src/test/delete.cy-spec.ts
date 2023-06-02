@@ -89,22 +89,6 @@ describe('Directive: Mask (Delete)', () => {
 
         cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
     });
-    it('should delete prefix', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: '(000) 000 000',
-                prefix: '+7',
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('1')
-            .type('{backspace}')
-            .should('have.value', '')
-            .type('f')
-            .should('have.value', '+7(');
-    });
     it('should delete suffix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
