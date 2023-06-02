@@ -94,6 +94,11 @@ export class NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.checkAndRemoveSuffix(inputValue);
         }
+        if (inputValue === '(' && this.prefix) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = '';
+        }
+
         const inputArray: string[] = inputValue.toString().split('');
         if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
             // eslint-disable-next-line no-param-reassign
@@ -545,7 +550,7 @@ export class NgxMaskApplierService {
         }
         let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
         if (result.length === 0) {
-            res = `${this.prefix}${result}`;
+            res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
         return res;
     }

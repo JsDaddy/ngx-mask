@@ -66,4 +66,35 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('97', '97$', fixture);
         expect(component.form.value).toEqual('97$');
     });
+
+    it('should delete prefix in pasted content', () => {
+        component.mask = 'AAA-AAA-AAA';
+        component.prefix = 'FOO-';
+        equal('FOO-D', 'FOO-D', fixture);
+        equal('FOO-DD', 'FOO-DD', fixture);
+        equal('FOO-DDD', 'FOO-DDD', fixture);
+        equal('FOO-DDD-D', 'FOO-DDD-D', fixture);
+        equal('FOO-DDD-DD', 'FOO-DDD-DD', fixture);
+        equal('FOO-DDD-DDD', 'FOO-DDD-DDD', fixture);
+        equal('FOO-DDD-DDD-D', 'FOO-DDD-DDD-D', fixture);
+        equal('FOO-DDD-DDD-DD', 'FOO-DDD-DDD-DD', fixture);
+        equal('FOO-DDD-DDD-DDD', 'FOO-DDD-DDD-DDD', fixture);
+        expect(component.form.value).toEqual('DDDDDDDDD');
+    });
+
+    it('should delete prefix in pasted content', () => {
+        component.mask = 'AAA-AAA-AAA';
+        component.prefix = 'FOO-';
+        component.dropSpecialCharacters = false;
+        equal('FOO-S', 'FOO-S', fixture);
+        equal('FOO-SS', 'FOO-SS', fixture);
+        equal('FOO-SSS', 'FOO-SSS', fixture);
+        equal('FOO-SSS-S', 'FOO-SSS-S', fixture);
+        equal('FOO-SSS-SS', 'FOO-SSS-SS', fixture);
+        equal('FOO-SSS-SSS', 'FOO-SSS-SSS', fixture);
+        equal('FOO-SSS-SSS-S', 'FOO-SSS-SSS-S', fixture);
+        equal('FOO-SSS-SSS-SS', 'FOO-SSS-SSS-SS', fixture);
+        equal('FOO-SSS-SSS-SSS', 'FOO-SSS-SSS-SSS', fixture);
+        expect(component.form.value).toEqual('FOO-SSS-SSS-SSS');
+    });
 });
