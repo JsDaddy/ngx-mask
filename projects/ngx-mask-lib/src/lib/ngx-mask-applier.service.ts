@@ -544,7 +544,7 @@ export class NgxMaskApplierService {
         }
         let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
         if (result.length === 0) {
-            !this.dropSpecialCharacters ? (res = `${this.prefix}${result}`) : (res = `${result}`);
+            res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
         return res;
     }
