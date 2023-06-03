@@ -19,7 +19,7 @@ export interface IConfig {
     leadZeroDateTime: boolean;
     triggerOnMaskChange: boolean;
     maskFilled: EventEmitter<void>;
-    parser?: ((value: any) => any )| null;
+    parser: (value: any) => any;
     format?: ((value: any) => any) | null;
     patterns: {
         [character: string]: {
@@ -57,6 +57,7 @@ export const initialConfig: IConfig = {
     leadZeroDateTime: false,
     triggerOnMaskChange: false,
     maskFilled: new EventEmitter<void>(),
+    parser: (value: any) => value,
     patterns: {
         '0': {
             pattern: new RegExp('\\d'),

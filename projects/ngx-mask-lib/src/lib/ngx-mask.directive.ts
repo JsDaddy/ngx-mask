@@ -80,7 +80,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
 
-    @Input() public parser: IConfig['parser'] | null = null;
+    @Input() public parser: IConfig['parser'] | null = (value: any) => value;
 
     @Input() public format: IConfig['format'] | null = null;
 
@@ -137,6 +137,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             parser,
             format
         } = changes;
+        if (parser) {
+            this._maskService.parser = parser?.currentValue || this._config['parser'];
+        }
+        if (format) {
+            this._maskService.format = format?.currentValue;
+        }
         if (maskExpression) {
             if (
                 maskExpression.currentValue !== maskExpression.previousValue &&
@@ -219,12 +225,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
-        }
-        if (parser) {
-            this._maskService.parser = parser?.currentValue;
-        }
-        if (format) {
-            this._maskService.format = format?.currentValue;
         }
         this._applyMask();
     }
@@ -579,7 +579,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     /** It writes the value in the input */
     public async writeValue(
-        inputValue: string | number | { value: string | number; disable?: boolean }
+        inputValue: string | number | { value: string | number; disable?: boolean } | any
     ): Promise<void> {
         if (typeof inputValue === 'object' && inputValue !== null && 'value' in inputValue) {
             if ('disable' in inputValue) {
@@ -627,7 +627,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         } else {
             this._maskService.formElementProperty = ['value', inputValue];
         }
-        this._inputValue = inputValue;
+        this._inputValue = this.format ? this.format(inputValue) : inputValue;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

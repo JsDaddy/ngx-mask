@@ -158,21 +158,22 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: "'hh:mm'",
         _mask: 'Hh:m0',
+        _dropSpecialCharacters: true,
         _showMaskTyped: true,
         _leadZeroDateTime: true,
-        _dropSpecialCharacters: false,
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { form: new UntypedFormControl(new Date()), model: '' },
+        _format: (value: Date) => {
+            return +`${String(value.getHours()).padStart(2, '0')}${String(value.getMinutes()).padStart(2, '0')}`;
+        },
         _parser: (value: string) => {
-            console.log('===>  pasaaas ');
+            if (!value)
+                return;
             const date = new Date();
-            const values = value.split(':');
-            const hour = +values[0]!;
-            const minuts = +values[1]!;
-
+            const hour = +value.slice(0, 2);
+            const minuts = +value.slice(2, 4);
             date.setHours(hour);
             date.setMinutes(minuts);
             date.setSeconds(0);
-            console.log('===> date ', date);
             return date;
         },
     },

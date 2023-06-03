@@ -132,6 +132,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
             );
         }
+
         this.formControlResult(result);
 
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -425,19 +426,15 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.maskChanged = false;
             return;
         }
-        if (this.parser){
-            this.onChange(
-                this.parser(inputValue)
-            );
-            return;
-        }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this._toNumber(
-                    this._checkSymbols(
-                        this._removeMask(
-                            this._removeSuffix(this._removePrefix(inputValue)),
-                            this.dropSpecialCharacters
+                this.parser(
+                    this._toNumber(
+                        this._checkSymbols(
+                            this._removeMask(
+                                this._removeSuffix(this._removePrefix(inputValue)),
+                                this.dropSpecialCharacters
+                            )
                         )
                     )
                 )
@@ -447,12 +444,14 @@ export class NgxMaskService extends NgxMaskApplierService {
             (!this.dropSpecialCharacters && this.prefix === inputValue)
         ) {
             this.onChange(
-                this._toNumber(
-                    this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                this.parser(
+                    this._toNumber(
+                        this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                    )
                 )
             );
         } else {
-            this.onChange(this._toNumber(inputValue));
+            this.onChange(this.parser(this._toNumber(inputValue)));
         }
     }
 
