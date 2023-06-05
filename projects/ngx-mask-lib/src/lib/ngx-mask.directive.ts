@@ -697,8 +697,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private _setMask() {
-        if (this._maskExpressionArray.length > 0) {
-            this._maskExpressionArray.some((mask): boolean | void => {
+        this._maskExpressionArray.some((mask): boolean | void => {
+            const specialChart: boolean = mask
+                .split('')
+                .some((char) => this._maskService.specialCharacters.includes(char));
+            if (specialChart || mask.includes('{')) {
                 const test =
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
@@ -720,8 +723,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 ? this._maskService._repeatPatternSymbols(expression)
                                 : expression;
                 }
-            });
-        }
+            } else {
+                const check: boolean = this._inputValue?.split('').every((character, index) => {
+                    const indexMask = mask.charAt(index);
+                    return this._maskService._checkSymbolMask(character, indexMask);
+                });
+                if (check) {
+                    this._maskValue = this.maskExpression = this._maskService.maskExpression = mask;
+                    return check;
+                }
+            }
+        });
     }
 
     private _currentLocaleDecimalMarker(): string {

@@ -554,7 +554,7 @@ You can hide symbols in input field and get the actual value in `formcontrol`.
 <input mask="CPF_CNPJ" />
 ```
 
-### Dynamic valid mask
+### Allow few mask in one expression
 
 #### Usage
 
@@ -566,6 +566,10 @@ You can pass into mask pattern with `||`.
 
 ```html
 <input mask="(00) 0000-0000||(00) 0 0000-0000" />
+```
+
+```html
+<input mask="00||SS" />
 ```
 
 ### Function maskFilled
