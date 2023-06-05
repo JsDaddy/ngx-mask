@@ -193,38 +193,62 @@ describe('Directive: Mask (Dynamic)', () => {
     it('should work with number or letters', () => {
         component.mask = '00||SS||000||000SS||0S0S';
         equal('0', '0', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('11', '11', fixture);
+        expect(component.form.valid).toBeTruthy();
         equal('112', '112', fixture);
+        expect(component.form.valid).toBeTruthy();
         equal('112A', '112A', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('112DS', '112DS', fixture);
+        expect(component.form.valid).toBeTruthy();
         equal('D', 'D', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('DD', 'DD', fixture);
+        expect(component.form.valid).toBeTruthy();
         equal('9D', '9D', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('0A0', '0A0', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('2D2D', '2D2D', fixture);
+        expect(component.form.valid).toBeTruthy();
     });
 
     it('should work for UK Post Codes', () => {
         component.mask = 'S0 0SS||SAA 0SS||SS0A 0SS';
-        equal('', '', fixture);
         equal('A', 'A', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('A0', 'A0', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('A00', 'A0 0', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('A00D', 'A0 0D', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('A00DD', 'A0 0DD', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('AAA0DD', 'AAA 0DD', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('AA0A0DR', 'AA0A 0DR', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('AB17NC', 'AB1 7NC', fixture);
+        expect(component.form.valid).toBeTrue();
     });
 
     it('should work with number or letters', () => {
         component.mask = '00||SS||000||000SS';
         equal('0', '0', fixture);
+        expect(component.form.invalid).toBeTrue();
         equal('11', '11', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('D', 'D', fixture);
+        expect(component.form.invalid).toBeTrue();
         equal('DD', 'DD', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('123', '123', fixture);
+        expect(component.form.valid).toBeTrue();
         equal('123S', '123S', fixture);
+        expect(component.form.valid).toBeFalse();
         equal('123SD', '123SD', fixture);
+        expect(component.form.valid).toBeTrue();
     });
 });
