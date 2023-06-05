@@ -6,6 +6,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { DebugElement } from '@angular/core';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { equal } from './utils/test-functions.component';
 
 describe('Directive: Mask (Dynamic)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -179,5 +180,51 @@ describe('Directive: Mask (Dynamic)', () => {
 
         expect(inputTarget.value).toBe('+55 (49) 3622168');
         expect(inputTarget.selectionStart).toEqual(16);
+    });
+
+    it('should work with number or letters', () => {
+        component.mask = '00||SS';
+        equal('0', '0', fixture);
+        equal('11', '11', fixture);
+        equal('D', 'D', fixture);
+        equal('DD', 'DD', fixture);
+    });
+
+    it('should work with number or letters', () => {
+        component.mask = '00||SS||000||000SS||0S0S';
+        equal('0', '0', fixture);
+        equal('11', '11', fixture);
+        equal('112', '112', fixture);
+        equal('112A', '112A', fixture);
+        equal('112DS', '112DS', fixture);
+        equal('D', 'D', fixture);
+        equal('DD', 'DD', fixture);
+        equal('9D', '9D', fixture);
+        equal('0A0', '0A0', fixture);
+        equal('2D2D', '2D2D', fixture);
+    });
+
+    it('should work for UK Post Codes', () => {
+        component.mask = 'S0 0SS||SAA 0SS||SS0A 0SS';
+        equal('', '', fixture);
+        equal('A', 'A', fixture);
+        equal('A0', 'A0', fixture);
+        equal('A00', 'A0 0', fixture);
+        equal('A00D', 'A0 0D', fixture);
+        equal('A00DD', 'A0 0DD', fixture);
+        equal('AAA0DD', 'AAA 0DD', fixture);
+        equal('AA0A0DR', 'AA0A 0DR', fixture);
+        equal('AB17NC', 'AB1 7NC', fixture);
+    });
+
+    it('should work with number or letters', () => {
+        component.mask = '00||SS||000||000SS';
+        equal('0', '0', fixture);
+        equal('11', '11', fixture);
+        equal('D', 'D', fixture);
+        equal('DD', 'DD', fixture);
+        equal('123', '123', fixture);
+        equal('123S', '123S', fixture);
+        equal('123SD', '123SD', fixture);
     });
 });

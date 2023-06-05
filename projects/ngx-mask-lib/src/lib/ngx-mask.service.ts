@@ -19,7 +19,8 @@ export class NgxMaskService extends NgxMaskApplierService {
      * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
      */
     public writingValue = false;
-
+    // public numberMask = '';
+    // public stringMask = '';
     public maskChanged = false;
     public _maskExpressionArray: string[] = [];
 
@@ -63,7 +64,12 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
-
+        // console.log(this.maskExpression)
+        // if (this.maskExpression === '00||SS' && inputValue.length > 0) {
+        //     const firstCharacter = inputValue.charAt(0);
+        //     const isLetter = /^[a-zA-Z]+$/.test(firstCharacter);
+        //     isLetter ? this.maskExpression = 'SS' : this.maskExpression = '00'
+        // }
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? ''
