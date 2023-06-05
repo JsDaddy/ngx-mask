@@ -50,13 +50,6 @@ export const ComDocs: IComDoc[] = [
         anchor: 'mask-specialCharacters',
     },
     {
-        header: 'Dynamic mask',
-        text: '',
-        code: `<input type='text' mask="(00) 00000000||+00 (00) 00000000" >`,
-        id: 8,
-        anchor: 'dynamic-mask',
-    },
-    {
         header: 'Optional mask',
         text: '',
         code: `<input type='text' mask="9999 999 999" >`,
@@ -83,6 +76,20 @@ export const ComDocs: IComDoc[] = [
         code: ` <input type='text' mask="percent.2" [allowNegativeNumbers]="true">`,
         id: 11,
         anchor: 'allowPercent',
+    },
+    {
+        header: 'Allow few mask in one expression',
+        text: '',
+        code: `<input type='text' mask="(00) 00000000||+00 (00) 00000000" >`,
+        id: 8,
+        anchor: 'allow-few-mask',
+    },
+    {
+        header: 'Allow few mask in one expression number or letter',
+        text: '',
+        code: `<input type='text' mask="00||SS" >`,
+        id: 8,
+        anchor: 'allow-few-mask',
     },
 ];
 
@@ -121,11 +128,6 @@ export const ComExamples: TExample<IMaskOptions>[] = [
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: 'Dynamic',
-        _mask: '(00) 00000000||+00 (00) 00000000',
-        control: { form: new UntypedFormControl(''), model: '' },
-    },
-    {
         _placeholder: 'Optional mask',
         _mask: '9999 999 999',
         control: { form: new UntypedFormControl(''), model: '' },
@@ -146,6 +148,16 @@ export const ComExamples: TExample<IMaskOptions>[] = [
         _placeholder: 'allowNegativeNumbers percent',
         _allowNegativeNumbers: true,
         _mask: 'percent.2',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Allow few mask in one expression',
+        _mask: '(00) 00000000||+00 (00) 00000000',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Allow few mask in one expression',
+        _mask: '00||SS',
         control: { form: new UntypedFormControl(''), model: '' },
     },
 ];

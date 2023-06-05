@@ -553,7 +553,7 @@ export class NgxMaskApplierService {
         return this.specialCharacters.find((val: string) => val === inputSymbol);
     }
 
-    protected _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
+    public _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
         this.patterns = this.customPattern ? this.customPattern : this.patterns;
         return (
             (this.patterns[maskSymbol]?.pattern &&
