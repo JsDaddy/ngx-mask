@@ -9,6 +9,7 @@ import { FormControl } from '@angular/forms';
             [formControl]="form"
             [mask]="mask"
             [prefix]="prefix"
+            [suffix]="suffix"
             [hiddenInput]="hiddenInput" />
     `,
 })
@@ -18,6 +19,8 @@ export class CypressTestMaskComponent {
     @Input() public hiddenInput = false;
 
     @Input() public prefix = '';
+
+    @Input() public suffix = '';
 
     public form: FormControl = new FormControl('');
 }

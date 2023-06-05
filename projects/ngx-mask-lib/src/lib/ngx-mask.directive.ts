@@ -701,11 +701,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             const specialChart: boolean = mask
                 .split('')
                 .some((char) => this._maskService.specialCharacters.includes(char));
-            if (specialChart || mask.includes('{')) {
+            if ((specialChart && this._inputValue && !mask.includes('S')) || mask.includes('{')) {
                 const test =
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
-                if (this._inputValue && test) {
+                if (test) {
                     this._maskValue =
                         this.maskExpression =
                         this._maskService.maskExpression =
