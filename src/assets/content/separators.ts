@@ -64,8 +64,8 @@ export const SepExamples: TExample<IMaskOptions>[] = [
     },
     {
         _placeholder: 'Separator 2 leadZero',
-        _mask: 'separator.2',
         _leadZero: true,
+        _mask: 'separator.2',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
