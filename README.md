@@ -453,9 +453,9 @@ Input value: 1234.56
 Masked value: 1,234
 ```
 ```html
-<input type="text" mask="separator.2" thousandSeparator="," [leadZero]="true" />
+<input type="text" mask="separator.2" [leadZero]="true" />
 ```
-For add to model zero at the end 
+To add zeros to the model at the end 
 
 ```text
 Input value: 12
