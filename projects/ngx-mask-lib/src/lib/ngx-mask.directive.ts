@@ -21,7 +21,7 @@ import {
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
-import {MaskExpression} from "./ngx-mask-applier.service";
+import {MaskExpression} from "./ngx-mask-expression.enum";
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
@@ -584,7 +584,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             inputValue = inputValue.value;
         }
 
-        if (typeof inputValue === 'number' || this._maskValue.startsWith(MaskExpression.SEPARATOR)) {
+        if (
+            typeof inputValue === 'number' ||
+            this._maskValue.startsWith(MaskExpression.SEPARATOR)
+        ) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this._maskService.numberToString(inputValue);
             const localeDecimalMarker = this._currentLocaleDecimalMarker();

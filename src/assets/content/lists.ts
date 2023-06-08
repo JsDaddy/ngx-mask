@@ -115,7 +115,7 @@ export const lists: IListItem[] = [
                 scrollTo: 'sep',
             },
             {
-                content: 'Separator',
+                content: 'Separator leadZero',
                 id: 4,
                 scrollTo: 'lead-zero',
             },

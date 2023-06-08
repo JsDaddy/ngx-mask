@@ -2,7 +2,8 @@ import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
-import { MaskExpression, NgxMaskApplierService } from './ngx-mask-applier.service';
+import { NgxMaskApplierService } from './ngx-mask-applier.service';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -53,10 +54,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
-        if (this.maskExpression === 'IP' && this.showMaskTyped) {
+        if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || '#');
         }
-        if (this.maskExpression === 'CPF_CNPJ' && this.showMaskTyped) {
+        if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || '#');
         }
         if (!inputValue && this.showMaskTyped) {
@@ -148,10 +149,13 @@ export class NgxMaskService extends NgxMaskApplierService {
         const resLen: number = result.length;
         const prefNmask: string = this.prefix + this.maskIsShown;
 
-        if (this.maskExpression.includes('H')) {
+        if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
             return result + prefNmask.slice(resLen + countSkipedSymbol);
-        } else if (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ') {
+        } else if (
+            this.maskExpression === MaskExpression.IP ||
+            this.maskExpression === MaskExpression.CPF_CNPJ
+        ) {
             return result + prefNmask;
         }
         return result + prefNmask.slice(resLen);
@@ -276,10 +280,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
         } else if (this.showMaskTyped) {
             if (inputVal) {
-                if (this.maskExpression === 'IP') {
+                if (this.maskExpression === MaskExpression.IP) {
                     return this._checkForIp(inputVal);
                 }
-                if (this.maskExpression === 'CPF_CNPJ') {
+                if (this.maskExpression === MaskExpression.CPF_CNPJ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
             }
