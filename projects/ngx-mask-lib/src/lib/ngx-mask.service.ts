@@ -2,7 +2,7 @@ import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
-import { NgxMaskApplierService } from './ngx-mask-applier.service';
+import {MaskExpression, NgxMaskApplierService} from './ngx-mask-applier.service';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -126,7 +126,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // b) remove decimal marker from list of special characters to mask
-        if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
+        if (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && this.dropSpecialCharacters === true) {
             this.specialCharacters = this.specialCharacters.filter(
                 (item: string) =>
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
@@ -253,7 +253,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     public numberToString(value: number | string): string {
         if (
             (!value && value !== 0) ||
-            (this.maskExpression.startsWith('separator') &&
+            (this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
                 (this.leadZero || !this.dropSpecialCharacters))
         ) {
             return String(value);
@@ -459,7 +459,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return value;
         }
         if (
-            this.maskExpression.startsWith('separator') &&
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
             (this.leadZero || !this.dropSpecialCharacters)
         ) {
             return value;
@@ -469,7 +469,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
-        if (this.maskExpression.startsWith('percent') && value.includes('.')) {
+        if (this.maskExpression.startsWith(MaskExpression.PERCENT) && value.includes('.')) {
             return value;
         }
         return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;

@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
 
+export const enum MaskExpression {
+    SEPARATOR = 'separator',
+    PERCENT = 'percent',
+}
+
 @Injectable()
+
 export class NgxMaskApplierService {
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
@@ -55,6 +61,7 @@ export class NgxMaskApplierService {
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
+
     public applyMaskWithPattern(
         inputValue: string,
         maskAndPattern: [string, IConfig['patterns']]
@@ -123,7 +130,7 @@ export class NgxMaskApplierService {
             }
         }
 
-        if (maskExpression.startsWith('percent')) {
+        if (maskExpression.startsWith(MaskExpression.PERCENT)) {
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
                 // eslint-disable-next-line no-useless-escape
@@ -158,7 +165,7 @@ export class NgxMaskApplierService {
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
-        } else if (maskExpression.startsWith('separator')) {
+        } else if (maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
                 inputValue.match('[ЁёА-я]') ||
@@ -531,7 +538,7 @@ export class NgxMaskApplierService {
         }
 
         let actualShift: number =
-            justPasted && !maskExpression.startsWith('separator')
+            justPasted && !maskExpression.startsWith(MaskExpression.SEPARATOR)
                 ? cursor
                 : this._shift.has(position)
                 ? shift
