@@ -94,7 +94,6 @@ export const SepExamples: TExample<IMaskOptions>[] = [
     },
     {
         _placeholder: 'separator.2',
-        _clearIfNotMatch: true,
         _mask: 'separator.2',
         _thousandSeparator: ',',
         control: { form: new UntypedFormControl(''), model: '' },
