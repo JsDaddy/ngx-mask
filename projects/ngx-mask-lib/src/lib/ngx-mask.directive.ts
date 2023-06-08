@@ -21,7 +21,7 @@ import {
 import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
-import {MaskExpression} from "./ngx-mask-expression.enum";
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
