@@ -452,6 +452,18 @@ Masked value: 1.234
 Input value: 1234.56
 Masked value: 1,234
 ```
+```html
+<input type="text" mask="separator.2" [leadZero]="true" />
+```
+To add zeros to the model at the end 
+
+```text
+Input value: 12
+Masked value: 12.00
+
+Input value: 12.1
+Masked value: 12.10
+```
 
 ```html
 <input type="text" mask="separator.2" separatorLimit="1000" />

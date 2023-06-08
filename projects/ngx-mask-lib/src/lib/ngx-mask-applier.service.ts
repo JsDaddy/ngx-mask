@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskApplierService {
@@ -42,6 +43,8 @@ export class NgxMaskApplierService {
 
     public leadZeroDateTime: IConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
 
+    public leadZero: IConfig['leadZero'] = this._config.leadZero;
+
     private _shift: Set<number> = new Set();
 
     public maskExpression = '';
@@ -53,6 +56,7 @@ export class NgxMaskApplierService {
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
+
     public applyMaskWithPattern(
         inputValue: string,
         maskAndPattern: [string, IConfig['patterns']]
@@ -98,7 +102,7 @@ export class NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             result += inputValue.slice(cursor, cursor + 1);
         }
-        if (maskExpression === 'IP') {
+        if (maskExpression === MaskExpression.IP) {
             const valuesIP = inputValue.split('.');
             this.ipError = this._validIP(valuesIP);
             // eslint-disable-next-line no-param-reassign
@@ -110,7 +114,7 @@ export class NgxMaskApplierService {
                 arr.push(inputValue[i] ?? '');
             }
         }
-        if (maskExpression === 'CPF_CNPJ') {
+        if (maskExpression === MaskExpression.CPF_CNPJ) {
             this.cpfCnpjError = arr.length !== 11 && arr.length !== 14;
             if (arr.length > 11) {
                 // eslint-disable-next-line no-param-reassign
@@ -120,7 +124,8 @@ export class NgxMaskApplierService {
                 maskExpression = '000.000.000-00';
             }
         }
-        if (maskExpression.startsWith('percent')) {
+
+        if (maskExpression.startsWith(MaskExpression.PERCENT)) {
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
                 // eslint-disable-next-line no-useless-escape
@@ -155,7 +160,7 @@ export class NgxMaskApplierService {
             } else {
                 result = inputValue.substring(0, inputValue.length - 1);
             }
-        } else if (maskExpression.startsWith('separator')) {
+        } else if (maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             if (
                 inputValue.match('[wа-яА-Я]') ||
                 inputValue.match('[ЁёА-я]') ||
@@ -179,6 +184,7 @@ export class NgxMaskApplierService {
                 !backspaced
                     ? inputValue.slice(0, inputValue.length - 1)
                     : inputValue;
+
             if (backspaced) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
@@ -229,12 +235,14 @@ export class NgxMaskApplierService {
                 new RegExp(thousandSeparatorCharEscaped, 'g'),
                 ''
             );
+
             result = this._formatWithSeparators(
                 strForSep,
                 this.thousandSeparator,
                 this.decimalMarker,
                 precision
             );
+
             const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
             const shiftStep: number = result.length - inputValue.length;
 
@@ -297,7 +305,7 @@ export class NgxMaskApplierService {
                     result += inputSymbol;
                     cursor += 3;
                 } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '')) {
-                    if (maskExpression[cursor] === 'H') {
+                    if (maskExpression[cursor] === MaskExpression.HOURS) {
                         if (Number(inputSymbol) > 2) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
@@ -310,7 +318,7 @@ export class NgxMaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'h') {
+                    if (maskExpression[cursor] === MaskExpression.HOUR) {
                         if (
                             (result === '2' && Number(inputSymbol) > 3) ||
                             ((result.slice(cursor - 2, cursor) === '2' ||
@@ -327,7 +335,10 @@ export class NgxMaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'm' || maskExpression[cursor] === 's') {
+                    if (
+                        maskExpression[cursor] === MaskExpression.MINUTE ||
+                        maskExpression[cursor] === MaskExpression.SECOND
+                    ) {
                         if (Number(inputSymbol) > 5) {
                             // eslint-disable-next-line no-param-reassign
                             position = position + 1;
@@ -354,7 +365,7 @@ export class NgxMaskApplierService {
                     const inputValueSliceMinusOnePlusOne = inputValue.slice(cursor - 1, cursor + 1);
                     const inputValueSliceCursorPlusTwo = inputValue.slice(cursor, cursor + 2);
                     const inputValueSliceMinusTwoCursor = inputValue.slice(cursor - 2, cursor);
-                    if (maskExpression[cursor] === 'd') {
+                    if (maskExpression[cursor] === MaskExpression.DAY) {
                         const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
                         const startWithMonthInput: boolean =
                             maskExpression.slice(0, 2) === 'M0' &&
@@ -384,7 +395,7 @@ export class NgxMaskApplierService {
                             continue;
                         }
                     }
-                    if (maskExpression[cursor] === 'M') {
+                    if (maskExpression[cursor] === MaskExpression.MONTH) {
                         const monthsCount = 12;
                         // mask without day
                         const withoutDays: boolean =
@@ -525,7 +536,7 @@ export class NgxMaskApplierService {
         }
 
         let actualShift: number =
-            justPasted && !maskExpression.startsWith('separator')
+            justPasted && !maskExpression.startsWith(MaskExpression.SEPARATOR)
                 ? cursor
                 : this._shift.has(position)
                 ? shift

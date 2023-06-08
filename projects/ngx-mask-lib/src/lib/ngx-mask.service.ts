@@ -3,6 +3,7 @@ import { DOCUMENT } from '@angular/common';
 
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -53,10 +54,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
-        if (this.maskExpression === 'IP' && this.showMaskTyped) {
+        if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || '#');
         }
-        if (this.maskExpression === 'CPF_CNPJ' && this.showMaskTyped) {
+        if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || '#');
         }
         if (!inputValue && this.showMaskTyped) {
@@ -126,7 +127,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // b) remove decimal marker from list of special characters to mask
-        if (this.maskExpression.startsWith('separator') && this.dropSpecialCharacters === true) {
+        if (
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            this.dropSpecialCharacters === true
+        ) {
             this.specialCharacters = this.specialCharacters.filter(
                 (item: string) =>
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
@@ -145,10 +149,13 @@ export class NgxMaskService extends NgxMaskApplierService {
         const resLen: number = result.length;
         const prefNmask: string = this.prefix + this.maskIsShown;
 
-        if (this.maskExpression.includes('H')) {
+        if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
             return result + prefNmask.slice(resLen + countSkipedSymbol);
-        } else if (this.maskExpression === 'IP' || this.maskExpression === 'CPF_CNPJ') {
+        } else if (
+            this.maskExpression === MaskExpression.IP ||
+            this.maskExpression === MaskExpression.CPF_CNPJ
+        ) {
             return result + prefNmask;
         }
         return result + prefNmask.slice(resLen);
@@ -251,7 +258,11 @@ export class NgxMaskService extends NgxMaskApplierService {
      * 1e-7 -> '0.0000001'
      */
     public numberToString(value: number | string): string {
-        if (!value && value !== 0) {
+        if (
+            (!value && value !== 0) ||
+            (this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+                (this.leadZero || !this.dropSpecialCharacters))
+        ) {
             return String(value);
         }
         return Number(value).toLocaleString('fullwide', {
@@ -269,10 +280,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
         } else if (this.showMaskTyped) {
             if (inputVal) {
-                if (this.maskExpression === 'IP') {
+                if (this.maskExpression === MaskExpression.IP) {
                     return this._checkForIp(inputVal);
                 }
-                if (this.maskExpression === 'CPF_CNPJ') {
+                if (this.maskExpression === MaskExpression.CPF_CNPJ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
             }
@@ -454,12 +465,18 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this.isNumberValue || value === '') {
             return value;
         }
+        if (
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            (this.leadZero || !this.dropSpecialCharacters)
+        ) {
+            return value;
+        }
         const num = Number(value);
         return Number.isNaN(num) ? value : num;
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
-        if (this.maskExpression.startsWith('percent') && value.includes('.')) {
+        if (this.maskExpression.startsWith(MaskExpression.PERCENT) && value.includes('.')) {
             return value;
         }
         return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
@@ -503,7 +520,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         return value.replace(this._regExpForRemove(markers), '.');
     }
 
-    private _checkSymbols(result: string): string | number | undefined | null {
+    public _checkSymbols(result: string): string | number | undefined | null {
         if (result === '') {
             return result;
         }
@@ -536,11 +553,17 @@ export class NgxMaskService extends NgxMaskApplierService {
         return matcher ? Number(matcher[1]) : null;
     }
 
-    private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
-        if (separatorExpression.indexOf('2') > 0) {
-            return Number(separatorValue).toFixed(2);
+    public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
+        const separatorPrecision = separatorExpression.slice(10, 11);
+        if (
+            separatorExpression.indexOf('2') > 0 ||
+            (this.leadZero && Number(separatorPrecision) > 1)
+        ) {
+            return this.leadZero
+                ? Number(separatorValue).toFixed(Number(separatorPrecision))
+                : Number(separatorValue).toFixed(2);
         }
-        return Number(separatorValue);
+        return this.numberToString(separatorValue);
     }
 
     public _repeatPatternSymbols(maskExp: string): string {

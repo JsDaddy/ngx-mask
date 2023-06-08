@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -586,4 +586,334 @@ describe('Separator: Mask', () => {
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
     });
+
+    it('should display zeros at the end separator2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1);
+        tick();
+        expect(inputTarget.value).toBe('1.00');
+
+        component.form.setValue(10);
+        tick();
+        expect(inputTarget.value).toBe('10.00');
+
+        component.form.setValue(100);
+        tick();
+        expect(inputTarget.value).toBe('100.00');
+
+        component.form.setValue(1000);
+        tick();
+        expect(inputTarget.value).toBe('1 000.00');
+
+        component.form.setValue(1000.1);
+        tick();
+        expect(inputTarget.value).toBe('1 000.10');
+
+        component.form.setValue(1000.11);
+        tick();
+        expect(inputTarget.value).toBe('1 000.11');
+
+        component.form.setValue(11000.11);
+        tick();
+        expect(inputTarget.value).toBe('11 000.11');
+
+        equal('0', '0', fixture, true);
+        tick();
+        expect(component.form.value).toBe('0.00');
+
+        equal('1', '1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1.00');
+
+        equal('10', '10', fixture, true);
+        tick();
+        expect(component.form.value).toBe('10.00');
+
+        equal('10', '10', fixture, true);
+        tick();
+        expect(component.form.value).toBe('10.00');
+
+        equal('120', '120', fixture, true);
+        tick();
+        expect(component.form.value).toBe('120.00');
+
+        equal('1220', '1 220', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1220.00');
+
+        equal('12340', '12 340', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.00');
+
+        equal('12340.1', '12 340.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.10');
+
+        equal('12340.12', '12 340.12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.12');
+    }));
+
+    it('should display zeros at the end separator2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        component.thousandSeparator = ',';
+        component.decimalMarker = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1000);
+        tick();
+        expect(inputTarget.value).toBe('1,000.00');
+
+        component.form.setValue(100);
+        tick();
+        expect(inputTarget.value).toBe('100.00');
+
+        component.form.setValue(10000);
+        tick();
+        expect(inputTarget.value).toBe('10,000.00');
+
+        component.form.setValue(120000);
+        tick();
+        expect(inputTarget.value).toBe('120,000.00');
+
+        component.form.setValue(10);
+        tick();
+        expect(inputTarget.value).toBe('10.00');
+
+        equal('12340.12', '12,340.12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.12');
+
+        equal('12340', '12,340', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.00');
+
+        equal('1234.1', '1,234.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1234.10');
+
+        equal('122340.1', '122,340.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('122340.10');
+    }));
+
+    it('should display zeros at the end separator3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(2);
+        tick();
+        expect(inputTarget.value).toBe('2.000');
+
+        component.form.setValue(20);
+        tick();
+        expect(inputTarget.value).toBe('20.000');
+
+        component.form.setValue(200);
+        tick();
+        expect(inputTarget.value).toBe('200.000');
+
+        component.form.setValue(2000);
+        tick();
+        expect(inputTarget.value).toBe('2 000.000');
+
+        component.form.setValue(2000.1);
+        tick();
+        expect(inputTarget.value).toBe('2 000.100');
+
+        component.form.setValue(2000.11);
+        tick();
+        expect(inputTarget.value).toBe('2 000.110');
+
+        component.form.setValue(2000.112);
+        tick();
+        expect(inputTarget.value).toBe('2 000.112');
+
+        component.form.setValue(22000.11);
+        tick();
+        expect(inputTarget.value).toBe('22 000.110');
+
+        equal('1', '1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1.000');
+
+        equal('30', '30', fixture, true);
+        tick();
+        expect(component.form.value).toBe('30.000');
+
+        equal('300', '300', fixture, true);
+        tick();
+        expect(component.form.value).toBe('300.000');
+
+        equal('1234', '1 234', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1234.000');
+
+        equal('12345', '12 345', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12345.000');
+
+        equal('12340.1', '12 340.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.100');
+
+        equal('12340.12', '12 340.12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.120');
+    }));
+
+    it('should display zeros at the end separator3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        component.thousandSeparator = ',';
+        component.decimalMarker = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1000);
+        tick();
+        expect(inputTarget.value).toBe('1,000.000');
+
+        component.form.setValue(100);
+        tick();
+        expect(inputTarget.value).toBe('100.000');
+
+        component.form.setValue(10000);
+        tick();
+        expect(inputTarget.value).toBe('10,000.000');
+
+        component.form.setValue(120000);
+        tick();
+        expect(inputTarget.value).toBe('120,000.000');
+
+        component.form.setValue(10);
+        tick();
+        expect(inputTarget.value).toBe('10.000');
+
+        equal('12340.12', '12,340.12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.120');
+
+        equal('12340', '12,340', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.000');
+
+        equal('1234.1', '1,234.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1234.100');
+
+        equal('122340.1', '122,340.1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('122340.100');
+    }));
+
+    it('should display zeros at the end separator2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        component.thousandSeparator = '.';
+        component.decimalMarker = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1000);
+        tick();
+        expect(inputTarget.value).toBe('1.000,00');
+
+        component.form.setValue(100);
+        tick();
+        expect(inputTarget.value).toBe('100,00');
+
+        component.form.setValue(10000);
+        tick();
+        expect(inputTarget.value).toBe('10.000,00');
+
+        component.form.setValue(120000);
+        tick();
+        expect(inputTarget.value).toBe('120.000,00');
+
+        component.form.setValue(10);
+        tick();
+        expect(inputTarget.value).toBe('10,00');
+
+        equal('12340,12', '12.340,12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.12');
+
+        equal('12340', '12.340', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.00');
+
+        equal('1234,1', '1.234,1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1234.10');
+
+        equal('122340,1', '122.340,1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('122340.10');
+    }));
+
+    it('should display zeros at the end separator3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        component.thousandSeparator = '.';
+        component.decimalMarker = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1000);
+        tick();
+        expect(inputTarget.value).toBe('1.000,000');
+
+        component.form.setValue(100);
+        tick();
+        expect(inputTarget.value).toBe('100,000');
+
+        component.form.setValue(10000);
+        tick();
+        expect(inputTarget.value).toBe('10.000,000');
+
+        component.form.setValue(120000);
+        tick();
+        expect(inputTarget.value).toBe('120.000,000');
+
+        component.form.setValue(10);
+        tick();
+        expect(inputTarget.value).toBe('10,000');
+
+        equal('12340,12', '12.340,12', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.120');
+
+        equal('12340', '12.340', fixture, true);
+        tick();
+        expect(component.form.value).toBe('12340.000');
+
+        equal('1234,1', '1.234,1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('1234.100');
+
+        equal('122340,1', '122.340,1', fixture, true);
+        tick();
+        expect(component.form.value).toBe('122340.100');
+    }));
 });
