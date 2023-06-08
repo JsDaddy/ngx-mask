@@ -8,7 +8,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -51,6 +51,7 @@ export class OptionsComponent implements AfterViewInit {
     @Input() public cardExamples!: (TExample<IMaskOptions> | { _pipe: string })[];
 
     @ViewChildren('cards') public cards!: QueryList<ElementRef>;
+
     public readonly phone = '123456789';
     public readonly trackByPath = inject(TrackByService).trackBy('id');
     public readonly activeCardId$: Observable<number> = inject(ScrollService).activeCard$;

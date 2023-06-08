@@ -253,7 +253,8 @@ export class NgxMaskService extends NgxMaskApplierService {
     public numberToString(value: number | string): string {
         if (
             (!value && value !== 0) ||
-            (this.maskExpression.startsWith('separator') && this.leadZero)
+            (this.maskExpression.startsWith('separator') &&
+                (this.leadZero || !this.dropSpecialCharacters))
         ) {
             return String(value);
         }
@@ -457,7 +458,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this.isNumberValue || value === '') {
             return value;
         }
-        if (this.maskExpression.startsWith('separator') && this.leadZero) {
+        if (
+            this.maskExpression.startsWith('separator') &&
+            (this.leadZero || !this.dropSpecialCharacters)
+        ) {
             return value;
         }
         const num = Number(value);
