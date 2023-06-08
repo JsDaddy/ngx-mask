@@ -2,7 +2,7 @@ import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
-import {MaskExpression, NgxMaskApplierService} from './ngx-mask-applier.service';
+import { MaskExpression, NgxMaskApplierService } from './ngx-mask-applier.service';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -126,7 +126,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // b) remove decimal marker from list of special characters to mask
-        if (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && this.dropSpecialCharacters === true) {
+        if (
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            this.dropSpecialCharacters === true
+        ) {
             this.specialCharacters = this.specialCharacters.filter(
                 (item: string) =>
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
