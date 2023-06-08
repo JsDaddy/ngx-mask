@@ -115,6 +115,11 @@ export const lists: IListItem[] = [
                 scrollTo: 'sep',
             },
             {
+                content: 'Separator',
+                id: 4,
+                scrollTo: 'lead-zero',
+            },
+            {
                 content: 'Dot separator',
                 id: 2,
                 scrollTo: 'Dsep',

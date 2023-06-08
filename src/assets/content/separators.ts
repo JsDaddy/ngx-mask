@@ -10,6 +10,13 @@ export const SepDocs: IComDoc[] = [
         anchor: 'sep',
     },
     {
+        header: 'Lead zero at model',
+        text: 'You can divide your input by thousands',
+        code: `<input type='text' mask="separator.2" [leadZero]="true">`,
+        id: 4,
+        anchor: 'lead-zero',
+    },
+    {
         header: 'Dot separator',
         text: 'For separate input with dots',
         code: `<input type='text' mask="separator" thousandSeparator="."/>`,
@@ -53,6 +60,12 @@ export const SepExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Separator',
         _mask: 'separator',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Separator 2 leadZero',
+        _mask: 'separator.2',
+        _leadZero: true,
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {

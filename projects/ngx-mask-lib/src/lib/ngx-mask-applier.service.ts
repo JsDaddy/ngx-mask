@@ -42,6 +42,8 @@ export class NgxMaskApplierService {
 
     public leadZeroDateTime: IConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
 
+    public leadZero: IConfig['leadZero'] = this._config.leadZero;
+
     private _shift: Set<number> = new Set();
 
     public maskExpression = '';
@@ -120,6 +122,7 @@ export class NgxMaskApplierService {
                 maskExpression = '000.000.000-00';
             }
         }
+
         if (maskExpression.startsWith('percent')) {
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
@@ -179,6 +182,7 @@ export class NgxMaskApplierService {
                 !backspaced
                     ? inputValue.slice(0, inputValue.length - 1)
                     : inputValue;
+
             if (backspaced) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
@@ -229,12 +233,14 @@ export class NgxMaskApplierService {
                 new RegExp(thousandSeparatorCharEscaped, 'g'),
                 ''
             );
+
             result = this._formatWithSeparators(
                 strForSep,
                 this.thousandSeparator,
                 this.decimalMarker,
                 precision
             );
+
             const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
             const shiftStep: number = result.length - inputValue.length;
 

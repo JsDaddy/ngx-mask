@@ -251,7 +251,10 @@ export class NgxMaskService extends NgxMaskApplierService {
      * 1e-7 -> '0.0000001'
      */
     public numberToString(value: number | string): string {
-        if (!value && value !== 0) {
+        if (
+            (!value && value !== 0) ||
+            (this.maskExpression.startsWith('separator') && this.leadZero)
+        ) {
             return String(value);
         }
         return Number(value).toLocaleString('fullwide', {
@@ -454,6 +457,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this.isNumberValue || value === '') {
             return value;
         }
+        if (this.maskExpression.startsWith('separator') && this.leadZero) {
+            return value;
+        }
         const num = Number(value);
         return Number.isNaN(num) ? value : num;
     }
@@ -503,7 +509,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         return value.replace(this._regExpForRemove(markers), '.');
     }
 
-    private _checkSymbols(result: string): string | number | undefined | null {
+    public _checkSymbols(result: string): string | number | undefined | null {
         if (result === '') {
             return result;
         }
@@ -536,11 +542,17 @@ export class NgxMaskService extends NgxMaskApplierService {
         return matcher ? Number(matcher[1]) : null;
     }
 
-    private _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
-        if (separatorExpression.indexOf('2') > 0) {
-            return Number(separatorValue).toFixed(2);
+    public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
+        const separatorPrecision = separatorExpression.slice(10, 11);
+        if (
+            separatorExpression.indexOf('2') > 0 ||
+            (this.leadZero && Number(separatorPrecision) > 1)
+        ) {
+            return this.leadZero
+                ? Number(separatorValue).toFixed(Number(separatorPrecision))
+                : Number(separatorValue).toFixed(2);
         }
-        return Number(separatorValue);
+        return this.numberToString(separatorValue);
     }
 
     public _repeatPatternSymbols(maskExp: string): string {

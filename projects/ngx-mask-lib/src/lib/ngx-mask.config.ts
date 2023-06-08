@@ -17,6 +17,7 @@ export interface IConfig {
     separatorLimit: string;
     allowNegativeNumbers: boolean;
     leadZeroDateTime: boolean;
+    leadZero: boolean;
     triggerOnMaskChange: boolean;
     maskFilled: EventEmitter<void>;
     patterns: {
@@ -53,6 +54,7 @@ export const initialConfig: IConfig = {
     // eslint-disable-next-line @typescript-eslint/quotes
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
+    leadZero: false,
     triggerOnMaskChange: false,
     maskFilled: new EventEmitter<void>(),
     patterns: {

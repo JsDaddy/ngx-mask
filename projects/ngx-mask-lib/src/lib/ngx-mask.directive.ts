@@ -78,6 +78,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
 
+    @Input() public leadZero: IConfig['leadZero'] | null = null;
+
     @Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
 
     @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
@@ -129,6 +131,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             separatorLimit,
             allowNegativeNumbers,
             leadZeroDateTime,
+            leadZero,
             triggerOnMaskChange,
         } = changes;
         if (maskExpression) {
@@ -210,6 +213,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (leadZeroDateTime) {
             this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
+        }
+        if (leadZero) {
+            this._maskService.leadZero = leadZero.currentValue;
         }
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
@@ -580,13 +586,29 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (typeof inputValue === 'number' || this._maskValue.startsWith('separator')) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this._maskService.numberToString(inputValue);
+            const localeDecimalMarker = this._currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
-                const localeDecimalMarker = this._currentLocaleDecimalMarker();
                 // eslint-disable-next-line no-param-reassign
                 inputValue =
                     this._maskService.decimalMarker !== localeDecimalMarker
                         ? inputValue.replace(localeDecimalMarker, this._maskService.decimalMarker)
                         : inputValue;
+            }
+            if (
+                this._maskService.leadZero &&
+                inputValue &&
+                this.maskExpression &&
+                this.dropSpecialCharacters !== false
+            ) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = this._maskService._checkPrecision(
+                    this.maskExpression.toString(),
+                    inputValue as string
+                );
+                if (this._maskService.decimalMarker === ',') {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = inputValue.toString().replace('.', ',');
+                }
             }
             this._maskService.isNumberValue = true;
         }
@@ -595,7 +617,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line no-param-reassign
             inputValue = '';
         }
-
         this._inputValue = inputValue;
         this._setMask();
 

@@ -24,6 +24,7 @@ import { IConfig } from '../../lib/ngx-mask.config';
             [hiddenInput]="hiddenInput"
             [allowNegativeNumbers]="allowNegativeNumbers"
             [leadZeroDateTime]="leadZeroDateTime"
+            [leadZero]="leadZero"
             [triggerOnMaskChange]="triggerOnMaskChange" />
     `,
 })
@@ -59,6 +60,8 @@ export class TestMaskComponent {
     public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | undefined;
 
     public leadZeroDateTime: IConfig['leadZeroDateTime'] | undefined;
+
+    public leadZero: IConfig['leadZero'] | undefined;
 
     public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
 
