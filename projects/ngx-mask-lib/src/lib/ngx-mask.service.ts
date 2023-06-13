@@ -64,7 +64,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
-
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? ''
@@ -261,7 +260,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (
             (!value && value !== 0) ||
             (this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
-                (this.leadZero || !this.dropSpecialCharacters))
+                (this.leadZero || !this.dropSpecialCharacters)) ||
+            (this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+                this.separatorLimit.length > 14 &&
+                String(value).length > 14)
         ) {
             return String(value);
         }
@@ -471,6 +473,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return value;
         }
+        if (String(value).length > 16 && this.separatorLimit.length > 14) {
+            return String(value);
+        }
         const num = Number(value);
         return Number.isNaN(num) ? value : num;
     }
@@ -538,6 +543,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (separatorPrecision) {
             if (result === this.decimalMarker) {
                 return null;
+            }
+            if (this.separatorLimit.length > 14) {
+                return String(separatorValue);
             }
             return this._checkPrecision(this.maskExpression, separatorValue);
         } else {

@@ -916,4 +916,37 @@ describe('Separator: Mask', () => {
         tick();
         expect(component.form.value).toBe('122340.100');
     }));
+
+    it('should display only 9 separator.2', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
+        component.decimalMarker = '.';
+
+        equal('999999999999999', '999,999,999,999,999', fixture);
+        expect(component.form.value).toBe('999999999999999');
+
+        equal('999999999999999.9', '999,999,999,999,999.9', fixture);
+        expect(component.form.value).toBe('999999999999999.9');
+
+        equal('999999999999999.99', '999,999,999,999,999.99', fixture);
+        expect(component.form.value).toBe('999999999999999.99');
+    });
+
+    it('should display only 9 separator.3', () => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = ',';
+        component.decimalMarker = '.';
+
+        equal('999999999999999', '999,999,999,999,999', fixture);
+        expect(component.form.value).toBe('999999999999999');
+
+        equal('999999999999999.9', '999,999,999,999,999.9', fixture);
+        expect(component.form.value).toBe('999999999999999.9');
+
+        equal('999999999999999.99', '999,999,999,999,999.99', fixture);
+        expect(component.form.value).toBe('999999999999999.99');
+
+        equal('999999999999999.999', '999,999,999,999,999.999', fixture);
+        expect(component.form.value).toBe('999999999999999.999');
+    });
 });
