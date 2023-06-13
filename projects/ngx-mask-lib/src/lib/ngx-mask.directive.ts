@@ -331,7 +331,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public onInput(e: CustomKeyboardEvent): void {
         // If IME is composing text, we wait for the composed text.
         if (this._isComposing) return;
-
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
 
@@ -621,9 +620,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line no-param-reassign
             inputValue = '';
         }
+
         this._inputValue = inputValue;
         this._setMask();
-
         if (
             (inputValue && this._maskService.maskExpression) ||
             (this._maskService.maskExpression &&
