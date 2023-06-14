@@ -171,7 +171,6 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
-            console.log(this.specialCharacters);
             // eslint-disable-next-line no-param-reassign
             inputValue =
                 inputValue.length > 1 &&
