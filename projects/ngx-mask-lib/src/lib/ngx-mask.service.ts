@@ -101,7 +101,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                     ? this.shiftTypedSymbols(actualResult.join(''))
                     : inputValue;
         }
-
+        if (justPasted && this.hiddenInput) {
+            newInputValue = inputValue;
+        }
         if (this.showMaskTyped) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.removeMask(inputValue);
@@ -135,6 +137,16 @@ export class NgxMaskService extends NgxMaskApplierService {
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
             );
         }
+        // if (
+        //     this.maskExpression.startsWith(MaskExpression.PERCENT) &&
+        //     this.dropSpecialCharacters === true &&
+        //     !Array.isArray(this.decimalMarker)
+        // ) {
+        //     this.specialCharacters = this.specialCharacters.filter(
+        //         (c: string) => c !== '.'
+        //     );
+        // }
+
         this.formControlResult(result);
 
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -591,7 +603,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                         );
                         if (maskExp.slice(0, this._start).length > 1 && maskExp.includes('S')) {
                             const symbols = maskExp.slice(0, this._start - 1);
-                            return symbols + accum + replaceWith;
+                            return symbols.includes('{')
+                                ? accum + replaceWith
+                                : symbols + accum + replaceWith;
                         } else {
                             return accum + replaceWith;
                         }

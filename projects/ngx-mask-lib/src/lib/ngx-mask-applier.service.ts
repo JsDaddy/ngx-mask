@@ -156,9 +156,9 @@ export class NgxMaskApplierService {
                 ? (value = inputValue.slice(cursor + 1, cursor + inputValue.length))
                 : (value = inputValue);
             if (this.percentage(value)) {
-                result = inputValue;
+                result = this._splitPercentZero(inputValue);
             } else {
-                result = inputValue.substring(0, inputValue.length - 1);
+                result = this._splitPercentZero(inputValue.substring(0, inputValue.length - 1));
             }
         } else if (maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             if (
@@ -171,6 +171,7 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
+            console.log(this.specialCharacters);
             // eslint-disable-next-line no-param-reassign
             inputValue =
                 inputValue.length > 1 &&
@@ -734,5 +735,18 @@ export class NgxMaskApplierService {
                 return value === '' || Number(value.substring(0, 3)) > 255;
             })
         );
+    }
+
+    private _splitPercentZero(value: string): string {
+        const decimalIndex = value.indexOf('.');
+        if (decimalIndex === -1) {
+            const parsedValue = parseInt(value, 10);
+            return isNaN(parsedValue) ? '' : parsedValue.toString();
+        } else {
+            const integerPart = parseInt(value.substring(0, decimalIndex), 10);
+            const decimalPart = value.substring(decimalIndex + 1);
+            const integerString = isNaN(integerPart) ? '' : integerPart.toString();
+            return integerString === '' ? '' : integerString + '.' + decimalPart;
+        }
     }
 }

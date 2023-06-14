@@ -89,4 +89,15 @@ describe('Directive: Mask (Repeat)', () => {
         equal('aa222', 'aa222', fixture);
         equal('dd2134', 'dd2134', fixture);
     });
+
+    it('should repeat digits only and work with dynamicMask', () => {
+        component.mask = 'A{5}.S{2}';
+        equal('d', 'd', fixture);
+        equal('dd', 'dd', fixture);
+        equal('dd1', 'dd1', fixture);
+        equal('aa22', 'aa22', fixture);
+        equal('aa222', 'aa222', fixture);
+        equal('dd213D', 'dd213.D', fixture);
+        equal('dd213DW', 'dd213.DW', fixture);
+    });
 });
