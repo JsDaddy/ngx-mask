@@ -2,6 +2,7 @@ import { inject, Pipe, PipeTransform } from '@angular/core';
 
 import { IConfig } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Pipe({
     name: 'mask',
@@ -47,7 +48,7 @@ export class NgxMaskPipe implements PipeTransform {
                 return this._maskService.applyMask(`${value}`, this.mask);
             }
         }
-        if (mask.includes('{')) {
+        if (mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)) {
             return this._maskService.applyMask(
                 `${value}`,
                 this._maskService._repeatPatternSymbols(mask)
@@ -67,7 +68,8 @@ export class NgxMaskPipe implements PipeTransform {
                     return test;
                 } else {
                     const expression =
-                        this._maskExpressionArray[this._maskExpressionArray.length - 1] ?? '';
+                        this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
+                        MaskExpression.EMPTY_STRING;
                     this.mask = expression;
                 }
             });

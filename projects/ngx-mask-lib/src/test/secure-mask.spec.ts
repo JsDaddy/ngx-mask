@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
@@ -155,4 +155,23 @@ describe('Directive: Mask (Secure)', () => {
         equal('1234', '***/*', fixture);
         equal('', '___/__/____', fixture);
     });
+
+    it('should select text in input and paste new value', fakeAsync(() => {
+        const inputValue = '111111';
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('#mask');
+        inputElement.value = '000000';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(0, inputElement.value.length);
+        inputElement.dispatchEvent(new MouseEvent('dblclick'));
+        fixture.detectChanges();
+        inputElement.value = inputValue;
+        inputElement.dispatchEvent(new Event('input'));
+        inputElement.dispatchEvent(new Event('change'));
+        fixture.detectChanges();
+        tick();
+
+        expect(component.form.value).toBe(inputValue);
+    }));
 });
