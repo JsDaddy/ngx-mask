@@ -76,7 +76,7 @@ export class NgxMaskApplierService {
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression || typeof inputValue !== 'string') {
-            return '';
+            return MaskExpression.EMPTY_STRING;
         }
         let cursor = 0;
         let result = '';
@@ -97,13 +97,16 @@ export class NgxMaskApplierService {
             inputValue = '';
         }
 
-        const inputArray: string[] = inputValue.toString().split('');
-        if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
+        const inputArray: string[] = inputValue.toString().split(MaskExpression.EMPTY_STRING);
+        if (
+            this.allowNegativeNumbers &&
+            inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
+        ) {
             // eslint-disable-next-line no-param-reassign
             result += inputValue.slice(cursor, cursor + 1);
         }
         if (maskExpression === MaskExpression.IP) {
-            const valuesIP = inputValue.split('.');
+            const valuesIP = inputValue.split(MaskExpression.DOT);
             this.ipError = this._validIP(valuesIP);
             // eslint-disable-next-line no-param-reassign
             maskExpression = '099.099.099.099';
@@ -111,7 +114,7 @@ export class NgxMaskApplierService {
         const arr: string[] = [];
         for (let i = 0; i < inputValue.length; i++) {
             if (inputValue[i]?.match('\\d')) {
-                arr.push(inputValue[i] ?? '');
+                arr.push(inputValue[i] ?? MaskExpression.EMPTY_STRING);
             }
         }
         if (maskExpression === MaskExpression.CPF_CNPJ) {
@@ -138,27 +141,34 @@ export class NgxMaskApplierService {
                 inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
             }
             if (
-                inputValue.indexOf('.') > 0 &&
-                !this.percentage(inputValue.substring(0, inputValue.indexOf('.')))
+                inputValue.indexOf(MaskExpression.DOT) > 0 &&
+                !this.percentage(inputValue.substring(0, inputValue.indexOf(MaskExpression.DOT)))
             ) {
-                let base: string = inputValue.substring(0, inputValue.indexOf('.') - 1);
-                if (this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-') {
-                    base = inputValue.substring(0, inputValue.indexOf('.'));
+                let base: string = inputValue.substring(
+                    0,
+                    inputValue.indexOf(MaskExpression.DOT) - 1
+                );
+                if (
+                    this.allowNegativeNumbers &&
+                    inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
+                ) {
+                    base = inputValue.substring(0, inputValue.indexOf(MaskExpression.DOT));
                 }
                 // eslint-disable-next-line no-param-reassign
                 inputValue = `${base}${inputValue.substring(
-                    inputValue.indexOf('.'),
+                    inputValue.indexOf(MaskExpression.DOT),
                     inputValue.length
                 )}`;
             }
             let value = '';
-            this.allowNegativeNumbers && inputValue.slice(cursor, cursor + 1) === '-'
+            this.allowNegativeNumbers &&
+            inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
                 ? (value = inputValue.slice(cursor + 1, cursor + inputValue.length))
                 : (value = inputValue);
             if (this.percentage(value)) {
-                result = inputValue;
+                result = this._splitPercentZero(inputValue);
             } else {
-                result = inputValue.substring(0, inputValue.length - 1);
+                result = this._splitPercentZero(inputValue.substring(0, inputValue.length - 1));
             }
         } else if (maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             if (
@@ -208,7 +218,10 @@ export class NgxMaskApplierService {
             //.replace(decimalMarkerEscaped, '');
             if (Array.isArray(this.decimalMarker)) {
                 for (const marker of this.decimalMarker) {
-                    invalidChars = invalidChars.replace(this._charToRegExpExpression(marker), '');
+                    invalidChars = invalidChars.replace(
+                        this._charToRegExpExpression(marker),
+                        MaskExpression.EMPTY_STRING
+                    );
                 }
             } else {
                 invalidChars = invalidChars.replace(
@@ -243,10 +256,11 @@ export class NgxMaskApplierService {
                 precision
             );
 
-            const commaShift: number = result.indexOf(',') - inputValue.indexOf(',');
+            const commaShift: number =
+                result.indexOf(MaskExpression.COMMA) - inputValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - inputValue.length;
 
-            if (shiftStep > 0 && result[position] !== ',') {
+            if (shiftStep > 0 && result[position] !== MaskExpression.COMMA) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
@@ -256,8 +270,9 @@ export class NgxMaskApplierService {
             } else if (
                 (commaShift !== 0 &&
                     position > 0 &&
-                    !(result.indexOf(',') >= position && position > 3)) ||
-                (!(result.indexOf('.') >= position && position > 3) && shiftStep <= 0)
+                    !(result.indexOf(MaskExpression.COMMA) >= position && position > 3)) ||
+                (!(result.indexOf(MaskExpression.DOT) >= position && position > 3) &&
+                    shiftStep <= 0)
             ) {
                 this._shift.clear();
                 backspaceShift = true;
@@ -273,38 +288,55 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0]!;
                 i < inputArray.length;
-                i++, inputSymbol = inputArray[i] ?? ''
+                i++, inputSymbol = inputArray[i] ?? MaskExpression.EMPTY_STRING
             ) {
                 if (cursor === maskExpression.length) {
                     break;
                 }
                 if (
-                    this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '') &&
-                    maskExpression[cursor + 1] === '?'
+                    this._checkSymbolMask(
+                        inputSymbol,
+                        maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
+                    ) &&
+                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION
                 ) {
                     result += inputSymbol;
                     cursor += 2;
                 } else if (
-                    maskExpression[cursor + 1] === '*' &&
+                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR &&
                     multi &&
-                    this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2] ?? '')
+                    this._checkSymbolMask(
+                        inputSymbol,
+                        maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
+                    )
                 ) {
                     result += inputSymbol;
                     cursor += 3;
                     multi = false;
                 } else if (
-                    this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '') &&
-                    maskExpression[cursor + 1] === '*'
+                    this._checkSymbolMask(
+                        inputSymbol,
+                        maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
+                    ) &&
+                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR
                 ) {
                     result += inputSymbol;
                     multi = true;
                 } else if (
-                    maskExpression[cursor + 1] === '?' &&
-                    this._checkSymbolMask(inputSymbol, maskExpression[cursor + 2] ?? '')
+                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION &&
+                    this._checkSymbolMask(
+                        inputSymbol,
+                        maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
+                    )
                 ) {
                     result += inputSymbol;
                     cursor += 3;
-                } else if (this._checkSymbolMask(inputSymbol, maskExpression[cursor] ?? '')) {
+                } else if (
+                    this._checkSymbolMask(
+                        inputSymbol,
+                        maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
+                    )
+                ) {
                     if (maskExpression[cursor] === MaskExpression.HOURS) {
                         if (Number(inputSymbol) > 2) {
                             // eslint-disable-next-line no-param-reassign
@@ -472,7 +504,11 @@ export class NgxMaskApplierService {
                 } else if (inputSymbol === ' ' && maskExpression[cursor] === ' ') {
                     result += inputSymbol;
                     cursor++;
-                } else if (this.specialCharacters.indexOf(maskExpression[cursor] ?? '') !== -1) {
+                } else if (
+                    this.specialCharacters.indexOf(
+                        maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
+                    ) !== -1
+                ) {
                     result += maskExpression[cursor];
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -481,8 +517,8 @@ export class NgxMaskApplierService {
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                 } else if (
                     this.specialCharacters.indexOf(inputSymbol) > -1 &&
-                    this.patterns[maskExpression[cursor] ?? ''] &&
-                    this.patterns[maskExpression[cursor] ?? '']?.optional
+                    this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] &&
+                    this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional
                 ) {
                     if (
                         !!inputArray[cursor] &&
@@ -491,23 +527,28 @@ export class NgxMaskApplierService {
                         maskExpression !== '00.000.000/0000-00' &&
                         !maskExpression.match(/^9+\.0+$/) &&
                         // maskExpression[cursor] !== '9'
-                        !this.patterns[maskExpression[cursor] ?? '']?.optional
+                        !this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]
+                            ?.optional
                     ) {
                         result += inputArray[cursor];
                     }
                     cursor++;
                     i--;
                 } else if (
-                    this.maskExpression[cursor + 1] === '*' &&
-                    this._findSpecialChar(this.maskExpression[cursor + 2] ?? '') &&
+                    this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR &&
+                    this._findSpecialChar(
+                        this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
+                    ) &&
                     this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
                     multi
                 ) {
                     cursor += 3;
                     result += inputSymbol;
                 } else if (
-                    this.maskExpression[cursor + 1] === '?' &&
-                    this._findSpecialChar(this.maskExpression[cursor + 2] ?? '') &&
+                    this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION &&
+                    this._findSpecialChar(
+                        this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
+                    ) &&
                     this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
                     multi
                 ) {
@@ -524,7 +565,9 @@ export class NgxMaskApplierService {
         }
         if (
             result.length + 1 === maskExpression.length &&
-            this.specialCharacters.indexOf(maskExpression[maskExpression.length - 1] ?? '') !== -1
+            this.specialCharacters.indexOf(
+                maskExpression[maskExpression.length - 1] ?? MaskExpression.EMPTY_STRING
+            ) !== -1
         ) {
             result += maskExpression[maskExpression.length - 1];
         }
@@ -553,7 +596,9 @@ export class NgxMaskApplierService {
         if (backspaced) {
             onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
-        let res = `${this.prefix}${onlySpecial ? '' : result}${this.suffix}`;
+        let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
+            this.suffix
+        }`;
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
@@ -586,16 +631,20 @@ export class NgxMaskApplierService {
                 decimalChars.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|')
             );
             x = str.split(regExp);
-            decimalChar = str.match(regExp)?.[0] ?? '';
+            decimalChar = str.match(regExp)?.[0] ?? MaskExpression.EMPTY_STRING;
         } else {
             x = str.split(decimalChars);
             decimalChar = decimalChars;
         }
-        const decimals: string = x.length > 1 ? `${decimalChar}${x[1]}` : '';
-        let res: string = x[0] ?? '';
-        const separatorLimit: string = this.separatorLimit.replace(/\s/g, '');
+        const decimals: string =
+            x.length > 1 ? `${decimalChar}${x[1]}` : MaskExpression.EMPTY_STRING;
+        let res: string = x[0] ?? MaskExpression.EMPTY_STRING;
+        const separatorLimit: string = this.separatorLimit.replace(
+            /\s/g,
+            MaskExpression.EMPTY_STRING
+        );
         if (separatorLimit && +separatorLimit) {
-            if (res[0] === '-') {
+            if (res[0] === MaskExpression.MINUS) {
                 res = `-${res.slice(1, res.length).slice(0, separatorLimit.length)}`;
             } else {
                 res = res.slice(0, separatorLimit.length);
@@ -620,7 +669,7 @@ export class NgxMaskApplierService {
     };
 
     private getPrecision = (maskExpression: string): number => {
-        const x: string[] = maskExpression.split('.');
+        const x: string[] = maskExpression.split(MaskExpression.DOT);
         if (x.length > 1) {
             return Number(x[x.length - 1]);
         }
@@ -637,7 +686,7 @@ export class NgxMaskApplierService {
                 (i - 1 < 0 ||
                     !inputValue.includes(this.suffix.substring(i - 1, this.suffix?.length)))
             ) {
-                return inputValue.replace(substr, '');
+                return inputValue.replace(substr, MaskExpression.EMPTY_STRING);
             }
         }
         return inputValue;
@@ -683,21 +732,23 @@ export class NgxMaskApplierService {
 
     private _stripToDecimal(str: string): string {
         return str
-            .split('')
+            .split(MaskExpression.EMPTY_STRING)
             .filter((i: string, idx: number) => {
                 const isDecimalMarker =
                     typeof this.decimalMarker === 'string'
                         ? i === this.decimalMarker
                         : // TODO (inepipenko) use utility type
-                          this.decimalMarker.includes(i as ',' | '.');
+                          this.decimalMarker.includes(
+                              i as MaskExpression.COMMA | MaskExpression.DOT
+                          );
                 return (
                     i.match('^-?\\d') ||
                     i === this.thousandSeparator ||
                     isDecimalMarker ||
-                    (i === '-' && idx === 0 && this.allowNegativeNumbers)
+                    (i === MaskExpression.MINUS && idx === 0 && this.allowNegativeNumbers)
                 );
             })
-            .join('');
+            .join(MaskExpression.EMPTY_STRING);
     }
 
     private _charToRegExpExpression(char: string): string {
@@ -729,10 +780,25 @@ export class NgxMaskApplierService {
             valuesIP.length === 4 &&
             !valuesIP.some((value: string, index: number) => {
                 if (valuesIP.length !== index + 1) {
-                    return value === '' || Number(value) > 255;
+                    return value === MaskExpression.EMPTY_STRING || Number(value) > 255;
                 }
-                return value === '' || Number(value.substring(0, 3)) > 255;
+                return value === MaskExpression.EMPTY_STRING || Number(value.substring(0, 3)) > 255;
             })
         );
+    }
+
+    private _splitPercentZero(value: string): string {
+        const decimalIndex = value.indexOf(MaskExpression.DOT);
+        if (decimalIndex === -1) {
+            const parsedValue = parseInt(value, 10);
+            return isNaN(parsedValue) ? MaskExpression.EMPTY_STRING : parsedValue.toString();
+        } else {
+            const integerPart = parseInt(value.substring(0, decimalIndex), 10);
+            const decimalPart = value.substring(decimalIndex + 1);
+            const integerString = isNaN(integerPart) ? '' : integerPart.toString();
+            return integerString === MaskExpression.EMPTY_STRING
+                ? MaskExpression.EMPTY_STRING
+                : integerString + MaskExpression.DOT + decimalPart;
+        }
     }
 }

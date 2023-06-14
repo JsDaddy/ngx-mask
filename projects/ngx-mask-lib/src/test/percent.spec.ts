@@ -73,4 +73,31 @@ describe('Directive: Mask (Percent)', () => {
         equal('123', '12%', fixture);
         equal('50.50', '50.50%', fixture);
     });
+
+    it('percent for split zero percent.2', () => {
+        component.mask = 'percent.2';
+        equal('01.23', '1.23', fixture);
+        equal('012.23', '12.23', fixture);
+        equal('099.23', '99.23', fixture);
+        equal('0999.23', '99.23', fixture);
+        equal('034.023', '34.02', fixture);
+    });
+
+    it('percent for split zero percent', () => {
+        component.mask = 'percent';
+        equal('01.23', '1.23', fixture);
+        equal('012.23', '12.23', fixture);
+        equal('099.23', '99.23', fixture);
+        equal('0999.23', '99.23', fixture);
+        equal('034.023', '34.023', fixture);
+    });
+
+    it('percent for split zero percent.3', () => {
+        component.mask = 'percent.3';
+        equal('01.233', '1.233', fixture);
+        equal('012.232', '12.232', fixture);
+        equal('099.230', '99.230', fixture);
+        equal('0999.000', '99.000', fixture);
+        equal('034.023', '34.023', fixture);
+    });
 });
