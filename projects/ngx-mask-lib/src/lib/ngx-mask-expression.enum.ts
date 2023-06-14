@@ -9,4 +9,12 @@ export const enum MaskExpression {
     HOURS = 'H',
     DAY = 'd',
     SECOND = 's',
+    LETTER_S = 'S',
+    DOT = '.',
+    COMMA = ',',
+    CURLY_BRACKETS_LEFT = '{',
+    CURLY_BRACKETS_RIGHT = '}',
+    MINUS = '-',
+    OR = '||',
+    HASH = '#',
 }

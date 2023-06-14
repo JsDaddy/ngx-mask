@@ -146,12 +146,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
                 if (this._maskService.allowNegativeNumbers) {
                     this._maskService.specialCharacters =
-                        this._maskService.specialCharacters.filter((c: string) => c !== '-');
+                        this._maskService.specialCharacters.filter(
+                            (c: string) => c !== MaskExpression.MINUS
+                        );
                 }
             }
-            if (maskExpression.currentValue && maskExpression.currentValue.split('||').length > 1) {
+            if (
+                maskExpression.currentValue &&
+                maskExpression.currentValue.split(MaskExpression.OR).length > 1
+            ) {
                 this._maskExpressionArray = maskExpression.currentValue
-                    .split('||')
+                    .split(MaskExpression.OR)
                     .sort((a: string, b: string) => {
                         return a.length - b.length;
                     });
@@ -608,9 +613,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this.maskExpression.toString(),
                     inputValue as string
                 );
-                if (this._maskService.decimalMarker === ',') {
+                if (this._maskService.decimalMarker === MaskExpression.COMMA) {
                     // eslint-disable-next-line no-param-reassign
-                    inputValue = inputValue.toString().replace('.', ',');
+                    inputValue = inputValue
+                        .toString()
+                        .replace(MaskExpression.DOT, MaskExpression.COMMA);
                 }
             }
             this._maskService.isNumberValue = true;
@@ -725,7 +732,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             const specialChart: boolean = mask
                 .split('')
                 .some((char) => this._maskService.specialCharacters.includes(char));
-            if ((specialChart && this._inputValue && !mask.includes('S')) || mask.includes('{')) {
+            if (
+                (specialChart && this._inputValue && !mask.includes(MaskExpression.LETTER_S)) ||
+                mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)
+            ) {
                 const test =
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
@@ -733,7 +743,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskValue =
                         this.maskExpression =
                         this._maskService.maskExpression =
-                            mask.includes('{')
+                            mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)
                                 ? this._maskService._repeatPatternSymbols(mask)
                                 : mask;
                     return test;
@@ -743,7 +753,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskValue =
                         this.maskExpression =
                         this._maskService.maskExpression =
-                            expression.includes('{')
+                            expression.includes(MaskExpression.CURLY_BRACKETS_LEFT)
                                 ? this._maskService._repeatPatternSymbols(expression)
                                 : expression;
                 }

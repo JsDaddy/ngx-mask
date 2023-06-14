@@ -55,10 +55,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
-            this.maskIsShown = this.showMaskInInput(inputValue || '#');
+            this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
         if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
-            this.maskIsShown = this.showMaskInInput(inputValue || '#');
+            this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
@@ -123,8 +123,11 @@ export class NgxMaskService extends NgxMaskApplierService {
         this.actualValue = this.getActualValue(result);
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
-        if (this.thousandSeparator === '.' && this.decimalMarker === '.') {
-            this.decimalMarker = ',';
+        if (
+            this.thousandSeparator === MaskExpression.DOT &&
+            this.decimalMarker === MaskExpression.DOT
+        ) {
+            this.decimalMarker = MaskExpression.COMMA;
         }
 
         // b) remove decimal marker from list of special characters to mask
@@ -336,7 +339,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _checkForIp(inputVal: string): string {
-        if (inputVal === '#') {
+        if (inputVal === MaskExpression.HASH) {
             return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         const arr: string[] = [];
@@ -377,7 +380,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             `/${this.placeHolderCharacter}${this.placeHolderCharacter}${this.placeHolderCharacter}${this.placeHolderCharacter}` +
             `-${this.placeHolderCharacter}${this.placeHolderCharacter}`;
 
-        if (inputVal === '#') {
+        if (inputVal === MaskExpression.HASH) {
             return cpf;
         }
         const arr: string[] = [];
@@ -484,7 +487,10 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _removeMask(value: string, specialCharactersForRemove: string[]): string {
-        if (this.maskExpression.startsWith(MaskExpression.PERCENT) && value.includes('.')) {
+        if (
+            this.maskExpression.startsWith(MaskExpression.PERCENT) &&
+            value.includes(MaskExpression.DOT)
+        ) {
             return value;
         }
         return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
@@ -525,7 +531,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             ? this.decimalMarker
             : [this.decimalMarker];
 
-        return value.replace(this._regExpForRemove(markers), '.');
+        return value.replace(this._regExpForRemove(markers), MaskExpression.DOT);
     }
 
     public _checkSymbols(result: string): string | number | undefined | null {
@@ -583,8 +589,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                 maskExp
                     .split('')
                     .reduce((accum: string, currVal: string, index: number): string => {
-                        this._start = currVal === '{' ? index : this._start;
-                        if (currVal !== '}') {
+                        this._start =
+                            currVal === MaskExpression.CURLY_BRACKETS_LEFT ? index : this._start;
+                        if (currVal !== MaskExpression.CURLY_BRACKETS_RIGHT) {
                             return this._findSpecialChar(currVal) ? accum + currVal : accum;
                         }
                         this._end = index;
@@ -592,9 +599,12 @@ export class NgxMaskService extends NgxMaskApplierService {
                         const replaceWith: string = new Array(repeatNumber + 1).join(
                             maskExp[this._start - 1]
                         );
-                        if (maskExp.slice(0, this._start).length > 1 && maskExp.includes('S')) {
+                        if (
+                            maskExp.slice(0, this._start).length > 1 &&
+                            maskExp.includes(MaskExpression.LETTER_S)
+                        ) {
                             const symbols = maskExp.slice(0, this._start - 1);
-                            return symbols.includes('{')
+                            return symbols.includes(MaskExpression.CURLY_BRACKETS_LEFT)
                                 ? accum + replaceWith
                                 : symbols + accum + replaceWith;
                         } else {
