@@ -137,15 +137,6 @@ export class NgxMaskService extends NgxMaskApplierService {
                     !this._compareOrIncludes(item, this.decimalMarker, this.thousandSeparator) //item !== this.decimalMarker, // !
             );
         }
-        // if (
-        //     this.maskExpression.startsWith(MaskExpression.PERCENT) &&
-        //     this.dropSpecialCharacters === true &&
-        //     !Array.isArray(this.decimalMarker)
-        // ) {
-        //     this.specialCharacters = this.specialCharacters.filter(
-        //         (c: string) => c !== '.'
-        //     );
-        // }
 
         this.formControlResult(result);
 
