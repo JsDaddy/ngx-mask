@@ -17,4 +17,7 @@ export const enum MaskExpression {
     MINUS = '-',
     OR = '||',
     HASH = '#',
+    EMPTY_STRING = '',
+    SYMBOL_STAR = '*',
+    SYMBOL_QUESTION = '?',
 }

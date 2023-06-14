@@ -53,7 +53,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!maskExpression) {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
-        this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : '';
+        this.maskIsShown = this.showMaskTyped
+            ? this.showMaskInInput()
+            : MaskExpression.EMPTY_STRING;
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
@@ -66,18 +68,18 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
-                ? inputValue[this.selStart] ?? ''
-                : '';
+                ? inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING
+                : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
         if (this.hiddenInput !== undefined && !this.writingValue) {
-            let actualResult: string[] = this.actualValue.split('');
+            let actualResult: string[] = this.actualValue.split(MaskExpression.EMPTY_STRING);
             // eslint-disable  @typescript-eslint/no-unused-expressions
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
                 this.selStart = Number(this.selStart);
                 this.selEnd = Number(this.selEnd);
             } else {
-                inputValue !== '' && actualResult.length
+                inputValue !== MaskExpression.EMPTY_STRING && actualResult.length
                     ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
                         ? inputValue.length > actualResult.length
                             ? actualResult.splice(this.selStart, 0, getSymbol)
@@ -98,7 +100,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             // eslint-enable  @typescript-eslint/no-unused-expressions
             newInputValue =
                 this.actualValue.length && actualResult.length <= inputValue.length
-                    ? this.shiftTypedSymbols(actualResult.join(''))
+                    ? this.shiftTypedSymbols(actualResult.join(MaskExpression.EMPTY_STRING))
                     : inputValue;
         }
         if (justPasted && this.hiddenInput) {
@@ -205,31 +207,34 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     public hideInput(inputValue: string, maskExpression: string): string {
         return inputValue
-            .split('')
+            .split(MaskExpression.EMPTY_STRING)
             .map((curr: string, index: number) => {
                 if (
                     this.patterns &&
-                    this.patterns[maskExpression[index] ?? ''] &&
-                    this.patterns[maskExpression[index] ?? '']?.symbol
+                    this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING] &&
+                    this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING]?.symbol
                 ) {
-                    return this.patterns[maskExpression[index] ?? '']?.symbol;
+                    return this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING]
+                        ?.symbol;
                 }
                 return curr;
             })
-            .join('');
+            .join(MaskExpression.EMPTY_STRING);
     }
 
     // this function is not necessary, it checks result against maskExpression
     public getActualValue(res: string): string {
-        const compare: string[] = res.split('').filter((symbol: string, i: number) => {
-            const maskChar = this.maskExpression[i] ?? '';
-            return (
-                this._checkSymbolMask(symbol, maskChar) ||
-                (this.specialCharacters.includes(maskChar) && symbol === maskChar)
-            );
-        });
-        if (compare.join('') === res) {
-            return compare.join('');
+        const compare: string[] = res
+            .split(MaskExpression.EMPTY_STRING)
+            .filter((symbol: string, i: number) => {
+                const maskChar = this.maskExpression[i] ?? MaskExpression.EMPTY_STRING;
+                return (
+                    this._checkSymbolMask(symbol, maskChar) ||
+                    (this.specialCharacters.includes(maskChar) && symbol === maskChar)
+                );
+            });
+        if (compare.join(MaskExpression.EMPTY_STRING) === res) {
+            return compare.join(MaskExpression.EMPTY_STRING);
         }
         return res;
     }
@@ -238,23 +243,27 @@ export class NgxMaskService extends NgxMaskApplierService {
         let symbolToReplace = '';
         const newInputValue: (string | undefined)[] =
             (inputValue &&
-                inputValue.split('').map((currSymbol: string, index: number) => {
-                    if (
-                        this.specialCharacters.includes(inputValue[index + 1] ?? '') &&
-                        inputValue[index + 1] !== this.maskExpression[index + 1]
-                    ) {
-                        symbolToReplace = currSymbol;
-                        return inputValue[index + 1];
-                    }
-                    if (symbolToReplace.length) {
-                        const replaceSymbol: string = symbolToReplace;
-                        symbolToReplace = '';
-                        return replaceSymbol;
-                    }
-                    return currSymbol;
-                })) ||
+                inputValue
+                    .split(MaskExpression.EMPTY_STRING)
+                    .map((currSymbol: string, index: number) => {
+                        if (
+                            this.specialCharacters.includes(
+                                inputValue[index + 1] ?? MaskExpression.EMPTY_STRING
+                            ) &&
+                            inputValue[index + 1] !== this.maskExpression[index + 1]
+                        ) {
+                            symbolToReplace = currSymbol;
+                            return inputValue[index + 1];
+                        }
+                        if (symbolToReplace.length) {
+                            const replaceSymbol: string = symbolToReplace;
+                            symbolToReplace = MaskExpression.EMPTY_STRING;
+                            return replaceSymbol;
+                        }
+                        return currSymbol;
+                    })) ||
             [];
-        return newInputValue.join('');
+        return newInputValue.join(MaskExpression.EMPTY_STRING);
     }
 
     /**
@@ -308,9 +317,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (
             this.clearIfNotMatch &&
             this.prefix.length + this.maskExpression.length + this.suffix.length !==
-                formElement.value.replace(/_/g, '').length
+                formElement.value.replace(/_/g, MaskExpression.EMPTY_STRING).length
         ) {
-            this.formElementProperty = ['value', ''];
+            this.formElementProperty = ['value', MaskExpression.EMPTY_STRING];
             this.applyMask(formElement.value, this.maskExpression);
         }
     }
@@ -326,7 +335,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     public checkSpecialCharAmount(mask: string): number {
         const chars: string[] = mask
-            .split('')
+            .split(MaskExpression.EMPTY_STRING)
             .filter((item: string) => this._findSpecialChar(item));
         return chars.length;
     }
@@ -344,7 +353,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         const arr: string[] = [];
         for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? '';
+            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
                 continue;
             }
@@ -385,7 +394,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         const arr: string[] = [];
         for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? '';
+            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
                 continue;
             }
@@ -470,7 +479,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _toNumber(value: string | number | undefined | null) {
-        if (!this.isNumberValue || value === '') {
+        if (!this.isNumberValue || value === MaskExpression.EMPTY_STRING) {
             return value;
         }
         if (
@@ -493,21 +502,26 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return value;
         }
-        return value ? value.replace(this._regExpForRemove(specialCharactersForRemove), '') : value;
+        return value
+            ? value.replace(
+                  this._regExpForRemove(specialCharactersForRemove),
+                  MaskExpression.EMPTY_STRING
+              )
+            : value;
     }
 
     private _removePrefix(value: string): string {
         if (!this.prefix) {
             return value;
         }
-        return value ? value.replace(this.prefix, '') : value;
+        return value ? value.replace(this.prefix, MaskExpression.EMPTY_STRING) : value;
     }
 
     private _removeSuffix(value: string): string {
         if (!this.suffix) {
             return value;
         }
-        return value ? value.replace(this.suffix, '') : value;
+        return value ? value.replace(this.suffix, MaskExpression.EMPTY_STRING) : value;
     }
 
     private _retrieveSeparatorValue(result: string): string {
@@ -535,7 +549,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     public _checkSymbols(result: string): string | number | undefined | null {
-        if (result === '') {
+        if (result === MaskExpression.EMPTY_STRING) {
             return result;
         }
 
@@ -587,7 +601,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         return (
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
-                    .split('')
+                    .split(MaskExpression.EMPTY_STRING)
                     .reduce((accum: string, currVal: string, index: number): string => {
                         this._start =
                             currVal === MaskExpression.CURLY_BRACKETS_LEFT ? index : this._start;
