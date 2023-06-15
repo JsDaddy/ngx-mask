@@ -571,7 +571,6 @@ export class NgxMaskApplierService {
         ) {
             result += maskExpression[maskExpression.length - 1];
         }
-
         let newPosition: number = position + 1;
 
         while (this._shift.has(newPosition)) {
@@ -597,11 +596,9 @@ export class NgxMaskApplierService {
         if (backspaced) {
             onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
-
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
             this.suffix
         }`;
-        //
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
