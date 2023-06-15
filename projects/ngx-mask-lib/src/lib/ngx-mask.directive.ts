@@ -254,6 +254,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (value && value.toString().length >= 1) {
             let counterOfOpt = 0;
+            if (this._maskValue.startsWith(MaskExpression.PERCENT)) {
+                return null;
+            }
             for (const key in this._maskService.patterns) {
                 if (this._maskService.patterns[key]?.optional) {
                     if (this._maskValue.indexOf(key) !== this._maskValue.lastIndexOf(key)) {
