@@ -1,3 +1,11 @@
+<input
+        [formControl]="test"
+        mask="separator.2"
+        thousandSeparator=" "
+        [decimalMarker]="','"
+        [allowNegativeNumbers]="true"
+/>
+{{test.value}}
 <section class="content column bg-full-white" *ngIf="activeCardId$ | async as activeCardId">
     <div
         class="card"
