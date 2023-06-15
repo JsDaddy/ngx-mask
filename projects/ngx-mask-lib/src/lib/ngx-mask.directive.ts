@@ -612,7 +612,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             this._maskValue.startsWith(MaskExpression.SEPARATOR)
         ) {
             // eslint-disable-next-line no-param-reassign
-            // inputValue = this._maskService.numberToString(inputValue);
             inputValue = String(inputValue);
             const localeDecimalMarker = this._currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
