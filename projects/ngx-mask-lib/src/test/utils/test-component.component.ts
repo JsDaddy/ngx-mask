@@ -25,6 +25,7 @@ import { IConfig } from '../../lib/ngx-mask.config';
             [allowNegativeNumbers]="allowNegativeNumbers"
             [leadZeroDateTime]="leadZeroDateTime"
             [leadZero]="leadZero"
+            [validation]="validation"
             [triggerOnMaskChange]="triggerOnMaskChange" />
     `,
 })
@@ -64,6 +65,8 @@ export class TestMaskComponent {
     public leadZero: IConfig['leadZero'] | undefined;
 
     public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
+
+    public validation: IConfig['validation'] | undefined;
 
     public cdr = inject(ChangeDetectorRef);
 }

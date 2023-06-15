@@ -282,10 +282,12 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return String(value);
         }
-        return Number(value).toLocaleString('fullwide', {
-            useGrouping: false,
-            maximumFractionDigits: 20,
-        });
+        return Number(value)
+            .toLocaleString('fullwide', {
+                useGrouping: false,
+                maximumFractionDigits: 20,
+            })
+            .replace(`/${MaskExpression.MINUS}/`, MaskExpression.MINUS);
     }
 
     public showMaskInInput(inputVal?: string): string {
