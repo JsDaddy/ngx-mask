@@ -287,7 +287,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 useGrouping: false,
                 maximumFractionDigits: 20,
             })
-            .replace(/−/, '-');
+            .replace(/−/, MaskExpression.MINUS);
     }
 
     public showMaskInInput(inputVal?: string): string {
