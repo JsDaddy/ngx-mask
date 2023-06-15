@@ -1,11 +1,11 @@
-import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
-import {DebugElement, LOCALE_ID} from '@angular/core';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { DebugElement, LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import {By} from "@angular/platform-browser";
+import { By } from '@angular/platform-browser';
 
 // FR locale uses comma as decimal marker
 describe('Separator: Mask with FR locale', () => {
@@ -77,6 +77,6 @@ describe('Separator: Mask with FR locale', () => {
         component.form.setValue(-78);
         tick();
         expect(inputTarget.value).toBe('-78');
-        equal('-78', '-78', fixture)
+        equal('-78', '-78', fixture);
     }));
 });
