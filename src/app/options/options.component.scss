@@ -114,3 +114,10 @@
         }
     }
 }
+
+.btn:invalid {
+    background: red;
+}
+.btn:valid {
+    background: skyblue;
+}

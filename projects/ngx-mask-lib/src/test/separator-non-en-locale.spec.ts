@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LOCALE_ID } from '@angular/core';
+import {ComponentFixture, fakeAsync, TestBed, tick} from '@angular/core/testing';
+import {DebugElement, LOCALE_ID} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import {By} from "@angular/platform-browser";
 
 // FR locale uses comma as decimal marker
 describe('Separator: Mask with FR locale', () => {
@@ -62,4 +63,20 @@ describe('Separator: Mask with FR locale', () => {
         typeTest('123 456.78', fixture);
         expect(component.form.value).toBe('123456.78');
     });
+
+    it('should show - at input', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ' ';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(-78);
+        tick();
+        expect(inputTarget.value).toBe('-78');
+        equal('-78', '-78', fixture)
+    }));
 });

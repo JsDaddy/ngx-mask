@@ -100,4 +100,34 @@ describe('Directive: Mask (Percent)', () => {
         equal('0999.000', '99.000', fixture);
         equal('034.023', '34.023', fixture);
     });
+
+    it('percent for split zero percent.2 should be valid', () => {
+        component.mask = 'percent.2';
+        component.validation = true;
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        expect(component.form.value).toBe('1');
+        expect(component.form.valid).toBeTruthy();
+    });
+
+    it('percent for split zero percent.3 should be valid', () => {
+        component.mask = 'percent.3';
+        component.validation = true;
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        expect(component.form.value).toBe('1');
+        expect(component.form.valid).toBeTruthy();
+    });
+
+    it('percent for split zero percent should be valid', () => {
+        component.mask = 'percent';
+        component.validation = true;
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        expect(component.form.value).toBe('1');
+        expect(component.form.valid).toBeTruthy();
+    });
 });
