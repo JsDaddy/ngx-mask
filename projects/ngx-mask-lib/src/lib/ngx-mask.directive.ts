@@ -612,7 +612,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             this._maskValue.startsWith(MaskExpression.SEPARATOR)
         ) {
             // eslint-disable-next-line no-param-reassign
-            inputValue = this._maskService.numberToString(inputValue);
+            inputValue = String(inputValue);
             const localeDecimalMarker = this._currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
                 // eslint-disable-next-line no-param-reassign
@@ -632,12 +632,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this.maskExpression.toString(),
                     inputValue as string
                 );
-                if (this._maskService.decimalMarker === MaskExpression.COMMA) {
-                    // eslint-disable-next-line no-param-reassign
-                    inputValue = inputValue
-                        .toString()
-                        .replace(MaskExpression.DOT, MaskExpression.COMMA);
-                }
+            }
+            if (this._maskService.decimalMarker === MaskExpression.COMMA) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = inputValue
+                    .toString()
+                    .replace(MaskExpression.DOT, MaskExpression.COMMA);
             }
             this._maskService.isNumberValue = true;
         }
