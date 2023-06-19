@@ -106,6 +106,17 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (justPasted && this.hiddenInput) {
             newInputValue = inputValue;
         }
+        if (this.deletedSpecialCharacter && position) {
+            if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
+                // eslint-disable-next-line no-param-reassign
+                position = position + 1;
+            } else if (maskExpression.slice(position - 1, position + 1) !== MaskExpression.MONTHS) {
+                // eslint-disable-next-line no-param-reassign
+                position = position - 2;
+            }
+            // eslint-disable-next-line no-param-reassign
+            this.deletedSpecialCharacter = false;
+        }
         if (this.showMaskTyped) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.removeMask(inputValue);

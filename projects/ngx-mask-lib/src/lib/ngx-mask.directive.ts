@@ -369,6 +369,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         let caretShift = 0;
         let backspaceShift = false;
+        if (this._code === 'Delete' && MaskExpression.SEPARATOR) {
+            this._maskService.deletedSpecialCharacter = true;
+        }
         this._maskService.applyValueChanges(
             position,
             this._justPasted,
