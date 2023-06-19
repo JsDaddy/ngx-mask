@@ -578,17 +578,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 );
             }
         }
-        // console.log('el', el.selectionStart)
-        // if (this._code === 'Delete' && el.selectionStart) {
-        //     el.selectionStart = el.selectionStart + 1;
-        //     // this._position = this._position + 1
-        // }
-        // if (this._maskValue.startsWith(MaskExpression.SEPARATOR) && this._code === 'Backspace' && this._position) {
-        //     this._position = this._position - 1;
-        //     // console.log('position',position)
-        //     // console.log('caret', caretShift)
-        // }
-        // console.log(this._inputValue);
         if (
             !!this.suffix &&
             this.suffix.length > 1 &&
