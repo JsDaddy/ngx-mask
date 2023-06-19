@@ -53,6 +53,8 @@ export class NgxMaskApplierService {
 
     public shownMaskExpression = '';
 
+    public deletedSpecialCharacter = false;
+
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
@@ -260,7 +262,7 @@ export class NgxMaskApplierService {
                 result.indexOf(MaskExpression.COMMA) - inputValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - inputValue.length;
 
-            if (shiftStep > 0 && result[position] !== MaskExpression.COMMA) {
+            if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
