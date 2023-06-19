@@ -106,10 +106,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (justPasted && this.hiddenInput) {
             newInputValue = inputValue;
         }
-        if (
-            this.deletedSpecialCharacter &&
-            position
-        ) {
+        if (this.deletedSpecialCharacter && position) {
             if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
                 // eslint-disable-next-line no-param-reassign
                 position = position + 1;
