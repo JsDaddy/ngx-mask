@@ -110,7 +110,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
                 // eslint-disable-next-line no-param-reassign
                 position = position + 1;
-            } else if (maskExpression.slice(position - 1, position + 1) !== 'M0') {
+            } else if (maskExpression.slice(position - 1, position + 1) !== MaskExpression.MONTHS) {
                 // eslint-disable-next-line no-param-reassign
                 position = position - 2;
             }

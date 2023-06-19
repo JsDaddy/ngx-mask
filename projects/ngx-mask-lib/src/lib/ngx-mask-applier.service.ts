@@ -400,9 +400,10 @@ export class NgxMaskApplierService {
                     const inputValueSliceCursorPlusTwo = inputValue.slice(cursor, cursor + 2);
                     const inputValueSliceMinusTwoCursor = inputValue.slice(cursor - 2, cursor);
                     if (maskExpression[cursor] === MaskExpression.DAY) {
-                        const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
+                        const maskStartWithMonth =
+                            maskExpression.slice(0, 2) === MaskExpression.MONTHS;
                         const startWithMonthInput: boolean =
-                            maskExpression.slice(0, 2) === 'M0' &&
+                            maskExpression.slice(0, 2) === MaskExpression.MONTHS &&
                             this.specialCharacters.includes(inputValueCursorMinusTwo);
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
