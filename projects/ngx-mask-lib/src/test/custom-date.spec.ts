@@ -26,4 +26,20 @@ describe('Directive: Mask (Custom date)', () => {
         equal('18', '18', fixture);
         equal('11111111', '11/11/1111', fixture);
     });
+
+    it('should keep the cursor position after deleting a character', () => {
+        // Set the initial input value and trigger an input event
+        const inputElement = fixture.nativeElement.querySelector('input');
+        component.mask = 'Hh:m0:s0';
+        inputElement.value = '12:34:56';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(3, 3);
+
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
+        fixture.detectChanges();
+
+        expect(inputElement.selectionStart).toBe(3);
+    });
 });

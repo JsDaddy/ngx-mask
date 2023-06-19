@@ -949,4 +949,19 @@ describe('Separator: Mask', () => {
         equal('999999999999999.999', '999,999,999,999,999.999', fixture);
         expect(component.form.value).toBe('999999999999999.999');
     });
+    it('should keep the cursor position after deleting a character', () => {
+        component.mask = 'separator.2';
+        const inputElement = fixture.nativeElement.querySelector('input');
+        inputElement.value = '123 456';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(4, 4);
+
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
+        fixture.detectChanges();
+
+        expect(inputElement.selectionStart).toBe(4);
+        expect(inputElement.value).toBe('123 456');
+    });
 });

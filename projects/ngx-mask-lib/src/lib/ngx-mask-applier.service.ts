@@ -53,6 +53,8 @@ export class NgxMaskApplierService {
 
     public shownMaskExpression = '';
 
+    public deletedSpecialCharacter = false;
+
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
@@ -260,7 +262,7 @@ export class NgxMaskApplierService {
                 result.indexOf(MaskExpression.COMMA) - inputValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - inputValue.length;
 
-            if (shiftStep > 0 && result[position] !== MaskExpression.COMMA) {
+            if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
@@ -398,9 +400,10 @@ export class NgxMaskApplierService {
                     const inputValueSliceCursorPlusTwo = inputValue.slice(cursor, cursor + 2);
                     const inputValueSliceMinusTwoCursor = inputValue.slice(cursor - 2, cursor);
                     if (maskExpression[cursor] === MaskExpression.DAY) {
-                        const maskStartWithMonth = maskExpression.slice(0, 2) === 'M0';
+                        const maskStartWithMonth =
+                            maskExpression.slice(0, 2) === MaskExpression.MONTHS;
                         const startWithMonthInput: boolean =
-                            maskExpression.slice(0, 2) === 'M0' &&
+                            maskExpression.slice(0, 2) === MaskExpression.MONTHS &&
                             this.specialCharacters.includes(inputValueCursorMinusTwo);
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||

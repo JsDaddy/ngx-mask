@@ -4,6 +4,7 @@ export const enum MaskExpression {
     IP = 'IP',
     CPF_CNPJ = 'CPF_CNPJ',
     MONTH = 'M',
+    MONTHS = 'M0',
     MINUTE = 'm',
     HOUR = 'h',
     HOURS = 'H',
