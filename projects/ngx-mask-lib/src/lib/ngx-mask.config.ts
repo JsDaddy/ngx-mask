@@ -104,6 +104,8 @@ export const initialConfig: IConfig = {
 
 export const timeMasks: string[] = ['Hh:m0:s0', 'Hh:m0', 'm0:s0'];
 
+export const emailMask = 'A*@A*.SSS';
+
 export const withoutValidation: string[] = [
     'percent',
     'Hh',

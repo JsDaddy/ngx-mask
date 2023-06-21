@@ -57,6 +57,13 @@ export const ComDocs: IComDoc[] = [
         anchor: 'optional-mask',
     },
     {
+        header: 'Email mask with validation',
+        text: '',
+        code: `<input mask="A*@A*.SSS" [validation]="true" [dropSpecialCharacters]="false" >`,
+        id: 13,
+        anchor: 'email-mask',
+    },
+    {
         header: 'Allow negative numbers to mask',
         text: 'You can allow negative numbers',
         code: ` <input type='text' mask="0000" [allowNegativeNumbers]="true">`,
@@ -130,6 +137,11 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'Optional mask',
         _mask: '9999 999 999',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: 'Valid email',
+        _mask: 'A*@A*.SSS',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {

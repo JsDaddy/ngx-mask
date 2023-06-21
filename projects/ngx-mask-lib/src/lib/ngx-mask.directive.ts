@@ -19,7 +19,13 @@ import {
 } from '@angular/forms';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
+import {
+    emailMask,
+    IConfig,
+    NGX_MASK_CONFIG,
+    timeMasks,
+    withoutValidation,
+} from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -251,6 +257,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (timeMasks.includes(this._maskValue)) {
             return this._validateTime(value);
+        }
+        if (this._maskValue.startsWith(emailMask)) {
+            return this._validateEmail(value);
         }
         if (value && value.toString().length >= 1) {
             let counterOfOpt = 0;
@@ -730,6 +739,20 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return this._createValidationError(value);
         }
 
+        return null;
+    }
+
+    private _validateEmail(value: string): ValidationErrors | null {
+        const afterDot: string | undefined = value.split('.')[1];
+        if (afterDot && afterDot.length > 1) {
+            return null;
+        }
+        if (value) {
+            return this._createValidationError(value);
+        }
+        if (!value) {
+            return null;
+        }
         return null;
     }
 
