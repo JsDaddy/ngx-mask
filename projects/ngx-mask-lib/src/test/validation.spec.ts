@@ -27,7 +27,12 @@ export class TestMaskValidationAttributeComponent {
 @Component({
     selector: 'jsdaddy-open-source-test',
     template: `
-        <input id="maska" mask="A*@A*.SSS" [validation]="validate" [dropSpecialCharacters]="dropSpecialCharacters" [formControl]="form" />
+        <input
+            id="maska"
+            mask="A*@A*.SSS"
+            [validation]="validate"
+            [dropSpecialCharacters]="dropSpecialCharacters"
+            [formControl]="form" />
     `,
 })
 export class TestMaskValidationEmailComponent {
