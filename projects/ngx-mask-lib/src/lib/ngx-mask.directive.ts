@@ -295,14 +295,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         4
             ) {
                 return null;
-            }
-            // if (
-            //     this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === 1 ||
-            //     this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === 1
-            // ) {
-            //     return null;
-            // }
-            else if (
+            } else if (
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) > 1 &&
                     value.toString().length <
                         this._maskValue.indexOf(MaskExpression.SYMBOL_STAR)) ||
@@ -771,20 +764,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         return null;
     }
-
-    // private _validateEmail(value: string): ValidationErrors | null {
-    //     const afterDot: string | undefined = value.split('.')[1];
-    //     if (afterDot && afterDot.length > 1) {
-    //         return null;
-    //     }
-    //     if (value) {
-    //         return this._createValidationError(value);
-    //     }
-    //     if (!value) {
-    //         return null;
-    //     }
-    //     return null;
-    // }
 
     private _getActualInputLength() {
         return (
