@@ -1,5 +1,19 @@
 import { EventEmitter, InjectionToken } from '@angular/core';
-import { MaskExpression } from './ngx-mask-expression.enum';
+
+export const enum ConfigExpression {
+    MINUTES = 'm0',
+    HOURS_HOUR = 'Hh',
+    SECONDS = 's0',
+    DAYS_MONTHS_YEARS = 'd0/M0/0000',
+    HOURS_MINUTES_SECONDS = 'Hh:m0:s0',
+    HOURS_MINUTES = 'Hh:m0',
+    MINUTES_SECONDS = 'm0:s0',
+    DAYS_MONTHS = 'd0/M0',
+    DAYS = 'd0',
+    SEPARATOR = 'separator',
+    MONTHS = 'M0',
+    PERCENT = 'percent',
+}
 
 export interface IConfig {
     suffix: string;
@@ -104,19 +118,19 @@ export const initialConfig: IConfig = {
 };
 
 export const timeMasks: string[] = [
-    MaskExpression.HOURS_MINUTES_SECONDS,
-    MaskExpression.HOURS_MINUTES,
-    MaskExpression.MINUTES_SECONDS,
+    ConfigExpression.HOURS_MINUTES_SECONDS,
+    ConfigExpression.HOURS_MINUTES,
+    ConfigExpression.MINUTES_SECONDS,
 ];
 
 export const withoutValidation: string[] = [
-    MaskExpression.PERCENT,
-    MaskExpression.HOURS_HOUR,
-    MaskExpression.SECONDS,
-    MaskExpression.MINUTES,
-    MaskExpression.SEPARATOR,
-    MaskExpression.DAYS_MONTHS_YEARS,
-    MaskExpression.DAYS_MONTHS,
-    MaskExpression.DAYS,
-    MaskExpression.MONTHS,
+    ConfigExpression.PERCENT,
+    ConfigExpression.HOURS_HOUR,
+    ConfigExpression.SECONDS,
+    ConfigExpression.MINUTES,
+    ConfigExpression.SEPARATOR,
+    ConfigExpression.DAYS_MONTHS_YEARS,
+    ConfigExpression.DAYS_MONTHS,
+    ConfigExpression.DAYS,
+    ConfigExpression.MONTHS,
 ];
