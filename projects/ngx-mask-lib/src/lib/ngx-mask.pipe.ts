@@ -54,6 +54,12 @@ export class NgxMaskPipe implements PipeTransform {
                 this._maskService._repeatPatternSymbols(mask)
             );
         }
+        if (config.leadZero) {
+            // eslint-disable-next-line no-param-reassign
+            value = this._maskService._checkPrecision(mask, value as string);
+            this._maskService.leadZero = config.leadZero;
+            return this._maskService.applyMask(`${value}`, mask);
+        }
         return this._maskService.applyMask(`${value}`, mask);
     }
 

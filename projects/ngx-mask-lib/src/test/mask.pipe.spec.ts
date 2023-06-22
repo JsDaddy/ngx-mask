@@ -252,5 +252,45 @@ describe('Pipe: Mask', () => {
         expect(value5).toEqual('dd1234');
     });
 
+    it('should work with leadZero separator.2', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.2', {
+            leadZero: true,
+        });
+        const value1: string | number = maskPipe.transform('1', 'separator.2', {
+            leadZero: true,
+        });
+        const value2: string | number = maskPipe.transform('12', 'separator.2', {
+            leadZero: true,
+        });
+        const value3: string | number = maskPipe.transform('123', 'separator.2', {
+            leadZero: true,
+        });
+
+        expect(value).toEqual('3 000.00');
+        expect(value1).toEqual('1.00');
+        expect(value2).toEqual('12.00');
+        expect(value3).toEqual('123.00');
+    });
+
+    it('should work with leadZero separator.3', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            leadZero: true,
+        });
+        const value1: string | number = maskPipe.transform('1', 'separator.3', {
+            leadZero: true,
+        });
+        const value2: string | number = maskPipe.transform('12', 'separator.3', {
+            leadZero: true,
+        });
+        const value3: string | number = maskPipe.transform('123', 'separator.3', {
+            leadZero: true,
+        });
+
+        expect(value).toEqual('3 000.000');
+        expect(value1).toEqual('1.000');
+        expect(value2).toEqual('12.000');
+        expect(value3).toEqual('123.000');
+    });
+
     //TODO(inepipepnko): need cover all config options
 });

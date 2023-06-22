@@ -292,12 +292,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         4
             ) {
                 return null;
-            }
-            if (
-                this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === 1 ||
-                this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === 1
-            ) {
-                return null;
             } else if (
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) > 1 &&
                     value.toString().length <
@@ -313,6 +307,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === -1 ||
                 this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === -1
             ) {
+                const array = this._maskValue.split('*');
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length -
                       this._maskService.checkSpecialCharAmount(this._maskValue) -
@@ -320,9 +315,43 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     : this.prefix
                     ? this._maskValue.length + this.prefix.length - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
-                if (value.toString().length < length) {
-                    return this._createValidationError(value);
+                if (array.length === 1) {
+                    if (value.toString().length < length) {
+                        return this._createValidationError(value);
+                    }
                 }
+                if (array.length > 1) {
+                    const lastIndexArray = array[array.length - 1];
+                    if (
+                        lastIndexArray &&
+                        this._maskService.specialCharacters.includes(lastIndexArray[0] as string) &&
+                        value.includes(lastIndexArray[0]) &&
+                        !this.dropSpecialCharacters
+                    ) {
+                        const special = value.split(lastIndexArray[0]);
+                        return special[special.length - 1].length === lastIndexArray.length - 1
+                            ? null
+                            : this._createValidationError(value);
+                    } else if (
+                        ((lastIndexArray &&
+                            !this._maskService.specialCharacters.includes(
+                                lastIndexArray[0] as string
+                            )) ||
+                            !lastIndexArray ||
+                            this._maskService.dropSpecialCharacters) &&
+                        value.length >= length
+                    ) {
+                        return null;
+                    } else {
+                        return this._createValidationError(value);
+                    }
+                }
+            }
+            if (
+                this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === 1 ||
+                this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === 1
+            ) {
+                return null;
             }
         }
         if (value) {
