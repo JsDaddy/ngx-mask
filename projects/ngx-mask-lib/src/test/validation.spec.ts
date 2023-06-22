@@ -29,7 +29,7 @@ export class TestMaskValidationAttributeComponent {
     template: `
         <input
             id="maska"
-            mask="A*@A*.SSS"
+            [mask]="mask"
             [validation]="validate"
             [dropSpecialCharacters]="dropSpecialCharacters"
             [formControl]="form" />
@@ -37,6 +37,8 @@ export class TestMaskValidationAttributeComponent {
 })
 export class TestMaskValidationEmailComponent {
     public form: FormControl = new FormControl('');
+
+    public mask = '';
 
     public validate = true;
 
@@ -168,14 +170,15 @@ describe('Directive: Mask (Validation)', () => {
             fixture.detectChanges();
         });
 
-        it('should be not valid email mask', () => {
+        it('should be not valid email mask A*@A*.SSS', () => {
+            component.mask = 'A*@A*.SSS';
             equal('a', 'a', fixture);
             expect(component.form.valid).toBe(false);
             equal('as', 'as', fixture);
             expect(component.form.valid).toBe(false);
             equal('asd', 'asd', fixture);
             expect(component.form.valid).toBe(false);
-            equal('asdt', 'asdt', fixture);
+            equal('andr', 'andr', fixture);
             expect(component.form.valid).toBe(false);
             equal('testing', 'testing', fixture);
             expect(component.form.valid).toBe(false);
@@ -191,12 +194,45 @@ describe('Directive: Mask (Validation)', () => {
             expect(component.form.valid).toBe(false);
             equal('testing@gmail.c', 'testing@gmail.c', fixture);
             expect(component.form.valid).toBe(false);
+            equal('testing@email.ua', 'testing@email.ua', fixture);
+            expect(component.form.valid).toBe(false);
+        });
+
+        it('should valid email mask A*@A*.SSS', () => {
+            component.mask = 'A*@A*.SSS';
+            equal('testing@gmail.com', 'testing@gmail.com', fixture);
+            expect(component.form.valid).toBe(true);
+        });
+
+        it('should be not valid mask A*@A*.SS', () => {
+            component.mask = 'A*@A*.SS';
+            equal('d', 'd', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('dd', 'dd', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('ddd', 'ddd', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('dddd', 'dddd', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andre', 'andre', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey', 'andrey', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey@', 'andrey@', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey@a', 'andrey@a', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey@te', 'andrey@te', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey@test', 'andrey@test', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('andrey@test.c', 'andrey@test.c', fixture);
+            expect(component.form.valid).toBe(false);
         });
 
         it('should valid email mask', () => {
-            equal('testing@gmail.com', 'testing@gmail.com', fixture);
-            expect(component.form.valid).toBe(true);
-            equal('testing@email.ua', 'testing@email.ua', fixture);
+            component.mask = 'A*@A*.SS';
+            equal('testing@some.ua', 'testing@some.ua', fixture);
             expect(component.form.valid).toBe(true);
         });
     });

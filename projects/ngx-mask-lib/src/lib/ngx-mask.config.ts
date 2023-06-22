@@ -1,4 +1,5 @@
-import { InjectionToken, EventEmitter } from '@angular/core';
+import { EventEmitter, InjectionToken } from '@angular/core';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 export interface IConfig {
     suffix: string;
@@ -102,18 +103,20 @@ export const initialConfig: IConfig = {
     },
 };
 
-export const timeMasks: string[] = ['Hh:m0:s0', 'Hh:m0', 'm0:s0'];
-
-export const emailMask = 'A*@A*.SSS';
+export const timeMasks: string[] = [
+    MaskExpression.HOURS_MINUTES_SECONDS,
+    MaskExpression.HOURS_MINUTES,
+    MaskExpression.MINUTES_SECONDS,
+];
 
 export const withoutValidation: string[] = [
-    'percent',
-    'Hh',
-    's0',
-    'm0',
-    'separator',
-    'd0/M0/0000',
-    'd0/M0',
-    'd0',
-    'M0',
+    MaskExpression.PERCENT,
+    MaskExpression.HOURS_HOUR,
+    MaskExpression.SECONDS,
+    MaskExpression.MINUTES,
+    MaskExpression.SEPARATOR,
+    MaskExpression.DAYS_MONTHS_YEARS,
+    MaskExpression.DAYS_MONTHS,
+    MaskExpression.DAYS,
+    MaskExpression.MONTHS,
 ];
