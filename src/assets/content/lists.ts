@@ -50,6 +50,11 @@ export const lists: IListItem[] = [
                 scrollTo: 'optional-mask',
             },
             {
+                content: 'Validation email mask',
+                id: 13,
+                scrollTo: 'email-mask',
+            },
+            {
                 content: 'allowNegativeNumber',
                 id: 11,
                 scrollTo: 'allowMask',
