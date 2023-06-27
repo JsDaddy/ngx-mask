@@ -526,7 +526,6 @@ export class NgxMaskApplierService {
                 ) {
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                 } else if (
-                    // this.specialCharacters.indexOf(inputSymbol) > -1 &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional
                 ) {
