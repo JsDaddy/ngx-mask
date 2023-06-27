@@ -55,7 +55,6 @@ export class NgxMaskPipe implements PipeTransform {
             );
         }
         if (mask.startsWith(MaskExpression.SEPARATOR)) {
-            // this._maskService.shownMaskExpression = mask;
             if (config.decimalMarker) {
                 this._maskService.decimalMarker = config.decimalMarker;
             }
