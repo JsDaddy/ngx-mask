@@ -547,7 +547,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (e.key === 'ArrowUp') {
             e.preventDefault();
         }
-
         if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'Delete') {
             if (e.key === 'Backspace' && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;

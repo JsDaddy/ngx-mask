@@ -692,4 +692,79 @@ describe('Directive: Mask', () => {
         expect(component.form.value).toBe('2234562233');
         expect(component.form.valid).toBeTruthy();
     });
+
+    it('Mask 0/9', () => {
+        component.mask = '0/9';
+        equal('1', '1', fixture);
+        equal('1/', '1/', fixture);
+        equal('1/2', '1/2', fixture);
+    });
+
+    it('Mask 9*/0*', () => {
+        component.mask = '9*/0*';
+        equal('1', '1', fixture);
+        equal('1/', '1/', fixture);
+        equal('1/2', '1/2', fixture);
+        equal('122/22', '122/22', fixture);
+        equal('/1', '/1', fixture);
+        equal('/222', '/222', fixture);
+        equal('1/22', '1/22', fixture);
+        equal('/', '/', fixture);
+    });
+
+    it('Mask 9000/0000', () => {
+        component.mask = '0009/0000';
+        equal('111/1111', '111/1111', fixture);
+        equal('1111/1111', '1111/1111', fixture);
+    });
+
+    it('Mask 00009-0000', () => {
+        component.mask = '00009-0000';
+        equal('0000-0000', '0000-0000', fixture);
+        equal('12345-6789', '12345-6789', fixture);
+    });
+
+    it('Mask 099L', () => {
+        component.mask = '099L';
+        equal('1d', '1d', fixture);
+        equal('22r', '22r', fixture);
+        equal('223r', '223r', fixture);
+    });
+
+    it('Mask 09999/099L', () => {
+        component.mask = '09999/099L';
+        equal('1/2d', '1/2d', fixture);
+        equal('12/2d', '12/2d', fixture);
+        equal('123/2d', '123/2d', fixture);
+        equal('1234/2d', '1234/2d', fixture);
+        equal('12345/2d', '12345/2d', fixture);
+        equal('12345/22d', '12345/22d', fixture);
+        equal('12345/223d', '12345/223d', fixture);
+    });
+
+    it('Mask 099SS', () => {
+        component.mask = '099SS';
+        equal('1d', '1d', fixture);
+        equal('1dD', '1dD', fixture);
+        equal('11d', '11d', fixture);
+        equal('111dD', '111dD', fixture);
+        equal('112SS', '112SS', fixture);
+    });
+
+    it('Mask     999999-0009999999/0000', () => {
+        component.mask = '999999-0009999999/0000';
+        equal('1-123/1234', '1-123/1234', fixture);
+        equal('12-123/1234', '12-123/1234', fixture);
+        equal('123-123/1234', '123-123/1234', fixture);
+        equal('1234-123/1234', '1234-123/1234', fixture);
+        equal('12345-123/1234', '12345-123/1234', fixture);
+        equal('123456-123/1234', '123456-123/1234', fixture);
+        equal('123456-1234/1234', '123456-1234/1234', fixture);
+        equal('123456-12345/1234', '123456-12345/1234', fixture);
+        equal('123456-123456/1234', '123456-123456/1234', fixture);
+        equal('123456-1234567/1234', '123456-1234567/1234', fixture);
+        equal('123456-12345678/1234', '123456-12345678/1234', fixture);
+        equal('123456-123456789/1234', '123456-123456789/1234', fixture);
+        equal('123456-1234567891/1234', '123456-1234567891/1234', fixture);
+    });
 });

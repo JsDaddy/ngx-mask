@@ -129,7 +129,6 @@ export class NgxMaskApplierService {
                 maskExpression = '000.000.000-00';
             }
         }
-
         if (maskExpression.startsWith(MaskExpression.PERCENT)) {
             if (
                 inputValue.match('[a-z]|[A-Z]') ||
@@ -504,7 +503,12 @@ export class NgxMaskApplierService {
                     }
                     result += inputSymbol;
                     cursor++;
-                } else if (inputSymbol === ' ' && maskExpression[cursor] === ' ') {
+                } else if (
+                    (inputSymbol === MaskExpression.WHITE_SPACE &&
+                        maskExpression[cursor] === MaskExpression.WHITE_SPACE) ||
+                    (inputSymbol === MaskExpression.SLASH &&
+                        maskExpression[cursor] === MaskExpression.SLASH)
+                ) {
                     result += inputSymbol;
                     cursor++;
                 } else if (
@@ -516,10 +520,13 @@ export class NgxMaskApplierService {
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                     i--;
-                } else if (maskExpression[cursor] === '9' && this.showMaskTyped) {
+                } else if (
+                    maskExpression[cursor] === MaskExpression.NUMBER_NINE &&
+                    this.showMaskTyped
+                ) {
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                 } else if (
-                    this.specialCharacters.indexOf(inputSymbol) > -1 &&
+                    // this.specialCharacters.indexOf(inputSymbol) > -1 &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional
                 ) {
@@ -529,11 +536,20 @@ export class NgxMaskApplierService {
                         maskExpression !== '000.000.000-00' &&
                         maskExpression !== '00.000.000/0000-00' &&
                         !maskExpression.match(/^9+\.0+$/) &&
-                        // maskExpression[cursor] !== '9'
                         !this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]
                             ?.optional
                     ) {
                         result += inputArray[cursor];
+                    }
+                    if (
+                        maskExpression.includes(
+                            MaskExpression.NUMBER_NINE + MaskExpression.SYMBOL_STAR
+                        ) &&
+                        maskExpression.includes(
+                            MaskExpression.NUMBER_ZERO + MaskExpression.SYMBOL_STAR
+                        )
+                    ) {
+                        cursor++;
                     }
                     cursor++;
                     i--;

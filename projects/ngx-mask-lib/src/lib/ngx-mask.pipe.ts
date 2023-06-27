@@ -54,11 +54,41 @@ export class NgxMaskPipe implements PipeTransform {
                 this._maskService._repeatPatternSymbols(mask)
             );
         }
-        if (config.leadZero) {
+        if (mask.startsWith(MaskExpression.SEPARATOR)) {
+            // this._maskService.shownMaskExpression = mask;
+            if (config.decimalMarker) {
+                this._maskService.decimalMarker = config.decimalMarker;
+            }
+            if (config.thousandSeparator) {
+                this._maskService.thousandSeparator = config.thousandSeparator;
+            }
+            if (config.leadZero) {
+                // eslint-disable-next-line no-param-reassign
+                this._maskService.leadZero = config.leadZero;
+            }
             // eslint-disable-next-line no-param-reassign
-            value = this._maskService._checkPrecision(mask, value as string);
-            this._maskService.leadZero = config.leadZero;
-            return this._maskService.applyMask(`${value}`, mask);
+            value = String(value);
+            const localeDecimalMarker = this._maskService._currentLocaleDecimalMarker();
+            if (!Array.isArray(this._maskService.decimalMarker)) {
+                // eslint-disable-next-line no-param-reassign
+                value =
+                    this._maskService.decimalMarker !== localeDecimalMarker
+                        ? value.replace(localeDecimalMarker, this._maskService.decimalMarker)
+                        : value;
+            }
+            if (
+                this._maskService.leadZero &&
+                value &&
+                this._maskService.dropSpecialCharacters !== false
+            ) {
+                // eslint-disable-next-line no-param-reassign
+                value = this._maskService._checkPrecision(mask, value as string);
+            }
+            if (this._maskService.decimalMarker === MaskExpression.COMMA) {
+                // eslint-disable-next-line no-param-reassign
+                value = value.toString().replace(MaskExpression.DOT, MaskExpression.COMMA);
+            }
+            this._maskService.isNumberValue = true;
         }
         return this._maskService.applyMask(`${value}`, mask);
     }

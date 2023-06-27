@@ -30,4 +30,8 @@ export const enum MaskExpression {
     EMPTY_STRING = '',
     SYMBOL_STAR = '*',
     SYMBOL_QUESTION = '?',
+    SLASH = '/',
+    WHITE_SPACE = ' ',
+    NUMBER_ZERO = '0',
+    NUMBER_NINE = '9',
 }
