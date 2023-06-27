@@ -547,7 +547,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (e.key === 'ArrowUp') {
             e.preventDefault();
         }
-
         if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'Delete') {
             if (e.key === 'Backspace' && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;
@@ -645,7 +644,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         ) {
             // eslint-disable-next-line no-param-reassign
             inputValue = String(inputValue);
-            const localeDecimalMarker = this._currentLocaleDecimalMarker();
+            const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue =
@@ -822,9 +821,5 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
             }
         });
-    }
-
-    private _currentLocaleDecimalMarker(): string {
-        return (1.1).toLocaleString().substring(1, 2);
     }
 }
