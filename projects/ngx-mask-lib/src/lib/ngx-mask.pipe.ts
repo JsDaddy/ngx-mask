@@ -67,7 +67,7 @@ export class NgxMaskPipe implements PipeTransform {
             }
             // eslint-disable-next-line no-param-reassign
             value = String(value);
-            const localeDecimalMarker = this._maskService._currentLocaleDecimalMarker();
+            const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
                 // eslint-disable-next-line no-param-reassign
                 value =

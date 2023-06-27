@@ -642,7 +642,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         );
     }
 
-    public _currentLocaleDecimalMarker(): string {
+    public currentLocaleDecimalMarker(): string {
         return (1.1).toLocaleString().substring(1, 2);
     }
 }
