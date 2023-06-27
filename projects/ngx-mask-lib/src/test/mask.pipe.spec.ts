@@ -292,5 +292,64 @@ describe('Pipe: Mask', () => {
         expect(value3).toEqual('123.000');
     });
 
+    it('should work with leadZero separator.2 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.2', {
+            leadZero: true,
+            thousandSeparator: '.',
+            decimalMarker: ',',
+        });
+        expect(value).toEqual('3.000,00');
+    });
+
+    it('should work with leadZero separator.2 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.2', {
+            leadZero: true,
+            thousandSeparator: ',',
+            decimalMarker: '.',
+        });
+        expect(value).toEqual('3,000.00');
+    });
+
+    it('should work with leadZero separator.3 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            leadZero: true,
+            thousandSeparator: '.',
+            decimalMarker: ',',
+        });
+        expect(value).toEqual('3.000,000');
+    });
+
+    it('should work with leadZero separator.3 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            leadZero: true,
+            thousandSeparator: ',',
+            decimalMarker: '.',
+        });
+        expect(value).toEqual('3,000.000');
+    });
+
+    it('should work with  separator.3 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            thousandSeparator: ',',
+            decimalMarker: '.',
+        });
+        expect(value).toEqual('3,000');
+    });
+
+    it('should work with  separator.2 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            thousandSeparator: ',',
+            decimalMarker: '.',
+        });
+        expect(value).toEqual('3,000');
+    });
+
+    it('should work with  separator.2 thousandSeparator decimalMarker', () => {
+        const value: string | number = maskPipe.transform('3000', 'separator.3', {
+            thousandSeparator: '.',
+            decimalMarker: ',',
+        });
+        expect(value).toEqual('3.000');
+    });
     //TODO(inepipepnko): need cover all config options
 });
