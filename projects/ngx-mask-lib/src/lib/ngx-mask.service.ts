@@ -330,10 +330,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (
             this.clearIfNotMatch &&
             this.prefix.length + this.maskExpression.length + this.suffix.length !==
-                formElement.value.replace(/_/g, MaskExpression.EMPTY_STRING).length
+                formElement.value.replace(this.placeHolderCharacter, MaskExpression.EMPTY_STRING).length
         ) {
             this.formElementProperty = ['value', MaskExpression.EMPTY_STRING];
-            this.applyMask(formElement.value, this.maskExpression);
+            this.applyMask('', this.maskExpression);
         }
     }
 
