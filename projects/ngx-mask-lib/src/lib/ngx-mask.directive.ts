@@ -637,6 +637,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.value;
         }
+
         if (
             typeof inputValue === 'number' ||
             this._maskValue.startsWith(MaskExpression.SEPARATOR)
