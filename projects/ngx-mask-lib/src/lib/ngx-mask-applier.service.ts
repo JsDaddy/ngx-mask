@@ -294,6 +294,7 @@ export class NgxMaskApplierService {
                 if (cursor === maskExpression.length) {
                     break;
                 }
+                const symbolStarInPattern: boolean = MaskExpression.SYMBOL_STAR in this.patterns;
                 if (
                     this._checkSymbolMask(
                         inputSymbol,
@@ -319,7 +320,8 @@ export class NgxMaskApplierService {
                         inputSymbol,
                         maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
                     ) &&
-                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR
+                    maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR &&
+                    !symbolStarInPattern
                 ) {
                     result += inputSymbol;
                     multi = true;

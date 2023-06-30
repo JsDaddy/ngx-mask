@@ -37,4 +37,25 @@ describe('Directive: Mask', () => {
         equal('2578989', '', fixture, true);
         equal('25789898', '+5257-898-98', fixture);
     });
+
+    it('should clear if mask is not matched with another placeholderCharacter *', async () => {
+        component.mask = '0000';
+        component.placeHolderCharacter = '*';
+        component.clearIfNotMatch = true;
+        equal('', '', fixture, true);
+        equal('333', '', fixture, true);
+        equal('22', '', fixture, true);
+        equal('2222', '2222', fixture);
+    });
+
+    it('should clear if mask is not matched with another placeholderCharacter X', async () => {
+        component.mask = '00000';
+        component.placeHolderCharacter = 'X';
+        component.clearIfNotMatch = true;
+        equal('', '', fixture, true);
+        equal('333', '', fixture, true);
+        equal('22', '', fixture, true);
+        equal('2222', '', fixture, true);
+        equal('12345', '12345', fixture);
+    });
 });
