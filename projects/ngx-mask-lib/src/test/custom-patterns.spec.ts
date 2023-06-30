@@ -78,3 +78,53 @@ describe('Directive: Mask (Provide custom patterns)', () => {
         equal('FFDD-2233', 'FFDD-2233', fixture);
     });
 });
+
+describe('Directive: Mask (Provide custom patterns with symbol *)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+    const ngxMaskCustomPatterns = {
+        '*': { pattern: new RegExp('[a-zA-Z0-9]') },
+    };
+
+    const ngxMaskConfigValue: Partial<IConfig> = {
+        patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
+    };
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestMaskComponent],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask(ngxMaskConfigValue)],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('custom patterns * should work with mask *-*', () => {
+        component.mask = '*-*';
+        equal('22', '2-2', fixture);
+    });
+
+    it('custom patterns * should work with mask **-**', () => {
+        component.mask = '**-**';
+        equal('22', '22', fixture);
+        equal('123', '12-3', fixture);
+        equal('1234', '12-34', fixture);
+    });
+
+    it('custom patterns * should work with mask ***-***', () => {
+        component.mask = '***-***';
+        equal('123456', '123-456', fixture);
+    });
+
+    it('custom patterns * should work with mask ****-****', () => {
+        component.mask = '****-****';
+        equal('12345678', '1234-5678', fixture);
+    });
+
+    it('custom patterns * should work with mask *****-*****', () => {
+        component.mask = '*****-*****';
+        equal('1234567890', '12345-67890', fixture);
+    });
+});
