@@ -158,9 +158,13 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
-                return result && result.length
-                    ? this.hideInput(result, this.maskExpression)
-                    : result;
+                if (backspaced) {
+                    return this.hideInput(result, this.maskExpression);
+                }
+                return (
+                    this.hideInput(result, this.maskExpression) +
+                    this.maskIsShown.slice(result.length)
+                );
             }
             return result;
         }
