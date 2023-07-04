@@ -650,23 +650,4 @@ export class NgxMaskService extends NgxMaskApplierService {
     public currentLocaleDecimalMarker(): string {
         return (1.1).toLocaleString().substring(1, 2);
     }
-
-    public typeNumber(inputValue: string, mask: string): string {
-        const numberString = inputValue.toString();
-        let maskedNumber = '';
-        let numberIndex = 0;
-
-        for (let i = 0; i < mask.length; i++) {
-            const maskChar = mask[i] as string;
-
-            if (this.specialCharacters.includes(maskChar)) {
-                maskedNumber += maskChar;
-            } else if (maskChar === '0') {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                maskedNumber += numberString[numberIndex] || this.placeHolderCharacter;
-                numberIndex++;
-            }
-        }
-        return maskedNumber;
-    }
 }
