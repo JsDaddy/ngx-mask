@@ -192,5 +192,4 @@ describe('Directive: Mask (Secure)', () => {
 
         equal('1234', '**-**', fixture);
     });
-
 });

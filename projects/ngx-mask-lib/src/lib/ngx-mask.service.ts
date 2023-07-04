@@ -1,9 +1,9 @@
-import {ElementRef, inject, Injectable, Renderer2} from '@angular/core';
-import {DOCUMENT} from '@angular/common';
+import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
-import {NGX_MASK_CONFIG, IConfig} from './ngx-mask.config';
-import {NgxMaskApplierService} from './ngx-mask-applier.service';
-import {MaskExpression} from './ngx-mask-expression.enum';
+import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
+import { NgxMaskApplierService } from './ngx-mask-applier.service';
+import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -30,16 +30,15 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _end!: number;
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
-    public onChange = (_: any) => {
-    };
+    public onChange = (_: any) => {};
 
     private readonly document = inject(DOCUMENT);
 
     protected override _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    private readonly _elementRef = inject(ElementRef, {optional: true});
+    private readonly _elementRef = inject(ElementRef, { optional: true });
 
-    private readonly _renderer = inject(Renderer2, {optional: true});
+    private readonly _renderer = inject(Renderer2, { optional: true });
 
     // eslint-disable-next-line complexity
     public override applyMask(
@@ -49,8 +48,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         justPasted = false,
         backspaced = false,
         // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
-        cb: (...args: any[]) => any = () => {
-        }
+        cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression) {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
@@ -86,10 +84,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                         ? inputValue.length > actualResult.length
                             ? actualResult.splice(this.selStart, 0, getSymbol)
                             : inputValue.length < actualResult.length
-                                ? actualResult.length - inputValue.length === 1
-                                    ? actualResult.splice(this.selStart - 1, 1)
-                                    : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-                                : null
+                            ? actualResult.length - inputValue.length === 1
+                                ? actualResult.splice(this.selStart - 1, 1)
+                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                            : null
                         : null
                     : (actualResult = []);
             }
@@ -202,8 +200,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         justPasted: boolean,
         backspaced: boolean,
         // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
-        cb: (...args: any[]) => any = () => {
-        }
+        cb: (...args: any[]) => any = () => {}
     ): void {
         const formElement = this._elementRef?.nativeElement;
         if (!formElement) {
@@ -337,8 +334,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (
             this.clearIfNotMatch &&
             this.prefix.length + this.maskExpression.length + this.suffix.length !==
-            formElement.value.replace(this.placeHolderCharacter, MaskExpression.EMPTY_STRING)
-                .length
+                formElement.value.replace(this.placeHolderCharacter, MaskExpression.EMPTY_STRING)
+                    .length
         ) {
             this.formElementProperty = ['value', MaskExpression.EMPTY_STRING];
             this.applyMask('', this.maskExpression);
@@ -525,9 +522,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         return value
             ? value.replace(
-                this._regExpForRemove(specialCharactersForRemove),
-                MaskExpression.EMPTY_STRING
-            )
+                  this._regExpForRemove(specialCharactersForRemove),
+                  MaskExpression.EMPTY_STRING
+              )
             : value;
     }
 
@@ -548,8 +545,8 @@ export class NgxMaskService extends NgxMaskApplierService {
     private _retrieveSeparatorValue(result: string): string {
         const specialCharacters = Array.isArray(this.dropSpecialCharacters)
             ? this.specialCharacters.filter((v) => {
-                return (this.dropSpecialCharacters as string[]).includes(v);
-            })
+                  return (this.dropSpecialCharacters as string[]).includes(v);
+              })
             : this.specialCharacters;
         return this._removeMask(result, specialCharacters);
     }
