@@ -98,7 +98,6 @@ export class NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             inputValue = '';
         }
-
         const inputArray: string[] = inputValue.toString().split(MaskExpression.EMPTY_STRING);
         if (
             this.allowNegativeNumbers &&

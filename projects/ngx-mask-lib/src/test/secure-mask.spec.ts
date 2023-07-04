@@ -151,8 +151,8 @@ describe('Directive: Mask (Secure)', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
         component.showMaskTyped = true;
-        equal('98765', '***/*5', fixture);
-        equal('1234', '***/*', fixture);
+        equal('98765', '***/*5/____', fixture);
+        equal('1234', '***/*_/____', fixture);
         equal('', '___/__/____', fixture);
     });
 
@@ -174,4 +174,22 @@ describe('Directive: Mask (Secure)', () => {
 
         expect(component.form.value).toBe(inputValue);
     }));
+
+    it('hideInput with showMaskTyped mask=XXXX', () => {
+        component.mask = 'XXXX';
+        component.hiddenInput = true;
+        component.showMaskTyped = true;
+        equal('1', '*___', fixture);
+        equal('12', '**__', fixture);
+        equal('123', '***_', fixture);
+        equal('1234', '****', fixture);
+    });
+
+    it('hideInput with showMaskTyped mask=XX-XX', () => {
+        component.mask = 'XX-XX';
+        component.hiddenInput = true;
+        component.showMaskTyped = true;
+
+        equal('1234', '**-**', fixture);
+    });
 });

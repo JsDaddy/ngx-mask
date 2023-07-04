@@ -964,4 +964,32 @@ describe('Separator: Mask', () => {
         expect(inputElement.selectionStart).toBe(4);
         expect(inputElement.value).toBe('123 456');
     });
+
+    it('should change formValue separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue('10.2');
+        tick();
+        expect(inputTarget.value).toBe('10.20');
+        expect(component.form.value).toBe('10.20');
+    }));
+
+    it('should change formValue separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue('10.2');
+        tick();
+        expect(inputTarget.value).toBe('10.200');
+        expect(component.form.value).toBe('10.200');
+    }));
 });

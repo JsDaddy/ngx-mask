@@ -426,10 +426,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         this._position =
             this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-
         let positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
             : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+
         if (positionToApply > this._getActualInputLength()) {
             positionToApply = this._getActualInputLength();
         }
@@ -669,6 +669,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 inputValue = inputValue
                     .toString()
                     .replace(MaskExpression.DOT, MaskExpression.COMMA);
+            }
+            if (this.maskExpression?.startsWith(MaskExpression.SEPARATOR) && this.leadZero) {
+                this._maskService.applyMask(
+                    inputValue.toString(),
+                    this._maskService.maskExpression
+                );
             }
             this._maskService.isNumberValue = true;
         }
