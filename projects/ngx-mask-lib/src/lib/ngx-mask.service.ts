@@ -66,6 +66,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
+
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING
@@ -117,7 +118,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             this.deletedSpecialCharacter = false;
         }
-        if (this.showMaskTyped) {
+        if (this.showMaskTyped && this.placeHolderCharacter.length === 1) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.removeMask(inputValue);
         }
@@ -320,6 +321,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                 if (this.maskExpression === MaskExpression.CPF_CNPJ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
+            }
+            if (this.placeHolderCharacter.length === this.maskExpression.length) {
+                return this.placeHolderCharacter;
             }
             return this.maskExpression.replace(/\w/g, this.placeHolderCharacter);
         }

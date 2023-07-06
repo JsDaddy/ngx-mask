@@ -19,7 +19,7 @@
 You can also try our NGX LOADER INDICATOR [check](https://www.npmjs.com/package/ngx-loader-indicator).
 You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-copypaste).
 
-### You can try live [demo](https://jsdaddy.github.io/ngx-mask/) with examples
+### You can try live [documentation](https://jsdaddy.github.io/ngx-mask/) with examples
 
 
 ## Installing

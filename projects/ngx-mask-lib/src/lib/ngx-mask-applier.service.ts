@@ -576,7 +576,8 @@ export class NgxMaskApplierService {
                 } else if (
                     this.showMaskTyped &&
                     this.specialCharacters.indexOf(inputSymbol) < 0 &&
-                    inputSymbol !== this.placeHolderCharacter
+                    inputSymbol !== this.placeHolderCharacter &&
+                    this.placeHolderCharacter.length === 1
                 ) {
                     stepBack = true;
                 }
