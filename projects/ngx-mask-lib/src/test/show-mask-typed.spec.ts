@@ -102,4 +102,33 @@ describe('Directive: Mask', () => {
         equal('12345679', '123-4*-****', fixture);
         equal('123456791', '123-4*-****', fixture);
     });
+
+    it('showMaskTyped && placeholder XXXXX-YYYY', () => {
+        component.showMaskTyped = true;
+        component.placeHolderCharacter = 'XXXXX-YYYY';
+        component.mask = '00000-0000';
+        equal('1', '1XXXX-YYYY', fixture);
+        equal('12', '12XXX-YYYY', fixture);
+        equal('123', '123XX-YYYY', fixture);
+        equal('1234', '1234X-YYYY', fixture);
+        equal('12345', '12345-YYYY', fixture);
+        equal('123456', '12345-6YYY', fixture);
+        equal('1234567', '12345-67YY', fixture);
+        equal('12345678', '12345-678Y', fixture);
+        equal('123456789', '12345-6789', fixture);
+    });
+
+    it('showMaskTyped && placeholder 00/00/0000', () => {
+        component.showMaskTyped = true;
+        component.placeHolderCharacter = 'dd/mm/yyyy';
+        component.mask = '00/00/0000';
+        equal('1', '1d/mm/yyyy', fixture);
+        equal('12', '12/mm/yyyy', fixture);
+        equal('123', '12/3m/yyyy', fixture);
+        equal('1234', '12/34/yyyy', fixture);
+        equal('12345', '12/34/5yyy', fixture);
+        equal('123456', '12/34/56yy', fixture);
+        equal('1234567', '12/34/567y', fixture);
+        equal('12345678', '12/34/5678', fixture);
+    });
 });
