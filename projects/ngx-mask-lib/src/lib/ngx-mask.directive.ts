@@ -671,10 +671,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     .replace(MaskExpression.DOT, MaskExpression.COMMA);
             }
             if (this.maskExpression?.startsWith(MaskExpression.SEPARATOR) && this.leadZero) {
-                this._maskService.applyMask(
-                    inputValue.toString(),
-                    this._maskService.maskExpression
-                );
+                requestAnimationFrame(() => {
+                    this._maskService.applyMask(
+                        inputValue.toString(),
+                        this._maskService.maskExpression
+                    );
+                });
             }
             this._maskService.isNumberValue = true;
         }

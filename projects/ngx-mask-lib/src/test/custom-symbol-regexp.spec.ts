@@ -26,4 +26,14 @@ describe('Directive: Mask', () => {
         equal('22222.333333', '22222.33', fixture);
         equal('22212323232', '22212323232', fixture);
     });
+
+    it('custom with symbols Á, á', () => {
+        const testPattern = {
+            S: { pattern: new RegExp('[A-Za-z-Áá]') },
+        };
+        component.mask = 'S*';
+        component.patterns = testPattern;
+        equal('Fernándos', 'Fernándos', fixture);
+        equal('Ánton', 'Ánton', fixture);
+    });
 });

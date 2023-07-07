@@ -976,7 +976,9 @@ describe('Separator: Mask', () => {
         component.form.setValue('10.2');
         tick();
         expect(inputTarget.value).toBe('10.20');
-        expect(component.form.value).toBe('10.20');
+        requestAnimationFrame(() => {
+            expect(component.form.value).toBe('10.20');
+        });
     }));
 
     it('should change formValue separator.3', fakeAsync(() => {
@@ -990,6 +992,8 @@ describe('Separator: Mask', () => {
         component.form.setValue('10.2');
         tick();
         expect(inputTarget.value).toBe('10.200');
-        expect(component.form.value).toBe('10.200');
+        requestAnimationFrame(() => {
+            expect(component.form.value).toBe('10.200');
+        });
     }));
 });
