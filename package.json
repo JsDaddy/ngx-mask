@@ -110,7 +110,7 @@
     "postcss-scss": "4.0.6",
     "prettier": "2.8.8",
     "puppeteer": "20.2.0",
-    "stylelint": "15.6.1",
+    "stylelint": "15.10.1",
     "stylelint-config-prettier": "9.0.5",
     "stylelint-config-recommended-scss": "11.0.0",
     "stylelint-prettier": "3.0.0",
