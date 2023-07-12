@@ -5,6 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { DebugElement } from '@angular/core';
+import { equal } from './utils/test-functions.component';
 
 describe('Directive: Mask (Trigger on mask change)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -43,5 +45,21 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         inputEl = fixture.debugElement.query(By.css('input'));
         expect(inputEl.nativeElement.value).toEqual('79 123 45 67');
         expect(component.form.value).toEqual('791234567');
+    });
+
+    it('should trigger form value update if mask is changed', async () => {
+        component.mask = '00000||00000-0000';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        equal('1234', '1234', fixture);
+        expect(inputTarget.value).toEqual('1234');
+        expect(component.form.value).toBe('1234');
+
+        component.mask = 'S0S 0S0';
+        equal(inputTarget.value, '', fixture, true);
+        expect(component.form.value).toBe('');
     });
 });

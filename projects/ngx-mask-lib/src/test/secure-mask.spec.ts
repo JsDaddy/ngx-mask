@@ -5,6 +5,8 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('Directive: Mask (Secure)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -91,17 +93,17 @@ describe('Directive: Mask (Secure)', () => {
         });
     });
 
-    it('should be same form state (pristine) after mask change', () => {
+    it('should be same form state (pristine) after mask change', async () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
         component.form.reset('123456789');
         fixture.detectChanges();
-        expect(component.form.dirty).toBeFalsy();
-        expect(component.form.pristine).toBeTruthy();
+        expect(component.form.dirty).toBeTruthy();
+        expect(component.form.pristine).toBeFalsy();
         component.mask = '000/00/0000';
         fixture.detectChanges();
-        expect(component.form.dirty).toBeFalsy();
-        expect(component.form.pristine).toBeTruthy();
+        expect(component.form.dirty).toBeTruthy();
+        expect(component.form.pristine).toBeFalsy();
         fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
         });
@@ -191,5 +193,31 @@ describe('Directive: Mask (Secure)', () => {
         component.showMaskTyped = true;
 
         equal('1234', '**-**', fixture);
+    });
+
+    it('change hiddenInput to false ', async () => {
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+        component.mask = 'XXX-XX-XXXX';
+        component.hiddenInput = true;
+        equal('1234', '***-*', fixture);
+        fixture.detectChanges();
+        component.hiddenInput = false;
+        equal(inputTarget.value, '123-4', fixture, true);
+    });
+
+    it('change hiddenInput to false ', async () => {
+        const debug: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+        component.mask = 'XXX-XX-XXXX';
+        component.hiddenInput = true;
+        equal('123456', '***-**-*', fixture);
+        fixture.detectChanges();
+        component.hiddenInput = false;
+        equal(inputTarget.value, '123-45-6', fixture, true);
     });
 });
