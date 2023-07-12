@@ -37,5 +37,5 @@ export const enum MaskExpression {
     BACKSPACE = 'Backspace',
     DELETE = 'Delete',
     ARROW_LEFT = 'ArrowLeft',
-    ARROW_UP = 'Backspace',
+    ARROW_UP = 'ArrowUp',
 }
