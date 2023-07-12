@@ -398,13 +398,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         let caretShift = 0;
         let backspaceShift = false;
-        if (this._code === 'Delete' && MaskExpression.SEPARATOR) {
+        if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
             this._maskService.deletedSpecialCharacter = true;
         }
         this._maskService.applyValueChanges(
             position,
             this._justPasted,
-            this._code === 'Backspace' || this._code === 'Delete',
+            this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE,
             (shift: number, _backspaceShift: boolean) => {
                 this._justPasted = false;
                 caretShift = shift;
@@ -418,17 +418,26 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
         if (this._maskExpressionArray.length) {
-            position =
-                el.selectionStart === 1
-                    ? (el.selectionStart as number) + this._maskService.prefix.length
-                    : (el.selectionStart as number);
+            if (this._code === MaskExpression.BACKSPACE) {
+                position = this.specialCharacters.includes(
+                    this._inputValue.slice(position - 1, position)
+                )
+                    ? position - 1
+                    : position;
+            } else {
+                position =
+                    el.selectionStart === 1
+                        ? (el.selectionStart as number) + this._maskService.prefix.length
+                        : (el.selectionStart as number);
+            }
         }
 
         this._position =
             this._position === 1 && this._inputValue.length === 1 ? null : this._position;
         let positionToApply: number = this._position
             ? this._inputValue.length + position + caretShift
-            : position + (this._code === 'Backspace' && !backspaceShift ? 0 : caretShift);
+            : position +
+              (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
 
         if (positionToApply > this._getActualInputLength()) {
             positionToApply = this._getActualInputLength();
@@ -454,9 +463,26 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this.onInput(e);
     }
 
-    @HostListener('blur')
-    public onBlur(): void {
+    @HostListener('blur', ['$event'])
+    public onBlur(e: CustomKeyboardEvent): void {
         if (this._maskValue) {
+            const el: HTMLInputElement = e.target as HTMLInputElement;
+            if (this.leadZero && el.value.length > 0 && typeof this.decimalMarker === 'string') {
+                const maskExpression = this._maskService.maskExpression;
+                const precision = Number(
+                    this._maskService.maskExpression.slice(
+                        maskExpression.length - 1,
+                        maskExpression.length
+                    )
+                );
+                if (precision > 1) {
+                    const decimalPart = el.value.split(this.decimalMarker)[1] as string;
+                    el.value = el.value.includes(this.decimalMarker)
+                        ? el.value + '0'.repeat(precision - decimalPart.length)
+                        : el.value + this.decimalMarker + '0'.repeat(precision);
+                    this._maskService.actualValue = el.value;
+                }
+            }
             this._maskService.clearIfNotMatchFn();
         }
         this.onTouch();
@@ -470,6 +496,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const posStart = 0;
         const posEnd = 0;
+
         if (
             el !== null &&
             el.selectionStart !== null &&
@@ -541,17 +568,20 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._code = e.code ? e.code : e.key;
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
-
         this._setMask();
 
-        if (e.key === 'ArrowUp') {
+        if (e.key === MaskExpression.ARROW_UP) {
             e.preventDefault();
         }
-        if (e.key === 'ArrowLeft' || e.key === 'Backspace' || e.key === 'Delete') {
-            if (e.key === 'Backspace' && el.value.length === 0) {
+        if (
+            e.key === MaskExpression.ARROW_LEFT ||
+            e.key === MaskExpression.BACKSPACE ||
+            e.key === MaskExpression.DELETE
+        ) {
+            if (e.key === MaskExpression.BACKSPACE && el.value.length === 0) {
                 el.selectionStart = el.selectionEnd;
             }
-            if (e.key === 'Backspace' && (el.selectionStart as number) !== 0) {
+            if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
                 // If specialChars is false, (shouldn't ever happen) then set to the defaults
                 this.specialCharacters = this.specialCharacters?.length
                     ? this.specialCharacters
@@ -592,7 +622,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             const cursorStart: number | null = el.selectionStart;
             if (
-                e.key === 'Backspace' &&
+                e.key === MaskExpression.BACKSPACE &&
                 !el.readOnly &&
                 cursorStart === 0 &&
                 el.selectionEnd === el.value.length &&

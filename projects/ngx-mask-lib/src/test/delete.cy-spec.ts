@@ -100,4 +100,23 @@ describe('Directive: Mask (Delete)', () => {
 
         cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
     });
+
+    it('should delete specialCharacter from allow few mask', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(00) 00000000||+00 (00) 00000000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123')
+            .should('have.value', '(12) 3')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 4)
+            .should('have.value', '(12) ')
+            .type('{rightArrow}')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 3);
+    });
 });
