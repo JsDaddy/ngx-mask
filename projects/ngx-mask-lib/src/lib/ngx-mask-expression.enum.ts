@@ -34,4 +34,8 @@ export const enum MaskExpression {
     WHITE_SPACE = ' ',
     NUMBER_ZERO = '0',
     NUMBER_NINE = '9',
+    BACKSPACE = 'Backspace',
+    DELETE = 'Delete',
+    ARROW_LEFT = 'ArrowLeft',
+    ARROW_UP = 'Backspace',
 }
