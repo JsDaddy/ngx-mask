@@ -66,7 +66,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
-
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING
@@ -86,7 +85,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                             ? actualResult.splice(this.selStart, 0, getSymbol)
                             : inputValue.length < actualResult.length
                             ? actualResult.length - inputValue.length === 1
-                                ? actualResult.splice(this.selStart - 1, 1)
+                                ? backspaced
+                                    ? actualResult.splice(this.selStart - 1, 1)
+                                    : actualResult.splice(inputValue.length - 1, 1)
                                 : actualResult.splice(this.selStart, this.selEnd - this.selStart)
                             : null
                         : null
@@ -123,7 +124,12 @@ export class NgxMaskService extends NgxMaskApplierService {
             inputValue = this.removeMask(inputValue);
         }
 
-        newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+        if (this.maskChanged) {
+            newInputValue = inputValue;
+        } else {
+            newInputValue =
+                Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
+        }
 
         const result: string = super.applyMask(
             newInputValue,
@@ -169,6 +175,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
             return result;
         }
+
         const resLen: number = result.length;
         const prefNmask: string = this.prefix + this.maskIsShown;
 
@@ -472,6 +479,13 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     private formControlResult(inputValue: string): void {
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
+            this.maskChanged
+                ? this.onChange(
+                      this._toNumber(
+                          this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                      )
+                  )
+                : '';
             this.maskChanged = false;
             return;
         }

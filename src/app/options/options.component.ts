@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ElementRef,
     inject,
@@ -8,7 +9,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -17,7 +18,7 @@ import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { TrackByService } from '@libraries/track-by/track-by.service';
-import { Observable } from 'rxjs';
+import { Observable, scan, startWith } from 'rxjs';
 import { ScrollService } from '@open-source/scroll/scroll.service';
 import { OpenSourcePath } from '@open-source/path/open-source.path';
 import { AccordionService } from '@open-source/accordion/accordion.service';
