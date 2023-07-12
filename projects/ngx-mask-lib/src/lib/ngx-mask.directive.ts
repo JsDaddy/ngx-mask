@@ -462,7 +462,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this.onInput(e);
     }
 
-    // @HostListener('blur')
     @HostListener('blur', ['$event'])
     public onBlur(e: CustomKeyboardEvent): void {
         if (this._maskValue) {
