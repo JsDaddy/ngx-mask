@@ -873,15 +873,4 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
         });
     }
-    public removeCharacterAtPosition(inputStr: string, position: number): string {
-        if (position < 0 || position >= inputStr.length) {
-            // Invalid position, return the original string
-            return inputStr;
-        }
-
-        const part1 = inputStr.slice(0, position);
-        const part2 = inputStr.slice(position + 1);
-
-        return part1 + part2;
-    }
 }
