@@ -28,8 +28,8 @@ describe('Directive: Mask (Drop special characters)', () => {
 
         expect(component.form.value).toBe('25-78-98');
 
-        component.form.setValue(123456);
         equal('123456', '12-34-56', fixture);
+
         expect(component.form.value).toBe('12-34-56');
 
         component.mask = '00-00/00';

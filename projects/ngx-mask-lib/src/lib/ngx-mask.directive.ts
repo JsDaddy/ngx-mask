@@ -383,10 +383,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public onInput(e: CustomKeyboardEvent): void {
         // If IME is composing text, we wait for the composed text.
         if (this._isComposing) return;
+
         const el: HTMLInputElement = e.target as HTMLInputElement;
         this._inputValue = el.value;
-
         this._setMask();
+
         if (!this._maskValue) {
             this.onChange(el.value);
             return;
@@ -400,6 +401,18 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         let backspaceShift = false;
         if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
             this._maskService.deletedSpecialCharacter = true;
+        }
+        if (
+            this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
+            this._code !== MaskExpression.BACKSPACE &&
+            this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
+            position < 10
+        ) {
+            const inputSymbol = this._inputValue.slice(position - 1, position);
+            el.value =
+                this._inputValue.slice(0, position - 1) +
+                inputSymbol +
+                this._inputValue.slice(position + 1);
         }
         this._maskService.applyValueChanges(
             position,
@@ -431,7 +444,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         : (el.selectionStart as number);
             }
         }
-
         this._position =
             this._position === 1 && this._inputValue.length === 1 ? null : this._position;
         let positionToApply: number = this._position
@@ -476,10 +488,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     )
                 );
                 if (precision > 1) {
+                    el.value = this.suffix ? el.value.split(this.suffix).join('') : el.value;
                     const decimalPart = el.value.split(this.decimalMarker)[1] as string;
                     el.value = el.value.includes(this.decimalMarker)
-                        ? el.value + '0'.repeat(precision - decimalPart.length)
-                        : el.value + this.decimalMarker + '0'.repeat(precision);
+                        ? el.value +
+                          MaskExpression.NUMBER_ZERO.repeat(precision - decimalPart.length) +
+                          this.suffix
+                        : el.value +
+                          this.decimalMarker +
+                          MaskExpression.NUMBER_ZERO.repeat(precision) +
+                          this.suffix;
                     this._maskService.actualValue = el.value;
                 }
             }
