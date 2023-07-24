@@ -31,10 +31,8 @@ export class NgxMaskService extends NgxMaskApplierService {
     private _end!: number;
 
     private _emitValue = false;
-
-    private _previousValue = '';
-
-    private _currentValue = '';
+    public _previousValue = '';
+    public _currentValue = '';
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
