@@ -404,7 +404,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (
             this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
-            this._code !== 'Backspace' &&
+            this._code !== MaskExpression.BACKSPACE &&
             this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
             position < 10
         ) {
@@ -491,8 +491,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     el.value = this.suffix ? el.value.split(this.suffix).join('') : el.value;
                     const decimalPart = el.value.split(this.decimalMarker)[1] as string;
                     el.value = el.value.includes(this.decimalMarker)
-                        ? el.value + '0'.repeat(precision - decimalPart.length) + this.suffix
-                        : el.value + this.decimalMarker + '0'.repeat(precision) + this.suffix;
+                        ? el.value +
+                          MaskExpression.NUMBER_ZERO.repeat(precision - decimalPart.length) +
+                          this.suffix
+                        : el.value +
+                          this.decimalMarker +
+                          MaskExpression.NUMBER_ZERO.repeat(precision) +
+                          this.suffix;
                     this._maskService.actualValue = el.value;
                 }
             }
