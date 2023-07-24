@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { scan, startWith } from 'rxjs';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -10,7 +11,11 @@ import { FormControl } from '@angular/forms';
             [mask]="mask"
             [prefix]="prefix"
             [suffix]="suffix"
+            [leadZero]="leadZero"
+            [showMaskTyped]="showMaskTyped"
             [hiddenInput]="hiddenInput" />
+
+        <pre id="pre">{{ counter$ | async }}</pre>
     `,
 })
 export class CypressTestMaskComponent {
@@ -22,5 +27,15 @@ export class CypressTestMaskComponent {
 
     @Input() public suffix = '';
 
+    @Input() public leadZero = false;
+
+    @Input() public showMaskTyped = false;
+
     public form: FormControl = new FormControl('');
+
+    public readonly counter$ = this.form.valueChanges.pipe(
+        startWith(0),
+        // eslint-disable-next-line no-param-reassign
+        scan((_, __, index) => ++index)
+    );
 }
