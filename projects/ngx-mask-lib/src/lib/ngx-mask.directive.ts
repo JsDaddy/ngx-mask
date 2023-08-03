@@ -83,6 +83,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
 
+    @Input() public apm: IConfig['apm'] | null = null;
+
     @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
@@ -134,6 +136,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             leadZeroDateTime,
             leadZero,
             triggerOnMaskChange,
+            apm,
         } = changes;
         if (maskExpression) {
             if (
@@ -177,6 +180,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         // Only overwrite the mask available patterns if a pattern has actually been passed in
         if (patterns && patterns.currentValue) {
             this._maskService.patterns = patterns.currentValue;
+        }
+        if (apm && apm.currentValue) {
+            this._maskService.apm = apm.currentValue;
         }
         if (prefix) {
             this._maskService.prefix = prefix.currentValue;
@@ -414,6 +420,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 inputSymbol +
                 this._inputValue.slice(position + 1);
         }
+
         this._maskService.applyValueChanges(
             position,
             this._justPasted,

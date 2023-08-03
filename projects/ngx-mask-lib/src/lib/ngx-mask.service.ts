@@ -78,7 +78,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                 : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
         if (this.hiddenInput !== undefined && !this.writingValue) {
-            let actualResult: string[] = this.actualValue.split(MaskExpression.EMPTY_STRING);
+            let actualResult: string[] =
+                inputValue && inputValue.length === 1
+                    ? inputValue.split(MaskExpression.EMPTY_STRING)
+                    : this.actualValue.split(MaskExpression.EMPTY_STRING);
             // eslint-disable  @typescript-eslint/no-unused-expressions
             // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
@@ -111,7 +114,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                     ? this.shiftTypedSymbols(actualResult.join(MaskExpression.EMPTY_STRING))
                     : inputValue;
         }
-        if (justPasted && this.hiddenInput) {
+        if (justPasted && (this.hiddenInput || !this.hiddenInput)) {
             newInputValue = inputValue;
         }
 
@@ -126,7 +129,11 @@ export class NgxMaskService extends NgxMaskApplierService {
             // eslint-disable-next-line no-param-reassign
             this.deletedSpecialCharacter = false;
         }
-        if (this.showMaskTyped && this.placeHolderCharacter.length === 1) {
+        if (
+            this.showMaskTyped &&
+            this.placeHolderCharacter.length === 1 &&
+            !this.leadZeroDateTime
+        ) {
             // eslint-disable-next-line no-param-reassign
             inputValue = this.removeMask(inputValue);
         }
@@ -600,7 +607,13 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (result === MaskExpression.EMPTY_STRING) {
             return result;
         }
-
+        if (
+            this.maskExpression.startsWith(MaskExpression.PERCENT) &&
+            this.decimalMarker === MaskExpression.COMMA
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            result = result.replace(MaskExpression.COMMA, MaskExpression.DOT);
+        }
         const separatorPrecision: number | null = this._retrieveSeparatorPrecision(
             this.maskExpression
         );
