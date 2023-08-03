@@ -130,4 +130,101 @@ describe('Directive: Mask (Percent)', () => {
         expect(component.form.value).toBe('1');
         expect(component.form.valid).toBeTruthy();
     });
+
+    it('percent with decimalMarker = , percent.2 ', () => {
+        component.mask = 'percent.2';
+        component.decimalMarker = ',';
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('12,2', '12,2', fixture);
+        equal('12,22', '12,22', fixture);
+        expect(component.form.value).toBe('12.22');
+    });
+
+    it('percent with decimalMarker = , percent.3 ', () => {
+        component.mask = 'percent.3';
+        component.decimalMarker = ',';
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('12,2', '12,2', fixture);
+        equal('12,22', '12,22', fixture);
+        equal('12,222', '12,222', fixture);
+        expect(component.form.value).toBe('12.222');
+    });
+
+    it('percent with decimalMarker = , percent.2 drop false ', () => {
+        component.mask = 'percent.2';
+        component.dropSpecialCharacters = false;
+        component.decimalMarker = ',';
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('12,2', '12,2', fixture);
+        equal('12,22', '12,22', fixture);
+        expect(component.form.value).toBe('12,22');
+    });
+
+    it('percent with decimalMarker = , percent.3 drop false ', () => {
+        component.mask = 'percent.3';
+        component.dropSpecialCharacters = false;
+        component.decimalMarker = ',';
+
+        equal('2', '2', fixture);
+        equal('22', '22', fixture);
+        equal('12,2', '12,2', fixture);
+        equal('12,221', '12,221', fixture);
+        expect(component.form.value).toBe('12,221');
+    });
+
+    it('percent with decimalMarker = , percent.2 drop false with suffix ', () => {
+        component.mask = 'percent.2';
+        component.dropSpecialCharacters = false;
+        component.decimalMarker = ',';
+        component.suffix = '%';
+
+        equal('1', '1%', fixture);
+        equal('12', '12%', fixture);
+        equal('12,2', '12,2%', fixture);
+        equal('12,22', '12,22%', fixture);
+        expect(component.form.value).toBe('12,22%');
+    });
+
+    it('percent with decimalMarker = , percent.3 drop false with suffix ', () => {
+        component.mask = 'percent.3';
+        component.dropSpecialCharacters = false;
+        component.suffix = '%';
+        component.decimalMarker = ',';
+
+        equal('2', '2%', fixture);
+        equal('22', '22%', fixture);
+        equal('12,2', '12,2%', fixture);
+        equal('12,221', '12,221%', fixture);
+        expect(component.form.value).toBe('12,221%');
+    });
+
+    it('percent with decimalMarker = , percent.2with suffix ', () => {
+        component.mask = 'percent.2';
+        component.suffix = '%';
+        component.decimalMarker = ',';
+
+        equal('1', '1%', fixture);
+        equal('12', '12%', fixture);
+        equal('12,2', '12,2%', fixture);
+        equal('12,22', '12,22%', fixture);
+        expect(component.form.value).toBe('12.22');
+    });
+
+    it('percent with decimalMarker = , percent.3  with suffix ', () => {
+        component.mask = 'percent.3';
+        component.suffix = '%';
+        component.decimalMarker = ',';
+
+        equal('2', '2%', fixture);
+        equal('22', '22%', fixture);
+        equal('12,2', '12,2%', fixture);
+        equal('12,221', '12,221%', fixture);
+        expect(component.form.value).toBe('12.221');
+    });
 });

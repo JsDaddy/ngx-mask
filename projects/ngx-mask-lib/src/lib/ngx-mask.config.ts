@@ -16,6 +16,7 @@ export interface IConfig {
     hiddenInput: boolean | undefined;
     validation: boolean;
     separatorLimit: string;
+    apm: boolean;
     allowNegativeNumbers: boolean;
     leadZeroDateTime: boolean;
     leadZero: boolean;
@@ -55,6 +56,7 @@ export const initialConfig: IConfig = {
     // eslint-disable-next-line @typescript-eslint/quotes
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
+    apm: false,
     leadZero: false,
     triggerOnMaskChange: false,
     maskFilled: new EventEmitter<void>(),

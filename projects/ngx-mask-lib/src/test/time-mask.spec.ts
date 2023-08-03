@@ -357,4 +357,83 @@ describe('Directive: Mask (Time)', () => {
         equal('11111111 2422920', '11.11.1111 2:42 - 2:9', fixture);
         equal('11119999 242022420', '11.11.9999 2:42 - 02:24', fixture);
     });
+
+    it('Date (Hh:m0 apm=true', () => {
+        component.mask = 'Hh:m0';
+        component.apm = true;
+        equal('1', '1', fixture);
+        equal('11', '11', fixture);
+        equal('12', '1:2', fixture);
+        equal('13', '1:3', fixture);
+        equal('15', '1:5', fixture);
+        equal('16', '1:6', fixture);
+        equal('17', '1:7', fixture);
+        equal('18', '1:8', fixture);
+        equal('19', '1:9', fixture);
+        equal('20', '2:0', fixture);
+        equal('21', '2:1', fixture);
+        equal('22', '2:2', fixture);
+        equal('23', '2:3', fixture);
+        equal('24', '2:4', fixture);
+        equal('25', '2:5', fixture);
+        equal('1123', '11:23', fixture);
+        equal('1323', '1:32', fixture);
+    });
+
+    it('Date (Hh:m0:s0 apm=true', () => {
+        component.mask = 'Hh:m0:s0';
+        component.apm = true;
+        equal('1323', '1:32:3', fixture);
+        equal('1223', '1:22:3', fixture);
+        equal('112322', '11:23:22', fixture);
+        equal('13231', '1:32:31', fixture);
+    });
+
+    it('Date (d0/M0/0000 Hh:m0:s0 apm=true', () => {
+        component.mask = 'd0/M0/0000 Hh:m0:s0';
+        component.apm = true;
+        equal('11122023', '11/12/2023', fixture);
+        equal('11122023 132', '11/12/2023 1:32', fixture);
+        equal('11122023 13230', '11/12/2023 1:32:30', fixture);
+    });
+
+    it('Date (0000-M0-d0 Hh:m0:s0.000', () => {
+        component.mask = '0000-M0-d0 Hh:m0:s0.000';
+        component.leadZeroDateTime = true;
+        component.showMaskTyped = true;
+        equal('2023', '2023-__-__ __:__:__.___', fixture);
+        equal('202309', '2023-09-__ __:__:__.___', fixture);
+        equal('20230931', '2023-09-31 __:__:__.___', fixture);
+        equal('2023093123', '2023-09-31 23:__:__.___', fixture);
+        equal('202309312344', '2023-09-31 23:44:__.___', fixture);
+        equal('20230931234435', '2023-09-31 23:44:35.___', fixture);
+        equal('20230920233003123', '2023-09-20 23:30:03.123', fixture);
+    });
+
+    it('Date (0000-M0-d0 leadZero and showMaskTyped', () => {
+        component.mask = '0000-M0-d0';
+        component.leadZeroDateTime = true;
+        component.showMaskTyped = true;
+        equal('2023', '2023-__-__', fixture);
+        equal('202310', '2023-10-__', fixture);
+        equal('20231029', '2023-10-29', fixture);
+    });
+
+    it('Date (0000/M0/d0 leadZero and showMaskTyped', () => {
+        component.mask = '0000/M0/d0';
+        component.leadZeroDateTime = true;
+        component.showMaskTyped = true;
+        equal('2023', '2023/__/__', fixture);
+        equal('202312', '2023/12/__', fixture);
+        equal('20231229', '2023/12/29', fixture);
+    });
+
+    it('Date (0000.M0.d0 leadZero and showMaskTyped', () => {
+        component.mask = '0000.M0.d0';
+        component.leadZeroDateTime = true;
+        component.showMaskTyped = true;
+        equal('2023', '2023.__.__', fixture);
+        equal('202310', '2023.10.__', fixture);
+        equal('20231031', '2023.10.31', fixture);
+    });
 });
