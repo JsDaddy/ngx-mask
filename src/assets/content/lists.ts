@@ -159,6 +159,16 @@ export const lists: IListItem[] = [
                 id: 3,
                 scrollTo: 'special',
             },
+            {
+                content: '12 hour format',
+                id: 4,
+                scrollTo: '12hour',
+            },
+            {
+                content: 'Percent with comma',
+                id: 5,
+                scrollTo: 'percentDecimalMarker',
+            },
         ],
     },
 ];

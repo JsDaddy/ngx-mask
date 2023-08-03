@@ -24,6 +24,22 @@ export const OthDocs: IComDoc[] = [
         id: 3,
         anchor: 'special',
     },
+    {
+        header: '12 hour format',
+        text: '',
+        // eslint-disable-next-line no-useless-escape
+        code: ` <input type='text'[apm]="true" mask="Hh:m0:s0" >`,
+        id: 4,
+        anchor: '12hour',
+    },
+    {
+        header: 'Percent with decimalMarker ,',
+        text: '',
+        // eslint-disable-next-line no-useless-escape
+        code: ` <input type='text'[decimalMarker]="','" mask="percent.2" >`,
+        id: 5,
+        anchor: 'percentDecimalMarker',
+    },
 ];
 
 export const OthExamples: (TExample<IMaskOptions> | { _pipe: string })[] = [
@@ -40,6 +56,18 @@ export const OthExamples: (TExample<IMaskOptions> | { _pipe: string })[] = [
         _placeholder: 'specialCharacters',
         _specialCharacters: `[ '[' ,']' , '\\' ]`,
         _mask: '[00][000]',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: '12 hour format',
+        _mask: 'Hh:m0:s0',
+        _apm: true,
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+    {
+        _placeholder: '12 hour format',
+        _mask: 'percent.2',
+        _decimalMarker: ',',
         control: { form: new UntypedFormControl(''), model: '' },
     },
 ];

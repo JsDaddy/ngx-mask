@@ -157,4 +157,106 @@ describe('Test Date Hh:m0', () => {
             .should('have.prop', 'selectionStart', 6)
             .clear();
     });
+
+    it('Mask separator.2 check cursor with value 100.0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: '.',
+                thousandSeparator: ',',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('1000')
+            .type('{leftArrow}')
+            .type('.')
+            .should('have.value', '100.0')
+            .should('have.prop', 'selectionStart', 4);
+    });
+
+    it('Mask separator.2 check cursor with value 1.00', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: '.',
+                thousandSeparator: ',',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('1000')
+            .type('{leftArrow}'.repeat(3))
+            .type('.')
+            .should('have.value', '1.00')
+            .should('have.prop', 'selectionStart', 2);
+    });
+
+    it('Mask separator.2 check cursor with value 123456789.20', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: '.',
+                thousandSeparator: ',',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('123456789.20')
+            .type('{leftArrow}'.repeat(4))
+            .type('.')
+            .should('have.value', '12,345,678.9')
+            .should('have.prop', 'selectionStart', 11);
+    });
+
+    it('Mask separator.2 check cursor with value 100.0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: ',',
+                thousandSeparator: '.',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('1000')
+            .type('{leftArrow}')
+            .type(',')
+            .should('have.value', '100,0')
+            .should('have.prop', 'selectionStart', 4);
+    });
+
+    it('Mask separator.2 check cursor with value 1.00', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: ',',
+                thousandSeparator: '.',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('1000')
+            .type('{leftArrow}'.repeat(3))
+            .type(',')
+            .should('have.value', '1,00')
+            .should('have.prop', 'selectionStart', 2);
+    });
+
+    it('Mask separator.2 check cursor with value 123456789.20', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                decimalMarker: ',',
+                thousandSeparator: '.',
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('123456789,20')
+            .type('{leftArrow}'.repeat(4))
+            .type(',')
+            .should('have.value', '12.345.678,9')
+            .should('have.prop', 'selectionStart', 11);
+    });
 });
