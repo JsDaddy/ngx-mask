@@ -706,8 +706,6 @@ export class NgxMaskApplierService {
         const value = Number(sanitizedStr);
 
         return !isNaN(value) && value >= 0 && value <= 100;
-
-        // return Number(str) >= 0 && Number(str) <= 100;
     };
 
     private getPrecision = (maskExpression: string): number => {
