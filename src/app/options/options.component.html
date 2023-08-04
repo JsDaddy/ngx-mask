@@ -37,14 +37,14 @@
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     <div class="dark-card bg-black" *ngIf="!ex._pipe; else pipeView">
-        <div class="dark-input pd-15">
+        <div class="dark-input pd-15" *ngIf="!ex._thousandSeparator">
             <input
                 [placeholder]="placeholder"
                 prefix="{{ ex._prefix }}"
                 suffix="{{ ex._suffix }}"
                 [dropSpecialCharacters]="ex._dropSpecialCharacters || ''"
                 mask="{{ ex._mask || '' }}"
-                thousandSeparator="{{ ex._thousandSeparator || ' ' }}"
+                [thousandSeparator]="ex._thousandSeparator || ' '"
                 [formControl]="ex.control.form"
                 [allowNegativeNumbers]="ex._allowNegativeNumbers || null"
                 [specialCharacters]="ex._specialCharacters || null"
@@ -58,6 +58,16 @@
                 [clearIfNotMatch]="ex._clearIfNotMatch || null"
                 [hiddenInput]="ex._hiddenInput"
                 class="customDarkInput bg-black white span" />
+        </div>
+        <div class="dark-input pd-15" *ngIf="ex._thousandSeparator">
+            <input
+                    [placeholder]="placeholder"
+                    mask="{{ ex._mask || '' }}"
+                    [thousandSeparator]="ex._thousandSeparator || ' '"
+                    [formControl]="ex.control.form"
+                    [decimalMarker]="ex._decimalMarker || '.'"
+                    [leadZero]="ex._leadZero || null"
+                    class="customDarkInput bg-black white span" />
         </div>
         <div *ngIf="!ex._validation; else validView">
             <div class="card-content row">

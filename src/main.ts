@@ -4,7 +4,7 @@ import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { IConfig, provideNgxMask } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
 import { provideRouter } from '@angular/router';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { provideHttpClient } from '@angular/common/http';
@@ -15,10 +15,6 @@ import { GithubStarsService } from '@libraries/github/github-stars.service';
 if (environment.production) {
     enableProdMode();
 }
-
-const maskConfig: Partial<IConfig> = {
-    validation: false,
-};
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -31,7 +27,7 @@ bootstrapApplication(AppComponent, {
         BaseHttpService,
         provideAnimations(),
         provideRouter([]),
-        provideNgxMask(maskConfig),
+        provideNgxMask(),
         {
             provide: HIGHLIGHT_OPTIONS,
             useValue: {
