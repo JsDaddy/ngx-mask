@@ -37,12 +37,12 @@
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     <div class="dark-card bg-black" *ngIf="!ex._pipe; else pipeView">
-        <div class="dark-input pd-15" *ngIf="!ex._thousandSeparator">
+        <div class="dark-input pd-15" *ngIf="!ex._thousandSeparator && !ex._dropSpecialCharacters">
             <input
                 [placeholder]="placeholder"
                 prefix="{{ ex._prefix }}"
                 suffix="{{ ex._suffix }}"
-                [dropSpecialCharacters]="ex._dropSpecialCharacters || ''"
+                [dropSpecialCharacters]="ex._dropSpecialCharacters"
                 mask="{{ ex._mask || '' }}"
                 [thousandSeparator]="ex._thousandSeparator || ' '"
                 [formControl]="ex.control.form"
@@ -59,15 +59,23 @@
                 [hiddenInput]="ex._hiddenInput"
                 class="customDarkInput bg-black white span" />
         </div>
+        <div class="dark-input pd-15" *ngIf="ex._dropSpecialCharacters">
+            <input
+                [placeholder]="placeholder"
+                mask="{{ ex._mask || '' }}"
+                [dropSpecialCharacters]="ex._dropSpecialCharacters"
+                [formControl]="ex.control.form"
+                class="customDarkInput bg-black white span" />
+        </div>
         <div class="dark-input pd-15" *ngIf="ex._thousandSeparator">
             <input
-                    [placeholder]="placeholder"
-                    mask="{{ ex._mask || '' }}"
-                    [thousandSeparator]="ex._thousandSeparator || ' '"
-                    [formControl]="ex.control.form"
-                    [decimalMarker]="ex._decimalMarker || '.'"
-                    [leadZero]="ex._leadZero || null"
-                    class="customDarkInput bg-black white span" />
+                [placeholder]="placeholder"
+                mask="{{ ex._mask || '' }}"
+                [thousandSeparator]="ex._thousandSeparator || ' '"
+                [formControl]="ex.control.form"
+                [decimalMarker]="ex._decimalMarker || '.'"
+                [leadZero]="ex._leadZero || null"
+                class="customDarkInput bg-black white span" />
         </div>
         <div *ngIf="!ex._validation; else validView">
             <div class="card-content row">
