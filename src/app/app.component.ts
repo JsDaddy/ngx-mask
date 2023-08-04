@@ -45,7 +45,6 @@ export class AppComponent {
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
     public switchCard(cardId: number): void {
-        console.log('',                this.card.examples = SepExamples)
         switch (cardId) {
             case 1:
                 this.card.docs = ComDocs;
