@@ -2,7 +2,7 @@
     <div
         class="card"
         *ngFor="let tile of cardDocs; let i = index; trackBy: trackByPath"
-        [ngClass]="activeCardId | color : tile.id"
+        [ngClass]="activeCardId | color: tile.id"
         [id]="tile.id"
         #cards>
         <div class="mr-title title row uppercase ls-25">
@@ -14,7 +14,7 @@
                     <img
                         width="20"
                         height="20"
-                        [src]="'hand-box' | asset : openSourceOptionsPath"
+                        [src]="'hand-box' | asset: openSourceOptionsPath"
                         alt="Hand with box" />
                     <span class="span">Usage</span>
                 </div>
@@ -109,7 +109,7 @@
 <ng-template #pipeView>
     <div class="dark-card bg-black">
         <jsdaddy-open-source-card-content
-            value="{{ phone | mask : '(000) 000-0000' }}"
+            value="{{ phone | mask: '(000) 000-0000' }}"
             title=""
             color="" />
         <jsdaddy-open-source-card-content value="(000) 000-0000" title="Mask:" color="green-view" />
