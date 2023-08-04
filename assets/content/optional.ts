@@ -49,7 +49,7 @@ export const OptDocs: IComDoc[] = [
 export const OptExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'prefix',
-        _prefix: '+75',
+        _prefix: '+7',
         _mask: '(00) 000 000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
@@ -61,13 +61,14 @@ export const OptExamples: TExample<IMaskOptions>[] = [
     },
     {
         _placeholder: 'dropSpecialCharacters',
-        _dropSpecialCharacters: false,
+        _dropSpecialCharacters: ['/'],
         _mask: '000-000.00',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'showMaskTyped',
         _showMaskTyped: true,
+        _prefix: '+7',
         _mask: '(000) 000-0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
@@ -80,7 +81,7 @@ export const OptExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'validation',
         _validation: true,
-        _mask: '000-000.00',
+        _mask: '00 00',
         control: { form: new UntypedFormControl(''), model: '' },
     },
 ];
