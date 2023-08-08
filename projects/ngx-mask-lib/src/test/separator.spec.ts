@@ -997,7 +997,7 @@ describe('Separator: Mask', () => {
         });
     }));
 
-    it('separator.8 should return number value',() => {
+    it('separator.8 should return number value', () => {
         component.mask = 'separator.8';
         component.thousandSeparator = '.';
         component.decimalMarker = ',';

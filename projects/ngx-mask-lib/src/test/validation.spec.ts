@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import {ReactiveFormsModule, FormControl, Validators} from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
@@ -55,7 +55,6 @@ export class TestMaskValidationTestSymbolStar {
     public mask = '';
     public validate = true;
 }
-
 
 describe('Directive: Mask (Validation)', () => {
     describe('Global validation true, validation attribute on input not specified', () => {
