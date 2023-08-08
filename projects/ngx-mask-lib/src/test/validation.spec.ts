@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
@@ -43,6 +43,17 @@ export class TestMaskValidationEmailComponent {
     public validate = true;
 
     public dropSpecialCharacters = false;
+}
+
+@Component({
+    selector: 'jsdaddy-open-source-test',
+    template: ` <input id="maska" [mask]="mask" [validation]="validate" [formControl]="form" /> `,
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class TestMaskValidationTestSymbolStar {
+    public form: FormControl = new FormControl('', [Validators.required, Validators.min(1)]);
+    public mask = '';
+    public validate = true;
 }
 
 describe('Directive: Mask (Validation)', () => {
@@ -233,6 +244,56 @@ describe('Directive: Mask (Validation)', () => {
         it('should valid email mask', () => {
             component.mask = 'A*@A*.SS';
             equal('testing@some.ua', 'testing@some.ua', fixture);
+            expect(component.form.valid).toBe(true);
+        });
+    });
+    describe('Global validation symbol star', () => {
+        let fixture: ComponentFixture<TestMaskValidationTestSymbolStar>;
+        let component: TestMaskValidationTestSymbolStar;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [TestMaskValidationTestSymbolStar],
+                imports: [ReactiveFormsModule, NgxMaskDirective],
+                providers: [provideNgxMask()],
+            });
+            fixture = TestBed.createComponent(TestMaskValidationTestSymbolStar);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('should valid from one digit mask 0*', () => {
+            component.mask = '0*';
+            component.validate = true;
+            equal('', '', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('0', '0', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('00', '00', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('1', '1', fixture);
+            expect(component.form.valid).toBe(true);
+            equal('01', '01', fixture);
+            expect(component.form.valid).toBe(true);
+        });
+
+        it('should valid from one digit mask S*', () => {
+            component.mask = 'S*';
+            component.validate = true;
+            equal('', '', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('d', 'd', fixture);
+            expect(component.form.valid).toBe(true);
+        });
+
+        it('should valid from one digit mask A*', () => {
+            component.mask = 'A*';
+            component.validate = true;
+            equal('', '', fixture);
+            expect(component.form.valid).toBe(false);
+            equal('d', 'd', fixture);
+            expect(component.form.valid).toBe(true);
+            equal('1', '1', fixture);
             expect(component.form.valid).toBe(true);
         });
     });

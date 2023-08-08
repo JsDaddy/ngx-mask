@@ -2,7 +2,7 @@
     <div
         class="card"
         *ngFor="let tile of cardDocs; let i = index; trackBy: trackByPath"
-        [ngClass]="activeCardId | color : tile.id"
+        [ngClass]="activeCardId | color: tile.id"
         [id]="tile.id"
         #cards>
         <div class="mr-title title row uppercase ls-25">
@@ -14,7 +14,7 @@
                     <img
                         width="20"
                         height="20"
-                        [src]="'hand-box' | asset : openSourceOptionsPath"
+                        [src]="'hand-box' | asset: openSourceOptionsPath"
                         alt="Hand with box" />
                     <span class="span">Usage</span>
                 </div>
@@ -37,14 +37,14 @@
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     <div class="dark-card bg-black" *ngIf="!ex._pipe; else pipeView">
-        <div class="dark-input pd-15">
+        <div class="dark-input pd-15" *ngIf="!ex._thousandSeparator && !ex._dropSpecialCharacters">
             <input
                 [placeholder]="placeholder"
                 prefix="{{ ex._prefix }}"
                 suffix="{{ ex._suffix }}"
-                [dropSpecialCharacters]="ex._dropSpecialCharacters || ''"
+                [dropSpecialCharacters]="ex._dropSpecialCharacters"
                 mask="{{ ex._mask || '' }}"
-                thousandSeparator="{{ ex._thousandSeparator || ' ' }}"
+                [thousandSeparator]="ex._thousandSeparator || ' '"
                 [formControl]="ex.control.form"
                 [allowNegativeNumbers]="ex._allowNegativeNumbers || null"
                 [specialCharacters]="ex._specialCharacters || null"
@@ -57,6 +57,24 @@
                 [showMaskTyped]="ex._showMaskTyped || null"
                 [clearIfNotMatch]="ex._clearIfNotMatch || null"
                 [hiddenInput]="ex._hiddenInput"
+                class="customDarkInput bg-black white span" />
+        </div>
+        <div class="dark-input pd-15" *ngIf="ex._dropSpecialCharacters">
+            <input
+                [placeholder]="placeholder"
+                mask="{{ ex._mask || '' }}"
+                [dropSpecialCharacters]="ex._dropSpecialCharacters"
+                [formControl]="ex.control.form"
+                class="customDarkInput bg-black white span" />
+        </div>
+        <div class="dark-input pd-15" *ngIf="ex._thousandSeparator">
+            <input
+                [placeholder]="placeholder"
+                mask="{{ ex._mask || '' }}"
+                [thousandSeparator]="ex._thousandSeparator || ' '"
+                [formControl]="ex.control.form"
+                [decimalMarker]="ex._decimalMarker || '.'"
+                [leadZero]="ex._leadZero || null"
                 class="customDarkInput bg-black white span" />
         </div>
         <div *ngIf="!ex._validation; else validView">
@@ -91,7 +109,7 @@
 <ng-template #pipeView>
     <div class="dark-card bg-black">
         <jsdaddy-open-source-card-content
-            value="{{ phone | mask : '(000) 000-0000' }}"
+            value="{{ phone | mask: '(000) 000-0000' }}"
             title=""
             color="" />
         <jsdaddy-open-source-card-content value="(000) 000-0000" title="Mask:" color="green-view" />

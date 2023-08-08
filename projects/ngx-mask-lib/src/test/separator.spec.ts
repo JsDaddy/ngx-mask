@@ -996,4 +996,16 @@ describe('Separator: Mask', () => {
             expect(component.form.value).toBe('10.200');
         });
     }));
+
+    it('separator.8 should return number value', fakeAsync(() => {
+        component.mask = 'separator.8';
+        component.thousandSeparator = '.';
+        component.decimalMarker = ',';
+
+        equal('12,34', '12,34', fixture);
+        tick();
+        requestAnimationFrame(() => {
+            expect(component.form.value).toBe(12.34);
+        });
+    }));
 });

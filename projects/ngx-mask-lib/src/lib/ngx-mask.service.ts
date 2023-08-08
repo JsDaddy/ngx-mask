@@ -376,8 +376,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this._renderer || !this._elementRef) {
             return;
         }
-        Promise.resolve().then(() =>
-            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
+        Promise.resolve().then(
+            () => this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
         );
     }
 
@@ -585,7 +585,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                   return (this.dropSpecialCharacters as string[]).includes(v);
               })
             : this.specialCharacters;
-        return this._removeMask(result, specialCharacters);
+        return this._removeMask(result, specialCharacters as string[]);
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
