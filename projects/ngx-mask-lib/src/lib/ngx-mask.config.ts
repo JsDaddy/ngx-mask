@@ -11,8 +11,8 @@ export interface IConfig {
     showMaskTyped: boolean;
     placeHolderCharacter: string;
     shownMaskExpression: string;
-    specialCharacters: string[];
-    dropSpecialCharacters: boolean | string[];
+    specialCharacters: string[] | readonly string[];
+    dropSpecialCharacters: boolean | string[] | readonly string[];
     hiddenInput: boolean | undefined;
     validation: boolean;
     separatorLimit: string;

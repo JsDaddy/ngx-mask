@@ -345,7 +345,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                             )) ||
                             !lastIndexArray ||
                             this._maskService.dropSpecialCharacters) &&
-                        value.length >= length
+                        value.length >= length - 1
                     ) {
                         return null;
                     } else {
