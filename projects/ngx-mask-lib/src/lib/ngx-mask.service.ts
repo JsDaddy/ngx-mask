@@ -585,7 +585,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                   return (this.dropSpecialCharacters as string[]).includes(v);
               })
             : this.specialCharacters;
-        return this._removeMask(result, specialCharacters);
+        return this._removeMask(result, specialCharacters as string[]);
     }
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
