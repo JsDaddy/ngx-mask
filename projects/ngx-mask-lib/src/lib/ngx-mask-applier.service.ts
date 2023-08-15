@@ -47,6 +47,10 @@ export class NgxMaskApplierService {
 
     public apm: IConfig['apm'] = this._config.apm;
 
+    public inputTransformFn: IConfig['inputTransformFn'] = this._config.inputTransformFn;
+
+    public outputTransformFn: IConfig['outputTransformFn'] = this._config.outputTransformFn;
+
     private _shift: Set<number> = new Set();
 
     public maskExpression = '';

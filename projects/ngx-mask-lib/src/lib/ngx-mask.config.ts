@@ -21,6 +21,8 @@ export interface IConfig {
     leadZeroDateTime: boolean;
     leadZero: boolean;
     triggerOnMaskChange: boolean;
+    inputTransformFn: (value: string) => string;
+    outputTransformFn: (value: any) => any;
     maskFilled: EventEmitter<void>;
     patterns: {
         [character: string]: {
@@ -59,6 +61,8 @@ export const initialConfig: IConfig = {
     apm: false,
     leadZero: false,
     triggerOnMaskChange: false,
+    inputTransformFn: (value: string) => value,
+    outputTransformFn: (value: any) => value,
     maskFilled: new EventEmitter<void>(),
     patterns: {
         '0': {

@@ -27,6 +27,8 @@ import { IConfig } from '../../lib/ngx-mask.config';
             [leadZero]="leadZero"
             [apm]="apm"
             [validation]="validation"
+            [inputTransformFn]="inputTransformFn || null"
+            [outputTransformFn]="outputTransformFn || null"
             [triggerOnMaskChange]="triggerOnMaskChange" />
     `,
 })
@@ -70,6 +72,10 @@ export class TestMaskComponent {
     public validation: IConfig['validation'] | undefined;
 
     public apm: IConfig['apm'] | undefined;
+
+    public inputTransformFn: IConfig['inputTransformFn'] | undefined;
+
+    public outputTransformFn: IConfig['outputTransformFn'] | undefined;
 
     public cdr = inject(ChangeDetectorRef);
 }
