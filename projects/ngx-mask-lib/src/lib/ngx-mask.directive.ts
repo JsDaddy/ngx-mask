@@ -85,6 +85,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public apm: IConfig['apm'] | null = null;
 
+    @Input() public inputTransformFn: IConfig['inputTransformFn'] | null = null;
+
+    @Input() public outputTransformFn: IConfig['outputTransformFn'] | null = null;
+
     @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
@@ -137,6 +141,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             leadZero,
             triggerOnMaskChange,
             apm,
+            inputTransformFn,
+            outputTransformFn,
         } = changes;
         if (maskExpression) {
             if (
@@ -231,6 +237,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (triggerOnMaskChange) {
             this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
+        }
+        if (inputTransformFn) {
+            this._maskService.inputTransformFn = inputTransformFn.currentValue;
+        }
+        if (outputTransformFn) {
+            this._maskService.outputTransformFn = outputTransformFn.currentValue;
         }
         this._applyMask();
     }
@@ -419,6 +431,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._inputValue.slice(0, position - 1) +
                 inputSymbol +
                 this._inputValue.slice(position + 1);
+        }
+
+        if (
+            (this._maskService.inputTransformFn.toString() !== MaskExpression.CONFIG_FUNC ||
+                this.inputTransformFn) &&
+            this._code !== MaskExpression.BACKSPACE
+        ) {
+            el.value = this.inputTransformFn
+                ? this.inputTransformFn(el.value)
+                : this._maskService.inputTransformFn(el.value);
+            this._maskService.actualValue = this._inputValue = el.value;
         }
 
         this._maskService.applyValueChanges(
@@ -692,7 +715,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.value;
         }
-
         if (
             typeof inputValue === 'number' ||
             this._maskValue.startsWith(MaskExpression.SEPARATOR)
@@ -741,6 +763,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             inputValue = '';
         }
 
+        if (this.inputTransformFn) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = this.inputTransformFn
+                ? this.inputTransformFn(inputValue)
+                : this._maskService.inputTransformFn(inputValue);
+            this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+        }
+
         this._inputValue = inputValue;
         this._setMask();
         if (
@@ -759,6 +789,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         } else {
             this._maskService.formElementProperty = ['value', inputValue];
         }
+        // this._inputValue = this.inputTransformFn
+        //     ? this.inputTransformFn(inputValue).toString()
+        //     : inputValue;
         this._inputValue = inputValue;
     }
 

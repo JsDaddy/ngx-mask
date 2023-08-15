@@ -1,3 +1,48 @@
+<input type="text" mask="S*"  [(ngModel)]="testValue" [inputTransformFn]="toUpeerCase" /> {{testValue}}
+
+<!--<br>-->
+<!--bez input-->
+<!--<input type="text" mask="S*"  [(ngModel)]="testValue1" /> {{testValue1}}-->
+<!--<input type="text" mask="XXX/X0/0000" [hiddenInput]="true">-->
+<!--<input mask="separator.2" [leadZero]="true" [decimalMarker]="'.'" [(ngModel)]="testValue">-->
+
+<!--{{testValue}}-->
+<!--<input [formControl]="testControl" mask="separator.1" decimalMarker='.' type="text"/>-->
+<!--<div class="errors">-->
+<!--    <div>Type of control value: {{typeOfValue(testControl.value)}}</div>-->
+<!--    <div>Type of control value: {{testControl.value}}</div>-->
+<!--</div>-->
+
+<!--<input type="text" mask="separator.3" [decimalMarker]="'.'" [outputTransformFn]="toFixede" [(ngModel)]="testValue2"> {{testValue2}}-->
+
+<!--<div class="errors">-->
+<!--    <div>Type of control value: {{ typeOfValue(testValue2) }}</div>-->
+<!--    <div>Type of control value: {{ testValue2 }}</div>-->
+<!--</div>-->
+<!--<input type="text" [allowNegativeNumbers]="true" mask="separator.0" thousandSeparator="," [(ngModel)]="amount" [outputTransformFn]="saveAfterDot">-->
+<!--{{amount}}-->
+
+
+<!--<input-->
+<!--       [(ngModel)]="value"-->
+<!--       [placeholder]="'hh:mm'"-->
+<!--       mask="Hh:m0"-->
+<!--       [showMaskTyped]="true"-->
+<!--       [dropSpecialCharacters]="false"-->
+<!--       [outputTransformFn]="parser"-->
+<!--       [inputTransformFn]="date"-->
+<!--       [leadZeroDateTime]="true"/>-->
+<!--{{value}}-->
+
+
+<input type="text" mask="separator.2" [(ngModel)]="someNumber"  [outputTransformFn]="numberValue" [decimalMarker]="'.'">
+<!--{{someNumber}}-->
+<div class="errors">
+    <div>Type of control value: {{typeOfValue(someNumber)}}</div>
+    <div>Type of control value: {{someNumber}}</div>
+</div>
+
+
 <section class="content column bg-full-white" *ngIf="activeCardId$ | async as activeCardId">
     <div
         class="card"

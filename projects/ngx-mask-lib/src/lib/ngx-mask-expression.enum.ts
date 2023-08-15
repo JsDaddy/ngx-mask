@@ -38,4 +38,5 @@ export const enum MaskExpression {
     DELETE = 'Delete',
     ARROW_LEFT = 'ArrowLeft',
     ARROW_UP = 'ArrowUp',
+    CONFIG_FUNC = '(value) => value',
 }
