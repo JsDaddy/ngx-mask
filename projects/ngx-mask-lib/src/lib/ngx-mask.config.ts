@@ -1,6 +1,16 @@
 import { EventEmitter, InjectionToken } from '@angular/core';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface InputTransformFn {
+    (value: unknown): string | number;
+}
+
+// eslint-disable-next-line @typescript-eslint/naming-convention
+export interface OutputTransformFn {
+    (value: string | number | undefined | null): unknown;
+}
+
 export interface IConfig {
     suffix: string;
     prefix: string;
@@ -21,6 +31,8 @@ export interface IConfig {
     leadZeroDateTime: boolean;
     leadZero: boolean;
     triggerOnMaskChange: boolean;
+    inputTransformFn: InputTransformFn;
+    outputTransformFn: OutputTransformFn;
     maskFilled: EventEmitter<void>;
     patterns: {
         [character: string]: {
@@ -59,6 +71,8 @@ export const initialConfig: IConfig = {
     apm: false,
     leadZero: false,
     triggerOnMaskChange: false,
+    inputTransformFn: (value: unknown) => value as string | number,
+    outputTransformFn: (value: string | number | undefined | null) => value,
     maskFilled: new EventEmitter<void>(),
     patterns: {
         '0': {

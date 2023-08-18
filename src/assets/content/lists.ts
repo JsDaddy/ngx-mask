@@ -107,6 +107,36 @@ export const lists: IListItem[] = [
         ],
     },
     {
+        header: 'Parser and Formatter',
+        id: 5,
+        defaultSvg: 'parser-and-formatter',
+        activeSvg: 'parser-and-formatter-active',
+        whiteChevron: 'white-chevron-down',
+        yellowChevron: 'yellow-chevron-down',
+        text: [
+            {
+                content: 'To upper case',
+                id: 1,
+                scrollTo: 'toUpperCase',
+            },
+            {
+                content: 'To local date',
+                id: 2,
+                scrollTo: 'to_date',
+            },
+            {
+                content: 'Change decimalMarker',
+                id: 3,
+                scrollTo: 'replace_dot',
+            },
+            {
+                content: 'Value toFixed(2)',
+                id: 4,
+                scrollTo: 'toFixed',
+            },
+        ],
+    },
+    {
         header: 'Separators',
         id: 3,
         defaultSvg: 'separator',
