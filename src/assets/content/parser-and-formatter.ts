@@ -84,12 +84,14 @@ export const ParserAndFormatterDocs: IComDoc[] = [
         // eslint-disable-next-line no-useless-escape
         code: ` <input type="text" mask="separator.3" [outputTransformFn]="toFixed" />
         public toFixed = (value: string | number | undefined | null): number => {
-            if (String(value).includes('.')) {
-                const numberValue = parseFloat(String(value));
-                const formattedValue = Number(numberValue.toFixed(2));
-                return formattedValue;
+            const formattedValue = String(value).split(' ').join('');
+            if (String(value).includes('.') && String(value).split('.').length === 2) {
+                const decimal = String(value).split('.')[1]?.length;
+                if (decimal && decimal > 2) {
+                    return Number(parseFloat(formattedValue).toFixed(2));
+                }
             }
-            return Number(value);
+            return Number(formattedValue);
         };
 `,
         id: 4,
@@ -144,9 +146,9 @@ export const FormatAndParserExamples: TExample<IMaskOptions>[] = [
         _inputTransformFn: (value: unknown): string => String(value),
         _outputTransformFn: (value: string | number | undefined | null): string => {
             if (String(value).includes('.')) {
-                return String(value).replace('.', ',');
+                return String(value).split(' ').join('').replace('.', ',');
             }
-            return String(value);
+            return String(value).split(' ').join('');
         },
         control: { form: new UntypedFormControl(''), model: '' },
     },
@@ -155,12 +157,14 @@ export const FormatAndParserExamples: TExample<IMaskOptions>[] = [
         _mask: 'separator.3',
         _inputTransformFn: (value: unknown): string => String(value),
         _outputTransformFn: (value: string | number | undefined | null): number => {
-            if (String(value).includes('.')) {
-                const numberValue = parseFloat(String(value));
-                const formattedValue = Number(numberValue.toFixed(2));
-                return formattedValue;
+            const formattedValue = String(value).split(' ').join('');
+            if (String(value).includes('.') && String(value).split('.').length === 2) {
+                const decimal = String(value).split('.')[1]?.length;
+                if (decimal && decimal > 2) {
+                    return Number(parseFloat(formattedValue).toFixed(2));
+                }
             }
-            return Number(value);
+            return Number(formattedValue);
         },
         control: { form: new UntypedFormControl(''), model: '' },
     },
