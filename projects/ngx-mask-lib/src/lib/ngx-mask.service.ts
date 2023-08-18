@@ -500,8 +500,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
             this.maskChanged
                 ? this.onChange(
-                      this._toNumber(
-                          this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                      this.outputTransformFn(
+                          this._toNumber(
+                              this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                          )
                       )
                   )
                 : '';

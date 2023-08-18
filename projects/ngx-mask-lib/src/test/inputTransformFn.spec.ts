@@ -23,7 +23,7 @@ describe('Directive: Mask', () => {
 
     it('inputTransformFn should return value toUpperCase', () => {
         component.mask = 'S*';
-        component.inputTransformFn = (value: string): string => value.toUpperCase();
+        component.inputTransformFn = (value: unknown): string => String(value).toUpperCase();
 
         equal('a', 'A', fixture);
         equal('an', 'AN', fixture);
@@ -35,7 +35,8 @@ describe('Directive: Mask', () => {
 
     it('inputTransformFn should return value formValue toUpperCase', () => {
         component.mask = 'S*';
-        component.outputTransformFn = (value: string): string => value.toUpperCase();
+        component.outputTransformFn = (value: string | number | undefined | null): string =>
+            String(value).toUpperCase();
 
         equal('a', 'a', fixture);
         equal('an', 'an', fixture);
@@ -48,8 +49,9 @@ describe('Directive: Mask', () => {
 
     it('inputTransformFn should return value formValue toUpperCase but input value to lowerCase', () => {
         component.mask = 'S*';
-        component.outputTransformFn = (value: string): string => value.toUpperCase();
-        component.inputTransformFn = (value: string): string => value.toLowerCase();
+        component.outputTransformFn = (value: string | number | undefined | null): string =>
+            String(value).toUpperCase();
+        component.inputTransformFn = (value: unknown): string => String(value).toLowerCase();
 
         equal('A', 'a', fixture);
         equal('AN', 'an', fixture);
@@ -63,11 +65,11 @@ describe('Directive: Mask', () => {
     it('separator.2 should replace dot in model', () => {
         component.mask = 'separator.2';
         component.decimalMarker = '.';
-        component.outputTransformFn = (value: string): string => {
-            if (value.includes('.')) {
-                return value.replace('.', ',');
+        component.outputTransformFn = (value: string | number | undefined | null): string => {
+            if (String(value).includes('.')) {
+                return String(value).replace('.', ',');
             }
-            return value;
+            return String(value);
         };
 
         equal('10.2', '10.2', fixture);
@@ -83,9 +85,9 @@ describe('Directive: Mask', () => {
     it('separator.3 should toFixed value in model and return Number', () => {
         component.mask = 'separator.3';
         component.decimalMarker = '.';
-        component.outputTransformFn = (value: string): number => {
-            if (value.toString().includes('.')) {
-                const numberValue = parseFloat(value);
+        component.outputTransformFn = (value: string | number | undefined | null): number => {
+            if (String(value).includes('.')) {
+                const numberValue = parseFloat(String(value));
                 const formattedValue = Number(numberValue.toFixed(2));
                 return formattedValue;
             }
@@ -105,11 +107,11 @@ describe('Directive: Mask', () => {
     it('mask 000.00 should replace dot in model', () => {
         component.mask = '000.00';
         component.dropSpecialCharacters = false;
-        component.outputTransformFn = (value: string): string => {
-            if (value.includes('.')) {
-                return value.replace('.', ',');
+        component.outputTransformFn = (value: string | number | undefined | null): string => {
+            if (String(value).includes('.')) {
+                return String(value).replace('.', ',');
             }
-            return value;
+            return String(value);
         };
 
         equal('100.22', '100.22', fixture);
@@ -122,7 +124,8 @@ describe('Directive: Mask', () => {
     it('mask separator.1 should return number', () => {
         component.mask = 'separator.1';
         component.decimalMarker = ',';
-        component.outputTransformFn = (value: string): number => Number(value);
+        component.outputTransformFn = (value: string | number | undefined | null): number =>
+            Number(value);
 
         equal('123,2', '123,2', fixture);
         expect(component.form.value).toBe(123.2);
@@ -140,7 +143,8 @@ describe('Directive: Mask', () => {
     it('mask separator.1 should return number decimalMarker dot', () => {
         component.mask = 'separator.1';
         component.decimalMarker = '.';
-        component.outputTransformFn = (value: string): number => Number(value);
+        component.outputTransformFn = (value: string | number | undefined | null): number =>
+            Number(value);
 
         equal('123.4', '123.4', fixture);
         expect(component.form.value).toBe(123.4);
@@ -157,11 +161,11 @@ describe('Directive: Mask', () => {
 
     it('mask percent should replace dot in model', () => {
         component.mask = 'percent.2';
-        component.outputTransformFn = (value: string): string => {
-            if (value.includes('.')) {
-                return value.replace('.', ',');
+        component.outputTransformFn = (value: string | number | undefined | null): string => {
+            if (String(value).includes('.')) {
+                return String(value).replace('.', ',');
             }
-            return value;
+            return String(value);
         };
         equal('1.2', '1.2', fixture);
         expect(component.form.value).toBe('1,2');
@@ -178,22 +182,32 @@ describe('Directive: Mask', () => {
         component.showMaskTyped = true;
         component.dropSpecialCharacters = false;
         component.leadZeroDateTime = true;
-        component.outputTransformFn = (value: string) => {
-            const fetch = new Date();
-            const values = value.split(':');
-            if (values.length >= 2) {
-                const hour = Number(values[0]);
-                const minuts = Number(values[1]);
-                fetch.setHours(hour);
-                fetch.setMinutes(minuts);
+        component.outputTransformFn = (value: string | number | undefined | null) => {
+            if (value) {
+                const fetch = new Date();
+                const values = String(value).split(':');
+                if (values.length >= 2) {
+                    const hour = Number(values[0]);
+                    const minuts = Number(values[1]);
+                    fetch.setHours(hour);
+                    fetch.setMinutes(minuts);
+                }
+                fetch.setSeconds(0);
+                return fetch.toString();
             }
-            fetch.setSeconds(0);
-            return fetch.toString();
+            return;
         };
-
-        equal('1314', '13:14', fixture);
-        expect(component.form.value).toBe(
-            'Tue Aug 15 2023 13:14:00 GMT+0300 (Eastern European Summer Time)'
-        );
+        const date = new Date();
+        component.inputTransformFn = (value: unknown): string => {
+            if (typeof value !== 'object') {
+                return String(value);
+            }
+            return `${String(date.getHours()).padStart(2, '0')}${String(date.getMinutes()).padStart(
+                2,
+                '0'
+            )}`;
+        };
+        component.form.setValue(new Date().toString());
+        expect(component.form.value).toBe(date.toString());
     });
 });

@@ -403,92 +403,93 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (this._isComposing) return;
 
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        this._inputValue = el.value;
-        this._setMask();
+        const transformedValue = this._maskService.inputTransformFn(el.value);
 
-        if (!this._maskValue) {
-            this.onChange(el.value);
-            return;
-        }
-        let position: number =
-            el.selectionStart === 1
-                ? (el.selectionStart as number) + this._maskService.prefix.length
-                : (el.selectionStart as number);
+        if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
+            el.value = transformedValue.toString();
 
-        let caretShift = 0;
-        let backspaceShift = false;
-        if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
-            this._maskService.deletedSpecialCharacter = true;
-        }
-        if (
-            this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
-            this._code !== MaskExpression.BACKSPACE &&
-            this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
-            position < 10
-        ) {
-            const inputSymbol = this._inputValue.slice(position - 1, position);
-            el.value =
-                this._inputValue.slice(0, position - 1) +
-                inputSymbol +
-                this._inputValue.slice(position + 1);
-        }
+            this._inputValue = el.value;
+            this._setMask();
 
-        if (
-            (this._maskService.inputTransformFn.toString() !== MaskExpression.CONFIG_FUNC ||
-                this.inputTransformFn) &&
-            this._code !== MaskExpression.BACKSPACE
-        ) {
-            el.value = this.inputTransformFn
-                ? this.inputTransformFn(el.value)
-                : this._maskService.inputTransformFn(el.value);
-            this._maskService.actualValue = this._inputValue = el.value;
-        }
-
-        this._maskService.applyValueChanges(
-            position,
-            this._justPasted,
-            this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE,
-            (shift: number, _backspaceShift: boolean) => {
-                this._justPasted = false;
-                caretShift = shift;
-                backspaceShift = _backspaceShift;
+            if (!this._maskValue) {
+                this.onChange(el.value);
+                return;
             }
-        );
-        // only set the selection if the element is active
-        if (this._getActiveElement() !== el) {
-            return;
-        }
 
-        // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
-        if (this._maskExpressionArray.length) {
-            if (this._code === MaskExpression.BACKSPACE) {
-                position = this.specialCharacters.includes(
-                    this._inputValue.slice(position - 1, position)
-                )
-                    ? position - 1
-                    : position;
-            } else {
-                position =
-                    el.selectionStart === 1
-                        ? (el.selectionStart as number) + this._maskService.prefix.length
-                        : (el.selectionStart as number);
+            let position: number =
+                el.selectionStart === 1
+                    ? (el.selectionStart as number) + this._maskService.prefix.length
+                    : (el.selectionStart as number);
+
+            let caretShift = 0;
+            let backspaceShift = false;
+            if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
+                this._maskService.deletedSpecialCharacter = true;
             }
-        }
-        this._position =
-            this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-        let positionToApply: number = this._position
-            ? this._inputValue.length + position + caretShift
-            : position +
-              (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
+            if (
+                this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
+                this._code !== MaskExpression.BACKSPACE &&
+                this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
+                position < 10
+            ) {
+                const inputSymbol = this._inputValue.slice(position - 1, position);
+                el.value =
+                    this._inputValue.slice(0, position - 1) +
+                    inputSymbol +
+                    this._inputValue.slice(position + 1);
+            }
 
-        if (positionToApply > this._getActualInputLength()) {
-            positionToApply = this._getActualInputLength();
+            this._maskService.applyValueChanges(
+                position,
+                this._justPasted,
+                this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE,
+                (shift: number, _backspaceShift: boolean) => {
+                    this._justPasted = false;
+                    caretShift = shift;
+                    backspaceShift = _backspaceShift;
+                }
+            );
+            // only set the selection if the element is active
+            if (this._getActiveElement() !== el) {
+                return;
+            }
+
+            // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
+            if (this._maskExpressionArray.length) {
+                if (this._code === MaskExpression.BACKSPACE) {
+                    position = this.specialCharacters.includes(
+                        this._inputValue.slice(position - 1, position)
+                    )
+                        ? position - 1
+                        : position;
+                } else {
+                    position =
+                        el.selectionStart === 1
+                            ? (el.selectionStart as number) + this._maskService.prefix.length
+                            : (el.selectionStart as number);
+                }
+            }
+            this._position =
+                this._position === 1 && this._inputValue.length === 1 ? null : this._position;
+            let positionToApply: number = this._position
+                ? this._inputValue.length + position + caretShift
+                : position +
+                  (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
+
+            if (positionToApply > this._getActualInputLength()) {
+                positionToApply = this._getActualInputLength();
+            }
+            if (positionToApply < 0) {
+                positionToApply = 0;
+            }
+            el.setSelectionRange(positionToApply, positionToApply);
+            this._position = null;
+        } else {
+            console.warn(
+                'Ngx-mask writeValue work with string | number, your current value:',
+                typeof transformedValue
+            );
         }
-        if (positionToApply < 0) {
-            positionToApply = 0;
-        }
-        el.setSelectionRange(positionToApply, positionToApply);
-        this._position = null;
     }
 
     // IME starts
@@ -705,94 +706,107 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     /** It writes the value in the input */
-    public async writeValue(
-        inputValue: string | number | { value: string | number; disable?: boolean }
-    ): Promise<void> {
-        if (typeof inputValue === 'object' && inputValue !== null && 'value' in inputValue) {
-            if ('disable' in inputValue) {
-                this.setDisabledState(Boolean(inputValue.disable));
+    public async writeValue(controlValue: unknown): Promise<void> {
+        if (typeof controlValue === 'object' && controlValue !== null && 'value' in controlValue) {
+            if ('disable' in controlValue) {
+                this.setDisabledState(Boolean(controlValue.disable));
             }
             // eslint-disable-next-line no-param-reassign
-            inputValue = inputValue.value;
+            controlValue = controlValue.value;
+        }
+        if (controlValue !== null) {
+            // eslint-disable-next-line no-param-reassign
+            controlValue = this.inputTransformFn
+                ? this.inputTransformFn(controlValue)
+                : controlValue;
         }
         if (
-            typeof inputValue === 'number' ||
-            this._maskValue.startsWith(MaskExpression.SEPARATOR)
+            typeof controlValue === 'string' ||
+            typeof controlValue === 'number' ||
+            controlValue === null
         ) {
             // eslint-disable-next-line no-param-reassign
-            inputValue = String(inputValue);
-            const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
-            if (!Array.isArray(this._maskService.decimalMarker)) {
-                // eslint-disable-next-line no-param-reassign
-                inputValue =
-                    this._maskService.decimalMarker !== localeDecimalMarker
-                        ? inputValue.replace(localeDecimalMarker, this._maskService.decimalMarker)
-                        : inputValue;
-            }
+            let inputValue: string | number | null = controlValue;
             if (
-                this._maskService.leadZero &&
-                inputValue &&
-                this.maskExpression &&
-                this.dropSpecialCharacters !== false
+                typeof inputValue === 'number' ||
+                this._maskValue.startsWith(MaskExpression.SEPARATOR)
             ) {
                 // eslint-disable-next-line no-param-reassign
-                inputValue = this._maskService._checkPrecision(
-                    this.maskExpression.toString(),
-                    inputValue as string
-                );
-            }
-            if (this._maskService.decimalMarker === MaskExpression.COMMA) {
-                // eslint-disable-next-line no-param-reassign
-                inputValue = inputValue
-                    .toString()
-                    .replace(MaskExpression.DOT, MaskExpression.COMMA);
-            }
-            if (this.maskExpression?.startsWith(MaskExpression.SEPARATOR) && this.leadZero) {
-                requestAnimationFrame(() => {
-                    this._maskService.applyMask(
-                        inputValue.toString(),
-                        this._maskService.maskExpression
+                inputValue = String(inputValue);
+                const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
+                if (!Array.isArray(this._maskService.decimalMarker)) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue =
+                        this._maskService.decimalMarker !== localeDecimalMarker
+                            ? inputValue.replace(
+                                  localeDecimalMarker,
+                                  this._maskService.decimalMarker
+                              )
+                            : inputValue;
+                }
+                if (
+                    this._maskService.leadZero &&
+                    inputValue &&
+                    this.maskExpression &&
+                    this.dropSpecialCharacters !== false
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = this._maskService._checkPrecision(
+                        this.maskExpression.toString(),
+                        inputValue as string
                     );
-                });
+                }
+                if (this._maskService.decimalMarker === MaskExpression.COMMA) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = inputValue
+                        .toString()
+                        .replace(MaskExpression.DOT, MaskExpression.COMMA);
+                }
+                if (this.maskExpression?.startsWith(MaskExpression.SEPARATOR) && this.leadZero) {
+                    requestAnimationFrame(() => {
+                        this._maskService.applyMask(
+                            inputValue?.toString() ?? '',
+                            this._maskService.maskExpression
+                        );
+                    });
+                }
+                this._maskService.isNumberValue = true;
             }
-            this._maskService.isNumberValue = true;
-        }
 
-        if (typeof inputValue !== 'string') {
-            // eslint-disable-next-line no-param-reassign
-            inputValue = '';
-        }
+            if (typeof inputValue !== 'string') {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = '';
+            }
 
-        if (this.inputTransformFn) {
-            // eslint-disable-next-line no-param-reassign
-            inputValue = this.inputTransformFn
-                ? this.inputTransformFn(inputValue)
-                : this._maskService.inputTransformFn(inputValue);
-            this._maskService.applyMask(inputValue, this._maskService.maskExpression);
-        }
-
-        this._inputValue = inputValue;
-        this._setMask();
-        if (
-            (inputValue && this._maskService.maskExpression) ||
-            (this._maskService.maskExpression &&
-                (this._maskService.prefix || this._maskService.showMaskTyped))
-        ) {
-            // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
-            this._maskService.writingValue = true;
-            this._maskService.formElementProperty = [
-                'value',
-                this._maskService.applyMask(inputValue, this._maskService.maskExpression),
-            ];
-            // Let the service know we've finished writing value
-            this._maskService.writingValue = false;
+            this._inputValue = inputValue;
+            this._setMask();
+            if (
+                (inputValue && this._maskService.maskExpression) ||
+                (this._maskService.maskExpression &&
+                    (this._maskService.prefix || this._maskService.showMaskTyped))
+            ) {
+                // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
+                typeof this.inputTransformFn !== 'function'
+                    ? (this._maskService.writingValue = true)
+                    : '';
+                this._maskService.formElementProperty = [
+                    'value',
+                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+                ];
+                // Let the service know we've finished writing value
+                typeof this.inputTransformFn !== 'function'
+                    ? (this._maskService.writingValue = false)
+                    : '';
+            } else {
+                this._maskService.formElementProperty = ['value', inputValue];
+            }
+            this._inputValue = inputValue;
         } else {
-            this._maskService.formElementProperty = ['value', inputValue];
+            console.warn(
+                'Ngx-mask writeValue work with string | number, your current value:',
+                typeof controlValue
+            );
         }
-        // this._inputValue = this.inputTransformFn
-        //     ? this.inputTransformFn(inputValue).toString()
-        //     : inputValue;
-        this._inputValue = inputValue;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
@@ -918,4 +932,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
         });
     }
+
+    // _private showWarning(inputValue: boolean | any) {
+    //     console.warn(
+    //         'Please check your control. Mask waiting for number | string, but current value:',
+    //         inputValue
+    //     );
+    // }
 }
