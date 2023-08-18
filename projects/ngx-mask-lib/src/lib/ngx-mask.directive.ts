@@ -932,11 +932,4 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
         });
     }
-
-    // _private showWarning(inputValue: boolean | any) {
-    //     console.warn(
-    //         'Please check your control. Mask waiting for number | string, but current value:',
-    //         inputValue
-    //     );
-    // }
 }
