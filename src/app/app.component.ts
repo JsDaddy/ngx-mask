@@ -16,6 +16,10 @@ import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
 import { LinkPath } from '@libraries/link/link.path';
+import {
+    FormatAndParserExamples,
+    ParserAndFormatterDocs,
+} from '../assets/content/parser-and-formatter';
 
 @Component({
     selector: 'jsdaddy-open-source-root',
@@ -61,6 +65,10 @@ export class AppComponent {
             case 4:
                 this.card.docs = OthDocs;
                 this.card.examples = OthExamples;
+                break;
+            case 5:
+                this.card.docs = ParserAndFormatterDocs;
+                this.card.examples = FormatAndParserExamples;
                 break;
             default:
                 break;

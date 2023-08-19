@@ -500,8 +500,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
             this.maskChanged
                 ? this.onChange(
-                      this._toNumber(
-                          this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                      this.outputTransformFn(
+                          this._toNumber(
+                              this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                          )
                       )
                   )
                 : '';
@@ -510,11 +512,13 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this._toNumber(
-                    this._checkSymbols(
-                        this._removeMask(
-                            this._removeSuffix(this._removePrefix(inputValue)),
-                            this.dropSpecialCharacters
+                this.outputTransformFn(
+                    this._toNumber(
+                        this._checkSymbols(
+                            this._removeMask(
+                                this._removeSuffix(this._removePrefix(inputValue)),
+                                this.dropSpecialCharacters
+                            )
                         )
                     )
                 )
@@ -524,12 +528,14 @@ export class NgxMaskService extends NgxMaskApplierService {
             (!this.dropSpecialCharacters && this.prefix === inputValue)
         ) {
             this.onChange(
-                this._toNumber(
-                    this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                this.outputTransformFn(
+                    this._toNumber(
+                        this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                    )
                 )
             );
         } else {
-            this.onChange(this._toNumber(inputValue));
+            this.onChange(this.outputTransformFn(this._toNumber(inputValue)));
         }
     }
 
