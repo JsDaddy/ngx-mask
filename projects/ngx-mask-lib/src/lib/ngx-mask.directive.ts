@@ -752,7 +752,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 ) {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = this._maskService._checkPrecision(
-                        this.maskExpression.toString(),
+                        this._maskService.maskExpression,
                         inputValue as string
                     );
                 }
