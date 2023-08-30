@@ -660,7 +660,7 @@ export class NgxMaskApplierService {
         );
     }
 
-    public _formatWithSeparators = (
+    private _formatWithSeparators = (
         str: string,
         thousandSeparatorChar: string,
         decimalChars: string | string[],
