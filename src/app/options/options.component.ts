@@ -8,7 +8,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -63,5 +63,15 @@ export class OptionsComponent implements AfterViewInit {
     public ngAfterViewInit(): void {
         this.scrollService.onScroll(this.cards);
         this.accordionService.onChangeAccordion(this.cards);
+    }
+
+    public testValue = '';
+    public val = '';
+    public showMaskTyped = true;
+
+    public testControl = new FormControl(10.3444, [Validators.required, Validators.min(1)]);
+
+    public typeOfValue(value: unknown): string {
+        return typeof value;
     }
 }

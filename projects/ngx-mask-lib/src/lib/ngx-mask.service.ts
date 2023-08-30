@@ -553,6 +553,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             return String(value);
         }
         const num = Number(value);
+        if (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && Number.isNaN(num)) {
+            const val = String(value).replace(',', '.');
+            return Number(val);
+        }
         return Number.isNaN(num) ? value : num;
     }
 
@@ -657,6 +661,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             separatorExpression.indexOf('2') > 0 ||
             (this.leadZero && Number(separatorPrecision) > 1)
         ) {
+            if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
+                // eslint-disable-next-line no-param-reassign
+                separatorValue = separatorValue.replace(',', '.');
+            }
             return this.leadZero
                 ? Number(separatorValue).toFixed(Number(separatorPrecision))
                 : Number(separatorValue).toFixed(2);

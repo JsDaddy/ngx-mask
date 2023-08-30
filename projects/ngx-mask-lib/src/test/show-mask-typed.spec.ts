@@ -131,4 +131,33 @@ describe('Directive: Mask', () => {
         equal('1234567', '12/34/567y', fixture);
         equal('12345678', '12/34/5678', fixture);
     });
+
+    it('should work with showMaskTyped', () => {
+        component.mask = '000/00000';
+        component.prefix = '06';
+        component.dropSpecialCharacters = false;
+        component.showMaskTyped = true;
+        equal('', '06___/_____', fixture);
+        equal('1', '061__/_____', fixture);
+        equal('12', '0612_/_____', fixture);
+        equal('123', '06123/_____', fixture);
+        equal('1230', '06123/0____', fixture);
+        equal('12304', '06123/04___', fixture);
+        equal('123040', '06123/040__', fixture);
+        equal('1230405', '06123/0405_', fixture);
+        equal('12304051', '06123/04051', fixture);
+    });
+
+    it('should work with showMaskTyped', () => {
+        component.mask = '000/00000';
+        component.prefix = '06';
+        equal('1', '061', fixture);
+        equal('12', '0612', fixture);
+        equal('123', '06123', fixture);
+        equal('1230', '06123/0', fixture);
+        equal('12304', '06123/04', fixture);
+        equal('123040', '06123/040', fixture);
+        equal('1230405', '06123/0405', fixture);
+        equal('12304051', '06123/04051', fixture);
+    });
 });

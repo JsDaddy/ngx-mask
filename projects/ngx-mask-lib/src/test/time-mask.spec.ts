@@ -363,7 +363,7 @@ describe('Directive: Mask (Time)', () => {
         component.apm = true;
         equal('1', '1', fixture);
         equal('11', '11', fixture);
-        equal('12', '1:2', fixture);
+        equal('12', '12', fixture);
         equal('13', '1:3', fixture);
         equal('15', '1:5', fixture);
         equal('16', '1:6', fixture);
@@ -378,13 +378,14 @@ describe('Directive: Mask (Time)', () => {
         equal('25', '2:5', fixture);
         equal('1123', '11:23', fixture);
         equal('1323', '1:32', fixture);
+        equal('1223', '12:23', fixture);
     });
 
     it('Date (Hh:m0:s0 apm=true', () => {
         component.mask = 'Hh:m0:s0';
         component.apm = true;
         equal('1323', '1:32:3', fixture);
-        equal('1223', '1:22:3', fixture);
+        equal('1223', '12:23', fixture);
         equal('112322', '11:23:22', fixture);
         equal('13231', '1:32:31', fixture);
     });
@@ -393,8 +394,9 @@ describe('Directive: Mask (Time)', () => {
         component.mask = 'd0/M0/0000 Hh:m0:s0';
         component.apm = true;
         equal('11122023', '11/12/2023', fixture);
-        equal('11122023 132', '11/12/2023 1:32', fixture);
-        equal('11122023 13230', '11/12/2023 1:32:30', fixture);
+        equal('11122023133456', '11/12/2023 1:33:45', fixture);
+        equal('11/12/2023 13:32:30 ', '11/12/2023 1:33:23', fixture);
+        equal('11/12/2023 12:32:30 ', '11/12/2023 12:32:30', fixture);
     });
 
     it('Date (0000-M0-d0 Hh:m0:s0.000', () => {
@@ -435,5 +437,15 @@ describe('Directive: Mask (Time)', () => {
         equal('2023', '2023.__.__', fixture);
         equal('202310', '2023.10.__', fixture);
         equal('20231031', '2023.10.31', fixture);
+    });
+
+    it('Date (0000.M0.d0 leadZero and showMaskTyped', () => {
+        component.mask = 'M0/d0/0000';
+        component.leadZeroDateTime = true;
+        component.showMaskTyped = true;
+        component.dropSpecialCharacters = false;
+        equal('01', '01/__/____', fixture);
+        equal('0109', '01/09/____', fixture);
+        equal('01/03/2011', '01/03/2011', fixture);
     });
 });
