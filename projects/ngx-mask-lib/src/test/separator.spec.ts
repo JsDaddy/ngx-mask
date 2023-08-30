@@ -1008,4 +1008,110 @@ describe('Separator: Mask', () => {
             expect(component.form.value).toBe(12.34);
         });
     }));
+
+    it('should display value in input with decimalMarker , and leadZero with separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        component.decimalMarker = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0.4);
+        tick();
+        expect(inputTarget.value).toBe('0,40');
+
+        component.form.setValue(10.4);
+        tick();
+        expect(inputTarget.value).toBe('10,40');
+
+        component.form.setValue(100.4);
+        tick();
+        expect(inputTarget.value).toBe('100,40');
+
+        component.form.setValue(1000.4);
+        tick();
+        expect(inputTarget.value).toBe('1 000,40');
+    }));
+
+    it('should display value in input with decimalMarker , and leadZero with separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        component.decimalMarker = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0.4);
+        tick();
+        expect(inputTarget.value).toBe('0,400');
+
+        component.form.setValue(20.4);
+        tick();
+        expect(inputTarget.value).toBe('20,400');
+
+        component.form.setValue(200.4);
+        tick();
+        expect(inputTarget.value).toBe('200,400');
+
+        component.form.setValue(2000.4);
+        tick();
+        expect(inputTarget.value).toBe('2 000,400');
+    }));
+
+    it('should display value in input with decimalMarker , and leadZero with separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.leadZero = true;
+        component.decimalMarker = ',';
+        component.thousandSeparator = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0.3);
+        tick();
+        expect(inputTarget.value).toBe('0,300');
+
+        component.form.setValue(30.4);
+        tick();
+        expect(inputTarget.value).toBe('30,400');
+
+        component.form.setValue(300.4);
+        tick();
+        expect(inputTarget.value).toBe('300,400');
+
+        component.form.setValue(3000.4);
+        tick();
+        expect(inputTarget.value).toBe('3.000,400');
+    }));
+
+    it('should display value in input with decimalMarker , and leadZero with separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        component.decimalMarker = ',';
+        component.thousandSeparator = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0.3);
+        tick();
+        expect(inputTarget.value).toBe('0,30');
+
+        component.form.setValue(30.4);
+        tick();
+        expect(inputTarget.value).toBe('30,40');
+
+        component.form.setValue(300.4);
+        tick();
+        expect(inputTarget.value).toBe('300,40');
+
+        component.form.setValue(3000.4);
+        tick();
+        expect(inputTarget.value).toBe('3.000,40');
+    }));
 });

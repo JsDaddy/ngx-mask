@@ -92,7 +92,7 @@ export class NgxMaskApplierService {
         let backspaceShift = false;
         let shift = 1;
         let stepBack = false;
-        if (inputValue.slice(0, this.prefix.length) === this.prefix) {
+        if (inputValue.slice(0, this.prefix.length) === this.prefix && !this.showMaskTyped) {
             // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -277,7 +277,8 @@ export class NgxMaskApplierService {
             } else if (
                 result[position - 1] === this.decimalMarker ||
                 shiftStep === -4 ||
-                shiftStep === -3
+                shiftStep === -3 ||
+                result[position] === MaskExpression.COMMA
             ) {
                 this._shift.clear();
                 this._shift.add(position - 1);
@@ -370,11 +371,11 @@ export class NgxMaskApplierService {
                         if (
                             this.apm
                                 ? (result.length === 1 && Number(result) > 1) ||
-                                  (result === '1' && Number(inputSymbol) > 1) ||
+                                  (result === '1' && Number(inputSymbol) > 2) ||
                                   (inputValue.slice(cursor - 1, cursor).length === 1 &&
-                                      Number(inputValue.slice(cursor - 1, cursor)) > 1) ||
+                                      Number(inputValue.slice(cursor - 1, cursor)) > 2) ||
                                   (inputValue.slice(cursor - 1, cursor) === '1' &&
-                                      Number(inputSymbol) > 1)
+                                      Number(inputSymbol) > 2)
                                 : (result === '2' && Number(inputSymbol) > 3) ||
                                   ((result.slice(cursor - 2, cursor) === '2' ||
                                       result.slice(cursor - 3, cursor) === '2' ||
