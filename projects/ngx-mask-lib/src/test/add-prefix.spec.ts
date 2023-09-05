@@ -97,4 +97,28 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('FOO-SSS-SSS-SSS', 'FOO-SSS-SSS-SSS', fixture);
         expect(component.form.value).toEqual('FOO-SSS-SSS-SSS');
     });
+
+    it('should replace $ with minus', () => {
+        component.mask = '0000.00';
+        component.prefix = '$';
+        component.allowNegativeNumbers = true;
+        equal('-1', '-$1', fixture);
+        equal('-12', '-$12', fixture);
+        equal('-123', '-$123', fixture);
+        equal('-1234', '-$1234', fixture);
+        equal('-12345', '-$1234.5', fixture);
+        equal('-123456', '-$1234.56', fixture);
+    });
+
+    it('should replace euro with minus', () => {
+        component.mask = '0000.00';
+        component.prefix = '€';
+        component.allowNegativeNumbers = true;
+        equal('-1', '-€1', fixture);
+        equal('-12', '-€12', fixture);
+        equal('-123', '-€123', fixture);
+        equal('-1234', '-€1234', fixture);
+        equal('-12345', '-€1234.5', fixture);
+        equal('-123456', '-€1234.56', fixture);
+    });
 });
