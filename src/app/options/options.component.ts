@@ -8,7 +8,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -60,6 +60,21 @@ export class OptionsComponent implements AfterViewInit {
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
 
+    public pattern = {
+        '0': {
+            pattern: new RegExp('\\d'),
+        },
+
+        '1': {
+            pattern: new RegExp('^(?:1[012]|0[1-9]):[0-5][0-9]$'),
+        },
+    };
+    // public formControl = new FormControl('', [
+    //     Validators.required,
+    //     Validators.max(1059),
+    //     Validators.minLength(4),
+    // ]);
+    public formControl = new FormControl('');
     public ngAfterViewInit(): void {
         this.scrollService.onScroll(this.cards);
         this.accordionService.onChangeAccordion(this.cards);

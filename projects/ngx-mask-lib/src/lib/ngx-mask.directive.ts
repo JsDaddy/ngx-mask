@@ -404,90 +404,110 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const transformedValue = this._maskService.inputTransformFn(el.value);
+        if (el.type !== 'number') {
+            if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
+                el.value = transformedValue.toString();
 
-        if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
-            el.value = transformedValue.toString();
+                this._inputValue = el.value;
+                this._setMask();
 
-            this._inputValue = el.value;
-            this._setMask();
-
-            if (!this._maskValue) {
-                this.onChange(el.value);
-                return;
-            }
-
-            let position: number =
-                el.selectionStart === 1
-                    ? (el.selectionStart as number) + this._maskService.prefix.length
-                    : (el.selectionStart as number);
-
-            let caretShift = 0;
-            let backspaceShift = false;
-            if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
-                this._maskService.deletedSpecialCharacter = true;
-            }
-            if (
-                this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
-                this._code !== MaskExpression.BACKSPACE &&
-                this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
-                position < 10
-            ) {
-                const inputSymbol = this._inputValue.slice(position - 1, position);
-                el.value =
-                    this._inputValue.slice(0, position - 1) +
-                    inputSymbol +
-                    this._inputValue.slice(position + 1);
-            }
-
-            this._maskService.applyValueChanges(
-                position,
-                this._justPasted,
-                this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE,
-                (shift: number, _backspaceShift: boolean) => {
-                    this._justPasted = false;
-                    caretShift = shift;
-                    backspaceShift = _backspaceShift;
+                if (!this._maskValue) {
+                    this.onChange(el.value);
+                    return;
                 }
-            );
-            // only set the selection if the element is active
-            if (this._getActiveElement() !== el) {
-                return;
-            }
 
-            // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
-            if (this._maskExpressionArray.length) {
-                if (this._code === MaskExpression.BACKSPACE) {
-                    position = this.specialCharacters.includes(
-                        this._inputValue.slice(position - 1, position)
-                    )
-                        ? position - 1
-                        : position;
-                } else {
-                    position =
-                        el.selectionStart === 1
-                            ? (el.selectionStart as number) + this._maskService.prefix.length
-                            : (el.selectionStart as number);
+                let position: number =
+                    el.selectionStart === 1
+                        ? (el.selectionStart as number) + this._maskService.prefix.length
+                        : (el.selectionStart as number);
+
+                let caretShift = 0;
+                let backspaceShift = false;
+                if (this._code === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
+                    this._maskService.deletedSpecialCharacter = true;
                 }
-            }
-            this._position =
-                this._position === 1 && this._inputValue.length === 1 ? null : this._position;
-            let positionToApply: number = this._position
-                ? this._inputValue.length + position + caretShift
-                : position +
-                  (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
+                if (
+                    this._inputValue.length >= this._maskService.maskExpression.length - 1 &&
+                    this._code !== MaskExpression.BACKSPACE &&
+                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
+                    position < 10
+                ) {
+                    const inputSymbol = this._inputValue.slice(position - 1, position);
+                    el.value =
+                        this._inputValue.slice(0, position - 1) +
+                        inputSymbol +
+                        this._inputValue.slice(position + 1);
+                }
 
-            if (positionToApply > this._getActualInputLength()) {
-                positionToApply = this._getActualInputLength();
+                if (
+                    this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
+                    this.apm
+                ) {
+                    if (this._justPasted && el.value.slice(0, 2) === MaskExpression.DOUBLE_ZERO) {
+                        el.value = el.value.slice(1, 2) + el.value.slice(2, el.value.length);
+                    }
+                    el.value =
+                        el.value === MaskExpression.DOUBLE_ZERO
+                            ? MaskExpression.NUMBER_ZERO
+                            : el.value;
+                }
+
+                this._maskService.applyValueChanges(
+                    position,
+                    this._justPasted,
+                    this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE,
+                    (shift: number, _backspaceShift: boolean) => {
+                        this._justPasted = false;
+                        caretShift = shift;
+                        backspaceShift = _backspaceShift;
+                    }
+                );
+                // only set the selection if the element is active
+                if (this._getActiveElement() !== el) {
+                    return;
+                }
+
+                // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
+                if (this._maskExpressionArray.length) {
+                    if (this._code === MaskExpression.BACKSPACE) {
+                        position = this.specialCharacters.includes(
+                            this._inputValue.slice(position - 1, position)
+                        )
+                            ? position - 1
+                            : position;
+                    } else {
+                        position =
+                            el.selectionStart === 1
+                                ? (el.selectionStart as number) + this._maskService.prefix.length
+                                : (el.selectionStart as number);
+                    }
+                }
+                this._position =
+                    this._position === 1 && this._inputValue.length === 1 ? null : this._position;
+                let positionToApply: number = this._position
+                    ? this._inputValue.length + position + caretShift
+                    : position +
+                      (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
+
+                if (positionToApply > this._getActualInputLength()) {
+                    positionToApply = this._getActualInputLength();
+                }
+                if (positionToApply < 0) {
+                    positionToApply = 0;
+                }
+                el.setSelectionRange(positionToApply, positionToApply);
+                this._position = null;
+            } else {
+                console.warn(
+                    'Ngx-mask writeValue work with string | number, your current value:',
+                    typeof transformedValue
+                );
             }
-            if (positionToApply < 0) {
-                positionToApply = 0;
-            }
-            el.setSelectionRange(positionToApply, positionToApply);
-            this._position = null;
         } else {
-            console.warn(
-                'Ngx-mask writeValue work with string | number, your current value:',
-                typeof transformedValue
+            this._maskService.applyValueChanges(
+                el.value.length,
+                this._justPasted,
+                this._code === MaskExpression.BACKSPACE || this._code === MaskExpression.DELETE
             );
         }
     }
@@ -581,14 +601,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             (el.value === this._maskService.prefix
                 ? this._maskService.prefix + this._maskService.maskIsShown
                 : el.value);
+
         /** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
         if (el && el.value !== nextValue) {
             el.value = nextValue;
         }
-
         /** fix of cursor position with prefix when mouse click occur */
         if (
             el &&
+            el.type !== 'number' &&
             ((el.selectionStart as number) || (el.selectionEnd as number)) <=
                 this._maskService.prefix.length
         ) {
@@ -619,90 +640,96 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._inputValue = el.value;
         this._setMask();
 
-        if (e.key === MaskExpression.ARROW_UP) {
-            e.preventDefault();
-        }
-        if (
-            e.key === MaskExpression.ARROW_LEFT ||
-            e.key === MaskExpression.BACKSPACE ||
-            e.key === MaskExpression.DELETE
-        ) {
-            if (e.key === MaskExpression.BACKSPACE && el.value.length === 0) {
-                el.selectionStart = el.selectionEnd;
+        if (el.type !== 'number') {
+            if (e.key === MaskExpression.ARROW_UP) {
+                e.preventDefault();
             }
-            if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
-                // If specialChars is false, (shouldn't ever happen) then set to the defaults
-                this.specialCharacters = this.specialCharacters?.length
-                    ? this.specialCharacters
-                    : this._config.specialCharacters;
-                if (this.prefix.length > 1 && (el.selectionStart as number) <= this.prefix.length) {
-                    el.setSelectionRange(this.prefix.length, el.selectionEnd);
-                } else {
+
+            if (
+                e.key === MaskExpression.ARROW_LEFT ||
+                e.key === MaskExpression.BACKSPACE ||
+                e.key === MaskExpression.DELETE
+            ) {
+                if (e.key === MaskExpression.BACKSPACE && el.value.length === 0) {
+                    el.selectionStart = el.selectionEnd;
+                }
+                if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
+                    // If specialChars is false, (shouldn't ever happen) then set to the defaults
+                    this.specialCharacters = this.specialCharacters?.length
+                        ? this.specialCharacters
+                        : this._config.specialCharacters;
                     if (
-                        this._inputValue.length !== (el.selectionStart as number) &&
-                        (el.selectionStart as number) !== 1
+                        this.prefix.length > 1 &&
+                        (el.selectionStart as number) <= this.prefix.length
                     ) {
-                        while (
-                            this.specialCharacters.includes(
-                                (
-                                    this._inputValue[(el.selectionStart as number) - 1] ??
-                                    MaskExpression.EMPTY_STRING
-                                ).toString()
-                            ) &&
-                            ((this.prefix.length >= 1 &&
-                                (el.selectionStart as number) > this.prefix.length) ||
-                                this.prefix.length === 0)
+                        el.setSelectionRange(this.prefix.length, el.selectionEnd);
+                    } else {
+                        if (
+                            this._inputValue.length !== (el.selectionStart as number) &&
+                            (el.selectionStart as number) !== 1
                         ) {
-                            el.setSelectionRange(
-                                (el.selectionStart as number) - 1,
-                                el.selectionEnd
-                            );
+                            while (
+                                this.specialCharacters.includes(
+                                    (
+                                        this._inputValue[(el.selectionStart as number) - 1] ??
+                                        MaskExpression.EMPTY_STRING
+                                    ).toString()
+                                ) &&
+                                ((this.prefix.length >= 1 &&
+                                    (el.selectionStart as number) > this.prefix.length) ||
+                                    this.prefix.length === 0)
+                            ) {
+                                el.setSelectionRange(
+                                    (el.selectionStart as number) - 1,
+                                    el.selectionEnd
+                                );
+                            }
                         }
                     }
                 }
+                this.checkSelectionOnDeletion(el);
+                if (
+                    this._maskService.prefix.length &&
+                    (el.selectionStart as number) <= this._maskService.prefix.length &&
+                    (el.selectionEnd as number) <= this._maskService.prefix.length
+                ) {
+                    e.preventDefault();
+                }
+                const cursorStart: number | null = el.selectionStart;
+                if (
+                    e.key === MaskExpression.BACKSPACE &&
+                    !el.readOnly &&
+                    cursorStart === 0 &&
+                    el.selectionEnd === el.value.length &&
+                    el.value.length !== 0
+                ) {
+                    this._position = this._maskService.prefix ? this._maskService.prefix.length : 0;
+                    this._maskService.applyMask(
+                        this._maskService.prefix,
+                        this._maskService.maskExpression,
+                        this._position
+                    );
+                }
             }
-            this.checkSelectionOnDeletion(el);
             if (
-                this._maskService.prefix.length &&
-                (el.selectionStart as number) <= this._maskService.prefix.length &&
-                (el.selectionEnd as number) <= this._maskService.prefix.length
+                !!this.suffix &&
+                this.suffix.length > 1 &&
+                this._inputValue.length - this.suffix.length < (el.selectionStart as number)
             ) {
+                el.setSelectionRange(
+                    this._inputValue.length - this.suffix.length,
+                    this._inputValue.length
+                );
+            } else if (
+                (e.code === 'KeyA' && e.ctrlKey) ||
+                (e.code === 'KeyA' && e.metaKey) // Cmd + A (Mac)
+            ) {
+                el.setSelectionRange(0, this._getActualInputLength());
                 e.preventDefault();
             }
-            const cursorStart: number | null = el.selectionStart;
-            if (
-                e.key === MaskExpression.BACKSPACE &&
-                !el.readOnly &&
-                cursorStart === 0 &&
-                el.selectionEnd === el.value.length &&
-                el.value.length !== 0
-            ) {
-                this._position = this._maskService.prefix ? this._maskService.prefix.length : 0;
-                this._maskService.applyMask(
-                    this._maskService.prefix,
-                    this._maskService.maskExpression,
-                    this._position
-                );
-            }
+            this._maskService.selStart = el.selectionStart;
+            this._maskService.selEnd = el.selectionEnd;
         }
-        if (
-            !!this.suffix &&
-            this.suffix.length > 1 &&
-            this._inputValue.length - this.suffix.length < (el.selectionStart as number)
-        ) {
-            el.setSelectionRange(
-                this._inputValue.length - this.suffix.length,
-                this._inputValue.length
-            );
-        } else if (
-            (e.code === 'KeyA' && e.ctrlKey) ||
-            (e.code === 'KeyA' && e.metaKey) // Cmd + A (Mac)
-        ) {
-            el.setSelectionRange(0, this._getActualInputLength());
-            e.preventDefault();
-        }
-        this._maskService.selStart = el.selectionStart;
-        this._maskService.selEnd = el.selectionEnd;
     }
 
     /** It writes the value in the input */

@@ -644,6 +644,15 @@ export class NgxMaskApplierService {
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
+        if (result.includes(MaskExpression.MINUS) && this.prefix && this.allowNegativeNumbers) {
+            if (backspaced && result === MaskExpression.MINUS) {
+                return '';
+            }
+            res = `${MaskExpression.MINUS}${this.prefix}${result
+                .split(MaskExpression.MINUS)
+                .join(MaskExpression.EMPTY_STRING)}${this.suffix}`;
+        }
+
         return res;
     }
 
