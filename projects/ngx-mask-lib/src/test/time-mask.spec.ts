@@ -388,6 +388,7 @@ describe('Directive: Mask (Time)', () => {
         equal('1223', '12:23', fixture);
         equal('112322', '11:23:22', fixture);
         equal('13231', '1:32:31', fixture);
+        equal('00', '0', fixture);
     });
 
     it('Date (d0/M0/0000 Hh:m0:s0 apm=true', () => {
