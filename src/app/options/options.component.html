@@ -1,29 +1,3 @@
-<input type="number" mask="0000" [formControl]="formControl" /> {{ formControl.value }}
-<!--<br />-->
-<!--<hr />-->
-<!--number-->
-<!--<input type="number" mask="percent.2" [formControl]="formControl" /> {{ formControl.value }}-->
-
-<!--<input [apm]="true" mask="Hh:m0:s0" [formControl]="formControl" /> {{ formControl.value }}-->
-
-<!--<input-->
-<!--    [prefix]="'$'"-->
-<!--    mask="0000.00"-->
-
-<!--    [formControl]="formControl"-->
-<!--    [allowNegativeNumbers]="true"-->
-<!--    [dropSpecialCharacters]="false" />-->
-<!--{{ formControl.value }}-->
-
-<!--<input [apm]="true" mask="d0/M0/0000 Hh:m0:s0" [formControl]="formControl" />-->
-<!--{{ formControl.value }}-->
-
-<!--<div class="errors">-->
-<!--    <div>Mask:0*</div>-->
-<!--    <div>Status:{{ formControl.status }}</div>-->
-<!--    <div>Errors:{{ formControl.errors | json }}</div>-->
-<!--</div>-->
-
 <section class="content column bg-full-white" *ngIf="activeCardId$ | async as activeCardId">
     <div
         class="card"
