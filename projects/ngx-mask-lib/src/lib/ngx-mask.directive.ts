@@ -89,6 +89,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @Input() public outputTransformFn: IConfig['outputTransformFn'] | null = null;
 
+    @Input() public keepCharacterPositions: IConfig['keepCharacterPositions'] | null = null;
+
     @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
@@ -143,6 +145,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             apm,
             inputTransformFn,
             outputTransformFn,
+            keepCharacterPositions,
         } = changes;
         if (maskExpression) {
             if (
@@ -244,6 +247,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (outputTransformFn) {
             this._maskService.outputTransformFn = outputTransformFn.currentValue;
         }
+        if (keepCharacterPositions) {
+            this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
+        }
         this._applyMask();
     }
 
@@ -343,7 +349,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     if (
                         lastIndexArray &&
                         this._maskService.specialCharacters.includes(lastIndexArray[0] as string) &&
-                        value.includes(lastIndexArray[0]) &&
+                        String(value).includes(lastIndexArray[0] ?? '') &&
                         !this.dropSpecialCharacters
                     ) {
                         const special = value.split(lastIndexArray[0]);
@@ -420,6 +426,115 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     el.selectionStart === 1
                         ? (el.selectionStart as number) + this._maskService.prefix.length
                         : (el.selectionStart as number);
+
+                if (
+                    this.showMaskTyped &&
+                    this.keepCharacterPositions &&
+                    this._maskService.placeHolderCharacter.length === 1
+                ) {
+                    const inputSymbol = el.value.slice(position - 1, position);
+                    const prefixLength = this.prefix.length;
+                    const checkSymbols: boolean = this._maskService._checkSymbolMask(
+                        inputSymbol,
+                        this._maskService.maskExpression[position - 1 - prefixLength] ??
+                            MaskExpression.EMPTY_STRING
+                    );
+                    const checkSpecialCharacter: boolean = this._maskService._checkSymbolMask(
+                        inputSymbol,
+                        this._maskService.maskExpression[position + 1 - prefixLength] ??
+                            MaskExpression.EMPTY_STRING
+                    );
+                    const selectRangeBackspace: boolean =
+                        this._maskService.selStart === this._maskService.selEnd;
+                    const selStart = Number(this._maskService.selStart) - prefixLength ?? '';
+                    const selEnd = Number(this._maskService.selEnd) - prefixLength ?? '';
+
+                    if (this._code === MaskExpression.BACKSPACE) {
+                        if (!selectRangeBackspace) {
+                            if (this._maskService.selStart === prefixLength) {
+                                this._maskService.actualValue =
+                                    this.prefix +
+                                    this._maskService.maskIsShown.slice(0, selEnd) +
+                                    this._inputValue.split(this.prefix).join('');
+                            } else if (
+                                this._maskService.selStart ===
+                                this._maskService.maskIsShown.length + prefixLength
+                            ) {
+                                this._maskService.actualValue =
+                                    this._inputValue +
+                                    this._maskService.maskIsShown.slice(selStart, selEnd);
+                            } else {
+                                this._maskService.actualValue =
+                                    this.prefix +
+                                    this._inputValue
+                                        .split(this.prefix)
+                                        .join('')
+                                        .slice(0, selStart) +
+                                    this._maskService.maskIsShown.slice(selStart, selEnd) +
+                                    this._maskService.actualValue.slice(
+                                        selEnd + prefixLength,
+                                        this._maskService.maskIsShown.length + prefixLength
+                                    ) +
+                                    this.suffix;
+                            }
+                        } else if (
+                            !this._maskService.specialCharacters.includes(
+                                this._maskService.maskExpression.slice(
+                                    position - this.prefix.length,
+                                    position + 1 - this.prefix.length
+                                )
+                            ) &&
+                            selectRangeBackspace
+                        ) {
+                            if (selStart === 1 && this.prefix) {
+                                this._maskService.actualValue =
+                                    this.prefix +
+                                    this._maskService.placeHolderCharacter +
+                                    el.value
+                                        .split(this.prefix)
+                                        .join('')
+                                        .split(this.suffix)
+                                        .join('') +
+                                    this.suffix;
+                                position = position - 1;
+                            } else {
+                                const part1 = el.value.substring(0, position);
+                                const part2 = el.value.substring(position);
+                                this._maskService.actualValue =
+                                    part1 + this._maskService.placeHolderCharacter + part2;
+                            }
+                        }
+                    }
+                    if (this._code !== MaskExpression.BACKSPACE) {
+                        if (!checkSymbols && !checkSpecialCharacter && selectRangeBackspace) {
+                            position = Number(el.selectionStart) - 1;
+                        } else if (
+                            this._maskService.specialCharacters.includes(
+                                el.value.slice(position, position + 1)
+                            ) &&
+                            checkSpecialCharacter &&
+                            !this._maskService.specialCharacters.includes(
+                                el.value.slice(position + 1, position + 2)
+                            )
+                        ) {
+                            this._maskService.actualValue =
+                                el.value.slice(0, position - 1) +
+                                el.value.slice(position, position + 1) +
+                                inputSymbol +
+                                el.value.slice(position + 2);
+                            position = position + 1;
+                        } else if (checkSymbols) {
+                            this._maskService.actualValue =
+                                el.value.slice(0, position - 1) +
+                                inputSymbol +
+                                el.value
+                                    .slice(position + 1)
+                                    .split(this.suffix)
+                                    .join('') +
+                                this.suffix;
+                        }
+                    }
+                }
 
                 let caretShift = 0;
                 let backspaceShift = false;
@@ -574,7 +689,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line
             (e as any).keyCode !== 38
         ) {
-            if (this._maskService.showMaskTyped) {
+            if (this._maskService.showMaskTyped && !this.keepCharacterPositions) {
                 // We are showing the mask in the input
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (
@@ -644,7 +759,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             if (e.key === MaskExpression.ARROW_UP) {
                 e.preventDefault();
             }
-
             if (
                 e.key === MaskExpression.ARROW_LEFT ||
                 e.key === MaskExpression.BACKSPACE ||

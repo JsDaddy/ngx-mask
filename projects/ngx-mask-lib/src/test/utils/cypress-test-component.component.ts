@@ -15,6 +15,7 @@ import { scan, startWith } from 'rxjs';
             [showMaskTyped]="showMaskTyped"
             [decimalMarker]="decimalMarker"
             [thousandSeparator]="thousandSeparator"
+            [keepCharacterPositions]="keepCharacterPositions"
             [hiddenInput]="hiddenInput" />
 
         <pre id="pre">{{ counter$ | async }}</pre>
@@ -36,6 +37,8 @@ export class CypressTestMaskComponent {
     @Input() public decimalMarker = '.';
 
     @Input() public thousandSeparator = ',';
+
+    @Input() public keepCharacterPositions = false;
 
     public form: FormControl = new FormControl('');
 
