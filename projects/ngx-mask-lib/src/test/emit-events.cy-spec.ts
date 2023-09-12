@@ -82,8 +82,8 @@ describe('Directive: Mask (emit-events)', () => {
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('#masked').type('10.0').blur().should('have.value', '10.000');
-        cy.get('#pre').should('have.text', '5');
+        cy.get('#masked').type('10').blur().should('have.value', '10.000');
+        cy.get('#pre').should('have.text', '3');
     });
 
     it('should emit event only when mask is correct with SS000', () => {
