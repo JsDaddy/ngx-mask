@@ -732,12 +732,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return;
         }
         /** select only inserted text */
-        if (
-            el &&
-            (el.selectionEnd as number) > this._getActualInputLength()
-            // &&
-            // !this.keepCharacterPositions
-        ) {
+        if (el && (el.selectionEnd as number) > this._getActualInputLength()) {
             el.selectionEnd = this._getActualInputLength();
         }
     }
