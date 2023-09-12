@@ -2,8 +2,8 @@
 
 ### Fix
 
--   Fix ([#1222](https://github.com/JsDaddy/ngx-mask/issues/1222))
 -   Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
+-   Fix ([#1222](https://github.com/JsDaddy/ngx-mask/issues/1222))
 
 
 
