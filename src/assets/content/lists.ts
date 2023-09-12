@@ -104,6 +104,11 @@ export const lists: IListItem[] = [
                 id: 6,
                 scrollTo: 'valid',
             },
+            {
+                content: 'Keep Character Position',
+                id: 7,
+                scrollTo: 'keep000',
+            },
         ],
     },
     {

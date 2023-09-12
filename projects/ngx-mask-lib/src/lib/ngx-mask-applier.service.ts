@@ -51,11 +51,16 @@ export class NgxMaskApplierService {
 
     public outputTransformFn: IConfig['outputTransformFn'] = this._config.outputTransformFn;
 
+    public keepCharacterPositions: IConfig['keepCharacterPositions'] =
+        this._config.keepCharacterPositions;
+
     private _shift: Set<number> = new Set();
 
     public maskExpression = '';
 
     public actualValue = '';
+
+    public showKeepCharacterExp = '';
 
     public shownMaskExpression = '';
 
