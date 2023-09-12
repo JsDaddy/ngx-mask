@@ -725,7 +725,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (
             el &&
             el.type !== 'number' &&
-            // !this.keepCharacterPositions &&
             ((el.selectionStart as number) || (el.selectionEnd as number)) <=
                 this._maskService.prefix.length
         ) {
