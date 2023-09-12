@@ -31,6 +31,7 @@ export interface IConfig {
     leadZeroDateTime: boolean;
     leadZero: boolean;
     triggerOnMaskChange: boolean;
+    keepCharacterPositions: boolean;
     inputTransformFn: InputTransformFn;
     outputTransformFn: OutputTransformFn;
     maskFilled: EventEmitter<void>;
@@ -70,6 +71,7 @@ export const initialConfig: IConfig = {
     leadZeroDateTime: false,
     apm: false,
     leadZero: false,
+    keepCharacterPositions: false,
     triggerOnMaskChange: false,
     inputTransformFn: (value: unknown) => value as string | number,
     outputTransformFn: (value: string | number | undefined | null) => value,

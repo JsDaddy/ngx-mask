@@ -43,7 +43,8 @@
                 !ex._thousandSeparator &&
                 !ex._dropSpecialCharacters &&
                 !ex._inputTransformFn &&
-                !ex.outputTransformFn
+                !ex.outputTransformFn &&
+                !ex._keepCharacterPositions
             ">
             <input
                 [placeholder]="placeholder"
@@ -69,8 +70,23 @@
         <div class="dark-input pd-15" *ngIf="ex._dropSpecialCharacters">
             <input
                 [placeholder]="placeholder"
+                [keepCharacterPositions]="ex._keepCharacterPositions"
+                [prefix]="ex._prefix"
+                [suffix]="ex._suffix"
                 mask="{{ ex._mask || '' }}"
                 [dropSpecialCharacters]="ex._dropSpecialCharacters"
+                [formControl]="ex.control.form"
+                class="customDarkInput bg-black white span" />
+        </div>
+        <div class="dark-input pd-15" *ngIf="ex._keepCharacterPositions">
+            <input
+                [placeholder]="placeholder"
+                [keepCharacterPositions]="ex._keepCharacterPositions"
+                [showMaskTyped]="ex._showMaskTyped"
+                [prefix]="ex._prefix || ''"
+                [suffix]="ex._suffix || ''"
+                mask="{{ ex._mask || '' }}"
+                [(ngModel)]="ex.control.model"
                 [formControl]="ex.control.form"
                 class="customDarkInput bg-black white span" />
         </div>
