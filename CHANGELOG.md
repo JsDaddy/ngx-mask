@@ -1,10 +1,18 @@
-# 16.3.3(2023-09-01)
+### Feature
+
+-   update ng 15.x
+
+<a name=15.2.0></a>
+
+
+
+# 16.3.3(2023-09-12)
 
 ### Fix
 
 -   Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
 
-# 16.3.2(2023-09-01)
+# 16.3.2(2023-09-12)
 
 ### Fix
 
