@@ -57,11 +57,11 @@
     "url": "https://github.com/JsDaddy/ngx-mask.git"
   },
   "dependencies": {
-    "@angular/animations": "16.2.4",
-    "@angular/compiler": "16.2.4",
-    "@angular/forms": "16.2.4",
-    "@angular/platform-browser": "16.2.4",
-    "@angular/router": "16.2.4",
+    "@angular/animations": "16.2.5",
+    "@angular/compiler": "16.2.5",
+    "@angular/forms": "16.2.5",
+    "@angular/platform-browser": "16.2.5",
+    "@angular/router": "16.2.5",
     "@jscutlery/cypress-angular": "^0.9.22",
     "highlight.js": "11.8.0",
     "ngx-highlightjs": "10.0.0",
@@ -69,18 +69,18 @@
     "zone.js": "0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^16.2.1",
+    "@angular-devkit/build-angular": "^16.2.2",
     "@angular-eslint/builder": "16.1.2",
     "@angular-eslint/eslint-plugin": "16.1.2",
     "@angular-eslint/eslint-plugin-template": "16.1.2",
     "@angular-eslint/schematics": "16.1.2",
     "@angular-eslint/template-parser": "16.1.2",
-    "@angular/cli": "^16.2.1",
-    "@angular/common": "^16.2.4",
-    "@angular/compiler-cli": "16.2.4",
-    "@angular/core": "^16.2.4",
-    "@angular/language-service": "16.2.4",
-    "@angular/platform-browser-dynamic": "^16.2.4",
+    "@angular/cli": "^16.2.2",
+    "@angular/common": "^16.2.5",
+    "@angular/compiler-cli": "16.2.5",
+    "@angular/core": "^16.2.5",
+    "@angular/language-service": "16.2.5",
+    "@angular/platform-browser-dynamic": "^16.2.5",
     "@commitlint/cli": "17.7.1",
     "@commitlint/config-conventional": "17.7.0",
     "@types/highlight.js": "9.12.4",
@@ -109,12 +109,12 @@
     "ng-packagr": "16.2.3",
     "postcss-scss": "4.0.8",
     "prettier": "3.0.3",
-    "puppeteer": "21.2.0",
+    "puppeteer": "21.2.1",
     "stylelint": "15.10.3",
     "stylelint-config-prettier": "9.0.5",
     "stylelint-config-recommended-scss": "13.0.0",
     "stylelint-prettier": "4.0.2",
     "ts-node": "10.9.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.5"
   }
 }
