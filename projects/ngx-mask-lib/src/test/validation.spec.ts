@@ -56,6 +56,17 @@ export class TestMaskValidationTestSymbolStar {
     public validate = true;
 }
 
+@Component({
+    selector: 'jsdaddy-open-source-test',
+    template: ` <input id="maska" [mask]="mask" [validation]="validate" [formControl]="form" /> `,
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class TestValidatorNumber {
+    public form: FormControl = new FormControl(44, Validators.required);
+    public mask = '';
+    public validate = true;
+}
+
 describe('Directive: Mask (Validation)', () => {
     describe('Global validation true, validation attribute on input not specified', () => {
         let fixture: ComponentFixture<TestMaskNoValidationAttributeComponent>;
@@ -295,6 +306,64 @@ describe('Directive: Mask (Validation)', () => {
             expect(component.form.valid).toBe(true);
             equal('1', '1', fixture);
             expect(component.form.valid).toBe(true);
+        });
+    });
+
+    describe('Global validation true, validation attribute on input not specified', () => {
+        let fixture: ComponentFixture<TestValidatorNumber>;
+        let component: TestValidatorNumber;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [TestValidatorNumber],
+                imports: [ReactiveFormsModule, NgxMaskDirective],
+                providers: [provideNgxMask({ validation: true })],
+            });
+            fixture = TestBed.createComponent(TestValidatorNumber);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('mask with number value should work as expected mask 0*', () => {
+            component.mask = '0*';
+            equal('44', '44', fixture);
+            expect(component.form.valid).toBe(true);
+            expect(component.form.value).toBe(44);
+
+            equal('', '', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe('');
+
+            equal('1', '1', fixture);
+            expect(component.form.valid).toBe(true);
+            expect(component.form.value).toBe(1);
+        });
+
+        it('mask with number value should work as expected mask 000.00', () => {
+            component.mask = '000.00';
+            equal('44', '44', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe(44);
+
+            equal('', '', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe('');
+
+            equal('1', '1', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe(1);
+
+            equal('444', '444', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe(444);
+
+            equal('444.3', '444.3', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe(4443);
+
+            equal('444.31', '444.31', fixture);
+            expect(component.form.valid).toBe(true);
+            expect(component.form.value).toBe(44431);
         });
     });
 });
