@@ -1,3 +1,10 @@
+# 16.3.6(2023-09-15)
+
+### Fix
+
+-   Fix ([#1232](https://github.com/JsDaddy/ngx-mask/issues/1232))
+
+
 # 16.3.5(2023-09-14)
 
 ### Fix
