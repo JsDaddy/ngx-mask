@@ -119,4 +119,23 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.prop', 'selectionStart', 3);
     });
+
+    it('should return value from ctrl+V', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '9999999999999',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('15')
+            .should('have.value', '15')
+            .type('{selectall}')
+            .type('{backspace}')
+            .should('have.value', '')
+            .invoke('val', '15')
+            .trigger('input');
+        cy.get('#pre1').should('have.text', '15');
+    });
 });

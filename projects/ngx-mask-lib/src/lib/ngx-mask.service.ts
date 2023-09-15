@@ -188,7 +188,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (result || result === '') {
             this._previousValue = this._currentValue;
             this._currentValue = result;
-            this._emitValue = this._previousValue !== this._currentValue || this.maskChanged;
+            this._emitValue =
+                this._previousValue !== this._currentValue ||
+                this.maskChanged ||
+                (this._previousValue === this._currentValue && justPasted);
         }
         this._emitValue ? this.formControlResult(result) : '';
 
