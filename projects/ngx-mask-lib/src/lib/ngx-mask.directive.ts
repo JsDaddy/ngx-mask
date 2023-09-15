@@ -331,6 +331,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === -1 ||
                 this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === -1
             ) {
+                // eslint-disable-next-line no-param-reassign
+                value = typeof value === 'number' ? String(value) : value;
                 const array = this._maskValue.split('*');
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length -
@@ -339,6 +341,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     : this.prefix
                     ? this._maskValue.length + this.prefix.length - counterOfOpt
                     : this._maskValue.length - counterOfOpt;
+
                 if (array.length === 1) {
                     if (value.toString().length < length) {
                         return this._createValidationError(value);

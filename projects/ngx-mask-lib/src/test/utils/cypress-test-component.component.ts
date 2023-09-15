@@ -19,6 +19,7 @@ import { scan, startWith } from 'rxjs';
             [hiddenInput]="hiddenInput" />
 
         <pre id="pre">{{ counter$ | async }}</pre>
+        <pre id="pre1">{{ form.value }}</pre>
     `,
 })
 export class CypressTestMaskComponent {
