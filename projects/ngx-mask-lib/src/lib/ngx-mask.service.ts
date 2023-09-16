@@ -394,10 +394,11 @@ export class NgxMaskService extends NgxMaskApplierService {
         );
     }
 
-    public checkSpecialCharAmount(mask: string): number {
+    public checkDropSpecialCharAmount(mask: string): number {
         const chars: string[] = mask
             .split(MaskExpression.EMPTY_STRING)
-            .filter((item: string) => this._findSpecialChar(item));
+            .filter((item: string) => this._findDropSpecialChar(item));
+
         return chars.length;
     }
 

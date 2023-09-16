@@ -661,6 +661,14 @@ export class NgxMaskApplierService {
         return res;
     }
 
+    public _findDropSpecialChar(inputSymbol: string): undefined | string {
+        if (Array.isArray(this.dropSpecialCharacters)) {
+            return this.dropSpecialCharacters.find((val: string) => val === inputSymbol);
+        }
+
+        return this._findSpecialChar(inputSymbol);
+    }
+
     public _findSpecialChar(inputSymbol: string): undefined | string {
         return this.specialCharacters.find((val: string) => val === inputSymbol);
     }
