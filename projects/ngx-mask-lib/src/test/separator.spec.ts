@@ -1114,4 +1114,45 @@ describe('Separator: Mask', () => {
         tick();
         expect(inputTarget.value).toBe('3.000,40');
     }));
+
+    it('should not allow add two zeros to inputValue', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.leadZero = true;
+        component.decimalMarker = ',';
+        component.thousandSeparator = '.';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-00', '-0', fixture);
+    }));
+
+    it('should not allow add two zeros to inputValue', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        component.thousandSeparator = ',';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-00', '-0', fixture);
+    }));
+
+    it('should not allow add two zeros to inputValue', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        component.thousandSeparator = '.';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-00', '-0', fixture);
+    }));
+
+    it('should not allow add two zeros to inputValue', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        component.thousandSeparator = ' ';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-00', '-0', fixture);
+    }));
 });
