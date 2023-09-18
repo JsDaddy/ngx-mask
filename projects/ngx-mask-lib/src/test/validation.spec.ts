@@ -67,6 +67,25 @@ export class TestValidatorNumber {
     public validate = true;
 }
 
+@Component({
+    selector: 'jsdaddy-open-source-test',
+    template: `
+        <input
+            id="maska"
+            [mask]="mask"
+            [specialCharacters]="specialCharacters"
+            [dropSpecialCharacters]="dropSpecialCharacters"
+            [formControl]="form" />
+    `,
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class TestValidatorDropSpecialCharacters {
+    public form: FormControl = new FormControl('+373', Validators.required);
+    public mask = '+000';
+    public specialCharacters = ['+', ' '];
+    public dropSpecialCharacters = [' '];
+}
+
 describe('Directive: Mask (Validation)', () => {
     describe('Global validation true, validation attribute on input not specified', () => {
         let fixture: ComponentFixture<TestMaskNoValidationAttributeComponent>;
@@ -364,6 +383,42 @@ describe('Directive: Mask (Validation)', () => {
             equal('444.31', '444.31', fixture);
             expect(component.form.valid).toBe(true);
             expect(component.form.value).toBe(44431);
+        });
+    });
+
+    describe('Global validation true, dropSpecialCharacters attribute on input specified as array', () => {
+        let fixture: ComponentFixture<TestValidatorDropSpecialCharacters>;
+        let component: TestValidatorDropSpecialCharacters;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [TestValidatorDropSpecialCharacters],
+                imports: [ReactiveFormsModule, NgxMaskDirective],
+                providers: [provideNgxMask({ validation: true })],
+            });
+            fixture = TestBed.createComponent(TestValidatorDropSpecialCharacters);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('dropSpecialCharacters is different from specialCharacters', () => {
+            component.mask = '+000';
+            component.specialCharacters = ['+', ' '];
+            component.dropSpecialCharacters = [' '];
+
+            equal('+37', '+37', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('+373', '+373', fixture);
+            expect(component.form.valid).toBe(true);
+
+            component.mask = '+000 000 00 000';
+
+            equal('+3736000000', '+373 600 00 00', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('+37360000000', '+373 600 00 000', fixture);
+            expect(component.form.valid).toBe(true);
         });
     });
 });
