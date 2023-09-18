@@ -336,7 +336,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 const array = this._maskValue.split('*');
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length -
-                      this._maskService.checkSpecialCharAmount(this._maskValue) -
+                      this._maskService.checkDropSpecialCharAmount(this._maskValue) -
                       counterOfOpt
                     : this.prefix
                     ? this._maskValue.length + this.prefix.length - counterOfOpt

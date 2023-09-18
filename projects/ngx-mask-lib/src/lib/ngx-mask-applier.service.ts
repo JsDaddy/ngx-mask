@@ -195,18 +195,29 @@ export class NgxMaskApplierService {
             }
             // eslint-disable-next-line no-param-reassign
             inputValue =
-                inputValue.length > 1 &&
-                inputValue[0] === '0' &&
-                inputValue[1] !== this.thousandSeparator &&
-                !this._compareOrIncludes(
-                    inputValue[1],
-                    this.decimalMarker,
-                    this.thousandSeparator
-                ) &&
-                !backspaced
+                inputValue[0] === '-' && this.allowNegativeNumbers
+                    ? inputValue.length > 2 &&
+                      inputValue[1] === '0' &&
+                      inputValue[2] !== this.thousandSeparator &&
+                      !this._compareOrIncludes(
+                          inputValue[2],
+                          this.decimalMarker,
+                          this.thousandSeparator
+                      ) &&
+                      !backspaced
+                        ? inputValue.slice(0, inputValue.length - 1)
+                        : inputValue
+                    : inputValue.length > 1 &&
+                      inputValue[0] === '0' &&
+                      inputValue[1] !== this.thousandSeparator &&
+                      !this._compareOrIncludes(
+                          inputValue[1],
+                          this.decimalMarker,
+                          this.thousandSeparator
+                      ) &&
+                      !backspaced
                     ? inputValue.slice(0, inputValue.length - 1)
                     : inputValue;
-
             if (backspaced) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
@@ -659,6 +670,14 @@ export class NgxMaskApplierService {
         }
 
         return res;
+    }
+
+    public _findDropSpecialChar(inputSymbol: string): undefined | string {
+        if (Array.isArray(this.dropSpecialCharacters)) {
+            return this.dropSpecialCharacters.find((val: string) => val === inputSymbol);
+        }
+
+        return this._findSpecialChar(inputSymbol);
     }
 
     public _findSpecialChar(inputSymbol: string): undefined | string {
