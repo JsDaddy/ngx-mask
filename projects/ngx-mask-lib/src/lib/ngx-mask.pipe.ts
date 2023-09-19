@@ -1,4 +1,4 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 import { IConfig } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
@@ -7,12 +7,11 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 @Pipe({
     name: 'mask',
     pure: true,
-    standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    private readonly defaultOptions: Partial<IConfig> = {};
+    public constructor(private _maskService: NgxMaskService) {}
 
-    private readonly _maskService = inject(NgxMaskService);
+    private readonly defaultOptions: Partial<IConfig> = {};
 
     private _maskExpressionArray: string[] = [];
 

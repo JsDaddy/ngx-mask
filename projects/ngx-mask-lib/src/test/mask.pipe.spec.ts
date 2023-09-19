@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskPipe } from '../lib/ngx-mask.pipe';
-import { IConfig, NgxMaskDirective } from 'ngx-mask';
+import { NgxMaskModule } from '../lib/ngx-mask.module';
+import { IConfig, NgxMaskPipe, NgxMaskService } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [NgxMaskPipe],
-            providers: [provideNgxMask(), NgxMaskDirective],
-        }).runInInjectionContext(() => {
-            maskPipe = new NgxMaskPipe();
+            imports: [NgxMaskModule.forRoot()],
         });
+    });
+    beforeEach(() => {
+        const service: NgxMaskService = TestBed.inject<NgxMaskService>(NgxMaskService);
+        maskPipe = new NgxMaskPipe(service);
     });
 
     it('should mask a string', () => {

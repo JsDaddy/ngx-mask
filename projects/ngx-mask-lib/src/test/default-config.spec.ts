@@ -1,8 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { provideEnvironmentNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { optionsConfig } from '../lib/ngx-mask.config';
 
 function createComponentWithDefaultConfig(
@@ -10,8 +9,7 @@ function createComponentWithDefaultConfig(
 ): ComponentFixture<TestMaskComponent> {
     TestBed.configureTestingModule({
         declarations: [TestMaskComponent],
-        imports: [ReactiveFormsModule, NgxMaskDirective],
-        providers: [provideEnvironmentNgxMask(defaultConfig)],
+        imports: [ReactiveFormsModule, NgxMaskModule.forRoot(defaultConfig)],
     });
     const fixture = TestBed.createComponent(TestMaskComponent);
     return fixture;

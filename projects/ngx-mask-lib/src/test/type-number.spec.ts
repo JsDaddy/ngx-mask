@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { equal } from './utils/test-functions.component';
+import { NgxMaskModule } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -21,8 +21,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestTypeNumber],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
-            providers: [provideNgxMask()],
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
         });
         fixture = TestBed.createComponent(TestTypeNumber);
         component = fixture.componentInstance;

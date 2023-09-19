@@ -8,6 +8,7 @@ import {
     Output,
     SimpleChanges,
     inject,
+    forwardRef,
 } from '@angular/core';
 import {
     ControlValueAccessor,
@@ -23,23 +24,23 @@ import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-ma
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
+// tslint:disable deprecation
+// tslint:disable no-input-rename
 @Directive({
     selector: 'input[mask], textarea[mask]',
-    standalone: true,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
-            useExisting: NgxMaskDirective,
+            useExisting: forwardRef(() => NgxMaskDirective),
             multi: true,
         },
         {
             provide: NG_VALIDATORS,
-            useExisting: NgxMaskDirective,
+            useExisting: forwardRef(() => NgxMaskDirective),
             multi: true,
         },
         NgxMaskService,
     ],
-    exportAs: 'mask,ngxMask',
 })
 export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
     // eslint-disable-next-line @angular-eslint/no-input-rename
@@ -850,14 +851,18 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     /** It writes the value in the input */
-    public async writeValue(controlValue: unknown): Promise<void> {
+    // public async writeValue(controlValue: unknown): Promise<void> {
+    public async writeValue(
+        controlValue: string | number | { value: string | number; disable?: boolean }
+    ): Promise<void> {
         if (typeof controlValue === 'object' && controlValue !== null && 'value' in controlValue) {
             if ('disable' in controlValue) {
                 this.setDisabledState(Boolean(controlValue.disable));
             }
-            // eslint-disable-next-line no-param-reassign
+            // // eslint-disable-next-line no-param-reassign
             controlValue = controlValue.value;
         }
+
         if (controlValue !== null) {
             // eslint-disable-next-line no-param-reassign
             controlValue = this.inputTransformFn

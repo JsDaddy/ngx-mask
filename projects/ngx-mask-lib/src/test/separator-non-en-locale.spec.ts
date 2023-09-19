@@ -3,8 +3,7 @@ import { DebugElement, LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskModule } from '../lib/ngx-mask.module';
 import { By } from '@angular/platform-browser';
 
 // FR locale uses comma as decimal marker
@@ -15,8 +14,8 @@ describe('Separator: Mask with FR locale', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
-            providers: [provideNgxMask(), { provide: LOCALE_ID, useValue: 'fr' }],
+            imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
+            providers: [{ provide: LOCALE_ID, useValue: 'fr' }],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

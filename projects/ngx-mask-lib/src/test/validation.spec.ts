@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskModule } from '../lib/ngx-mask.module';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -94,8 +93,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskNoValidationAttributeComponent],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask({ validation: true })],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot({ validation: true })],
             });
             fixture = TestBed.createComponent(TestMaskNoValidationAttributeComponent);
             component = fixture.componentInstance;
@@ -121,8 +119,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskValidationAttributeComponent],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask()],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
             });
             fixture = TestBed.createComponent(TestMaskValidationAttributeComponent);
             component = fixture.componentInstance;
@@ -154,8 +151,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskNoValidationAttributeComponent],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask({ validation: false })],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot({ validation: false })],
             });
             fixture = TestBed.createComponent(TestMaskNoValidationAttributeComponent);
             component = fixture.componentInstance;
@@ -175,8 +171,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskValidationAttributeComponent],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask()],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
             });
             fixture = TestBed.createComponent(TestMaskValidationAttributeComponent);
             component = fixture.componentInstance;
@@ -203,8 +198,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskValidationEmailComponent],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask()],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
             });
             fixture = TestBed.createComponent(TestMaskValidationEmailComponent);
             component = fixture.componentInstance;
@@ -284,8 +278,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestMaskValidationTestSymbolStar],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask()],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot()],
             });
             fixture = TestBed.createComponent(TestMaskValidationTestSymbolStar);
             component = fixture.componentInstance;
@@ -335,8 +328,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestValidatorNumber],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask({ validation: true })],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot({ validation: true })],
             });
             fixture = TestBed.createComponent(TestValidatorNumber);
             component = fixture.componentInstance;
@@ -393,8 +385,7 @@ describe('Directive: Mask (Validation)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({
                 declarations: [TestValidatorDropSpecialCharacters],
-                imports: [ReactiveFormsModule, NgxMaskDirective],
-                providers: [provideNgxMask({ validation: true })],
+                imports: [ReactiveFormsModule, NgxMaskModule.forRoot({ validation: true })],
             });
             fixture = TestBed.createComponent(TestValidatorDropSpecialCharacters);
             component = fixture.componentInstance;

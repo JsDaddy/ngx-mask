@@ -10,7 +10,7 @@
         "module": "esnext",
         "experimentalDecorators": true,
         "strict": true,
-        "target": "ES2022",
+        "target": "es2020",
         "lib": ["es2020", "dom"],
         "paths": {
             "ngx-mask": ["projects/ngx-mask-lib/src"],

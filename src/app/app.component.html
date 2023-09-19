@@ -1,13 +1,25 @@
-<div class="content-wrapper column">
-    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />
-    <section class="mask-wrap row">
-        <div class="drawer-container column">
-            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />
-        </div>
-        <div class="right-section column">
-            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />
-            <jsdaddy-open-source-options [cardDocs]="card.docs" [cardExamples]="card.examples" />
-            <jsdaddy-open-source-footer />
-        </div>
-    </section>
+<!--<div class="content-wrapper column">-->
+<!--    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />-->
+<!--    <section class="mask-wrap row">-->
+<!--        <div class="drawer-container column">-->
+<!--            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />-->
+<!--        </div>-->
+<!--        <div class="right-section column">-->
+<!--            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />-->
+<!--            <jsdaddy-open-source-options [cardDocs]="card.docs" [cardExamples]="card.examples" />-->
+<!--            <jsdaddy-open-source-footer />-->
+<!--        </div>-->
+<!--    </section>-->
+<!--</div>-->
+
+<div>
+    <input type="text" mask="XXX/XX/XXX" [hiddenInput]="hide" [formControl]="test" />
+    value {{ test.value }}
+    <!--    <div>value="{{ phone | mask: '(000) 000-0000' }}"</div>-->
+    <hr />
+    <button (click)="hiden()">hiden</button>
+    <!--    <hr />-->
+    <!--    <button (click)="disabled()">disabled</button>-->
+    <!--    <hr />-->
+    <!--    <button (click)="setValue()">setValue</button>-->
 </div>
