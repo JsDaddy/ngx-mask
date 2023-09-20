@@ -7,8 +7,8 @@ import {
     OnChanges,
     Output,
     SimpleChanges,
-    inject,
     forwardRef,
+    Inject,
 } from '@angular/core';
 import {
     ControlValueAccessor,
@@ -109,11 +109,18 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     /**For IME composition event */
     private _isComposing = false;
 
-    private readonly document = inject(DOCUMENT);
+    // private readonly document = inject(DOCUMENT);
 
-    public _maskService = inject(NgxMaskService, { self: true });
+    // public _maskService = inject(NgxMaskService, { self: true });
 
-    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
+    // protected _config = inject<IConfig>(NGX_MASK_CONFIG);
+
+    public constructor(
+        // tslint:disable-next-line
+        @Inject(DOCUMENT) private document: any,
+        @Inject(NGX_MASK_CONFIG) protected _config: IConfig,
+        public _maskService: NgxMaskService
+    ) {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
@@ -862,7 +869,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // // eslint-disable-next-line no-param-reassign
             controlValue = controlValue.value;
         }
-
+        console.log('decimal', this._maskService.decimalMarker);
         if (controlValue !== null) {
             // eslint-disable-next-line no-param-reassign
             controlValue = this.inputTransformFn

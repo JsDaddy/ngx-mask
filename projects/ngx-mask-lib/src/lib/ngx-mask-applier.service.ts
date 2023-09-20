@@ -1,58 +1,54 @@
-import { inject, Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskApplierService {
-    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
+    // protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] =
-        this._config.dropSpecialCharacters;
+    public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
 
-    public hiddenInput: IConfig['hiddenInput'] = this._config.hiddenInput;
+    public hiddenInput: IConfig['hiddenInput'];
 
     public showTemplate!: IConfig['showTemplate'];
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
+    public clearIfNotMatch: IConfig['clearIfNotMatch'];
 
-    public specialCharacters: IConfig['specialCharacters'] = this._config.specialCharacters;
+    public specialCharacters: IConfig['specialCharacters'];
 
-    public patterns: IConfig['patterns'] = this._config.patterns;
+    public patterns: IConfig['patterns'];
 
-    public prefix: IConfig['prefix'] = this._config.prefix;
+    public prefix: IConfig['prefix'];
 
-    public suffix: IConfig['suffix'] = this._config.suffix;
+    public suffix: IConfig['suffix'];
 
-    public thousandSeparator: IConfig['thousandSeparator'] = this._config.thousandSeparator;
+    public thousandSeparator: IConfig['thousandSeparator'];
 
-    public decimalMarker: IConfig['decimalMarker'] = this._config.decimalMarker;
+    public decimalMarker: IConfig['decimalMarker'];
 
     public customPattern!: IConfig['patterns'];
 
-    public showMaskTyped: IConfig['showMaskTyped'] = this._config.showMaskTyped;
+    public showMaskTyped: IConfig['showMaskTyped'];
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] =
-        this._config.placeHolderCharacter;
+    public placeHolderCharacter: IConfig['placeHolderCharacter'];
 
-    public validation: IConfig['validation'] = this._config.validation;
+    public validation: IConfig['validation'];
 
-    public separatorLimit: IConfig['separatorLimit'] = this._config.separatorLimit;
+    public separatorLimit: IConfig['separatorLimit'];
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] =
-        this._config.allowNegativeNumbers;
+    public allowNegativeNumbers: IConfig['allowNegativeNumbers'];
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
+    public leadZeroDateTime: IConfig['leadZeroDateTime'];
 
-    public leadZero: IConfig['leadZero'] = this._config.leadZero;
+    public leadZero: IConfig['leadZero'];
 
-    public apm: IConfig['apm'] = this._config.apm;
+    public apm: IConfig['apm'];
 
-    public inputTransformFn: IConfig['inputTransformFn'] = this._config.inputTransformFn;
+    public inputTransformFn: IConfig['inputTransformFn'];
 
-    public outputTransformFn: IConfig['outputTransformFn'] = this._config.outputTransformFn;
+    public outputTransformFn: IConfig['outputTransformFn'];
 
-    public keepCharacterPositions: IConfig['keepCharacterPositions'] =
-        this._config.keepCharacterPositions;
+    public keepCharacterPositions: IConfig['keepCharacterPositions'];
 
     private _shift: Set<number> = new Set();
 
@@ -69,6 +65,48 @@ export class NgxMaskApplierService {
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
+
+    public constructor(@Inject(NGX_MASK_CONFIG) protected _config: IConfig) {
+        this.dropSpecialCharacters = this._config.dropSpecialCharacters;
+
+        this.hiddenInput = this._config.hiddenInput;
+
+        this.clearIfNotMatch = this._config.clearIfNotMatch;
+
+        this.specialCharacters = this._config.specialCharacters;
+
+        this.patterns = this._config.patterns;
+
+        this.prefix = this._config.prefix;
+
+        this.suffix = this._config.suffix;
+
+        this.thousandSeparator = this._config.thousandSeparator;
+
+        this.decimalMarker = this._config.decimalMarker;
+
+        this.showMaskTyped = this._config.showMaskTyped;
+
+        this.placeHolderCharacter = this._config.placeHolderCharacter;
+
+        this.validation = this._config.validation;
+
+        this.separatorLimit = this._config.separatorLimit;
+
+        this.allowNegativeNumbers = this._config.allowNegativeNumbers;
+
+        this.leadZeroDateTime = this._config.leadZeroDateTime;
+
+        this.leadZero = this._config.leadZero;
+
+        this.apm = this._config.apm;
+
+        this.inputTransformFn = this._config.inputTransformFn;
+
+        this.outputTransformFn = this._config.outputTransformFn;
+
+        this.keepCharacterPositions = this._config.keepCharacterPositions;
+    }
 
     public applyMaskWithPattern(
         inputValue: string,

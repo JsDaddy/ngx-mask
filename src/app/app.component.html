@@ -12,14 +12,22 @@
 <!--    </section>-->
 <!--</div>-->
 
-<div>
-    <input type="text" mask="XXX/XX/XXX" [hiddenInput]="hide" [formControl]="test" />
-    value {{ test.value }}
-    <!--    <div>value="{{ phone | mask: '(000) 000-0000' }}"</div>-->
-    <hr />
-    <button (click)="hiden()">hiden</button>
-    <!--    <hr />-->
-    <!--    <button (click)="disabled()">disabled</button>-->
-    <!--    <hr />-->
-    <!--    <button (click)="setValue()">setValue</button>-->
-</div>
+<!--<div>-->
+<!--    <input type="text" mask="XXX/XX/XXX" [hiddenInput]="hide" [formControl]="test" />-->
+<!--    value {{ test.value }}-->
+<!--    &lt;!&ndash;    <div>value="{{ phone | mask: '(000) 000-0000' }}"</div>&ndash;&gt;-->
+<!--    <hr />-->
+<!--    <button (click)="hiden()">hiden</button>-->
+<!--    &lt;!&ndash;    <hr />&ndash;&gt;-->
+<!--    &lt;!&ndash;    <button (click)="disabled()">disabled</button>&ndash;&gt;-->
+<!--    &lt;!&ndash;    <hr />&ndash;&gt;-->
+<!--    &lt;!&ndash;    <button (click)="setValue()">setValue</button>&ndash;&gt;-->
+<!--</div>-->
+
+<input
+    type="text"
+    mask="separator.3"
+    [decimalMarker]="','"
+    [leadZero]="true"
+    [formControl]="test" />
+{{ test.value }}

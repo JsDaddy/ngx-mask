@@ -45,7 +45,7 @@ export class AppComponent {
     //             break;
     //     }
     // }
-    public test = new FormControl('1234');
+    public test = new FormControl('0.4');
     public phone = '';
 
     public hide = true;

@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 import { IConfig } from '../../lib/ngx-mask.config';
@@ -37,45 +37,45 @@ export class TestMaskComponent {
 
     public form: FormControl = new FormControl();
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | undefined;
+    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] = true;
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] | undefined;
+    public clearIfNotMatch: IConfig['clearIfNotMatch'] = false;
 
-    public patterns: IConfig['patterns'] | undefined;
+    public patterns!: IConfig['patterns'];
 
     public prefix: IConfig['prefix'] = '';
 
-    public thousandSeparator: IConfig['thousandSeparator'] | undefined;
+    public thousandSeparator: IConfig['thousandSeparator'] = ' ';
 
-    public decimalMarker: IConfig['decimalMarker'] | undefined;
+    public decimalMarker: IConfig['decimalMarker'] = ',';
 
     public suffix: IConfig['suffix'] = '';
 
-    public specialCharacters: IConfig['specialCharacters'] | undefined;
+    public specialCharacters!: IConfig['specialCharacters'];
 
-    public showMaskTyped: IConfig['showMaskTyped'] | undefined;
+    public showMaskTyped: IConfig['showMaskTyped'] = false;
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] | undefined;
+    public placeHolderCharacter: IConfig['placeHolderCharacter'] = '_';
 
-    public hiddenInput: IConfig['hiddenInput'] | undefined;
+    public hiddenInput: IConfig['hiddenInput'] = false;
 
     public separatorLimit: IConfig['separatorLimit'] = '';
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | undefined;
+    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] = false;
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] | undefined;
+    public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
 
-    public leadZero: IConfig['leadZero'] | undefined;
+    public leadZero: IConfig['leadZero'] = false;
 
-    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
+    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] = false;
 
-    public validation: IConfig['validation'] | undefined;
+    public validation: IConfig['validation'] = true;
 
-    public apm: IConfig['apm'] | undefined;
+    public apm: IConfig['apm'] = false;
 
     public inputTransformFn: IConfig['inputTransformFn'] | undefined;
 
     public outputTransformFn: IConfig['outputTransformFn'] | undefined;
 
-    public cdr = inject(ChangeDetectorRef);
+    // public cdr = inject(ChangeDetectorRef);
 }
