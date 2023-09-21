@@ -24,6 +24,12 @@ import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-ma
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
+interface IOnChage {
+    (_: any): void
+}
+interface IOnTouch {
+    (): void
+}
 // tslint:disable deprecation
 // tslint:disable no-input-rename
 @Directive({
@@ -118,10 +124,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     ) {}
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
-    public onChange = (_: any) => {};
+    public onChange: IOnChage = (_: any) => {};
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    public onTouch = () => {};
+    public onTouch: IOnTouch = () => {};
 
     public ngOnChanges(changes: SimpleChanges): void {
         const {
@@ -960,11 +966,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
     }
 
-    public registerOnChange(fn: typeof this.onChange): void {
+    public registerOnChange(fn: IOnChage): void {
         this._maskService.onChange = this.onChange = fn;
     }
 
-    public registerOnTouched(fn: typeof this.onTouch): void {
+    public registerOnTouched(fn: IOnTouch): void {
         this.onTouch = fn;
     }
 
