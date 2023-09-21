@@ -4,8 +4,6 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskApplierService {
-    // protected _config = inject<IConfig>(NGX_MASK_CONFIG);
-
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
 
     public hiddenInput: IConfig['hiddenInput'];

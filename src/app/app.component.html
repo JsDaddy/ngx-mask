@@ -24,10 +24,6 @@
 <!--    &lt;!&ndash;    <button (click)="setValue()">setValue</button>&ndash;&gt;-->
 <!--</div>-->
 
-<input
-    type="text"
-    mask="separator.3"
-    [decimalMarker]="','"
-    [leadZero]="true"
-    [formControl]="test" />
-{{ test.value }}
+<input type="text" mask="separator.3" [decimalMarker]="','" [leadZero]="true" [(ngModel)]="phone" />
+<!--{{ phone | mask: '(000) 000-0000' }}"-->
+<span>{{ phone | mask: '(000) 000-0000' }}</span>

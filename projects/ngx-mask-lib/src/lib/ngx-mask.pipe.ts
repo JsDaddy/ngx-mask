@@ -9,7 +9,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     pure: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    public constructor(private _maskService: NgxMaskService) {}
+    public constructor(public _maskService: NgxMaskService) {}
 
     private readonly defaultOptions: Partial<IConfig> = {};
 

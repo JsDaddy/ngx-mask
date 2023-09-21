@@ -41,6 +41,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
         },
         NgxMaskService,
     ],
+    exportAs: 'mask,ngxMask',
 })
 export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
     // eslint-disable-next-line @angular-eslint/no-input-rename
@@ -108,12 +109,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     /**For IME composition event */
     private _isComposing = false;
-
-    // private readonly document = inject(DOCUMENT);
-
-    // public _maskService = inject(NgxMaskService, { self: true });
-
-    // protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
     public constructor(
         // tslint:disable-next-line
@@ -869,7 +864,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // // eslint-disable-next-line no-param-reassign
             controlValue = controlValue.value;
         }
-        console.log('decimal', this._maskService.decimalMarker);
+
         if (controlValue !== null) {
             // eslint-disable-next-line no-param-reassign
             controlValue = this.inputTransformFn

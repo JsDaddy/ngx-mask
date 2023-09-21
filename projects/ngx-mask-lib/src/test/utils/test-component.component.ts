@@ -45,9 +45,9 @@ export class TestMaskComponent {
 
     public prefix: IConfig['prefix'] = '';
 
-    public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+    public thousandSeparator: IConfig['thousandSeparator'] | undefined;
 
-    public decimalMarker: IConfig['decimalMarker'] = ',';
+    public decimalMarker: IConfig['decimalMarker'] | undefined;
 
     public suffix: IConfig['suffix'] = '';
 
@@ -65,7 +65,8 @@ export class TestMaskComponent {
 
     public leadZeroDateTime: IConfig['leadZeroDateTime'] = false;
 
-    public leadZero: IConfig['leadZero'] = false;
+    // public leadZero: IConfig['leadZero'] = undefined
+    public leadZero: IConfig['leadZero'] | undefined;
 
     public triggerOnMaskChange: IConfig['triggerOnMaskChange'] = false;
 
