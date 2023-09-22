@@ -868,9 +868,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             typeof controlValue === 'string' ||
             typeof controlValue === 'number' ||
             controlValue === null
+            // ||
+            // controlValue === undefined
         ) {
             // eslint-disable-next-line no-param-reassign
-            let inputValue: string | number | null = controlValue;
+            let inputValue: string | number | null | undefined = controlValue;
             if (
                 typeof inputValue === 'number' ||
                 this._maskValue.startsWith(MaskExpression.SEPARATOR)
@@ -946,10 +948,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             this._inputValue = inputValue;
         } else {
+            // if (controlValue === undefined) {
+            //     this._maskService.formElementProperty = ['value', MaskExpression.EMPTY_STRING];
+            // } else {
             console.warn(
                 'Ngx-mask writeValue work with string | number, your current value:',
                 typeof controlValue
             );
+            // }
         }
     }
 
