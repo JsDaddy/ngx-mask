@@ -867,10 +867,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (
             typeof controlValue === 'string' ||
             typeof controlValue === 'number' ||
-            controlValue === null
+            controlValue === null ||
+            controlValue === undefined
         ) {
             // eslint-disable-next-line no-param-reassign
-            let inputValue: string | number | null = controlValue;
+            let inputValue: string | number | null | undefined = controlValue;
             if (
                 typeof inputValue === 'number' ||
                 this._maskValue.startsWith(MaskExpression.SEPARATOR)
