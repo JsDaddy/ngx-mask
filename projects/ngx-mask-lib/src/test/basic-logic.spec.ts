@@ -767,4 +767,11 @@ describe('Directive: Mask', () => {
         equal('123456-123456789/1234', '123456-123456789/1234', fixture);
         equal('123456-1234567891/1234', '123456-1234567891/1234', fixture);
     });
+
+    it('setValue undefined should return undefined ', () => {
+        component.mask = '0000';
+        equal('1234', '1234', fixture);
+        component.form.setValue(undefined);
+        expect(component.form.value).toBe(undefined);
+    });
 });
