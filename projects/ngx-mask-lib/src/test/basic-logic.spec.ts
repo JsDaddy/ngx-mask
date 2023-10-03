@@ -774,4 +774,20 @@ describe('Directive: Mask', () => {
         component.form.setValue(undefined);
         expect(component.form.value).toBe(undefined);
     });
+
+    it('after resetValue should show in model same value', () => {
+        component.mask = '0';
+        equal('1', '1', fixture);
+        component.form.reset();
+        equal('1', '1', fixture);
+        expect(component.form.value).toBe('1');
+    });
+
+    it('after resetValue should show in model same value', () => {
+        component.mask = '9';
+        equal('2', '2', fixture);
+        component.form.reset();
+        equal('2', '2', fixture);
+        expect(component.form.value).toBe('2');
+    });
 });
