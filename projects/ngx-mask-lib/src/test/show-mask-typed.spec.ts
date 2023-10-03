@@ -5,6 +5,8 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -159,5 +161,48 @@ describe('Directive: Mask', () => {
         equal('123040', '06123/040', fixture);
         equal('1230405', '06123/0405', fixture);
         equal('12304051', '06123/04051', fixture);
+    });
+
+    it('should work with showMaskTyped 000/00000', async () => {
+        component.mask = '000/00000';
+        component.showMaskTyped = false;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        expect(inputTarget.selectionStart).toBe(3);
+        component.showMaskTyped = true;
+        inputTarget.focus();
+
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).toBe('123/_____');
+        expect(inputTarget.selectionStart).toBe(3);
+    });
+
+    it('should work with showMaskTyped 000/00000 with prefix', async () => {
+        component.mask = '000/00000';
+        component.prefix = '+38 ';
+        component.showMaskTyped = false;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        equal('+38 1', '+38 1', fixture);
+        equal('+38 12', '+38 12', fixture);
+        equal('+38 123', '+38 123', fixture);
+        expect(inputTarget.selectionStart).toBe(7);
+        component.showMaskTyped = true;
+        inputTarget.focus();
+
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).toBe('+38 123/_____');
+        expect(inputTarget.selectionStart).toBe(7);
     });
 });

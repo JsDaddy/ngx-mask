@@ -26,23 +26,24 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     public triggerOnMaskChange = false;
 
+    public _previousValue = '';
+
+    public _currentValue = '';
+
+    private _emitValue = false;
+
     private _start!: number;
 
     private _end!: number;
 
-    private _emitValue = false;
-
-    private _previousValue = '';
-
-    private _currentValue = '';
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
+
+    public readonly _elementRef = inject(ElementRef, { optional: true });
 
     private readonly document = inject(DOCUMENT);
 
     protected override _config = inject<IConfig>(NGX_MASK_CONFIG);
-
-    private readonly _elementRef = inject(ElementRef, { optional: true });
 
     private readonly _renderer = inject(Renderer2, { optional: true });
 
@@ -72,6 +73,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(this.prefix);
             return this.prefix + this.maskIsShown;
         }
+
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
                 ? inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING
@@ -194,7 +196,6 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (this._previousValue === this._currentValue && justPasted);
         }
         this._emitValue ? this.formControlResult(result) : '';
-
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 if (backspaced) {
