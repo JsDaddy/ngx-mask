@@ -105,6 +105,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _justPasted = false;
 
+    private _isFocused = false;
+
     /**For IME composition event */
     private _isComposing = false;
 
@@ -213,6 +215,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (showMaskTyped) {
             this._maskService.showMaskTyped = showMaskTyped.currentValue;
+            if (
+                showMaskTyped.previousValue === false &&
+                showMaskTyped.currentValue === true &&
+                this._isFocused
+            ) {
+                requestAnimationFrame(() => {
+                    this._maskService._elementRef?.nativeElement.click();
+                });
+            }
         }
         if (placeHolderCharacter) {
             this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
@@ -393,6 +404,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._justPasted = true;
     }
 
+    @HostListener('focus', ['$event']) public onFocus() {
+        this._isFocused = true;
+    }
+
     @HostListener('ngModelChange', ['$event'])
     public onModelChange(value: string | undefined | null | number): void {
         // on form reset we need to update the actualValue
@@ -410,7 +425,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public onInput(e: CustomKeyboardEvent): void {
         // If IME is composing text, we wait for the composed text.
         if (this._isComposing) return;
-
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const transformedValue = this._maskService.inputTransformFn(el.value);
         if (el.type !== 'number') {
@@ -672,6 +686,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             this._maskService.clearIfNotMatchFn();
         }
+        this._isFocused = false;
         this.onTouch();
     }
 
@@ -680,6 +695,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (!this._maskValue) {
             return;
         }
+
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const posStart = 0;
         const posEnd = 0;
@@ -864,12 +880,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 ? this.inputTransformFn(controlValue)
                 : controlValue;
         }
+
         if (
             typeof controlValue === 'string' ||
             typeof controlValue === 'number' ||
             controlValue === null ||
             controlValue === undefined
         ) {
+            if (controlValue === null || controlValue === undefined) {
+                this._maskService._currentValue = '';
+                this._maskService._previousValue = '';
+            }
             // eslint-disable-next-line no-param-reassign
             let inputValue: string | number | null | undefined = controlValue;
             if (

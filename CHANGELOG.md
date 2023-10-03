@@ -1,3 +1,11 @@
+# 16.3.9(2023-10-02)
+
+### Fix
+
+-   Fix ([#1248](https://github.com/JsDaddy/ngx-mask/issues/1248))
+-   Fix ([#1246](https://github.com/JsDaddy/ngx-mask/issues/1246))
+-   Fix ([#1247](https://github.com/JsDaddy/ngx-mask/issues/1247))
+
 # 16.3.8(2023-09-18)
 
 ### Fix
@@ -289,6 +297,10 @@
 
 <a name=15.1.5></a>
 
+### Feature 15.2.1
+
+-  Upgrade version 15.2.1 with more fixes since version 16.x.x
+
 # 15.1.5(2023-05-12)
 
 ### Fix
@@ -374,6 +386,14 @@
 
 <a name="14.2.4"></a>
 
+### Feature 14.3.2
+
+-  Upgrade version 14.3.2 with more fixes since version 16.x.x
+-  Change MaskPipe => NgxMaskPipe
+-  Change MaskService => NgxMaskService
+-  Change MaskApplierService => NgxMaskApplierService
+-  Change MaskDirective => NgxMaskMaskDirective
+
 # 14.2.4(2022-10-27)
 
 ### Fix
@@ -444,6 +464,16 @@
 -   Update to Angular 14
 
 <a name="13.1.15"></a>
+
+### Feature 13.2.1
+
+-  Upgrade version 13.2.1 with more fixes since version 16.x.x
+-  Change MaskPipe => NgxMaskPipe
+-  Change MaskService => NgxMaskService
+-  Change MaskApplierService => NgxMaskApplierService
+-  Change MaskDirective => NgxMaskMaskDirective
+
+<a name="13.2.1"></a>
 
 # 13.1.15(2022-05-29)
 
