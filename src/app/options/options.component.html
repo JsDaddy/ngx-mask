@@ -1,3 +1,66 @@
+<input mask="09.09" />
+
+<!--<form [formGroup]="form">-->
+<!--    <label>NgxMask Time</label>-->
+<!--    <br />-->
+<!--    <br />-->
+<!--    <input-->
+<!--        name="ngxMaskInputTest"-->
+<!--        formControlName="ngxMaskInputTest"-->
+<!--        [mask]="maskConfig.mask"-->
+<!--        [showMaskTyped]="maskConfig.options.showMaskTyped"-->
+<!--        [shownMaskExpression]="maskConfig.mask"-->
+<!--        [placeHolderCharacter]="maskConfig.options.placeHolderCharacter"-->
+<!--        [specialCharacters]="maskConfig.options.specialCharacters"-->
+<!--        [patterns]="maskConfig.options.patterns"-->
+<!--        [dropSpecialCharacters]="maskConfig.options.dropSpecialCharacters"-->
+<!--        [leadZeroDateTime]="maskConfig.options.leadZeroDateTime"-->
+<!--        [autocomplete]="false" />-->
+<!--    {{ form.get('ngxMaskInputTest')?.value }}-->
+<!--</form>-->
+
+<!--<input mask="d0/M0/0000" [leadZeroDateTime]="true" [(ngModel)]="testValue" />-->
+<!--<input mask="Hh:m0" [leadZeroDateTime]="true" [(ngModel)]="testValue" />-->
+<!--{{ testValue }}-->
+
+<!--{{ mask }} / {{ negative }} <br /><br />-->
+<!--<input type="text" [mask]="mask" [allowNegativeNumbers]="negative" />-->
+<!--<br /><br />-->
+<!--&lt;!&ndash;<input type="text" [mask]="mask" [allowNegativeNumbers]="true" />&ndash;&gt;-->
+<!--&lt;!&ndash;<br /><br />&ndash;&gt;-->
+<!--<button (click)="changeIt()">Change</button>-->
+
+<!--<input-->
+<!--    [mask]="mask$ | async"-->
+<!--    [dropSpecialCharacters]="false"-->
+<!--    [formControl]="control"-->
+<!--    [patterns]="patterns" />-->
+<!--<div>value: {{ control.value }}</div>-->
+
+<!--<input type="text" [mask]="firstCustom" [patterns]="MASK_PATTERN" [(ngModel)]="testValue" />-->
+<!--{{ testValue }}-->
+
+<!--<input mask="09.99" />-->
+
+<!--<input [mask]="mask$ | async" [dropSpecialCharacters]="false" [formControl]="control" />-->
+
+<!--<div>value: {{ control.value }}</div>-->
+
+<!--<ng-container *ngTemplateOutlet="myTemplate; context: { val1: null, val2: null }"> </ng-container>-->
+<!--<ng-template #myTemplate let-val1="val1" let-val2="val2">-->
+<!--    <span-->
+<!--        >Part 1:-->
+<!--        <pre>{{ val1 | mask: firstCustom }}</pre>-->
+<!--    </span>-->
+<!--    <span-->
+<!--        >Part 2:-->
+<!--        <div>{{ val2 | mask: secondCustomMask : { patterns: MASK_PATTERN } }}</div>-->
+<!--    </span>-->
+<!--</ng-template>-->
+
+<!--<input type="text" mask="A*.00" [formControl]="formControl" [validation]="true" />-->
+<!--{{ formControl.valid }}-->
+
 <section class="content column bg-full-white" *ngIf="activeCardId$ | async as activeCardId">
     <div
         class="card"

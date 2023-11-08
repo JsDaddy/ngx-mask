@@ -449,4 +449,17 @@ describe('Directive: Mask (Time)', () => {
         equal('0109', '01/09/____', fixture);
         equal('01/03/2011', '01/03/2011', fixture);
     });
+
+    it('Date (d0/M0/0000 leadZero)', () => {
+        component.mask = 'M0/d0/0000';
+        component.leadZeroDateTime = true;
+        equal('4122000', '04/12/2000', fixture);
+        equal('442000', '04/04/2000', fixture);
+    });
+
+    it('Date (Hh:m0 leadZero)', () => {
+        component.mask = 'Hh:m0';
+        component.leadZeroDateTime = true;
+        equal('49', '04:09', fixture);
+    });
 });
