@@ -259,4 +259,33 @@ describe('Test Date Hh:m0', () => {
             .should('have.value', '12.345.678,9')
             .should('have.prop', 'selectionStart', 11);
     });
+
+    it('Mask d0/M0/0000 should set cursor on right position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'd0/M0/0000',
+                leadZeroDateTime: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('33')
+            .should('have.value', '03/03')
+            .should('have.prop', 'selectionStart', 5);
+    });
+
+    it('Mask d0/M0/0000 should set cursor on right position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'd0/M0/0000',
+                leadZeroDateTime: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('913')
+            .should('have.value', '09/01/3')
+            .should('have.prop', 'selectionStart', 7);
+    });
 });

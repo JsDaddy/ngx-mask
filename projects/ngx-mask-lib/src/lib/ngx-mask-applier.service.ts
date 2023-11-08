@@ -669,7 +669,6 @@ export class NgxMaskApplierService {
                 .split(MaskExpression.MINUS)
                 .join(MaskExpression.EMPTY_STRING)}${this.suffix}`;
         }
-
         return res;
     }
 
