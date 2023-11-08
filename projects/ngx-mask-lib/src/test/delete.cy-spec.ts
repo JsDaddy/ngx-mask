@@ -1,5 +1,6 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
 import { CypressTestMaskModule } from './utils/cypress-test.module';
+import { FormControl } from '@angular/forms';
 
 describe('Directive: Mask (Delete)', () => {
     it('cursor should correct delete with ViewEncapsulation.ShadowDom showMaskTyped=true', () => {
@@ -137,5 +138,67 @@ describe('Directive: Mask (Delete)', () => {
             .invoke('val', '15')
             .trigger('input');
         cy.get('#pre1').should('have.text', '15');
+    });
+
+    it('should not delete special character from backspace', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                form: new FormControl('12345678'),
+                mask: '00D : 00H : 00M : 00S',
+                shownMaskExpression: '00D : 00H : 00M : 00S',
+                showMaskTyped: true,
+                dropSpecialCharacters: false,
+                leadZeroDateTime: true,
+                placeHolderCharacter: '',
+                patterns: {
+                    '0': { pattern: /\d/ },
+                    '9': { pattern: /\d/, optional: true },
+                    A: { pattern: /[a-zA-Z0-9]/ },
+                    L: { pattern: /[a-z]/ },
+                    S: { pattern: /[a-zA-Z]/ },
+                    U: { pattern: /[A-Z]/ },
+                    X: { pattern: /\d/, symbol: '*' },
+                    d: { pattern: /\d/ },
+                    h: { pattern: /\d/ },
+                    s: { pattern: /\d/ },
+                    D: { pattern: /D/ }, // custom: The D on the mask can only be the D character
+                    H: { pattern: /H/ }, // custom: the H on the mask can only be the H character
+                    M: { pattern: /M/ }, // custom: the M on the mask can only be the M character
+                    '\\S': { pattern: /\S/ }, // custom: the S on the mask can only be the S character. Escape it to prevent digits from being removed from the value
+                },
+                specialCharacters: [
+                    '-',
+                    '/',
+                    '(',
+                    ')',
+                    '.',
+                    ':',
+                    ' ',
+                    '+',
+                    ',',
+                    '@',
+                    '[',
+                    ']',
+                    '"',
+                    "'",
+                    'D',
+                    'H',
+                    'M',
+                    '\\S',
+                ],
+            },
+            imports: [CypressTestMaskModule],
+        });
+        cy.get('#masked')
+            .type('{rightArrow}'.repeat(1))
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}')
+            .should('have.value', '12D : 34H : 56M : 78S')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '12D : 34H : 56M : 78S')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '12D : 34H : 56M : 78S');
     });
 });

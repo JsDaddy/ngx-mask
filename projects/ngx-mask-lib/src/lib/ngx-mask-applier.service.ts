@@ -324,6 +324,7 @@ export class NgxMaskApplierService {
                 if (cursor === maskExpression.length) {
                     break;
                 }
+
                 const symbolStarInPattern: boolean = MaskExpression.SYMBOL_STAR in this.patterns;
                 if (
                     this._checkSymbolMask(
@@ -373,7 +374,7 @@ export class NgxMaskApplierService {
                     if (maskExpression[cursor] === MaskExpression.HOURS) {
                         if (this.apm ? Number(inputSymbol) > 9 : Number(inputSymbol) > 2) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -413,7 +414,7 @@ export class NgxMaskApplierService {
                     ) {
                         if (Number(inputSymbol) > 5) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -458,7 +459,7 @@ export class NgxMaskApplierService {
                                   this.specialCharacters.includes(inputValueCursorPlusOne))
                         ) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -530,7 +531,7 @@ export class NgxMaskApplierService {
                             (day2monthInputDot && !this.leadZeroDateTime)
                         ) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;

@@ -1155,4 +1155,14 @@ describe('Separator: Mask', () => {
 
         equal('-00', '-0', fixture);
     }));
+
+    it('should allow minus after change it to true', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.allowNegativeNumbers = false;
+        fixture.detectChanges();
+
+        equal('-1234', '1 234', fixture);
+        component.allowNegativeNumbers = true;
+        equal('-1234', '-1 234', fixture);
+    }));
 });

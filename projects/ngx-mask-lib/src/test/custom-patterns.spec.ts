@@ -128,3 +128,53 @@ describe('Directive: Mask (Provide custom patterns with symbol *)', () => {
         equal('1234567890', '12345-67890', fixture);
     });
 });
+
+describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    const ngxMaskConfig: IConfig = {
+        ...initialConfig,
+        patterns: {
+            f: {
+                pattern: /[a-zA-Z0-9 ]/,
+            },
+            F: {
+                pattern: /[а-яА-Яa-zA-Z0-9 ]/,
+            },
+        },
+    };
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestMaskComponent],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask(ngxMaskConfig)],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('custom patterns f* should work not delete space after setTimeout', () => {
+        component.mask = 'f*';
+        equal('test value', 'test value', fixture);
+        equal('test value with', 'test value with', fixture);
+        equal('test value with space', 'test value with space', fixture);
+        setTimeout(() => {
+            component.mask = 'F*';
+            expect(component.form.value).toBe('test value with space');
+        });
+    });
+
+    it('custom patterns F* should work not delete space after setTimeout', () => {
+        component.mask = 'F*';
+        equal('test value', 'test value', fixture);
+        equal('test value with', 'test value with', fixture);
+        equal('test value with space', 'test value with space', fixture);
+        setTimeout(() => {
+            component.mask = 'f*';
+            expect(component.form.value).toBe('test value with space');
+        });
+    });
+});

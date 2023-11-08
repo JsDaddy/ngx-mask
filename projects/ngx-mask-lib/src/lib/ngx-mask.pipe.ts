@@ -89,6 +89,9 @@ export class NgxMaskPipe implements PipeTransform {
             }
             this._maskService.isNumberValue = true;
         }
+        if (value === null || value === undefined) {
+            return this._maskService.applyMask('', mask);
+        }
         return this._maskService.applyMask(`${value}`, mask);
     }
 
