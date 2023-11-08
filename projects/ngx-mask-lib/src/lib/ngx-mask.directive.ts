@@ -569,6 +569,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         inputSymbol +
                         this._inputValue.slice(position + 1);
                 }
+                if (
+                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
+                    this.leadZeroDateTime
+                ) {
+                    if (
+                        (position < 3 && Number(el.value) > 31 && Number(el.value) < 40) ||
+                        (position === 5 && Number(el.value.slice(3, 5)) > 12)
+                    ) {
+                        position = position + 2;
+                    }
+                }
 
                 if (
                     this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
