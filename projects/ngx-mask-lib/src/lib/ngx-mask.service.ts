@@ -119,7 +119,15 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (justPasted && (this.hiddenInput || !this.hiddenInput)) {
             newInputValue = inputValue;
         }
-
+        if (
+            backspaced &&
+            this.specialCharacters.indexOf(
+                this.maskExpression[position] ?? MaskExpression.EMPTY_STRING
+            ) !== -1 &&
+            this.showMaskTyped
+        ) {
+            newInputValue = this._currentValue;
+        }
         if (this.deletedSpecialCharacter && position) {
             if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
                 // eslint-disable-next-line no-param-reassign
@@ -195,6 +203,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 this.maskChanged ||
                 (this._previousValue === this._currentValue && justPasted);
         }
+
         this._emitValue ? this.formControlResult(result) : '';
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
@@ -581,6 +590,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return value;
         }
+
         return value
             ? value.replace(
                   this._regExpForRemove(specialCharactersForRemove),
@@ -604,11 +614,20 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     private _retrieveSeparatorValue(result: string): string {
-        const specialCharacters = Array.isArray(this.dropSpecialCharacters)
+        let specialCharacters = Array.isArray(this.dropSpecialCharacters)
             ? this.specialCharacters.filter((v) => {
                   return (this.dropSpecialCharacters as string[]).includes(v);
               })
             : this.specialCharacters;
+        if (
+            !this.deletedSpecialCharacter &&
+            this._checkPatternForSpace() &&
+            result.includes(MaskExpression.WHITE_SPACE)
+        ) {
+            specialCharacters = specialCharacters.filter(
+                (char) => char !== MaskExpression.WHITE_SPACE
+            );
+        }
         return this._removeMask(result, specialCharacters as string[]);
     }
 
@@ -662,6 +681,22 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
     }
 
+    private _checkPatternForSpace(): boolean {
+        for (const key in this.patterns) {
+            // eslint-disable-next-line no-prototype-builtins
+            if (this.patterns[key] && this.patterns[key]?.hasOwnProperty('pattern')) {
+                const patternString = this.patterns[key]?.pattern.toString();
+                const pattern = this.patterns[key]?.pattern;
+                if (
+                    (patternString?.includes(MaskExpression.WHITE_SPACE) as boolean) &&
+                    pattern?.test(this.maskExpression)
+                ) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
     // TODO should think about helpers or separting decimal precision to own property
     private _retrieveSeparatorPrecision(maskExpretion: string): number | null {
         const matcher: RegExpMatchArray | null = maskExpretion.match(

@@ -790,4 +790,14 @@ describe('Directive: Mask', () => {
         equal('2', '2', fixture);
         expect(component.form.value).toBe('2');
     });
+
+    it('should work with optional mask 09.09', () => {
+        component.mask = '09.09';
+        equal('2', '2', fixture);
+        equal('2.3', '2.3', fixture);
+        equal('2.34', '2.34', fixture);
+        equal('21', '21', fixture);
+        equal('21.2', '21.2', fixture);
+        equal('21.24', '21.24', fixture);
+    });
 });

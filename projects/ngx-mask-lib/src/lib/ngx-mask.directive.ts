@@ -156,15 +156,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             ) {
                 this._maskService.maskChanged = true;
             }
-            if (allowNegativeNumbers) {
-                this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
-                if (this._maskService.allowNegativeNumbers) {
-                    this._maskService.specialCharacters =
-                        this._maskService.specialCharacters.filter(
-                            (c: string) => c !== MaskExpression.MINUS
-                        );
-                }
-            }
             if (
                 maskExpression.currentValue &&
                 maskExpression.currentValue.split(MaskExpression.OR).length > 1
@@ -179,6 +170,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskExpressionArray = [];
                 this._maskValue = maskExpression.currentValue || MaskExpression.EMPTY_STRING;
                 this._maskService.maskExpression = this._maskValue;
+            }
+        }
+        if (allowNegativeNumbers) {
+            this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
+            if (this._maskService.allowNegativeNumbers) {
+                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
+                    (c: string) => c !== MaskExpression.MINUS
+                );
             }
         }
         if (specialCharacters) {
@@ -946,6 +945,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
             this._inputValue = inputValue;
             this._setMask();
+
             if (
                 (inputValue && this._maskService.maskExpression) ||
                 (this._maskService.maskExpression &&

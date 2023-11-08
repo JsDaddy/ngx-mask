@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { scan, startWith } from 'rxjs';
+import { IConfig, NGX_MASK_CONFIG } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -15,14 +16,23 @@ import { scan, startWith } from 'rxjs';
             [showMaskTyped]="showMaskTyped"
             [decimalMarker]="decimalMarker"
             [thousandSeparator]="thousandSeparator"
+            [shownMaskExpression]="shownMaskExpression"
+            [leadZeroDateTime]="leadZeroDateTime"
+            [dropSpecialCharacters]="dropSpecialCharacters"
+            [specialCharacters]="specialCharacters"
+            [patterns]="patterns"
             [keepCharacterPositions]="keepCharacterPositions"
             [hiddenInput]="hiddenInput" />
 
         <pre id="pre">{{ counter$ | async }}</pre>
         <pre id="pre1">{{ form.value }}</pre>
+        <div>
+            {{ leadZeroDateTime }}
+        </div>
     `,
 })
 export class CypressTestMaskComponent {
+    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
     @Input() public mask = '';
 
     @Input() public hiddenInput = false;
@@ -40,6 +50,18 @@ export class CypressTestMaskComponent {
     @Input() public thousandSeparator = ',';
 
     @Input() public keepCharacterPositions = false;
+
+    @Input() public shownMaskExpression = '';
+
+    @Input() public placeHolderCharacter = '';
+
+    @Input() public dropSpecialCharacters = true;
+
+    @Input() public leadZeroDateTime = false;
+
+    @Input() public patterns = this._config.patterns;
+
+    @Input() public specialCharacters = this._config.specialCharacters;
 
     public form: FormControl = new FormControl('');
 
