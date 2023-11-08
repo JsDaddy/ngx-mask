@@ -6,7 +6,7 @@
 -   Fix ([#1261](https://github.com/JsDaddy/ngx-mask/issues/1261))
 -   Fix ([#1258](https://github.com/JsDaddy/ngx-mask/issues/1258))
 -   Fix ([#1262](https://github.com/JsDaddy/ngx-mask/issues/1262))
--   Fix ([#1254](https://github.com/JsDaddy/ngx-mask/issues/1254))
+-   Fix ([#1254](ht 4tps://github.com/JsDaddy/ngx-mask/issues/1254))
 -   Fix ([#1256](https://github.com/JsDaddy/ngx-mask/issues/1256))
 
 # 16.3.9(2023-10-02)
