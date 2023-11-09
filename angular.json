@@ -15,20 +15,20 @@
                     "options": {
                         "outputPath": "dist/ngx-mask",
                         "index": "src/index.html",
-                        "browser": "src/main.ts",
                         "polyfills": [
                             "zone.js"
                         ],
-                        "tsConfig": "tsconfig.app.json",
-                        "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ],
+                        "tsConfig": "src/tsconfig.app.json",
+                        "assets": ["src/assets", "src/favicon.ico"],
                         "styles": [
+                            "node_modules/highlight.js/styles/github.css",
                             "src/styles.scss"
                         ],
-                        "scripts": []
+                        "scripts": [],
+                        "extractLicenses": false,
+                        "sourceMap": true,
+                        "optimization": false,
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
