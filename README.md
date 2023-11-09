@@ -23,9 +23,13 @@ You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-cop
 
 
 ## Installing
-Angular version 16.x.x
+Angular version 17.x.x
 ```bash
 $ npm install --save ngx-mask
+```
+Angular version 16.x.x
+```bash
+$ npm install --save ngx-mask@16.4.1
 ```
 Angular version 15.x.x
 ```bash
