@@ -7,7 +7,7 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -29,22 +29,20 @@ import { AccordionService } from '@open-source/accordion/accordion.service';
     standalone: true,
     providers: [ScrollService, AccordionService],
     imports: [
-        JsonPipe,
-        NgFor,
-        NgIf,
-        NgClass,
-        NgTemplateOutlet,
-        FormsModule,
-        ReactiveFormsModule,
-        HighlightModule,
-        NgxMaskDirective,
-        NgxMaskPipe,
-        AssetPipe,
-        IsEmptyPipe,
-        ColorPipe,
-        CardContentComponent,
-        AsyncPipe,
-    ],
+    JsonPipe,
+    NgClass,
+    NgTemplateOutlet,
+    FormsModule,
+    ReactiveFormsModule,
+    HighlightModule,
+    NgxMaskDirective,
+    NgxMaskPipe,
+    AssetPipe,
+    IsEmptyPipe,
+    ColorPipe,
+    CardContentComponent,
+    AsyncPipe
+],
 })
 export class OptionsComponent implements AfterViewInit {
     @Input() public cardDocs!: IComDoc[];
