@@ -208,16 +208,16 @@ export class NgxMaskApplierService {
                         ? inputValue.slice(0, inputValue.length - 1)
                         : inputValue
                     : inputValue.length > 1 &&
-                      inputValue[0] === '0' &&
-                      inputValue[1] !== this.thousandSeparator &&
-                      !this._compareOrIncludes(
-                          inputValue[1],
-                          this.decimalMarker,
-                          this.thousandSeparator
-                      ) &&
-                      !backspaced
-                    ? inputValue.slice(0, inputValue.length - 1)
-                    : inputValue;
+                        inputValue[0] === '0' &&
+                        inputValue[1] !== this.thousandSeparator &&
+                        !this._compareOrIncludes(
+                            inputValue[1],
+                            this.decimalMarker,
+                            this.thousandSeparator
+                        ) &&
+                        !backspaced
+                      ? inputValue.slice(0, inputValue.length - 1)
+                      : inputValue;
             if (backspaced) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
@@ -641,8 +641,8 @@ export class NgxMaskApplierService {
             justPasted && !maskExpression.startsWith(MaskExpression.SEPARATOR)
                 ? cursor
                 : this._shift.has(position)
-                ? shift
-                : 0;
+                  ? shift
+                  : 0;
         if (stepBack) {
             actualShift--;
         }

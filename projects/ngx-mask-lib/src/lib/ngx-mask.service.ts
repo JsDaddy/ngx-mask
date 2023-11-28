@@ -95,12 +95,12 @@ export class NgxMaskService extends NgxMaskApplierService {
                         ? inputValue.length > actualResult.length
                             ? actualResult.splice(this.selStart, 0, getSymbol)
                             : inputValue.length < actualResult.length
-                            ? actualResult.length - inputValue.length === 1
-                                ? backspaced
-                                    ? actualResult.splice(this.selStart - 1, 1)
-                                    : actualResult.splice(inputValue.length - 1, 1)
-                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-                            : null
+                              ? actualResult.length - inputValue.length === 1
+                                  ? backspaced
+                                      ? actualResult.splice(this.selStart - 1, 1)
+                                      : actualResult.splice(inputValue.length - 1, 1)
+                                  : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                              : null
                         : null
                     : (actualResult = []);
             }
