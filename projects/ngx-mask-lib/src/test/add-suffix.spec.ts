@@ -38,4 +38,14 @@ describe('Directive: Mask (Add suffix)', () => {
         component.suffix = '.sh';
         equal('h', 'h.sh', fixture);
     });
+
+    it('should display suffix at the end with showMaskTyped mask 0 000', () => {
+        component.mask = '0 000';
+        component.suffix = '$';
+        component.showMaskTyped = true;
+        equal('1', '1 ___$', fixture);
+        equal('12', '1 2__$', fixture);
+        equal('123', '1 23_$', fixture);
+        equal('1234', '1 234$', fixture);
+    });
 });

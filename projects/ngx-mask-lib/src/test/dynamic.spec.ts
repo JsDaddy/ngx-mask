@@ -245,4 +245,27 @@ describe('Directive: Mask (Dynamic)', () => {
         equal('123SD', '123SD', fixture);
         expect(component.form.valid).toBeTrue();
     });
+
+    it('should be valid if mask dont changes  00000||00000-0000', () => {
+        component.mask = '00000||00000-0000';
+        component.showMaskTyped = true;
+        equal('1', '1____', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('11', '11___', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('123', '123__', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('1234', '1234_', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('12345', '12345', fixture);
+        expect(component.form.valid).toBeTrue();
+        equal('123456', '12345-6___', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('1234567', '12345-67__', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('12345678', '12345-678_', fixture);
+        expect(component.form.invalid).toBeTrue();
+        equal('123456789', '12345-6789', fixture);
+        expect(component.form.valid).toBeTrue();
+    });
 });

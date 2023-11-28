@@ -71,7 +71,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
-            return this.prefix + this.maskIsShown;
+            return this.prefix + this.maskIsShown + this.suffix;
         }
 
         const getSymbol: string =
@@ -95,12 +95,12 @@ export class NgxMaskService extends NgxMaskApplierService {
                         ? inputValue.length > actualResult.length
                             ? actualResult.splice(this.selStart, 0, getSymbol)
                             : inputValue.length < actualResult.length
-                            ? actualResult.length - inputValue.length === 1
-                                ? backspaced
-                                    ? actualResult.splice(this.selStart - 1, 1)
-                                    : actualResult.splice(inputValue.length - 1, 1)
-                                : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-                            : null
+                              ? actualResult.length - inputValue.length === 1
+                                  ? backspaced
+                                      ? actualResult.splice(this.selStart - 1, 1)
+                                      : actualResult.splice(inputValue.length - 1, 1)
+                                  : actualResult.splice(this.selStart, this.selEnd - this.selStart)
+                              : null
                         : null
                     : (actualResult = []);
             }
@@ -218,7 +218,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return result;
         }
         const resLen: number = result.length;
-        const prefNmask: string = this.prefix + this.maskIsShown;
+        const prefNmask: string = this.prefix + this.maskIsShown + this.suffix;
 
         if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
@@ -580,6 +580,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             const val = String(value).replace(',', '.');
             return Number(val);
         }
+
         return Number.isNaN(num) ? value : num;
     }
 
@@ -622,7 +623,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (
             !this.deletedSpecialCharacter &&
             this._checkPatternForSpace() &&
-            result.includes(MaskExpression.WHITE_SPACE)
+            result.includes(MaskExpression.WHITE_SPACE) &&
+            this.maskExpression.includes(MaskExpression.SYMBOL_STAR)
         ) {
             specialCharacters = specialCharacters.filter(
                 (char) => char !== MaskExpression.WHITE_SPACE
