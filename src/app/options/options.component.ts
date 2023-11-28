@@ -8,7 +8,7 @@ import {
     ViewChildren,
 } from '@angular/core';
 import { AsyncPipe, JsonPipe, NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -60,6 +60,18 @@ export class OptionsComponent implements AfterViewInit {
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
 
+    public testValue = 'some value with space';
+    public mask = 'f*';
+    public form;
+    public constructor(fb: FormBuilder) {
+        this.form = fb.group({
+            zipcode: new FormControl(),
+            zipcodeNoMaskTyped: new FormControl(),
+        });
+        setTimeout(() => {
+            this.mask = 'F*';
+        }, 3000);
+    }
     public ngAfterViewInit(): void {
         this.scrollService.onScroll(this.cards);
         this.accordionService.onChangeAccordion(this.cards);

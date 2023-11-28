@@ -97,7 +97,7 @@ export class NgxMaskApplierService {
         let backspaceShift = false;
         let shift = 1;
         let stepBack = false;
-        if (inputValue.slice(0, this.prefix.length) === this.prefix && !this.showMaskTyped) {
+        if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -656,8 +656,9 @@ export class NgxMaskApplierService {
             onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
-            this.suffix
+            this.showMaskTyped ? '' : this.suffix
         }`;
+
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
@@ -676,7 +677,6 @@ export class NgxMaskApplierService {
         if (Array.isArray(this.dropSpecialCharacters)) {
             return this.dropSpecialCharacters.find((val: string) => val === inputSymbol);
         }
-
         return this._findSpecialChar(inputSymbol);
     }
 

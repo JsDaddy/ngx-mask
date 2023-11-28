@@ -172,19 +172,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskService.maskExpression = this._maskValue;
             }
         }
+        if (specialCharacters) {
+            if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
+                return;
+            } else {
+                this._maskService.specialCharacters = specialCharacters.currentValue || [];
+            }
+        }
         if (allowNegativeNumbers) {
             this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
             if (this._maskService.allowNegativeNumbers) {
                 this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
                     (c: string) => c !== MaskExpression.MINUS
                 );
-            }
-        }
-        if (specialCharacters) {
-            if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
-                return;
-            } else {
-                this._maskService.specialCharacters = specialCharacters.currentValue || [];
             }
         }
         // Only overwrite the mask available patterns if a pattern has actually been passed in
@@ -455,6 +455,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         this._maskService.maskExpression[position - 1 - prefixLength] ??
                             MaskExpression.EMPTY_STRING
                     );
+
                     const checkSpecialCharacter: boolean = this._maskService._checkSymbolMask(
                         inputSymbol,
                         this._maskService.maskExpression[position + 1 - prefixLength] ??
@@ -540,13 +541,42 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 el.value.slice(position + 2);
                             position = position + 1;
                         } else if (checkSymbols) {
+                            if (el.value.length === 1 && position === 1) {
+                                this._maskService.actualValue =
+                                    this.prefix +
+                                    inputSymbol +
+                                    this._maskService.maskIsShown.slice(
+                                        1,
+                                        this._maskService.maskIsShown.length
+                                    ) +
+                                    this.suffix;
+                            } else {
+                                this._maskService.actualValue =
+                                    el.value.slice(0, position - 1) +
+                                    inputSymbol +
+                                    el.value
+                                        .slice(position + 1)
+                                        .split(this.suffix)
+                                        .join('') +
+                                    this.suffix;
+                            }
+                        } else if (
+                            this.prefix &&
+                            el.value.length === 1 &&
+                            position - prefixLength === 1 &&
+                            this._maskService._checkSymbolMask(
+                                el.value,
+                                this._maskService.maskExpression[position - 1 - prefixLength] ??
+                                    MaskExpression.EMPTY_STRING
+                            )
+                        ) {
                             this._maskService.actualValue =
-                                el.value.slice(0, position - 1) +
-                                inputSymbol +
-                                el.value
-                                    .slice(position + 1)
-                                    .split(this.suffix)
-                                    .join('') +
+                                this.prefix +
+                                el.value +
+                                this._maskService.maskIsShown.slice(
+                                    1,
+                                    this._maskService.maskIsShown.length
+                                ) +
                                 this.suffix;
                         }
                     }
@@ -897,7 +927,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             controlValue === null ||
             controlValue === undefined
         ) {
-            if (controlValue === null || controlValue === undefined) {
+            if (controlValue === null || controlValue === undefined || controlValue === '') {
                 this._maskService._currentValue = '';
                 this._maskService._previousValue = '';
             }
@@ -1096,7 +1126,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 : expression;
                 }
             } else {
-                const check: boolean = this._inputValue
+                const check: boolean = this._maskService
+                    .removeMask(this._inputValue)
                     ?.split(MaskExpression.EMPTY_STRING)
                     .every((character, index) => {
                         const indexMask = mask.charAt(index);
