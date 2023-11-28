@@ -800,4 +800,20 @@ describe('Directive: Mask', () => {
         equal('21.2', '21.2', fixture);
         equal('21.24', '21.24', fixture);
     });
+
+    it('should work change value after setValue to empty string mask 9', () => {
+        component.mask = '9';
+        equal('2', '2', fixture);
+        component.form.setValue('');
+        equal('2', '2', fixture);
+        expect(component.form.value).toBe('2');
+    });
+
+    it('should work change value after setValue to empty string mask 0', () => {
+        component.mask = '0';
+        equal('4', '4', fixture);
+        component.form.setValue('');
+        equal('4', '4', fixture);
+        expect(component.form.value).toBe('4');
+    });
 });

@@ -5,12 +5,12 @@ const commonjsGlobal =
     typeof globalThis !== 'undefined'
         ? globalThis
         : typeof window !== 'undefined'
-        ? window
-        : typeof global !== 'undefined'
-        ? global
-        : typeof self !== 'undefined'
-        ? self
-        : {};
+          ? window
+          : typeof global !== 'undefined'
+            ? global
+            : typeof self !== 'undefined'
+              ? self
+              : {};
 
 (function () {
     if (!commonjsGlobal.KeyboardEvent) {

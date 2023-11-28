@@ -6,6 +6,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { initialConfig } from 'ngx-mask';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -1164,5 +1165,45 @@ describe('Separator: Mask', () => {
         equal('-1234', '1 234', fixture);
         component.allowNegativeNumbers = true;
         equal('-1234', '-1 234', fixture);
+    }));
+
+    it('should change value in formControl mask separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.allowNegativeNumbers = true;
+        component.specialCharacters = [...initialConfig.specialCharacters];
+        fixture.detectChanges();
+
+        equal('-1234.10', '-1 234.10', fixture);
+        expect(component.form.value).toBe('-1234.10');
+    }));
+
+    it('should change value in formControl mask separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.allowNegativeNumbers = true;
+        component.specialCharacters = [...initialConfig.specialCharacters];
+        fixture.detectChanges();
+
+        equal('-1234.567', '-1 234.567', fixture);
+        expect(component.form.value).toBe('-1234.567');
+    }));
+
+    it('should change value in formControl mask separator.1', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.allowNegativeNumbers = true;
+        component.specialCharacters = [...initialConfig.specialCharacters];
+        fixture.detectChanges();
+
+        equal('-1234.9', '-1 234.9', fixture);
+        expect(component.form.value).toBe('-1234.9');
+    }));
+
+    it('should change value in formControl mask separator.0', fakeAsync(() => {
+        component.mask = 'separator.0';
+        component.allowNegativeNumbers = true;
+        component.specialCharacters = [...initialConfig.specialCharacters];
+        fixture.detectChanges();
+
+        equal('-1234', '-1 234', fixture);
+        expect(component.form.value).toBe('-1234');
     }));
 });
