@@ -27,12 +27,12 @@ import {
     styleUrls: ['./app.component.scss'],
     standalone: true,
     imports: [
-    OptionsComponent,
-    HeaderComponent,
-    SubHeaderComponent,
-    AccordionComponent,
-    FooterComponent
-],
+        OptionsComponent,
+        HeaderComponent,
+        SubHeaderComponent,
+        AccordionComponent,
+        FooterComponent,
+    ],
 })
 export class AppComponent {
     public card: {
