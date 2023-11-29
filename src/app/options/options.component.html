@@ -1,5 +1,3 @@
-<input mask="" type="number" />
-
 @if (activeCardId$ | async; as activeCardId) {
     <section class="content column bg-full-white">
         @for (tile of cardDocs; track trackByPath(i, tile); let i = $index) {
