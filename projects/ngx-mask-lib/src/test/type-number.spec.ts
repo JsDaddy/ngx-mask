@@ -59,4 +59,13 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         equal('100', '100', fixture);
         equal('99', '99', fixture);
     });
+
+    it('should be editable with empty mask', () => {
+        component.mask = '';
+
+        equal('100', '100', fixture);
+        equal('99', '99', fixture);
+        equal('1', '1', fixture);
+        equal('1324', '1324', fixture);
+    });
 });

@@ -639,6 +639,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     return;
                 }
 
+                if (this._maskService.plusOnePosition) {
+                    position = position + 1;
+                    this._maskService.plusOnePosition = false;
+                }
                 // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
                 if (this._maskExpressionArray.length) {
                     if (this._code === MaskExpression.BACKSPACE) {
@@ -660,9 +664,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     ? this._inputValue.length + position + caretShift
                     : position +
                       (this._code === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
-
                 if (positionToApply > this._getActualInputLength()) {
-                    positionToApply = this._getActualInputLength();
+                    positionToApply =
+                        el.value === this._maskService.decimalMarker && el.value.length === 1
+                            ? this._getActualInputLength() + 1
+                            : this._getActualInputLength();
                 }
                 if (positionToApply < 0) {
                     positionToApply = 0;
@@ -676,6 +682,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 );
             }
         } else {
+            if (!this._maskValue) {
+                this.onChange(el.value);
+                return;
+            }
             this._maskService.applyValueChanges(
                 el.value.length,
                 this._justPasted,

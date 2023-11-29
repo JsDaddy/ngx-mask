@@ -565,7 +565,7 @@ describe('Separator: Mask', () => {
         equal('0', '0', fixture);
         equal('0,', '0,', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0,1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
         // TODO(inepipenko): strange thet return 0.
@@ -574,16 +574,16 @@ describe('Separator: Mask', () => {
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0.1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
-        equal('0,', '0', fixture);
+        equal('0,', '0.', fixture);
         component.decimalMarker = ['.', ','];
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
-        equal('0,', '0,', fixture);
+        equal('0,', '0.', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0.1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
     });
@@ -1124,7 +1124,7 @@ describe('Separator: Mask', () => {
         component.allowNegativeNumbers = true;
         fixture.detectChanges();
 
-        equal('-00', '-0', fixture);
+        equal('-00', '-0,0', fixture);
     }));
 
     it('should not allow add two zeros to inputValue', fakeAsync(() => {
@@ -1134,7 +1134,7 @@ describe('Separator: Mask', () => {
         component.allowNegativeNumbers = true;
         fixture.detectChanges();
 
-        equal('-00', '-0', fixture);
+        equal('-00', '-0.0', fixture);
     }));
 
     it('should not allow add two zeros to inputValue', fakeAsync(() => {
@@ -1144,7 +1144,7 @@ describe('Separator: Mask', () => {
         component.allowNegativeNumbers = true;
         fixture.detectChanges();
 
-        equal('-00', '-0', fixture);
+        equal('-00', '-0,0', fixture);
     }));
 
     it('should not allow add two zeros to inputValue', fakeAsync(() => {
@@ -1154,7 +1154,7 @@ describe('Separator: Mask', () => {
         component.allowNegativeNumbers = true;
         fixture.detectChanges();
 
-        equal('-00', '-0', fixture);
+        equal('-00', '-0,0', fixture);
     }));
 
     it('should allow minus after change it to true', fakeAsync(() => {
@@ -1205,5 +1205,246 @@ describe('Separator: Mask', () => {
 
         equal('-1234', '-1 234', fixture);
         expect(component.form.value).toBe('-1234');
+    }));
+
+    it('should change value if user star from zero separator.0', fakeAsync(() => {
+        component.mask = 'separator.0';
+        fixture.detectChanges();
+
+        equal('03', '3', fixture);
+        equal('034', '34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = '.';
+        fixture.detectChanges();
+
+        equal('03', '0.3', fixture);
+        equal('034', '0.3', fixture);
+        equal('.3', '0.3', fixture);
+        equal('.34', '0.3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = ',';
+        fixture.detectChanges();
+
+        equal('03', '0,3', fixture);
+        equal('034', '0,3', fixture);
+        equal(',3', '0,3', fixture);
+        equal(',34', '0,3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        fixture.detectChanges();
+
+        equal('03', '0.3', fixture);
+        equal('034', '0.34', fixture);
+        equal('.3', '0.3', fixture);
+        equal('.34', '0.34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        fixture.detectChanges();
+
+        equal('03', '0,3', fixture);
+        equal('034', '0,34', fixture);
+        equal(',3', '0,3', fixture);
+        equal(',34', '0,34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = '.';
+        fixture.detectChanges();
+
+        equal('03', '0.3', fixture);
+        equal('034', '0.34', fixture);
+        equal('.3', '0.3', fixture);
+        equal('.34', '0.34', fixture);
+        equal('.345', '0.345', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = ',';
+        fixture.detectChanges();
+
+        equal('03', '0,3', fixture);
+        equal('034', '0,34', fixture);
+        equal(',3', '0,3', fixture);
+        equal(',34', '0,34', fixture);
+        equal(',345', '0,345', fixture);
+    }));
+
+    it('should change value if user star from zero separator.0 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.0';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-3', fixture);
+        equal('-034', '-34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.3', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1 with allowNegativeNumber decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,3', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.2 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.34', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.2 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,34', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.34', fixture);
+        equal('-0345', '-0.345', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.34', fixture);
+        equal('-.345', '-0.345', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3 with allowNegativeNumber', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,34', fixture);
+        equal('-0345', '-0,345', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,34', fixture);
+        equal('-,345', '-0,345', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,3', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.3', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.3', fixture);
+    }));
+
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,34', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.2 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.34', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.34', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0,3', fixture);
+        equal('-034', '-0,34', fixture);
+        equal('-,3', '-0,3', fixture);
+        equal('-,34', '-0,34', fixture);
+        equal('-,345', '-0,345', fixture);
+    }));
+
+    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.decimalMarker = '.';
+        component.allowNegativeNumbers = true;
+        component.leadZero = true;
+        fixture.detectChanges();
+
+        equal('-03', '-0.3', fixture);
+        equal('-034', '-0.34', fixture);
+        equal('-.3', '-0.3', fixture);
+        equal('-.34', '-0.34', fixture);
+        equal('-.345', '-0.345', fixture);
     }));
 });
