@@ -58,6 +58,8 @@ export class OptionsComponent implements AfterViewInit {
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
 
+    public testValue = '';
+
     public ngAfterViewInit(): void {
         this.scrollService.onScroll(this.cards);
         this.accordionService.onChangeAccordion(this.cards);
