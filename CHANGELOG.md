@@ -1,5 +1,11 @@
 # 17.0.2(2023-11-29)
 
+### Feat
+
+- update dependencies
+
+# 17.0.2(2023-11-29)
+
 ### Fix
 
 -   Fix ([#1272](https://github.com/JsDaddy/ngx-mask/issues/1272))
