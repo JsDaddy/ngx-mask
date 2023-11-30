@@ -14,14 +14,14 @@
         "lib": ["es2020", "dom"],
         "paths": {
             "@angular/*": ["../node_modules/@angular/*"],
-            "ngx-mask": ["projects/ngx-mask-lib/src"],
-            "ngx-mask/*": ["projects/ngx-mask-lib/src"],
-//            "ngx-mask": [
-//                "dist/ngx-mask-lib"
-//            ],
-//            "ngx-mask/*": [
-//                "dist/ngx-mask-lib/*"
-//            ],
+//            "ngx-mask": ["projects/ngx-mask-lib/src"],
+//            "ngx-mask/*": ["projects/ngx-mask-lib/src"],
+            "ngx-mask": [
+                "dist/ngx-mask-lib"
+            ],
+            "ngx-mask/*": [
+                "dist/ngx-mask-lib/*"
+            ],
             "@open-source/*": ["src/libraries/open-source/*"],
             "@libraries/*": ["src/libraries/*"]
         },
