@@ -564,7 +564,7 @@ describe('Separator: Mask', () => {
         equal('0', '0', fixture);
         equal('0,', '0,', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0,1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
         // TODO(inepipenko): strange thet return 0.
@@ -573,16 +573,16 @@ describe('Separator: Mask', () => {
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0.1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
-        equal('0,', '0', fixture);
+        equal('0,', '0.', fixture);
         component.decimalMarker = ['.', ','];
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
-        equal('0,', '0,', fixture);
+        equal('0,', '0.', fixture);
         equal('0 ', '0', fixture);
-        equal('01', '0', fixture);
+        equal('01', '0.1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
     });

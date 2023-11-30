@@ -13,8 +13,8 @@
         "target": "ES2022",
         "lib": ["es2020", "dom"],
         "paths": {
-            "ngx-mask": ["projects/ngx-mask-lib/src"],
-            "ngx-mask/*": ["projects/ngx-mask-lib/src"],
+            "ngx-mask": ["dist/ngx-mask-lib/"],
+            "ngx-mask/*": ["dist/ngx-mask-lib/"],
             "@open-source/*": ["src/libraries/open-source/*"],
             "@libraries/*": ["src/libraries/*"]
         },

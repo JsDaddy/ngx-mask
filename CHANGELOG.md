@@ -1,5 +1,11 @@
 ### Feature
 
+-   update ng 15.2.2
+
+<a name=15.2.1></a>
+
+### Feature
+
 -   update ng 15.2.1
 
 <a name=15.2.1></a>
