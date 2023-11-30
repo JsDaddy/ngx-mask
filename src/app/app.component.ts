@@ -12,7 +12,7 @@ import {
     IMaskOptions,
     TExample,
 } from '@open-source/accordion/content.interfaces';
-import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
+// import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
 import { LinkPath } from '@libraries/link/link.path';
@@ -29,7 +29,7 @@ import {
     imports: [
         OptionsComponent,
         HeaderComponent,
-        SubHeaderComponent,
+        // SubHeaderComponent,
         AccordionComponent,
         FooterComponent,
     ],
