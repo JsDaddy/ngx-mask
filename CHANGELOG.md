@@ -1,3 +1,9 @@
+# 17.0.3(2023-11-30)
+
+### Feat
+
+- update dependencies
+
 # 17.0.2(2023-11-29)
 
 ### Feat
@@ -30,6 +36,10 @@
 ### Feature
 
 -   update ng 17.x
+- 
+### Feature 16.4.2
+
+-  Upgrade version 16.4.2 with more fixes since version 17.x.x
 
 # 16.4.1(2023-11-08)
 
@@ -346,6 +356,10 @@
 
 <a name=15.1.5></a>
 
+### Feature 15.2.3
+
+-  Upgrade version 15.2.3 with more fixes since version 17.x.x
+
 ### Feature 15.2.1
 
 -  Upgrade version 15.2.1 with more fixes since version 16.x.x
@@ -435,6 +449,11 @@
 
 <a name="14.2.4"></a>
 
+### Feature 14.3.3
+
+-  Upgrade version 15.2.2 with more fixes since version 17.x.x
+
+
 ### Feature 14.3.2
 
 -  Upgrade version 14.3.2 with more fixes since version 16.x.x
@@ -513,6 +532,11 @@
 -   Update to Angular 14
 
 <a name="13.1.15"></a>
+
+### Feature 13.3.2
+
+-  Upgrade version 13.2.2 with more fixes since version 17.x.x
+
 
 ### Feature 13.2.1
 
