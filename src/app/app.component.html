@@ -13,7 +13,7 @@
 <!--</div>-->
 
 <div>
-    <input type="text" mask="XXX/XX/XXX" [hiddenInput]="hide" [formControl]="test" />
+    <input type="text" mask="separator.2" [decimalMarker]="'.'" [formControl]="test" />
     value {{ test.value }}
     <!--    <div>value="{{ phone | mask: '(000) 000-0000' }}"</div>-->
     <hr />

@@ -56,6 +56,8 @@ export class NgxMaskApplierService {
 
     private _shift: Set<number> = new Set();
 
+    public plusOnePosition: boolean = false;
+
     public maskExpression = '';
 
     public actualValue = '';
@@ -97,7 +99,7 @@ export class NgxMaskApplierService {
         let backspaceShift = false;
         let shift = 1;
         let stepBack = false;
-        if (inputValue.slice(0, this.prefix.length) === this.prefix && !this.showMaskTyped) {
+        if (inputValue.slice(0, this.prefix.length) === this.prefix) {
             // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
@@ -193,32 +195,99 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
-            // eslint-disable-next-line no-param-reassign
-            inputValue =
-                inputValue[0] === '-' && this.allowNegativeNumbers
+            const precision: number = this.getPrecision(maskExpression);
+            const decimalMarker = Array.isArray(this.decimalMarker)
+                ? MaskExpression.DOT
+                : this.decimalMarker;
+            if (precision === 0) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = this.allowNegativeNumbers
                     ? inputValue.length > 2 &&
-                      inputValue[1] === '0' &&
+                      inputValue[0] === MaskExpression.MINUS &&
+                      inputValue[1] === MaskExpression.NUMBER_ZERO &&
                       inputValue[2] !== this.thousandSeparator &&
-                      !this._compareOrIncludes(
-                          inputValue[2],
-                          this.decimalMarker,
-                          this.thousandSeparator
-                      ) &&
-                      !backspaced
-                        ? inputValue.slice(0, inputValue.length - 1)
+                      inputValue[2] !== MaskExpression.COMMA &&
+                      inputValue[2] !== MaskExpression.DOT
+                        ? '-' + inputValue.slice(2, inputValue.length)
+                        : inputValue[0] === MaskExpression.NUMBER_ZERO &&
+                          inputValue.length > 1 &&
+                          inputValue[1] !== this.thousandSeparator &&
+                          inputValue[1] !== MaskExpression.COMMA &&
+                          inputValue[1] !== MaskExpression.DOT
+                        ? inputValue.slice(1, inputValue.length)
                         : inputValue
                     : inputValue.length > 1 &&
-                      inputValue[0] === '0' &&
+                      inputValue[0] === MaskExpression.NUMBER_ZERO &&
                       inputValue[1] !== this.thousandSeparator &&
-                      !this._compareOrIncludes(
-                          inputValue[1],
-                          this.decimalMarker,
-                          this.thousandSeparator
-                      ) &&
-                      !backspaced
-                    ? inputValue.slice(0, inputValue.length - 1)
+                      inputValue[1] !== MaskExpression.COMMA &&
+                      inputValue[1] !== MaskExpression.DOT
+                    ? inputValue.slice(1, inputValue.length)
                     : inputValue;
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                if (inputValue[0] === decimalMarker && inputValue.length > 1) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue =
+                        MaskExpression.NUMBER_ZERO + inputValue.slice(0, inputValue.length + 1);
+                    this.plusOnePosition = true;
+                }
+                if (
+                    inputValue[0] === MaskExpression.NUMBER_ZERO &&
+                    inputValue[1] !== decimalMarker &&
+                    inputValue[1] !== this.thousandSeparator
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue =
+                        inputValue.length > 1
+                            ? inputValue.slice(0, 1) +
+                              decimalMarker +
+                              inputValue.slice(1, inputValue.length + 1)
+                            : inputValue;
+                    this.plusOnePosition = true;
+                }
+                if (
+                    this.allowNegativeNumbers &&
+                    inputValue[0] === MaskExpression.MINUS &&
+                    (inputValue[1] === decimalMarker ||
+                        inputValue[1] === MaskExpression.NUMBER_ZERO)
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue =
+                        inputValue[1] === decimalMarker && inputValue.length > 2
+                            ? inputValue.slice(0, 1) +
+                              MaskExpression.NUMBER_ZERO +
+                              inputValue.slice(1, inputValue.length)
+                            : inputValue[1] === MaskExpression.NUMBER_ZERO &&
+                              inputValue.length > 2 &&
+                              inputValue[2] !== decimalMarker
+                            ? inputValue.slice(0, 2) +
+                              decimalMarker +
+                              inputValue.slice(2, inputValue.length)
+                            : inputValue;
+                    this.plusOnePosition = true;
+                }
+            }
+
             if (backspaced) {
+                if (
+                    inputValue[0] === MaskExpression.NUMBER_ZERO &&
+                    inputValue[1] === this.decimalMarker &&
+                    (inputValue[position] === MaskExpression.NUMBER_ZERO ||
+                        inputValue[position] === this.decimalMarker)
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = inputValue.slice(2, inputValue.length);
+                }
+                if (
+                    inputValue[0] === MaskExpression.MINUS &&
+                    inputValue[1] === MaskExpression.NUMBER_ZERO &&
+                    inputValue[2] === this.decimalMarker &&
+                    (inputValue[position] === MaskExpression.NUMBER_ZERO ||
+                        inputValue[position] === this.decimalMarker)
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = MaskExpression.MINUS + inputValue.slice(3, inputValue.length);
+                }
                 // eslint-disable-next-line no-param-reassign
                 inputValue = this._compareOrIncludes(
                     inputValue[inputValue.length - 1],
@@ -254,17 +323,11 @@ export class NgxMaskApplierService {
             }
 
             const invalidCharRegexp = new RegExp('[' + invalidChars + ']');
-
-            if (
-                inputValue.match(invalidCharRegexp) ||
-                (inputValue.length === 1 &&
-                    this._compareOrIncludes(inputValue, this.decimalMarker, this.thousandSeparator))
-            ) {
+            if (inputValue.match(invalidCharRegexp)) {
                 // eslint-disable-next-line no-param-reassign
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
 
-            const precision: number = this.getPrecision(maskExpression);
             // eslint-disable-next-line no-param-reassign
             inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
             const strForSep: string = inputValue.replace(
@@ -324,6 +387,7 @@ export class NgxMaskApplierService {
                 if (cursor === maskExpression.length) {
                     break;
                 }
+
                 const symbolStarInPattern: boolean = MaskExpression.SYMBOL_STAR in this.patterns;
                 if (
                     this._checkSymbolMask(
@@ -373,7 +437,7 @@ export class NgxMaskApplierService {
                     if (maskExpression[cursor] === MaskExpression.HOURS) {
                         if (this.apm ? Number(inputSymbol) > 9 : Number(inputSymbol) > 2) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -413,7 +477,7 @@ export class NgxMaskApplierService {
                     ) {
                         if (Number(inputSymbol) > 5) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -458,7 +522,7 @@ export class NgxMaskApplierService {
                                   this.specialCharacters.includes(inputValueCursorPlusOne))
                         ) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -530,7 +594,7 @@ export class NgxMaskApplierService {
                             (day2monthInputDot && !this.leadZeroDateTime)
                         ) {
                             // eslint-disable-next-line no-param-reassign
-                            position = position + 1;
+                            position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
@@ -655,8 +719,9 @@ export class NgxMaskApplierService {
             onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
-            this.suffix
+            this.showMaskTyped ? '' : this.suffix
         }`;
+
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
@@ -668,7 +733,6 @@ export class NgxMaskApplierService {
                 .split(MaskExpression.MINUS)
                 .join(MaskExpression.EMPTY_STRING)}${this.suffix}`;
         }
-
         return res;
     }
 
@@ -676,7 +740,6 @@ export class NgxMaskApplierService {
         if (Array.isArray(this.dropSpecialCharacters)) {
             return this.dropSpecialCharacters.find((val: string) => val === inputSymbol);
         }
-
         return this._findSpecialChar(inputSymbol);
     }
 
