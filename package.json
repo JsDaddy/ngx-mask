@@ -1,6 +1,6 @@
 {
   "name": "ngx-mask",
-  "version": "13.2.1-test",
+  "version": "13.2.2",
   "description": "Awesome ngx mask",
   "license": "MIT",
   "engines": {
@@ -66,6 +66,7 @@
     "@angular/platform-browser": "~13.3.0",
     "@angular/platform-browser-dynamic": "~13.4.0",
     "@angular/router": "~13.3.0",
+    "@babel/parser": "^7.23.5",
     "@jscutlery/cypress-angular": "0.9.22",
     "@types/ws": "^8.5.4",
     "bootstrap": "5.2.2",
@@ -118,7 +119,7 @@
     "ng-packagr": "14.2.2",
     "postcss-scss": "4.0.5",
     "prettier": "2.7.1",
-    "puppeteer": "19.2.0",
+    "puppeteer": "13.4.0",
     "stylelint": "14.14.0",
     "stylelint-config-prettier": "9.0.3",
     "stylelint-config-recommended-scss": "13.0.0",

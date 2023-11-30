@@ -8,6 +8,7 @@ describe('Pipe: Mask', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [NgxMaskModule.forRoot()],
+            providers: [NgxMaskService, NgxMaskPipe],
         });
     });
     beforeEach(() => {
