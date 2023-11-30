@@ -1,15 +1,20 @@
 import { TestBed } from '@angular/core/testing';
-import { NgxMaskModule } from '../lib/ngx-mask.module';
-import { IConfig, NgxMaskPipe, NgxMaskService } from 'ngx-mask';
+import { IConfig, NgxMaskModule, NgxMaskPipe, NgxMaskService } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
-
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [NgxMaskModule.forRoot()],
+            declarations: [],
+            imports: [
+                NgxMaskModule.forRoot({
+                    validation: true,
+                }),
+            ],
+            providers: [NgxMaskPipe, NgxMaskService],
         });
     });
+
     beforeEach(() => {
         const service: NgxMaskService = TestBed.inject<NgxMaskService>(NgxMaskService);
         maskPipe = new NgxMaskPipe(service);
@@ -351,5 +356,5 @@ describe('Pipe: Mask', () => {
         });
         expect(value).toEqual('3.000');
     });
-    //TODO(inepipepnko): need cover all config options
+    // TODO(inepipepnko): need cover all config options
 });

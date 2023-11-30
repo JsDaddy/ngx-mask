@@ -15,7 +15,7 @@
 <div>
     <input type="text" mask="separator.2" [decimalMarker]="'.'" [formControl]="test" />
     value {{ test.value }}
-    <!--    <div>value="{{ phone | mask: '(000) 000-0000' }}"</div>-->
+    <div>value="{{ phone | mask: 'separator.2' }}"</div>
     <hr />
     <button (click)="hiden()">hiden</button>
     <!--    <hr />-->
