@@ -33,7 +33,7 @@ $ npm install --save ngx-mask@16.4.2
 ```
 Angular version 15.x.x
 ```bash
-$ npm install --save ngx-mask@15.2.2
+$ npm install --save ngx-mask@15.2.3
 ```
 Angular version 14.x.x
 ```bash
