@@ -29,19 +29,19 @@ $ npm install --save ngx-mask
 ```
 Angular version 16.x.x
 ```bash
-$ npm install --save ngx-mask@16.4.1
+$ npm install --save ngx-mask@16.4.2
 ```
 Angular version 15.x.x
 ```bash
-$ npm install --save ngx-mask@15.2.1
+$ npm install --save ngx-mask@15.2.3
 ```
 Angular version 14.x.x
 ```bash
-$ npm install --save ngx-mask@14.3.2
+$ npm install --save ngx-mask@14.3.3
 ```
 Angular version 13.x.x or 12.x.x
 ```bash
-$ npm install --save ngx-mask@13.2.1
+$ npm install --save ngx-mask@13.2.2
 ```
 
 ## Quickstart if ngx-mask version >= 15.0.0
