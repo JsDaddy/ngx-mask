@@ -7,7 +7,7 @@ import {
     QueryList,
     ViewChildren,
 } from '@angular/core';
-import { AsyncPipe, JsonPipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, JsonPipe, NgClass, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -16,7 +16,6 @@ import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
-import { TrackByService } from '@libraries/track-by/track-by.service';
 import { Observable } from 'rxjs';
 import { ScrollService } from '@open-source/scroll/scroll.service';
 import { OpenSourcePath } from '@open-source/path/open-source.path';
@@ -42,6 +41,7 @@ import { AccordionService } from '@open-source/accordion/accordion.service';
         ColorPipe,
         CardContentComponent,
         AsyncPipe,
+        NgOptimizedImage,
     ],
 })
 export class OptionsComponent implements AfterViewInit {
@@ -51,7 +51,6 @@ export class OptionsComponent implements AfterViewInit {
     @ViewChildren('cards') public cards!: QueryList<ElementRef>;
 
     public readonly phone = '123456789';
-    public readonly trackByPath = inject(TrackByService).trackBy('id');
     public readonly activeCardId$: Observable<number> = inject(ScrollService).activeCard$;
     public readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
 

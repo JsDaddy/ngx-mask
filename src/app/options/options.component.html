@@ -1,6 +1,6 @@
 @if (activeCardId$ | async; as activeCardId) {
     <section class="content column bg-full-white">
-        @for (tile of cardDocs; track trackByPath(i, tile); let i = $index) {
+        @for (tile of cardDocs; track tile.id; let i = $index) {
             <div class="card" [ngClass]="activeCardId | color: tile.id" [id]="tile.id" #cards>
                 <div class="mr-title title row uppercase ls-25">
                     {{ tile.header }}
