@@ -1,3 +1,10 @@
+<input
+    type="text"
+    mask="separator.2"
+    [leadZero]="true"
+    [decimalMarker]="'.'"
+    [thousandSeparator]="','" />
+
 <section class="content column bg-full-white">
     @for (tile of cardDocs(); track tile.id; let i = $index) {
         <div class="card" [class]="activeCardId() | color: tile.id" [id]="tile.id" #cards>
