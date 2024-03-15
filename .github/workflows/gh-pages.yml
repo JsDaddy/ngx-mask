@@ -3,7 +3,7 @@ name: GitHub pages
 on:
   push:
     branches:
-      - develop
+      - feat/versions
 
 jobs:
   build:
@@ -39,11 +39,11 @@ jobs:
           echo '********'
           npm run build
 
-      - name: Deploy demo
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/ngx-mask/browser
+#      - name: Deploy demo
+#        uses: peaceiris/actions-gh-pages@v3
+#        with:
+#          github_token: ${{ secrets.GITHUB_TOKEN }}
+#          publish_dir: ./dist/ngx-mask/browser
 
     outputs:
       version: ${{ steps.semantic-release.outputs.new-release-version }}
