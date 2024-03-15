@@ -438,8 +438,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     );
                     const selectRangeBackspace: boolean =
                         this._maskService.selStart === this._maskService.selEnd;
-                    const selStart = Number(this._maskService.selStart) - prefixLength ?? '';
-                    const selEnd = Number(this._maskService.selEnd) - prefixLength ?? '';
+                    const selStart = Number(this._maskService.selStart) - prefixLength;
+                    const selEnd = Number(this._maskService.selEnd) - prefixLength;
 
                     if (this._code === MaskExpression.BACKSPACE) {
                         if (!selectRangeBackspace) {
