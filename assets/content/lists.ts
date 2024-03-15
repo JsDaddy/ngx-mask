@@ -20,11 +20,6 @@ export const lists: IListItem[] = [
                 scrollTo: 'date-and-hour',
             },
             {
-                content: 'Hour',
-                id: 3,
-                scrollTo: 'hour',
-            },
-            {
                 content: 'Valid 24 hour format',
                 id: 4,
                 scrollTo: 'valid24',

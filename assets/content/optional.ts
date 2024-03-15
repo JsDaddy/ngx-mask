@@ -96,7 +96,8 @@ export const OptExamples: TExample<IMaskOptions>[] = [
     },
     {
         _placeholder: 'dropSpecialCharacters',
-        _dropSpecialCharacters: ['/'],
+        _dropSpecialCharacters: false,
+        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _mask: '000-000.00',
         control: { form: new UntypedFormControl(''), model: '' },
     },
