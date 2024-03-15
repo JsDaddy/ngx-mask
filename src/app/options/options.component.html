@@ -1,39 +1,38 @@
-@if (activeCardId$ | async; as activeCardId) {
-    <section class="content column bg-full-white">
-        @for (tile of cardDocs; track trackByPath(i, tile); let i = $index) {
-            <div class="card" [ngClass]="activeCardId | color: tile.id" [id]="tile.id" #cards>
-                <div class="mr-title title row uppercase ls-25">
-                    {{ tile.header }}
-                </div>
-
-                <div class="cards-block row" [id]="tile.anchor">
-                    <div class="light-card bg-full-white pd-15">
-                        <div class="light-title row ai-c">
-                            <img
-                                width="20"
-                                height="20"
-                                [src]="'hand-box' | asset: openSourceOptionsPath"
-                                alt="Hand with box" />
-                            <span class="span">Usage</span>
-                        </div>
-                        <span class="source uppercase ls-25 full-white span">Source code</span>
-                        <div class="white-input">
-                            <pre class="row">
-                <code type="text" [highlight]="tile.code" class="input-view bg-white"></code>
-                <img height="18" width="13" [src]="'input-vector' | asset : openSourceOptionsPath" class="input-img ais-c" alt="Input vector" />
-              </pre>
-                        </div>
-                    </div>
-                    <ng-container
-                        *ngTemplateOutlet="
-                            exampleTmpl;
-                            context: { $implicit: cardExamples[i], placeholder: tile.header }
-                        "></ng-container>
-                </div>
+<section class="content column bg-full-white">
+    @for (tile of cardDocs(); track tile.id; let i = $index) {
+        <div class="card" [class]="activeCardId() | color: tile.id" [id]="tile.id" #cards>
+            <div class="mr-title title row uppercase ls-25">
+                {{ tile.header }}
             </div>
-        }
-    </section>
-}
+
+            <div class="cards-block row" [id]="tile.anchor">
+                <div class="light-card bg-full-white pd-15">
+                    <div class="light-title row ai-c">
+                        <img
+                            width="20"
+                            height="20"
+                            [ngSrc]="'hand-box' | asset: openSourceOptionsPath"
+                            alt="Hand with box" />
+                        <span class="span">Usage</span>
+                    </div>
+                    <span class="source uppercase ls-25 full-white span">Source code</span>
+                    <div class="white-input">
+                        <pre class="row">
+                <code [highlight]="tile.code" class="input-view bg-white"></code>
+                <img height="18" width="13" [ngSrc]="'input-vector' | asset : openSourceOptionsPath" class="input-img ais-c" alt="Input vector" />
+              </pre>
+                    </div>
+                </div>
+                <ng-container
+                    *ngTemplateOutlet="
+                        exampleTmpl;
+                        context: { $implicit: cardExamples()?.[i], placeholder: tile.header }
+                    "></ng-container>
+            </div>
+        </div>
+    }
+</section>
+
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     @if (!ex._pipe) {
         <div class="dark-card bg-black">
