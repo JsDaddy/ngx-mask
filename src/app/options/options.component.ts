@@ -1,5 +1,5 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
-import { AsyncPipe, JsonPipe, NgClass, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -21,7 +21,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
     providers: [ScrollService, AccordionService],
     imports: [
         JsonPipe,
-        NgClass,
         NgTemplateOutlet,
         FormsModule,
         ReactiveFormsModule,
@@ -32,7 +31,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
         IsEmptyPipe,
         ColorPipe,
         CardContentComponent,
-        AsyncPipe,
         NgOptimizedImage,
     ],
 })
