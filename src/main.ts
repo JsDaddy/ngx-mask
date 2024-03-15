@@ -11,10 +11,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { BaseHttpService } from '@libraries/base-http/base-http.service';
 import { DOMAIN } from '@libraries/token/token';
 import { GithubStarsService } from '@libraries/github/github-stars.service';
+import { VersionToken } from '@libraries/version/version.token';
 
 if (environment.production) {
     enableProdMode();
 }
+const { VITE_RELEASE_VERSION } = process.env;
 
 bootstrapApplication(AppComponent, {
     providers: [
@@ -35,5 +37,6 @@ bootstrapApplication(AppComponent, {
                 fullLibraryLoader: () => import('highlight.js'),
             },
         },
+        { provide: VersionToken, useValue: VITE_RELEASE_VERSION },
     ],
 }).catch((err) => console.error(err));
