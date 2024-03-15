@@ -98,6 +98,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
 
+    //[TODO] andriiKamaldinov1 find better solution
     public ngOnChanges(changes: SimpleChanges): void {
         const {
             maskExpression,
