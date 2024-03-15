@@ -15,8 +15,7 @@ import { GithubStarsService } from '@libraries/github/github-stars.service';
 if (environment.production) {
     enableProdMode();
 }
-// const { VITE_RELEASE_VERSION } = process.env;
-console.log('@@');
+
 bootstrapApplication(AppComponent, {
     providers: [
         ɵprovideZonelessChangeDetection(),

@@ -51,9 +51,6 @@ export class AppComponent {
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
-    public constructor() {
-        console.log('proce', process);
-    }
     public switchCard(cardId: number): void {
         switch (cardId) {
             case 1:
