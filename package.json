@@ -38,7 +38,7 @@
     "release:major": "npm run version:major && npm run build:lib && npm run pack:lib && npm run publish:lib",
     "release:minor": "npm run version:minor && npm run build:lib && npm run pack:lib && npm run publish:lib",
     "release:patch": "npm run version:patch && npm run build:lib && npm run pack:lib && npm run publish:lib",
-    "start": "ng serve --hmr",
+    "start": "ng serve",
     "start-prod": "angular-http-server --path dist/ngx-mask --p 3000 --silent",
     "test": "npm run test:lib",
     "cypress:open": "cypress open",

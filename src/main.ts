@@ -1,4 +1,4 @@
-import { enableProdMode } from '@angular/core';
+import { enableProdMode, ɵprovideZonelessChangeDetection } from '@angular/core';
 
 import { environment } from './environments/environment';
 import { bootstrapApplication } from '@angular/platform-browser';
@@ -18,6 +18,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
+        ɵprovideZonelessChangeDetection(),
         GithubStarsService,
         provideHttpClient(),
         {
