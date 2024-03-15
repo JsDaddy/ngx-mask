@@ -1095,25 +1095,21 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.removeMask(this._inputValue)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (test) {
-                    this._maskValue =
-                        // this.maskExpression =
-                        this._maskService.maskExpression = mask.includes(
-                            MaskExpression.CURLY_BRACKETS_LEFT
-                        )
-                            ? this._maskService._repeatPatternSymbols(mask)
-                            : mask;
+                    this._maskValue = this._maskService.maskExpression = mask.includes(
+                        MaskExpression.CURLY_BRACKETS_LEFT
+                    )
+                        ? this._maskService._repeatPatternSymbols(mask)
+                        : mask;
                     return test;
                 } else {
                     const expression =
                         this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
                         MaskExpression.EMPTY_STRING;
-                    this._maskValue =
-                        // this.maskExpression =
-                        this._maskService.maskExpression = expression.includes(
-                            MaskExpression.CURLY_BRACKETS_LEFT
-                        )
-                            ? this._maskService._repeatPatternSymbols(expression)
-                            : expression;
+                    this._maskValue = this._maskService.maskExpression = expression.includes(
+                        MaskExpression.CURLY_BRACKETS_LEFT
+                    )
+                        ? this._maskService._repeatPatternSymbols(expression)
+                        : expression;
                 }
             } else {
                 const check: boolean = this._maskService
@@ -1124,9 +1120,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         return this._maskService._checkSymbolMask(character, indexMask);
                     });
                 if (check) {
-                    this._maskValue =
-                        // this.maskExpression =
-                        this._maskService.maskExpression = mask;
+                    this._maskValue = this._maskService.maskExpression = mask;
                     return check;
                 }
             }
