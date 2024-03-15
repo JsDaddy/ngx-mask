@@ -1,25 +1,97 @@
-name: Publish npm
+name: GitHub pages
 
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          registry-url: https://registry.npmjs.org/
-      - name: Build library
+
+      - name: Build demo
         run: |
           npm ci --force
           git submodule update --init --recursive --remote
-          npm run build:lib
-      - name: Publish library
-        run: npm run publish:lib
+          npm run build
+
+      - name: Semantic Release
+        id: semantic-release
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          GITHUB_TOKEN: ${{ secrets.PRIVATE_TOKEN_GITHUB }}
+        run: |
+          npx semantic-release
+
+      - name: Build app
+        env:
+          VITE_RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
+        run: |
+          echo '********'
+          echo "VITE_RELEASE_VERSION: $VITE_RELEASE_VERSION"
+          echo '********'
+          npm run build
+
+      - name: Deploy demo
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist/ngx-mask/browser
+
+  slack_notification:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.25.0
+        with:
+          channel-id: 'deployments'
+          payload: |
+            {
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Project: `${{ github.event.repository.name }}`"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Version: `${{ needs.build.outputs.VITE_RELEASE_VERSION || 'TBA' }}`"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Commit/PR URL: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Website URL: ${{ secrets.WEBSITE_URL || 'TBA' }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
