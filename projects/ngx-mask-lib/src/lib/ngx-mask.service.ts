@@ -399,6 +399,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this._renderer || !this._elementRef) {
             return;
         }
+        //[TODO]: andriikamaldinov1 find better solution
         Promise.resolve().then(() =>
             this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
         );
