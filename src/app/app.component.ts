@@ -20,9 +20,9 @@ import {
     FormatAndParserExamples,
     ParserAndFormatterDocs,
 } from '../assets/content/parser-and-formatter';
-import * as process from 'process';
-import { VersionToken } from '@libraries/version/version.token';
-const { VITE_RELEASE_VERSION } = process.env;
+// import * as process from 'process';
+// import { VersionToken } from '@libraries/version/version.token';
+// const { VITE_RELEASE_VERSION } = process.env;
 
 @Component({
     selector: 'jsdaddy-open-source-root',
@@ -36,7 +36,7 @@ const { VITE_RELEASE_VERSION } = process.env;
         AccordionComponent,
         FooterComponent,
     ],
-    providers: [{ provide: VersionToken, useValue: VITE_RELEASE_VERSION }],
+    // providers: [{ provide: VersionToken, useValue: VITE_RELEASE_VERSION }],
 })
 export class AppComponent {
     public card: {
