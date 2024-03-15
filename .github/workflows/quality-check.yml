@@ -14,11 +14,11 @@ jobs:
           node-version: 18
       - name: Check quality
         run: |
-#          npm ci --force
-#          git submodule update --init --recursive --remote
-#          npm run lint
-#          npm run cypress:bash
-#          npm test
-#          npm run build
-#          npm run build:lib
+          npm ci --force
+          git submodule update --init --recursive --remote
+          npm run lint
+          npm run cypress:bash
+          npm test
+          npm run build
+          npm run build:lib
 
