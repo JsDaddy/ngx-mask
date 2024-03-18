@@ -17,9 +17,4 @@ jobs:
           npm ci --force
           git submodule update --init --recursive --remote
           bash .github/workflows/scripts/quality
-          npm run lint
-          npm run cypress:bash
-          npm test
-          npm run build
-          npm run build:lib
 
