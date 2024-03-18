@@ -1,5 +1,5 @@
 branches:
-  - develop
+  - feat/versions
 
 plugins:
   - '@semantic-release/commit-analyzer'
