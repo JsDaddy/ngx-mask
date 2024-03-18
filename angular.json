@@ -30,6 +30,9 @@
                     },
                     "configurations": {
                         "production": {
+                            "define": {
+                                "VERSION": "'<%version%>'"
+                            },
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -55,13 +58,15 @@
                             "outputHashing": "all"
                         },
                         "development": {
+                            "define": {
+                                "VERSION": "'v0.0.1'"
+                            },
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
                         }
                     },
                     "defaultConfiguration": "production"
-
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
