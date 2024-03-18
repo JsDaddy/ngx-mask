@@ -17,6 +17,11 @@ jobs:
         with:
           node-version: 20
 
+      - name: Install deps
+        run: |
+          npm ci --force
+          git submodule update --init --recursive --remote   
+
       - name: Semantic Release
         id: semantic-release
         env:
@@ -32,8 +37,6 @@ jobs:
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo '********'
           bash .github/workflows/scripts/replace_template.sh $RELEASE_VERSION
-          npm ci --force
-          git submodule update --init --recursive --remote
           npm run build
 
       - name: Deploy demo
