@@ -50,6 +50,8 @@
     "version:major": "npm --no-git-tag-version version major && cd projects/ngx-mask-lib && npm --no-git-tag-version version major",
     "version:minor": "npm --no-git-tag-version version minor && cd projects/ngx-mask-lib && npm --no-git-tag-version version minor",
     "version:patch": "npm --no-git-tag-version version patch && cd projects/ngx-mask-lib && npm --no-git-tag-version version patch",
+    "type-coverage-report": "typescript-coverage-report",
+    "type-coverage": "type-coverage"
   },
   "repository": {
     "type": "git",
@@ -117,6 +119,22 @@
     "stylelint-config-recommended-scss": "14.0.0",
     "stylelint-prettier": "5.0.0",
     "ts-node": "10.9.2",
-    "typescript": "5.4.2"
+    "type-coverage": "^2.27.1",
+    "typescript": "5.4.2",
+    "typescript-coverage-report": "^1.0.0"
+  },
+  "typeCoverage": {
+    "atLeast": 93,
+    "ignoreObject": true,
+    "ignoreAsAssertion": true,
+    "ignoreTypeAssertion;": true,
+    "strict": true,
+    "suppressError": true,
+    "reportSemanticError": true,
+    "ignoreCatch": true,
+    "ignoreFiles": [
+      "server/**/*.ts",
+      "server.ts"
+    ]
   }
 }
