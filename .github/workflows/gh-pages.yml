@@ -79,7 +79,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Version: `${{ needs.build.outputs.RELEASE_VERSION || 'TBA' }}`"
+                    "text": "Version: `${{ needs.build.outputs.version || 'TBA' }}`"
                   }
                 },
                 {
