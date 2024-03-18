@@ -78,4 +78,7 @@ export class AppComponent {
                 break;
         }
     }
+    public constructor() {
+        console.log(process);
+    }
 }
