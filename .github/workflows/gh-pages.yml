@@ -37,6 +37,7 @@ jobs:
           echo '********'
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo '********'
+          bash .github/scripts/replace_template.sh $RELEASE_VERSION
           npm run build
 
       - name: Deploy demo
