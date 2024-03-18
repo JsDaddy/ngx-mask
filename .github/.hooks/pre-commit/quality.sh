@@ -14,4 +14,8 @@ fi
 
 npm run test
 
+npm run cypress:bash
+
 npm run build
+
+npm run build:lib

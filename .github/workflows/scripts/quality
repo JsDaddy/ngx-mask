@@ -1,9 +1,0 @@
-#!/usr/bin
-
-set -e
-
-npm run lint
-npm run cypress:bash
-npm test
-npm run build
-npm run build:lib
