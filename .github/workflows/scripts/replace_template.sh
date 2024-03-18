@@ -8,7 +8,7 @@ fi
 
 current_directory=$(pwd)
 echo "Current directory: $current_directory"
-
+ls $current_directory
 # Assign arguments to variables
 custom_string="$1"
 
