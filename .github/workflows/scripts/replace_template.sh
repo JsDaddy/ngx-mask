@@ -6,6 +6,9 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
+current_directory=$(pwd)
+echo "Current directory: $current_directory"
+
 # Assign arguments to variables
 custom_string="$1"
 
