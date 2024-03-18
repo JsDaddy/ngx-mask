@@ -32,10 +32,10 @@ jobs:
 
       - name: Build app
         env:
-          VITE_RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
+          RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
         run: |
           echo '********'
-          echo "VITE_RELEASE_VERSION: $VITE_RELEASE_VERSION"
+          echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo '********'
           npm run build
 
