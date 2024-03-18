@@ -13,4 +13,5 @@ else
 fi
 
 npm run test
+
 npm run build
