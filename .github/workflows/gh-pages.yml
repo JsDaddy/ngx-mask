@@ -11,17 +11,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Build demo
-        run: |
-          npm ci --force
-          git submodule update --init --recursive --remote
-          npm run build
 
       - name: Semantic Release
         id: semantic-release
@@ -30,7 +24,7 @@ jobs:
         run: |
           npx semantic-release
 
-      - name: Build app
+      - name: Build demo app
         env:
           RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
         run: |
@@ -38,6 +32,8 @@ jobs:
           echo "RELEASE_VERSION: $RELEASE_VERSION"
           echo '********'
           bash .github/workflows/scripts/replace_template.sh $RELEASE_VERSION
+          npm ci --force
+          git submodule update --init --recursive --remote
           npm run build
 
       - name: Deploy demo
