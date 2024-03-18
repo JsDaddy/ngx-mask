@@ -79,7 +79,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "Version: `${{ needs.build_and_push_docker_hub.outputs.version || 'TBA' }}`"
+                    "text": "Version: `${{ needs.build_and_push_docker_hub.outputs.release_version || 'TBA' }}`"
                   }
                 },
                 {
