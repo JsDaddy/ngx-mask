@@ -1447,4 +1447,142 @@ describe('Separator: Mask', () => {
         equal('-.34', '-0.34', fixture);
         equal('-.345', '-0.345', fixture);
     }));
+
+    it('separator.2 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        fixture.detectChanges();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,78');
+        });
+    }));
+
+    it('separator.3 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = '.';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,78');
+        });
+    }));
+
+    it('separator.1 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.thousandSeparator = '.';
+        component.mask = 'separator.1';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,78');
+        });
+    }));
+
+    it('separator.2 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+
+        expect(inputTarget.value).toBe('1,255.78');
+    }));
+
+    it('separator.3 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+
+        expect(inputTarget.value).toBe('1,255.78');
+    }));
+
+    it('separator.1 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.thousandSeparator = ',';
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+
+        expect(inputTarget.value).toBe('1,255.7');
+    }));
+
+    it('separator.2 thousandSeparator = . leadZero should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,78');
+        });
+    }));
+
+    it('separator.3 thousandSeparator = . leadZero should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = '.';
+        component.leadZero = true;
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,780');
+        });
+    }));
+
+    it('separator.1 thousandSeparator = . leadZero  should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
+        component.thousandSeparator = '.';
+        component.mask = 'separator.1';
+        component.leadZero = true;
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(1255.78);
+        tick();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('1.255,78');
+        });
+    }));
 });
