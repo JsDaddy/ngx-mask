@@ -362,5 +362,4 @@ describe('Pipe: Mask', () => {
         expect(valueWithSuffix).toEqual('55 (555) DDD');
         expect(valueWithPrefix).toEqual('DDD 55 (555)');
     });
-    //TODO(inepipepnko): need cover all config options
 });
