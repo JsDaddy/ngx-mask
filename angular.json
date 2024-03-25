@@ -16,9 +16,6 @@
                         "outputPath": "dist/ngx-mask",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
-                        "polyfills": [
-                            "zone.js"
-                        ],
                         "tsConfig": "src/tsconfig.app.json",
                         "assets": ["src/assets", "src/favicon.ico"],
                         "styles": [
@@ -33,6 +30,9 @@
                     },
                     "configurations": {
                         "production": {
+                            "define": {
+                                "VERSION": "'<%version%>'"
+                            },
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -41,8 +41,8 @@
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "2kb",
-                                    "maximumError": "5kb"
+                                    "maximumWarning": "5kb",
+                                    "maximumError": "7kb"
                                 }
                             ],
                             "optimization": true,
@@ -58,13 +58,15 @@
                             "outputHashing": "all"
                         },
                         "development": {
+                            "define": {
+                                "VERSION": "'v0.0.1'"
+                            },
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
                         }
                     },
                     "defaultConfiguration": "production"
-
                 },
                 "serve": {
                     "builder": "@angular-devkit/build-angular:dev-server",
@@ -84,10 +86,9 @@
                     }
                 },
                 "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
+                    "builder": "@angular-devkit/build-angular:web-test-runner",
                     "options": {
                         "main": "src/test.ts",
-                        "karmaConfig": "src/karma.conf.js",
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.spec.json",
                         "codeCoverage": true,

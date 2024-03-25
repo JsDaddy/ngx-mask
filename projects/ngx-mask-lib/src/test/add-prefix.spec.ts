@@ -121,4 +121,13 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('-12345', '-€1234.5', fixture);
         equal('-123456', '-€1234.56', fixture);
     });
+
+    it('should remove prefix when setValue', () => {
+        component.mask = '000 000';
+        component.prefix = 'KZ';
+        component.dropSpecialCharacters = true;
+        component.form.setValue('KZ123123');
+        equal('KZ123123', 'KZ123 123', fixture);
+        expect(component.form.value).toBe('123123');
+    });
 });

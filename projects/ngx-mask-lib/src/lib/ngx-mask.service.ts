@@ -124,7 +124,8 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.specialCharacters.indexOf(
                 this.maskExpression[position] ?? MaskExpression.EMPTY_STRING
             ) !== -1 &&
-            this.showMaskTyped
+            this.showMaskTyped &&
+            !this.prefix
         ) {
             newInputValue = this._currentValue;
         }
@@ -399,8 +400,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this._renderer || !this._elementRef) {
             return;
         }
-        Promise.resolve().then(
-            () => this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
+        //[TODO]: andriikamaldinov1 find better solution
+        Promise.resolve().then(() =>
+            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
         );
     }
 

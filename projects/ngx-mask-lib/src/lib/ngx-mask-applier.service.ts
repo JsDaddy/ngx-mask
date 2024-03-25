@@ -173,11 +173,12 @@ export class NgxMaskApplierService {
                     inputValue.length
                 )}`;
             }
-
             let value = '';
             this.allowNegativeNumbers &&
             inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
-                ? (value = inputValue.slice(cursor + 1, cursor + inputValue.length))
+                ? (value =
+                      MaskExpression.MINUS +
+                      inputValue.slice(cursor + 1, cursor + inputValue.length))
                 : (value = inputValue);
             if (this.percentage(value)) {
                 result = this._splitPercentZero(inputValue);
@@ -718,6 +719,7 @@ export class NgxMaskApplierService {
         if (backspaced) {
             onlySpecial = inputArray.every((char) => this.specialCharacters.includes(char));
         }
+
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
             this.showMaskTyped ? '' : this.suffix
         }`;
@@ -804,7 +806,11 @@ export class NgxMaskApplierService {
 
     private percentage = (str: string): boolean => {
         const sanitizedStr = str.replace(',', '.');
-        const value = Number(sanitizedStr);
+        const value = Number(
+            this.allowNegativeNumbers && str.includes(MaskExpression.MINUS)
+                ? sanitizedStr.slice(1, str.length)
+                : sanitizedStr
+        );
 
         return !isNaN(value) && value >= 0 && value <= 100;
     };
@@ -848,7 +854,6 @@ export class NgxMaskApplierService {
             const precisionRegEx = new RegExp(
                 this._charToRegExpExpression(decimalMarker) + `\\d{${precision}}.*$`
             );
-
             const precisionMatch: RegExpMatchArray | null = inputValue.match(precisionRegEx);
             const precisionMatchLength: number = (precisionMatch && precisionMatch[0]?.length) ?? 0;
             if (precisionMatchLength - 1 > precision) {
@@ -929,6 +934,9 @@ export class NgxMaskApplierService {
     }
 
     private _splitPercentZero(value: string): string {
+        if (value === MaskExpression.MINUS && this.allowNegativeNumbers) {
+            return value;
+        }
         const decimalIndex =
             typeof this.decimalMarker === 'string'
                 ? value.indexOf(this.decimalMarker)

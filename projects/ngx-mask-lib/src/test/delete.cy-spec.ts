@@ -201,4 +201,91 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.value', '12D : 34H : 56M : 78S');
     });
+
+    it('should backspace with showMaskTyped and prefix', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(000) 000-0000',
+                prefix: '+7 ',
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('1234567890')
+            .should('have.value', '+7 (123) 456-7890')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 16)
+            .should('have.value', '+7 (123) 456-789_')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 15)
+            .should('have.value', '+7 (123) 456-78__')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 14)
+            .should('have.value', '+7 (123) 456-7___')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 12)
+            .should('have.value', '+7 (123) 456-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 11)
+            .should('have.value', '+7 (123) 45_-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 10)
+            .should('have.value', '+7 (123) 4__-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 7)
+            .should('have.value', '+7 (123) ___-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '+7 (12_) ___-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '+7 (1__) ___-____')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '+7 (___) ___-____');
+    });
+
+    it('should backspace with showMaskTyped and prefix', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '00 000 00 00',
+                prefix: '+32 ',
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('1234567890')
+            .should('have.value', '+32 12 345 67 89')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 15)
+            .should('have.value', '+32 12 345 67 8_')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 13)
+            .should('have.value', '+32 12 345 67 __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 12)
+            .should('have.value', '+32 12 345 6_ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 10)
+            .should('have.value', '+32 12 345 __ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 9)
+            .should('have.value', '+32 12 34_ __ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 8)
+            .should('have.value', '+32 12 3__ __ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '+32 12 ___ __ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '+32 1_ ___ __ __')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 4)
+            .should('have.value', '+32 __ ___ __ __');
+    });
 });

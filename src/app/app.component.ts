@@ -20,7 +20,9 @@ import {
     FormatAndParserExamples,
     ParserAndFormatterDocs,
 } from '../assets/content/parser-and-formatter';
+import { VersionToken } from '@libraries/version/version.token';
 
+declare const VERSION: string;
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
@@ -33,6 +35,7 @@ import {
         AccordionComponent,
         FooterComponent,
     ],
+    providers: [{ provide: VersionToken, useValue: VERSION }],
 })
 export class AppComponent {
     public card: {
@@ -42,12 +45,12 @@ export class AppComponent {
         docs: ComDocs,
         examples: ComExamples,
     };
+
     public lists: IListItem[] = lists;
     public githubMaskLink = LinkPath.NGX_MASK;
     public title = 'Ngx-Mask';
     public subtitle = 'Angular plugin to make masks on form fields and html elements';
     public chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
-
     public switchCard(cardId: number): void {
         switch (cardId) {
             case 1:

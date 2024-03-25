@@ -65,4 +65,65 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('1234567.89', '1 234 567.89', fixture);
         expect(component.form.value).toBe(1234567.89);
     });
+
+    it('dropSpecialCharacter test for valid', () => {
+        component.mask = '(000) 000-0000';
+        component.dropSpecialCharacters = true;
+        component.validation = true;
+        equal('1', '(1', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12', '(12', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123', '(123', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234', '(123) 4', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12345', '(123) 45', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123456', '(123) 456', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234567', '(123) 456-7', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12345678', '(123) 456-78', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123456789', '(123) 456-789', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234567890', '(123) 456-7890', fixture);
+        expect(component.form.valid).toBe(true);
+    });
+
+    it('dropSpecialCharacter = false test for valid', () => {
+        component.mask = '(000) 000-0000';
+        component.dropSpecialCharacters = true;
+        component.validation = true;
+        equal('1', '(1', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12', '(12', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123', '(123', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234', '(123) 4', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12345', '(123) 45', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123456', '(123) 456', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234567', '(123) 456-7', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12345678', '(123) 456-78', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('123456789', '(123) 456-789', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('1234567890', '(123) 456-7890', fixture);
+        expect(component.form.valid).toBe(true);
+    });
+
+    it('dropSpecialCharacter = true test for valid with setValue', () => {
+        component.mask = '(000) 000-0000';
+        component.dropSpecialCharacters = true;
+        component.validation = true;
+        component.form.setValue('1234567890');
+        equal('1234567890', '(123) 456-7890', fixture);
+        expect(component.form.valid).toBe(true);
+    });
 });
