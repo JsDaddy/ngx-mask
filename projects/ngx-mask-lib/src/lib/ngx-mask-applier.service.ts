@@ -576,7 +576,8 @@ export class NgxMaskApplierService {
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusTwoCursor as string
                             ) &&
-                            Number(inputValueSliceMinusTwoCursor) > monthsCount;
+                            Number(inputValueSliceMinusTwoCursor) > monthsCount &&
+                            maskExpression.includes('d0');
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&

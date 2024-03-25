@@ -204,8 +204,11 @@ export class NgxMaskService extends NgxMaskApplierService {
                 this.maskChanged ||
                 (this._previousValue === this._currentValue && justPasted);
         }
-
-        this._emitValue ? this.formControlResult(result) : '';
+        this._emitValue
+            ? this.writingValue
+                ? requestAnimationFrame(() => this.formControlResult(result))
+                : this.formControlResult(result)
+            : '';
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 if (backspaced) {
