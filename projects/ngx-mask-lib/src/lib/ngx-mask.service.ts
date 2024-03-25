@@ -569,10 +569,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             return value;
         }
         if (
-            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
-            (this.leadZero || !this.dropSpecialCharacters)
-            // ||
-            // (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && String(value) === '0')
+            (this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+                (this.leadZero || !this.dropSpecialCharacters)) ||
+            (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && String(value) === '0')
         ) {
             return value;
         }

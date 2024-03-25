@@ -1,6 +1,6 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
@@ -50,25 +50,10 @@ export class OptionsComponent {
 
     public readonly activeCardId = toSignal(this.scrollService.activeCard$);
 
-    public formControl1 = new FormControl(100);
-    public testNumber = new FormControl();
-
     public constructor() {
         effect(() => {
             this.scrollService.onScroll(this.cards());
             this.accordionService.onChangeAccordion(this.cards());
         });
-        this.testNumber.setValue(123412);
-    }
-
-    public prefix1 = '$';
-
-    public testValue = new FormControl('1234567890');
-
-    public widthDropSpecialCharacters = new FormControl('0000000000');
-    public widthoutDropSpecialCharacters = new FormControl('0000000000');
-
-    public test(): void {
-        console.log(this.testNumber);
     }
 }

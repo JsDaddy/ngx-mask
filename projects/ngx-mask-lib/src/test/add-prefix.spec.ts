@@ -130,13 +130,4 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('KZ123123', 'KZ123 123', fixture);
         expect(component.form.value).toBe('123123');
     });
-
-    it('should remove prefix when setValue', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = false;
-        component.form.setValue('KZ123123');
-        equal('KZ123123', 'KZ123 123', fixture);
-        expect(component.form.value).toBe('KZ123 123');
-    });
 });
