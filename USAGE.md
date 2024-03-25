@@ -17,7 +17,7 @@ Also, you can use mask pipe.
 You could path any valid config options, for example thousandSeparator and suffix
 
 ```html
-<span>{{value | mask: 'separator': {thousandSeparator: ',', suffix: ' sm'}}</span>
+<span>{{value | mask: 'separator': { thousandSeparator: ',', suffix: ' sm' } }}</span>
 ```
 
 ### Examples

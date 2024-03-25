@@ -227,4 +227,77 @@ describe('Directive: Mask (Percent)', () => {
         equal('12,221', '12,221%', fixture);
         expect(component.form.value).toBe('12.221');
     });
+
+    it('percent with allowNegative = true', () => {
+        component.mask = 'percent';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        expect(component.form.value).toBe('-12');
+    });
+
+    it('percent 2 with allowNegative = true', () => {
+        component.mask = 'percent.2';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        equal('-12.3', '-12.3', fixture);
+        equal('-12.34', '-12.34', fixture);
+        expect(component.form.value).toBe('-12.34');
+    });
+
+    it('percent 3 with allowNegative = true', () => {
+        component.mask = 'percent.3';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        equal('-12.3', '-12.3', fixture);
+        equal('-12.34', '-12.34', fixture);
+        equal('-12.345', '-12.345', fixture);
+        expect(component.form.value).toBe('-12.345');
+    });
+
+    it('percent with allowNegative = true, decimalMarker = ,', () => {
+        component.mask = 'percent';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        expect(component.form.value).toBe('-12');
+    });
+
+    it('percent 2 with allowNegative = true, decimalMarker = ,', () => {
+        component.mask = 'percent.2';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        equal('-12,3', '-12,3', fixture);
+        equal('-12,34', '-12,34', fixture);
+        expect(component.form.value).toBe('-12.34');
+    });
+
+    it('percent 3 with allowNegative = true, decimalMarker = ,', () => {
+        component.mask = 'percent.3';
+        component.allowNegativeNumbers = true;
+        component.decimalMarker = ',';
+
+        equal('-', '-', fixture);
+        equal('-1', '-1', fixture);
+        equal('-12', '-12', fixture);
+        equal('-12,3', '-12,3', fixture);
+        equal('-12,34', '-12,34', fixture);
+        equal('-12,345', '-12,345', fixture);
+        expect(component.form.value).toBe('-12.345');
+    });
 });

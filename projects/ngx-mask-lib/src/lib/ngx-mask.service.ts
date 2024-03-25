@@ -124,7 +124,8 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.specialCharacters.indexOf(
                 this.maskExpression[position] ?? MaskExpression.EMPTY_STRING
             ) !== -1 &&
-            this.showMaskTyped
+            this.showMaskTyped &&
+            !this.prefix
         ) {
             newInputValue = this._currentValue;
         }
