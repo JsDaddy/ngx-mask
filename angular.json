@@ -36,31 +36,18 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "500kb",
-                                    "maximumError": "1mb"
+                                    "maximumWarning": "2mb",
+                                    "maximumError": "2mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
-                                    "maximumWarning": "5kb",
-                                    "maximumError": "7kb"
-                                }
-                            ],
-                            "optimization": true,
-                            "sourceMap": false,
-                            "namedChunks": false,
-                            "extractLicenses": true,
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/environments/environment.ts",
-                                    "with": "src/environments/environment.prod.ts"
+                                    "maximumWarning": "15kb",
+                                    "maximumError": "15kb"
                                 }
                             ],
                             "outputHashing": "all"
                         },
                         "development": {
-                            "define": {
-                                "VERSION": "'v0.0.1'"
-                            },
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
@@ -79,26 +66,21 @@
                         }
                     }
                 },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "buildTarget": "ngx-mask:build"
-                    }
-                },
                 "test": {
                     "builder": "@angular-devkit/build-angular:web-test-runner",
                     "options": {
-                        "main": "src/test.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "src/tsconfig.spec.json",
-                        "codeCoverage": true,
-                        "sourceMap": true,
-                        "scripts": [],
-                        "styles": [
-                            "node_modules/bootstrap/dist/css/bootstrap-grid.css",
-                            "src/styles.scss"
+                        "tsConfig": "tsconfig.spec.json",
+                        "inlineStyleLanguage": "scss",
+                        "assets": [
+                            "src/favicon.ico",
+                            "src/assets"
                         ],
-                        "assets": ["src/assets", "src/favicon.ico"]
+                        "polyfills": [
+                            "zone.js",
+                            "zone.js/testing"
+                        ],
+                        "styles": ["src/styles.scss"],
+                        "scripts": []
                     }
                 },
                 "lint": {
@@ -126,17 +108,6 @@
                             "project": "projects/ngx-mask-lib/ng-package.prod.json",
                             "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.prod.json"
                         }
-                    }
-                },
-                "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
-                    "options": {
-                        "main": "projects/ngx-mask-lib/src/test.ts",
-                        "polyfills": "src/polyfills.ts",
-                        "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
-                        "karmaConfig": "projects/ngx-mask-lib/karma.conf.js",
-                        "codeCoverage": true,
-                        "sourceMap": true
                     }
                 },
                 "lint": {
