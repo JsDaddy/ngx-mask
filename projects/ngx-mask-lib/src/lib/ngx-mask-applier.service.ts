@@ -724,7 +724,6 @@ export class NgxMaskApplierService {
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
             this.showMaskTyped ? '' : this.suffix
         }`;
-
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
@@ -942,18 +941,24 @@ export class NgxMaskApplierService {
             typeof this.decimalMarker === 'string'
                 ? value.indexOf(this.decimalMarker)
                 : value.indexOf(MaskExpression.DOT);
+        const emptyOrMinus =
+            this.allowNegativeNumbers && value.includes(MaskExpression.MINUS) ? '-' : '';
         if (decimalIndex === -1) {
-            const parsedValue = parseInt(value, 10);
-            return isNaN(parsedValue) ? MaskExpression.EMPTY_STRING : parsedValue.toString();
+            const parsedValue = parseInt(emptyOrMinus ? value.slice(1, value.length) : value, 10);
+            return isNaN(parsedValue)
+                ? MaskExpression.EMPTY_STRING
+                : emptyOrMinus + parsedValue.toString();
         } else {
-            const integerPart = parseInt(value.substring(0, decimalIndex), 10);
+            const integerPart = parseInt(value.replace('-', '').substring(0, decimalIndex), 10);
             const decimalPart = value.substring(decimalIndex + 1);
             const integerString = isNaN(integerPart) ? '' : integerPart.toString();
+
             const decimal =
                 typeof this.decimalMarker === 'string' ? this.decimalMarker : MaskExpression.DOT;
+
             return integerString === MaskExpression.EMPTY_STRING
                 ? MaskExpression.EMPTY_STRING
-                : integerString + decimal + decimalPart;
+                : emptyOrMinus + integerString + decimal + decimalPart;
         }
     }
 }

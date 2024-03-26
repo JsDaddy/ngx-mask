@@ -53,7 +53,7 @@ export class OptionsComponent {
     public control = new FormControl('KZ12312');
     public widthDropSpecialCharacters = new FormControl('');
     public widthoutDropSpecialCharacters = new FormControl('');
-    public testValue = new FormControl('');
+    public testValue = new FormControl('100');
     public mask = '0000';
     public formControl1 = new FormControl(100);
     public formControl2 = new FormControl(123412);

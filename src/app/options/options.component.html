@@ -1,17 +1,30 @@
+percent2 , <input mask="percent.2" [allowNegativeNumbers]="true" [decimalMarker]="','" /> <br />
+percent2 . <input mask="percent.2" [allowNegativeNumbers]="true" [decimalMarker]="'.'" /> <br />
+percent
+<input mask="percent" [allowNegativeNumbers]="true" />
+<br />
+leadzero
 <input
-    type="text"
-    mask="M0-d0-0000"
-    [dropSpecialCharacters]="false"
-    [leadZeroDateTime]="true"
-    [showMaskTyped]="true"
-    placeholder="dd-MM-yyyy" />
-<input
-    type="text"
-    mask="d0-M0-0000"
-    [dropSpecialCharacters]="false"
-    [leadZeroDateTime]="true"
-    [showMaskTyped]="true"
-    placeholder="dd-MM-yyyy" />
+    mask="separator.2"
+    [leadZero]="true"
+    decimalMarker="."
+    [thousandSeparator]="''"
+    [formControl]="testValue" />
+{{ testValue.value }}
+<!--<input-->
+<!--    type="text"-->
+<!--    mask="M0-d0-0000"-->
+<!--    [dropSpecialCharacters]="false"-->
+<!--    [leadZeroDateTime]="true"-->
+<!--    [showMaskTyped]="true"-->
+<!--    placeholder="dd-MM-yyyy" />-->
+<!--<input-->
+<!--    type="text"-->
+<!--    mask="d0-M0-0000"-->
+<!--    [dropSpecialCharacters]="false"-->
+<!--    [leadZeroDateTime]="true"-->
+<!--    [showMaskTyped]="true"-->
+<!--    placeholder="dd-MM-yyyy" />-->
 
 <!--<input [formControl]="testValue" type="text" [mask]="'separator.2'" />-->
 
