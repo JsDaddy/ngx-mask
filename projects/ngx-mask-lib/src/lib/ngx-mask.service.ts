@@ -71,7 +71,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
-            return this.prefix + this.maskIsShown + this.suffix;
+            return `${this.prefix}${this.maskIsShown}${this.suffix}`;
         }
 
         const getSymbol: string =
@@ -163,7 +163,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(value);
             return this.actualValue
                 ? this.actualValue
-                : this.prefix + this.maskIsShown + this.suffix;
+                : `${this.prefix}${this.maskIsShown}${this.suffix}`;
         }
 
         const result: string = super.applyMask(
@@ -204,33 +204,33 @@ export class NgxMaskService extends NgxMaskApplierService {
                 this.maskChanged ||
                 (this._previousValue === this._currentValue && justPasted);
         }
-
-        this._emitValue ? this.formControlResult(result) : '';
+        this._emitValue
+            ? this.writingValue
+                ? requestAnimationFrame(() => this.formControlResult(result))
+                : this.formControlResult(result)
+            : '';
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 if (backspaced) {
                     return this.hideInput(result, this.maskExpression);
                 }
-                return (
-                    this.hideInput(result, this.maskExpression) +
-                    this.maskIsShown.slice(result.length)
-                );
+                return `${this.hideInput(result, this.maskExpression)}${this.maskIsShown.slice(result.length)}`;
             }
             return result;
         }
         const resLen: number = result.length;
-        const prefNmask: string = this.prefix + this.maskIsShown + this.suffix;
+        const prefNmask: string = `${this.prefix}${this.maskIsShown}${this.suffix}`;
 
         if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
-            return result + prefNmask.slice(resLen + countSkipedSymbol);
+            return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
         } else if (
             this.maskExpression === MaskExpression.IP ||
             this.maskExpression === MaskExpression.CPF_CNPJ
         ) {
-            return result + prefNmask;
+            return `${result}${prefNmask}`;
         }
-        return result + prefNmask.slice(resLen);
+        return `${result}${prefNmask.slice(resLen)}`;
     }
 
     // get the number of characters that were shifted

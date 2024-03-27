@@ -126,4 +126,30 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('1234567890', '(123) 456-7890', fixture);
         expect(component.form.valid).toBe(true);
     });
+
+    it('dropSpecialCharacter = false test for valid with setValue', () => {
+        component.mask = '(000) 000-0000';
+        component.dropSpecialCharacters = false;
+        component.validation = true;
+        equal('1', '(1', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('12', '(12', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('123', '(123', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('1234', '(123) 4', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('12345', '(123) 45', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('123456', '(123) 456', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('1234567', '(123) 456-7', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('12345678', '(123) 456-78', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('123456789', '(123) 456-789', fixture);
+        expect(component.form.valid).toBeFalsy();
+        equal('1234567890', '(123) 456-7890', fixture);
+        expect(component.form.valid).toBeTrue();
+    });
 });

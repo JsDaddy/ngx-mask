@@ -469,30 +469,23 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     if (this._code === MaskExpression.BACKSPACE) {
                         if (!selectRangeBackspace) {
                             if (this._maskService.selStart === prefixLength) {
-                                this._maskService.actualValue =
-                                    this.prefix +
-                                    this._maskService.maskIsShown.slice(0, selEnd) +
-                                    this._inputValue.split(this.prefix).join('');
+                                this._maskService.actualValue = `${this.prefix}${this._maskService.maskIsShown.slice(0, selEnd)}${this._inputValue.split(this.prefix).join('')}`;
                             } else if (
                                 this._maskService.selStart ===
                                 this._maskService.maskIsShown.length + prefixLength
                             ) {
-                                this._maskService.actualValue =
-                                    this._inputValue +
-                                    this._maskService.maskIsShown.slice(selStart, selEnd);
+                                this._maskService.actualValue = `${this._inputValue}${this._maskService.maskIsShown.slice(selStart, selEnd)}`;
                             } else {
-                                this._maskService.actualValue =
-                                    this.prefix +
-                                    this._inputValue
-                                        .split(this.prefix)
-                                        .join('')
-                                        .slice(0, selStart) +
-                                    this._maskService.maskIsShown.slice(selStart, selEnd) +
-                                    this._maskService.actualValue.slice(
-                                        selEnd + prefixLength,
-                                        this._maskService.maskIsShown.length + prefixLength
-                                    ) +
-                                    this.suffix;
+                                this._maskService.actualValue = `${this.prefix}${this._inputValue
+                                    .split(this.prefix)
+                                    .join('')
+                                    .slice(
+                                        0,
+                                        selStart
+                                    )}${this._maskService.maskIsShown.slice(selStart, selEnd)}${this._maskService.actualValue.slice(
+                                    selEnd + prefixLength,
+                                    this._maskService.maskIsShown.length + prefixLength
+                                )}${this.suffix}`;
                             }
                         } else if (
                             !this._maskService.specialCharacters.includes(
@@ -504,21 +497,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                             selectRangeBackspace
                         ) {
                             if (selStart === 1 && this.prefix) {
-                                this._maskService.actualValue =
-                                    this.prefix +
-                                    this._maskService.placeHolderCharacter +
-                                    el.value
-                                        .split(this.prefix)
-                                        .join('')
-                                        .split(this.suffix)
-                                        .join('') +
-                                    this.suffix;
+                                this._maskService.actualValue = `${this.prefix}${this._maskService.placeHolderCharacter}${el.value
+                                    .split(this.prefix)
+                                    .join('')
+                                    .split(this.suffix)
+                                    .join('')}${this.suffix}`;
+
                                 position = position - 1;
                             } else {
                                 const part1 = el.value.substring(0, position);
                                 const part2 = el.value.substring(position);
-                                this._maskService.actualValue =
-                                    part1 + this._maskService.placeHolderCharacter + part2;
+                                this._maskService.actualValue = `${part1}${this._maskService.placeHolderCharacter}${part2}`;
                             }
                         }
                     }
@@ -534,31 +523,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 el.value.slice(position + 1, position + 2)
                             )
                         ) {
-                            this._maskService.actualValue =
-                                el.value.slice(0, position - 1) +
-                                el.value.slice(position, position + 1) +
-                                inputSymbol +
-                                el.value.slice(position + 2);
+                            this._maskService.actualValue = `${el.value.slice(0, position - 1)}${el.value.slice(position, position + 1)}${inputSymbol}${el.value.slice(position + 2)}`;
                             position = position + 1;
                         } else if (checkSymbols) {
                             if (el.value.length === 1 && position === 1) {
-                                this._maskService.actualValue =
-                                    this.prefix +
-                                    inputSymbol +
-                                    this._maskService.maskIsShown.slice(
-                                        1,
-                                        this._maskService.maskIsShown.length
-                                    ) +
-                                    this.suffix;
+                                this._maskService.actualValue = `${this.prefix}${inputSymbol}${this._maskService.maskIsShown.slice(
+                                    1,
+                                    this._maskService.maskIsShown.length
+                                )}${this.suffix}`;
                             } else {
-                                this._maskService.actualValue =
-                                    el.value.slice(0, position - 1) +
-                                    inputSymbol +
-                                    el.value
-                                        .slice(position + 1)
-                                        .split(this.suffix)
-                                        .join('') +
-                                    this.suffix;
+                                this._maskService.actualValue = `${el.value.slice(0, position - 1)}${inputSymbol}${el.value
+                                    .slice(position + 1)
+                                    .split(this.suffix)
+                                    .join('')}${this.suffix}`;
                             }
                         } else if (
                             this.prefix &&
@@ -570,14 +547,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                     MaskExpression.EMPTY_STRING
                             )
                         ) {
-                            this._maskService.actualValue =
-                                this.prefix +
-                                el.value +
-                                this._maskService.maskIsShown.slice(
-                                    1,
-                                    this._maskService.maskIsShown.length
-                                ) +
-                                this.suffix;
+                            this._maskService.actualValue = `${this.prefix}${el.value}${this._maskService.maskIsShown.slice(
+                                1,
+                                this._maskService.maskIsShown.length
+                            )}${this.suffix}`;
                         }
                     }
                 }

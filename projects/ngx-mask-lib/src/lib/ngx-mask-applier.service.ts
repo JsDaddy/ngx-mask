@@ -176,9 +176,7 @@ export class NgxMaskApplierService {
             let value = '';
             this.allowNegativeNumbers &&
             inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
-                ? (value =
-                      MaskExpression.MINUS +
-                      inputValue.slice(cursor + 1, cursor + inputValue.length))
+                ? (value = `${MaskExpression.MINUS}${inputValue.slice(cursor + 1, cursor + inputValue.length)}`)
                 : (value = inputValue);
             if (this.percentage(value)) {
                 result = this._splitPercentZero(inputValue);
@@ -576,7 +574,8 @@ export class NgxMaskApplierService {
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusTwoCursor as string
                             ) &&
-                            Number(inputValueSliceMinusTwoCursor) > monthsCount;
+                            Number(inputValueSliceMinusTwoCursor) > monthsCount &&
+                            maskExpression.includes('d0');
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
@@ -941,18 +940,24 @@ export class NgxMaskApplierService {
             typeof this.decimalMarker === 'string'
                 ? value.indexOf(this.decimalMarker)
                 : value.indexOf(MaskExpression.DOT);
+        const emptyOrMinus =
+            this.allowNegativeNumbers && value.includes(MaskExpression.MINUS) ? '-' : '';
         if (decimalIndex === -1) {
-            const parsedValue = parseInt(value, 10);
-            return isNaN(parsedValue) ? MaskExpression.EMPTY_STRING : parsedValue.toString();
+            const parsedValue = parseInt(emptyOrMinus ? value.slice(1, value.length) : value, 10);
+            return isNaN(parsedValue)
+                ? MaskExpression.EMPTY_STRING
+                : `${emptyOrMinus}${parsedValue}`;
         } else {
-            const integerPart = parseInt(value.substring(0, decimalIndex), 10);
+            const integerPart = parseInt(value.replace('-', '').substring(0, decimalIndex), 10);
             const decimalPart = value.substring(decimalIndex + 1);
             const integerString = isNaN(integerPart) ? '' : integerPart.toString();
+
             const decimal =
                 typeof this.decimalMarker === 'string' ? this.decimalMarker : MaskExpression.DOT;
+
             return integerString === MaskExpression.EMPTY_STRING
                 ? MaskExpression.EMPTY_STRING
-                : integerString + decimal + decimalPart;
+                : `${emptyOrMinus}${integerString}${decimal}${decimalPart}`;
         }
     }
 }
