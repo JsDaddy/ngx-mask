@@ -724,6 +724,7 @@ export class NgxMaskApplierService {
         let res = `${this.prefix}${onlySpecial ? MaskExpression.EMPTY_STRING : result}${
             this.showMaskTyped ? '' : this.suffix
         }`;
+
         if (result.length === 0) {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
