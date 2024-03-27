@@ -176,9 +176,7 @@ export class NgxMaskApplierService {
             let value = '';
             this.allowNegativeNumbers &&
             inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
-                ? (value =
-                      MaskExpression.MINUS +
-                      inputValue.slice(cursor + 1, cursor + inputValue.length))
+                ? (value = `${MaskExpression.MINUS}${inputValue.slice(cursor + 1, cursor + inputValue.length)}`)
                 : (value = inputValue);
             if (this.percentage(value)) {
                 result = this._splitPercentZero(inputValue);
@@ -948,7 +946,7 @@ export class NgxMaskApplierService {
             const parsedValue = parseInt(emptyOrMinus ? value.slice(1, value.length) : value, 10);
             return isNaN(parsedValue)
                 ? MaskExpression.EMPTY_STRING
-                : emptyOrMinus + parsedValue.toString();
+                : `${emptyOrMinus}${parsedValue}`;
         } else {
             const integerPart = parseInt(value.replace('-', '').substring(0, decimalIndex), 10);
             const decimalPart = value.substring(decimalIndex + 1);
@@ -959,7 +957,7 @@ export class NgxMaskApplierService {
 
             return integerString === MaskExpression.EMPTY_STRING
                 ? MaskExpression.EMPTY_STRING
-                : emptyOrMinus + integerString + decimal + decimalPart;
+                : `${emptyOrMinus}${integerString}${decimal}${decimalPart}`;
         }
     }
 }
