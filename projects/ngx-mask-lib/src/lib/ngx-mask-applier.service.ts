@@ -345,7 +345,10 @@ export class NgxMaskApplierService {
                 result.indexOf(MaskExpression.COMMA) - inputValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - inputValue.length;
 
-            if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
+            if (result[position - 1] === this.thousandSeparator && this.prefix && backspaced) {
+                // eslint-disable-next-line no-param-reassign
+                position = position - 1;
+            } else if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
@@ -523,9 +526,15 @@ export class NgxMaskApplierService {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(
+                                maskExpression,
+                                this.leadZeroDateTime ? cursor + 1 : cursor,
+                                inputArray.length
+                            );
                             i--;
                             if (this.leadZeroDateTime) {
+                                // eslint-disable-next-line no-param-reassign
+                                position = position + 1;
                                 result += '0';
                             }
                             continue;
@@ -543,6 +552,7 @@ export class NgxMaskApplierService {
                         const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                         const day1monthInput: boolean =
                             inputValueSliceMinusThreeMinusOne.includes(specialChart) &&
+                            maskExpression.includes('d0') &&
                             ((this.specialCharacters.includes(inputValueCursorMinusTwo) &&
                                 Number(inputValueSliceMinusOnePlusOne) > monthsCount &&
                                 !this.specialCharacters.includes(inputValueCursor)) ||
@@ -584,6 +594,14 @@ export class NgxMaskApplierService {
                             ) &&
                             !this.specialCharacters.includes(inputValueCursorMinusOne) &&
                             Number(inputValueSliceMinusOnePlusOne) > monthsCount;
+                        console.log(
+                            Number(inputSymbol) > 1 && this.leadZeroDateTime,
+                            withoutDays,
+                            day1monthInput,
+                            day2monthPaste,
+                            day1monthPaste,
+                            day2monthInput
+                        );
                         if (
                             (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
                             withoutDays ||
@@ -596,10 +614,16 @@ export class NgxMaskApplierService {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(
+                                maskExpression,
+                                this.leadZeroDateTime ? cursor + 1 : cursor,
+                                inputArray.length
+                            );
                             i--;
                             if (this.leadZeroDateTime) {
                                 result += '0';
+                                // eslint-disable-next-line no-param-reassign
+                                position = position + 1;
                             }
                             continue;
                         }
