@@ -233,9 +233,33 @@ describe('Directive: Mask (Percent)', () => {
         component.allowNegativeNumbers = true;
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         expect(component.form.value).toBe('-12');
+    });
+
+    it('percent with allowNegative = true', () => {
+        component.mask = 'percent.1';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0.', '-0.', fixture);
+        equal('-0.1', '-0.1', fixture);
+        expect(component.form.value).toBe('-0.1');
+    });
+
+    it('percent with allowNegative = true', () => {
+        component.mask = 'percent.1';
+        component.decimalMarker = ',';
+        component.allowNegativeNumbers = true;
+
+        equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0,', '-0,', fixture);
+        equal('-0,1', '-0,1', fixture);
+        expect(component.form.value).toBe('-0.1');
     });
 
     it('percent 2 with allowNegative = true', () => {
@@ -243,6 +267,10 @@ describe('Directive: Mask (Percent)', () => {
         component.allowNegativeNumbers = true;
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0.', '-0.', fixture);
+        equal('-0.1', '-0.1', fixture);
+        equal('-0.12', '-0.12', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         equal('-12.3', '-12.3', fixture);
@@ -255,6 +283,11 @@ describe('Directive: Mask (Percent)', () => {
         component.allowNegativeNumbers = true;
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0.', '-0.', fixture);
+        equal('-0.1', '-0.1', fixture);
+        equal('-0.12', '-0.12', fixture);
+        equal('-0.123', '-0.123', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         equal('-12.3', '-12.3', fixture);
@@ -269,6 +302,7 @@ describe('Directive: Mask (Percent)', () => {
         component.allowNegativeNumbers = true;
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         expect(component.form.value).toBe('-12');
@@ -280,6 +314,10 @@ describe('Directive: Mask (Percent)', () => {
         component.allowNegativeNumbers = true;
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0,', '-0,', fixture);
+        equal('-0,1', '-0,1', fixture);
+        equal('-0,12', '-0,12', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         equal('-12,3', '-12,3', fixture);
@@ -293,6 +331,11 @@ describe('Directive: Mask (Percent)', () => {
         component.decimalMarker = ',';
 
         equal('-', '-', fixture);
+        equal('-0', '-0', fixture);
+        equal('-0,', '-0,', fixture);
+        equal('-0,1', '-0,1', fixture);
+        equal('-0,12', '-0,12', fixture);
+        equal('-0,123', '-0,123', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
         equal('-12,3', '-12,3', fixture);

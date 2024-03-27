@@ -457,9 +457,31 @@ describe('Directive: Mask (Time)', () => {
         equal('442000', '04/04/2000', fixture);
     });
 
-    it('Date (Hh:m0 leadZero)', () => {
-        component.mask = 'Hh:m0';
-        component.leadZeroDateTime = true;
-        equal('49', '04:09', fixture);
+    it('Date (0000-M0)', () => {
+        component.mask = '0000-M0';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1234', fixture);
+        equal('12341', '1234-1', fixture);
+        equal('123412', '1234-12', fixture);
+    });
+    it('Date (0000/M0)', () => {
+        component.mask = '0000/M0';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1234', fixture);
+        equal('12341', '1234/1', fixture);
+        equal('123412', '1234/12', fixture);
+    });
+    it('Date (0000:M0)', () => {
+        component.mask = '0000:M0';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1234', fixture);
+        equal('12341', '1234:1', fixture);
+        equal('123412', '1234:12', fixture);
     });
 });
