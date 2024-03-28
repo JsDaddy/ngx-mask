@@ -147,17 +147,22 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'allowNegativeNumbers mask',
         _allowNegativeNumbers: true,
+        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _mask: '0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers separator',
         _allowNegativeNumbers: true,
+        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
+        _decimalMarker: '.',
         _mask: 'separator',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers percent',
+        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
+        _decimalMarker: '.',
         _allowNegativeNumbers: true,
         _mask: 'percent.2',
         control: { form: new UntypedFormControl(''), model: '' },
