@@ -324,4 +324,55 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.prop', 'selectionStart', 10);
     });
+
+    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'M0-d0-0000',
+                leadZeroDateTime: true,
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12310000')
+            .should('have.value', '12-31-0000')
+            .type('{backspace}'.repeat(8))
+            .should('have.value', '__-__-____');
+    });
+
+    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'M0/d0/0000',
+                leadZeroDateTime: true,
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12310000')
+            .should('have.value', '12/31/0000')
+            .type('{backspace}'.repeat(8))
+            .should('have.value', '__/__/____');
+    });
+
+    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'M0:d0:0000',
+                leadZeroDateTime: true,
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12310000')
+            .should('have.value', '12:31:0000')
+            .type('{backspace}'.repeat(8))
+            .should('have.value', '__:__:____');
+    });
 });

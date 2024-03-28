@@ -514,27 +514,23 @@ export class NgxMaskApplierService {
                             (!maskStartWithMonth &&
                                 (Number(inputValueSliceCursorPlusTwo) > daysCount ||
                                     Number(inputValueSliceMinusOnePlusOne) > daysCount ||
-                                    this.specialCharacters.includes(inputValueCursorPlusOne))) ||
+                                    (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                        !backspaced))) ||
                             (startWithMonthInput
                                 ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
                                   (!this.specialCharacters.includes(inputValueCursor) &&
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
                                 : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  this.specialCharacters.includes(inputValueCursorPlusOne))
+                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                      !backspaced))
                         ) {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
-                            this._shiftStep(
-                                maskExpression,
-                                this.leadZeroDateTime ? cursor + 1 : cursor,
-                                inputArray.length
-                            );
+                            this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
                             if (this.leadZeroDateTime) {
-                                // eslint-disable-next-line no-param-reassign
-                                position = position + 1;
                                 result += '0';
                             }
                             continue;
@@ -547,7 +543,8 @@ export class NgxMaskApplierService {
                             cursor === 0 &&
                             (Number(inputSymbol) > 2 ||
                                 Number(inputValueSliceCursorPlusTwo) > monthsCount ||
-                                this.specialCharacters.includes(inputValueCursorPlusOne));
+                                (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                    !backspaced));
                         // day<10 && month<12 for input
                         const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                         const day1monthInput: boolean =
@@ -569,7 +566,8 @@ export class NgxMaskApplierService {
                             ) &&
                             this.specialCharacters.includes(inputValueCursorMinusOne) &&
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
-                                this.specialCharacters.includes(inputValueCursorPlusOne));
+                                (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                    !backspaced));
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5) ||
@@ -614,16 +612,10 @@ export class NgxMaskApplierService {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
-                            this._shiftStep(
-                                maskExpression,
-                                this.leadZeroDateTime ? cursor + 1 : cursor,
-                                inputArray.length
-                            );
+                            this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
                             if (this.leadZeroDateTime) {
                                 result += '0';
-                                // eslint-disable-next-line no-param-reassign
-                                position = position + 1;
                             }
                             continue;
                         }

@@ -107,6 +107,7 @@ Masked value: (Hel-loW)
 ### Custom pattern for this
 
 You can define custom pattern and specify symbol to be rendered in input field.
+Patterns may conflict with such letters as h, d, m, s, because we use these characters for dates.
 
 ```typescript
 pattern = {
