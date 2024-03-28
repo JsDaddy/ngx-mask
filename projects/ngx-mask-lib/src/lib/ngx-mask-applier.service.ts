@@ -592,14 +592,6 @@ export class NgxMaskApplierService {
                             ) &&
                             !this.specialCharacters.includes(inputValueCursorMinusOne) &&
                             Number(inputValueSliceMinusOnePlusOne) > monthsCount;
-                        console.log(
-                            Number(inputSymbol) > 1 && this.leadZeroDateTime,
-                            withoutDays,
-                            day1monthInput,
-                            day2monthPaste,
-                            day1monthPaste,
-                            day2monthInput
-                        );
                         if (
                             (Number(inputSymbol) > 1 && this.leadZeroDateTime) ||
                             withoutDays ||
