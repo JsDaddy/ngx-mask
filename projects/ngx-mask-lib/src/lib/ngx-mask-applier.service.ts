@@ -345,7 +345,10 @@ export class NgxMaskApplierService {
                 result.indexOf(MaskExpression.COMMA) - inputValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - inputValue.length;
 
-            if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
+            if (result[position - 1] === this.thousandSeparator && this.prefix && backspaced) {
+                // eslint-disable-next-line no-param-reassign
+                position = position - 1;
+            } else if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
@@ -511,14 +514,16 @@ export class NgxMaskApplierService {
                             (!maskStartWithMonth &&
                                 (Number(inputValueSliceCursorPlusTwo) > daysCount ||
                                     Number(inputValueSliceMinusOnePlusOne) > daysCount ||
-                                    this.specialCharacters.includes(inputValueCursorPlusOne))) ||
+                                    (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                        !backspaced))) ||
                             (startWithMonthInput
                                 ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
                                   (!this.specialCharacters.includes(inputValueCursor) &&
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
                                 : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  this.specialCharacters.includes(inputValueCursorPlusOne))
+                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                      !backspaced))
                         ) {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
@@ -538,11 +543,13 @@ export class NgxMaskApplierService {
                             cursor === 0 &&
                             (Number(inputSymbol) > 2 ||
                                 Number(inputValueSliceCursorPlusTwo) > monthsCount ||
-                                this.specialCharacters.includes(inputValueCursorPlusOne));
+                                (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                    !backspaced));
                         // day<10 && month<12 for input
                         const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                         const day1monthInput: boolean =
                             inputValueSliceMinusThreeMinusOne.includes(specialChart) &&
+                            maskExpression.includes('d0') &&
                             ((this.specialCharacters.includes(inputValueCursorMinusTwo) &&
                                 Number(inputValueSliceMinusOnePlusOne) > monthsCount &&
                                 !this.specialCharacters.includes(inputValueCursor)) ||
@@ -559,7 +566,8 @@ export class NgxMaskApplierService {
                             ) &&
                             this.specialCharacters.includes(inputValueCursorMinusOne) &&
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
-                                this.specialCharacters.includes(inputValueCursorPlusOne));
+                                (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                    !backspaced));
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5) ||
