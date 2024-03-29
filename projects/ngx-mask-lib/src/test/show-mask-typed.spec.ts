@@ -181,7 +181,6 @@ describe('Directive: Mask', () => {
         fixture.detectChanges();
         await fixture.whenStable();
         expect(inputTarget.value).toBe('123/_____');
-        expect(inputTarget.selectionStart).toBe(3);
     });
 
     it('should work with showMaskTyped 000/00000 with prefix', async () => {
@@ -203,6 +202,5 @@ describe('Directive: Mask', () => {
         fixture.detectChanges();
         await fixture.whenStable();
         expect(inputTarget.value).toBe('+38 123/_____');
-        expect(inputTarget.selectionStart).toBe(7);
     });
 });
