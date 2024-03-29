@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/libraries/open-source/sub-header/sub-header.component.scss"],
+  "sourcesContent": ["@import '../../../libraries/styles/media-breakpoints';\n.sub-header {\n    padding: 20px 20px 20px 30px;\n    .title {\n        padding-bottom: 10px;\n    }\n    .sub-title {\n        padding-bottom: 10px;\n    }\n    .chips {\n        flex-wrap: wrap;\n        gap: 10px;\n        &:first-child {\n            padding: 0 5px 0 0;\n        }\n    }\n}\n\n@media screen and (max-width: $mobileWidth) {\n    .sub-header {\n        padding: 35px 20px 20px 20px;\n        .git-text {\n            display: block;\n            .title-btn {\n                position: relative;\n                top: -35px;\n                right: 19px;\n            }\n        }\n        .sub-text {\n            position: relative;\n            top: 30px;\n        }\n    }\n}\n"],
+  "mappings": ";AACA,CAAA;AACI,WAAA,KAAA,KAAA,KAAA;;AACA,CAFJ,WAEI,CAAA;AACI,kBAAA;;AAEJ,CALJ,WAKI,CAAA;AACI,kBAAA;;AAEJ,CARJ,WAQI,CAAA;AACI,aAAA;AACA,OAAA;;AACA,CAXR,WAWQ,CAHJ,KAGI;AACI,WAAA,EAAA,IAAA,EAAA;;AAKZ,OAAA,OAAA,IAAA,CAAA,SAAA,EAAA;AACI,GAlBJ;AAmBQ,aAAA,KAAA,KAAA,KAAA;;AACA,GApBR,WAoBQ,CAAA;AACI,aAAA;;AACA,GAtBZ,WAsBY,CAFJ,SAEI,CAAA;AACI,cAAA;AACA,SAAA;AACA,WAAA;;AAGR,GA5BR,WA4BQ,CAAA;AACI,cAAA;AACA,SAAA;;;",
+  "names": []
+}
