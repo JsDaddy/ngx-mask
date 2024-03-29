@@ -184,6 +184,10 @@ Then, just define masks in inputs.
 
 Text [documentation](https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md)
 
+## Setup hooks
+```bash
+$ npm run init:hooks
+```
 
 ## Contributing
 We would love some contributions! Check out this [document](https://github.com/JsDaddy/ngx-mask/blob/develop/CONTRIBUTING.md) to get started.
