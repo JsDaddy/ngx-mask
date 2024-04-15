@@ -14,6 +14,7 @@ jobs:
           node-version: 18
       - name: Check quality
         run: |
+          npm install --package-lock-only --force
           npm ci --force
           git submodule update --init --recursive --remote
           bash .github/workflows/scripts/quality.sh

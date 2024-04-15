@@ -19,6 +19,7 @@ jobs:
 
       - name: Install deps
         run: |
+          npm install --package-lock-only --force
           npm ci --force
           git submodule update --init --recursive --remote   
 
