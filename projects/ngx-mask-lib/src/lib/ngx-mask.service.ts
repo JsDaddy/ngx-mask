@@ -713,7 +713,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         const separatorPrecision = separatorExpression.slice(10, 11);
         if (
             separatorExpression.indexOf('2') > 0 ||
-            (this.leadZero && Number(separatorPrecision) > 1)
+            (this.leadZero && Number(separatorPrecision) > 0)
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
                 // eslint-disable-next-line no-param-reassign
