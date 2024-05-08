@@ -692,7 +692,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         maskExpression.length
                     )
                 );
-                if (precision > 1) {
+                if (precision > 0) {
                     el.value = this.suffix ? el.value.split(this.suffix).join('') : el.value;
                     const decimalPart = el.value.split(this.decimalMarker)[1] as string;
                     el.value = el.value.includes(this.decimalMarker)
