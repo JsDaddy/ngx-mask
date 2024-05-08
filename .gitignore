@@ -29,6 +29,7 @@ npm-debug.log
 testem.log
 /typings
 /cypress/*
+.nx
 # e2e
 /e2e/*.js
 /e2e/*.map

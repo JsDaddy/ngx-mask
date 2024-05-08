@@ -588,6 +588,56 @@ describe('Separator: Mask', () => {
         equal('0@', '0', fixture);
     });
 
+    it('should add trailing zero when separator.1 and leadZero = true', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0);
+        tick();
+        expect(inputTarget.value).toBe('0.0');
+
+        component.form.setValue(1);
+        tick();
+        expect(inputTarget.value).toBe('1.0');
+
+        component.form.setValue(88);
+        tick();
+        expect(inputTarget.value).toBe('88.0');
+
+        component.form.setValue(99);
+        tick();
+        expect(inputTarget.value).toBe('99.0');
+    }));
+
+    it('should not modify value with one decimal when separator.1 and leadZero = true', fakeAsync(() => {
+        component.mask = 'separator.1';
+        component.leadZero = true;
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue(0.0);
+        tick();
+        expect(inputTarget.value).toBe('0.0');
+
+        component.form.setValue(1.0);
+        tick();
+        expect(inputTarget.value).toBe('1.0');
+
+        component.form.setValue(88.0);
+        tick();
+        expect(inputTarget.value).toBe('88.0');
+
+        component.form.setValue(99.9);
+        tick();
+        expect(inputTarget.value).toBe('99.9');
+    }));
+
     it('should display zeros at the end separator2', fakeAsync(() => {
         component.mask = 'separator.2';
         component.leadZero = true;

@@ -288,4 +288,35 @@ describe('Test Date Hh:m0', () => {
             .should('have.value', '09/01/3')
             .should('have.prop', 'selectionStart', 7);
     });
+
+    it('Mask should work with showMaskTyped 000/00000 with prefix', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '000/00000',
+                prefix: '+38 ',
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123')
+            .should('have.value', '+38 123/_____')
+            .should('have.prop', 'selectionStart', 7);
+    });
+
+    it('Mask should work with showMaskTyped 000/00000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '000/00000',
+                showMaskTyped: false,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123')
+            .should('have.value', '123')
+            .should('have.prop', 'selectionStart', 3);
+    });
 });
