@@ -608,7 +608,7 @@ describe('Separator: Mask', () => {
         tick();
         expect(inputTarget.value).toBe('88.0');
 
-        component.form.setValue(99.);
+        component.form.setValue(99);
         tick();
         expect(inputTarget.value).toBe('99.0');
     }));
@@ -637,7 +637,6 @@ describe('Separator: Mask', () => {
         tick();
         expect(inputTarget.value).toBe('99.9');
     }));
-
 
     it('should display zeros at the end separator2', fakeAsync(() => {
         component.mask = 'separator.2';
