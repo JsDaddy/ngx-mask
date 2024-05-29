@@ -4,6 +4,9 @@ set -e
 
 npm run lint
 
+npm run snyk:auth -- $snyk_token
+npm run snyk:test
+
 output=$(npm run type-coverage)
 if echo "$output" | grep -q "lower than "; then
     echo "$output"

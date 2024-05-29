@@ -51,3 +51,6 @@ test-reports/
 /projects/ngx-mask-lib/coverage
 
 .angular
+
+# Snyk
+.dccache
