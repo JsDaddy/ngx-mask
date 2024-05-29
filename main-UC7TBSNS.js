@@ -45568,7 +45568,7 @@ var _AppComponent = class _AppComponent {
 _AppComponent.\u0275fac = function AppComponent_Factory(t) {
   return new (t || _AppComponent)();
 };
-_AppComponent.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], standalone: true, features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.9.0" }]), \u0275\u0275StandaloneFeature], decls: 22, vars: 7, consts: [[1, "content-wrapper", "column"], [3, "activeLink"], [1, "mask-wrap", "row"], [1, "drawer-container", "column"], [3, "switchCardIndex", "lists"], [1, "right-section", "column"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
+_AppComponent.\u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], standalone: true, features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.9.1" }]), \u0275\u0275StandaloneFeature], decls: 22, vars: 7, consts: [[1, "content-wrapper", "column"], [3, "activeLink"], [1, "mask-wrap", "row"], [1, "drawer-container", "column"], [3, "switchCardIndex", "lists"], [1, "right-section", "column"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
   if (rf & 1) {
     \u0275\u0275elementStart(0, "div", 0);
     \u0275\u0275text(1, "\n    ");
@@ -50276,4 +50276,4 @@ bootstrapApplication(AppComponent, {
    * License: MIT
    *)
 */
-//# sourceMappingURL=main-S7JUTE73.js.map
+//# sourceMappingURL=main-UC7TBSNS.js.map
