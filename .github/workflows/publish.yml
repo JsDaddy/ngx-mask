@@ -24,3 +24,50 @@ jobs:
         run: npm run publish:lib
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+  slack_notification:
+    needs:
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post to a Slack channel
+        id: slack
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: 'deployments'
+          payload: |
+            {
+              "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Project: `${{ github.event.repository.name }}`"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Commit/PR URL: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  }
+                },
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "Website URL: ${{ secrets.WEBSITE_URL || 'TBA' }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

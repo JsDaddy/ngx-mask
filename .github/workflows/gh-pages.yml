@@ -56,11 +56,12 @@ jobs:
     steps:
       - name: Post to a Slack channel
         id: slack
-        uses: slackapi/slack-github-action@v1.25.0
+        uses: slackapi/slack-github-action@v1.26.0
         with:
           channel-id: 'deployments'
           payload: |
             {
+              "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
               "blocks": [
                 {
                   "type": "section",
