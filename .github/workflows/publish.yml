@@ -9,19 +9,22 @@ jobs:
     build:
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v3
-            - uses: actions/setup-node@v3
+            - uses: actions/checkout@v4
+              with:
+                  submodules: true
+            - uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: latest
+            - uses: actions/setup-node@v4
               with:
                   node-version: 20
                   registry-url: https://registry.npmjs.org/
             - name: Build library
               run: |
-                  npm install --package-lock-only --force
-                  npm ci --force
-                  git submodule update --init --recursive --remote
-                  npm run build:lib
+                  bun i
+                  bun run build:lib
             - name: Publish library
-              run: npm run publish:lib
+              run: bun run publish:lib
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 

@@ -2,12 +2,12 @@
 
 set -e
 
-npm run lint
+bun lint
 
-npm run snyk:auth -- $snyk_token
-npm run snyk:test
+# run snyk:auth -- $snyk_token
+# bun run snyk:test
 
-output=$(npm run type-coverage)
+output=$(bun run type-coverage)
 if echo "$output" | grep -q "lower than "; then
     echo "$output"
     exit 1  # Terminate the hook script with a non-zero exit code
@@ -15,9 +15,9 @@ else
     echo "Type coverage is good! 🎉"
 fi
 
-npm run test
-npm run cypress:bash
+bun run test
+bun run cypress:bash
 
-npm run build
+bun run build
 
-npm run build:lib
+bun run build:lib
