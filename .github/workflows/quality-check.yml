@@ -4,21 +4,25 @@ on: [push]
 
 env:
     snyk_token: ${{ secrets.SNYK_TOKEN }}
+    REF: ${{ github.head_ref || github.ref_name }}
 
 jobs:
-  quality-check:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - name: Check quality
-        run: |
-          npm install --package-lock-only --force
-          npm ci --force
-          git submodule update --init --recursive --remote
-          bash .github/workflows/scripts/quality.sh
-
+    quality-check:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                  submodules: true
+                  ref: ${{ env.REF }}
+            - uses: oven-sh/setup-bun@v1
+              with:
+                  bun-version: latest
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+            - name: Check quality
+              run: |
+                  bun i
+                  bash .github/workflows/scripts/quality.sh
