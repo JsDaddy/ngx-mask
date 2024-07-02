@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress';
+
 export default defineConfig({
     projectId: 'qhyo66',
     component: {
