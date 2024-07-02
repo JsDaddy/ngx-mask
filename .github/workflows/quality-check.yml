@@ -2,9 +2,6 @@ name: build and quality
 
 on: [push]
 
-env:
-    snyk_token: ${{ secrets.SNYK_TOKEN }}
-
 jobs:
     quality-check:
         runs-on: ubuntu-latest
