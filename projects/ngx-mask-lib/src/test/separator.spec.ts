@@ -1635,4 +1635,79 @@ describe('Separator: Mask', () => {
             expect(inputTarget.value).toBe('1.255,78');
         });
     }));
+
+    it('should work when decimalMarker have default value separator.2', fakeAsync(() => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1,234', fixture);
+    }));
+
+    it('should work when decimalMarker have default value separator.3', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = ',';
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1,234', fixture);
+    }));
+
+    it('should work when decimalMarker have default value separator.1', fakeAsync(() => {
+        component.mask = 'separator.3';
+        component.thousandSeparator = ',';
+        fixture.detectChanges();
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1,234', fixture);
+    }));
+
+    it('should not delete decimalMarker ,', () => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '1,23';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(4, 4);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '1,2';
+        inputElement.setSelectionRange(3, 3);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '1,';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('1,');
+    });
+
+    it('should not delete decimalMarker .', () => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '12.23';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(4, 4);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '12.2';
+        inputElement.setSelectionRange(3, 3);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '12.';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('12.');
+    });
 });
