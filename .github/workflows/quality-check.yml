@@ -2,10 +2,6 @@ name: build and quality
 
 on: [push]
 
-env:
-    snyk_token: ${{ secrets.SNYK_TOKEN }}
-    REF: ${{ github.head_ref || github.ref_name }}
-
 jobs:
     quality-check:
         runs-on: ubuntu-latest

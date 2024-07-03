@@ -36,7 +36,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _end!: number;
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
     public readonly _elementRef = inject(ElementRef, { optional: true });
@@ -47,14 +47,13 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private readonly _renderer = inject(Renderer2, { optional: true });
 
-    // eslint-disable-next-line complexity
     public override applyMask(
         inputValue: string,
         maskExpression: string,
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression) {
@@ -85,7 +84,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
                     : this.actualValue.split(MaskExpression.EMPTY_STRING);
             // eslint-disable  @typescript-eslint/no-unused-expressions
-            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+
             if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
                 this.selStart = Number(this.selStart);
                 this.selEnd = Number(this.selEnd);
@@ -137,7 +136,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 // eslint-disable-next-line no-param-reassign
                 position = position - 2;
             }
-            // eslint-disable-next-line no-param-reassign
+
             this.deletedSpecialCharacter = false;
         }
         if (
@@ -184,7 +183,6 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             this.decimalMarker = MaskExpression.COMMA;
         }
-
         // b) remove decimal marker from list of special characters to mask
         if (
             this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
@@ -249,7 +247,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         position: number,
         justPasted: boolean,
         backspaced: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cb: (...args: any[]) => any = () => {}
     ): void {
         const formElement = this._elementRef?.nativeElement;
