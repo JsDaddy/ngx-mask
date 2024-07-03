@@ -87,7 +87,7 @@ export class NgxMaskApplierService {
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression || typeof inputValue !== 'string') {
@@ -116,7 +116,6 @@ export class NgxMaskApplierService {
             this.allowNegativeNumbers &&
             inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
         ) {
-            // eslint-disable-next-line no-param-reassign
             result += inputValue.slice(cursor, cursor + 1);
         }
         if (maskExpression === MaskExpression.IP) {
@@ -223,7 +222,6 @@ export class NgxMaskApplierService {
                       ? inputValue.slice(1, inputValue.length)
                       : inputValue;
             } else {
-                // eslint-disable-next-line no-param-reassign
                 if (inputValue[0] === decimalMarker && inputValue.length > 1) {
                     // eslint-disable-next-line no-param-reassign
                     inputValue =
@@ -287,14 +285,6 @@ export class NgxMaskApplierService {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = MaskExpression.MINUS + inputValue.slice(3, inputValue.length);
                 }
-                // eslint-disable-next-line no-param-reassign
-                inputValue = this._compareOrIncludes(
-                    inputValue[inputValue.length - 1],
-                    this.decimalMarker,
-                    this.thousandSeparator
-                )
-                    ? inputValue.slice(0, inputValue.length - 1)
-                    : inputValue;
             }
             // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
             //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK
@@ -359,7 +349,8 @@ export class NgxMaskApplierService {
                 result[position - 1] === this.decimalMarker ||
                 shiftStep === -4 ||
                 shiftStep === -3 ||
-                result[position] === MaskExpression.COMMA
+                result[position] === MaskExpression.COMMA ||
+                result[position] === MaskExpression.WHITE_SPACE
             ) {
                 this._shift.clear();
                 this._shift.add(position - 1);
@@ -381,7 +372,6 @@ export class NgxMaskApplierService {
             }
         } else {
             for (
-                // eslint-disable-next-line
                 let i: number = 0, inputSymbol: string = inputArray[0]!;
                 i < inputArray.length;
                 i++, inputSymbol = inputArray[i] ?? MaskExpression.EMPTY_STRING

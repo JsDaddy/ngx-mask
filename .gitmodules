@@ -1,3 +1,4 @@
 [submodule "src/libraries"]
 	path = src/libraries
+	branch = main
 	url = https://github.com/JsDaddy/libraries.git
