@@ -285,14 +285,6 @@ export class NgxMaskApplierService {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = MaskExpression.MINUS + inputValue.slice(3, inputValue.length);
                 }
-                // eslint-disable-next-line no-param-reassign
-                inputValue = this._compareOrIncludes(
-                    inputValue[inputValue.length - 1],
-                    this.decimalMarker,
-                    this.thousandSeparator
-                )
-                    ? inputValue.slice(0, inputValue.length + 1)
-                    : inputValue;
             }
             // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
             //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK

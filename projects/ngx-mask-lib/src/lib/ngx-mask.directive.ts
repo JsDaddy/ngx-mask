@@ -42,7 +42,6 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     exportAs: 'mask,ngxMask',
 })
 export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
-    // eslint-disable-next-line @angular-eslint/no-input-rename
     @Input('mask') public maskExpression: string | undefined | null = '';
 
     @Input() public specialCharacters: IConfig['specialCharacters'] = [];
@@ -116,10 +115,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -263,7 +261,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._applyMask();
     }
 
-    // eslint-disable-next-line complexity
     public validate({ value }: FormControl): ValidationErrors | null {
         if (!this._maskService.validation || !this._maskValue) {
             return null;
@@ -778,7 +775,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
     }
 
-    // eslint-disable-next-line complexity
     @HostListener('keydown', ['$event'])
     public onKeyDown(e: CustomKeyboardEvent): void {
         if (!this._maskValue) {
@@ -913,17 +909,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskService._currentValue = '';
                 this._maskService._previousValue = '';
             }
-            // eslint-disable-next-line no-param-reassign
+
             let inputValue: string | number | null | undefined = controlValue;
             if (
                 typeof inputValue === 'number' ||
                 this._maskValue.startsWith(MaskExpression.SEPARATOR)
             ) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = String(inputValue);
                 const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
                 if (!Array.isArray(this._maskService.decimalMarker)) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue =
                         this._maskService.decimalMarker !== localeDecimalMarker
                             ? inputValue.replace(
@@ -932,26 +926,23 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                               )
                             : inputValue;
                 }
-                if (
-                    Array.isArray(this._maskService.decimalMarker) &&
-                    this.decimalMarker === MaskExpression.DOT
-                ) {
-                    this._maskService.decimalMarker = MaskExpression.COMMA;
-                }
+
                 if (
                     this._maskService.leadZero &&
                     inputValue &&
                     this.maskExpression &&
                     this.dropSpecialCharacters !== false
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue = this._maskService._checkPrecision(
                         this._maskService.maskExpression,
                         inputValue as string
                     );
                 }
-                if (this._maskService.decimalMarker === MaskExpression.COMMA) {
-                    // eslint-disable-next-line no-param-reassign
+                if (
+                    this.decimalMarker === MaskExpression.COMMA ||
+                    (Array.isArray(this._maskService.decimalMarker) &&
+                        this.thousandSeparator === MaskExpression.DOT)
+                ) {
                     inputValue = inputValue
                         .toString()
                         .replace(MaskExpression.DOT, MaskExpression.COMMA);
@@ -968,7 +959,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
 
             if (typeof inputValue !== 'string') {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = '';
             }
 

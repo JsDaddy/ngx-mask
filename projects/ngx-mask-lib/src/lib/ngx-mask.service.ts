@@ -183,13 +183,6 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             this.decimalMarker = MaskExpression.COMMA;
         }
-        if (
-            this.thousandSeparator === MaskExpression.COMMA &&
-            this.decimalMarker === MaskExpression.COMMA
-        ) {
-            this.decimalMarker = MaskExpression.DOT;
-        }
-
         // b) remove decimal marker from list of special characters to mask
         if (
             this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
