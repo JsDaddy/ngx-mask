@@ -614,12 +614,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
                 // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
                 if (this._maskExpressionArray.length) {
-                    const backSpaceSpecialCharactersPosition =
+                    const isBackspaceInSpecialCharacterPosition =
                         this._code === MaskExpression.BACKSPACE &&
                         this.specialCharacters.includes(
                             el.value.slice(position, this._maskService.actualValue.length)
                         );
-                    if (backSpaceSpecialCharactersPosition) {
+                    if (isBackspaceInSpecialCharacterPosition) {
                         position = position - 1;
                     } else {
                         position =
