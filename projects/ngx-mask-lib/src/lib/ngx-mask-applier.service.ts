@@ -504,16 +504,14 @@ export class NgxMaskApplierService {
                             (!maskStartWithMonth &&
                                 (Number(inputValueSliceCursorPlusTwo) > daysCount ||
                                     Number(inputValueSliceMinusOnePlusOne) > daysCount ||
-                                    (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                                        !backspaced))) ||
+                                    this.specialCharacters.includes(inputValueCursorPlusOne))) ||
                             (startWithMonthInput
                                 ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
                                   (!this.specialCharacters.includes(inputValueCursor) &&
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
                                 : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                                      !backspaced))
+                                  this.specialCharacters.includes(inputValueCursorPlusOne))
                         ) {
                             // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
@@ -556,8 +554,7 @@ export class NgxMaskApplierService {
                             ) &&
                             this.specialCharacters.includes(inputValueCursorMinusOne) &&
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
-                                (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                                    !backspaced));
+                                this.specialCharacters.includes(inputValueCursorPlusOne));
                         // cursor === 5 && without days
                         const day2monthInputDot: boolean =
                             (Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5) ||

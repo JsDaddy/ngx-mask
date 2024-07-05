@@ -162,7 +162,7 @@ describe('Directive: Mask (Delete)', () => {
             key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
+
             preventDefault: () => {},
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
@@ -185,7 +185,7 @@ describe('Directive: Mask (Delete)', () => {
             key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
+
             preventDefault: () => {},
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
@@ -208,7 +208,7 @@ describe('Directive: Mask (Delete)', () => {
             key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
+
             preventDefault: () => {},
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
@@ -231,10 +231,79 @@ describe('Directive: Mask (Delete)', () => {
             key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
-            // eslint-disable-next-line @typescript-eslint/no-empty-function
+
             preventDefault: () => {},
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(3);
+    });
+
+    it('date mask should show keep right value d0/M0/0000', () => {
+        component.mask = 'd0/M0/0000';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '4/4/4444';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(8, 8);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4/4/444';
+        inputElement.setSelectionRange(7, 7);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4/4/44';
+        inputElement.setSelectionRange(6, 6);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4/4/4';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('4/4/4');
+    });
+
+    it('date mask should show keep right value d0:M0:0000', () => {
+        component.mask = 'd0:M0:0000';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '4:4:4444';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(8, 8);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4:4:444';
+        inputElement.setSelectionRange(7, 7);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4:4:44';
+        inputElement.setSelectionRange(6, 6);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4:4:4';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('4:4:4');
+    });
+
+    it('date mask should show keep right value d0-M0-0000', () => {
+        component.mask = 'd0-M0-0000';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '4-4-4444';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(8, 8);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4-4-444';
+        inputElement.setSelectionRange(7, 7);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4-4-44';
+        inputElement.setSelectionRange(6, 6);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '4-4-4';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('4-4-4');
     });
 });
