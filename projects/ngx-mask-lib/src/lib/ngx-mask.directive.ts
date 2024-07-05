@@ -616,10 +616,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 if (this._maskExpressionArray.length) {
                     if (this._code === MaskExpression.BACKSPACE) {
                         position = this.specialCharacters.includes(
-                            this._inputValue.slice(position - 1, position)
+                            el.value.slice(position, this._maskService.actualValue.length)
                         )
                             ? position - 1
-                            : position;
+                            : this._maskService.actualValue.length;
                     } else {
                         position =
                             el.selectionStart === 1
@@ -974,6 +974,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 typeof this.inputTransformFn !== 'function'
                     ? (this._maskService.writingValue = true)
                     : '';
+
                 this._maskService.formElementProperty = [
                     'value',
                     this._maskService.applyMask(inputValue, this._maskService.maskExpression),
@@ -1077,6 +1078,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             const specialChart: boolean = mask
                 .split(MaskExpression.EMPTY_STRING)
                 .some((char) => this._maskService.specialCharacters.includes(char));
+
             if (
                 (specialChart && this._inputValue && !mask.includes(MaskExpression.LETTER_S)) ||
                 mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)
@@ -1111,7 +1113,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         const indexMask = mask.charAt(index);
                         return this._maskService._checkSymbolMask(character, indexMask);
                     });
-                if (check) {
+
+                if (check || this._justPasted) {
                     this._maskValue = this.maskExpression = this._maskService.maskExpression = mask;
                     return check;
                 }
