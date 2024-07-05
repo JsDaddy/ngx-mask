@@ -268,4 +268,19 @@ describe('Directive: Mask (Dynamic)', () => {
         equal('123456789', '12345-6789', fixture);
         expect(component.form.valid).toBeTrue();
     });
+
+    it('should work with when justPasted', () => {
+        component.mask = '00000||S0S 0S0';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '1234', fixture);
+        equal('12345', '12345', fixture);
+        equal('A', 'A', fixture);
+        equal('A5', 'A5', fixture);
+        equal('A5A', 'A5A', fixture);
+        equal('A5A 0', 'A5A 0', fixture);
+        equal('A5A 0A', 'A5A 0A', fixture);
+        equal('A5A 0A9', 'A5A 0A9', fixture);
+    });
 });

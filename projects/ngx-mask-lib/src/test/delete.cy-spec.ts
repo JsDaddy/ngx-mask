@@ -114,7 +114,7 @@ describe('Directive: Mask (Delete)', () => {
             .type('123')
             .should('have.value', '(12) 3')
             .type('{backspace}')
-            .should('have.prop', 'selectionStart', 4)
+            .should('have.prop', 'selectionStart', 5)
             .should('have.value', '(12) ')
             .type('{rightArrow}')
             .type('{backspace}')

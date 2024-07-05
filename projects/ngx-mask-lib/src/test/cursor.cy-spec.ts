@@ -319,4 +319,52 @@ describe('Test Date Hh:m0', () => {
             .should('have.value', '123')
             .should('have.prop', 'selectionStart', 3);
     });
+
+    it('dynamic mask after backspace should have right cursor position (000) 000-0000||+000000000000000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(000) 000-0000||+000000000000000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123 45678901')
+
+            .should('have.value', '+1245678901')
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 13);
+    });
+
+    it('dynamic mask after backspace should have right cursor position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(000) 000-0000||+000000000000000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123 4')
+
+            .should('have.value', '(123) 4')
+            .type('{backspace}'.repeat(2))
+            .should('have.prop', 'selectionStart', 4);
+    });
+
+    it('dynamic mask after backspace should have right cursor position (00) 00000000||+00 (00) 00000000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(00) 00000000||+00 (00) 00000000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123')
+
+            .should('have.value', '(12) 3')
+            .type('{backspace}'.repeat(2))
+            .should('have.prop', 'selectionStart', 3);
+    });
 });
