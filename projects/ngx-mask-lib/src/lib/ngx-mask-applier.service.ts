@@ -725,18 +725,14 @@ export class NgxMaskApplierService {
             res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
         }
 
-        const indexFirstNonSpecialCharacter = Array.from(this.maskExpression).findIndex(
-            (char) => !this.specialCharacters.includes(char)
-        );
+        const firstSpecialCharacterMask =
+            inputValue.length === 1 &&
+            this.specialCharacters.includes(maskExpression[0] as string) &&
+            inputValue !== maskExpression[0];
 
         if (
-            inputValue.length === 1 &&
-            !this._checkSymbolMask(
-                inputValue,
-                this.maskExpression[indexFirstNonSpecialCharacter] as string
-            ) &&
-            this.specialCharacters.includes(this.maskExpression.slice(0, 1)) &&
-            inputValue !== this.maskExpression.slice(0, 1)
+            !this._checkSymbolMask(inputValue, maskExpression[1] as string) &&
+            firstSpecialCharacterMask
         ) {
             return '';
         }
