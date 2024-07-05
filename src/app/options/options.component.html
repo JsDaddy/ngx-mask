@@ -1,3 +1,5 @@
+<input mask="(000) 000-0000||+000000000000000" />
+
 <section class="content column bg-full-white">
     @for (tile of cardDocs(); track tile.id; let i = $index) {
         <div class="card" [class]="activeCardId() | color: tile.id" [id]="tile.id" #cards>
