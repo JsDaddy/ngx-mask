@@ -3,7 +3,6 @@
 set -e
 
 bun lint-staged
-bun lint
 
 # bun run snyk:test
 
