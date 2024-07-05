@@ -816,4 +816,84 @@ describe('Directive: Mask', () => {
         equal('4', '4', fixture);
         expect(component.form.value).toBe('4');
     });
+
+    it('should return empty string if first character not same in mask (000) 000-0000', () => {
+        component.mask = '(000) 000-0000';
+
+        equal('', '', fixture);
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('$', '', fixture);
+        equal('#', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('/', '', fixture);
+        equal('[', '', fixture);
+        equal(']', '', fixture);
+        equal('=', '', fixture);
+    });
+
+    it('should return empty string if first character not same in mask (000) 000-0000 with prefix', () => {
+        component.mask = '(000) 000-0000';
+        component.prefix = '+7';
+        equal('', '', fixture);
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('$', '', fixture);
+        equal('#', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('/', '', fixture);
+        equal('[', '', fixture);
+        equal(']', '', fixture);
+        equal('=', '', fixture);
+    });
+
+    it('should return empty string if first character not same in mask (000) 000-0000 with suffix', () => {
+        component.mask = '(000) 000-0000';
+        component.prefix = '+7';
+        equal('', '', fixture);
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('$', '', fixture);
+        equal('#', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('/', '', fixture);
+        equal('[', '', fixture);
+        equal(']', '', fixture);
+        equal('=', '', fixture);
+    });
+
+    it('should return empty string if first character not same in mask (000) 000-0000||+000000000000000', () => {
+        component.mask = '(000) 000-0000||+000000000000000';
+
+        equal('', '', fixture);
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('$', '', fixture);
+        equal('#', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('/', '', fixture);
+        equal('[', '', fixture);
+        equal(']', '', fixture);
+        equal('=', '', fixture);
+    });
+
+    it('should return empty string if first character not same in mask +(000) 000-0000', () => {
+        component.mask = '(000) 000-0000';
+        component.prefix = '+7';
+        equal('', '', fixture);
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('$', '', fixture);
+        equal('#', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('/', '', fixture);
+        equal('[', '', fixture);
+        equal(']', '', fixture);
+        equal('=', '', fixture);
+    });
 });
