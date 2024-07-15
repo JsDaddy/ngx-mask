@@ -1710,4 +1710,26 @@ describe('Separator: Mask', () => {
 
         expect(inputElement.value).toBe('12.');
     });
+
+    it('should change position when click backspace thousandSeparator = .', () => {
+        component.mask = 'separator.2';
+        component.decimalMarker = ',';
+        component.thousandSeparator = '.';
+        const inputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '1234567.89';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(4, 4);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '12.2';
+        inputElement.setSelectionRange(3, 3);
+        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
+        inputElement.value = '12.';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('12.');
+    });
 });

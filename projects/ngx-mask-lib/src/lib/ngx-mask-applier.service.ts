@@ -349,8 +349,7 @@ export class NgxMaskApplierService {
                 result[position - 1] === this.decimalMarker ||
                 shiftStep === -4 ||
                 shiftStep === -3 ||
-                result[position] === MaskExpression.COMMA ||
-                result[position] === MaskExpression.WHITE_SPACE
+                result[position] === this.thousandSeparator
             ) {
                 this._shift.clear();
                 this._shift.add(position - 1);
