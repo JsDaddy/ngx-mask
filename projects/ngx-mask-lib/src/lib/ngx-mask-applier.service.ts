@@ -349,8 +349,7 @@ export class NgxMaskApplierService {
                 result[position - 1] === this.decimalMarker ||
                 shiftStep === -4 ||
                 shiftStep === -3 ||
-                result[position] === MaskExpression.COMMA ||
-                result[position] === MaskExpression.WHITE_SPACE
+                result[position] === this.thousandSeparator
             ) {
                 this._shift.clear();
                 this._shift.add(position - 1);
@@ -485,7 +484,6 @@ export class NgxMaskApplierService {
                     const inputValueCursorPlusTwo = inputValue[cursor + 2] as string;
                     const inputValueCursorMinusOne = inputValue[cursor - 1] as string;
                     const inputValueCursorMinusTwo = inputValue[cursor - 2] as string;
-                    const inputValueCursorMinusThree = inputValue[cursor - 3] as string;
                     const inputValueSliceMinusThreeMinusOne = inputValue.slice(
                         cursor - 3,
                         cursor - 1
@@ -541,11 +539,7 @@ export class NgxMaskApplierService {
                             ((this.specialCharacters.includes(inputValueCursorMinusTwo) &&
                                 Number(inputValueSliceMinusOnePlusOne) > monthsCount &&
                                 !this.specialCharacters.includes(inputValueCursor)) ||
-                                this.specialCharacters.includes(inputValueCursor) ||
-                                (this.specialCharacters.includes(inputValueCursorMinusThree) &&
-                                    Number(inputValueSliceMinusTwoCursor) > monthsCount &&
-                                    !this.specialCharacters.includes(inputValueCursorMinusOne)) ||
-                                this.specialCharacters.includes(inputValueCursorMinusOne));
+                                this.specialCharacters.includes(inputValueCursor));
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
