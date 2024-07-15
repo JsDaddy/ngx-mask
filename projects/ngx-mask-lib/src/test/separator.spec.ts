@@ -1716,20 +1716,85 @@ describe('Separator: Mask', () => {
         component.decimalMarker = ',';
         component.thousandSeparator = '.';
         const inputElement = fixture.nativeElement.querySelector('input');
+        inputElement.value = '1.234.567,89';
 
-        inputElement.value = '1234567.89';
+        expect(inputElement.value).toBe('1.234.567,89');
+
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        inputElement.setSelectionRange(4, 4);
-        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
-        inputElement.value = '12.2';
-        inputElement.setSelectionRange(3, 3);
-        inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace' }));
-        inputElement.value = '12.';
+        inputElement.setSelectionRange(2, 2);
+        inputElement.selectionStart;
+        expect(inputElement.selectionStart).toBe(2);
+
+        const backspaceEvent = new KeyboardEvent('keydown', {
+            key: 'Backspace',
+            code: 'Backspace',
+        });
+        inputElement.dispatchEvent(backspaceEvent);
+
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(inputElement.value).toBe('12.');
+        expect(inputElement.value).toBe('1.234.567,89');
+        expect(inputElement.selectionStart).toBe(1);
+    });
+
+    it('should change position when click backspace thousandSeparator = ,', () => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        component.thousandSeparator = ',';
+        const inputElement = fixture.nativeElement.querySelector('input');
+        inputElement.value = '1,234,567.89';
+
+        expect(inputElement.value).toBe('1,234,567.89');
+
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(2, 2);
+        inputElement.selectionStart;
+        expect(inputElement.selectionStart).toBe(2);
+
+        const backspaceEvent = new KeyboardEvent('keydown', {
+            key: 'Backspace',
+            code: 'Backspace',
+        });
+        inputElement.dispatchEvent(backspaceEvent);
+
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('1,234,567.89');
+        expect(inputElement.selectionStart).toBe(1);
+    });
+
+    it('should change position when click backspace thousandSeparator = ', () => {
+        component.mask = 'separator.2';
+        component.decimalMarker = '.';
+        component.thousandSeparator = ' ';
+        const inputElement = fixture.nativeElement.querySelector('input');
+        inputElement.value = '1 234 567.89';
+
+        expect(inputElement.value).toBe('1 234 567.89');
+
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        inputElement.setSelectionRange(2, 2);
+        inputElement.selectionStart;
+        expect(inputElement.selectionStart).toBe(2);
+
+        const backspaceEvent = new KeyboardEvent('keydown', {
+            key: 'Backspace',
+            code: 'Backspace',
+        });
+        inputElement.dispatchEvent(backspaceEvent);
+
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(inputElement.value).toBe('1 234 567.89');
+        expect(inputElement.selectionStart).toBe(1);
     });
 });

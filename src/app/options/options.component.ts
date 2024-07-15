@@ -56,6 +56,4 @@ export class OptionsComponent {
             this.accordionService.onChangeAccordion(this.cards());
         });
     }
-
-    public myValue = 1234567.89;
 }
