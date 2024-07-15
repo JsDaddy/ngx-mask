@@ -484,4 +484,23 @@ describe('Directive: Mask (Time)', () => {
         equal('12341', '1234:1', fixture);
         equal('123412', '1234:12', fixture);
     });
+
+    it('Date d0/M0', () => {
+        component.mask = 'd0/M0';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '12/3', fixture);
+        equal('1234', '12/3', fixture);
+        equal('33', '3/3', fixture);
+    });
+
+    it('Date d0/M0 with v', () => {
+        component.mask = 'd0/M0';
+        component.leadZeroDateTime = true;
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '12/03', fixture);
+        equal('1234', '12/03', fixture);
+        equal('44', '04/04', fixture);
+    });
 });
