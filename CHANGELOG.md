@@ -1,4 +1,11 @@
-# 17.1.2(2024-07-05)
+# 17.1.3(2024-07-16)
+
+### Fix
+
+-   Fix ([#1386](https://github.com/JsDaddy/ngx-mask/issues/1386))
+-   Fix ([#1370](https://github.com/JsDaddy/ngx-mask/issues/1370))
+
+# 17.1.2(2024-07-15)
 
 ### Fix
 
