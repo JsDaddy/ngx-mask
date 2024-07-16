@@ -596,12 +596,6 @@ export class NgxMaskApplierService {
                     result += inputSymbol;
                     cursor++;
                 } else if (
-                    // (inputSymbol === MaskExpression.WHITE_SPACE &&
-                    //     maskExpression[cursor] === MaskExpression.WHITE_SPACE) ||
-                    // (inputSymbol === MaskExpression.SLASH &&
-                    //     maskExpression[cursor] === MaskExpression.SLASH) ||
-                    // (inputSymbol === MaskExpression.MINUS &&
-                    //     maskExpression[cursor] === MaskExpression.MINUS)
                     this.specialCharacters.includes(inputSymbol) &&
                     maskExpression[cursor] === inputSymbol
                 ) {
@@ -616,16 +610,7 @@ export class NgxMaskApplierService {
                     cursor++;
                     this._shiftStep(maskExpression, cursor, inputArray.length);
                     i--;
-                }
-                // else if (
-                //     this.specialCharacters.includes(inputSymbol) &&
-                //     this.specialCharacters.includes(maskExpression[cursor] ?? '')
-                // ) {
-                //     console.log('ZALUPA');
-                //     result += inputSymbol;
-                //     cursor++;
-                // }
-                else if (
+                } else if (
                     maskExpression[cursor] === MaskExpression.NUMBER_NINE &&
                     this.showMaskTyped
                 ) {
@@ -655,7 +640,6 @@ export class NgxMaskApplierService {
                     ) {
                         cursor++;
                     }
-                    //
 
                     cursor++;
                     i--;
@@ -695,7 +679,6 @@ export class NgxMaskApplierService {
                 maskExpression[maskExpression.length - 1] ?? MaskExpression.EMPTY_STRING
             ) !== -1
         ) {
-            console.log('@@@@111');
             result += maskExpression[maskExpression.length - 1];
         }
         let newPosition: number = position + 1;
