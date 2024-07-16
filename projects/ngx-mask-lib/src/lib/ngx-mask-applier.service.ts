@@ -266,24 +266,30 @@ export class NgxMaskApplierService {
             }
 
             if (backspaced) {
+                const inputValueAfterZero = inputValue.slice(
+                    this._findFirstNonZeroDigitIndex(inputValue),
+                    inputValue.length
+                );
                 if (
                     inputValue[0] === MaskExpression.NUMBER_ZERO &&
                     inputValue[1] === this.decimalMarker &&
                     (inputValue[position] === MaskExpression.NUMBER_ZERO ||
-                        inputValue[position] === this.decimalMarker)
+                        inputValue[position] === this.decimalMarker) &&
+                    position < 2
                 ) {
                     // eslint-disable-next-line no-param-reassign
-                    inputValue = inputValue.slice(2, inputValue.length);
+                    inputValue = inputValueAfterZero;
                 }
                 if (
                     inputValue[0] === MaskExpression.MINUS &&
                     inputValue[1] === MaskExpression.NUMBER_ZERO &&
                     inputValue[2] === this.decimalMarker &&
                     (inputValue[position] === MaskExpression.NUMBER_ZERO ||
-                        inputValue[position] === this.decimalMarker)
+                        inputValue[position] === this.decimalMarker) &&
+                    position < 3
                 ) {
                     // eslint-disable-next-line no-param-reassign
-                    inputValue = MaskExpression.MINUS + inputValue.slice(3, inputValue.length);
+                    inputValue = MaskExpression.MINUS + inputValueAfterZero;
                 }
             }
             // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
@@ -960,5 +966,15 @@ export class NgxMaskApplierService {
                 ? MaskExpression.EMPTY_STRING
                 : `${emptyOrMinus}${integerString}${decimal}${decimalPart}`;
         }
+    }
+
+    private _findFirstNonZeroDigitIndex(inputString: string): number {
+        for (let i = 0; i < inputString.length; i++) {
+            const char = inputString[i];
+            if (char && char >= '1' && char <= '9') {
+                return i;
+            }
+        }
+        return -1;
     }
 }
