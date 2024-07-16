@@ -299,7 +299,7 @@ describe('Directive: Mask', () => {
         equal('(', '(', fixture);
         equal('(1', '(1', fixture);
         equal('(12', '(12', fixture);
-        equal('(12)', '(12) ', fixture);
+        equal('(12)', '(12)', fixture);
         equal('(12) 3', '(12) 3', fixture);
         equal('(12) 34', '(12) 34', fixture);
         equal('(12) 345', '(12) 345', fixture);
@@ -895,5 +895,37 @@ describe('Directive: Mask', () => {
         equal('[', '', fixture);
         equal(']', '', fixture);
         equal('=', '', fixture);
+    });
+
+    it('optional mask should work correct 99-99', () => {
+        component.mask = '99-99';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '12-3', fixture);
+        equal('1234', '12-34', fixture);
+        equal('1-2', '1-2', fixture);
+        equal('1-23', '1-23', fixture);
+    });
+
+    it('custom mask with optional symbol should work correct mask=999-999-999', () => {
+        component.mask = '999-999-999';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '123-4', fixture);
+        equal('12345', '123-45', fixture);
+        equal('123456', '123-456', fixture);
+        equal('1234567', '123-456-7', fixture);
+        equal('12345678', '123-456-78', fixture);
+        equal('123456789', '123-456-789', fixture);
+        equal('1-', '1-', fixture);
+        equal('1-2', '1-2', fixture);
+        equal('1-2-3', '1-2-3', fixture);
+        equal('1-2-345', '1-2-345', fixture);
+        equal('12-3-45', '12-3-45', fixture);
+        equal('12-34-56', '12-34-56', fixture);
+        equal('12-34-567', '12-34-567', fixture);
+        equal('123-4-5', '123-4-5', fixture);
+        equal('123-45-6', '123-45-6', fixture);
     });
 });

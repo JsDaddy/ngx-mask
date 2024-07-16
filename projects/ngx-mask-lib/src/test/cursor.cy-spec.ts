@@ -349,7 +349,7 @@ describe('Test Date Hh:m0', () => {
 
             .should('have.value', '(123) 4')
             .type('{backspace}'.repeat(2))
-            .should('have.prop', 'selectionStart', 4);
+            .should('have.prop', 'selectionStart', 5);
     });
 
     it('dynamic mask after backspace should have right cursor position (00) 00000000||+00 (00) 00000000', () => {
@@ -365,6 +365,6 @@ describe('Test Date Hh:m0', () => {
 
             .should('have.value', '(12) 3')
             .type('{backspace}'.repeat(2))
-            .should('have.prop', 'selectionStart', 3);
+            .should('have.prop', 'selectionStart', 4);
     });
 });

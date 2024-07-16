@@ -596,10 +596,8 @@ export class NgxMaskApplierService {
                     result += inputSymbol;
                     cursor++;
                 } else if (
-                    (inputSymbol === MaskExpression.WHITE_SPACE &&
-                        maskExpression[cursor] === MaskExpression.WHITE_SPACE) ||
-                    (inputSymbol === MaskExpression.SLASH &&
-                        maskExpression[cursor] === MaskExpression.SLASH)
+                    this.specialCharacters.includes(inputSymbol) &&
+                    maskExpression[cursor] === inputSymbol
                 ) {
                     result += inputSymbol;
                     cursor++;
@@ -642,6 +640,7 @@ export class NgxMaskApplierService {
                     ) {
                         cursor++;
                     }
+
                     cursor++;
                     i--;
                 } else if (
