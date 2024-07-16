@@ -299,7 +299,7 @@ describe('Directive: Mask', () => {
         equal('(', '(', fixture);
         equal('(1', '(1', fixture);
         equal('(12', '(12', fixture);
-        equal('(12)', '(12) ', fixture);
+        equal('(12)', '(12)', fixture);
         equal('(12) 3', '(12) 3', fixture);
         equal('(12) 34', '(12) 34', fixture);
         equal('(12) 345', '(12) 345', fixture);
@@ -895,5 +895,15 @@ describe('Directive: Mask', () => {
         equal('[', '', fixture);
         equal(']', '', fixture);
         equal('=', '', fixture);
+    });
+
+    it('optional mask should work correct 99-99', () => {
+        component.mask = '99-99';
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '12-3', fixture);
+        equal('1234', '12-34', fixture);
+        equal('1-2', '1-2', fixture);
+        equal('1-23', '1-23', fixture);
     });
 });

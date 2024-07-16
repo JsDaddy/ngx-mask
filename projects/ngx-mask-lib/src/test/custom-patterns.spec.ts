@@ -178,3 +178,54 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
         });
     });
 });
+
+describe('Directive: Mask (Provide custom patterns with symbol B optional)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+    const ngxMaskCustomPatterns = {
+        '0': { pattern: new RegExp('\\d') },
+        A: { pattern: new RegExp('[0-9,;]'), optional: false },
+        B: { pattern: new RegExp('[0-9,;]'), optional: true },
+    };
+
+    const ngxMaskConfigValue: Partial<IConfig> = {
+        patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
+    };
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            declarations: [TestMaskComponent],
+            imports: [ReactiveFormsModule, NgxMaskDirective],
+            providers: [provideNgxMask(ngxMaskConfigValue)],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('custom mask with optional symbol should work correct mask=(000) 000-0000 x BBBBBBBBBB', () => {
+        component.mask = '(000) 000-0000 x BBBBBBBBBB';
+        equal('1', '(1', fixture);
+        equal('12', '(12', fixture);
+        equal('123', '(123', fixture);
+        equal('1234', '(123) 4', fixture);
+        equal('12345', '(123) 45', fixture);
+        equal('123456', '(123) 456', fixture);
+        equal('1234567', '(123) 456-7', fixture);
+        equal('12345678', '(123) 456-78', fixture);
+        equal('123456789', '(123) 456-789', fixture);
+        equal('1234567890', '(123) 456-7890', fixture);
+        requestAnimationFrame(() => {
+            equal('1234567890 1', '(123) 456-7890 x 1', fixture);
+            equal('1234567890 12', '(123) 456-7890 x 12', fixture);
+            equal('1234567890 123', '(123) 456-7890 x 123', fixture);
+            equal('1234567890 1234', '(123) 456-7890 x 1234', fixture);
+            equal('1234567890 12345', '(123) 456-7890 x 12345', fixture);
+            equal('1234567890 123456', '(123) 456-7890 x 123456', fixture);
+            equal('1234567890 1234567', '(123) 456-7890 x 1234567', fixture);
+            equal('1234567890 12345678', '(123) 456-7890 x 12345678', fixture);
+            equal('1234567890 123456789', '(123) 456-7890 x 123456789', fixture);
+            equal('1234567890 1234567890', '(123) 456-7890 x 1234567890', fixture);
+        });
+    });
+});
