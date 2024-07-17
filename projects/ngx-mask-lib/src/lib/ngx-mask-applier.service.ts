@@ -275,6 +275,7 @@ export class NgxMaskApplierService {
                     inputValue[position] === decimalMarker;
                 const zeroIndexNumberZero = inputValue[0] === MaskExpression.NUMBER_ZERO;
                 const zeroIndexMinus = inputValue[0] === MaskExpression.MINUS;
+                const zeroIndexThousand = inputValue[0] === this.thousandSeparator;
                 const firstIndexDecimalMarker = inputValue[1] === decimalMarker;
                 const firstIndexNumberZero = inputValue[1] === MaskExpression.NUMBER_ZERO;
                 const secondIndexDecimalMarker = inputValue[2] === decimalMarker;
@@ -298,9 +299,10 @@ export class NgxMaskApplierService {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = MaskExpression.MINUS + inputValueAfterZero;
                 }
+
                 if (
                     inputValueAfterZero !== MaskExpression.MINUS &&
-                    ((position === 0 && !zeroIndexNumberZero) ||
+                    ((position === 0 && (zeroIndexNumberZero || zeroIndexThousand)) ||
                         (this.allowNegativeNumbers &&
                             position === 1 &&
                             zeroIndexMinus &&

@@ -551,4 +551,55 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.value', '-33');
     });
+
+    it('should correct work after backspace separator.2 when first digit .', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: '.',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('50004')
+            .should('have.value', '50.004')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '4');
+    });
+
+    it('should correct work after backspace separator.2 when first digit ,', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: ',',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('50004')
+            .should('have.value', '50,004')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '4');
+    });
+
+    it('should correct work after backspace separator.2 when first digit whitespace', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: ' ',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('50004')
+            .should('have.value', '50 004')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '4');
+    });
 });
