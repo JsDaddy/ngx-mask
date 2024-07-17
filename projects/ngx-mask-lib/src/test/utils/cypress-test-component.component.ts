@@ -14,6 +14,7 @@ import { IConfig, NGX_MASK_CONFIG } from 'ngx-mask';
             [suffix]="suffix"
             [leadZero]="leadZero"
             [showMaskTyped]="showMaskTyped"
+            [allowNegativeNumbers]="allowNegativeNumbers"
             [decimalMarker]="decimalMarker"
             [thousandSeparator]="thousandSeparator"
             [shownMaskExpression]="shownMaskExpression"
@@ -36,6 +37,8 @@ export class CypressTestMaskComponent {
     @Input() public mask = '';
 
     @Input() public hiddenInput = false;
+
+    @Input() public allowNegativeNumbers = false;
 
     @Input() public prefix = '';
 
