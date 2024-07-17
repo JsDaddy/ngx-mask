@@ -155,7 +155,13 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
         }
 
-        if (this.showMaskTyped && this.keepCharacterPositions && this.actualValue && !justPasted) {
+        if (
+            this.showMaskTyped &&
+            this.keepCharacterPositions &&
+            this.actualValue &&
+            !justPasted &&
+            !this.writingValue
+        ) {
             const value = this.dropSpecialCharacters
                 ? this.removeMask(this.actualValue)
                 : this.actualValue;

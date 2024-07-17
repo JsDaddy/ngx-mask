@@ -928,4 +928,22 @@ describe('Directive: Mask', () => {
         equal('123-4-5', '123-4-5', fixture);
         equal('123-45-6', '123-45-6', fixture);
     });
+
+    it('mask 00/00/0000 with keepCharacterPositions should work after setValue', () => {
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.mask = '00/00/0000';
+        component.showMaskTyped = true;
+        component.keepCharacterPositions = true;
+
+        equal('11/11/1111', '11/11/1111', fixture);
+        component.form.setValue('22/22/2222');
+        fixture.detectChanges();
+        requestAnimationFrame(() => {
+            expect(inputTarget.value).toBe('22/22/2222');
+        });
+    });
 });
