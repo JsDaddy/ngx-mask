@@ -25,6 +25,7 @@ import { IConfig } from '../../lib/ngx-mask.config';
             [allowNegativeNumbers]="allowNegativeNumbers"
             [leadZeroDateTime]="leadZeroDateTime"
             [leadZero]="leadZero"
+            [keepCharacterPositions]="keepCharacterPositions"
             [apm]="apm"
             [validation]="validation"
             [inputTransformFn]="inputTransformFn || null"
@@ -52,6 +53,8 @@ export class TestMaskComponent {
     public suffix: IConfig['suffix'] = '';
 
     public specialCharacters: IConfig['specialCharacters'] | undefined;
+
+    public keepCharacterPositions: IConfig['keepCharacterPositions'] | undefined;
 
     public showMaskTyped: IConfig['showMaskTyped'] | undefined;
 
