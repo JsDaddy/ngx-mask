@@ -223,8 +223,6 @@ export class NgxMaskApplierService {
                       : inputValue;
             } else {
                 if (inputValue[0] === decimalMarker && inputValue.length > 1) {
-                    console.log('ZALUPA111');
-
                     // eslint-disable-next-line no-param-reassign
                     inputValue =
                         MaskExpression.NUMBER_ZERO + inputValue.slice(0, inputValue.length + 1);
