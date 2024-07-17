@@ -463,4 +463,92 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}')
             .should('have.value', '-14');
     });
+
+    it('should correct work after backspace separator.3 leadZero allowNegative', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.3',
+                allowNegativeNumbers: true,
+                leadZero: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('-0.1')
+            .should('have.value', '-0.1')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '-1')
+            .type('{backspace}')
+            .should('have.value', '-');
+    });
+
+    it('should correct work after backspace separator', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('0.33')
+            .should('have.value', '0.33')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '33');
+    });
+
+    it('should correct work after backspace separator leadZero', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator',
+                leadZero: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('0.33')
+            .should('have.value', '0.33')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '33');
+    });
+
+    it('should correct work after backspace separator allowNegativeNumbers', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator',
+                allowNegativeNumbers: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('-0.33')
+            .should('have.value', '-0.33')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '-33');
+    });
+
+    it('should correct work after backspace separator leadZero', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator',
+                leadZero: true,
+                allowNegativeNumbers: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('-0.33')
+            .should('have.value', '-0.33')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '-33');
+    });
 });

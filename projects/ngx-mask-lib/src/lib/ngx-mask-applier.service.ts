@@ -270,26 +270,46 @@ export class NgxMaskApplierService {
                     this._findFirstNonZeroDigitIndex(inputValue),
                     inputValue.length
                 );
+                const positionOfZeroOrDecimalMarker =
+                    inputValue[position] === MaskExpression.NUMBER_ZERO ||
+                    inputValue[position] === decimalMarker;
+                const zeroIndexNumberZero = inputValue[0] === MaskExpression.NUMBER_ZERO;
+                const zeroIndexMinus = inputValue[0] === MaskExpression.MINUS;
+                const firstIndexDecimalMarker = inputValue[1] === decimalMarker;
+                const firstIndexNumberZero = inputValue[1] === MaskExpression.NUMBER_ZERO;
+                const secondIndexDecimalMarker = inputValue[2] === decimalMarker;
+
                 if (
-                    inputValue[0] === MaskExpression.NUMBER_ZERO &&
-                    inputValue[1] === this.decimalMarker &&
-                    (inputValue[position] === MaskExpression.NUMBER_ZERO ||
-                        inputValue[position] === this.decimalMarker) &&
+                    zeroIndexNumberZero &&
+                    firstIndexDecimalMarker &&
+                    positionOfZeroOrDecimalMarker &&
                     position < 2
                 ) {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = inputValueAfterZero;
                 }
                 if (
-                    inputValue[0] === MaskExpression.MINUS &&
-                    inputValue[1] === MaskExpression.NUMBER_ZERO &&
-                    inputValue[2] === this.decimalMarker &&
-                    (inputValue[position] === MaskExpression.NUMBER_ZERO ||
-                        inputValue[position] === this.decimalMarker) &&
+                    zeroIndexMinus &&
+                    firstIndexNumberZero &&
+                    secondIndexDecimalMarker &&
+                    positionOfZeroOrDecimalMarker &&
                     position < 3
                 ) {
                     // eslint-disable-next-line no-param-reassign
                     inputValue = MaskExpression.MINUS + inputValueAfterZero;
+                }
+                if (
+                    inputValueAfterZero !== MaskExpression.MINUS &&
+                    ((position === 0 && !zeroIndexNumberZero) ||
+                        (this.allowNegativeNumbers &&
+                            position === 1 &&
+                            zeroIndexMinus &&
+                            !firstIndexNumberZero))
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = zeroIndexMinus
+                        ? MaskExpression.MINUS + inputValueAfterZero
+                        : inputValueAfterZero;
                 }
             }
             // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
