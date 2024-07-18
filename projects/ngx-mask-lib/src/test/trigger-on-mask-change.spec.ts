@@ -49,6 +49,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
 
     it('should trigger form value update if mask is changed', async () => {
         component.mask = '00000||00000-0000';
+        component.triggerOnMaskChange = true;
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);

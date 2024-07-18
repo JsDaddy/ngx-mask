@@ -208,8 +208,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                 this.maskChanged ||
                 (this._previousValue === this._currentValue && justPasted);
         }
+
         this._emitValue
-            ? this.writingValue
+            ? this.writingValue && this.triggerOnMaskChange
                 ? requestAnimationFrame(() => this.formControlResult(result))
                 : this.formControlResult(result)
             : '';
@@ -527,7 +528,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     private formControlResult(inputValue: string): void {
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
-            this.maskChanged
+            this.triggerOnMaskChange && this.maskChanged
                 ? this.onChange(
                       this.outputTransformFn(
                           this._toNumber(

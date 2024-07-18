@@ -508,6 +508,7 @@ describe('Directive: Mask', () => {
 
     it('should remove ghost character on toggling mask', () => {
         component.mask = '0000';
+        component.triggerOnMaskChange = true;
         component.form.setValue('1111a');
         equal('1111a', '1111', fixture);
         expect(component.form.value).toBe('1111');
@@ -945,5 +946,26 @@ describe('Directive: Mask', () => {
         requestAnimationFrame(() => {
             expect(inputTarget.value).toBe('22/22/2222');
         });
+    });
+
+    it('mask sepator.0 after setValue should be dont dirty', () => {
+        component.mask = 'separator.0';
+        component.form.setValue('2');
+
+        expect(component.form.dirty).toBe(false);
+    });
+
+    it('mask sepator.2 after setValue should be dont dirty', () => {
+        component.mask = 'separator.0';
+        component.form.setValue('2002');
+
+        expect(component.form.dirty).toBe(false);
+    });
+
+    it('mask 00/00/0000 after setValue should be dont dirty', () => {
+        component.mask = 'separator.0';
+        component.form.setValue('12312312');
+
+        expect(component.form.dirty).toBe(false);
     });
 });

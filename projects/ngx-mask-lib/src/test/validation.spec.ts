@@ -360,13 +360,13 @@ describe('Directive: Mask (Validation)', () => {
 
         it('mask with number value should work as expected mask 000.00', () => {
             component.mask = '000.00';
-            equal('44', '44', fixture);
-            expect(component.form.invalid).toBe(true);
-            expect(component.form.value).toBe(44);
-
             equal('', '', fixture);
             expect(component.form.invalid).toBe(true);
             expect(component.form.value).toBe('');
+
+            equal('44', '44', fixture);
+            expect(component.form.invalid).toBe(true);
+            expect(component.form.value).toBe(44);
 
             equal('1', '1', fixture);
             expect(component.form.invalid).toBe(true);
