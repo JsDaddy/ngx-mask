@@ -283,8 +283,23 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (timeMasks.includes(this._maskValue)) {
             return this._validateTime(value);
         }
+
         if (value && value.toString().length >= 1) {
             let counterOfOpt = 0;
+
+            if (
+                this._maskValue.includes(MaskExpression.CURLY_BRACKETS_LEFT) &&
+                this._maskValue.includes(MaskExpression.CURLY_BRACKETS_RIGHT)
+            ) {
+                const lengthInsideCurlyBrackets = this._maskValue.slice(
+                    this._maskValue.indexOf(MaskExpression.CURLY_BRACKETS_LEFT) + 1,
+                    this._maskValue.indexOf(MaskExpression.CURLY_BRACKETS_RIGHT)
+                );
+
+                return lengthInsideCurlyBrackets === String(value.length)
+                    ? null
+                    : this._createValidationError(value);
+            }
             if (this._maskValue.startsWith(MaskExpression.PERCENT)) {
                 return null;
             }
@@ -311,26 +326,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
             }
             if (
-                this._maskValue.indexOf(MaskExpression.CURLY_BRACKETS_LEFT) === 1 &&
-                value.toString().length ===
-                    this._maskValue.length +
-                        Number(
-                            (
-                                this._maskValue.split(MaskExpression.CURLY_BRACKETS_LEFT)[1] ??
-                                MaskExpression.EMPTY_STRING
-                            ).split(MaskExpression.CURLY_BRACKETS_RIGHT)[0]
-                        ) -
-                        4
-            ) {
-                return null;
-            } else if (
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) > 1 &&
                     value.toString().length <
                         this._maskValue.indexOf(MaskExpression.SYMBOL_STAR)) ||
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) > 1 &&
                     value.toString().length <
-                        this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION)) ||
-                this._maskValue.indexOf(MaskExpression.CURLY_BRACKETS_LEFT) === 1
+                        this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION))
             ) {
                 return this._createValidationError(value);
             }
