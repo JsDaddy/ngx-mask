@@ -100,4 +100,91 @@ describe('Directive: Mask (Repeat)', () => {
         equal('dd213D', 'dd213.D', fixture);
         equal('dd213DW', 'dd213.DW', fixture);
     });
+
+    it('should A{8} be valid if length 8', () => {
+        component.mask = 'A{8}';
+        equal('1', '1', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12', '12', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123', '123', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234', '1234', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345', '12345', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123456', '123456', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234567', '1234567', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345678', '12345678', fixture);
+        expect(component.form.valid).toBe(true);
+    });
+
+    it('should A{9} be valid if length 9', () => {
+        component.mask = 'A{9}';
+        equal('1', '1', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12', '12', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123', '123', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234', '1234', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345', '12345', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123456', '123456', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234567', '1234567', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345678', '12345678', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123456789', '123456789', fixture);
+        expect(component.form.valid).toBe(true);
+    });
+
+    it('should A{10} be valid if length 10', () => {
+        component.mask = 'A{10}';
+        equal('1', '1', fixture);
+        expect(component.form.valid).toBe(false);
+        equal('12', '12', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123', '123', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234', '1234', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345', '12345', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123456', '123456', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234567', '1234567', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('12345678', '12345678', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('123456789', '123456789', fixture);
+        expect(component.form.valid).toBe(false);
+
+        equal('1234567890', '1234567890', fixture);
+        expect(component.form.valid).toBe(true);
+    });
 });

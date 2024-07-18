@@ -93,9 +93,10 @@ describe('Directive: Mask (Secure)', () => {
         });
     });
 
-    it('should be same form state (pristine) after mask change', async () => {
+    it('should be same form state (pristine) after mask change triggerOnMaskChange = true', async () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
+        component.triggerOnMaskChange = true;
         component.form.reset('123456789');
         fixture.detectChanges();
         expect(component.form.dirty).toBeTruthy();
