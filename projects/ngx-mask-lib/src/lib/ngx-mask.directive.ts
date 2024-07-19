@@ -102,6 +102,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _maskExpressionArray: string[] = [];
 
+    private _allowFewMaskChangeMask: boolean = false;
+
     private _justPasted = false;
 
     private _isFocused = false;
@@ -615,13 +617,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
                 // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
                 if (this._maskExpressionArray.length) {
-                    const isBackSpaceInSpecialCharactersPosition =
-                        this._code === MaskExpression.BACKSPACE &&
-                        this.specialCharacters.includes(
-                            el.value.slice(position, this._maskService.actualValue.length)
+                    if (this._code === MaskExpression.BACKSPACE) {
+                        const specialChartMinusOne = this.specialCharacters.includes(
+                            this._maskService.actualValue.slice(position - 1, position)
                         );
-                    if (isBackSpaceInSpecialCharactersPosition) {
-                        position = position - 1;
+                        const specialChartPlusOne = this.specialCharacters.includes(
+                            this._maskService.actualValue.slice(position, position + 1)
+                        );
+                        if (this._allowFewMaskChangeMask && !specialChartPlusOne) {
+                            position = (el.selectionStart as number) + 1;
+                            this._allowFewMaskChangeMask = false;
+                        } else {
+                            position = specialChartMinusOne ? position - 1 : position;
+                        }
                     } else {
                         position =
                             el.selectionStart === 1
@@ -1097,6 +1105,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 : mask;
                     return test;
                 } else {
+                    if (this._code === MaskExpression.BACKSPACE) {
+                        this._allowFewMaskChangeMask = true;
+                    }
                     const expression =
                         this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
                         MaskExpression.EMPTY_STRING;
