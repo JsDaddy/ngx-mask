@@ -141,7 +141,6 @@ describe('Directive: Mask (Add prefix)', () => {
 
         fixture.whenStable().then(() => {
             fixture.detectChanges();
-
             equal('KZ123123', 'KZ123 123', fixture);
             expect(component.form.value).toBe('123123');
         });
