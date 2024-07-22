@@ -35,6 +35,7 @@ module.exports = tseslint.config(
     {
         // Everything in this config object targets our TypeScript files (Components, Directives, Pipes etc)
         files: ['**/*.ts'],
+
         extends: [
             // Apply the recommended core rules
             eslint.configs.recommended,
