@@ -283,4 +283,40 @@ describe('Directive: Mask (Dynamic)', () => {
         equal('A5A 0A', 'A5A 0A', fixture);
         equal('A5A 0A9', 'A5A 0A9', fixture);
     });
+
+    it('should work with only S', () => {
+        component.mask = 'S.||S.S.||S.S.S.||S.S.S.S.||S.S.S.S.S.';
+        equal('D', 'D.', fixture);
+        equal('D.D', 'D.D.', fixture);
+        equal('DDD', 'D.D.D.', fixture);
+        equal('DDDD', 'D.D.D.D.', fixture);
+        equal('DDDDD', 'D.D.D.D.D.', fixture);
+    });
+
+    it('should work with only A', () => {
+        component.mask = 'A.||A.A.||A.A.A.||A.A.A.A.||A.A.A.A.A.';
+        equal('D', 'D.', fixture);
+        equal('D.D', 'D.D.', fixture);
+        equal('DDD', 'D.D.D.', fixture);
+        equal('DDDD', 'D.D.D.D.', fixture);
+        equal('DDDDD', 'D.D.D.D.D.', fixture);
+    });
+
+    it('should work with only U', () => {
+        component.mask = 'U.||U.U.||U.U.U.||U.U.U.U.||U.U.U.U.U.';
+        equal('D', 'D.', fixture);
+        equal('D.D', 'D.D.', fixture);
+        equal('DDD', 'D.D.D.', fixture);
+        equal('DDDD', 'D.D.D.D.', fixture);
+        equal('DDDDD', 'D.D.D.D.D.', fixture);
+    });
+
+    it('should work with only L', () => {
+        component.mask = 'L.||L.L.||L.L.L.||L.L.L.L.||L.L.L.L.L.';
+        equal('d', 'd.', fixture);
+        equal('d.d', 'd.d.', fixture);
+        equal('ddd', 'd.d.d.', fixture);
+        equal('dddd', 'd.d.d.d.', fixture);
+        equal('ddddd', 'd.d.d.d.d.', fixture);
+    });
 });

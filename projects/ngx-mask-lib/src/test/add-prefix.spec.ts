@@ -138,8 +138,11 @@ describe('Directive: Mask (Add prefix)', () => {
         component.dropSpecialCharacters = false;
         component.triggerOnMaskChange = true;
         component.form.setValue('KZ123123');
-        equal('KZ123123', 'KZ123 123', fixture);
-        requestAnimationFrame(() => {
+
+        fixture.whenStable().then(() => {
+            fixture.detectChanges();
+
+            equal('KZ123123', 'KZ123 123', fixture);
             expect(component.form.value).toBe('123123');
         });
     });
