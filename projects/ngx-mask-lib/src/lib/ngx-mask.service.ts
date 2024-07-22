@@ -105,7 +105,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
             if (this.showMaskTyped) {
                 if (!this.hiddenInput) {
-                    // eslint-disable-next-line no-param-reassign
+                     
                     inputValue = this.removeMask(inputValue);
                 }
             }
@@ -130,10 +130,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (this.deletedSpecialCharacter && position) {
             if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 position = position + 1;
             } else if (maskExpression.slice(position - 1, position + 1) !== MaskExpression.MONTHS) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 position = position - 2;
             }
 
@@ -144,7 +144,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.placeHolderCharacter.length === 1 &&
             !this.leadZeroDateTime
         ) {
-            // eslint-disable-next-line no-param-reassign
+             
             inputValue = this.removeMask(inputValue);
         }
 
@@ -224,7 +224,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return result;
         }
         const resLen: number = result.length;
-        const prefNmask: string = `${this.prefix}${this.maskIsShown}${this.suffix}`;
+        const prefNmask = `${this.prefix}${this.maskIsShown}${this.suffix}`;
 
         if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
@@ -664,7 +664,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.maskExpression.startsWith(MaskExpression.PERCENT) &&
             this.decimalMarker === MaskExpression.COMMA
         ) {
-            // eslint-disable-next-line no-param-reassign
+             
             result = result.replace(MaskExpression.COMMA, MaskExpression.DOT);
         }
         const separatorPrecision: number | null = this._retrieveSeparatorPrecision(
@@ -721,7 +721,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             (this.leadZero && Number(separatorPrecision) > 0)
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 separatorValue = separatorValue.replace(',', '.');
             }
             return this.leadZero

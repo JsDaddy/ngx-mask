@@ -62,14 +62,14 @@ export class NgxMaskPipe implements PipeTransform {
                 this._maskService.thousandSeparator = config.thousandSeparator;
             }
             if (config.leadZero) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 this._maskService.leadZero = config.leadZero;
             }
-            // eslint-disable-next-line no-param-reassign
+             
             value = String(value);
             const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
             if (!Array.isArray(this._maskService.decimalMarker)) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 value =
                     this._maskService.decimalMarker !== localeDecimalMarker
                         ? value.replace(localeDecimalMarker, this._maskService.decimalMarker)
@@ -80,11 +80,11 @@ export class NgxMaskPipe implements PipeTransform {
                 value &&
                 this._maskService.dropSpecialCharacters !== false
             ) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 value = this._maskService._checkPrecision(mask, value as string);
             }
             if (this._maskService.decimalMarker === MaskExpression.COMMA) {
-                // eslint-disable-next-line no-param-reassign
+                 
                 value = value.toString().replace(MaskExpression.DOT, MaskExpression.COMMA);
             }
             this._maskService.isNumberValue = true;

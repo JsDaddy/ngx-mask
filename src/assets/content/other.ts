@@ -27,7 +27,7 @@ export const OthDocs: IComDoc[] = [
     {
         header: '12 hour format',
         text: '',
-        // eslint-disable-next-line no-useless-escape
+         
         code: ` <input type='text'[apm]="true" mask="Hh:m0:s0" >`,
         id: 4,
         anchor: '12hour',
@@ -35,7 +35,7 @@ export const OthDocs: IComDoc[] = [
     {
         header: 'Percent with decimalMarker ,',
         text: '',
-        // eslint-disable-next-line no-useless-escape
+         
         code: ` <input type='text'[decimalMarker]="','" mask="percent.2" >`,
         id: 5,
         anchor: 'percentDecimalMarker',

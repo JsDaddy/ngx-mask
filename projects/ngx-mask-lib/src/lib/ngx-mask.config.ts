@@ -1,15 +1,11 @@
 import { EventEmitter, InjectionToken } from '@angular/core';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface InputTransformFn {
-    (value: unknown): string | number;
-}
+ 
+export type InputTransformFn = (value: unknown) => string | number;
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
-export interface OutputTransformFn {
-    (value: string | number | undefined | null): unknown;
-}
+ 
+export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
 export interface IConfig {
     suffix: string;
@@ -35,19 +31,17 @@ export interface IConfig {
     inputTransformFn: InputTransformFn;
     outputTransformFn: OutputTransformFn;
     maskFilled: EventEmitter<void>;
-    patterns: {
-        [character: string]: {
+    patterns: Record<string, {
             pattern: RegExp;
             optional?: boolean;
             symbol?: string;
-        };
-    };
+        }>;
 }
 
 export type optionsConfig = Partial<IConfig>;
-export const NGX_MASK_CONFIG: InjectionToken<IConfig> = new InjectionToken('ngx-mask config');
-export const NEW_CONFIG: InjectionToken<IConfig> = new InjectionToken('new ngx-mask config');
-export const INITIAL_CONFIG: InjectionToken<IConfig> = new InjectionToken(
+export const NGX_MASK_CONFIG = new InjectionToken<IConfig>('ngx-mask config');
+export const NEW_CONFIG = new InjectionToken<IConfig>('new ngx-mask config');
+export const INITIAL_CONFIG = new InjectionToken<IConfig>(
     'initial ngx-mask config'
 );
 
@@ -66,7 +60,7 @@ export const initialConfig: IConfig = {
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
-    // eslint-disable-next-line @typescript-eslint/quotes
+     
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
     apm: false,

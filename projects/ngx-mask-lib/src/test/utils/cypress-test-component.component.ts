@@ -70,7 +70,7 @@ export class CypressTestMaskComponent {
 
     public readonly counter$ = this.form.valueChanges.pipe(
         startWith(0),
-        // eslint-disable-next-line no-param-reassign
+         
         scan((_, __, index) => ++index)
     );
 }

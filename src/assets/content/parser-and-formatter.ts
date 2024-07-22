@@ -67,7 +67,7 @@ export const ParserAndFormatterDocs: IComDoc[] = [
     {
         header: 'replace dot',
         text: '',
-        // eslint-disable-next-line no-useless-escape
+         
         code: ` <input type='text' mask="separator.2" [outputTransformFn]="replaceDot"
         public replaceDot = (value: string | number | undefined | null): string => {
             if (String(value).includes('.')) {
@@ -81,7 +81,7 @@ export const ParserAndFormatterDocs: IComDoc[] = [
     {
         header: 'toFixed(2)',
         text: '',
-        // eslint-disable-next-line no-useless-escape
+         
         code: ` <input type="text" mask="separator.3" [outputTransformFn]="toFixed" />
         public toFixed = (value: string | number | undefined | null): number => {
             const formattedValue = String(value).split(' ').join('');
