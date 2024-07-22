@@ -75,7 +75,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         const getSymbol: string =
             !!inputValue && typeof this.selStart === 'number'
-                ? inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING
+                ? (inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING)
                 : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
         if (this.hiddenInput !== undefined && !this.writingValue) {
@@ -105,7 +105,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             }
             if (this.showMaskTyped) {
                 if (!this.hiddenInput) {
-                     
                     inputValue = this.removeMask(inputValue);
                 }
             }
@@ -130,10 +129,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (this.deletedSpecialCharacter && position) {
             if (this.specialCharacters.includes(this.actualValue.slice(position, position + 1))) {
-                 
                 position = position + 1;
             } else if (maskExpression.slice(position - 1, position + 1) !== MaskExpression.MONTHS) {
-                 
                 position = position - 2;
             }
 
@@ -144,7 +141,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.placeHolderCharacter.length === 1 &&
             !this.leadZeroDateTime
         ) {
-             
             inputValue = this.removeMask(inputValue);
         }
 
@@ -430,6 +426,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         const arr: string[] = [];
+
         for (let i = 0; i < inputVal.length; i++) {
             const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
@@ -471,6 +468,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return cpf;
         }
         const arr: string[] = [];
+
         for (let i = 0; i < inputVal.length; i++) {
             const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
@@ -664,7 +662,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.maskExpression.startsWith(MaskExpression.PERCENT) &&
             this.decimalMarker === MaskExpression.COMMA
         ) {
-             
             result = result.replace(MaskExpression.COMMA, MaskExpression.DOT);
         }
         const separatorPrecision: number | null = this._retrieveSeparatorPrecision(
@@ -721,7 +718,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             (this.leadZero && Number(separatorPrecision) > 0)
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
-                 
                 separatorValue = separatorValue.replace(',', '.');
             }
             return this.leadZero

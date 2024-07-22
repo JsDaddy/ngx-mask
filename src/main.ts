@@ -1,4 +1,4 @@
-import { ɵprovideZonelessChangeDetection } from '@angular/core';
+import { provideZoneChangeDetection } from '@angular/core';
 
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
@@ -13,7 +13,7 @@ import { GithubStarsService } from '@libraries/github/github-stars.service';
 
 bootstrapApplication(AppComponent, {
     providers: [
-        ɵprovideZonelessChangeDetection(),
+        provideZoneChangeDetection(),
         GithubStarsService,
         provideHttpClient(),
         {

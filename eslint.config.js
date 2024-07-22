@@ -66,48 +66,25 @@ module.exports = tseslint.config(
                     type: 'attribute',
                 },
             ],
-            //     '@typescript-eslint/array-type': ['error'],
-            //     '@typescript-eslint/consistent-type-assertions': [
-            //         'error',
-            //         {
-            //             assertionStyle: 'as',
-            //         },
-            //     ],
-            //     '@typescript-eslint/naming-convention': [
-            //         'error',
-            //         {
-            //             selector: 'interface',
-            //             format: ['PascalCase'],
-            //             custom: {
-            //                 regex: '^I[A-Z]',
-            //                 match: true,
-            //             },
-            //         },
-            //     ],
-            //     '@typescript-eslint/explicit-member-accessibility': ['error'],
-            //     'import/no-unresolved': 'off',
-            //     'import/no-extraneous-dependencies': 'off',
-            //     'import/prefer-default-export': 'off',
-            //     'no-underscore-dangle': 'off',
-            //     'class-methods-use-this': 'off',
-            //     'lines-between-class-members': 'off',
-            //     'no-return-assign': 'off',
-            //     'no-param-reassign': [
-            //         'error',
-            //         {
-            //             props: false,
-            //         },
-            //     ],
-            //     'no-plusplus': ['off'],
-            //     '@typescript-eslint/no-unused-vars': [
-            //         'error',
-            //         {
-            //             argsIgnorePattern: '^_',
-            //         },
-            //     ],
-            //     '@typescript-eslint/unbound-method': 'off',
-            //     'import/no-cycle': 'off',
-            //     'import/extensions': 'off',
+            '@typescript-eslint/prefer-for-of': 'off',
+            '@typescript-eslint/no-unused-vars': [
+                'error',
+                {
+                    argsIgnorePattern: '^_',
+                },
+            ],
+            '@typescript-eslint/no-empty-function': [
+                'error',
+                {
+                    allow: ['arrowFunctions', 'functions', 'methods'],
+                },
+            ],
+            '@typescript-eslint/no-explicit-any': [
+                'error',
+                {
+                    ignoreRestArgs: true,
+                },
+            ],
         },
     },
     {

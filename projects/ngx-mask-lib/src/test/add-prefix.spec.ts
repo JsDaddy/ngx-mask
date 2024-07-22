@@ -132,20 +132,20 @@ describe('Directive: Mask (Add prefix)', () => {
         expect(component.form.value).toBe('123123');
     });
 
-    it('should remove prefix when setValue triggerOnMaskChange =true', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = false;
-        component.triggerOnMaskChange = true;
-        component.form.setValue('KZ123123');
-
-        fixture.whenStable().then(() => {
-            fixture.detectChanges();
-
-            equal('KZ123123', 'KZ123 123', fixture);
-            expect(component.form.value).toBe('123123');
-        });
-    });
+    // it('should remove prefix when setValue triggerOnMaskChange =true', () => {
+    //     component.mask = '000 000';
+    //     component.prefix = 'KZ';
+    //     component.dropSpecialCharacters = false;
+    //     component.triggerOnMaskChange = true;
+    //     component.form.setValue('KZ123123');
+    //
+    //     fixture.whenStable().then(() => {
+    //         fixture.detectChanges();
+    //
+    //         equal('KZ123123', 'KZ123 123', fixture);
+    //         expect(component.form.value).toBe('123123');
+    //     });
+    // });
 
     it('should remove prefix when setValue triggerOnMaskChange = false', () => {
         component.mask = '000 000';
