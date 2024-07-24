@@ -74,6 +74,8 @@ export class TestMaskComponent {
 
     public validation: IConfig['validation'] | undefined;
 
+    public setValueFailureBehavior: IConfig['setValueFailureBehavior'] | undefined;
+
     public apm: IConfig['apm'] | undefined;
 
     public inputTransformFn: IConfig['inputTransformFn'] | undefined;

@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
+import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation, setValueValidationError } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -262,6 +262,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
+        if (this._maskService.setValueFailureBehavior === 'ShowValidationError' && this._maskService.maskingIssue) {
+            return setValueValidationError;
+        }
+
         if (!this._maskService.validation || !this._maskValue) {
             return null;
         }
@@ -979,7 +983,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+                    this.getNextValue(controlValue, inputValue),
                 ];
                 // Let the service know we've finished writing value
                 typeof this.inputTransformFn !== 'function'
@@ -995,6 +999,59 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 typeof controlValue
             );
         }
+    }
+
+    private get triggeredByFormControlSetValue(): boolean {
+        return !this._justPasted && !this._code && !this._isComposing;
+    }
+
+    private getNextValue(controlValue: unknown, inputValue: string): string | boolean {
+        const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+        this._maskService.maskingIssue = !this.maskAppliedWithoutIssue(maskedValue, inputValue); 
+        if (!this._maskService.maskingIssue) {
+            return maskedValue;
+        }
+
+        console.warn(`The value ${controlValue} cannot be masked in the expected manner!`);
+        return controlValue as boolean | string;
+    }
+
+    private maskAppliedWithoutIssue(maskedValue: string, inputValue: string): boolean {
+        // Issues can only arise from formControl.setValue()
+        if (!this.triggeredByFormControlSetValue) {
+            return true;
+        }
+
+        if (!this.maskExpression) {
+            return true;
+        }
+        
+        // If the mask can be removed and the unmaskedValue matches the inputValue,
+        // then the mask was applied without issue.
+        const unmaskedValue = this._maskService.removeMask(maskedValue);
+        const maskKeptAllCharacters = unmaskedValue === inputValue; 
+        if (maskKeptAllCharacters) {
+            return true;
+        }
+
+        // If they don't match, 
+        // then one explanation is that there was a loss of precision.
+        // If precision is lost, then the mask is irreversible,
+        // so we shouldn't expect an exact match when we remove it.
+        // In this case, let's verify that the lost precision was intended, and ignore if so.
+        const hasPrecision = this.maskExpression.indexOf("separator.");
+        const mayPossiblyLosePrecision = hasPrecision >= 0;
+        if (mayPossiblyLosePrecision) {
+            const maskExpressionPrecision = Number(this.maskExpression.split("separator.")[1]);
+            const unmaskedValuePrecision = unmaskedValue.split(".")[1]?.length;
+            const unmaskedPrecisionLossDueToMask = unmaskedValuePrecision === maskExpressionPrecision;
+            if (unmaskedPrecisionLossDueToMask) {
+                return true;
+            }
+        }
+
+        // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
+        return false;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

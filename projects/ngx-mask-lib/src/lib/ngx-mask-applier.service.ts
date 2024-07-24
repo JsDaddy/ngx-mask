@@ -36,6 +36,8 @@ export class NgxMaskApplierService {
 
     public validation: IConfig['validation'] = this._config.validation;
 
+    public setValueFailureBehavior: IConfig['setValueFailureBehavior'] = this._config.setValueFailureBehavior;
+
     public separatorLimit: IConfig['separatorLimit'] = this._config.separatorLimit;
 
     public allowNegativeNumbers: IConfig['allowNegativeNumbers'] =

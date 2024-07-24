@@ -11,6 +11,9 @@ export interface OutputTransformFn {
     (value: string | number | undefined | null): unknown;
 }
 
+export type SetValueFailureBehavior = 'ShowValidationError' | '';
+export const setValueValidationError = { 'masking issue': true }; 
+
 export interface IConfig {
     suffix: string;
     prefix: string;
@@ -25,6 +28,7 @@ export interface IConfig {
     dropSpecialCharacters: boolean | string[] | readonly string[];
     hiddenInput: boolean | undefined;
     validation: boolean;
+    setValueFailureBehavior: SetValueFailureBehavior;
     separatorLimit: string;
     apm: boolean;
     allowNegativeNumbers: boolean;
@@ -66,6 +70,7 @@ export const initialConfig: IConfig = {
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
+    setValueFailureBehavior: '',
     // eslint-disable-next-line @typescript-eslint/quotes
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
