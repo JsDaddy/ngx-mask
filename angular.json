@@ -26,7 +26,8 @@
                         "extractLicenses": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true
+                        "namedChunks": true,
+                        "polyfills": ["zone.js"]
                     },
                     "configurations": {
                         "production": {
@@ -71,14 +72,8 @@
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ],
-                        "polyfills": [
-                            "zone.js",
-                            "zone.js/testing"
-                        ],
+                        "assets": ["src/favicon.ico", "src/assets"],
+                        "polyfills": ["zone.js", "zone.js/testing"],
                         "styles": ["src/styles.scss"],
                         "scripts": []
                     }

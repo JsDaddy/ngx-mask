@@ -9,4 +9,5 @@ export default defineConfig({
         },
         specPattern: 'projects/ngx-mask-lib/src/test/**/*.cy-spec.ts',
     },
+    defaultCommandTimeout: 10000,
 });

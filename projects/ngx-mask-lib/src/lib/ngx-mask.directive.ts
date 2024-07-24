@@ -102,7 +102,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _maskExpressionArray: string[] = [];
 
-    private _allowFewMaskChangeMask: boolean = false;
+    private _allowFewMaskChangeMask = false;
 
     private _justPasted = false;
 
@@ -341,7 +341,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === -1 ||
                 this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === -1
             ) {
-                // eslint-disable-next-line no-param-reassign
                 value = typeof value === 'number' ? String(value) : value;
                 const array = this._maskValue.split('*');
                 const length: number = this._maskService.dropSpecialCharacters
@@ -899,11 +898,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             if ('disable' in controlValue) {
                 this.setDisabledState(Boolean(controlValue.disable));
             }
-            // eslint-disable-next-line no-param-reassign
+
             controlValue = controlValue.value;
         }
         if (controlValue !== null) {
-            // eslint-disable-next-line no-param-reassign
             controlValue = this.inputTransformFn
                 ? this.inputTransformFn(controlValue)
                 : controlValue;

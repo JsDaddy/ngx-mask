@@ -27,7 +27,8 @@
         "noUncheckedIndexedAccess": true,
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
-        "useDefineForClassFields": false
+        "useDefineForClassFields": false,
+        "skipLibCheck": true
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
