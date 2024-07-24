@@ -24,6 +24,7 @@ const ignores = [
     'coverage-ts/',
     'cypress/',
     'package-lock.json',
+    '.cache'
 ];
 
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
