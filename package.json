@@ -94,7 +94,7 @@
         "@jscutlery/cypress-angular": "^0.9.22",
         "@types/highlight.js": "9.12.4",
         "@types/jasmine": "5.1.4",
-        "@types/node": "20.14.11",
+        "@types/node": "20.14.12",
         "@typescript-eslint/eslint-plugin": "7.17.0",
         "@typescript-eslint/parser": "7.17.0",
         "@web/test-runner": "^0.18.2",
