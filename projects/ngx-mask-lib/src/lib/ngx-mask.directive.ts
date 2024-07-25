@@ -19,7 +19,7 @@ import {
 } from '@angular/forms';
 
 import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation, setValueValidationError } from './ngx-mask.config';
+import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -264,10 +264,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
-        if (this._maskService.maskingIssue) {
-            return setValueValidationError;
-        }
-
         if (!this._maskService.validation || !this._maskValue) {
             return null;
         }
@@ -1007,28 +1003,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
     }
 
-    private get triggeredByFormControlSetValue(): boolean {
-        return !this._justPasted && !this._code && !this._isComposing;
-    }
-
     private getNextValue(controlValue: unknown, inputValue: string): string | boolean {
         const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
         this._maskService.maskingIssue = !this.maskAppliedWithoutIssue(maskedValue, inputValue); 
         if (!this._maskService.maskingIssue) {
             return maskedValue;
         }
-
-        console.warn(`The value ${controlValue} cannot be masked in the expected manner!`);
+        
+        console.warn(`Unexpected error applying mask: ${this._maskService.maskExpression} to value: ${controlValue}`);
         return controlValue as boolean | string;
     }
 
     private maskAppliedWithoutIssue(maskedValue: string, inputValue: string): boolean {
-        // Issues can only arise from formControl.setValue()
-        if (!this.triggeredByFormControlSetValue) {
-            return true;
-        }
-
-        if (!this.maskExpression) {
+        if (!this._maskService.maskExpression) {
             return true;
         }
         
@@ -1045,10 +1032,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         // If precision is lost, then the mask is irreversible,
         // so we shouldn't expect an exact match when we remove it.
         // In this case, let's verify that the lost precision was intended, and ignore if so.
-        const hasPrecision = this.maskExpression.indexOf("separator.");
+        const hasPrecision = this._maskService.maskExpression.indexOf("separator.");
         const mayPossiblyLosePrecision = hasPrecision >= 0;
         if (mayPossiblyLosePrecision) {
-            const maskExpressionPrecision = Number(this.maskExpression.split("separator.")[1]);
+            const maskExpressionPrecision = Number(this._maskService.maskExpression.split("separator.")[1]);
             const unmaskedValuePrecision = unmaskedValue.split(".")[1]?.length;
             const unmaskedPrecisionLossDueToMask = unmaskedValuePrecision === maskExpressionPrecision;
             if (unmaskedPrecisionLossDueToMask) {
@@ -1057,7 +1044,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
 
         // If they don't match, 
-        // then another explanation is that special characters were dropped.
+        // then another explanation is that special characters were lost.
         // Again, that would make the mask irreversible,
         // so we shouldn't expect an exact match when we remove it.
         // In this case, let's verify that the lost characters were intended, and ignore if so.
@@ -1072,7 +1059,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 return true;
             }
         }
-
+        
         // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
         return false;
     }

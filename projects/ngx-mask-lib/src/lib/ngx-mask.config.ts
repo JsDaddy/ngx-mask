@@ -5,8 +5,6 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
-export const setValueValidationError = { 'masking issue': true }; 
-
 export interface IConfig {
     suffix: string;
     prefix: string;
