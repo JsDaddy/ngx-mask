@@ -1023,7 +1023,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private maskAppliedWithoutIssue(maskedValue: string, inputValue: string): boolean {
-        debugger;
         // Issues can only arise from formControl.setValue()
         if (!this.triggeredByFormControlSetValue) {
             return true;
@@ -1071,11 +1070,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             const unmaskedCharacterLossDueToDroppedSpecialChars = unmaskedValue === inputWithoutSpecialCharacters;
             if (unmaskedCharacterLossDueToDroppedSpecialChars) {
                 return true;
-            } else {
-                debugger;
             }
-        } else {
-            debugger;
         }
 
         // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
