@@ -56,9 +56,9 @@ export class NgxMaskApplierService {
     public keepCharacterPositions: IConfig['keepCharacterPositions'] =
         this._config.keepCharacterPositions;
 
-    private _shift: Set<number> = new Set();
+    private _shift = new Set<number>();
 
-    public plusOnePosition: boolean = false;
+    public plusOnePosition = false;
 
     public maskExpression = '';
 
@@ -102,15 +102,12 @@ export class NgxMaskApplierService {
         let shift = 1;
         let stepBack = false;
         if (inputValue.slice(0, this.prefix.length) === this.prefix) {
-            // eslint-disable-next-line no-param-reassign
             inputValue = inputValue.slice(this.prefix.length, inputValue.length);
         }
         if (!!this.suffix && inputValue?.length > 0) {
-            // eslint-disable-next-line no-param-reassign
             inputValue = this.checkAndRemoveSuffix(inputValue);
         }
         if (inputValue === '(' && this.prefix) {
-            // eslint-disable-next-line no-param-reassign
             inputValue = '';
         }
         const inputArray: string[] = inputValue.toString().split(MaskExpression.EMPTY_STRING);
@@ -123,7 +120,7 @@ export class NgxMaskApplierService {
         if (maskExpression === MaskExpression.IP) {
             const valuesIP = inputValue.split(MaskExpression.DOT);
             this.ipError = this._validIP(valuesIP);
-            // eslint-disable-next-line no-param-reassign
+
             maskExpression = '099.099.099.099';
         }
         const arr: string[] = [];
@@ -135,10 +132,8 @@ export class NgxMaskApplierService {
         if (maskExpression === MaskExpression.CPF_CNPJ) {
             this.cpfCnpjError = arr.length !== 11 && arr.length !== 14;
             if (arr.length > 11) {
-                // eslint-disable-next-line no-param-reassign
                 maskExpression = '00.000.000/0000-00';
             } else {
-                // eslint-disable-next-line no-param-reassign
                 maskExpression = '000.000.000-00';
             }
         }
@@ -148,10 +143,9 @@ export class NgxMaskApplierService {
                 // eslint-disable-next-line no-useless-escape
                 (inputValue.match(/[-!$%^&*()_+|~=`{}\[\]:";'<>?,\/.]/) && !backspaced)
             ) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
                 const precision: number = this.getPrecision(maskExpression);
-                // eslint-disable-next-line no-param-reassign
+
                 inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
             }
             const decimalMarker =
@@ -168,7 +162,7 @@ export class NgxMaskApplierService {
                 ) {
                     base = inputValue.substring(0, inputValue.indexOf(decimalMarker));
                 }
-                // eslint-disable-next-line no-param-reassign
+
                 inputValue = `${base}${inputValue.substring(
                     inputValue.indexOf(decimalMarker),
                     inputValue.length
@@ -192,7 +186,6 @@ export class NgxMaskApplierService {
                 inputValue.match(/[-@#!$%\\^&*()_£¬'+|~=`{}\]:";<>.?/]/) ||
                 inputValue.match('[^A-Za-z0-9,]')
             ) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = this._stripToDecimal(inputValue);
             }
             const precision: number = this.getPrecision(maskExpression);
@@ -200,7 +193,6 @@ export class NgxMaskApplierService {
                 ? MaskExpression.DOT
                 : this.decimalMarker;
             if (precision === 0) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = this.allowNegativeNumbers
                     ? inputValue.length > 2 &&
                       inputValue[0] === MaskExpression.MINUS &&
@@ -225,7 +217,6 @@ export class NgxMaskApplierService {
                       : inputValue;
             } else {
                 if (inputValue[0] === decimalMarker && inputValue.length > 1) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue =
                         MaskExpression.NUMBER_ZERO + inputValue.slice(0, inputValue.length + 1);
                     this.plusOnePosition = true;
@@ -235,7 +226,6 @@ export class NgxMaskApplierService {
                     inputValue[1] !== decimalMarker &&
                     inputValue[1] !== this.thousandSeparator
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue =
                         inputValue.length > 1
                             ? inputValue.slice(0, 1) +
@@ -250,7 +240,6 @@ export class NgxMaskApplierService {
                     (inputValue[1] === decimalMarker ||
                         inputValue[1] === MaskExpression.NUMBER_ZERO)
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue =
                         inputValue[1] === decimalMarker && inputValue.length > 2
                             ? inputValue.slice(0, 1) +
@@ -288,7 +277,6 @@ export class NgxMaskApplierService {
                     positionOfZeroOrDecimalMarker &&
                     position < 2
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue = inputValueAfterZero;
                 }
                 if (
@@ -298,7 +286,6 @@ export class NgxMaskApplierService {
                     positionOfZeroOrDecimalMarker &&
                     position < 3
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue = MaskExpression.MINUS + inputValueAfterZero;
                 }
 
@@ -310,7 +297,6 @@ export class NgxMaskApplierService {
                             zeroIndexMinus &&
                             !firstIndexNumberZero))
                 ) {
-                    // eslint-disable-next-line no-param-reassign
                     inputValue = zeroIndexMinus
                         ? MaskExpression.MINUS + inputValueAfterZero
                         : inputValueAfterZero;
@@ -343,11 +329,9 @@ export class NgxMaskApplierService {
 
             const invalidCharRegexp = new RegExp('[' + invalidChars + ']');
             if (inputValue.match(invalidCharRegexp)) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
 
-            // eslint-disable-next-line no-param-reassign
             inputValue = this.checkInputPrecision(inputValue, precision, this.decimalMarker);
             const strForSep: string = inputValue.replace(
                 new RegExp(thousandSeparatorCharEscaped, 'g'),
@@ -366,7 +350,6 @@ export class NgxMaskApplierService {
             const shiftStep: number = result.length - inputValue.length;
 
             if (result[position - 1] === this.thousandSeparator && this.prefix && backspaced) {
-                // eslint-disable-next-line no-param-reassign
                 position = position - 1;
             } else if (shiftStep > 0 && result[position] !== this.thousandSeparator) {
                 backspaceShift = true;
@@ -393,7 +376,7 @@ export class NgxMaskApplierService {
                 this._shift.clear();
                 backspaceShift = true;
                 shift = shiftStep;
-                // eslint-disable-next-line no-param-reassign
+
                 position += shiftStep;
                 this._shift.add(position);
             } else {
@@ -401,7 +384,7 @@ export class NgxMaskApplierService {
             }
         } else {
             for (
-                let i: number = 0, inputSymbol: string = inputArray[0]!;
+                let i = 0, inputSymbol: string = inputArray[0]!;
                 i < inputArray.length;
                 i++, inputSymbol = inputArray[i] ?? MaskExpression.EMPTY_STRING
             ) {
@@ -457,7 +440,6 @@ export class NgxMaskApplierService {
                 ) {
                     if (maskExpression[cursor] === MaskExpression.HOURS) {
                         if (this.apm ? Number(inputSymbol) > 9 : Number(inputSymbol) > 2) {
-                            // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -485,7 +467,6 @@ export class NgxMaskApplierService {
                                       Number(inputSymbol) > 3 &&
                                       cursor > 10)
                         ) {
-                            // eslint-disable-next-line no-param-reassign
                             position = position + 1;
                             cursor += 1;
                             i--;
@@ -497,7 +478,6 @@ export class NgxMaskApplierService {
                         maskExpression[cursor] === MaskExpression.SECOND
                     ) {
                         if (Number(inputSymbol) > 5) {
-                            // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -541,7 +521,6 @@ export class NgxMaskApplierService {
                                 : Number(inputValueSliceCursorPlusTwo) > daysCount ||
                                   this.specialCharacters.includes(inputValueCursorPlusOne))
                         ) {
-                            // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -612,7 +591,6 @@ export class NgxMaskApplierService {
                             day2monthInput ||
                             (day2monthInputDot && !this.leadZeroDateTime)
                         ) {
-                            // eslint-disable-next-line no-param-reassign
                             position = !this.leadZeroDateTime ? position + 1 : position;
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
@@ -878,7 +856,7 @@ export class NgxMaskApplierService {
             // TODO need think about decimalMarker
             if (Array.isArray(decimalMarker)) {
                 const marker = decimalMarker.find((dm) => dm !== this.thousandSeparator);
-                // eslint-disable-next-line no-param-reassign
+
                 decimalMarker = marker ? marker : decimalMarker[0];
             }
             const precisionRegEx = new RegExp(
@@ -888,7 +866,7 @@ export class NgxMaskApplierService {
             const precisionMatchLength: number = (precisionMatch && precisionMatch[0]?.length) ?? 0;
             if (precisionMatchLength - 1 > precision) {
                 const diff = precisionMatchLength - 1 - precision;
-                // eslint-disable-next-line no-param-reassign
+
                 inputValue = inputValue.substring(0, inputValue.length - diff);
             }
             if (
@@ -899,7 +877,6 @@ export class NgxMaskApplierService {
                     this.thousandSeparator
                 )
             ) {
-                // eslint-disable-next-line no-param-reassign
                 inputValue = inputValue.substring(0, inputValue.length - 1);
             }
         }

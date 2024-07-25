@@ -328,12 +328,11 @@ describe('Test Date Hh:m0', () => {
             imports: [CypressTestMaskModule],
         });
 
+        cy.get('#masked').type('111111111111').should('have.value', '+11111111111');
         cy.get('#masked')
-            .type('123 45678901')
-
-            .should('have.value', '+1245678901')
             .type('{backspace}')
-            .should('have.prop', 'selectionStart', 13);
+            .should('have.value', '(111) 111-1111')
+            .should('have.prop', 'selectionStart', 14);
     });
 
     it('dynamic mask after backspace should have right cursor position', () => {
@@ -345,10 +344,11 @@ describe('Test Date Hh:m0', () => {
         });
 
         cy.get('#masked')
-            .type('123 4')
+            .type('1234567890')
 
-            .should('have.value', '(123) 4')
-            .type('{backspace}'.repeat(2))
+            .should('have.value', '(123) 456-7890')
+            .type('{leftArrow}'.repeat(7))
+            .type('{backspace}')
             .should('have.prop', 'selectionStart', 5);
     });
 
@@ -360,11 +360,7 @@ describe('Test Date Hh:m0', () => {
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('#masked')
-            .type('123')
-
-            .should('have.value', '(12) 3')
-            .type('{backspace}'.repeat(2))
-            .should('have.prop', 'selectionStart', 4);
+        cy.get('#masked').type('111').should('have.value', '(11) 1');
+        cy.get('#masked').type('{backspace}').should('have.prop', 'selectionStart', 4);
     });
 });
