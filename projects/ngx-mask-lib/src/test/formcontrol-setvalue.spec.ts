@@ -15,7 +15,7 @@ describe('Directive: Mask (formControl.setValue)', () => {
         TestBed.configureTestingModule({
             declarations: [TestMaskComponent],
             imports: [ReactiveFormsModule, NgxMaskDirective],
-            providers: [provideNgxMask({ setValueFailureBehavior: 'ShowValidationError' })],
+            providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;

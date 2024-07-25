@@ -5,7 +5,6 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
-export type SetValueFailureBehavior = 'ShowValidationError' | '';
 export const setValueValidationError = { 'masking issue': true }; 
 
 export interface IConfig {
@@ -22,7 +21,6 @@ export interface IConfig {
     dropSpecialCharacters: boolean | string[] | readonly string[];
     hiddenInput: boolean | undefined;
     validation: boolean;
-    setValueFailureBehavior: SetValueFailureBehavior;
     separatorLimit: string;
     apm: boolean;
     allowNegativeNumbers: boolean;
@@ -63,7 +61,6 @@ export const initialConfig: IConfig = {
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
-    setValueFailureBehavior: '',
 
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,

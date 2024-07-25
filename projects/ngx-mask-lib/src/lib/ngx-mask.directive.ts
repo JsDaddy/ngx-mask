@@ -264,7 +264,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
-        if (this._maskService.setValueFailureBehavior === 'ShowValidationError' && this._maskService.maskingIssue) {
+        if (this._maskService.maskingIssue) {
             return setValueValidationError;
         }
 
@@ -1023,6 +1023,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private maskAppliedWithoutIssue(maskedValue: string, inputValue: string): boolean {
+        debugger;
         // Issues can only arise from formControl.setValue()
         if (!this.triggeredByFormControlSetValue) {
             return true;
@@ -1054,6 +1055,27 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             if (unmaskedPrecisionLossDueToMask) {
                 return true;
             }
+        }
+
+        // If they don't match, 
+        // then another explanation is that special characters were dropped.
+        // Again, that would make the mask irreversible,
+        // so we shouldn't expect an exact match when we remove it.
+        // In this case, let's verify that the lost characters were intended, and ignore if so.
+        if (this._maskService.dropSpecialCharacters) {
+            const specialCharacters = Array.isArray(this._maskService.dropSpecialCharacters)
+                ? this._maskService.dropSpecialCharacters.concat(this._maskService.specialCharacters)
+                : this._maskService.specialCharacters;
+            let inputWithoutSpecialCharacters = inputValue;
+            specialCharacters.forEach(sc => inputWithoutSpecialCharacters = inputWithoutSpecialCharacters.replace(sc, ""));
+            const unmaskedCharacterLossDueToDroppedSpecialChars = unmaskedValue === inputWithoutSpecialCharacters;
+            if (unmaskedCharacterLossDueToDroppedSpecialChars) {
+                return true;
+            } else {
+                debugger;
+            }
+        } else {
+            debugger;
         }
 
         // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
