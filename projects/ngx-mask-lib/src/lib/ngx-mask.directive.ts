@@ -22,6 +22,7 @@ import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { NgxMaskFaultDetectionService } from './ngx-mask-fault-detection.service';
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
@@ -38,6 +39,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
             multi: true,
         },
         NgxMaskService,
+        NgxMaskFaultDetectionService,
     ],
     exportAs: 'mask,ngxMask',
 })
@@ -114,6 +116,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private readonly document = inject(DOCUMENT);
 
     public _maskService = inject(NgxMaskService, { self: true });
+
+    public _maskFaultDetector = inject(NgxMaskFaultDetectionService, { self: true });
 
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
@@ -1005,97 +1009,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private getNextValue(controlValue: unknown, inputValue: string): string | boolean {
         const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
-        const maskingFault = this.maskApplicationFault(maskedValue, inputValue); 
+        const maskingFault = this._maskFaultDetector.maskApplicationFault(maskedValue, inputValue); 
         if (!maskingFault) {
             return maskedValue;
         }
         
         console.warn(`Unexpected fault applying mask: ${this._maskService.maskExpression} to value: ${controlValue}`);
         return controlValue as boolean | string;
-    }
-
-    private maskApplicationFault(maskedValue: string, inputValue: string): boolean {
-        const unmaskedValue = this._maskService.removeMask(maskedValue);
-        if (this._maskService.dropSpecialCharacters) {
-            inputValue = this.removeSpecialCharactersFrom(inputValue);
-        }
-
-        if (this._maskService.hiddenInput) {
-            inputValue = this.removeHiddenCharacters(unmaskedValue, inputValue);
-        }
-        
-        if (unmaskedValue === inputValue) {
-            return false;
-        }
-
-        // They may still not match due to lost precision 
-        const hasPrecision = this._maskService.maskExpression.indexOf(MaskExpression.SEPARATOR + ".");
-        const mayPossiblyLosePrecision = hasPrecision >= 0;
-        if (mayPossiblyLosePrecision) {
-            const maskExpressionPrecision = Number(this._maskService.maskExpression.split(MaskExpression.SEPARATOR + ".")[1]);
-            const decimalMarkers = Array.isArray(this._maskService.decimalMarker) ? this._maskService.decimalMarker : [ this._maskService.decimalMarker ];
-            const unmaskedPrecisionLossDueToMask = decimalMarkers.some((dm) => {
-                const split = unmaskedValue.split(dm);
-                const unmaskedValuePrecision = split[split.length - 1]?.length;
-                const unmaskedPrecisionLossDueToMask = unmaskedValuePrecision === maskExpressionPrecision;
-                return unmaskedPrecisionLossDueToMask;
-            });
-            if (unmaskedPrecisionLossDueToMask) {
-                return false;
-            }
-
-            const scientificNotation = inputValue.indexOf("e") > 0;
-            if (scientificNotation) {
-                const power = inputValue.split("e")[1];
-                if (power && unmaskedValue.endsWith(power)) {
-                    return false;
-                }
-            }
-        }
-
-        // removeMask() might not be removing the thousandth separator
-        const unmaskedWithoutThousandth = this.replaceEachCharacterWith(unmaskedValue, this._maskService.thousandSeparator, MaskExpression.EMPTY_STRING);
-        if (unmaskedWithoutThousandth === inputValue) {
-            return false;
-        }
-        
-        // Is there any other reason to ignore a diff between unmaskedValue and inputValue?
-        return true;
-    }
-
-    private removeSpecialCharactersFrom(inputValue: string): string {
-        const specialCharacters = Array.isArray(this._maskService.dropSpecialCharacters)
-            ? this._maskService.dropSpecialCharacters.concat(this._maskService.specialCharacters)
-            : this._maskService.specialCharacters;
-        let result = inputValue;
-        specialCharacters.forEach(sc => {
-            result = this.replaceEachCharacterWith(result, sc, MaskExpression.EMPTY_STRING);
-        });
-
-        return result;
-    }
-
-    private removeHiddenCharacters(unmaskedValue: string, inputValue: string): string {
-        for (let i = 0; i < unmaskedValue.length; i++) {
-            const charAt = unmaskedValue.charAt(i);
-            const isHidden = charAt === MaskExpression.SYMBOL_STAR;
-            if (isHidden) {
-                const part_1 = inputValue.substring(0, i);
-                const part_2 = MaskExpression.SYMBOL_STAR;
-                const part_3 = inputValue.substring(i + 1)
-                inputValue = `${part_1}${part_2}${part_3}`
-            }
-        }
-
-        return inputValue;
-    }
-
-    private replaceEachCharacterWith(result: string, replace: string, replaceWith: string): string {
-        while (result.indexOf(replace) >= 0) {
-            result = result.replace(replace, replaceWith);
-        }
-
-        return result;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
