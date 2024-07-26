@@ -989,7 +989,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this.getNextValue(controlValue, inputValue),
+                    this.getNextValue(inputValue),
                 ];
                 // Let the service know we've finished writing value
                 typeof this.inputTransformFn !== 'function'
@@ -1007,14 +1007,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
     }
 
-    private getNextValue(controlValue: unknown, inputValue: string): string | boolean {
+    private getNextValue(inputValue: string): string | boolean {
         const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
         const maskingFault = this._maskFaultDetector.maskApplicationFault(maskedValue, inputValue); 
         if (!maskingFault) {
             return maskedValue;
         }
         
-        return controlValue as boolean | string;
+        return inputValue;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
