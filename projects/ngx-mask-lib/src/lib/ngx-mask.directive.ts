@@ -1053,14 +1053,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
         }
 
-        // IS THIS A BUG?
-        // removeMask() is not removing the thousandth separator
+        // removeMask() might not be removing the thousandth separator
         const unmaskedWithoutThousandth = this.replaceEachCharacterWith(unmaskedValue, this._maskService.thousandSeparator, MaskExpression.EMPTY_STRING);
         if (unmaskedWithoutThousandth === inputValue) {
             return false;
         }
         
-        // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
+        // Is there any other reason to ignore a diff between unmaskedValue and inputValue?
         return true;
     }
 
