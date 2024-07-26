@@ -27,6 +27,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     public triggerOnMaskChange = false;
 
     public _previousValue = '';
+    
     public _currentValue = '';
 
     private _emitValue = false;

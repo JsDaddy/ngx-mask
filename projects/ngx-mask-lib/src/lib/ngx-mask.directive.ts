@@ -1010,16 +1010,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return maskedValue;
         }
         
-        console.warn(`Unexpected error applying mask: ${this._maskService.maskExpression} to value: ${controlValue}`);
+        console.warn(`Unexpected fault applying mask: ${this._maskService.maskExpression} to value: ${controlValue}`);
         return controlValue as boolean | string;
     }
 
     private maskAppliedWithoutFault(maskedValue: string, inputValue: string): boolean {
         try {
-            if (!this._maskService.maskExpression) {
-                return true;
-            }
-            
             const unmaskedValue = this._maskService.removeMask(maskedValue);
             if (this._maskService.dropSpecialCharacters) {
                 inputValue = this.removeSpecialCharactersFrom(inputValue);
@@ -1046,7 +1042,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             const hasPrecision = this._maskService.maskExpression.indexOf(MaskExpression.SEPARATOR + ".");
             const mayPossiblyLosePrecision = hasPrecision >= 0;
             if (mayPossiblyLosePrecision) {
-                const maskExpressionPrecision = Number(this._maskService.maskExpression.split("separator.")[1]);
+                const maskExpressionPrecision = Number(this._maskService.maskExpression.split(MaskExpression.SEPARATOR + ".")[1]);
                 const decimalMarkers = Array.isArray(this._maskService.decimalMarker) ? this._maskService.decimalMarker : [ this._maskService.decimalMarker ];
                 const unmaskedPrecisionLossDueToMask = decimalMarkers.some((dm) => {
                     const split = unmaskedValue.split(dm);
@@ -1075,6 +1071,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             
             // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
+            debugger;
             return false;
         } catch(err) {
             return true;
