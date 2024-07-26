@@ -1015,53 +1015,94 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private maskAppliedWithoutIssue(maskedValue: string, inputValue: string): boolean {
-        if (!this._maskService.maskExpression) {
-            return true;
-        }
-        
-        // If the mask can be removed and the unmaskedValue matches the inputValue,
-        // then the mask was applied without issue.
-        const unmaskedValue = this._maskService.removeMask(maskedValue);
-        const maskKeptAllCharacters = unmaskedValue === inputValue; 
-        if (maskKeptAllCharacters) {
-            return true;
-        }
-
-        // If they don't match, 
-        // then one explanation is that there was a loss of precision.
-        // If precision is lost, then the mask is irreversible,
-        // so we shouldn't expect an exact match when we remove it.
-        // In this case, let's verify that the lost precision was intended, and ignore if so.
-        const hasPrecision = this._maskService.maskExpression.indexOf("separator.");
-        const mayPossiblyLosePrecision = hasPrecision >= 0;
-        if (mayPossiblyLosePrecision) {
-            const maskExpressionPrecision = Number(this._maskService.maskExpression.split("separator.")[1]);
-            const unmaskedValuePrecision = unmaskedValue.split(".")[1]?.length;
-            const unmaskedPrecisionLossDueToMask = unmaskedValuePrecision === maskExpressionPrecision;
-            if (unmaskedPrecisionLossDueToMask) {
+        try {
+            if (!this._maskService.maskExpression) {
                 return true;
             }
-        }
+            
+            const unmaskedValue = this._maskService.removeMask(maskedValue);
+            if (this._maskService.dropSpecialCharacters) {
+                inputValue = this.removeSpecialCharactersFrom(inputValue);
+            }
 
-        // If they don't match, 
-        // then another explanation is that special characters were lost.
-        // Again, that would make the mask irreversible,
-        // so we shouldn't expect an exact match when we remove it.
-        // In this case, let's verify that the lost characters were intended, and ignore if so.
-        if (this._maskService.dropSpecialCharacters) {
-            const specialCharacters = Array.isArray(this._maskService.dropSpecialCharacters)
-                ? this._maskService.dropSpecialCharacters.concat(this._maskService.specialCharacters)
-                : this._maskService.specialCharacters;
-            let inputWithoutSpecialCharacters = inputValue;
-            specialCharacters.forEach(sc => inputWithoutSpecialCharacters = inputWithoutSpecialCharacters.replace(sc, ""));
-            const unmaskedCharacterLossDueToDroppedSpecialChars = unmaskedValue === inputWithoutSpecialCharacters;
-            if (unmaskedCharacterLossDueToDroppedSpecialChars) {
+            if (this._maskService.hiddenInput) {
+                for (let i = 0; i < unmaskedValue.length; i++) {
+                    const charAt = unmaskedValue.charAt(i);
+                    const isHidden = charAt === MaskExpression.SYMBOL_STAR;
+                    if (isHidden) {
+                        const part_1 = inputValue.substring(0, i);
+                        const part_2 = MaskExpression.SYMBOL_STAR;
+                        const part_3 = inputValue.substring(i + 1)
+                        inputValue = `${part_1}${part_2}${part_3}`
+                    }
+                }
+            }
+            
+            if (unmaskedValue === inputValue) {
                 return true;
             }
+
+            // If they don't match, 
+            // then one explanation is that there was a loss of precision.
+            // If precision is lost, then the mask is irreversible,
+            // so we shouldn't expect an exact match when we remove it.
+            // In this case, let's verify that the lost precision was intended, and ignore if so.
+            const hasPrecision = this._maskService.maskExpression.indexOf(MaskExpression.SEPARATOR + ".");
+            const mayPossiblyLosePrecision = hasPrecision >= 0;
+            if (mayPossiblyLosePrecision) {
+                const maskExpressionPrecision = Number(this._maskService.maskExpression.split("separator.")[1]);
+                const decimalMarkers = Array.isArray(this._maskService.decimalMarker) ? this._maskService.decimalMarker : [ this._maskService.decimalMarker ];
+                const unmaskedPrecisionLossDueToMask = decimalMarkers.some((dm) => {
+                    const split = unmaskedValue.split(dm);
+                    const unmaskedValuePrecision = split[split.length - 1]?.length;
+                    const unmaskedPrecisionLossDueToMask = unmaskedValuePrecision === maskExpressionPrecision;
+                    return unmaskedPrecisionLossDueToMask;
+                });
+                if (unmaskedPrecisionLossDueToMask) {
+                    return true;
+                }
+
+                const scientificNotation = inputValue.indexOf("e") > 0;
+                if (scientificNotation) {
+                    const power = inputValue.split("e")[1];
+                    if (power && unmaskedValue.endsWith(power)) {
+                        return true;
+                    }
+                }
+            }
+
+            // IS THIS A BUG?
+            // removeMask() is not removing the thousandth separator
+            const unmaskedWithoutThousandth = this.replaceEachCharacterWith(unmaskedValue, this._maskService.thousandSeparator, MaskExpression.EMPTY_STRING);
+            if (unmaskedWithoutThousandth === inputValue) {
+                return true;
+            }
+            
+            // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
+            return false;
+        } catch(err) {
+            return true;
         }
-        
-        // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
-        return false;
+    }
+
+    private removeSpecialCharactersFrom(inputValue: string): string {
+        const specialCharacters = Array.isArray(this._maskService.dropSpecialCharacters)
+            ? this._maskService.dropSpecialCharacters.concat(this._maskService.specialCharacters)
+            : this._maskService.specialCharacters;
+        let result = inputValue;
+        specialCharacters.forEach(sc => {
+            result = this.replaceEachCharacterWith(result, sc, MaskExpression.EMPTY_STRING);
+        });
+
+        return result;
+    }
+
+    private replaceEachCharacterWith(result: string, replace: string, replaceWith: string): string {
+        while (result.indexOf(replace) >= 0) {
+            result = result.replace(replace, replaceWith);
+        }
+
+        return result;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
