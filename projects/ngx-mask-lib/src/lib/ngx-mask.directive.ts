@@ -1042,11 +1042,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 return true;
             }
 
-            // If they don't match, 
-            // then one explanation is that there was a loss of precision.
-            // If precision is lost, then the mask is irreversible,
-            // so we shouldn't expect an exact match when we remove it.
-            // In this case, let's verify that the lost precision was intended, and ignore if so.
+            // They may still not match due to lost precision 
             const hasPrecision = this._maskService.maskExpression.indexOf(MaskExpression.SEPARATOR + ".");
             const mayPossiblyLosePrecision = hasPrecision >= 0;
             if (mayPossiblyLosePrecision) {
