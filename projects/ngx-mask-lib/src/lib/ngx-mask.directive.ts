@@ -1005,8 +1005,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private getNextValue(controlValue: unknown, inputValue: string): string | boolean {
         const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
-        const maskingFault = !this.maskAppliedWithoutFault(maskedValue, inputValue); 
-        if (maskingFault) {
+        const maskingFault = this.maskApplicationFault(maskedValue, inputValue); 
+        if (!maskingFault) {
             return maskedValue;
         }
         
@@ -1014,7 +1014,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         return controlValue as boolean | string;
     }
 
-    private maskAppliedWithoutFault(maskedValue: string, inputValue: string): boolean {
+    private maskApplicationFault(maskedValue: string, inputValue: string): boolean {
         const unmaskedValue = this._maskService.removeMask(maskedValue);
         if (this._maskService.dropSpecialCharacters) {
             inputValue = this.removeSpecialCharactersFrom(inputValue);
@@ -1025,7 +1025,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         
         if (unmaskedValue === inputValue) {
-            return true;
+            return false;
         }
 
         // They may still not match due to lost precision 
@@ -1041,14 +1041,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 return unmaskedPrecisionLossDueToMask;
             });
             if (unmaskedPrecisionLossDueToMask) {
-                return true;
+                return false;
             }
 
             const scientificNotation = inputValue.indexOf("e") > 0;
             if (scientificNotation) {
                 const power = inputValue.split("e")[1];
                 if (power && unmaskedValue.endsWith(power)) {
-                    return true;
+                    return false;
                 }
             }
         }
@@ -1057,12 +1057,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         // removeMask() is not removing the thousandth separator
         const unmaskedWithoutThousandth = this.replaceEachCharacterWith(unmaskedValue, this._maskService.thousandSeparator, MaskExpression.EMPTY_STRING);
         if (unmaskedWithoutThousandth === inputValue) {
-            return true;
+            return false;
         }
         
         // [TODO] Is there any other reason to ignore a diff between unmaskedValue and inputValue?
-        debugger;
-        return false;
+        return true;
     }
 
     private removeSpecialCharactersFrom(inputValue: string): string {
