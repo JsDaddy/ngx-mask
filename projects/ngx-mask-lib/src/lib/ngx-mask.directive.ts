@@ -1014,7 +1014,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return maskedValue;
         }
         
-        console.warn(`Unexpected fault applying mask: ${this._maskService.maskExpression} to value: ${controlValue}`);
         return controlValue as boolean | string;
     }
 

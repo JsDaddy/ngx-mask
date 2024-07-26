@@ -59,6 +59,7 @@ export class NgxMaskFaultDetectionService {
         }
         
         // Is there any other reason to ignore a diff between unmaskedValue and inputValue?
+        console.warn(`Unexpected fault applying mask: ${this._maskService.maskExpression} to value: ${inputValue}`);
         return true;
     }
 
