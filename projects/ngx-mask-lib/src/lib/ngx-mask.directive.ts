@@ -22,6 +22,7 @@ import { CustomKeyboardEvent } from './custom-keyboard-event';
 import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { NgxMaskFaultDetectionService } from './ngx-mask-fault-detection.service';
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
@@ -38,6 +39,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
             multi: true,
         },
         NgxMaskService,
+        NgxMaskFaultDetectionService,
     ],
     exportAs: 'mask,ngxMask',
 })
@@ -114,6 +116,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private readonly document = inject(DOCUMENT);
 
     public _maskService = inject(NgxMaskService, { self: true });
+
+    public _maskFaultDetector = inject(NgxMaskFaultDetectionService, { self: true });
 
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
@@ -985,7 +989,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+                    this.getNextValue(inputValue),
                 ];
                 // Let the service know we've finished writing value
                 typeof this.inputTransformFn !== 'function'
@@ -1001,6 +1005,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 typeof controlValue
             );
         }
+    }
+
+    private getNextValue(inputValue: string): string {
+        const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+        const maskingFault = this._maskFaultDetector.maskApplicationFault(maskedValue, inputValue); 
+        if (!maskingFault) {
+            return maskedValue;
+        }
+        
+        return inputValue;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

@@ -8,6 +8,7 @@ import {
     optionsConfig,
 } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
+import { NgxMaskFaultDetectionService } from './ngx-mask-fault-detection.service';
 
 /**
  * @internal
@@ -36,6 +37,7 @@ export function provideNgxMask(configValue?: optionsConfig | (() => optionsConfi
             useFactory: _configFactory,
         },
         NgxMaskService,
+        NgxMaskFaultDetectionService
     ];
 }
 
