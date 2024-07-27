@@ -1007,7 +1007,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
     }
 
-    private getNextValue(inputValue: string): string | boolean {
+    private getNextValue(inputValue: string): string {
         const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
         const maskingFault = this._maskFaultDetector.maskApplicationFault(maskedValue, inputValue); 
         if (!maskingFault) {
