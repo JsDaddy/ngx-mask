@@ -9,7 +9,7 @@ export class NgxMaskFaultDetectionService {
 
     /**
      * Attempts to remove the mask from the maskedValue and compare it with inputValue. Accounts for irreversible changes, such as loss of precision or dropped special characters.
-     * @param maskedValue the input value after being masked (don't call applyMask() more than once because it has side effects).
+     * @param maskedValue the input value after being masked (doesn't call applyMask() itself because doing so causes undesired side effects).
      * @param inputValue the value that would be sent to the native element.
      * @returns whether the mask can be removed without any unexpected loss of characters.
      */
