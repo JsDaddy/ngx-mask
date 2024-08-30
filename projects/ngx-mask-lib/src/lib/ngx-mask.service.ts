@@ -117,11 +117,16 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (justPasted && (this.hiddenInput || !this.hiddenInput)) {
             newInputValue = inputValue;
         }
+        const isNoSelectionBeforeSpecialCharacter =
+            typeof this.selStart === "number" &&
+            typeof this.selEnd === "number" &&
+            this.selStart + 1 === this.selEnd;
         if (
             backspaced &&
             this.specialCharacters.indexOf(
                 this.maskExpression[position] ?? MaskExpression.EMPTY_STRING
             ) !== -1 &&
+            isNoSelectionBeforeSpecialCharacter &&
             this.showMaskTyped &&
             !this.prefix
         ) {
