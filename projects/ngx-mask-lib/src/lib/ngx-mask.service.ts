@@ -36,7 +36,6 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _end!: number;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
     public readonly _elementRef = inject(ElementRef, { optional: true });
@@ -53,7 +52,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression) {
@@ -250,7 +249,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         position: number,
         justPasted: boolean,
         backspaced: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         cb: (...args: any[]) => any = () => {}
     ): void {
         const formElement = this._elementRef?.nativeElement;

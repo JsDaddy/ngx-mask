@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function typeTest(inputValue: string, fixture: any): string {
     fixture.detectChanges();
 
@@ -10,7 +9,6 @@ export function typeTest(inputValue: string, fixture: any): string {
     return fixture.nativeElement.querySelector('input').value;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function equal(value: string, expectedValue: string, fixture: any, async = false): void {
     typeTest(value, fixture);
 

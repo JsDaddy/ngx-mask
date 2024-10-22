@@ -87,7 +87,7 @@ export class NgxMaskApplierService {
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression || typeof inputValue !== 'string') {

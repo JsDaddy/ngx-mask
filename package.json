@@ -100,6 +100,7 @@
         "@web/test-runner": "^0.18.2",
         "angular-cli-ghpages": "2.0.1",
         "angular-http-server": "1.12.0",
+        "bun-types": "^1.1.29",
         "eslint": "9.7.0",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-json": "4.0.0",

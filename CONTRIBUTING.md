@@ -8,16 +8,16 @@ Please format code and markup in your issue using [github markdown](https://help
 
 ## Contributing to Source Code (Pull Requests)
 
-- If your PR changes any behavior or fixes an issue, it should have an associated test.
-- New features should be general and as simple as possible.
-- Breaking changes should be avoided if possible.
-- All pull requests require review. No PR will be merged without a comment from a team member stating LGTM (Looks good to me).
+-   If your PR changes any behavior or fixes an issue, it should have an associated test.
+-   New features should be general and as simple as possible.
+-   Breaking changes should be avoided if possible.
+-   All pull requests require review. No PR will be merged without a comment from a team member stating LGTM (Looks good to me).
 
 ## Protractor specific rules
 
-- JavaScript style should generally follow the [Google JS style guide](https://google.github.io/styleguide/javascriptguide.xml).
-- Document public methods with jsdoc.
-- Be consistent with the code around you!
+-   JavaScript style should generally follow the [Google JS style guide](https://google.github.io/styleguide/javascriptguide.xml).
+-   Document public methods with jsdoc.
+-   Be consistent with the code around you!
 
 ## Commit Messages
 

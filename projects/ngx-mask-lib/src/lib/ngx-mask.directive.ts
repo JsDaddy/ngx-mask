@@ -117,7 +117,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     protected _config = inject<IConfig>(NGX_MASK_CONFIG);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
     public onTouch = () => {};
@@ -422,7 +421,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     @HostListener('input', ['$event'])
     public onInput(e: CustomKeyboardEvent): void {
         // If IME is composing text, we wait for the composed text.
-        if (this._isComposing) return;
+        if (this._isComposing) {
+            return;
+        }
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const transformedValue = this._maskService.inputTransformFn(el.value);
         if (el.type !== 'number') {
@@ -733,7 +734,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&
-            // eslint-disable-next-line
             (e as any).keyCode !== 38
         ) {
             if (this._maskService.showMaskTyped && !this.keepCharacterPositions) {
@@ -792,7 +792,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         if (this._isComposing) {
             // User finalize their choice from IME composition, so trigger onInput() for the composed text.
-            if (e.key === 'Enter') this.onCompositionEnd(e);
+            if (e.key === 'Enter') {
+                this.onCompositionEnd(e);
+            }
             return;
         }
 
@@ -1036,7 +1038,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _applyMask(): any {
         this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
             this._maskValue || ''
