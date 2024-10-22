@@ -1,24 +1,24 @@
 sudo: false
 language: node_js
 node_js:
-  - '18'
+    - '18'
 
 cache:
-  directories:
-    - node_modules
+    directories:
+        - node_modules
 
 addons:
-  chrome: stable
+    chrome: stable
 
 notifications:
-  email: false
+    email: false
 
 git:
-  depth: 3
+    depth: 3
 
 before_install:
-  - npm install -g npm@^8.19.2
+    - npm install -g npm@^8.19.2
 
 script:
-  - export CHROME_BIN=chromium-browser
-  - npm run ci
+    - export CHROME_BIN=chromium-browser
+    - npm run ci
