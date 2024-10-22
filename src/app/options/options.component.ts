@@ -45,6 +45,8 @@ export class OptionsComponent {
     public readonly phone = '123456789';
     public readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
     public readonly specialCharacters = initialConfig.specialCharacters;
+    public readonly outputTransformFn = initialConfig.outputTransformFn;
+    public readonly inputTransformFn = initialConfig.inputTransformFn;
 
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
