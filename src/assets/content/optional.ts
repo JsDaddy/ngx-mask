@@ -97,7 +97,6 @@ export const OptExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'dropSpecialCharacters',
         _dropSpecialCharacters: false,
-        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _mask: '000-000.00',
         control: { form: new UntypedFormControl(''), model: '' },
     },
@@ -121,28 +120,24 @@ export const OptExamples: TExample<IMaskOptions>[] = [
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: '000-000-000',
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '000-000-000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: '00/00/0000',
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '00/00/0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: '0000 0000 0000 0000',
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '0000 0000 0000 0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: '0 000',
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _suffix: '$',
@@ -150,7 +145,6 @@ export const OptExamples: TExample<IMaskOptions>[] = [
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
-        _placeholder: '0000.00',
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _prefix: '$',
