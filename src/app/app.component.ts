@@ -48,19 +48,15 @@ export class AppComponent {
     public readonly subtitle = 'Angular plugin to make masks on form fields and html elements';
     public readonly chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
-    // private readonly selectedCardId = signal<number>(1);
+    private readonly selectedCardId = signal<number>(1);
 
     public switchCard(cardId: number): void {
-        // if (this.selectedCardId() === cardId) {
-        //     return;
-        // }
-        // this.selectedCardId.set(cardId);
+        if (this.selectedCardId() === cardId) {
+            return;
+        }
+        this.selectedCardId.set(cardId);
 
         switch (cardId) {
-            case 1:
-                this.docs.set(ComDocs);
-                this.examples.set(ComExamples);
-                break;
             case 2:
                 this.docs.set(OptDocs);
                 this.examples.set(OptExamples);
@@ -78,6 +74,8 @@ export class AppComponent {
                 this.examples.set(FormatAndParserExamples);
                 break;
             default:
+                this.docs.set(ComDocs);
+                this.examples.set(ComExamples);
                 break;
         }
     }
