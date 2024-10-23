@@ -1,45 +1,58 @@
 @import '../../libraries/styles/border-mixin';
 @import '../../libraries/styles/media-breakpoints';
 
-.content {
+:host {
     gap: 16px;
     padding: 16px;
     border-top: 1px solid rgba(25, 25, 25, 0.05);
     box-sizing: border-box;
+    background-color: var(--full-white);
+    display: flex;
+    flex-direction: column;
+
     .yellow {
         &.card {
             background: rgba(255, 214, 77, 0.05);
             border: 1px solid var(--yellow);
         }
     }
+
     .card {
         padding: 10px;
         gap: 10px;
         background: rgba(25, 25, 25, 0.02);
         border-radius: 15px;
+
         .mr-title {
             margin: 10px 0 10px 26px;
         }
+
         .cards-block {
             scroll-margin-top: 185px;
+
             .light-card {
                 flex: 55%;
                 border-radius: 10px;
+
                 .light-title {
                     margin-bottom: 20px;
+
                     span {
                         margin-left: 10px;
                         font-size: 16px;
                         color: rgba(25, 25, 25, 0.25);
                     }
                 }
+
                 .source {
                     font-size: 10px;
                     color: rgba(25, 25, 25, 0.45);
                     margin-bottom: 10px;
                 }
+
                 .white-input {
                     display: block;
+
                     .input-view {
                         width: 100%;
                         height: fit-content;
@@ -50,16 +63,19 @@
                         overflow: hidden;
                         white-space: pre-line;
                     }
+
                     .input-img {
                         position: relative;
                         right: 20px;
                     }
                 }
             }
+
             .dark-card {
                 flex: 45%;
                 border-radius: 10px;
                 margin-left: 30px;
+
                 .dark-input {
                     .customDarkInput {
                         @include border-bottom-grey;
@@ -72,14 +88,17 @@
                         -webkit-transition: 0.5s;
                         transition: 0.5s;
                         outline: none;
+
                         &:hover {
                             @include border-bottom-yellow;
                             background: var(--ligth-grey);
                         }
+
                         &[type='text']:focus {
                             @include border-bottom-yellow;
                             background: var(--ligth-grey);
                         }
+
                         &[type='number']:focus {
                             @include border-bottom-yellow;
                             background: var(--ligth-grey);
@@ -89,23 +108,25 @@
             }
         }
     }
-}
-.pd-15 {
-    padding: 15px;
-}
-.mrl-50 {
-    margin-left: 50px;
-}
 
-@media screen and (max-width: $mobileWidth) {
-    .content {
+    .pd-15 {
+        padding: 15px;
+    }
+
+    .mrl-50 {
+        margin-left: 50px;
+    }
+
+    @media screen and (max-width: $mobileWidth) {
         .card {
             .cards-block {
                 flex-direction: column;
+
                 .dark-card {
                     flex: 100%;
                     margin-left: 0;
                 }
+
                 .light-card {
                     flex: 100%;
                     margin-bottom: 10px;
