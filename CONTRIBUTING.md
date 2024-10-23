@@ -34,5 +34,4 @@ Where `<type>` is one of [feat, fix, docs, refactor, test, chore, deps] and
 
 ## Testing your changes
 
-When you submit a PR, tests will also be run on the Continuous Integration environment
-through Travis. If your tests fail on Travis, take a look at the logs.
+When you submit a PR, tests will be automatically run on the Continuous Integration environment. If any of your tests fail, review the logs and address the issues before requesting a review.
