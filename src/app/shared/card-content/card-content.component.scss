@@ -1,4 +1,7 @@
-.card-text {
+:host {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
     .sub-text {
         margin-bottom: 5px;
     }
@@ -17,10 +20,4 @@
     .yellow-view {
         background: rgba(248, 248, 248, 0.05);
     }
-}
-.pd-15 {
-    padding: 15px;
-}
-.mrl-50 {
-    margin-left: 50px;
 }

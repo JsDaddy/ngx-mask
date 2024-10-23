@@ -1,7 +1,7 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
@@ -44,6 +44,9 @@ export class OptionsComponent {
 
     public readonly phone = '123456789';
     public readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
+    public readonly specialCharacters = initialConfig.specialCharacters;
+    public readonly outputTransformFn = initialConfig.outputTransformFn;
+    public readonly inputTransformFn = initialConfig.inputTransformFn;
 
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
