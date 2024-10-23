@@ -75,13 +75,13 @@
             <jsdaddy-open-source-card-content [value]="ex._mask" title="Mask:" color="green-view" />
             @if (ex._validation) {
                 <jsdaddy-open-source-card-content
-                    value="{{ ex.control.form.errors | json }}"
+                    [value]="ex.control.form.errors | json"
                     title="Mask error:"
                     color="yellow-view" />
             }
         } @else {
             <jsdaddy-open-source-card-content
-                value="{{ phone | mask: '(000) 000-0000' }}"
+                [value]="phone | mask: '(000) 000-0000'"
                 title=""
                 color="" />
             <jsdaddy-open-source-card-content

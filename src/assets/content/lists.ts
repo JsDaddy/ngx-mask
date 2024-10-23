@@ -164,6 +164,11 @@ export const lists: IListItem[] = [
                 id: 4,
                 scrollTo: 'comma_sep',
             },
+            {
+                content: 'Zero separator',
+                id: 5,
+                scrollTo: 'sep0',
+            },
         ],
     },
     {
