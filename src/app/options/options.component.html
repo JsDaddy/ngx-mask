@@ -1,4 +1,3 @@
-<!--<section class="content column bg-full-white">-->
 @for (tile of cardDocs(); track tile.id; let i = $index) {
     <div class="card" [class]="activeCardId() | color: tile.id" [id]="tile.id" #cards>
         <div class="mr-title title row uppercase ls-25">
@@ -31,7 +30,6 @@
         </div>
     </div>
 }
-<!--</section>-->
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
     <div class="dark-card bg-black">
