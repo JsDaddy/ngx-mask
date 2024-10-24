@@ -1,26 +1,27 @@
-@import '../libraries/styles/media-breakpoints';
+//@import '../libraries/styles/media-breakpoints';
 :host {
-    display: block;
-    height: 100%;
+    @apply block h-full;
+    //display: block;
+    //height: 100%;
 }
-.content-wrapper {
-    .mask-wrap {
-        height: calc(100% - 64px);
-        overflow: auto;
-        .right-section {
-            width: 100%;
-            padding-left: 310px;
-        }
-    }
-}
-
-@media screen and (max-width: $desktopWidth) {
-    .content-wrapper {
-        .mask-wrap {
-            .right-section {
-                padding: 0;
-                margin-top: 55px;
-            }
-        }
-    }
-}
+//.content-wrapper {
+//    .mask-wrap {
+//        height: calc(100% - 64px);
+//        overflow: auto;
+//        .right-section {
+//            width: 100%;
+//            padding-left: 310px;
+//        }
+//    }
+//}
+//
+//@media screen and (max-width: $desktopWidth) {
+//    .content-wrapper {
+//        .mask-wrap {
+//            .right-section {
+//                padding: 0;
+//                margin-top: 55px;
+//            }
+//        }
+//    }
+//}
