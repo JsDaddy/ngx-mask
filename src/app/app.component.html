@@ -1,10 +1,10 @@
-<div class="content-wrapper column">
+<div class="flex flex-col">
     <jsdaddy-open-source-header [activeLink]="githubMaskLink" />
-    <section class="mask-wrap row">
-        <div class="drawer-container column">
+    <section class="flex overflow-auto mt-[64px]">
+        <div class="drawer-container flex flex-col">
             <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />
         </div>
-        <div class="right-section column">
+        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">
             <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />
             <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />
             <jsdaddy-open-source-footer />
