@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/shared/card-content/card-content.component.scss"],
-  "sourcesContent": [":host {\n    padding: 15px;\n    display: flex;\n    flex-direction: column;\n    .sub-text {\n        margin-bottom: 5px;\n    }\n    .green-view,\n    .yellow-view {\n        padding: 0 5px;\n        gap: 10px;\n        height: 21px;\n        width: fit-content;\n        border-radius: 5px;\n    }\n    .green-view {\n        color: var(--green);\n        background: rgba(26, 183, 126, 0.05);\n    }\n    .yellow-view {\n        background: rgba(248, 248, 248, 0.05);\n    }\n}\n"],
-  "mappings": ";AAAA;AACI,WAAA;AACA,WAAA;AACA,kBAAA;;AACA,MAAA,CAAA;AACI,iBAAA;;AAEJ,MAAA,CAAA;AAAA,MAAA,CAAA;AAEI,WAAA,EAAA;AACA,OAAA;AACA,UAAA;AACA,SAAA;AACA,iBAAA;;AAEJ,MAAA,CARA;AASI,SAAA,IAAA;AACA,cAAA,KAAA,EAAA,EAAA,GAAA,EAAA,GAAA,EAAA;;AAEJ,MAAA,CAZA;AAaI,cAAA,KAAA,GAAA,EAAA,GAAA,EAAA,GAAA,EAAA;;",
-  "names": []
-}

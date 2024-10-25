@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/app.component.scss"],
+  "sourcesContent": [":host {\n    @apply block h-full;\n}\n"],
+  "mappings": ";AACI;AAAA,WAAA;AAAA,UAAA;AAAA;",
+  "names": []
+}

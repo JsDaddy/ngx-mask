@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/libraries/chip/chip.component.scss"],
-  "sourcesContent": ["div {\n    width: max-content;\n    padding: 5px 15px;\n    border-radius: 25px;\n    &.is-active {\n        background: var(--yellow) !important;\n    }\n}\n"],
-  "mappings": ";AAAA;AACI,SAAA;AACA,WAAA,IAAA;AACA,iBAAA;;AACA,GAAA,CAAA;AACI,cAAA,IAAA;;",
-  "names": []
-}

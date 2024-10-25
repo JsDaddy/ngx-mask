@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/libraries/open-source/footer/footer.component.scss"],
-  "sourcesContent": ["@import '../../styles/media-breakpoints';\n.all-rights {\n    height: calc(100dvh - 600px);\n    span {\n        padding-bottom: 40px;\n        color: rgb(100 116 139);\n    }\n}\n\n@media screen and (max-width: $desktopWidth) {\n    .all-rights {\n        height: calc(100dvh - 65vh);\n    }\n}\n\n@media screen and (max-width: $mobileWidth) {\n    .all-rights {\n        height: 150px;\n    }\n}\n"],
-  "mappings": ";AACA,CAAA;AACI,UAAA,KAAA,OAAA,EAAA;;AACA,CAFJ,WAEI;AACI,kBAAA;AACA,SAAA,IAAA,GAAA,EAAA,GAAA,EAAA;;AAIR,OAAA,OAAA,IAAA,CAAA,SAAA,EAAA;AACI,GATJ;AAUQ,YAAA,KAAA,OAAA,EAAA;;;AAIR,OAAA,OAAA,IAAA,CAAA,SAAA,EAAA;AACI,GAfJ;AAgBQ,YAAA;;;",
-  "names": []
-}

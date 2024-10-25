@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/options/options.component.scss"],
+  "sourcesContent": [":host {\n    @apply flex flex-col gap-4 p-4 bg-full-white box-border border-t border-t-black/10 py-5 pl-[22px] pr-4;\n}\n"],
+  "mappings": ";AACI;AAAA,cAAA;AAAA,WAAA;AAAA,kBAAA;AAAA,OAAA;AAAA,oBAAA;AAAA,oBAAA,IAAA,EAAA,EAAA,EAAA,EAAA;AAAA,mBAAA;AAAA,oBAAA,IAAA,IAAA,IAAA,IAAA,EAAA,IAAA;AAAA,WAAA;AAAA,eAAA;AAAA,kBAAA;AAAA,gBAAA;AAAA,iBAAA;AAAA;",
+  "names": []
+}

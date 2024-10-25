@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/app.component.scss"],
-  "sourcesContent": ["@import '../libraries/styles/media-breakpoints';\n:host {\n    display: block;\n    height: 100%;\n}\n.content-wrapper {\n    .mask-wrap {\n        height: calc(100% - 64px);\n        overflow: auto;\n        .right-section {\n            width: 100%;\n            padding-left: 310px;\n        }\n    }\n}\n\n@media screen and (max-width: $desktopWidth) {\n    .content-wrapper {\n        .mask-wrap {\n            .right-section {\n                padding: 0;\n                margin-top: 55px;\n            }\n        }\n    }\n}\n"],
-  "mappings": ";AACA;AACI,WAAA;AACA,UAAA;;AAGA,CAAA,gBAAA,CAAA;AACI,UAAA,KAAA,KAAA,EAAA;AACA,YAAA;;AACA,CAHJ,gBAGI,CAHJ,UAGI,CAAA;AACI,SAAA;AACA,gBAAA;;AAKZ,OAAA,OAAA,IAAA,CAAA,SAAA,EAAA;AAGY,GAbR,gBAaQ,CAbR,UAaQ,CAVJ;AAWQ,aAAA;AACA,gBAAA;;;",
-  "names": []
-}

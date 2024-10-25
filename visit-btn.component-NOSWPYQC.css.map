@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/libraries/open-source/visit-btn/visit-btn.component.scss"],
-  "sourcesContent": [":host {\n    display: block;\n    .color-btn {\n        flex-direction: row;\n        padding: 15px 32px;\n        width: 100%;\n        height: 45px;\n        border-radius: 10px;\n    }\n}\n"],
-  "mappings": ";AAAA;AACI,WAAA;;AACA,MAAA,CAAA;AACI,kBAAA;AACA,WAAA,KAAA;AACA,SAAA;AACA,UAAA;AACA,iBAAA;;",
-  "names": []
-}
