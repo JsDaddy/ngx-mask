@@ -72,9 +72,9 @@ bootstrapApplication(AppComponent, {
 ### Passing your own mask config options
 
 ```typescript
-import { IConfig } from 'ngx-mask'
+import { Config } from 'ngx-mask'
 
-const maskConfig: Partial<IConfig> = {
+const maskConfig: Partial<Config> = {
   validation: false,
 };
 
@@ -90,7 +90,7 @@ bootstrapApplication(AppComponent, {
 ### Using a function to configure:
 
 ```typescript
-const maskConfigFunction: () => Partial<IConfig> = () => {
+const maskConfigFunction: () => Partial<Config> = () => {
   return {
     validation: false,
   };
@@ -144,9 +144,9 @@ Import **ngx-mask** module in Angular app.
 ### With default mask config options
 
 ```typescript
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxMaskModule, Config } from 'ngx-mask'
 
-export const options: Partial<null|IConfig> | (() => Partial<IConfig>) = null;
+export const options: Partial<null|Config> | (() => Partial<Config>) = null;
 
 @NgModule({
   imports: [
@@ -158,9 +158,9 @@ export const options: Partial<null|IConfig> | (() => Partial<IConfig>) = null;
 ### Passing in your own mask config options
 
 ```typescript
-import { NgxMaskModule, IConfig } from 'ngx-mask'
+import { NgxMaskModule, Config } from 'ngx-mask'
 
-const maskConfig: Partial<IConfig> = {
+const maskConfig: Partial<Config> = {
   validation: false,
 };
 
@@ -174,7 +174,7 @@ const maskConfig: Partial<IConfig> = {
 Or using a function to get the config:
 
 ```typescript
-const maskConfigFunction: () => Partial<IConfig> = () => {
+const maskConfigFunction: () => Partial<Config> = () => {
   return {
     validation: false,
   };

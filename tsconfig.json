@@ -28,7 +28,8 @@
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
         "useDefineForClassFields": false,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "noImplicitAny": true
     },
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,

@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
+import { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
-export const OthDocs: IComDoc[] = [
+export const OthDocs: ComDoc[] = [
     {
         header: 'Secure input',
         text: 'You can hide symbols in input field and get the actual value in formcontrol',
@@ -42,7 +42,7 @@ export const OthDocs: IComDoc[] = [
     },
 ];
 
-export const OthExamples: (TExample<IMaskOptions> | { _pipe: string })[] = [
+export const OthExamples: (TExample<MaskOptions> | { _pipe: string })[] = [
     {
         _placeholder: 'Secure input',
         _hiddenInput: true,

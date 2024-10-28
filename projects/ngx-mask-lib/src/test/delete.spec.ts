@@ -163,7 +163,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(2);
@@ -186,7 +188,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(3);
@@ -209,7 +213,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(2);
@@ -232,7 +238,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(3);

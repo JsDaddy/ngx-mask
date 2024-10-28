@@ -6,12 +6,7 @@ import { ComDocs, ComExamples } from 'src/assets/content/common-cases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from '@open-source/header/header.component';
-import {
-    IComDoc,
-    IListItem,
-    IMaskOptions,
-    TExample,
-} from '@open-source/accordion/content.interfaces';
+import { ComDoc, ListItem, MaskOptions, TExample } from '@open-source/accordion/content.types';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';
@@ -39,10 +34,10 @@ declare const VERSION: string;
     providers: [{ provide: VersionToken, useValue: VERSION }],
 })
 export class AppComponent {
-    public docs = signal<IComDoc[]>(ComDocs);
-    public examples = signal<(TExample<IMaskOptions> | { _pipe: string })[]>(ComExamples);
+    public docs = signal<ComDoc[]>(ComDocs);
+    public examples = signal<(TExample<MaskOptions> | { _pipe: string })[]>(ComExamples);
 
-    public readonly lists: IListItem[] = lists;
+    public readonly lists: ListItem[] = lists;
     public readonly githubMaskLink = LinkPath.NGX_MASK;
     public readonly title = 'Ngx-Mask';
     public readonly subtitle = 'Angular plugin to make masks on form fields and html elements';

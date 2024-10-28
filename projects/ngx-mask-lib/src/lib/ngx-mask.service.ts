@@ -1,7 +1,7 @@
 import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, Config } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -36,14 +36,14 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _end!: number;
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: any) => {};
 
     public readonly _elementRef = inject(ElementRef, { optional: true });
 
     private readonly document = inject(DOCUMENT);
 
-    protected override _config = inject<IConfig>(NGX_MASK_CONFIG);
+    protected override _config = inject<Config>(NGX_MASK_CONFIG);
 
     private readonly _renderer = inject(Renderer2, { optional: true });
 
@@ -53,7 +53,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression) {
@@ -78,17 +78,16 @@ export class NgxMaskService extends NgxMaskApplierService {
                 ? (inputValue[this.selStart] ?? MaskExpression.EMPTY_STRING)
                 : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
-        if (this.hiddenInput !== undefined && !this.writingValue) {
+        if (this.hiddenInput && !this.writingValue) {
             let actualResult: string[] =
                 inputValue && inputValue.length === 1
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
                     : this.actualValue.split(MaskExpression.EMPTY_STRING);
-            // eslint-disable  @typescript-eslint/no-unused-expressions
-
             if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
                 this.selStart = Number(this.selStart);
                 this.selEnd = Number(this.selEnd);
             } else {
+                // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
                 inputValue !== MaskExpression.EMPTY_STRING && actualResult.length
                     ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
                         ? inputValue.length > actualResult.length
@@ -205,6 +204,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (this._previousValue === this._currentValue && justPasted);
         }
 
+        // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
         this._emitValue
             ? this.writingValue && this.triggerOnMaskChange
                 ? requestAnimationFrame(() => this.formControlResult(result))
@@ -250,7 +250,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         position: number,
         justPasted: boolean,
         backspaced: boolean,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): void {
         const formElement = this._elementRef?.nativeElement;
@@ -426,6 +426,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
         const arr: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < inputVal.length; i++) {
             const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
@@ -467,6 +468,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return cpf;
         }
         const arr: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < inputVal.length; i++) {
             const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
             if (!value) {
@@ -524,6 +526,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     private formControlResult(inputValue: string): void {
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
+            // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
             this.triggerOnMaskChange && this.maskChanged
                 ? this.onChange(
                       this.outputTransformFn(

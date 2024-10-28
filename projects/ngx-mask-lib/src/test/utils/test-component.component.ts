@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { IConfig } from '../../lib/ngx-mask.config';
+import { Config } from '../../lib/ngx-mask.config';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -38,47 +38,47 @@ export class TestMaskComponent {
 
     public form: FormControl = new FormControl();
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | undefined;
+    public dropSpecialCharacters: Config['dropSpecialCharacters'] | undefined;
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] | undefined;
+    public clearIfNotMatch: Config['clearIfNotMatch'] | undefined;
 
-    public patterns: IConfig['patterns'] | undefined;
+    public patterns: Config['patterns'] | undefined;
 
-    public prefix: IConfig['prefix'] = '';
+    public prefix: Config['prefix'] = '';
 
-    public thousandSeparator: IConfig['thousandSeparator'] | undefined;
+    public thousandSeparator: Config['thousandSeparator'] | undefined;
 
-    public decimalMarker: IConfig['decimalMarker'] | undefined;
+    public decimalMarker: Config['decimalMarker'] | undefined;
 
-    public suffix: IConfig['suffix'] = '';
+    public suffix: Config['suffix'] = '';
 
-    public specialCharacters: IConfig['specialCharacters'] | undefined;
+    public specialCharacters: Config['specialCharacters'] | undefined;
 
-    public keepCharacterPositions: IConfig['keepCharacterPositions'] | undefined;
+    public keepCharacterPositions: Config['keepCharacterPositions'] | undefined;
 
-    public showMaskTyped: IConfig['showMaskTyped'] | undefined;
+    public showMaskTyped: Config['showMaskTyped'] | undefined;
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] | undefined;
+    public placeHolderCharacter: Config['placeHolderCharacter'] | undefined;
 
-    public hiddenInput: IConfig['hiddenInput'] | undefined;
+    public hiddenInput: Config['hiddenInput'] | undefined;
 
-    public separatorLimit: IConfig['separatorLimit'] = '';
+    public separatorLimit: Config['separatorLimit'] = '';
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | undefined;
+    public allowNegativeNumbers: Config['allowNegativeNumbers'] | undefined;
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] | undefined;
+    public leadZeroDateTime: Config['leadZeroDateTime'] | undefined;
 
-    public leadZero: IConfig['leadZero'] | undefined;
+    public leadZero: Config['leadZero'] | undefined;
 
-    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
+    public triggerOnMaskChange: Config['triggerOnMaskChange'] | undefined;
 
-    public validation: IConfig['validation'] | undefined;
+    public validation: Config['validation'] | undefined;
 
-    public apm: IConfig['apm'] | undefined;
+    public apm: Config['apm'] | undefined;
 
-    public inputTransformFn: IConfig['inputTransformFn'] | undefined;
+    public inputTransformFn: Config['inputTransformFn'] | undefined;
 
-    public outputTransformFn: IConfig['outputTransformFn'] | undefined;
+    public outputTransformFn: Config['outputTransformFn'] | undefined;
 
     public cdr = inject(ChangeDetectorRef);
 }

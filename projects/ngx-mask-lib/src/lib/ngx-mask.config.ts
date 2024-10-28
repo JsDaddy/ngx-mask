@@ -5,7 +5,7 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
-export interface IConfig {
+export type Config = {
     suffix: string;
     prefix: string;
     thousandSeparator: string;
@@ -37,14 +37,14 @@ export interface IConfig {
             symbol?: string;
         }
     >;
-}
+};
 
-export type optionsConfig = Partial<IConfig>;
-export const NGX_MASK_CONFIG = new InjectionToken<IConfig>('ngx-mask config');
-export const NEW_CONFIG = new InjectionToken<IConfig>('new ngx-mask config');
-export const INITIAL_CONFIG = new InjectionToken<IConfig>('initial ngx-mask config');
+export type optionsConfig = Partial<Config>;
+export const NGX_MASK_CONFIG = new InjectionToken<Config>('ngx-mask config');
+export const NEW_CONFIG = new InjectionToken<Config>('new ngx-mask config');
+export const INITIAL_CONFIG = new InjectionToken<Config>('initial ngx-mask config');
 
-export const initialConfig: IConfig = {
+export const initialConfig: Config = {
     suffix: '',
     prefix: '',
     thousandSeparator: ' ',

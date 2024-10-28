@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
+import { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
-export const OptDocs: IComDoc[] = [
+export const OptDocs: ComDoc[] = [
     {
         header: 'Prefix (string)',
         text: 'You can add prefix to you masked value',
@@ -81,7 +81,7 @@ export const OptDocs: IComDoc[] = [
     },
 ];
 
-export const OptExamples: TExample<IMaskOptions>[] = [
+export const OptExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'prefix',
         _prefix: '+7',

@@ -1724,7 +1724,6 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         inputElement.setSelectionRange(2, 2);
-        inputElement.selectionStart;
         expect(inputElement.selectionStart).toBe(2);
 
         const backspaceEvent = new KeyboardEvent('keydown', {
@@ -1753,7 +1752,6 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         inputElement.setSelectionRange(2, 2);
-        inputElement.selectionStart;
         expect(inputElement.selectionStart).toBe(2);
 
         const backspaceEvent = new KeyboardEvent('keydown', {
@@ -1782,7 +1780,6 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         inputElement.setSelectionRange(2, 2);
-        inputElement.selectionStart;
         expect(inputElement.selectionStart).toBe(2);
 
         const backspaceEvent = new KeyboardEvent('keydown', {

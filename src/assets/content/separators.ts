@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
+import { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
-export const SepDocs: IComDoc[] = [
+export const SepDocs: ComDoc[] = [
     {
         header: 'Thousand separator',
         text: 'You can divide your input by thousands',
@@ -39,7 +39,7 @@ export const SepDocs: IComDoc[] = [
     },
 ];
 
-export const SepExamples: TExample<IMaskOptions>[] = [
+export const SepExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'Separator',
         _mask: 'separator',

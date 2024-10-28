@@ -1,6 +1,6 @@
-import { IListItem } from '@open-source/accordion/content.interfaces';
+import { ListItem } from '@open-source/accordion/content.types';
 
-export const lists: IListItem[] = [
+export const lists: ListItem[] = [
     {
         header: 'Common cases',
         id: 1,

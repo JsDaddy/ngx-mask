@@ -1,6 +1,6 @@
 import { inject, Pipe, PipeTransform } from '@angular/core';
 
-import { IConfig, NGX_MASK_CONFIG } from './ngx-mask.config';
+import { Config, NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -10,7 +10,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    private readonly defaultOptions = inject<IConfig>(NGX_MASK_CONFIG);
+    private readonly defaultOptions = inject<Config>(NGX_MASK_CONFIG);
 
     private readonly _maskService = inject(NgxMaskService);
 
@@ -21,7 +21,7 @@ export class NgxMaskPipe implements PipeTransform {
     public transform(
         value: string | number,
         mask: string,
-        { patterns, ...config }: Partial<IConfig> = {} as Partial<IConfig>
+        { patterns, ...config }: Partial<Config> = {} as Partial<Config>
     ): string {
         const currentConfig = {
             maskExpression: mask,
@@ -33,7 +33,6 @@ export class NgxMaskPipe implements PipeTransform {
             },
         };
         Object.entries(currentConfig).forEach(([key, value]) => {
-            //eslint-disable-next-line  @typescript-eslint/no-explicit-any
             (this._maskService as any)[key] = value;
         });
         if (mask.includes('||')) {

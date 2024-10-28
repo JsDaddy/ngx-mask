@@ -1,57 +1,55 @@
 import { inject, Injectable } from '@angular/core';
-import { NGX_MASK_CONFIG, IConfig } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, Config } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskApplierService {
-    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
+    protected _config = inject<Config>(NGX_MASK_CONFIG);
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] =
+    public dropSpecialCharacters: Config['dropSpecialCharacters'] =
         this._config.dropSpecialCharacters;
 
-    public hiddenInput: IConfig['hiddenInput'] = this._config.hiddenInput;
+    public hiddenInput: Config['hiddenInput'] = this._config.hiddenInput;
 
-    public showTemplate!: IConfig['showTemplate'];
+    public showTemplate!: Config['showTemplate'];
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
+    public clearIfNotMatch: Config['clearIfNotMatch'] = this._config.clearIfNotMatch;
 
-    public specialCharacters: IConfig['specialCharacters'] = this._config.specialCharacters;
+    public specialCharacters: Config['specialCharacters'] = this._config.specialCharacters;
 
-    public patterns: IConfig['patterns'] = this._config.patterns;
+    public patterns: Config['patterns'] = this._config.patterns;
 
-    public prefix: IConfig['prefix'] = this._config.prefix;
+    public prefix: Config['prefix'] = this._config.prefix;
 
-    public suffix: IConfig['suffix'] = this._config.suffix;
+    public suffix: Config['suffix'] = this._config.suffix;
 
-    public thousandSeparator: IConfig['thousandSeparator'] = this._config.thousandSeparator;
+    public thousandSeparator: Config['thousandSeparator'] = this._config.thousandSeparator;
 
-    public decimalMarker: IConfig['decimalMarker'] = this._config.decimalMarker;
+    public decimalMarker: Config['decimalMarker'] = this._config.decimalMarker;
 
-    public customPattern!: IConfig['patterns'];
+    public customPattern!: Config['patterns'];
 
-    public showMaskTyped: IConfig['showMaskTyped'] = this._config.showMaskTyped;
+    public showMaskTyped: Config['showMaskTyped'] = this._config.showMaskTyped;
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] =
-        this._config.placeHolderCharacter;
+    public placeHolderCharacter: Config['placeHolderCharacter'] = this._config.placeHolderCharacter;
 
-    public validation: IConfig['validation'] = this._config.validation;
+    public validation: Config['validation'] = this._config.validation;
 
-    public separatorLimit: IConfig['separatorLimit'] = this._config.separatorLimit;
+    public separatorLimit: Config['separatorLimit'] = this._config.separatorLimit;
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] =
-        this._config.allowNegativeNumbers;
+    public allowNegativeNumbers: Config['allowNegativeNumbers'] = this._config.allowNegativeNumbers;
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
+    public leadZeroDateTime: Config['leadZeroDateTime'] = this._config.leadZeroDateTime;
 
-    public leadZero: IConfig['leadZero'] = this._config.leadZero;
+    public leadZero: Config['leadZero'] = this._config.leadZero;
 
-    public apm: IConfig['apm'] = this._config.apm;
+    public apm: Config['apm'] = this._config.apm;
 
-    public inputTransformFn: IConfig['inputTransformFn'] = this._config.inputTransformFn;
+    public inputTransformFn: Config['inputTransformFn'] = this._config.inputTransformFn;
 
-    public outputTransformFn: IConfig['outputTransformFn'] = this._config.outputTransformFn;
+    public outputTransformFn: Config['outputTransformFn'] = this._config.outputTransformFn;
 
-    public keepCharacterPositions: IConfig['keepCharacterPositions'] =
+    public keepCharacterPositions: Config['keepCharacterPositions'] =
         this._config.keepCharacterPositions;
 
     private _shift = new Set<number>();
@@ -74,7 +72,7 @@ export class NgxMaskApplierService {
 
     public applyMaskWithPattern(
         inputValue: string,
-        maskAndPattern: [string, IConfig['patterns']]
+        maskAndPattern: [string, Config['patterns']]
     ): string {
         const [mask, customPattern] = maskAndPattern;
         this.customPattern = customPattern;
@@ -87,7 +85,7 @@ export class NgxMaskApplierService {
         position = 0,
         justPasted = false,
         backspaced = false,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): string {
         if (!maskExpression || typeof inputValue !== 'string') {
@@ -122,6 +120,7 @@ export class NgxMaskApplierService {
             maskExpression = '099.099.099.099';
         }
         const arr: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < inputValue.length; i++) {
             if (inputValue[i]?.match('\\d')) {
                 arr.push(inputValue[i] ?? MaskExpression.EMPTY_STRING);
@@ -167,6 +166,7 @@ export class NgxMaskApplierService {
                 )}`;
             }
             let value = '';
+            // eslint-disable-next-line @typescript-eslint/no-unused-expressions
             this.allowNegativeNumbers &&
             inputValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
                 ? (value = `${MaskExpression.MINUS}${inputValue.slice(cursor + 1, cursor + inputValue.length)}`)
@@ -382,6 +382,7 @@ export class NgxMaskApplierService {
             }
         } else {
             for (
+                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 let i = 0, inputSymbol: string = inputArray[0]!;
                 i < inputArray.length;
                 i++, inputSymbol = inputArray[i] ?? MaskExpression.EMPTY_STRING
@@ -848,7 +849,7 @@ export class NgxMaskApplierService {
     private checkInputPrecision = (
         inputValue: string,
         precision: number,
-        decimalMarker: IConfig['decimalMarker']
+        decimalMarker: Config['decimalMarker']
     ): string => {
         if (precision < Infinity) {
             // TODO need think about decimalMarker

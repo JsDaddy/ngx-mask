@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskPipe } from '../lib/ngx-mask.pipe';
-import { IConfig, NgxMaskDirective } from 'ngx-mask';
+import { Config, NgxMaskDirective } from 'ngx-mask';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
@@ -33,7 +33,7 @@ describe('Pipe: Mask', () => {
     });
 
     it('should custom pattern', () => {
-        const patterns: IConfig['patterns'] = {
+        const patterns: Config['patterns'] = {
             P: {
                 pattern: new RegExp('\\d'),
             },
@@ -171,7 +171,7 @@ describe('Pipe: Mask', () => {
     });
 
     it('should work with custom pattern and hideInput', () => {
-        const SSN_PATTERNS: IConfig['patterns'] = {
+        const SSN_PATTERNS: Config['patterns'] = {
             0: { pattern: new RegExp('\\d') },
             A: { pattern: new RegExp('\\d'), symbol: '●' },
         };
