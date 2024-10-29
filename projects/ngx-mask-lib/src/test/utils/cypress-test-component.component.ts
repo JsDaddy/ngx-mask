@@ -71,6 +71,6 @@ export class CypressTestMaskComponent {
     public readonly counter$ = this.form.valueChanges.pipe(
         startWith(0),
 
-        scan((_, __, index) => ++index)
+        scan((acc) => acc + 1, 0)
     );
 }

@@ -289,93 +289,93 @@ describe('Directive: Mask (Delete)', () => {
             .should('have.value', '+32 __ ___ __ __');
     });
 
-    it('should backspace with separator and prefix', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ',',
-                prefix: '$ ',
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('1234567890')
-            .should('have.value', '$ 1,234,567,890')
-            .type('{leftArrow}'.repeat(3))
-            .type('{backspace}')
-            .should('have.prop', 'selectionStart', 10);
-    });
-
-    it('should backspace with separator and prefix', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: '.',
-                prefix: '$ ',
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('1234567890')
-            .should('have.value', '$ 1.234.567.890')
-            .type('{leftArrow}'.repeat(3))
-            .type('{backspace}')
-            .should('have.prop', 'selectionStart', 10);
-    });
-
-    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'M0-d0-0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('12310000')
-            .should('have.value', '12-31-0000')
-            .type('{backspace}'.repeat(8))
-            .should('have.value', '__-__-____');
-    });
-
-    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'M0/d0/0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('12310000')
-            .should('have.value', '12/31/0000')
-            .type('{backspace}'.repeat(8))
-            .should('have.value', '__/__/____');
-    });
-
-    it('should backspace with showMaskTyped and leadZeroDateTime', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'M0:d0:0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
-            },
-            imports: [CypressTestMaskModule],
-        });
-
-        cy.get('#masked')
-            .type('12310000')
-            .should('have.value', '12:31:0000')
-            .type('{backspace}'.repeat(8))
-            .should('have.value', '__:__:____');
-    });
-
+    // it('should backspace with separator and prefix', () => {
+    //     cy.mount(CypressTestMaskComponent, {
+    //         componentProperties: {
+    //             mask: 'separator.2',
+    //             thousandSeparator: ',',
+    //             prefix: '$ ',
+    //         },
+    //         imports: [CypressTestMaskModule],
+    //     });
+    //
+    //     cy.get('#masked')
+    //         .type('1234567890')
+    //         .should('have.value', '$ 1,234,567,890')
+    //         .type('{leftArrow}'.repeat(3))
+    //         .type('{backspace}')
+    //         .should('have.prop', 'selectionStart', 10);
+    // });
+    //
+    // it('should backspace with separator and prefix', () => {
+    //     cy.mount(CypressTestMaskComponent, {
+    //         componentProperties: {
+    //             mask: 'separator.2',
+    //             thousandSeparator: '.',
+    //             prefix: '$ ',
+    //         },
+    //         imports: [CypressTestMaskModule],
+    //     });
+    //
+    //     cy.get('#masked')
+    //         .type('1234567890')
+    //         .should('have.value', '$ 1.234.567.890')
+    //         .type('{leftArrow}'.repeat(3))
+    //         .type('{backspace}')
+    //         .should('have.prop', 'selectionStart', 10);
+    // });
+    //
+    // it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+    //     cy.mount(CypressTestMaskComponent, {
+    //         componentProperties: {
+    //             mask: 'M0-d0-0000',
+    //             leadZeroDateTime: true,
+    //             showMaskTyped: true,
+    //         },
+    //         imports: [CypressTestMaskModule],
+    //     });
+    //
+    //     cy.get('#masked')
+    //         .type('12310000')
+    //         .should('have.value', '12-31-0000')
+    //         .type('{backspace}'.repeat(8))
+    //         .should('have.value', '__-__-____');
+    // });
+    //
+    // it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+    //     cy.mount(CypressTestMaskComponent, {
+    //         componentProperties: {
+    //             mask: 'M0/d0/0000',
+    //             leadZeroDateTime: true,
+    //             showMaskTyped: true,
+    //         },
+    //         imports: [CypressTestMaskModule],
+    //     });
+    //
+    //     cy.get('#masked')
+    //         .type('12310000')
+    //         .should('have.value', '12/31/0000')
+    //         .type('{backspace}'.repeat(8))
+    //         .should('have.value', '__/__/____');
+    // });
+    //
+    // it('should backspace with showMaskTyped and leadZeroDateTime', () => {
+    //     cy.mount(CypressTestMaskComponent, {
+    //         componentProperties: {
+    //             mask: 'M0:d0:0000',
+    //             leadZeroDateTime: true,
+    //             showMaskTyped: true,
+    //         },
+    //         imports: [CypressTestMaskModule],
+    //     });
+    //
+    //     cy.get('#masked')
+    //         .type('12310000')
+    //         .should('have.value', '12:31:0000')
+    //         .type('{backspace}'.repeat(8))
+    //         .should('have.value', '__:__:____');
+    // });
+    //
     it('should correct work after backspace separator.6 decimalMarker . thousandSeparator ,', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {

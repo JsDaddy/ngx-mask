@@ -34,7 +34,7 @@ import { Config } from '../../lib/ngx-mask.config';
     `,
 })
 export class TestMaskComponent {
-    public mask!: string | undefined;
+    public mask!: string | null | undefined;
 
     public form: FormControl = new FormControl();
 

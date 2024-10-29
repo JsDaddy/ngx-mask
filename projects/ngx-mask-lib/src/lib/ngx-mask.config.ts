@@ -17,7 +17,7 @@ export type Config = {
     shownMaskExpression: string;
     specialCharacters: string[] | readonly string[];
     dropSpecialCharacters: boolean | string[] | readonly string[];
-    hiddenInput: boolean | undefined;
+    hiddenInput: boolean;
     validation: boolean;
     separatorLimit: string;
     apm: boolean;
@@ -54,7 +54,7 @@ export const initialConfig: Config = {
     showMaskTyped: false,
     placeHolderCharacter: '_',
     dropSpecialCharacters: true,
-    hiddenInput: undefined,
+    hiddenInput: false,
     shownMaskExpression: '',
     separatorLimit: '',
     allowNegativeNumbers: false,

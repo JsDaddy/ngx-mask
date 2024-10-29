@@ -512,7 +512,7 @@ describe('Directive: Mask', () => {
         component.form.setValue('1111a');
         equal('1111a', '1111', fixture);
         expect(component.form.value).toBe('1111');
-        component.mask = undefined;
+        component.mask = null;
         expect(component.form.value).toBe('1111');
     });
 
@@ -769,11 +769,11 @@ describe('Directive: Mask', () => {
         equal('123456-1234567891/1234', '123456-1234567891/1234', fixture);
     });
 
-    it('setValue undefined should return undefined ', () => {
+    it('setValue undefined should return  null', () => {
         component.mask = '0000';
         equal('1234', '1234', fixture);
-        component.form.setValue(undefined);
-        expect(component.form.value).toBe(undefined);
+        component.form.setValue(null);
+        expect(component.form.value).toBe(null);
     });
 
     it('after resetValue should show in model same value', () => {

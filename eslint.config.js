@@ -143,10 +143,9 @@ module.exports = tseslint.config(
             'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
 
             //THINK ABOUT THIS
-            'no-param-reassign': 'off',
-            'no-undefined': 'off',
-            // 'no-param-reassign': 'error', 43
-            // 'no-undefined': 'error', 9
+            // 'no-param-reassign': 'off',
+            'no-param-reassign': 'error',
+            'no-undefined': 'error',
 
             '@typescript-eslint/no-unused-expressions': 'error',
             '@typescript-eslint/array-type': 'error',
