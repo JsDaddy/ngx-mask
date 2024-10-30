@@ -1,25 +1,17 @@
 import { DOCUMENT } from '@angular/common';
-import {
-    Directive,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChanges,
-    inject,
-} from '@angular/core';
-import {
+import type { OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
+import type {
     ControlValueAccessor,
     FormControl,
-    NG_VALIDATORS,
-    NG_VALUE_ACCESSOR,
     ValidationErrors,
     Validator,
 } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { IConfig, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
+import type { CustomKeyboardEvent } from './custom-keyboard-event';
+import type { NgxMaskConfig } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -44,53 +36,53 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
     @Input('mask') public maskExpression: string | undefined | null = '';
 
-    @Input() public specialCharacters: IConfig['specialCharacters'] = [];
+    @Input() public specialCharacters: NgxMaskConfig['specialCharacters'] = [];
 
-    @Input() public patterns: IConfig['patterns'] = {};
+    @Input() public patterns: NgxMaskConfig['patterns'] = {};
 
-    @Input() public prefix: IConfig['prefix'] = '';
+    @Input() public prefix: NgxMaskConfig['prefix'] = '';
 
-    @Input() public suffix: IConfig['suffix'] = '';
+    @Input() public suffix: NgxMaskConfig['suffix'] = '';
 
-    @Input() public thousandSeparator: IConfig['thousandSeparator'] = ' ';
+    @Input() public thousandSeparator: NgxMaskConfig['thousandSeparator'] = ' ';
 
-    @Input() public decimalMarker: IConfig['decimalMarker'] = '.';
+    @Input() public decimalMarker: NgxMaskConfig['decimalMarker'] = '.';
 
-    @Input() public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | null = null;
+    @Input() public dropSpecialCharacters: NgxMaskConfig['dropSpecialCharacters'] | null = null;
 
-    @Input() public hiddenInput: IConfig['hiddenInput'] | null = null;
+    @Input() public hiddenInput: NgxMaskConfig['hiddenInput'] | null = null;
 
-    @Input() public showMaskTyped: IConfig['showMaskTyped'] | null = null;
+    @Input() public showMaskTyped: NgxMaskConfig['showMaskTyped'] | null = null;
 
-    @Input() public placeHolderCharacter: IConfig['placeHolderCharacter'] | null = null;
+    @Input() public placeHolderCharacter: NgxMaskConfig['placeHolderCharacter'] | null = null;
 
-    @Input() public shownMaskExpression: IConfig['shownMaskExpression'] | null = null;
+    @Input() public shownMaskExpression: NgxMaskConfig['shownMaskExpression'] | null = null;
 
-    @Input() public showTemplate: IConfig['showTemplate'] | null = null;
+    @Input() public showTemplate: NgxMaskConfig['showTemplate'] | null = null;
 
-    @Input() public clearIfNotMatch: IConfig['clearIfNotMatch'] | null = null;
+    @Input() public clearIfNotMatch: NgxMaskConfig['clearIfNotMatch'] | null = null;
 
-    @Input() public validation: IConfig['validation'] | null = null;
+    @Input() public validation: NgxMaskConfig['validation'] | null = null;
 
-    @Input() public separatorLimit: IConfig['separatorLimit'] | null = null;
+    @Input() public separatorLimit: NgxMaskConfig['separatorLimit'] | null = null;
 
-    @Input() public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | null = null;
+    @Input() public allowNegativeNumbers: NgxMaskConfig['allowNegativeNumbers'] | null = null;
 
-    @Input() public leadZeroDateTime: IConfig['leadZeroDateTime'] | null = null;
+    @Input() public leadZeroDateTime: NgxMaskConfig['leadZeroDateTime'] | null = null;
 
-    @Input() public leadZero: IConfig['leadZero'] | null = null;
+    @Input() public leadZero: NgxMaskConfig['leadZero'] | null = null;
 
-    @Input() public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | null = null;
+    @Input() public triggerOnMaskChange: NgxMaskConfig['triggerOnMaskChange'] | null = null;
 
-    @Input() public apm: IConfig['apm'] | null = null;
+    @Input() public apm: NgxMaskConfig['apm'] | null = null;
 
-    @Input() public inputTransformFn: IConfig['inputTransformFn'] | null = null;
+    @Input() public inputTransformFn: NgxMaskConfig['inputTransformFn'] | null = null;
 
-    @Input() public outputTransformFn: IConfig['outputTransformFn'] | null = null;
+    @Input() public outputTransformFn: NgxMaskConfig['outputTransformFn'] | null = null;
 
-    @Input() public keepCharacterPositions: IConfig['keepCharacterPositions'] | null = null;
+    @Input() public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] | null = null;
 
-    @Output() public maskFilled: IConfig['maskFilled'] = new EventEmitter<void>();
+    @Output() public maskFilled: NgxMaskConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
 
@@ -115,11 +107,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     public _maskService = inject(NgxMaskService, { self: true });
 
-    protected _config = inject<IConfig>(NGX_MASK_CONFIG);
+    protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: any) => {};
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -264,14 +257,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
+        const processedValue: string = typeof value === 'number' ? String(value) : value;
+
         if (!this._maskService.validation || !this._maskValue) {
             return null;
         }
         if (this._maskService.ipError) {
-            return this._createValidationError(value);
+            return this._createValidationError(processedValue);
         }
         if (this._maskService.cpfCnpjError) {
-            return this._createValidationError(value);
+            return this._createValidationError(processedValue);
         }
         if (this._maskValue.startsWith(MaskExpression.SEPARATOR)) {
             return null;
@@ -283,10 +278,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return null;
         }
         if (timeMasks.includes(this._maskValue)) {
-            return this._validateTime(value);
+            return this._validateTime(processedValue);
         }
 
-        if (value && value.toString().length >= 1) {
+        if (processedValue && processedValue.length >= 1) {
             let counterOfOpt = 0;
 
             if (
@@ -298,9 +293,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskValue.indexOf(MaskExpression.CURLY_BRACKETS_RIGHT)
                 );
 
-                return lengthInsideCurlyBrackets === String(value.length)
+                return lengthInsideCurlyBrackets === String(processedValue.length)
                     ? null
-                    : this._createValidationError(value);
+                    : this._createValidationError(processedValue);
             }
             if (this._maskValue.startsWith(MaskExpression.PERCENT)) {
                 return null;
@@ -318,7 +313,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     }
                     if (
                         this._maskValue.indexOf(key) !== -1 &&
-                        value.toString().length >= this._maskValue.indexOf(key)
+                        processedValue.length >= this._maskValue.indexOf(key)
                     ) {
                         return null;
                     }
@@ -329,19 +324,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
             if (
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) > 1 &&
-                    value.toString().length <
-                        this._maskValue.indexOf(MaskExpression.SYMBOL_STAR)) ||
+                    processedValue.length < this._maskValue.indexOf(MaskExpression.SYMBOL_STAR)) ||
                 (this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) > 1 &&
-                    value.toString().length <
-                        this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION))
+                    processedValue.length < this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION))
             ) {
-                return this._createValidationError(value);
+                return this._createValidationError(processedValue);
             }
             if (
                 this._maskValue.indexOf(MaskExpression.SYMBOL_STAR) === -1 ||
                 this._maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === -1
             ) {
-                value = typeof value === 'number' ? String(value) : value;
                 const array = this._maskValue.split('*');
                 const length: number = this._maskService.dropSpecialCharacters
                     ? this._maskValue.length -
@@ -352,8 +344,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                       : this._maskValue.length - counterOfOpt;
 
                 if (array.length === 1) {
-                    if (value.toString().length < length) {
-                        return this._createValidationError(value);
+                    if (processedValue.length < length) {
+                        return this._createValidationError(processedValue);
                     }
                 }
                 if (array.length > 1) {
@@ -361,13 +353,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     if (
                         lastIndexArray &&
                         this._maskService.specialCharacters.includes(lastIndexArray[0] as string) &&
-                        String(value).includes(lastIndexArray[0] ?? '') &&
+                        String(processedValue).includes(lastIndexArray[0] ?? '') &&
                         !this.dropSpecialCharacters
                     ) {
                         const special = value.split(lastIndexArray[0]);
                         return special[special.length - 1].length === lastIndexArray.length - 1
                             ? null
-                            : this._createValidationError(value);
+                            : this._createValidationError(processedValue);
                     } else if (
                         ((lastIndexArray &&
                             !this._maskService.specialCharacters.includes(
@@ -375,11 +367,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                             )) ||
                             !lastIndexArray ||
                             this._maskService.dropSpecialCharacters) &&
-                        value.length >= length - 1
+                        processedValue.length >= length - 1
                     ) {
                         return null;
                     } else {
-                        return this._createValidationError(value);
+                        return this._createValidationError(processedValue);
                     }
                 }
             }
@@ -410,7 +402,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public onModelChange(value: string | undefined | null | number): void {
         // on form reset we need to update the actualValue
         if (
-            (value === MaskExpression.EMPTY_STRING || value === null || value === undefined) &&
+            (value === MaskExpression.EMPTY_STRING ||
+                value === null ||
+                typeof value === 'undefined') &&
             this._maskService.actualValue
         ) {
             this._maskService.actualValue = this._maskService.getActualValue(
@@ -422,7 +416,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     @HostListener('input', ['$event'])
     public onInput(e: CustomKeyboardEvent): void {
         // If IME is composing text, we wait for the composed text.
-        if (this._isComposing) return;
+        if (this._isComposing) {
+            return;
+        }
         const el: HTMLInputElement = e.target as HTMLInputElement;
         const transformedValue = this._maskService.inputTransformFn(el.value);
         if (el.type !== 'number') {
@@ -654,6 +650,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 el.setSelectionRange(positionToApply, positionToApply);
                 this._position = null;
             } else {
+                // eslint-disable-next-line no-console
                 console.warn(
                     'Ngx-mask writeValue work with string | number, your current value:',
                     typeof transformedValue
@@ -733,7 +730,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&
-            // eslint-disable-next-line
             (e as any).keyCode !== 38
         ) {
             if (this._maskService.showMaskTyped && !this.keepCharacterPositions) {
@@ -792,7 +788,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
         if (this._isComposing) {
             // User finalize their choice from IME composition, so trigger onInput() for the composed text.
-            if (e.key === 'Enter') this.onCompositionEnd(e);
+            if (e.key === 'Enter') {
+                this.onCompositionEnd(e);
+            }
             return;
         }
 
@@ -894,31 +892,30 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     /** It writes the value in the input */
     public async writeValue(controlValue: unknown): Promise<void> {
-        if (typeof controlValue === 'object' && controlValue !== null && 'value' in controlValue) {
-            if ('disable' in controlValue) {
-                this.setDisabledState(Boolean(controlValue.disable));
+        let value = controlValue;
+        if (typeof value === 'object' && value !== null && 'value' in value) {
+            if ('disable' in value) {
+                this.setDisabledState(Boolean(value.disable));
             }
 
-            controlValue = controlValue.value;
+            value = value.value;
         }
-        if (controlValue !== null) {
-            controlValue = this.inputTransformFn
-                ? this.inputTransformFn(controlValue)
-                : controlValue;
+        if (value !== null) {
+            value = this.inputTransformFn ? this.inputTransformFn(value) : value;
         }
 
         if (
-            typeof controlValue === 'string' ||
-            typeof controlValue === 'number' ||
-            controlValue === null ||
-            controlValue === undefined
+            typeof value === 'string' ||
+            typeof value === 'number' ||
+            value === null ||
+            typeof value === 'undefined'
         ) {
-            if (controlValue === null || controlValue === undefined || controlValue === '') {
+            if (value === null || typeof value === 'undefined' || value === '') {
                 this._maskService._currentValue = '';
                 this._maskService._previousValue = '';
             }
 
-            let inputValue: string | number | null | undefined = controlValue;
+            let inputValue: string | number | null | undefined = value;
             if (
                 typeof inputValue === 'number' ||
                 this._maskValue.startsWith(MaskExpression.SEPARATOR)
@@ -979,26 +976,26 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     (this._maskService.prefix || this._maskService.showMaskTyped))
             ) {
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
-                typeof this.inputTransformFn !== 'function'
-                    ? (this._maskService.writingValue = true)
-                    : '';
-
+                if (typeof this.inputTransformFn !== 'function') {
+                    this._maskService.writingValue = true;
+                }
                 this._maskService.formElementProperty = [
                     'value',
                     this._maskService.applyMask(inputValue, this._maskService.maskExpression),
                 ];
                 // Let the service know we've finished writing value
-                typeof this.inputTransformFn !== 'function'
-                    ? (this._maskService.writingValue = false)
-                    : '';
+                if (typeof this.inputTransformFn !== 'function') {
+                    this._maskService.writingValue = false;
+                }
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
             }
             this._inputValue = inputValue;
         } else {
+            // eslint-disable-next-line no-console
             console.warn(
                 'Ngx-mask writeValue work with string | number, your current value:',
-                typeof controlValue
+                typeof value
             );
         }
     }
@@ -1036,7 +1033,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _applyMask(): any {
         this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
             this._maskValue || ''

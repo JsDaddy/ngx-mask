@@ -50,11 +50,20 @@ describe('Test Date Hh:m0', () => {
             },
             imports: [CypressTestMaskModule],
         });
-        cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
+        cy.get('#masked')
+            .type('77')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('777').should('have.prop', 'selectionStart', 4);
+        cy.get('#masked')
+            .type('777')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '7/7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('1177').should('have.prop', 'selectionStart', 6);
+        cy.get('#masked')
+            .type('1177')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '11/7/7');
     });
 
     it('Mask M0/d0/0000 check cursor', () => {
@@ -64,11 +73,20 @@ describe('Test Date Hh:m0', () => {
             },
             imports: [CypressTestMaskModule],
         });
-        cy.get('#masked').type('88').should('have.prop', 'selectionStart', 3);
+        cy.get('#masked')
+            .type('88')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '8/8');
         cy.get('#masked').clear();
-        cy.get('#masked').type('777').should('have.prop', 'selectionStart', 4);
+        cy.get('#masked')
+            .type('777')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '7/7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('1177').should('have.prop', 'selectionStart', 6);
+        cy.get('#masked')
+            .type('1177')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '11/7/7');
     });
 
     it('Mask 0000/M0/d0 check cursor', () => {
@@ -328,7 +346,7 @@ describe('Test Date Hh:m0', () => {
             imports: [CypressTestMaskModule],
         });
 
-        cy.get('#masked').type('111111111111').should('have.value', '+11111111111');
+        cy.get('#masked').type('11111111111').should('have.value', '+11111111111');
         cy.get('#masked')
             .type('{backspace}')
             .should('have.value', '(111) 111-1111')

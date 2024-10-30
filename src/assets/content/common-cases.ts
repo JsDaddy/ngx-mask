@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
+import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
-export const ComDocs: IComDoc[] = [
+export const ComDocs: ComDoc[] = [
     {
         header: 'Date',
         text: '',
@@ -100,7 +100,7 @@ export const ComDocs: IComDoc[] = [
     },
 ];
 
-export const ComExamples: TExample<IMaskOptions>[] = [
+export const ComExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'Date',
         _mask: 'd0/M0/0000',

@@ -3,7 +3,6 @@ import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
 import { ColorPipe } from '@open-source/color/color.pipe';
@@ -12,6 +11,7 @@ import { ScrollService } from '@open-source/scroll/scroll.service';
 import { AccordionService } from '@open-source/accordion/accordion.service';
 import { OpenSourcePath } from '@open-source/path/open-source.path';
 import { toSignal } from '@angular/core/rxjs-interop';
+import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
 @Component({
     selector: 'jsdaddy-open-source-options',
@@ -35,8 +35,8 @@ import { toSignal } from '@angular/core/rxjs-interop';
     ],
 })
 export class OptionsComponent {
-    public cardDocs = input<IComDoc[]>();
-    public cardExamples = input<(TExample<IMaskOptions> | { _pipe: string })[]>();
+    public cardDocs = input<ComDoc[]>();
+    public cardExamples = input<(TExample<MaskOptions> | { _pipe: string })[]>();
 
     public cards = viewChildren<string, ElementRef<HTMLElement>>('cards', {
         read: ElementRef,

@@ -26,8 +26,7 @@
                         "extractLicenses": false,
                         "sourceMap": true,
                         "optimization": false,
-                        "namedChunks": true,
-                        "polyfills": ["zone.js"]
+                        "namedChunks": true
                     },
                     "configurations": {
                         "production": {
