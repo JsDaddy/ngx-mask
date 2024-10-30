@@ -201,6 +201,7 @@ export class NgxMaskApplierService {
             ) {
                 processedValue = this._stripToDecimal(processedValue);
             }
+
             const precision: number = this.getPrecision(maskExpression);
             const decimalMarker = Array.isArray(this.decimalMarker)
                 ? MaskExpression.DOT
@@ -369,7 +370,8 @@ export class NgxMaskApplierService {
             const shiftStep: number = result.length - processedValue.length;
 
             if (
-                result[processedPosition - 1] === this.thousandSeparator &&
+                (result[processedPosition - 1] === this.thousandSeparator ||
+                    result[processedPosition - this.prefix.length]) &&
                 this.prefix &&
                 backspaced
             ) {
@@ -555,7 +557,8 @@ export class NgxMaskApplierService {
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
                                 : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  this.specialCharacters.includes(inputValueCursorPlusOne))
+                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
+                                      !backspaced))
                         ) {
                             processedPosition = !this.leadZeroDateTime
                                 ? processedPosition + 1
@@ -563,6 +566,7 @@ export class NgxMaskApplierService {
                             cursor += 1;
                             this._shiftStep(maskExpression, cursor, inputArray.length);
                             i--;
+
                             if (this.leadZeroDateTime) {
                                 result += '0';
                             }

@@ -141,12 +141,8 @@ module.exports = tseslint.config(
             'lines-between-class-members': 'off',
             'no-return-assign': 'off',
             'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }],
-
-            //THINK ABOUT THIS
-            // 'no-param-reassign': 'off',
             'no-param-reassign': 'error',
             'no-undefined': 'error',
-
             '@typescript-eslint/no-unused-expressions': 'error',
             '@typescript-eslint/array-type': 'error',
             '@typescript-eslint/consistent-type-assertions': [

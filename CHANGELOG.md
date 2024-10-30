@@ -1,3 +1,26 @@
+# 18.0.1(2024-10-29)
+
+### Enhancement
+
+- add tailwind
+- change interface to type, remove prefix "I"
+- update dependencies
+- add ESLint strict rules
+
+### Fix
+
+-   Fix ([#1410](https://github.com/JsDaddy/ngx-mask/issues/1410))
+
+# 17.1.8(2024-07-16)
+
+### Fix
+
+-   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
+-   Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
+
+
+
+
 # 17.1.8(2024-07-16)
 
 ### Fix
