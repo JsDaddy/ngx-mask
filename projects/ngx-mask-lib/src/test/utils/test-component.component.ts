@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-
-import { IConfig } from '../../lib/ngx-mask.config';
+import type { NgxMaskConfig } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -34,51 +33,51 @@ import { IConfig } from '../../lib/ngx-mask.config';
     `,
 })
 export class TestMaskComponent {
-    public mask!: string | undefined;
+    public mask!: string | null | undefined;
 
     public form: FormControl = new FormControl();
 
-    public dropSpecialCharacters: IConfig['dropSpecialCharacters'] | undefined;
+    public dropSpecialCharacters: NgxMaskConfig['dropSpecialCharacters'] | undefined;
 
-    public clearIfNotMatch: IConfig['clearIfNotMatch'] | undefined;
+    public clearIfNotMatch: NgxMaskConfig['clearIfNotMatch'] | undefined;
 
-    public patterns: IConfig['patterns'] | undefined;
+    public patterns: NgxMaskConfig['patterns'] | undefined;
 
-    public prefix: IConfig['prefix'] = '';
+    public prefix: NgxMaskConfig['prefix'] = '';
 
-    public thousandSeparator: IConfig['thousandSeparator'] | undefined;
+    public thousandSeparator: NgxMaskConfig['thousandSeparator'] | undefined;
 
-    public decimalMarker: IConfig['decimalMarker'] | undefined;
+    public decimalMarker: NgxMaskConfig['decimalMarker'] | undefined;
 
-    public suffix: IConfig['suffix'] = '';
+    public suffix: NgxMaskConfig['suffix'] = '';
 
-    public specialCharacters: IConfig['specialCharacters'] | undefined;
+    public specialCharacters: NgxMaskConfig['specialCharacters'] | undefined;
 
-    public keepCharacterPositions: IConfig['keepCharacterPositions'] | undefined;
+    public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] | undefined;
 
-    public showMaskTyped: IConfig['showMaskTyped'] | undefined;
+    public showMaskTyped: NgxMaskConfig['showMaskTyped'] | undefined;
 
-    public placeHolderCharacter: IConfig['placeHolderCharacter'] | undefined;
+    public placeHolderCharacter: NgxMaskConfig['placeHolderCharacter'] | undefined;
 
-    public hiddenInput: IConfig['hiddenInput'] | undefined;
+    public hiddenInput: NgxMaskConfig['hiddenInput'] | undefined;
 
-    public separatorLimit: IConfig['separatorLimit'] = '';
+    public separatorLimit: NgxMaskConfig['separatorLimit'] = '';
 
-    public allowNegativeNumbers: IConfig['allowNegativeNumbers'] | undefined;
+    public allowNegativeNumbers: NgxMaskConfig['allowNegativeNumbers'] | undefined;
 
-    public leadZeroDateTime: IConfig['leadZeroDateTime'] | undefined;
+    public leadZeroDateTime: NgxMaskConfig['leadZeroDateTime'] | undefined;
 
-    public leadZero: IConfig['leadZero'] | undefined;
+    public leadZero: NgxMaskConfig['leadZero'] | undefined;
 
-    public triggerOnMaskChange: IConfig['triggerOnMaskChange'] | undefined;
+    public triggerOnMaskChange: NgxMaskConfig['triggerOnMaskChange'] | undefined;
 
-    public validation: IConfig['validation'] | undefined;
+    public validation: NgxMaskConfig['validation'] | undefined;
 
-    public apm: IConfig['apm'] | undefined;
+    public apm: NgxMaskConfig['apm'] | undefined;
 
-    public inputTransformFn: IConfig['inputTransformFn'] | undefined;
+    public inputTransformFn: NgxMaskConfig['inputTransformFn'] | undefined;
 
-    public outputTransformFn: IConfig['outputTransformFn'] | undefined;
+    public outputTransformFn: NgxMaskConfig['outputTransformFn'] | undefined;
 
     public cdr = inject(ChangeDetectorRef);
 }

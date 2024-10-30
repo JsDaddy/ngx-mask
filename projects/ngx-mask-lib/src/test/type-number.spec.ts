@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { equal } from './utils/test-functions.component';
 

@@ -1,165 +1,103 @@
-<section class="content column bg-full-white">
-    @for (tile of cardDocs(); track tile.id; let i = $index) {
-        <div class="card" [class]="activeCardId() | color: tile.id" [id]="tile.id" #cards>
-            <div class="mr-title title row uppercase ls-25">
-                {{ tile.header }}
-            </div>
-
-            <div class="cards-block row" [id]="tile.anchor">
-                <div class="light-card bg-full-white pd-15">
-                    <div class="light-title row ai-c">
-                        <img
-                            width="20"
-                            height="20"
-                            [ngSrc]="'hand-box' | asset: openSourceOptionsPath"
-                            alt="Hand with box" />
-                        <span class="span">Usage</span>
-                    </div>
-                    <span class="source uppercase ls-25 full-white span">Source code</span>
-                    <div class="white-input">
-                        <pre class="row">
-                             <code [highlight]="tile.code" language="JavaScript" class="input-view bg-white"></code>
-                             <img height="18" width="13" [ngSrc]="'input-vector' | asset : openSourceOptionsPath" class="input-img ais-c" alt="Input vector" />
-                        </pre>
-                    </div>
-                </div>
-                <ng-container
-                    *ngTemplateOutlet="
-                        exampleTmpl;
-                        context: { $implicit: cardExamples()?.[i], placeholder: tile.header }
-                    "></ng-container>
-            </div>
+@for (tile of cardDocs(); track tile.id; let i = $index) {
+    <div
+        class="flex flex-col p-2.5 gap-2.5 bg-dark/[.02] rounded-15px"
+        [class]="
+            activeCardId() === tile.id ? 'border border-solid border-yellow bg-yellow/[.05]' : ''
+        "
+        [id]="tile.id"
+        #cards>
+        <div class="ml-4 flex items-center text-title text-dark uppercase tracking-[.25em]">
+            {{ tile.header }}
         </div>
-    }
-</section>
+
+        <div class="flex gap-30px mob:flex-col mob:gap-15px scroll-mt-[185px]" [id]="tile.anchor">
+            <div class="flex-[55%] rounded-10px bg-full-white p-15px">
+                <div class="flex items-start gap-2.5 mb-5">
+                    <img
+                        width="20"
+                        height="20"
+                        [ngSrc]="'hand-box' | asset: openSourceOptionsPath"
+                        alt="Hand with box" />
+                    <span class="text-span text-dark/[.25]">Usage</span>
+                </div>
+                <span class="uppercase tracking-[.25em] text-span text-dark/[.45]"
+                    >Source code</span
+                >
+                <div class="block mt-2.5">
+                    <pre class="flex text-span">
+                        <code [highlight]="tile.code" language="html" class="bg-white w-full h-fit pl-15px rounded-10px border-none overflow-hidden whitespace-pre-line"></code>
+                        <img height="18" width="13" [ngSrc]="'input-vector' | asset : openSourceOptionsPath" class="relative right-5 self-center" alt="Input vector" />
+                    </pre>
+                </div>
+            </div>
+            <ng-container
+                *ngTemplateOutlet="
+                    exampleTmpl;
+                    context: { $implicit: cardExamples()?.[i], placeholder: tile.header }
+                "></ng-container>
+        </div>
+    </div>
+}
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
-    @if (!ex._pipe) {
-        <div class="dark-card bg-black">
-            @if (
-                !ex._thousandSeparator &&
-                !ex._dropSpecialCharacters &&
-                !ex._inputTransformFn &&
-                !ex.outputTransformFn &&
-                !ex._keepCharacterPositions
-            ) {
-                <div class="dark-input pd-15">
-                    <input
-                        [placeholder]="placeholder"
-                        prefix="{{ ex._prefix }}"
-                        suffix="{{ ex._suffix }}"
-                        [dropSpecialCharacters]="ex._dropSpecialCharacters"
-                        mask="{{ ex._mask || '' }}"
-                        [thousandSeparator]="ex._thousandSeparator || ' '"
-                        [formControl]="ex.control.form"
-                        [allowNegativeNumbers]="ex._allowNegativeNumbers || null"
-                        [specialCharacters]="ex._specialCharacters || null"
-                        [shownMaskExpression]="ex._shownMaskExpression || null"
-                        [(ngModel)]="ex.control.model"
-                        [apm]="ex._apm || false"
-                        [decimalMarker]="ex._decimalMarker"
-                        [leadZero]="ex._leadZero || null"
-                        [validation]="ex._validation || null"
-                        [showMaskTyped]="ex._showMaskTyped || null"
-                        [clearIfNotMatch]="ex._clearIfNotMatch || null"
-                        [hiddenInput]="ex._hiddenInput"
-                        class="customDarkInput bg-black white span" />
-                </div>
-            }
-            @if (ex._dropSpecialCharacters) {
-                <div class="dark-input pd-15">
-                    <input
-                        [placeholder]="placeholder"
-                        [keepCharacterPositions]="ex._keepCharacterPositions"
-                        [prefix]="ex._prefix"
-                        [suffix]="ex._suffix"
-                        mask="{{ ex._mask || '' }}"
-                        [dropSpecialCharacters]="ex._dropSpecialCharacters"
-                        [formControl]="ex.control.form"
-                        class="customDarkInput bg-black white span" />
-                </div>
-            }
-            @if (ex._keepCharacterPositions) {
-                <div class="dark-input pd-15">
-                    <input
-                        [placeholder]="placeholder"
-                        [keepCharacterPositions]="ex._keepCharacterPositions"
-                        [showMaskTyped]="ex._showMaskTyped"
-                        [prefix]="ex._prefix || ''"
-                        [suffix]="ex._suffix || ''"
-                        mask="{{ ex._mask || '' }}"
-                        [(ngModel)]="ex.control.model"
-                        [formControl]="ex.control.form"
-                        class="customDarkInput bg-black white span" />
-                </div>
-            }
-            @if (ex._thousandSeparator) {
-                <div class="dark-input pd-15">
-                    <input
-                        [placeholder]="placeholder"
-                        mask="{{ ex._mask || '' }}"
-                        [thousandSeparator]="ex._thousandSeparator || ' '"
-                        [formControl]="ex.control.form"
-                        [(ngModel)]="ex.control.model"
-                        [decimalMarker]="ex._decimalMarker || '.'"
-                        [leadZero]="ex._leadZero || null"
-                        class="customDarkInput bg-black white span" />
-                </div>
-            }
-            @if (ex._inputTransformFn || ex._outputTransformFn) {
-                <div class="dark-input pd-15">
-                    <input
-                        [placeholder]="placeholder"
-                        mask="{{ ex._mask || '' }}"
-                        [inputTransformFn]="ex._inputTransformFn"
-                        [outputTransformFn]="ex._outputTransformFn || ''"
-                        [(ngModel)]="ex.control.model"
-                        [thousandSeparator]="ex._thousandSeparator || ' '"
-                        [formControl]="ex.control.form"
-                        [dropSpecialCharacters]="ex._dropSpecialCharacters"
-                        [decimalMarker]="ex._decimalMarker || '.'"
-                        class="customDarkInput bg-black white span" />
-                </div>
-            }
-            @if (!ex._validation) {
-                <div>
-                    <div class="card-content row">
-                        <jsdaddy-open-source-card-content
-                            value="{{ ex.control.form.value | isEmpty }}"
-                            title="Form Control:"
-                            color="yellow-view" />
-                        <jsdaddy-open-source-card-content
-                            value="{{ ex.control.model | isEmpty }}"
-                            title="Ng Model:"
-                            color="yellow-view" />
-                    </div>
-                    <jsdaddy-open-source-card-content
-                        value="{{ ex._mask }}"
-                        title="Mask:"
-                        color="green-view" />
-                </div>
-            } @else {
-                <jsdaddy-open-source-card-content
-                    value="{{ ex.control.form.errors | json }}"
-                    title="Form Control:"
-                    color="yellow-view" />
-                <jsdaddy-open-source-card-content
-                    value="{{ ex.control.form.errors | json }}"
-                    title="Mask:"
-                    color="green-view" />
-            }
-        </div>
-    } @else {
-        <div class="dark-card bg-black">
-            <jsdaddy-open-source-card-content
-                value="{{ phone | mask: '(000) 000-0000' }}"
-                title=""
-                color="" />
-            <jsdaddy-open-source-card-content
-                value="(000) 000-0000"
-                title="Mask:"
-                color="green-view" />
-            <jsdaddy-open-source-card-content value="123456789" title="Value:" color="green-view" />
-        </div>
+    <div class="flex-[45%] rounded-10px p-15px bg-black">
+        <ng-container
+            *ngTemplateOutlet="
+                !ex._pipe ? inputTemplate : pipeTemplate;
+                context: { $implicit: ex, placeholder: placeholder }
+            ">
+        </ng-container>
+    </div>
+</ng-template>
+
+<ng-template #inputTemplate let-ex let-placeholder="placeholder">
+    <div class="flex">
+        <input
+            [placeholder]="placeholder || ''"
+            [placeHolderCharacter]="ex._placholderCharacter || '_'"
+            [prefix]="ex._prefix || ''"
+            [suffix]="ex._suffix || ''"
+            [dropSpecialCharacters]="ex._dropSpecialCharacters ?? true"
+            [mask]="ex._mask || ''"
+            [thousandSeparator]="ex._thousandSeparator || ' '"
+            [formControl]="ex.control.form"
+            [allowNegativeNumbers]="ex._allowNegativeNumbers || null"
+            [specialCharacters]="ex._specialCharacters || specialCharacters"
+            [shownMaskExpression]="ex._shownMaskExpression"
+            [(ngModel)]="ex.control.model"
+            [apm]="ex._apm || false"
+            [decimalMarker]="ex._decimalMarker || '.'"
+            [leadZero]="ex._leadZero || false"
+            [keepCharacterPositions]="ex._keepCharacterPositions || false"
+            [validation]="ex._validation || false"
+            [showMaskTyped]="ex._showMaskTyped || false"
+            [clearIfNotMatch]="ex._clearIfNotMatch"
+            [hiddenInput]="ex._hiddenInput || undefined"
+            [outputTransformFn]="ex._outputTransformFn || outputTransformFn"
+            [inputTransformFn]="ex._inputTransformFn || inputTransformFn"
+            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-black border-b-2px border-b-white rounded-10px focus:border-b-yellow hover:border-b-yellow hover:bg-full-white/25 focus:bg-full-white/25" />
+    </div>
+    <div class="flex gap-50px">
+        <jsdaddy-open-source-card-content
+            [value]="ex.control.form.value | isEmpty"
+            title="Form Control:"
+            color="yellow-view" />
+        <jsdaddy-open-source-card-content
+            [value]="ex.control.model | isEmpty"
+            title="Ng Model:"
+            color="yellow-view" />
+    </div>
+    <jsdaddy-open-source-card-content [value]="ex._mask" title="Mask:" color="green-view" />
+    @if (ex._validation) {
+        <jsdaddy-open-source-card-content
+            [value]="ex.control.form.errors | json"
+            title="Mask error:"
+            color="yellow-view" />
     }
+</ng-template>
+
+<ng-template #pipeTemplate>
+    <jsdaddy-open-source-card-content [value]="phone | mask: '(000) 000-0000'" title="" color="" />
+    <jsdaddy-open-source-card-content value="(000) 000-0000" title="Mask:" color="green-view" />
+    <jsdaddy-open-source-card-content value="123456789" title="Value:" color="green-view" />
 </ng-template>

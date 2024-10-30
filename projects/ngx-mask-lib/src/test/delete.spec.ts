@@ -1,6 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DebugElement } from '@angular/core';
+import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
@@ -163,7 +164,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(2);
@@ -186,7 +189,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(3);
@@ -209,7 +214,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(2);
@@ -232,7 +239,9 @@ describe('Directive: Mask (Delete)', () => {
             keyCode: 8,
             target: inputTarget,
 
-            preventDefault: () => {},
+            preventDefault: () => {
+                void 0;
+            },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         expect(inputTarget.selectionStart).toEqual(3);

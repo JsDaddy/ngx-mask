@@ -1,3 +1,22 @@
+# 18.0.1(2024-10-29)
+
+### Breaking Changes
+
+-   rename "IConfig" to "NgxMaskConfig"
+-   rename "optionsConfig" to "NgxMaskOptions"
+-   change interface to type
+
+### Fix
+
+-   Fix ([#1410](https://github.com/JsDaddy/ngx-mask/issues/1410))
+
+# 17.1.8(2024-07-16)
+
+### Fix
+
+-   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
+-   Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
+
 # 17.1.8(2024-07-16)
 
 ### Fix
@@ -46,13 +65,11 @@
 -   Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
 -   Fix ([#1390](https://github.com/JsDaddy/ngx-mask/issues/1390))
 
-
 # 17.1.1(2024-07-05)
 
 ### Fix
 
 -   Fix ([#1383](https://github.com/JsDaddy/ngx-mask/issues/1383))
-
 
 # 17.1.0(2024-07-05)
 
@@ -61,8 +78,6 @@
 -   Fix ([#1294](https://github.com/JsDaddy/ngx-mask/issues/1294))
 -   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
 -   Fix ([#1365](https://github.com/JsDaddy/ngx-mask/issues/1365))
-
-
 
 # 17.0.9(2024-07-02)
 
@@ -73,8 +88,6 @@
 -   Fix ([#1369](https://github.com/JsDaddy/ngx-mask/issues/1369))
 -   Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
 -   Fix ([#1377](https://github.com/JsDaddy/ngx-mask/issues/1377))
-
-
 
 # 17.0.8(2024-04-30)
 
@@ -87,8 +100,8 @@
 ### Fix
 
 -   Fix ([#1298](https://github.com/JsDaddy/ngx-mask/issues/1298))
--   Fix ([#1307](https://github.com/JsDaddy/ngx-mask/issues/1307)) 
--   Fix ([#1306](https://github.com/JsDaddy/ngx-mask/issues/1306)) 
+-   Fix ([#1307](https://github.com/JsDaddy/ngx-mask/issues/1307))
+-   Fix ([#1306](https://github.com/JsDaddy/ngx-mask/issues/1306))
 
 # 17.0.6(2024-03-27)
 
@@ -110,27 +123,26 @@
 -   Fix ([#1308](https://github.com/JsDaddy/ngx-mask/issues/1308))
 -   Fix ([#1299](https://github.com/JsDaddy/ngx-mask/issues/1299))
 
-
 # 17.0.4(2023-12-01)
 
 ### Feat
 
-- update v16.4.2
-- update v15.2.3
-- update v14.3.3
-- update v13.2.2
+-   update v16.4.2
+-   update v15.2.3
+-   update v14.3.3
+-   update v13.2.2
 
 # 17.0.3(2023-11-30)
 
 ### Feat
 
-- update dependencies
+-   update dependencies
 
 # 17.0.2(2023-11-29)
 
 ### Feat
 
-- update dependencies
+-   update dependencies
 
 # 17.0.2(2023-11-29)
 
@@ -158,10 +170,11 @@
 ### Feature
 
 -   update ng 17.x
-- 
+-
+
 ### Feature 16.4.2
 
--  Upgrade version 16.4.2 with more fixes since version 17.x.x
+-   Upgrade version 16.4.2 with more fixes since version 17.x.x
 
 # 16.4.1(2023-11-08)
 
@@ -194,7 +207,6 @@
 -   Change README.md
 -   Fix ([#1242](https://github.com/JsDaddy/ngx-mask/issues/1242))
 
-
 # 16.3.7(2023-09-18)
 
 ### Fix
@@ -206,7 +218,6 @@
 ### Fix
 
 -   Fix ([#1232](https://github.com/JsDaddy/ngx-mask/issues/1232))
-
 
 # 16.3.5(2023-09-14)
 
@@ -232,8 +243,6 @@
 
 -   Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
 
-
-
 # 16.3.1(2023-09-01)
 
 ### Fix
@@ -255,7 +264,6 @@
 -   Fix ([#1206](https://github.com/JsDaddy/ngx-mask/issues/1206))
 -   Fix ([#1211](https://github.com/JsDaddy/ngx-mask/issues/1211))
 
-
 # 16.2.9(2023-08-08)
 
 ### Fix
@@ -264,7 +272,7 @@
 -   Fix ([#890](https://github.com/JsDaddy/ngx-mask/issues/890))
 -   Fix ([#841](https://github.com/JsDaddy/ngx-mask/issues/841))
 -   Fix ([#1162](https://github.com/JsDaddy/ngx-mask/issues/1162))
- 
+
 # 16.2.7(2023-08-08)
 
 ### Fix
@@ -480,11 +488,11 @@
 
 ### Feature 15.2.3
 
--  Upgrade version 15.2.3 with more fixes since version 17.x.x
+-   Upgrade version 15.2.3 with more fixes since version 17.x.x
 
 ### Feature 15.2.1
 
--  Upgrade version 15.2.1 with more fixes since version 16.x.x
+-   Upgrade version 15.2.1 with more fixes since version 16.x.x
 
 # 15.1.5(2023-05-12)
 
@@ -573,16 +581,15 @@
 
 ### Feature 14.3.3
 
--  Upgrade version 15.2.2 with more fixes since version 17.x.x
-
+-   Upgrade version 15.2.2 with more fixes since version 17.x.x
 
 ### Feature 14.3.2
 
--  Upgrade version 14.3.2 with more fixes since version 16.x.x
--  Change MaskPipe => NgxMaskPipe
--  Change MaskService => NgxMaskService
--  Change MaskApplierService => NgxMaskApplierService
--  Change MaskDirective => NgxMaskMaskDirective
+-   Upgrade version 14.3.2 with more fixes since version 16.x.x
+-   Change MaskPipe => NgxMaskPipe
+-   Change MaskService => NgxMaskService
+-   Change MaskApplierService => NgxMaskApplierService
+-   Change MaskDirective => NgxMaskMaskDirective
 
 # 14.2.4(2022-10-27)
 
@@ -657,16 +664,15 @@
 
 ### Feature 13.3.2
 
--  Upgrade version 13.2.2 with more fixes since version 17.x.x
-
+-   Upgrade version 13.2.2 with more fixes since version 17.x.x
 
 ### Feature 13.2.1
 
--  Upgrade version 13.2.1 with more fixes since version 16.x.x
--  Change MaskPipe => NgxMaskPipe
--  Change MaskService => NgxMaskService
--  Change MaskApplierService => NgxMaskApplierService
--  Change MaskDirective => NgxMaskMaskDirective
+-   Upgrade version 13.2.1 with more fixes since version 16.x.x
+-   Change MaskPipe => NgxMaskPipe
+-   Change MaskService => NgxMaskService
+-   Change MaskApplierService => NgxMaskApplierService
+-   Change MaskDirective => NgxMaskMaskDirective
 
 <a name="13.2.1"></a>
 

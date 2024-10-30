@@ -1,27 +1,23 @@
-import { EnvironmentProviders, inject, makeEnvironmentProviders, Provider } from '@angular/core';
+import type { EnvironmentProviders, Provider } from '@angular/core';
+import { inject, makeEnvironmentProviders } from '@angular/core';
 
-import {
-    NGX_MASK_CONFIG,
-    INITIAL_CONFIG,
-    initialConfig,
-    NEW_CONFIG,
-    optionsConfig,
-} from './ngx-mask.config';
+import type { NgxMaskOptions } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, INITIAL_CONFIG, initialConfig, NEW_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 
 /**
  * @internal
  */
-function _configFactory(): optionsConfig {
-    const initConfig = inject<optionsConfig>(INITIAL_CONFIG);
-    const configValue = inject<optionsConfig | (() => optionsConfig)>(NEW_CONFIG);
+function _configFactory(): NgxMaskOptions {
+    const initConfig = inject<NgxMaskOptions>(INITIAL_CONFIG);
+    const configValue = inject<NgxMaskOptions | (() => NgxMaskOptions)>(NEW_CONFIG);
 
     return configValue instanceof Function
         ? { ...initConfig, ...configValue() }
         : { ...initConfig, ...configValue };
 }
 
-export function provideNgxMask(configValue?: optionsConfig | (() => optionsConfig)): Provider[] {
+export function provideNgxMask(configValue?: NgxMaskOptions | (() => NgxMaskOptions)): Provider[] {
     return [
         {
             provide: NEW_CONFIG,
@@ -40,7 +36,7 @@ export function provideNgxMask(configValue?: optionsConfig | (() => optionsConfi
 }
 
 export function provideEnvironmentNgxMask(
-    configValue?: optionsConfig | (() => optionsConfig)
+    configValue?: NgxMaskOptions | (() => NgxMaskOptions)
 ): EnvironmentProviders {
     return makeEnvironmentProviders(provideNgxMask(configValue));
 }

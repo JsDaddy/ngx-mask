@@ -12,7 +12,7 @@ jobs:
             - uses: actions/checkout@v4
               with:
                   submodules: true
-            - uses: oven-sh/setup-bun@v1
+            - uses: oven-sh/setup-bun@v2
               with:
                   bun-version: latest
             - uses: actions/setup-node@v4
@@ -23,8 +23,11 @@ jobs:
               run: |
                   bun i
                   bun run build:lib
+            - name: Setup npm token
+              run: |
+                  echo "//registry.npmjs.org/:_authToken=${{ secrets.npm_token }}" > dist/ngx-mask-lib/.npmrc
             - name: Publish library
-              run: bun run publish:lib
+              run: bun publish:lib
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
 
@@ -35,7 +38,7 @@ jobs:
         steps:
             - name: Post to a Slack channel
               id: slack
-              uses: slackapi/slack-github-action@v1.26.0
+              uses: slackapi/slack-github-action@v1.27.0
               with:
                   channel-id: 'deployments'
                   payload: |

@@ -1,7 +1,7 @@
 import { UntypedFormControl } from '@angular/forms';
-import { IComDoc, IMaskOptions, TExample } from '@open-source/accordion/content.interfaces';
+import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
-export const ComDocs: IComDoc[] = [
+export const ComDocs: ComDoc[] = [
     {
         header: 'Date',
         text: '',
@@ -20,21 +20,21 @@ export const ComDocs: IComDoc[] = [
         header: 'Valid 24 hour format',
         text: '',
         code: `<input mask="Hh:m0:s0" />`,
-        id: 4,
+        id: 3,
         anchor: 'valid24',
     },
     {
         header: 'Mixed types',
         text: '',
         code: `<input mask="AAA 000-S0S" />`,
-        id: 5,
+        id: 4,
         anchor: 'mixed',
     },
     {
         header: 'Valid date start with years',
         text: '',
         code: `<input mask="0000.M0.d0" />`,
-        id: 9,
+        id: 5,
         anchor: 'startWithYears',
     },
     {
@@ -46,61 +46,61 @@ export const ComDocs: IComDoc[] = [
         shownMaskExpression="'(___) ___-____ ext. ______'"
         mask="(000) 000-0000 ext. 000000"
         >`,
-        id: 7,
+        id: 6,
         anchor: 'mask-specialCharacters',
     },
     {
         header: 'Optional mask',
         text: '',
         code: `<input type='text' mask="9999 999 999" >`,
-        id: 12,
+        id: 7,
         anchor: 'optional-mask',
     },
     {
         header: 'Email mask with validation',
         text: '',
         code: `<input mask="A*@A*.SSS" [validation]="true" [dropSpecialCharacters]="false" >`,
-        id: 13,
+        id: 8,
         anchor: 'email-mask',
     },
     {
         header: 'Allow negative numbers to mask',
         text: 'You can allow negative numbers',
         code: ` <input type='text' mask="0000" [allowNegativeNumbers]="true">`,
-        id: 11,
+        id: 9,
         anchor: 'allowMask',
     },
     {
         header: 'Allow negative numbers to separator',
         text: 'You can allow negative numbers to',
         code: ` <input type='text' mask="separator" [allowNegativeNumbers]="true">`,
-        id: 11,
+        id: 9,
         anchor: 'allowSeparator',
     },
     {
         header: 'Allow negative numbers to percent',
         text: 'You can allow negative numbers',
         code: ` <input type='text' mask="percent.2" [allowNegativeNumbers]="true">`,
-        id: 11,
+        id: 9,
         anchor: 'allowPercent',
     },
     {
         header: 'Allow few mask in one expression',
         text: '',
         code: `<input type='text' mask="(00) 00000000||+00 (00) 00000000" >`,
-        id: 8,
+        id: 10,
         anchor: 'allow-few-mask',
     },
     {
         header: 'Allow few mask in one expression number or letter',
         text: '',
         code: `<input type='text' mask="00||SS" >`,
-        id: 8,
+        id: 10,
         anchor: 'allow-few-mask',
     },
 ];
 
-export const ComExamples: TExample<IMaskOptions>[] = [
+export const ComExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'Date',
         _mask: 'd0/M0/0000',
@@ -147,21 +147,18 @@ export const ComExamples: TExample<IMaskOptions>[] = [
     {
         _placeholder: 'allowNegativeNumbers mask',
         _allowNegativeNumbers: true,
-        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _mask: '0000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers separator',
         _allowNegativeNumbers: true,
-        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _decimalMarker: '.',
         _mask: 'separator',
         control: { form: new UntypedFormControl(''), model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers percent',
-        _specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
         _decimalMarker: '.',
         _allowNegativeNumbers: true,
         _mask: 'percent.2',
