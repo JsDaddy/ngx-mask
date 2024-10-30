@@ -1,12 +1,8 @@
-import { EnvironmentProviders, inject, makeEnvironmentProviders, Provider } from '@angular/core';
+import type { EnvironmentProviders, Provider } from '@angular/core';
+import { inject, makeEnvironmentProviders } from '@angular/core';
 
-import {
-    NGX_MASK_CONFIG,
-    INITIAL_CONFIG,
-    initialConfig,
-    NEW_CONFIG,
-    optionsConfig,
-} from './ngx-mask.config';
+import type { optionsConfig } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, INITIAL_CONFIG, initialConfig, NEW_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 
 /**

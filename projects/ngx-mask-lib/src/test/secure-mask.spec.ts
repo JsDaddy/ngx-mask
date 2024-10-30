@@ -1,11 +1,12 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import { DebugElement } from '@angular/core';
+import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 describe('Directive: Mask (Secure)', () => {

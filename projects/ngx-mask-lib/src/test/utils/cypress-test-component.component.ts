@@ -1,7 +1,8 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { scan, startWith } from 'rxjs';
-import { Config, NGX_MASK_CONFIG } from 'ngx-mask';
+import type { Config } from 'ngx-mask';
+import { NGX_MASK_CONFIG } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',

@@ -11,7 +11,7 @@ import { ScrollService } from '@open-source/scroll/scroll.service';
 import { AccordionService } from '@open-source/accordion/accordion.service';
 import { OpenSourcePath } from '@open-source/path/open-source.path';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
 @Component({
     selector: 'jsdaddy-open-source-options',

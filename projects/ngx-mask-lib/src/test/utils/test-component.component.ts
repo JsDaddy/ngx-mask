@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
-import { Config } from '../../lib/ngx-mask.config';
+import type { Config } from '../../lib/ngx-mask.config';
 
 @Component({
     selector: 'jsdaddy-open-source-test',

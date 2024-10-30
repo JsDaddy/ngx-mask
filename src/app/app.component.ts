@@ -6,7 +6,7 @@ import { ComDocs, ComExamples } from 'src/assets/content/common-cases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
 import { HeaderComponent } from '@open-source/header/header.component';
-import { ComDoc, ListItem, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, ListItem, MaskOptions, TExample } from '@open-source/accordion/content.types';
 import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
 import { AccordionComponent } from '@open-source/accordion/accordion.component';
 import { FooterComponent } from '@open-source/footer/footer.component';

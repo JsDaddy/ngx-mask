@@ -1,25 +1,17 @@
 import { DOCUMENT } from '@angular/common';
-import {
-    Directive,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnChanges,
-    Output,
-    SimpleChanges,
-    inject,
-} from '@angular/core';
-import {
+import type { OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, Output, inject } from '@angular/core';
+import type {
     ControlValueAccessor,
     FormControl,
-    NG_VALIDATORS,
-    NG_VALUE_ACCESSOR,
     ValidationErrors,
     Validator,
 } from '@angular/forms';
+import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { CustomKeyboardEvent } from './custom-keyboard-event';
-import { Config, NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
+import type { CustomKeyboardEvent } from './custom-keyboard-event';
+import type { Config } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 

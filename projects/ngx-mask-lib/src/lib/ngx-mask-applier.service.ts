@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { NGX_MASK_CONFIG, Config } from './ngx-mask.config';
+import type { Config } from './ngx-mask.config';
+import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()

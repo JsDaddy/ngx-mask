@@ -155,6 +155,8 @@ module.exports = tseslint.config(
             '@typescript-eslint/unbound-method': 'off',
             'import/no-cycle': 'off',
             'import/extensions': 'off',
+            '@typescript-eslint/consistent-type-imports': 'error',
+            '@typescript-eslint/consistent-type-exports': 'error',
         },
     },
     {

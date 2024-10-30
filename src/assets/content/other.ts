@@ -1,5 +1,5 @@
 import { UntypedFormControl } from '@angular/forms';
-import { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
 export const OthDocs: ComDoc[] = [
     {

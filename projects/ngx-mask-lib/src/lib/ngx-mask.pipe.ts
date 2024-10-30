@@ -1,6 +1,8 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { inject, Pipe } from '@angular/core';
 
-import { Config, NGX_MASK_CONFIG } from './ngx-mask.config';
+import type { Config } from './ngx-mask.config';
+import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 

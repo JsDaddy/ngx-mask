@@ -1,11 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import { Config, initialConfig } from 'ngx-mask';
+import type { Config } from 'ngx-mask';
+import { initialConfig } from 'ngx-mask';
 
 describe('Directive: Mask (Custom patterns)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
