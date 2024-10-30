@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { scan, startWith } from 'rxjs';
-import type { Config } from 'ngx-mask';
+import type { NgxMaskConfig } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
 
 @Component({
@@ -34,7 +34,7 @@ import { NGX_MASK_CONFIG } from 'ngx-mask';
     `,
 })
 export class CypressTestMaskComponent {
-    protected _config = inject<Config>(NGX_MASK_CONFIG);
+    protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     @Input() public mask = '';
 
     @Input() public hiddenInput = false;

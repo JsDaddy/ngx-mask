@@ -10,7 +10,7 @@ import type {
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { CustomKeyboardEvent } from './custom-keyboard-event';
-import type { Config } from './ngx-mask.config';
+import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -36,53 +36,53 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
     @Input('mask') public maskExpression: string | undefined | null = '';
 
-    @Input() public specialCharacters: Config['specialCharacters'] = [];
+    @Input() public specialCharacters: NgxMaskConfig['specialCharacters'] = [];
 
-    @Input() public patterns: Config['patterns'] = {};
+    @Input() public patterns: NgxMaskConfig['patterns'] = {};
 
-    @Input() public prefix: Config['prefix'] = '';
+    @Input() public prefix: NgxMaskConfig['prefix'] = '';
 
-    @Input() public suffix: Config['suffix'] = '';
+    @Input() public suffix: NgxMaskConfig['suffix'] = '';
 
-    @Input() public thousandSeparator: Config['thousandSeparator'] = ' ';
+    @Input() public thousandSeparator: NgxMaskConfig['thousandSeparator'] = ' ';
 
-    @Input() public decimalMarker: Config['decimalMarker'] = '.';
+    @Input() public decimalMarker: NgxMaskConfig['decimalMarker'] = '.';
 
-    @Input() public dropSpecialCharacters: Config['dropSpecialCharacters'] | null = null;
+    @Input() public dropSpecialCharacters: NgxMaskConfig['dropSpecialCharacters'] | null = null;
 
-    @Input() public hiddenInput: Config['hiddenInput'] | null = null;
+    @Input() public hiddenInput: NgxMaskConfig['hiddenInput'] | null = null;
 
-    @Input() public showMaskTyped: Config['showMaskTyped'] | null = null;
+    @Input() public showMaskTyped: NgxMaskConfig['showMaskTyped'] | null = null;
 
-    @Input() public placeHolderCharacter: Config['placeHolderCharacter'] | null = null;
+    @Input() public placeHolderCharacter: NgxMaskConfig['placeHolderCharacter'] | null = null;
 
-    @Input() public shownMaskExpression: Config['shownMaskExpression'] | null = null;
+    @Input() public shownMaskExpression: NgxMaskConfig['shownMaskExpression'] | null = null;
 
-    @Input() public showTemplate: Config['showTemplate'] | null = null;
+    @Input() public showTemplate: NgxMaskConfig['showTemplate'] | null = null;
 
-    @Input() public clearIfNotMatch: Config['clearIfNotMatch'] | null = null;
+    @Input() public clearIfNotMatch: NgxMaskConfig['clearIfNotMatch'] | null = null;
 
-    @Input() public validation: Config['validation'] | null = null;
+    @Input() public validation: NgxMaskConfig['validation'] | null = null;
 
-    @Input() public separatorLimit: Config['separatorLimit'] | null = null;
+    @Input() public separatorLimit: NgxMaskConfig['separatorLimit'] | null = null;
 
-    @Input() public allowNegativeNumbers: Config['allowNegativeNumbers'] | null = null;
+    @Input() public allowNegativeNumbers: NgxMaskConfig['allowNegativeNumbers'] | null = null;
 
-    @Input() public leadZeroDateTime: Config['leadZeroDateTime'] | null = null;
+    @Input() public leadZeroDateTime: NgxMaskConfig['leadZeroDateTime'] | null = null;
 
-    @Input() public leadZero: Config['leadZero'] | null = null;
+    @Input() public leadZero: NgxMaskConfig['leadZero'] | null = null;
 
-    @Input() public triggerOnMaskChange: Config['triggerOnMaskChange'] | null = null;
+    @Input() public triggerOnMaskChange: NgxMaskConfig['triggerOnMaskChange'] | null = null;
 
-    @Input() public apm: Config['apm'] | null = null;
+    @Input() public apm: NgxMaskConfig['apm'] | null = null;
 
-    @Input() public inputTransformFn: Config['inputTransformFn'] | null = null;
+    @Input() public inputTransformFn: NgxMaskConfig['inputTransformFn'] | null = null;
 
-    @Input() public outputTransformFn: Config['outputTransformFn'] | null = null;
+    @Input() public outputTransformFn: NgxMaskConfig['outputTransformFn'] | null = null;
 
-    @Input() public keepCharacterPositions: Config['keepCharacterPositions'] | null = null;
+    @Input() public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] | null = null;
 
-    @Output() public maskFilled: Config['maskFilled'] = new EventEmitter<void>();
+    @Output() public maskFilled: NgxMaskConfig['maskFilled'] = new EventEmitter<void>();
 
     private _maskValue = '';
 
@@ -107,7 +107,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     public _maskService = inject(NgxMaskService, { self: true });
 
-    protected _config = inject<Config>(NGX_MASK_CONFIG);
+    protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: any) => {};

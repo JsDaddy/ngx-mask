@@ -5,7 +5,7 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
-export type Config = {
+export type NgxMaskConfig = {
     suffix: string;
     prefix: string;
     thousandSeparator: string;
@@ -39,12 +39,12 @@ export type Config = {
     >;
 };
 
-export type optionsConfig = Partial<Config>;
-export const NGX_MASK_CONFIG = new InjectionToken<Config>('ngx-mask config');
-export const NEW_CONFIG = new InjectionToken<Config>('new ngx-mask config');
-export const INITIAL_CONFIG = new InjectionToken<Config>('initial ngx-mask config');
+export type NgxMaskOptions = Partial<NgxMaskConfig>;
+export const NGX_MASK_CONFIG = new InjectionToken<NgxMaskConfig>('ngx-mask config');
+export const NEW_CONFIG = new InjectionToken<NgxMaskConfig>('new ngx-mask config');
+export const INITIAL_CONFIG = new InjectionToken<NgxMaskConfig>('initial ngx-mask config');
 
-export const initialConfig: Config = {
+export const initialConfig: NgxMaskConfig = {
     suffix: '',
     prefix: '',
     thousandSeparator: ' ',
@@ -59,7 +59,6 @@ export const initialConfig: Config = {
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
-
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
     apm: false,

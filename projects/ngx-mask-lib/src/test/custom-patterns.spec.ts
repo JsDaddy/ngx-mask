@@ -6,7 +6,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import type { Config } from 'ngx-mask';
+import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig } from 'ngx-mask';
 
 describe('Directive: Mask (Custom patterns)', () => {
@@ -44,7 +44,7 @@ describe('Directive: Mask (Provide custom patterns)', () => {
         B: { pattern: new RegExp('[a-zA-Z]'), optional: true },
     };
 
-    const ngxMaskConfigValue: Partial<Config> = {
+    const ngxMaskConfigValue: Partial<NgxMaskConfig> = {
         patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
     };
 
@@ -88,7 +88,7 @@ describe('Directive: Mask (Provide custom patterns with symbol *)', () => {
         '*': { pattern: new RegExp('[a-zA-Z0-9]') },
     };
 
-    const ngxMaskConfigValue: Partial<Config> = {
+    const ngxMaskConfigValue: Partial<NgxMaskConfig> = {
         patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
     };
 
@@ -135,7 +135,7 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
 
-    const ngxMaskConfig: Config = {
+    const ngxMaskConfig: NgxMaskConfig = {
         ...initialConfig,
         patterns: {
             f: {
@@ -190,7 +190,7 @@ describe('Directive: Mask (Provide custom patterns with symbol B optional)', () 
         B: { pattern: new RegExp('[0-9,;]'), optional: true },
     };
 
-    const ngxMaskConfigValue: Partial<Config> = {
+    const ngxMaskConfigValue: Partial<NgxMaskConfig> = {
         patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
     };
 

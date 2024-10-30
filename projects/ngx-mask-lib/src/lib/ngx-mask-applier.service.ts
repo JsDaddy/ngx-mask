@@ -1,56 +1,58 @@
 import { inject, Injectable } from '@angular/core';
-import type { Config } from './ngx-mask.config';
+import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
 @Injectable()
 export class NgxMaskApplierService {
-    protected _config = inject<Config>(NGX_MASK_CONFIG);
+    protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
-    public dropSpecialCharacters: Config['dropSpecialCharacters'] =
+    public dropSpecialCharacters: NgxMaskConfig['dropSpecialCharacters'] =
         this._config.dropSpecialCharacters;
 
-    public hiddenInput: Config['hiddenInput'] = this._config.hiddenInput;
+    public hiddenInput: NgxMaskConfig['hiddenInput'] = this._config.hiddenInput;
 
-    public showTemplate!: Config['showTemplate'];
+    public showTemplate!: NgxMaskConfig['showTemplate'];
 
-    public clearIfNotMatch: Config['clearIfNotMatch'] = this._config.clearIfNotMatch;
+    public clearIfNotMatch: NgxMaskConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
 
-    public specialCharacters: Config['specialCharacters'] = this._config.specialCharacters;
+    public specialCharacters: NgxMaskConfig['specialCharacters'] = this._config.specialCharacters;
 
-    public patterns: Config['patterns'] = this._config.patterns;
+    public patterns: NgxMaskConfig['patterns'] = this._config.patterns;
 
-    public prefix: Config['prefix'] = this._config.prefix;
+    public prefix: NgxMaskConfig['prefix'] = this._config.prefix;
 
-    public suffix: Config['suffix'] = this._config.suffix;
+    public suffix: NgxMaskConfig['suffix'] = this._config.suffix;
 
-    public thousandSeparator: Config['thousandSeparator'] = this._config.thousandSeparator;
+    public thousandSeparator: NgxMaskConfig['thousandSeparator'] = this._config.thousandSeparator;
 
-    public decimalMarker: Config['decimalMarker'] = this._config.decimalMarker;
+    public decimalMarker: NgxMaskConfig['decimalMarker'] = this._config.decimalMarker;
 
-    public customPattern!: Config['patterns'];
+    public customPattern!: NgxMaskConfig['patterns'];
 
-    public showMaskTyped: Config['showMaskTyped'] = this._config.showMaskTyped;
+    public showMaskTyped: NgxMaskConfig['showMaskTyped'] = this._config.showMaskTyped;
 
-    public placeHolderCharacter: Config['placeHolderCharacter'] = this._config.placeHolderCharacter;
+    public placeHolderCharacter: NgxMaskConfig['placeHolderCharacter'] =
+        this._config.placeHolderCharacter;
 
-    public validation: Config['validation'] = this._config.validation;
+    public validation: NgxMaskConfig['validation'] = this._config.validation;
 
-    public separatorLimit: Config['separatorLimit'] = this._config.separatorLimit;
+    public separatorLimit: NgxMaskConfig['separatorLimit'] = this._config.separatorLimit;
 
-    public allowNegativeNumbers: Config['allowNegativeNumbers'] = this._config.allowNegativeNumbers;
+    public allowNegativeNumbers: NgxMaskConfig['allowNegativeNumbers'] =
+        this._config.allowNegativeNumbers;
 
-    public leadZeroDateTime: Config['leadZeroDateTime'] = this._config.leadZeroDateTime;
+    public leadZeroDateTime: NgxMaskConfig['leadZeroDateTime'] = this._config.leadZeroDateTime;
 
-    public leadZero: Config['leadZero'] = this._config.leadZero;
+    public leadZero: NgxMaskConfig['leadZero'] = this._config.leadZero;
 
-    public apm: Config['apm'] = this._config.apm;
+    public apm: NgxMaskConfig['apm'] = this._config.apm;
 
-    public inputTransformFn: Config['inputTransformFn'] = this._config.inputTransformFn;
+    public inputTransformFn: NgxMaskConfig['inputTransformFn'] = this._config.inputTransformFn;
 
-    public outputTransformFn: Config['outputTransformFn'] = this._config.outputTransformFn;
+    public outputTransformFn: NgxMaskConfig['outputTransformFn'] = this._config.outputTransformFn;
 
-    public keepCharacterPositions: Config['keepCharacterPositions'] =
+    public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] =
         this._config.keepCharacterPositions;
 
     private _shift = new Set<number>();
@@ -73,7 +75,7 @@ export class NgxMaskApplierService {
 
     public applyMaskWithPattern(
         inputValue: string,
-        maskAndPattern: [string, Config['patterns']]
+        maskAndPattern: [string, NgxMaskConfig['patterns']]
     ): string {
         const [mask, customPattern] = maskAndPattern;
         this.customPattern = customPattern;
@@ -895,7 +897,7 @@ export class NgxMaskApplierService {
     private checkInputPrecision = (
         inputValue: string,
         precision: number,
-        decimalMarker: Config['decimalMarker']
+        decimalMarker: NgxMaskConfig['decimalMarker']
     ): string => {
         let processedInputValue = inputValue;
         let processedDecimalMarker = decimalMarker;

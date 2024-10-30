@@ -1,11 +1,10 @@
 # 18.0.1(2024-10-29)
 
-### Enhancement
+### Breaking Changes
 
--   add tailwind
--   change interface to type, remove prefix "I"
--   update dependencies
--   add ESLint strict rules
+-   rename "IConfig" to "NgxMaskConfig"
+-   rename "optionsConfig" to "NgxMaskOptions"
+-   change interface to type
 
 ### Fix
 

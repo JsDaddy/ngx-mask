@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { inject, Pipe } from '@angular/core';
 
-import type { Config } from './ngx-mask.config';
+import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -12,7 +12,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    private readonly defaultOptions = inject<Config>(NGX_MASK_CONFIG);
+    private readonly defaultOptions = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
     private readonly _maskService = inject(NgxMaskService);
 
@@ -23,7 +23,7 @@ export class NgxMaskPipe implements PipeTransform {
     public transform(
         value: string | number,
         mask: string,
-        { patterns, ...config }: Partial<Config> = {} as Partial<Config>
+        { patterns, ...config }: Partial<NgxMaskConfig> = {} as Partial<NgxMaskConfig>
     ): string {
         let processedValue: string | number = value;
 

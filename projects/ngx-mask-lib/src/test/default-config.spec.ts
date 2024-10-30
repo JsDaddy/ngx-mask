@@ -4,10 +4,10 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import type { optionsConfig } from '../lib/ngx-mask.config';
+import type { NgxMaskOptions } from '../lib/ngx-mask.config';
 
 function createComponentWithDefaultConfig(
-    defaultConfig?: optionsConfig
+    defaultConfig?: NgxMaskOptions
 ): ComponentFixture<TestMaskComponent> {
     TestBed.configureTestingModule({
         declarations: [TestMaskComponent],

@@ -1,7 +1,7 @@
 import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
-import type { Config } from './ngx-mask.config';
+import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -44,7 +44,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private readonly document = inject(DOCUMENT);
 
-    protected override _config = inject<Config>(NGX_MASK_CONFIG);
+    protected override _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
     private readonly _renderer = inject(Renderer2, { optional: true });
 
