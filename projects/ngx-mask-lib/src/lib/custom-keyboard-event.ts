@@ -13,6 +13,7 @@ const commonjsGlobal =
 
 (function () {
     if (!commonjsGlobal.KeyboardEvent) {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         commonjsGlobal.KeyboardEvent = function (_eventType: any, _init: any) {};
     }
 })();
