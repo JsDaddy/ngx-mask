@@ -687,7 +687,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public onBlur(e: CustomKeyboardEvent): void {
         if (this._maskValue) {
             const el: HTMLInputElement = e.target as HTMLInputElement;
-            if (this.leadZero && el.value.length > 0 && typeof this.decimalMarker === 'string') {
+            if (
+                this._maskService.leadZero &&
+                el.value.length > 0 &&
+                typeof this._maskService.decimalMarker === 'string'
+            ) {
                 const maskExpression = this._maskService.maskExpression;
                 const precision = Number(
                     this._maskService.maskExpression.slice(
@@ -695,17 +699,23 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         maskExpression.length
                     )
                 );
+
                 if (precision > 0) {
-                    el.value = this.suffix ? el.value.split(this.suffix).join('') : el.value;
-                    const decimalPart = el.value.split(this.decimalMarker)[1] as string;
-                    el.value = el.value.includes(this.decimalMarker)
+                    el.value = this._maskService.suffix
+                        ? el.value.split(this._maskService.suffix).join('')
+                        : el.value;
+                    const decimalPart = el.value.split(
+                        this._maskService.decimalMarker
+                    )[1] as string;
+
+                    el.value = el.value.includes(this._maskService.decimalMarker)
                         ? el.value +
                           MaskExpression.NUMBER_ZERO.repeat(precision - decimalPart.length) +
-                          this.suffix
+                          this._maskService.suffix
                         : el.value +
-                          this.decimalMarker +
+                          this._maskService.decimalMarker +
                           MaskExpression.NUMBER_ZERO.repeat(precision) +
-                          this.suffix;
+                          this._maskService.suffix;
                     this._maskService.actualValue = el.value;
                 }
             }
@@ -903,7 +913,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (value !== null) {
             value = this.inputTransformFn ? this.inputTransformFn(value) : value;
         }
-
         if (
             typeof value === 'string' ||
             typeof value === 'number' ||
@@ -943,10 +952,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         inputValue as string
                     );
                 }
+
                 if (
-                    this.decimalMarker === MaskExpression.COMMA ||
+                    this._maskService.decimalMarker === MaskExpression.COMMA ||
                     (Array.isArray(this._maskService.decimalMarker) &&
-                        this.thousandSeparator === MaskExpression.DOT)
+                        this._maskService.thousandSeparator === MaskExpression.DOT)
                 ) {
                     inputValue = inputValue
                         .toString()

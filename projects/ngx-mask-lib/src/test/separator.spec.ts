@@ -1795,4 +1795,44 @@ describe('Separator: Mask', () => {
         expect(inputElement.value).toBe('1 234 567.89');
         expect(inputElement.selectionStart).toBe(1);
     });
+
+    it('should show correct value with separator.9', fakeAsync(() => {
+        component.mask = 'separator.9';
+        component.decimalMarker = '.';
+        component.leadZero = true;
+        component.separatorLimit = '10';
+        fixture.detectChanges();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+
+        component.form.setValue(10.1);
+        tick();
+        fixture.detectChanges();
+        expect(inputTarget.value).toBe('10.100000000');
+    }));
+
+    it('should show correct value with separator.10', fakeAsync(() => {
+        component.mask = 'separator.10';
+        component.decimalMarker = '.';
+        component.leadZero = true;
+        component.separatorLimit = '10';
+        fixture.detectChanges();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+
+        component.form.setValue(10.1);
+        tick();
+        fixture.detectChanges();
+        expect(inputTarget.value).toBe('10.1000000000');
+    }));
 });

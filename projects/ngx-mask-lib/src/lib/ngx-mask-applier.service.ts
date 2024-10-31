@@ -870,7 +870,7 @@ export class NgxMaskApplierService {
         return !isNaN(value) && value >= 0 && value <= 100;
     };
 
-    private getPrecision = (maskExpression: string): number => {
+    public getPrecision = (maskExpression: string): number => {
         const x: string[] = maskExpression.split(MaskExpression.DOT);
         if (x.length > 1) {
             return Number(x[x.length - 1]);
