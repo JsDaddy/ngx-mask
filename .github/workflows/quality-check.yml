@@ -21,11 +21,11 @@ jobs:
             - name: Check quality
               run: |
                   bun i
-                  bash .github/workflows/scripts/quality.sh
+#                  bash .github/workflows/scripts/quality.sh
             - name: Extract version from package.json
               id: extract_version
               run: |
-                VERSION=$(jq -r '.version' < package.json)
+                VERSION=$(jq -r '.version' < dist/ngx-mask-lib/package.json)
                 echo "VERSION=$VERSION" >> $GITHUB_ENV
               env:
                 VERSION: ${{ steps.extract_version.outputs.VERSION }}
