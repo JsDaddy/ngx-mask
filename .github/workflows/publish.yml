@@ -30,6 +30,11 @@ jobs:
               run: bun publish:lib
               env:
                   NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+            - name: Extract version
+              id: get_version
+              run: |
+                  VERSION=$(node -p "require('./dist/ngx-mask-lib/package.json').version")
+                  echo "version=$VERSION" >> $GITHUB_OUTPUT      
 
     slack_notification:
         needs:
@@ -57,6 +62,13 @@ jobs:
                             "text": {
                               "type": "mrkdwn",
                               "text": "Project: `${{ github.event.repository.name }}`"
+                            }
+                          },
+                          {
+                            "type": "section",
+                            "text": {
+                                "type": "mrkdwn",
+                                "text": "Version: `${{ needs.build.outputs.version || 'TBA' }}`"
                             }
                           },
                           {
