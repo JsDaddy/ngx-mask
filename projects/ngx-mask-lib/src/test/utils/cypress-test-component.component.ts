@@ -24,6 +24,7 @@ import { NGX_MASK_CONFIG } from 'ngx-mask';
             [specialCharacters]="specialCharacters"
             [patterns]="patterns"
             [keepCharacterPositions]="keepCharacterPositions"
+            [separatorLimit]="separatorLimit"
             [hiddenInput]="hiddenInput" />
 
         <pre id="pre">{{ counter$ | async }}</pre>
@@ -62,6 +63,8 @@ export class CypressTestMaskComponent {
     @Input() public dropSpecialCharacters = true;
 
     @Input() public leadZeroDateTime = false;
+
+    @Input() public separatorLimit = '';
 
     @Input() public patterns = this._config.patterns;
 
