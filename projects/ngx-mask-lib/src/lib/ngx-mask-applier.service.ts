@@ -207,7 +207,9 @@ export class NgxMaskApplierService {
 
             const precision: number = this.getPrecision(maskExpression);
             const decimalMarker = Array.isArray(this.decimalMarker)
-                ? MaskExpression.DOT
+                ? this.thousandSeparator === MaskExpression.DOT
+                    ? MaskExpression.COMMA
+                    : MaskExpression.DOT
                 : this.decimalMarker;
 
             if (precision === 0) {
@@ -371,6 +373,8 @@ export class NgxMaskApplierService {
             const commaShift: number =
                 result.indexOf(MaskExpression.COMMA) - processedValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - processedValue.length;
+            const backspacedDecimalMarkerWithSeparatorLimit =
+                backspaced && result.length < inputValue.length && this.separatorLimit;
 
             if (
                 (result[processedPosition - 1] === this.thousandSeparator ||
@@ -379,7 +383,10 @@ export class NgxMaskApplierService {
                 backspaced
             ) {
                 processedPosition = processedPosition - 1;
-            } else if (shiftStep > 0 && result[processedPosition] !== this.thousandSeparator) {
+            } else if (
+                (shiftStep > 0 && result[processedPosition] !== this.thousandSeparator) ||
+                backspacedDecimalMarkerWithSeparatorLimit
+            ) {
                 backspaceShift = true;
                 let _shift = 0;
                 do {
@@ -387,7 +394,7 @@ export class NgxMaskApplierService {
                     _shift++;
                 } while (_shift < shiftStep);
             } else if (
-                result[processedPosition - 1] === this.decimalMarker ||
+                result[processedPosition - 1] === this.thousandSeparator ||
                 shiftStep === -4 ||
                 shiftStep === -3 ||
                 result[processedPosition] === this.thousandSeparator
@@ -821,6 +828,7 @@ export class NgxMaskApplierService {
     ) => {
         let x: string[] = [];
         let decimalChar = '';
+
         if (Array.isArray(decimalChars)) {
             const regExp = new RegExp(
                 decimalChars.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|')
@@ -870,7 +878,7 @@ export class NgxMaskApplierService {
         return !isNaN(value) && value >= 0 && value <= 100;
     };
 
-    private getPrecision = (maskExpression: string): number => {
+    public getPrecision = (maskExpression: string): number => {
         const x: string[] = maskExpression.split(MaskExpression.DOT);
         if (x.length > 1) {
             return Number(x[x.length - 1]);

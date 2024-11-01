@@ -720,8 +720,9 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
-        const separatorPrecision = separatorExpression.slice(10, 11);
+        const separatorPrecision = this.getPrecision(separatorExpression);
         let value = separatorValue;
+
         if (
             separatorExpression.indexOf('2') > 0 ||
             (this.leadZero && Number(separatorPrecision) > 0)

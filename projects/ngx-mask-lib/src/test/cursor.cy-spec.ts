@@ -381,4 +381,95 @@ describe('Test Date Hh:m0', () => {
         cy.get('#masked').type('111').should('have.value', '(11) 1');
         cy.get('#masked').type('{backspace}').should('have.prop', 'selectionStart', 4);
     });
+
+    it('when decimalMarker doenst set should have right position cursor thousandSeparator = .', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: '.',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12345678,00')
+
+            .should('have.value', '12.345.678,00')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}'.repeat(3))
+            .should('have.value', '12.345,00');
+    });
+
+    it('when decimalMarker doenst set should have right position cursor thousandSeparator = ,', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: ',',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12345678.00')
+
+            .should('have.value', '12,345,678.00')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}'.repeat(3))
+            .should('have.value', '12,345.00');
+    });
+
+    it('should place cursor after backspace with separatorLimit = 10 in correct position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                separatorLimit: '10',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('12.10')
+            .should('have.value', '12.10')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '12')
+            .should('have.prop', 'selectionStart', 2);
+    });
+
+    it('should place cursor after backspace with separatorLimit = 100 in correct position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                separatorLimit: '100',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123.10')
+            .should('have.value', '123.10')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '123')
+            .should('have.prop', 'selectionStart', 3);
+    });
+
+    it('should place cursor after backspace with separatorLimit = 1000 in correct position', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: 'separator.2',
+                thousandSeparator: ',',
+                separatorLimit: '1000',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('1234.10')
+            .should('have.value', '1,234.10')
+            .type('{leftArrow}'.repeat(2))
+            .type('{backspace}')
+            .should('have.value', '1,234')
+            .should('have.prop', 'selectionStart', 5);
+    });
 });

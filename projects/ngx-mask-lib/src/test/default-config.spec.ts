@@ -64,4 +64,38 @@ describe('Default config', () => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('1.234,56');
         });
     });
+
+    it('default config overriden - decimalMarker and thousandSeparator and leadZero', () => {
+        const fixture = createComponentWithDefaultConfig({
+            thousandSeparator: '.',
+            decimalMarker: ',',
+            leadZero: true,
+            separatorLimit: '100',
+        });
+        const component = fixture.componentInstance;
+        component.mask = 'separator.2';
+
+        component.form = new FormControl(123);
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            expect(fixture.nativeElement.querySelector('input').value).toBe('123,00');
+        });
+    });
+
+    it('default config overriden - decimalMarker and thousandSeparator and leadZero and suffix', () => {
+        const fixture = createComponentWithDefaultConfig({
+            suffix: ' €',
+            thousandSeparator: ' ',
+            decimalMarker: ',',
+            leadZero: true,
+        });
+        const component = fixture.componentInstance;
+        component.mask = 'separator.2';
+
+        component.form = new FormControl(15000.33);
+        fixture.detectChanges();
+        fixture.whenRenderingDone().then(() => {
+            expect(fixture.nativeElement.querySelector('input').value).toBe('15 000,33 €');
+        });
+    });
 });
