@@ -27,8 +27,8 @@ jobs:
               run: |
                 VERSION=$(jq -r '.version' < dist/ngx-mask-lib/package.json)
                 echo "VERSION=$VERSION" >> $GITHUB_ENV
-              env:
-                VERSION: ${{ steps.extract_version.outputs.VERSION }}
+                echo "::set-output name=VERSION::$VERSION"
+
             - name: Confirm extracted version
               run:
-                echo $VERSION"
+                echo "The extracted version is: ${{ steps.extract_version.outputs.VERSION }}"
