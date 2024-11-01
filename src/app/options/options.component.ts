@@ -13,6 +13,8 @@ import { OpenSourcePath } from '@open-source/path/open-source.path';
 import { toSignal } from '@angular/core/rxjs-interop';
 import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
 
+type Deciml = '.' | ',' | ['.', ','];
+
 @Component({
     selector: 'jsdaddy-open-source-options',
     templateUrl: './options.component.html',
@@ -59,8 +61,8 @@ export class OptionsComponent {
             this.accordionService.onChangeAccordion(this.cards());
         });
     }
-    public amount = new FormControl('15000.33');
-    public amount1 = new FormControl('1500');
+    public amount = new FormControl('40.32');
+    public amount1 = new FormControl('4000.3');
 
     public testControl = new FormControl(0.085);
 
@@ -86,10 +88,11 @@ export class OptionsComponent {
         this.testValue2 = parseFloat(value);
     }
 
-    public thousand = '.';
-    public inputValue = '';
+    public thousand = ',';
+    public decimalMarker: Deciml = '.';
+    public inputValue = '10000.30';
 
     public changeThousand() {
-        this.thousand = ',';
+        this.thousand = '.';
     }
 }

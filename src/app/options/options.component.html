@@ -1,7 +1,32 @@
 <div class="flex flex-col bg-dark">
+    <!--    <input mask="separator.2" separatorLimit="10" [formControl]="amount" />-->
+
+    <!--    <span>{{ amount.value }}</span>-->
+    <!--    <input mask="separator.2" separatorLimit="1000" [formControl]="amount1" />-->
+    <!--    &lt;!&ndash;    <input mask="separator.2" separatorLimit="100" [formControl]="amount1" />&ndash;&gt;-->
+    <!--    &lt;!&ndash;    <input mask="separator.2" separatorLimit="1000" [leadZero]="true" [formControl]="amount1" />&ndash;&gt;-->
+
+    <!--    <span>WITHOUT SeparatorLIMIT</span>-->
+
+    <!--    <input mask="separator.2" thousandSeparator="." [formControl]="amount1" />-->
+    <!--    <span>{{ amount1.value }}</span>-->
+    <!--    <span>With bug</span>-->
+    <!--    <br />-->
+    <!--    <input-->
+    <!--        name="with-bug"-->
+    <!--        mask="separator.2"-->
+    <!--        decimalMarker=","-->
+    <!--        thousandSeparator="."-->
+    <!--        [formControl]="amount" />-->
+
+    <!--    <br />-->
+
+    <!--    <span>Without bug</span>-->
+    <!--    <br />-->
+    <!--    <input name="without-bug" mask="separator.2" thousandSeparator="." [formControl]="amount" />-->
     <input
         mask="separator.2"
-        decimalMarker="."
+        [decimalMarker]="decimalMarker"
         [thousandSeparator]="thousand"
         [(ngModel)]="inputValue" />
     <span>{{ inputValue }}</span>
