@@ -29,3 +29,6 @@ jobs:
                 echo "VERSION=$VERSION" >> $GITHUB_ENV
               env:
                 VERSION: ${{ steps.extract_version.outputs.VERSION }}
+            - name: Confirm extracted version
+              run:
+                echo $VERSION"
