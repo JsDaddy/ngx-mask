@@ -413,7 +413,6 @@ export class NgxMaskApplierService {
                 ) &&
                     shiftStep <= 0)
             ) {
-                console.log('@@@@@@@@@@@222222');
                 this._shift.clear();
                 backspaceShift = true;
                 shift = shiftStep;

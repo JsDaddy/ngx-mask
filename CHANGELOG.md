@@ -1,8 +1,13 @@
-https://github.com/JsDaddy/ngx-mask/issues/1427
-https://github.com/JsDaddy/ngx-mask/issues/1405
-https://github.com/JsDaddy/ngx-mask/issues/1426
-https://github.com/JsDaddy/ngx-mask/issues/1406
-https://github.com/JsDaddy/ngx-mask/issues/1420
+# 18.0.2(2024-11-01)
+
+### Fix
+
+-   Fix ([#1427](https://github.com/JsDaddy/ngx-mask/issues/1427))
+-   Fix ([#1405](https://github.com/JsDaddy/ngx-mask/issues/1405))
+-   Fix ([#1426](https://github.com/JsDaddy/ngx-mask/issues/1426))
+-   Fix ([#1406](https://github.com/JsDaddy/ngx-mask/issues/1406))
+-   Fix ([#1420](https://github.com/JsDaddy/ngx-mask/issues/1420))
+-   Fix ([#1416](https://github.com/JsDaddy/ngx-mask/issues/1416))
 
 # 18.0.1(2024-10-29)
 

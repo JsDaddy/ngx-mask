@@ -781,7 +781,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             ((el.selectionStart as number) || (el.selectionEnd as number)) <=
                 this._maskService.prefix.length
         ) {
-            el.selectionStart = this._maskService.prefix.length;
+            const specialCharactersAtTheStart =
+                this._maskService.maskExpression.match(
+                    new RegExp(
+                        `^[${this._maskService.specialCharacters.map((c) => `\\${c}`).join('')}]+`
+                    )
+                )?.[0].length || 0;
+
+            el.selectionStart = this._maskService.prefix.length + specialCharactersAtTheStart;
             return;
         }
         /** select only inserted text */
