@@ -62,6 +62,13 @@ jobs:
                           {
                             "type": "section",
                             "text": {
+                                "type": "mrkdwn",
+                                "text": "Version: `${{ needs.build.outputs.version || 'TBA' }}`"
+                            }
+                          },
+                          {
+                            "type": "section",
+                            "text": {
                               "type": "mrkdwn",
                               "text": "Commit/PR URL: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
                             }

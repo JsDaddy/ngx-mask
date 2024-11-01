@@ -22,3 +22,10 @@ jobs:
               run: |
                   bun i
                   bash .github/workflows/scripts/quality.sh
+            - name: Extract version from package.json
+              id: extract_version
+              run: |
+                VERSION=$(jq -r '.version' < package.json)
+                echo "VERSION=$VERSION" >> $GITHUB_ENV
+              env:
+                VERSION: ${{ steps.extract_version.outputs.VERSION }}
