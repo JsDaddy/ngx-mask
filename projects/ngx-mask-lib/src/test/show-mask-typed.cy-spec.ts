@@ -37,4 +37,17 @@ describe('Directive: Mask (Delete)', () => {
 
         cy.get('#masked').click().should('have.prop', 'selectionStart', 0);
     });
+
+    it('should place cursor in right place mask (000) 000-0000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '(000) 000-0000',
+                showMaskTyped: true,
+                prefix: '+380 ',
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked').click().should('have.prop', 'selectionStart', 6);
+    });
 });
