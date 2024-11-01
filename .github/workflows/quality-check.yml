@@ -22,14 +22,3 @@ jobs:
               run: |
                   bun i
                   bash .github/workflows/scripts/quality.sh
-            - name: Extract version
-              id: get_version
-              run: |
-                  VERSION=$(node -p "require('./dist/ngx-mask-lib/package.json').version")
-                  echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-            - name: Use version
-              env:
-                  VERSION: ${{ steps.get_version.outputs.version }}
-              run:
-                  echo $VERSION
