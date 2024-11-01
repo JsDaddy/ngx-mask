@@ -21,7 +21,7 @@ jobs:
             - name: Check quality
               run: |
                   bun i
-#                  bash .github/workflows/scripts/quality.sh
+                  bash .github/workflows/scripts/quality.sh
             - name: Extract version from package.json
               id: extract_version
               run: |
