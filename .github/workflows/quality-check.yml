@@ -33,7 +33,7 @@ jobs:
 
     slack_notification:
       needs:
-        - build
+        - quality-check
       runs-on: ubuntu-latest
       steps:
         - name: Post to a Slack channel
