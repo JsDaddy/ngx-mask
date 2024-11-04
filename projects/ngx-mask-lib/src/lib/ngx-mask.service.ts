@@ -210,6 +210,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (this._previousValue === this._currentValue && justPasted);
         }
 
+        // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
         this._emitValue
             ? this.writingValue && this.triggerOnMaskChange
                 ? requestAnimationFrame(() => this.formControlResult(result))
