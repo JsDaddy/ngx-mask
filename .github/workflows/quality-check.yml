@@ -31,36 +31,11 @@ jobs:
                 VERSION=$(node -p "require('./dist/ngx-mask-lib/package.json').version")
                 echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-    slack_notification:
+    version_check:
       needs:
         - quality-check
       runs-on: ubuntu-latest
       steps:
-        - name: Post to a Slack channel
-          id: slack
-          uses: slackapi/slack-github-action@v1.27.0
-          with:
-            channel-id: 'deployments'
-            payload: |
-              {
-                "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
-                "blocks": [
-                  {
-                    "type": "section",
-                    "text": {
-                      "type": "mrkdwn",
-                      "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
-                    }
-                  },
-                  {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Version: `${{ needs.quality-check.outputs.version || 'TBA' }}`"
-                    }
-                  },
-                
-                ]
-              }
-          env:
-            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        - name: Display version
+          run:
+            echo "${{ needs.quality-check.outputs.version || 'TBA' }}"
