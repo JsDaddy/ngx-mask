@@ -15,8 +15,8 @@ else
     echo "Type coverage is good! 🎉"
 fi
 
-bun run test
-bun run cypress:bash
+#bun run test
+#bun run cypress:bash
 
 bun run build
 

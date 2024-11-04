@@ -1,6 +1,6 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
@@ -58,5 +58,11 @@ export class OptionsComponent {
             this.scrollService.onScroll(this.cards());
             this.accordionService.onChangeAccordion(this.cards());
         });
+    }
+
+    public formControl = new FormControl('123 456 789 999 999 9');
+
+    public onClick() {
+        this.formControl.setValue('978-1-93624-386-0');
     }
 }

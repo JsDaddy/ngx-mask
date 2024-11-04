@@ -1,3 +1,41 @@
+<div class="flex flex-col bg-black">
+    <!--    <input-->
+    <!--        type="text"-->
+    <!--        mask="000-000-000"-->
+    <!--        [formControl]="formControl"-->
+    <!--        [showMaskTyped]="true"-->
+    <!--        [keepCharacterPositions]="true" />-->
+
+    <!--    <input-->
+    <!--        type="text"-->
+    <!--        mask="000-000-000"-->
+    <!--        [formControl]="formControl"-->
+    <!--        [showMaskTyped]="true"-->
+    <!--        prefix="+387 "-->
+    <!--        [keepCharacterPositions]="true" />-->
+    <!--    <span>{{ formControl.value }}</span>-->
+
+    <input type="text" mask="d0.M0." [dropSpecialCharacters]="false" />
+    <input type="text" mask="M0.d0." [dropSpecialCharacters]="false" />
+
+    <br />
+    <span>Workaround</span>
+    <input type="text" mask="d0.M0." [dropSpecialCharacters]="false" [leadZeroDateTime]="true" />
+    <input type="text" mask="M0.d0." [dropSpecialCharacters]="false" [leadZeroDateTime]="true" />
+
+    <!--    <div>-->
+    <!--        <p>Mask set to 'SSS-SSS-SSS'</p>-->
+    <!--        <input-->
+    <!--            [formControl]="formControl"-->
+    <!--            [showMaskTyped]="true"-->
+    <!--            [validation]="true"-->
+    <!--            type="text"-->
+    <!--            [mask]="'SSS-SSS-SSS'" />-->
+    <!--    </div>-->
+    <!--    <span>{{ formControl.value }}</span>-->
+    <!--    <button (click)="onClick()" class="text-full-white">Set value to: 978-1-93624-386-0</button>-->
+</div>
+
 @for (tile of cardDocs(); track tile.id; let i = $index) {
     <div
         class="flex flex-col p-2.5 gap-2.5 bg-dark/[.02] rounded-15px"
