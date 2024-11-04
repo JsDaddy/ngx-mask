@@ -5,8 +5,6 @@ on: [push]
 jobs:
     quality-check:
         runs-on: ubuntu-latest
-        outputs:
-          version: ${{ steps.get_version.outputs.version }}
         permissions:
             contents: write
         steps:
@@ -24,18 +22,3 @@ jobs:
               run: |
                   bun i
                   bash .github/workflows/scripts/quality.sh
-
-            - name: Extract version
-              id: get_version
-              run: |
-                VERSION=$(node -p "require('./dist/ngx-mask-lib/package.json').version")
-                echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-    version_check:
-      needs:
-        - quality-check
-      runs-on: ubuntu-latest
-      steps:
-        - name: Display version
-          run:
-            echo "${{ needs.quality-check.outputs.version || 'TBA' }}"
