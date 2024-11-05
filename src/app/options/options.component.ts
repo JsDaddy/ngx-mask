@@ -1,6 +1,6 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
@@ -67,7 +67,7 @@ export class OptionsComponent {
     }
 
     public testValue1 = 100.12;
-    public formControl1 = new FormControl(100.12);
+    public formControl1 = new FormControl('', Validators.required);
     public testValue2 = 100.12;
     public mask = 'separator.2';
     public thousand = '.';

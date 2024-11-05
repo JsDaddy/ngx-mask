@@ -280,7 +280,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (timeMasks.includes(this._maskValue)) {
             return this._validateTime(processedValue);
         }
-
+        if (this._maskValue === MaskExpression.EMAIL_MASK) {
+            const emailPattern = /^.+@.+\..+$/;
+            if (!emailPattern.test(processedValue) && processedValue) {
+                return this._createValidationError(processedValue);
+            } else {
+                return null;
+            }
+        }
         if (processedValue && processedValue.length >= 1) {
             let counterOfOpt = 0;
 

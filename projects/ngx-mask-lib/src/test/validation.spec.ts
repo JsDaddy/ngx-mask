@@ -87,6 +87,23 @@ export class TestValidatorDropSpecialCharacters {
     public dropSpecialCharacters = [' '];
 }
 
+@Component({
+    selector: 'jsdaddy-open-source-test',
+    template: `
+        <input
+            id="maska"
+            [mask]="mask"
+            [dropSpecialCharacters]="dropSpecialCharacters"
+            [formControl]="form" />
+    `,
+})
+// eslint-disable-next-line @angular-eslint/component-class-suffix
+export class TestValidatorEmailMask {
+    public form: FormControl = new FormControl('', Validators.required);
+    public mask = 'A*@A*.A*';
+    public dropSpecialCharacters = false;
+}
+
 describe('Directive: Mask (Validation)', () => {
     describe('Global validation true, validation attribute on input not specified', () => {
         let fixture: ComponentFixture<TestMaskNoValidationAttributeComponent>;
@@ -419,6 +436,48 @@ describe('Directive: Mask (Validation)', () => {
             expect(component.form.valid).toBe(false);
 
             equal('+37360000000', '+373 600 00 000', fixture);
+            expect(component.form.valid).toBe(true);
+        });
+    });
+
+    describe('Global validation true, email mask', () => {
+        let fixture: ComponentFixture<TestValidatorEmailMask>;
+        let component: TestValidatorEmailMask;
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                declarations: [TestValidatorEmailMask],
+                imports: [ReactiveFormsModule, NgxMaskDirective],
+                providers: [provideNgxMask({ validation: true })],
+            });
+            fixture = TestBed.createComponent(TestValidatorEmailMask);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('email Mask should validated correct', () => {
+            component.mask = 'A*@A*.A*';
+            component.dropSpecialCharacters = false;
+
+            equal('validate', 'validate', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('validate@', 'validate@', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('validate@some', 'validate@some', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('validate@some.', 'validate@some.', fixture);
+            expect(component.form.valid).toBe(false);
+
+            equal('validate@some.e', 'validate@some.e', fixture);
+            expect(component.form.valid).toBe(true);
+
+            equal('validate@some.eu', 'validate@some.eu', fixture);
+            expect(component.form.valid).toBe(true);
+
+            equal('validate@some.com', 'validate@some.com', fixture);
             expect(component.form.valid).toBe(true);
         });
     });

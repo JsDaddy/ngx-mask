@@ -64,6 +64,13 @@ export const ComDocs: ComDoc[] = [
         anchor: 'email-mask',
     },
     {
+        header: 'Email mask with validation',
+        text: '',
+        code: `<input mask="A*@A*.A*" [validation]="true" [dropSpecialCharacters]="false" >`,
+        id: 8,
+        anchor: 'email-mask',
+    },
+    {
         header: 'Allow negative numbers to mask',
         text: 'You can allow negative numbers',
         code: ` <input type='text' mask="0000" [allowNegativeNumbers]="true">`,
@@ -142,8 +149,18 @@ export const ComExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'Valid email',
         _mask: 'A*@A*.SSS',
+        _validation: true,
+        _dropSpecialCharacters: false,
         control: { form: new UntypedFormControl(''), model: '' },
     },
+    {
+        _placeholder: 'Valid email',
+        _validation: true,
+        _dropSpecialCharacters: false,
+        _mask: 'A*@A*.A*',
+        control: { form: new UntypedFormControl(''), model: '' },
+    },
+
     {
         _placeholder: 'allowNegativeNumbers mask',
         _allowNegativeNumbers: true,
