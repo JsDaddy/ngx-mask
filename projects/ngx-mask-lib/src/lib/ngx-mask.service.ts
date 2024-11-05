@@ -206,6 +206,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this._emitValue =
                 this._previousValue !== this._currentValue ||
                 this.maskChanged ||
+                this.writingValue ||
                 (this._previousValue === this._currentValue && justPasted);
         }
 
@@ -215,6 +216,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 ? requestAnimationFrame(() => this.formControlResult(result))
                 : this.formControlResult(result)
             : '';
+
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
                 if (backspaced) {
@@ -530,6 +532,10 @@ export class NgxMaskService extends NgxMaskApplierService {
      * @param inputValue the current form input value
      */
     private formControlResult(inputValue: string): void {
+        if (this.writingValue && !inputValue) {
+            this.onChange('');
+            return;
+        }
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
             // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
             this.triggerOnMaskChange && this.maskChanged
@@ -583,9 +589,11 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return value;
         }
-        if (String(value).length > 16 && this.separatorLimit.length > 14) {
+
+        if (String(value).length > 14 && this.maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             return String(value);
         }
+
         const num = Number(value);
         if (this.maskExpression.startsWith(MaskExpression.SEPARATOR) && Number.isNaN(num)) {
             const val = String(value).replace(',', '.');
@@ -686,7 +694,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (processedResult === this.decimalMarker) {
                 return null;
             }
-            if (this.separatorLimit.length > 14) {
+            if (separatorValue.length > 14) {
                 return String(separatorValue);
             }
             return this._checkPrecision(this.maskExpression, separatorValue);

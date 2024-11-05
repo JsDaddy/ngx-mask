@@ -1835,4 +1835,42 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
         expect(inputTarget.value).toBe('10.1000000000');
     }));
+
+    it('should support big numbers with separator', () => {
+        component.mask = 'separator';
+
+        equal('12345678910111215', '12 345 678 910 111 215', fixture);
+        expect(component.form.value).toBe('12345678910111215');
+        equal('12345678910111215.9999', '12 345 678 910 111 215.9999', fixture);
+        expect(component.form.value).toBe('12345678910111215.9999');
+    });
+
+    it('should support big numbers with separator 2', () => {
+        component.mask = 'separator.2';
+
+        equal('12345678910111215', '12 345 678 910 111 215', fixture);
+        expect(component.form.value).toBe('12345678910111215');
+        equal('12345678910111215.9999', '12 345 678 910 111 215.99', fixture);
+        expect(component.form.value).toBe('12345678910111215.99');
+    });
+
+    it('should support big numbers with separator 2 thousand =.', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = '.';
+
+        equal('12345678910111215', '12.345.678.910.111.215', fixture);
+        expect(component.form.value).toBe('12345678910111215');
+        equal('12345678910111215,99', '12.345.678.910.111.215,99', fixture);
+        expect(component.form.value).toBe('12345678910111215.99');
+    });
+
+    it('should support big numbers with separator 2 thousand =,', () => {
+        component.mask = 'separator.2';
+        component.thousandSeparator = ',';
+
+        equal('12345678910111215', '12,345,678,910,111,215', fixture);
+        expect(component.form.value).toBe('12345678910111215');
+        equal('12345678910111215.9999', '12,345,678,910,111,215.99', fixture);
+        expect(component.form.value).toBe('12345678910111215.99');
+    });
 });

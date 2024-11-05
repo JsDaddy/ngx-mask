@@ -969,4 +969,56 @@ describe('Directive: Mask', () => {
 
         expect(component.form.dirty).toBe(false);
     });
+
+    it('mask sepator.2 after setValue should be dont dirty', () => {
+        component.mask = 'separator.0';
+        component.form.setValue('2002');
+
+        expect(component.form.dirty).toBe(false);
+    });
+
+    it('should return empty string in formControl mask SSS-SSS-SSS', () => {
+        component.mask = 'SSS-SSS-SSS';
+        component.form.setValue('978-1-93624-386-0');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        expect(inputTarget.value).toBe('');
+    });
+
+    it('should return empty string in formControl mask AAA-AAA-AAA', () => {
+        component.mask = 'AAA-AAA-AAA';
+        component.form.setValue('978-123-936');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        expect(inputTarget.value).toBe('');
+    });
+
+    it('should return empty string in formControl mask (000) 000-000', () => {
+        component.mask = '(000) 000-000';
+        component.form.setValue('978-123-936');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        expect(inputTarget.value).toBe('');
+    });
+
+    it('should return empty string in formControl mask (000) 000-000 with prefix +7', () => {
+        component.mask = '(000) 000-000';
+        component.prefix = '+7 ';
+        component.form.setValue('978-123-936');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+
+        expect(inputTarget.value).toBe('');
+    });
 });

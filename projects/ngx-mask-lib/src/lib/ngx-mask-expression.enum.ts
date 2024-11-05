@@ -12,6 +12,7 @@ export const enum MaskExpression {
     HOURS_HOUR = 'Hh',
     SECONDS = 's0',
     HOURS_MINUTES_SECONDS = 'Hh:m0:s0',
+    EMAIL_MASK = 'A*@A*.A*',
     HOURS_MINUTES = 'Hh:m0',
     MINUTES_SECONDS = 'm0:s0',
     DAYS_MONTHS_YEARS = 'd0/M0/0000',
