@@ -207,4 +207,47 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}'.repeat(2))
             .should('have.value', '12/__/567 test');
     });
+
+    it('should delete character from del', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '000-000-000',
+                keepCharacterPositions: true,
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('123456789')
+            .type('{leftArrow}'.repeat(11))
+            .type('{del}'.repeat(11))
+            .should('have.value', '___-___-___');
+
+        cy.get('#masked').clear();
+        cy.get('#masked')
+            .type('123456789')
+            .type('{leftArrow}'.repeat(4))
+            .type('{del}')
+            .should('have.value', '123-456-789')
+            .should('have.prop', 'selectionStart', 8);
+    });
+
+    it('should delete character from del', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: '0000 0000 0000 0000',
+                keepCharacterPositions: true,
+                showMaskTyped: true,
+            },
+            imports: [CypressTestMaskModule],
+        });
+
+        cy.get('#masked')
+            .type('1234567891011121')
+            .type('{leftArrow}'.repeat(5))
+            .type('{del}')
+            .should('have.value', '1234 5678 9101 1121')
+            .should('have.prop', 'selectionStart', 15);
+    });
 });

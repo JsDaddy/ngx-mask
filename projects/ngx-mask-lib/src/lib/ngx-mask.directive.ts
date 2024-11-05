@@ -280,7 +280,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (timeMasks.includes(this._maskValue)) {
             return this._validateTime(processedValue);
         }
+        if (this._maskValue === MaskExpression.EMAIL_MASK) {
+            const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
+            if (!emailPattern.test(processedValue) && processedValue) {
+                return this._createValidationError(processedValue);
+            } else {
+                return null;
+            }
+        }
         if (processedValue && processedValue.length >= 1) {
             let counterOfOpt = 0;
 
@@ -461,7 +469,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     const selStart = Number(this._maskService.selStart) - prefixLength;
                     const selEnd = Number(this._maskService.selEnd) - prefixLength;
 
-                    if (this._code === MaskExpression.BACKSPACE) {
+                    const backspaceOrDelete =
+                        this._code === MaskExpression.BACKSPACE ||
+                        this._code === MaskExpression.DELETE;
+
+                    if (backspaceOrDelete) {
                         if (!selectRangeBackspace) {
                             if (this._maskService.selStart === prefixLength) {
                                 this._maskService.actualValue = `${this.prefix}${this._maskService.maskIsShown.slice(0, selEnd)}${this._inputValue.split(this.prefix).join('')}`;
@@ -505,8 +517,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 this._maskService.actualValue = `${part1}${this._maskService.placeHolderCharacter}${part2}`;
                             }
                         }
+                        position = this._code === MaskExpression.DELETE ? position + 1 : position;
                     }
-                    if (this._code !== MaskExpression.BACKSPACE) {
+                    if (!backspaceOrDelete) {
                         if (!checkSymbols && !checkSpecialCharacter && selectRangeBackspace) {
                             position = Number(el.selectionStart) - 1;
                         } else if (
@@ -996,6 +1009,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 if (typeof this.inputTransformFn !== 'function') {
                     this._maskService.writingValue = true;
                 }
+
                 this._maskService.formElementProperty = [
                     'value',
                     this._maskService.applyMask(inputValue, this._maskService.maskExpression),
