@@ -589,7 +589,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return value;
         }
-        if (String(value).length > 16 && this.separatorLimit.length > 14) {
+
+        if (String(value).length > 14 && this.maskExpression.startsWith(MaskExpression.SEPARATOR)) {
             return String(value);
         }
 
@@ -693,7 +694,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (processedResult === this.decimalMarker) {
                 return null;
             }
-            if (this.separatorLimit.length > 14) {
+            if (separatorValue.length > 14) {
                 return String(separatorValue);
             }
             return this._checkPrecision(this.maskExpression, separatorValue);

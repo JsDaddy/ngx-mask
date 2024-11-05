@@ -65,4 +65,23 @@ export class OptionsComponent {
     public onClick() {
         this.formControl.setValue('978-1-93624-386-0');
     }
+
+    public testValue1 = 100.12;
+    public formControl1 = new FormControl(100.12);
+    public testValue2 = 100.12;
+    public mask = 'separator.2';
+    public thousand = '.';
+    public input = '60.04';
+    public input1 = '-60.04';
+    public updateValueWithLeadZero(value: any) {
+        this.testValue1 = parseFloat(value);
+    }
+
+    public updateValueWithoutLeadZero(value: any) {
+        this.testValue2 = parseFloat(value);
+    }
+
+    public fill() {
+        this.thousand = ',';
+    }
 }
