@@ -1,6 +1,6 @@
 import { Component, effect, ElementRef, inject, input, viewChildren } from '@angular/core';
 import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
@@ -58,30 +58,5 @@ export class OptionsComponent {
             this.scrollService.onScroll(this.cards());
             this.accordionService.onChangeAccordion(this.cards());
         });
-    }
-
-    public formControl = new FormControl('123 456 789 999 999 9');
-
-    public onClick() {
-        this.formControl.setValue('978-1-93624-386-0');
-    }
-
-    public testValue1 = 100.12;
-    public formControl1 = new FormControl('', Validators.required);
-    public testValue2 = 100.12;
-    public mask = 'separator.2';
-    public thousand = '.';
-    public input = '60.04';
-    public input1 = '-60.04';
-    public updateValueWithLeadZero(value: any) {
-        this.testValue1 = parseFloat(value);
-    }
-
-    public updateValueWithoutLeadZero(value: any) {
-        this.testValue2 = parseFloat(value);
-    }
-
-    public fill() {
-        this.thousand = ',';
     }
 }
