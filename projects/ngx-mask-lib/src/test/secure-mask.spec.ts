@@ -222,4 +222,19 @@ describe('Directive: Mask (Secure)', () => {
         component.hiddenInput = false;
         equal(inputTarget.value, '123-45-6', fixture, true);
     });
+
+    it('change hiddenInput to false when mask is full', async () => {
+        const debug: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+        component.mask = 'XXX/XX/XXXX';
+        component.hiddenInput = true;
+        equal('123456789', '***/**/****', fixture);
+        expect(component.form.value).toBe('123456789');
+        fixture.detectChanges();
+        component.hiddenInput = false;
+        equal(inputTarget.value, '123/45/6789', fixture, true);
+        expect(component.form.value).toBe('123456789');
+    });
 });

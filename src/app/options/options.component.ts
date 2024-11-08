@@ -59,4 +59,20 @@ export class OptionsComponent {
             this.accordionService.onChangeAccordion(this.cards());
         });
     }
+
+    public hiddenInput = true;
+    public value = '';
+    public value1 = '12.10';
+    public value2 = '-50.40';
+
+    public changeHiddenInput() {
+        this.hiddenInput = !this.hiddenInput;
+    }
+
+    public fill() {
+        this.thousand = '.';
+    }
+
+    public input = '12033.30';
+    public thousand = ',';
 }

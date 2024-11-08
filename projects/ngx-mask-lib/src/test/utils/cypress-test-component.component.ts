@@ -38,7 +38,7 @@ export class CypressTestMaskComponent {
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     @Input() public mask = '';
 
-    @Input() public hiddenInput = false;
+    @Input() public hiddenInput = this._config.hiddenInput;
 
     @Input() public allowNegativeNumbers = false;
 
@@ -50,7 +50,7 @@ export class CypressTestMaskComponent {
 
     @Input() public showMaskTyped = false;
 
-    @Input() public decimalMarker = '.';
+    @Input() public decimalMarker = this._config.decimalMarker;
 
     @Input() public thousandSeparator = ',';
 

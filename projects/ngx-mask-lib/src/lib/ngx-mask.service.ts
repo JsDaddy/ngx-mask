@@ -80,7 +80,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
         let newPosition = position;
-        if (this.hiddenInput && !this.writingValue) {
+        if (this.hiddenInput !== null && !this.writingValue) {
             let actualResult: string[] =
                 inputValue && inputValue.length === 1
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
