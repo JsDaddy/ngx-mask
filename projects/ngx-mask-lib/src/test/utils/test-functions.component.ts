@@ -1,16 +1,50 @@
-export function typeTest(inputValue: string, fixture: any): string {
+export const Paste = 'Paste';
+export const Type = 'Type';
+
+export function pasteTest(inputValue: string, fixture: any): string {
     fixture.detectChanges();
 
     fixture.nativeElement.querySelector('input').value = inputValue;
 
+    fixture.nativeElement.querySelector('input').dispatchEvent(new Event('paste'));
     fixture.nativeElement.querySelector('input').dispatchEvent(new Event('input'));
+    fixture.nativeElement.querySelector('input').dispatchEvent(new Event('ngModelChange'));
 
-    fixture.detectChanges();
     return fixture.nativeElement.querySelector('input').value;
 }
 
-export function equal(value: string, expectedValue: string, fixture: any, async = false): void {
-    typeTest(value, fixture);
+export function typeTest(inputValue: string, fixture: any): string {
+    fixture.detectChanges();
+    const inputArray = inputValue.split('');
+    const inputElement = fixture.nativeElement.querySelector('input');
+
+    inputElement.value = '';
+    inputElement.dispatchEvent(new Event('input'));
+    inputElement.dispatchEvent(new Event('ngModelChange'));
+
+    {
+        for (const element of inputArray) {
+            inputElement.dispatchEvent(new Event('keydown'), { key: element });
+            inputElement.value += element;
+            inputElement.dispatchEvent(new Event('input'));
+            inputElement.dispatchEvent(new Event('ngModelChange'));
+        }
+    }
+    return inputElement.value;
+}
+
+export function equal(
+    value: string,
+    expectedValue: string,
+    fixture: any,
+    async = false,
+    testType: typeof Paste | typeof Type = Type
+): void {
+    if (testType === Paste) {
+        pasteTest(value, fixture);
+    } else {
+        typeTest(value, fixture);
+    }
 
     if (async) {
         Promise.resolve().then(() => {

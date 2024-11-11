@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, typeTest } from './utils/test-functions.component';
+import { equal, Paste, pasteTest } from './utils/test-functions.component';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 
@@ -110,7 +110,7 @@ describe('Directive: Mask', () => {
 
     it('Masks with numbers, strings e special characters', () => {
         component.mask = '(099) A99-SSSS';
-        equal('as', '(', fixture);
+        equal('as', '(', fixture, false, Paste);
         equal('(1', '(1', fixture);
         equal('(12', '(12', fixture);
         equal('(123', '(123', fixture);
@@ -339,7 +339,7 @@ describe('Directive: Mask', () => {
 
     it('should strip special characters from form control value', () => {
         component.mask = '00/00/0000';
-        typeTest('30/08/19921', fixture);
+        pasteTest('30/08/19921', fixture);
         expect(component.form.value).toBe('30081992');
     });
 
@@ -368,9 +368,9 @@ describe('Directive: Mask', () => {
             },
         };
         equal('', '', fixture);
-        equal('2578989', '[', fixture);
+        equal('2578989', '[', fixture, false, Paste);
         equal('hello world', '[hel]-[low]*[or]', fixture);
-        equal('111.111-11', '[', fixture);
+        equal('111.111-11', '[', fixture, false, Paste);
 
         component.mask = '(000-000)';
         component.specialCharacters = ['(', '-', ')'];
@@ -496,7 +496,7 @@ describe('Directive: Mask', () => {
         component.mask = '(000) 000-00-00';
         fixture.detectChanges();
         equal('0', '(0', fixture);
-        equal('(', '(', fixture);
+        equal('(', '(', fixture, false, Paste);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         debugElement.triggerEventHandler('keydown', {
@@ -504,7 +504,9 @@ describe('Directive: Mask', () => {
             keyCode: 8,
             target: inputTarget,
         });
-        equal('(', '', fixture);
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        debugElement.triggerEventHandler('ngModelChange', { target: inputTarget });
+        expect(inputTarget.value).toBe('');
     });
 
     it('should remove ghost character on toggling mask', () => {
@@ -941,7 +943,7 @@ describe('Directive: Mask', () => {
         component.showMaskTyped = true;
         component.keepCharacterPositions = true;
 
-        equal('11/11/1111', '11/11/1111', fixture);
+        equal('11111111', '11/11/1111', fixture, false, Paste);
         component.form.setValue('22/22/2222');
         fixture.detectChanges();
         requestAnimationFrame(() => {

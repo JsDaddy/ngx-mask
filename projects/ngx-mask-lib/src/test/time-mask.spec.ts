@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, Paste } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
@@ -45,7 +45,8 @@ describe('Directive: Mask (Time)', () => {
     it('Hours', () => {
         component.showMaskTyped = true;
         component.mask = 'Hh:m0';
-        equal('3__:__', '3_:__', fixture);
+        equal('3__:__', '3_:__', fixture, false, Paste);
+        equal('3__:__', '3:__', fixture);
         equal('33:__', '3:3_', fixture);
         equal('33__:__', '3:3_', fixture);
     });
@@ -207,30 +208,30 @@ describe('Directive: Mask (Time)', () => {
 
     it('Date (d0/M0:0000', () => {
         component.mask = 'd0/M0:0000';
-        equal('999999', '9/9:9999', fixture);
-        equal('888888', '8/8:8888', fixture);
-        equal('777777', '7/7:7777', fixture);
-        equal('666666', '6/6:6666', fixture);
-        equal('555555', '5/5:5555', fixture);
-        equal('444444', '4/4:4444', fixture);
-        equal('333333', '3/3:3333', fixture);
-        equal('2222222', '22/2:2222', fixture);
-        equal('11111111', '11/11:1111', fixture);
-        equal('20232023', '20/2:3202', fixture);
+        equal('999999', '9/9:9999', fixture, false, Paste);
+        equal('888888', '8/8:8888', fixture, false, Paste);
+        equal('777777', '7/7:7777', fixture, false, Paste);
+        equal('666666', '6/6:6666', fixture, false, Paste);
+        equal('555555', '5/5:5555', fixture, false, Paste);
+        equal('444444', '4/4:4444', fixture, false, Paste);
+        equal('333333', '3/3:3333', fixture, false, Paste);
+        equal('2222222', '22/2:2222', fixture, false, Paste);
+        equal('11111111', '11/11:1111', fixture, false, Paste);
+        equal('20232023', '20/2:3202', fixture, false, Paste);
     });
 
     it('Date (m0/d0/0000', () => {
         component.mask = 'm0/d0/0000';
-        equal('999999', '9/9/9999', fixture);
-        equal('888888', '8/8/8888', fixture);
-        equal('777777', '7/7/7777', fixture);
-        equal('666666', '6/6/6666', fixture);
-        equal('5555555', '55/5/5555', fixture);
-        equal('4444444', '44/4/4444', fixture);
-        equal('3333333', '33/3/3333', fixture);
-        equal('22222222', '22/22/2222', fixture);
-        equal('11111111', '11/11/1111', fixture);
-        equal('20232023', '20/2/3202', fixture);
+        equal('999999', '9/9/9999', fixture, false, Paste);
+        equal('888888', '8/8/8888', fixture, false, Paste);
+        equal('777777', '7/7/7777', fixture, false, Paste);
+        equal('666666', '6/6/6666', fixture, false, Paste);
+        equal('5555555', '55/5/5555', fixture, false, Paste);
+        equal('4444444', '44/4/4444', fixture, false, Paste);
+        equal('3333333', '33/3/3333', fixture, false, Paste);
+        equal('22222222', '22/22/2222', fixture, false, Paste);
+        equal('11111111', '11/11/1111', fixture, false, Paste);
+        equal('20232023', '20/2/3202', fixture, false, Paste);
     });
 
     it('Date (0000-M0-d0', () => {
@@ -441,7 +442,7 @@ describe('Directive: Mask (Time)', () => {
         equal('20231031', '2023.10.31', fixture);
     });
 
-    it('Date (0000.M0.d0 leadZero and showMaskTyped', () => {
+    it('Date (M0/d0/0000 leadZero and showMaskTyped', () => {
         component.mask = 'M0/d0/0000';
         component.leadZeroDateTime = true;
         component.showMaskTyped = true;
@@ -452,7 +453,7 @@ describe('Directive: Mask (Time)', () => {
     });
 
     it('Date (d0/M0/0000 leadZero)', () => {
-        component.mask = 'M0/d0/0000';
+        component.mask = 'd0/M0/0000';
         component.leadZeroDateTime = true;
         equal('4122000', '04/12/2000', fixture);
         equal('442000', '04/04/2000', fixture);

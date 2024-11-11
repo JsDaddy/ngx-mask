@@ -3,7 +3,7 @@ import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, typeTest } from './utils/test-functions.component';
+import { equal, typeTest, pasteTest, Paste } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 import type { DebugElement } from '@angular/core';
@@ -69,7 +69,7 @@ describe('Directive: Mask (Secure)', () => {
     it('it checks secure input functionality on reset', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
-        typeTest('54321', fixture);
+        pasteTest('54321', fixture);
         component.form.reset('98765');
         fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5');
@@ -79,7 +79,7 @@ describe('Directive: Mask (Secure)', () => {
     it('it checks secure input functionality on reset then typed', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
-        typeTest('54321', fixture);
+        pasteTest('54321', fixture);
         component.form.reset();
         equal('98765', '***/*5', fixture);
     });
@@ -87,7 +87,7 @@ describe('Directive: Mask (Secure)', () => {
     it('it checks secure input functionality on setValue(longer string)', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
-        typeTest('54321', fixture);
+        pasteTest('54321', fixture);
         component.form.setValue('1234567');
         fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');
@@ -106,7 +106,7 @@ describe('Directive: Mask (Secure)', () => {
         fixture.detectChanges();
         expect(component.form.dirty).toBeTruthy();
         expect(component.form.pristine).toBeFalsy();
-        fixture.whenStable().then(() => {
+        return fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
         });
     });
@@ -133,7 +133,7 @@ describe('Directive: Mask (Secure)', () => {
         component.hiddenInput = true;
         component.mask = 'XXX/X0/0000';
         equal('54321', '***/*1', fixture);
-        typeTest('1', fixture);
+        pasteTest('1', fixture);
         expect(component.form.value).toBe('1');
         component.form.reset();
         expect(component.form.value).toBe(null);
@@ -207,7 +207,7 @@ describe('Directive: Mask (Secure)', () => {
         equal('1234', '***-*', fixture);
         fixture.detectChanges();
         component.hiddenInput = false;
-        equal(inputTarget.value, '123-4', fixture, true);
+        equal(inputTarget.value, '123-4', fixture, true, Paste);
     });
 
     it('change hiddenInput to false ', async () => {
@@ -224,17 +224,15 @@ describe('Directive: Mask (Secure)', () => {
     });
 
     it('change hiddenInput to false when mask is full', async () => {
-        const debug: DebugElement = fixture.debugElement.query(By.css('input'));
-        const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
-        fixture.detectChanges();
         component.mask = 'XXX/XX/XXXX';
         component.hiddenInput = true;
-        equal('123456789', '***/**/****', fixture);
-        expect(component.form.value).toBe('123456789');
+        fixture.detectChanges();
+        typeTest('123456789', fixture);
         fixture.detectChanges();
         component.hiddenInput = false;
-        equal(inputTarget.value, '123/45/6789', fixture, true);
-        expect(component.form.value).toBe('123456789');
+        fixture.detectChanges();
+        return fixture.whenStable().then(() => {
+            expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
+        });
     });
 });

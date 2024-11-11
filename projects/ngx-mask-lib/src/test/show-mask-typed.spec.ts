@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, Paste } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 import type { DebugElement } from '@angular/core';
@@ -193,9 +193,9 @@ describe('Directive: Mask', () => {
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
         fixture.detectChanges();
 
-        equal('+38 1', '+38 1', fixture);
-        equal('+38 12', '+38 12', fixture);
-        equal('+38 123', '+38 123', fixture);
+        equal('+38 1', '+38 1', fixture, false, Paste);
+        equal('+38 12', '+38 12', fixture, false, Paste);
+        equal('+38 123', '+38 123', fixture, false, Paste);
         expect(inputTarget.selectionStart).toBe(7);
         component.showMaskTyped = true;
         inputTarget.focus();

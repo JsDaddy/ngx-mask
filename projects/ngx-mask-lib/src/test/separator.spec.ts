@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, typeTest } from './utils/test-functions.component';
+import { equal, Paste, typeTest } from './utils/test-functions.component';
 import { provideNgxMask } from '../lib/ngx-mask.providers';
 import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 import { initialConfig } from 'ngx-mask';
@@ -114,7 +114,7 @@ describe('Separator: Mask', () => {
 
     it('separator precision 0 for 1000000.00', () => {
         component.mask = 'separator.0';
-        equal('1000000.00', '1 000 000', fixture);
+        equal('1000000.00', '1 000 000', fixture, false, Paste);
     });
 
     it('separator precision 2 with 0 after point for 1000000.00', () => {
@@ -201,7 +201,7 @@ describe('Separator: Mask', () => {
     it('separator thousandSeparator . precision 0 for 1000000.00', () => {
         component.mask = 'separator.0';
         component.thousandSeparator = '.';
-        equal('1000000,00', '1.000.000', fixture);
+        equal('1000000,00', '1.000.000', fixture, false, Paste);
     });
 
     it('separator thousandSeparator , for 1000000', () => {
@@ -225,7 +225,7 @@ describe('Separator: Mask', () => {
     it('separator thousandSeparator , precision 0 for 1000000.00', () => {
         component.mask = 'separator.0';
         component.thousandSeparator = ',';
-        equal('1000000.00', '1,000,000', fixture);
+        equal('1000000.00', '1,000,000', fixture, false, Paste);
     });
 
     it(`separator thousandSeparator ' for 1000000`, () => {
@@ -249,7 +249,7 @@ describe('Separator: Mask', () => {
     it(`separator thousandSeparator ' precision 0 for 1000000.00`, () => {
         component.mask = 'separator.0';
         component.thousandSeparator = `'`;
-        equal('1000000.00', `1'000'000`, fixture);
+        equal('1000000.00', `1'000'000`, fixture, false, Paste);
     });
 
     it('should not shift cursor for input in-between digits', () => {
