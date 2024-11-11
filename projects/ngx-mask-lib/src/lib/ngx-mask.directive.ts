@@ -1147,11 +1147,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                                 : expression;
                 }
             } else {
+                const cleanMask = this._maskService.removeMask(mask);
                 const check: boolean = this._maskService
                     .removeMask(this._inputValue)
                     ?.split(MaskExpression.EMPTY_STRING)
                     .every((character, index) => {
-                        const indexMask = mask.charAt(index);
+                        const indexMask = cleanMask.charAt(index);
                         return this._maskService._checkSymbolMask(character, indexMask);
                     });
 
