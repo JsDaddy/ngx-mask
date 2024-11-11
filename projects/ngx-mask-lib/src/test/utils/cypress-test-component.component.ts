@@ -38,7 +38,7 @@ export class CypressTestMaskComponent {
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     @Input() public mask = '';
 
-    @Input() public hiddenInput = false;
+    @Input() public hiddenInput = null;
 
     @Input() public allowNegativeNumbers = false;
 
