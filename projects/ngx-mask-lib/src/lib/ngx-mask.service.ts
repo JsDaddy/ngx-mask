@@ -48,6 +48,16 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private readonly _renderer = inject(Renderer2, { optional: true });
 
+    /**
+     * Applies the mask to the input value.
+     * @param inputValue The input value to be masked.
+     * @param maskExpression The mask expression to apply.
+     * @param position The position in the input value.
+     * @param justPasted Whether the value was just pasted.
+     * @param backspaced Whether the value was backspaced.
+     * @param cb Callback function.
+     * @returns The masked value.
+     */
     public override applyMask(
         inputValue: string,
         maskExpression: string,
@@ -57,18 +67,25 @@ export class NgxMaskService extends NgxMaskApplierService {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): string {
+        // If no mask expression, return the input value or the actual value
         if (!maskExpression) {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
+
+        // Show mask in input if required
         this.maskIsShown = this.showMaskTyped
             ? this.showMaskInInput()
             : MaskExpression.EMPTY_STRING;
+
+        // Handle specific mask expressions
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
         if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
+
+        // Handle empty input value with mask typed
         if (!inputValue && this.showMaskTyped) {
             this.formControlResult(this.prefix);
             return `${this.prefix}${this.maskIsShown}${this.suffix}`;
@@ -80,41 +97,87 @@ export class NgxMaskService extends NgxMaskApplierService {
                 : MaskExpression.EMPTY_STRING;
         let newInputValue = '';
         let newPosition = position;
-        if (this.hiddenInput !== null && !this.writingValue) {
+
+        // Handle hidden input or input with asterisk symbol
+        if (
+            (this.hiddenInput ||
+                (inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0)) &&
+            !this.writingValue
+        ) {
             let actualResult: string[] =
                 inputValue && inputValue.length === 1
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
                     : this.actualValue.split(MaskExpression.EMPTY_STRING);
+
+            // Handle backspace
+            if (backspaced) {
+                actualResult = actualResult
+                    .slice(0, position)
+                    .concat(actualResult.slice(position + 1));
+            }
+
+            // Remove mask if showMaskTyped is true
+            if (this.showMaskTyped) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = this.removeMask(inputValue);
+                actualResult = this.removeMask(actualResult.join('')).split(
+                    MaskExpression.EMPTY_STRING
+                );
+            }
+
+            // Handle selection start and end
             if (typeof this.selStart === 'object' && typeof this.selEnd === 'object') {
                 this.selStart = Number(this.selStart);
                 this.selEnd = Number(this.selEnd);
             } else {
-                // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-                inputValue !== MaskExpression.EMPTY_STRING && actualResult.length
-                    ? typeof this.selStart === 'number' && typeof this.selEnd === 'number'
-                        ? inputValue.length > actualResult.length
-                            ? actualResult.splice(this.selStart, 0, getSymbol)
-                            : inputValue.length < actualResult.length
-                              ? actualResult.length - inputValue.length === 1
-                                  ? backspaced
-                                      ? actualResult.splice(this.selStart - 1, 1)
-                                      : actualResult.splice(inputValue.length - 1, 1)
-                                  : actualResult.splice(this.selStart, this.selEnd - this.selStart)
-                              : null
-                        : null
-                    : (actualResult = []);
+                if (inputValue !== MaskExpression.EMPTY_STRING && actualResult.length) {
+                    if (typeof this.selStart === 'number' && typeof this.selEnd === 'number') {
+                        if (inputValue.length > actualResult.length) {
+                            actualResult.splice(this.selStart, 0, getSymbol);
+                        } else if (inputValue.length < actualResult.length) {
+                            if (actualResult.length - inputValue.length === 1) {
+                                if (backspaced) {
+                                    actualResult.splice(this.selStart - 1, 1);
+                                } else {
+                                    actualResult.splice(inputValue.length - 1, 1);
+                                }
+                            } else {
+                                actualResult.splice(this.selStart, this.selEnd - this.selStart);
+                            }
+                        }
+                    }
+                } else {
+                    actualResult = [];
+                }
             }
+
+            // Remove mask if showMaskTyped is true and hiddenInput is false
             if (this.showMaskTyped && !this.hiddenInput) {
                 newInputValue = this.removeMask(inputValue);
             }
-            newInputValue =
-                this.actualValue.length && actualResult.length <= inputValue.length
-                    ? this.shiftTypedSymbols(actualResult.join(MaskExpression.EMPTY_STRING))
-                    : inputValue;
+
+            // Handle actual value length
+            if (this.actualValue.length) {
+                if (actualResult.length < inputValue.length) {
+                    newInputValue = this.shiftTypedSymbols(
+                        actualResult.join(MaskExpression.EMPTY_STRING)
+                    );
+                } else if (actualResult.length === inputValue.length) {
+                    newInputValue = actualResult.join(MaskExpression.EMPTY_STRING);
+                } else {
+                    newInputValue = inputValue;
+                }
+            } else {
+                newInputValue = inputValue;
+            }
         }
+
+        // Handle just pasted input
         if (justPasted && (this.hiddenInput || !this.hiddenInput)) {
             newInputValue = inputValue;
         }
+
+        // Handle backspace with special characters
         if (
             backspaced &&
             this.specialCharacters.indexOf(
@@ -125,6 +188,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             newInputValue = this._currentValue;
         }
+
+        // Handle deleted special character
         if (this.deletedSpecialCharacter && newPosition) {
             if (
                 this.specialCharacters.includes(
@@ -140,14 +205,17 @@ export class NgxMaskService extends NgxMaskApplierService {
 
             this.deletedSpecialCharacter = false;
         }
+
+        // Remove mask if showMaskTyped is true and placeHolderCharacter length is 1
         if (
             this.showMaskTyped &&
             this.placeHolderCharacter.length === 1 &&
             !this.leadZeroDateTime
         ) {
-            newInputValue = this.removeMask(inputValue);
+            newInputValue = this.removeMask(newInputValue);
         }
 
+        // Handle mask changed
         if (this.maskChanged) {
             newInputValue = inputValue;
         } else {
@@ -155,6 +223,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
         }
 
+        // Handle showMaskTyped and keepCharacterPositions
         if (
             this.showMaskTyped &&
             this.keepCharacterPositions &&
@@ -171,6 +240,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 : `${this.prefix}${this.maskIsShown}${this.suffix}`;
         }
 
+        // Apply the mask using the parent class method
         const result: string = super.applyMask(
             newInputValue,
             maskExpression,
@@ -181,6 +251,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         );
 
         this.actualValue = this.getActualValue(result);
+
         // handle some separator implications:
         // a.) adjust decimalMarker default (. -> ,) if thousandSeparator is a dot
         if (
@@ -200,6 +271,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
 
+        // Update previous and current values
         if (result || result === '') {
             this._previousValue = this._currentValue;
             this._currentValue = result;
@@ -210,6 +282,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (this._previousValue === this._currentValue && justPasted);
         }
 
+        // Propagate the input value back to the Angular model
         // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
         this._emitValue
             ? this.writingValue && this.triggerOnMaskChange
@@ -217,18 +290,18 @@ export class NgxMaskService extends NgxMaskApplierService {
                 : this.formControlResult(result)
             : '';
 
+        // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
             if (this.hiddenInput) {
-                if (backspaced) {
-                    return this.hideInput(result, this.maskExpression);
-                }
                 return `${this.hideInput(result, this.maskExpression)}${this.maskIsShown.slice(result.length)}`;
             }
             return result;
         }
+
         const resLen: number = result.length;
         const prefNmask = `${this.prefix}${this.maskIsShown}${this.suffix}`;
 
+        // Handle specific mask expressions
         if (this.maskExpression.includes(MaskExpression.HOURS)) {
             const countSkipedSymbol = this._numberSkipedSymbols(result);
             return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
@@ -238,6 +311,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return `${result}${prefNmask}`;
         }
+
         return `${result}${prefNmask.slice(resLen)}`;
     }
 
