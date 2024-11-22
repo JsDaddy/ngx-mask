@@ -1,13 +1,12 @@
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { signal } from '@angular/core';
 
 describe('Test Date Hh:m0', () => {
     it('Test value Hh:m0', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
+                mask: signal('Hh:m0'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('2020').should('have.value', '20:20');
@@ -22,9 +21,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
+                mask: signal('Hh:m0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
         cy.get('#masked').clear();
@@ -34,9 +32,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0:s0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0:s0',
+                mask: signal('Hh:m0:s0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
         cy.get('#masked').clear();
@@ -46,9 +43,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask d0/m0/0000 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/m0/0000',
+                mask: signal('d0/m0/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('77')
@@ -69,9 +65,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask M0/d0/0000 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'M0/d0/0000',
+                mask: signal('M0/d0/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('88')
@@ -92,9 +87,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask 0000/M0/d0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0000/M0/d0',
+                mask: signal('0000/M0/d0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('999999').should('have.prop', 'selectionStart', 8);
         cy.get('#masked').clear();
@@ -104,9 +98,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0:s0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0:s0',
+                mask: signal('Hh:m0:s0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -122,9 +115,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask (00) 90000-0000 check cursor and value', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 00009-0000',
+                mask: signal('(00) 00009-0000'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -159,9 +151,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask 099.09 check cursor and value', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '099.09',
+                mask: signal('099.09'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -179,10 +170,9 @@ describe('Test Date Hh:m0', () => {
     it('Mask d0/M0/0000 should set cursor on right position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/M0/0000',
-                leadZeroDateTime: true,
+                mask: signal('d0/M0/0000'),
+                leadZeroDateTime: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('33')
@@ -193,10 +183,9 @@ describe('Test Date Hh:m0', () => {
     it('Mask d0/M0/0000 should set cursor on right position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/M0/0000',
-                leadZeroDateTime: true,
+                mask: signal('d0/M0/0000'),
+                leadZeroDateTime: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -208,11 +197,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask should work with showMaskTyped 000/00000 with prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000/00000',
-                prefix: '+38 ',
-                showMaskTyped: true,
+                mask: signal('000/00000'),
+                prefix: signal('+38 '),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -224,10 +212,9 @@ describe('Test Date Hh:m0', () => {
     it('Mask should work with showMaskTyped 000/00000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000/00000',
-                showMaskTyped: false,
+                mask: signal('000/00000'),
+                showMaskTyped: signal(false),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -239,9 +226,8 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position (000) 000-0000||+000000000000000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000||+000000000000000',
+                mask: signal('(000) 000-0000||+000000000000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('11111111111').should('have.value', '+11111111111');
@@ -254,9 +240,8 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000||+000000000000000',
+                mask: signal('(000) 000-0000||+000000000000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -271,9 +256,8 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position (00) 00000000||+00 (00) 00000000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 00000000||+00 (00) 00000000',
+                mask: signal('(00) 00000000||+00 (00) 00000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('111').should('have.value', '(11) 1');
