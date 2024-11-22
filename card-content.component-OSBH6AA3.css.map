@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/shared/card-content/card-content.component.scss"],
+  "sourcesContent": [":host {\n    @apply flex flex-col mt-5 text-full-white;\n\n    .green-view {\n        @apply text-green bg-green/[.10];\n    }\n    .yellow-view {\n        @apply text-yellow bg-yellow/[.10];\n    }\n}\n"],
+  "mappings": ";AACI;AAAA,cAAA;AAAA,WAAA;AAAA,kBAAA;AAAA,qBAAA;AAAA,SAAA,IAAA,IAAA,IAAA,IAAA,EAAA,IAAA,iBAAA,EAAA;AAAA;AAGI,MAAA,CAAA;AAAA,oBAAA,IAAA,GAAA,IAAA,IAAA,EAAA;AAAA,qBAAA;AAAA,SAAA,IAAA,GAAA,IAAA,IAAA,EAAA,IAAA,iBAAA,EAAA;AAAA;AAGA,MAAA,CAAA;AAAA,oBAAA,IAAA,IAAA,IAAA,GAAA,EAAA;AAAA,qBAAA;AAAA,SAAA,IAAA,IAAA,IAAA,GAAA,EAAA,IAAA,iBAAA,EAAA;AAAA;",
+  "names": []
+}
