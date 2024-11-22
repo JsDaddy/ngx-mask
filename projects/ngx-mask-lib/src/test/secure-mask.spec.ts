@@ -1,11 +1,12 @@
 import type { ComponentFixture } from '@angular/core/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -15,8 +16,7 @@ describe('Directive: Mask (Secure)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -70,7 +70,9 @@ describe('Directive: Mask (Secure)', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
         typeTest('54321', fixture);
-        component.form.reset('98765');
+        component.form.reset();
+
+        component.form.setValue('98765');
         fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5');
         });
@@ -88,6 +90,8 @@ describe('Directive: Mask (Secure)', () => {
         component.mask = 'XXX/X0/0000';
         component.hiddenInput = true;
         typeTest('54321', fixture);
+        component.form.reset();
+
         component.form.setValue('1234567');
         fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');

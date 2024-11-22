@@ -1,14 +1,13 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { CypressTestMaskModule } from './utils/cypress-test.module';
+import { signal } from '@angular/core';
 
 describe('Directive: Mask (Delete)', () => {
     it('should place cursor in right place mask (000) 000-0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000',
-                showMaskTyped: true,
+                mask: signal('(000) 000-0000'),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').click().should('have.prop', 'selectionStart', 1);
@@ -17,10 +16,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should place cursor in right place mask ((000)) 000-0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '((000)) 000-0000',
-                showMaskTyped: true,
+                mask: signal('((000)) 000-0000'),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').click().should('have.prop', 'selectionStart', 2);
@@ -29,10 +27,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should place cursor in right place mask 000 000-0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000 000-0000',
-                showMaskTyped: true,
+                mask: signal('000 000-0000'),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').click().should('have.prop', 'selectionStart', 0);
@@ -41,11 +38,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should place cursor in right place mask (000) 000-0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000',
-                showMaskTyped: true,
-                prefix: '+380 ',
+                mask: signal('(000) 000-0000'),
+                showMaskTyped: signal(true),
+                prefix: signal('+380 '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').click().should('have.prop', 'selectionStart', 6);

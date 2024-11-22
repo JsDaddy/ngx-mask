@@ -7,6 +7,8 @@ import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [ReactiveFormsModule, NgxMaskDirective],
     template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 class TestMaskComponent {
@@ -26,8 +28,7 @@ describe('Directive: Mask (Function maskFilled)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);

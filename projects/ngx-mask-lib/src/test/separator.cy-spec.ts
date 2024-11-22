@@ -1,15 +1,14 @@
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { signal } from '@angular/core';
 
 describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 100.0', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('1000')
@@ -22,11 +21,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 1.00', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('1000')
@@ -39,11 +37,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 123456789.20', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('123456789.20')
@@ -56,11 +53,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 100.0', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
+                mask: signal('separator.2'),
+                decimalMarker: signal(','),
+                thousandSeparator: signal('.'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('1000')
@@ -73,11 +69,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 1.00', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
+                mask: signal('separator.2'),
+                decimalMarker: signal(','),
+                thousandSeparator: signal('.'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('1000')
@@ -90,11 +85,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 123456789.20', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
+                mask: signal('separator.2'),
+                decimalMarker: signal(','),
+                thousandSeparator: signal('.'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('123456789,20')
@@ -107,10 +101,9 @@ describe('Test Date Hh:m0', () => {
     it('when decimalMarker doenst set should have right position cursor thousandSeparator = .', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: '.',
+                mask: signal('separator.2'),
+                thousandSeparator: signal('.'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -125,10 +118,9 @@ describe('Test Date Hh:m0', () => {
     it('when decimalMarker doenst set should have right position cursor thousandSeparator = ,', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -143,10 +135,9 @@ describe('Test Date Hh:m0', () => {
     it('should place cursor after backspace with separatorLimit = 10 in correct position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                separatorLimit: '10',
+                mask: signal('separator.2'),
+                separatorLimit: signal('10'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -161,10 +152,9 @@ describe('Test Date Hh:m0', () => {
     it('should place cursor after backspace with separatorLimit = 100 in correct position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                separatorLimit: '100',
+                mask: signal('separator.2'),
+                separatorLimit: signal('100'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -179,11 +169,10 @@ describe('Test Date Hh:m0', () => {
     it('should place cursor after backspace with separatorLimit = 1000 in correct position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ',',
-                separatorLimit: '1000',
+                mask: signal('separator.2'),
+                thousandSeparator: signal(','),
+                separatorLimit: signal('1000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -198,11 +187,10 @@ describe('Test Date Hh:m0', () => {
     it('should backspace with separator and prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ',',
-                prefix: '$ ',
+                mask: signal('separator.2'),
+                thousandSeparator: signal(','),
+                prefix: signal('$ '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -216,11 +204,10 @@ describe('Test Date Hh:m0', () => {
     it('should backspace with separator and prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: '.',
-                prefix: '$ ',
+                mask: signal('separator.2'),
+                thousandSeparator: signal('.'),
+                prefix: signal('$ '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -234,11 +221,10 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.6 decimalMarker . thousandSeparator ,', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.6',
-                decimalMarker: '.',
-                thousandSeparator: ',',
+                mask: signal('separator.6'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -257,11 +243,10 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.2 decimalMarker . thousandSeparator ,', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -278,12 +263,11 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.2 decimalMarker . thousandSeparator , allowNegative', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
-                allowNegativeNumbers: true,
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
+                allowNegativeNumbers: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -300,12 +284,11 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.3 decimalMarker . thousandSeparator , allowNegative', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.3',
-                decimalMarker: '.',
-                thousandSeparator: ',',
-                allowNegativeNumbers: true,
+                mask: signal('separator.3'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(','),
+                allowNegativeNumbers: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -322,11 +305,10 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.3 leadZero allowNegative', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.3',
-                allowNegativeNumbers: true,
-                leadZero: true,
+                mask: signal('separator.3'),
+                allowNegativeNumbers: signal(true),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -342,9 +324,8 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator',
+                mask: signal('separator'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -358,10 +339,9 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator leadZero', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator',
-                leadZero: true,
+                mask: signal('separator'),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -375,10 +355,9 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator allowNegativeNumbers', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator',
-                allowNegativeNumbers: true,
+                mask: signal('separator'),
+                allowNegativeNumbers: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -392,11 +371,10 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator leadZero', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator',
-                leadZero: true,
-                allowNegativeNumbers: true,
+                mask: signal('separator'),
+                leadZero: signal(true),
+                allowNegativeNumbers: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -410,10 +388,9 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.2 when first digit .', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: '.',
+                mask: signal('separator.2'),
+                thousandSeparator: signal('.'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -427,10 +404,9 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.2 when first digit ,', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ',',
+                mask: signal('separator.2'),
+                thousandSeparator: signal(','),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -444,10 +420,9 @@ describe('Test Date Hh:m0', () => {
     it('should correct work after backspace separator.2 when first digit whitespace', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                thousandSeparator: ' ',
+                mask: signal('separator.2'),
+                thousandSeparator: signal(' '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')

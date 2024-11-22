@@ -1,14 +1,13 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 import { FormControl } from '@angular/forms';
+import { signal } from '@angular/core';
 
 describe('Directive: Mask (Delete)', () => {
     it('cursor should correct delete with ViewEncapsulation.ShadowDom showMaskTyped=true', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000',
+                mask: signal('(000) 000-0000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -22,9 +21,8 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete character in input', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00/00/0000',
+                mask: signal('00/00/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -37,9 +35,8 @@ describe('Directive: Mask (Delete)', () => {
     it('should not delete special mask character', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00/00/0000',
+                mask: signal('00/00/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -52,10 +49,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete secure character', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'XXX/X0/0000',
-                hiddenInput: true,
+                mask: signal('XXX/X0/0000'),
+                hiddenInput: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -68,9 +64,8 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete selection', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000 000 000',
+                mask: signal('000 000 000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -82,10 +77,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000 000 000',
-                prefix: '+7',
+                mask: signal('000 000 000'),
+                prefix: signal('+7'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
@@ -93,10 +87,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete suffix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000 000 000',
-                suffix: '$',
+                mask: signal('000 000 000'),
+                suffix: signal('$'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('1').type('{backspace}').should('have.value', '');
@@ -105,9 +98,8 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete specialCharacter from allow few mask', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 00000000||+00 (00) 00000000',
+                mask: signal('(00) 00000000||+00 (00) 00000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -124,9 +116,8 @@ describe('Directive: Mask (Delete)', () => {
     it('should return value from ctrl+V', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '9999999999999',
+                mask: signal('9999999999999'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -141,53 +132,54 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('should not delete special character from backspace', () => {
+        const patterns = {
+            '0': { pattern: /\d/ },
+            '9': { pattern: /\d/, optional: true },
+            A: { pattern: /[a-zA-Z0-9]/ },
+            L: { pattern: /[a-z]/ },
+            S: { pattern: /[a-zA-Z]/ },
+            U: { pattern: /[A-Z]/ },
+            X: { pattern: /\d/, symbol: '*' },
+            d: { pattern: /\d/ },
+            h: { pattern: /\d/ },
+            s: { pattern: /\d/ },
+            D: { pattern: /D/ }, // custom: The D on the mask can only be the D character
+            H: { pattern: /H/ }, // custom: the H on the mask can only be the H character
+            M: { pattern: /M/ }, // custom: the M on the mask can only be the M character
+            '\\S': { pattern: /\S/ }, // custom: the S on the mask can only be the S character. Escape it to prevent digits from being removed from the value
+        };
+        const specialCharacters = [
+            '-',
+            '/',
+            '(',
+            ')',
+            '.',
+            ':',
+            ' ',
+            '+',
+            ',',
+            '@',
+            '[',
+            ']',
+            '"',
+            "'",
+            'D',
+            'H',
+            'M',
+            '\\S',
+        ];
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
                 form: new FormControl('12345678'),
-                mask: '00D : 00H : 00M : 00S',
-                shownMaskExpression: '00D : 00H : 00M : 00S',
-                showMaskTyped: true,
-                dropSpecialCharacters: false,
-                leadZeroDateTime: true,
-                placeHolderCharacter: '',
-                patterns: {
-                    '0': { pattern: /\d/ },
-                    '9': { pattern: /\d/, optional: true },
-                    A: { pattern: /[a-zA-Z0-9]/ },
-                    L: { pattern: /[a-z]/ },
-                    S: { pattern: /[a-zA-Z]/ },
-                    U: { pattern: /[A-Z]/ },
-                    X: { pattern: /\d/, symbol: '*' },
-                    d: { pattern: /\d/ },
-                    h: { pattern: /\d/ },
-                    s: { pattern: /\d/ },
-                    D: { pattern: /D/ }, // custom: The D on the mask can only be the D character
-                    H: { pattern: /H/ }, // custom: the H on the mask can only be the H character
-                    M: { pattern: /M/ }, // custom: the M on the mask can only be the M character
-                    '\\S': { pattern: /\S/ }, // custom: the S on the mask can only be the S character. Escape it to prevent digits from being removed from the value
-                },
-                specialCharacters: [
-                    '-',
-                    '/',
-                    '(',
-                    ')',
-                    '.',
-                    ':',
-                    ' ',
-                    '+',
-                    ',',
-                    '@',
-                    '[',
-                    ']',
-                    '"',
-                    "'",
-                    'D',
-                    'H',
-                    'M',
-                    '\\S',
-                ],
+                mask: signal('00D : 00H : 00M : 00S'),
+                shownMaskExpression: signal('00D : 00H : 00M : 00S'),
+                showMaskTyped: signal(true),
+                dropSpecialCharacters: signal(false),
+                leadZeroDateTime: signal(true),
+                placeHolderCharacter: signal(''),
+                patterns: signal(patterns),
+                specialCharacters: signal(specialCharacters),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('{rightArrow}'.repeat(1))
@@ -205,11 +197,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with showMaskTyped and prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000',
-                prefix: '+7 ',
-                showMaskTyped: true,
+                mask: signal('(000) 000-0000'),
+                prefix: signal('+7 '),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -250,11 +241,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with showMaskTyped and prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00 000 00 00',
-                prefix: '+32 ',
-                showMaskTyped: true,
+                mask: signal('00 000 00 00'),
+                prefix: signal('+32 '),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -292,11 +282,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with showMaskTyped and leadZeroDateTime', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'M0-d0-0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
+                mask: signal('M0-d0-0000'),
+                leadZeroDateTime: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -309,11 +298,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with showMaskTyped and leadZeroDateTime', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'M0/d0/0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
+                mask: signal('M0/d0/0000'),
+                leadZeroDateTime: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -326,11 +314,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with showMaskTyped and leadZeroDateTime', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'M0:d0:0000',
-                leadZeroDateTime: true,
-                showMaskTyped: true,
+                mask: signal('M0:d0:0000'),
+                leadZeroDateTime: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -343,10 +330,9 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with mask Hh:m0', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
-                showMaskTyped: true,
+                mask: signal('Hh:m0'),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -359,11 +345,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should backspace with mask Hh:m0 and leadZeroDateTime', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
-                showMaskTyped: true,
-                leadZeroDateTime: true,
+                mask: signal('Hh:m0'),
+                showMaskTyped: signal(true),
+                leadZeroDateTime: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')

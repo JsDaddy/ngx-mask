@@ -15,8 +15,7 @@ describe('Directive: Mask (Custom patterns)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -50,8 +49,7 @@ describe('Directive: Mask (Provide custom patterns)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(ngxMaskConfigValue)],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -94,8 +92,7 @@ describe('Directive: Mask (Provide custom patterns with symbol *)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(ngxMaskConfigValue)],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -149,8 +146,7 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(ngxMaskConfig)],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -196,8 +192,7 @@ describe('Directive: Mask (Provide custom patterns with symbol B optional)', () 
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(ngxMaskConfigValue)],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
