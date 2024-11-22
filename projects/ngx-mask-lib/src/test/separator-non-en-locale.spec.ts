@@ -16,8 +16,7 @@ describe('Separator: Mask with FR locale', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(), { provide: LOCALE_ID, useValue: 'fr' }],
         });
         fixture = TestBed.createComponent(TestMaskComponent);

@@ -1,15 +1,14 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { CypressTestMaskModule } from './utils/cypress-test.module';
+import { signal } from '@angular/core';
 
 describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: (000) 000-0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('(000) 000-0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -22,11 +21,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: S0S S0S', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'S0S AAA',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('S0S AAA'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -42,11 +40,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 000-000.00', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000-000.00',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('000-000.00'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -60,11 +57,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 0000 0000 0000 0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0000 0000 0000 0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('0000 0000 0000 0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -81,11 +77,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 00/00/0000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00/00/0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('00/00/0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -99,12 +94,11 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: (000)000-0000, prefix +38', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000)000-0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
-                prefix: '+38 ',
+                mask: signal('(000)000-0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                prefix: signal('+38 '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -118,12 +112,11 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 0 000, prefix $', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0 000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
-                prefix: '$ ',
+                mask: signal('0 000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                prefix: signal('$ '),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -137,12 +130,11 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 0000, prefix foo/', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
-                prefix: 'foo/',
+                mask: signal('0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                prefix: signal('foo/'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -155,11 +147,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: AAA-AAA-AAA', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'AAA-AAA-AAA',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('AAA-AAA-AAA'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -173,12 +164,11 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 0 000 suffix $', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0 000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
-                suffix: ' $',
+                mask: signal('0 000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                suffix: signal(' $'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -192,12 +182,11 @@ describe('Directive: Mask (Delete)', () => {
     it('should replace character to _ mask: 00/00/000 suffix test', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00/00/000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
-                suffix: ' test',
+                mask: signal('00/00/000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                suffix: signal(' test'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -211,11 +200,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete character from del', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000-000-000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('000-000-000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -236,11 +224,10 @@ describe('Directive: Mask (Delete)', () => {
     it('should delete character from del', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0000 0000 0000 0000',
-                keepCharacterPositions: true,
-                showMaskTyped: true,
+                mask: signal('0000 0000 0000 0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')

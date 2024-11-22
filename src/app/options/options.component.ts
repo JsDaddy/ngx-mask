@@ -5,7 +5,6 @@ import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
 import { AssetPipe } from '@libraries/asset/asset.pipe';
 import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
-import { ColorPipe } from '@open-source/color/color.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
 import { ScrollService } from '@open-source/scroll/scroll.service';
 import { AccordionService } from '@open-source/accordion/accordion.service';
@@ -29,7 +28,6 @@ import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/conte
         NgxMaskPipe,
         AssetPipe,
         IsEmptyPipe,
-        ColorPipe,
         CardContentComponent,
         NgOptimizedImage,
     ],
