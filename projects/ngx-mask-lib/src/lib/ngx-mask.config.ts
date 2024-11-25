@@ -59,7 +59,7 @@ export const initialConfig: NgxMaskConfig = {
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
-    specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
+    specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'", "\u2019"],
     leadZeroDateTime: false,
     apm: false,
     leadZero: false,
