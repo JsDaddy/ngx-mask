@@ -24,8 +24,19 @@ export function typeTest(inputValue: string, fixture: any): string {
 
     {
         for (const element of inputArray) {
-            inputElement.dispatchEvent(new Event('keydown'), { key: element });
-            inputElement.value += element;
+            inputElement.dispatchEvent(new KeyboardEvent('keydown'), { key: element });
+            if (inputElement.type === 'text') {
+                const selectionStart = inputElement.selectionStart || 0;
+                const selectionEnd = inputElement.selectionEnd || 0;
+                inputElement.value =
+                    inputElement.value.slice(0, selectionStart) +
+                    element +
+                    inputElement.value.slice(selectionEnd);
+
+                inputElement.selectionStart = selectionStart + 1;
+            } else {
+                inputElement.value += element;
+            }
             inputElement.dispatchEvent(new Event('input'));
             inputElement.dispatchEvent(new Event('ngModelChange'));
         }
