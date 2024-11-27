@@ -13,8 +13,7 @@ describe('Directive: Mask (Drop special characters)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -28,19 +27,24 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('257898', '25-78-98', fixture);
 
         expect(component.form.value).toBe('25-78-98');
-
         equal('123456', '12-34-56', fixture);
 
         expect(component.form.value).toBe('12-34-56');
+    });
 
+    it('should correct value with mask 00-00/00 with dropSpecialCharacters = /', () => {
         component.mask = '00-00/00';
         component.dropSpecialCharacters = ['/'];
+
         equal('257898', '25-78/98', fixture);
         expect(component.form.value).toBe('25-7898');
+    });
 
+    it('should correct value with mask 0000.00 with dropSpecialCharacters = true', () => {
         component.mask = '0000.00';
         component.dropSpecialCharacters = true;
         component.form.setValue(123456);
+
         equal('123456', '1234.56', fixture);
         expect(component.form.value).toBe(123456);
     });

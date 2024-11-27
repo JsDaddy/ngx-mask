@@ -1,11 +1,8 @@
 import { CypressTestTriggerOnMaskChangeComponent } from './utils/cypress-test-trigger-on-mask-change.component';
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 
 describe('Directive: Mask (Trigger on mask change) [Cypress]', () => {
     it('should put back initial value if mask is toggled', async () => {
-        cy.mount(CypressTestTriggerOnMaskChangeComponent, {
-            imports: [CypressTestMaskModule],
-        });
+        cy.mount(CypressTestTriggerOnMaskChangeComponent);
 
         cy.get('#masked').type('7912345678').should('have.value', '7912345678');
         cy.get('.formvalue').should('have.text', '7912345678');

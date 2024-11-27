@@ -1,80 +1,101 @@
-import { Component, inject, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, inject, input } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { scan, startWith } from 'rxjs';
 import type { NgxMaskConfig } from 'ngx-mask';
+import { provideNgxMask } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+    providers: [provideNgxMask()],
     template: `
         <input
             id="masked"
             [formControl]="form"
-            [mask]="mask"
-            [prefix]="prefix"
-            [suffix]="suffix"
-            [leadZero]="leadZero"
-            [showMaskTyped]="showMaskTyped"
-            [allowNegativeNumbers]="allowNegativeNumbers"
-            [decimalMarker]="decimalMarker"
-            [thousandSeparator]="thousandSeparator"
-            [shownMaskExpression]="shownMaskExpression"
-            [leadZeroDateTime]="leadZeroDateTime"
-            [dropSpecialCharacters]="dropSpecialCharacters"
-            [specialCharacters]="specialCharacters"
-            [patterns]="patterns"
-            [keepCharacterPositions]="keepCharacterPositions"
-            [separatorLimit]="separatorLimit"
-            [hiddenInput]="hiddenInput" />
+            [mask]="mask()"
+            [prefix]="prefix()"
+            [suffix]="suffix()"
+            [leadZero]="leadZero()"
+            [showMaskTyped]="showMaskTyped()"
+            [allowNegativeNumbers]="allowNegativeNumbers()"
+            [decimalMarker]="decimalMarker()"
+            [thousandSeparator]="thousandSeparator()"
+            [shownMaskExpression]="shownMaskExpression()"
+            [leadZeroDateTime]="leadZeroDateTime()"
+            [dropSpecialCharacters]="dropSpecialCharacters()"
+            [specialCharacters]="specialCharacters()"
+            [patterns]="patterns()"
+            [keepCharacterPositions]="keepCharacterPositions()"
+            [separatorLimit]="separatorLimit()"
+            [hiddenInput]="hiddenInput()" />
 
-        <pre id="pre">{{ counter$ | async }}</pre>
+        <pre id="pre">{{ counter$() }}</pre>
         <pre id="pre1">{{ form.value }}</pre>
         <div>
-            {{ leadZeroDateTime }}
+            {{ leadZeroDateTime() }}
         </div>
     `,
 })
 export class CypressTestMaskComponent {
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
-    @Input() public mask = '';
+    public mask = input('');
 
-    @Input() public hiddenInput = false;
+    public hiddenInput = input<NgxMaskConfig['hiddenInput']>(this._config.hiddenInput);
 
-    @Input() public allowNegativeNumbers = false;
+    public allowNegativeNumbers = input<NgxMaskConfig['allowNegativeNumbers']>(
+        this._config.allowNegativeNumbers
+    );
 
-    @Input() public prefix = '';
+    public prefix = input<NgxMaskConfig['prefix']>(this._config.prefix);
 
-    @Input() public suffix = '';
+    public suffix = input<NgxMaskConfig['suffix']>(this._config.suffix);
 
-    @Input() public leadZero = false;
+    public leadZero = input<NgxMaskConfig['leadZero']>(this._config.leadZero);
 
-    @Input() public showMaskTyped = false;
+    public showMaskTyped = input<NgxMaskConfig['showMaskTyped']>(this._config.showMaskTyped);
 
-    @Input() public decimalMarker = '.';
+    public decimalMarker = input<NgxMaskConfig['decimalMarker'] | string>('.');
 
-    @Input() public thousandSeparator = ',';
+    public thousandSeparator = input<NgxMaskConfig['thousandSeparator']>(',');
 
-    @Input() public keepCharacterPositions = false;
+    public keepCharacterPositions = input<NgxMaskConfig['keepCharacterPositions']>(
+        this._config.keepCharacterPositions
+    );
 
-    @Input() public shownMaskExpression = '';
+    public shownMaskExpression = input<NgxMaskConfig['shownMaskExpression']>(
+        this._config.shownMaskExpression
+    );
 
-    @Input() public placeHolderCharacter = '';
+    public placeHolderCharacter = input<NgxMaskConfig['placeHolderCharacter']>(
+        this._config.placeHolderCharacter
+    );
 
-    @Input() public dropSpecialCharacters = true;
+    public dropSpecialCharacters = input<NgxMaskConfig['dropSpecialCharacters']>(
+        this._config.dropSpecialCharacters
+    );
+    public leadZeroDateTime = input<NgxMaskConfig['leadZeroDateTime']>(
+        this._config.leadZeroDateTime
+    );
 
-    @Input() public leadZeroDateTime = false;
+    public separatorLimit = input<NgxMaskConfig['separatorLimit']>(this._config.separatorLimit);
 
-    @Input() public separatorLimit = '';
+    public patterns = input<NgxMaskConfig['patterns']>(this._config.patterns);
 
-    @Input() public patterns = this._config.patterns;
-
-    @Input() public specialCharacters = this._config.specialCharacters;
+    public specialCharacters = input<NgxMaskConfig['specialCharacters']>(
+        this._config.specialCharacters
+    );
 
     public form: FormControl = new FormControl('');
 
-    public readonly counter$ = this.form.valueChanges.pipe(
-        startWith(0),
+    public readonly counter$ = toSignal(
+        this.form.valueChanges.pipe(
+            startWith(0),
 
-        scan((acc) => acc + 1, 0)
+            scan((acc) => acc + 1, 0)
+        )
     );
 }

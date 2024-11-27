@@ -7,6 +7,8 @@ import { equal } from './utils/test-functions.component';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [ReactiveFormsModule, NgxMaskDirective],
     template: ` <input id="maska" type="number" [mask]="mask" [formControl]="form" /> `,
 })
 // eslint-disable-next-line @angular-eslint/component-class-suffix
@@ -21,8 +23,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestTypeNumber],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestTypeNumber],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestTypeNumber);

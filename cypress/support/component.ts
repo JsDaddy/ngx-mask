@@ -1,4 +1,4 @@
-import { mount } from 'cypress/angular';
+import { mount } from 'cypress/angular-signals';
 
 declare global {
     // eslint-disable-next-line @typescript-eslint/no-namespace

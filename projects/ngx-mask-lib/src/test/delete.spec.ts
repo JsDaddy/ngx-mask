@@ -14,8 +14,7 @@ describe('Directive: Mask (Delete)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);

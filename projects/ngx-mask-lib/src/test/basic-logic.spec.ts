@@ -15,8 +15,7 @@ describe('Directive: Mask', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -946,9 +945,8 @@ describe('Directive: Mask', () => {
         equal('11111111', '11/11/1111', fixture, false, Paste);
         component.form.setValue('22/22/2222');
         fixture.detectChanges();
-        requestAnimationFrame(() => {
-            expect(inputTarget.value).toBe('22/22/2222');
-        });
+
+        equal('22/22/2222', '22/22/2222', fixture);
     });
 
     it('mask sepator.0 after setValue should be dont dirty', () => {
