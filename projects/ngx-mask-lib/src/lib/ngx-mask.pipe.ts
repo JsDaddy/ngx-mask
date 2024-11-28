@@ -1,4 +1,5 @@
 import type { PipeTransform } from '@angular/core';
+import { signal } from '@angular/core';
 import { inject, Pipe } from '@angular/core';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
@@ -12,13 +13,11 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
+    private _maskExpressionArray = signal<string[]>([]);
+    private mask = signal<string>('');
+
     private readonly defaultOptions = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
-
     private readonly _maskService = inject(NgxMaskService);
-
-    private _maskExpressionArray: string[] = [];
-
-    private mask = '';
 
     public transform(
         value: string | number,
@@ -32,7 +31,7 @@ export class NgxMaskPipe implements PipeTransform {
             ...this.defaultOptions,
             ...config,
             patterns: {
-                ...this._maskService.patterns,
+                ...this._maskService.patterns(),
                 ...patterns,
             },
         };
@@ -44,14 +43,14 @@ export class NgxMaskPipe implements PipeTransform {
         if (mask.includes('||')) {
             const maskParts = mask.split('||');
             if (maskParts.length > 1) {
-                this._maskExpressionArray = maskParts.sort(
-                    (a: string, b: string) => a.length - b.length
+                this._maskExpressionArray.set(
+                    maskParts.sort((a: string, b: string) => a.length - b.length)
                 );
                 this._setMask(processedValue as string);
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
+                return this._maskService.applyMask(`${processedValue}`, this.mask());
             } else {
-                this._maskExpressionArray = [];
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
+                this._maskExpressionArray.set([]);
+                return this._maskService.applyMask(`${processedValue}`, this.mask());
             }
         }
 
@@ -64,44 +63,44 @@ export class NgxMaskPipe implements PipeTransform {
 
         if (mask.startsWith(MaskExpression.SEPARATOR)) {
             if (config.decimalMarker) {
-                this._maskService.decimalMarker = config.decimalMarker;
+                this._maskService.decimalMarker.set(config.decimalMarker);
             }
             if (config.thousandSeparator) {
-                this._maskService.thousandSeparator = config.thousandSeparator;
+                this._maskService.thousandSeparator.set(config.thousandSeparator);
             }
             if (config.leadZero) {
-                this._maskService.leadZero = config.leadZero;
+                this._maskService.leadZero.set(config.leadZero);
             }
 
             processedValue = String(processedValue);
             const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
 
-            if (!Array.isArray(this._maskService.decimalMarker)) {
+            if (!Array.isArray(this._maskService.decimalMarker())) {
                 processedValue =
-                    this._maskService.decimalMarker !== localeDecimalMarker
+                    this._maskService.decimalMarker() !== localeDecimalMarker
                         ? (processedValue as string).replace(
                               localeDecimalMarker,
-                              this._maskService.decimalMarker
+                              this._maskService.decimalMarker() as string
                           )
                         : processedValue;
             }
 
             if (
-                this._maskService.leadZero &&
+                this._maskService.leadZero() &&
                 processedValue &&
-                this._maskService.dropSpecialCharacters !== false
+                this._maskService.dropSpecialCharacters() !== false
             ) {
                 processedValue = this._maskService._checkPrecision(mask, processedValue as string);
             }
 
-            if (this._maskService.decimalMarker === MaskExpression.COMMA) {
+            if (this._maskService.decimalMarker() === MaskExpression.COMMA) {
                 processedValue = (processedValue as string).replace(
                     MaskExpression.DOT,
                     MaskExpression.COMMA
                 );
             }
 
-            this._maskService.isNumberValue = true;
+            this._maskService.isNumberValue.set(true);
         }
 
         if (processedValue === null || typeof processedValue === 'undefined') {
@@ -113,18 +112,18 @@ export class NgxMaskPipe implements PipeTransform {
 
     private _setMask(value: string) {
         if (this._maskExpressionArray.length > 0) {
-            this._maskExpressionArray.some((mask): boolean | void => {
+            this._maskExpressionArray().some((mask): boolean | void => {
                 const test =
                     this._maskService.removeMask(value)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (value && test) {
-                    this.mask = mask;
+                    this.mask.set(mask);
                     return test;
                 } else {
                     const expression =
-                        this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
+                        this._maskExpressionArray()[this._maskExpressionArray().length - 1] ??
                         MaskExpression.EMPTY_STRING;
-                    this.mask = expression;
+                    this.mask.set(expression);
                 }
             });
         }
