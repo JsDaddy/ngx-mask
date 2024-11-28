@@ -204,6 +204,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (hiddenInput) {
             this._maskService.hiddenInput = hiddenInput.currentValue;
+            if (hiddenInput.previousValue === true && hiddenInput.currentValue === false) {
+                this._inputValue = this._maskService.actualValue;
+            }
         }
         if (showMaskTyped) {
             this._maskService.showMaskTyped = showMaskTyped.currentValue;
