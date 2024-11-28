@@ -50,7 +50,7 @@
             "checks": {
                 "invalidBananaInBox": "error",
                 "nullishCoalescingNotNullable": "warning",
-                "unusedStandaloneImports": "suppress"
+                "unusedStandaloneImports": "error"
             },
             "defaultCategory": "suppress"
         }

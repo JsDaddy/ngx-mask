@@ -13,6 +13,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
+                        "security": { "autoCsp": true },
                         "outputPath": "dist/ngx-mask",
                         "index": "src/index.html",
                         "browser": "src/main.ts",
