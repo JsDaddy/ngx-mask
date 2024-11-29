@@ -1,5 +1,5 @@
 import type { PipeTransform } from '@angular/core';
-import { inject, Pipe } from '@angular/core';
+import { inject, Pipe, signal } from '@angular/core';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
@@ -16,9 +16,8 @@ export class NgxMaskPipe implements PipeTransform {
 
     private readonly _maskService = inject(NgxMaskService);
 
-    private _maskExpressionArray: string[] = [];
-
-    private mask = '';
+    private _maskExpressionArray = signal<string[]>([]);
+    private _mask = signal<string>('');
 
     public transform(
         value: string | number,
@@ -44,14 +43,14 @@ export class NgxMaskPipe implements PipeTransform {
         if (mask.includes('||')) {
             const maskParts = mask.split('||');
             if (maskParts.length > 1) {
-                this._maskExpressionArray = maskParts.sort(
-                    (a: string, b: string) => a.length - b.length
+                this._maskExpressionArray.set(
+                    maskParts.sort((a: string, b: string) => a.length - b.length)
                 );
                 this._setMask(processedValue as string);
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
+                return this._maskService.applyMask(`${processedValue}`, this._mask());
             } else {
-                this._maskExpressionArray = [];
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
+                this._maskExpressionArray.set([]);
+                return this._maskService.applyMask(`${processedValue}`, this._mask());
             }
         }
 
@@ -112,19 +111,19 @@ export class NgxMaskPipe implements PipeTransform {
     }
 
     private _setMask(value: string) {
-        if (this._maskExpressionArray.length > 0) {
-            this._maskExpressionArray.some((mask): boolean | void => {
+        if (this._maskExpressionArray().length > 0) {
+            this._maskExpressionArray().some((mask): boolean | void => {
                 const test =
                     this._maskService.removeMask(value)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (value && test) {
-                    this.mask = mask;
+                    this._mask.set(mask);
                     return test;
                 } else {
                     const expression =
-                        this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
+                        this._maskExpressionArray()[this._maskExpressionArray.length - 1] ??
                         MaskExpression.EMPTY_STRING;
-                    this.mask = expression;
+                    this._mask.set(expression);
                 }
             });
         }

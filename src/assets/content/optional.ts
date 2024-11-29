@@ -84,7 +84,7 @@ export const OptDocs: ComDoc[] = [
 export const OptExamples: TExample<MaskOptions>[] = [
     {
         _placeholder: 'prefix',
-        _prefix: '+7',
+        _prefix: '+7 ',
         _mask: '(00) 000 000',
         control: { form: new UntypedFormControl(''), model: '' },
     },
