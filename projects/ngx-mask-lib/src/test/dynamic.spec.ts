@@ -5,8 +5,7 @@ import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import type { DebugElement } from '@angular/core';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { equal } from './utils/test-functions.component';
 
 describe('Directive: Mask (Dynamic)', () => {
@@ -24,7 +23,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('The input value when set by the FormControl should be masked accordingly the dynamic mask', async () => {
-        component.mask = '000-0||0000-0||00000-0';
+        component.mask.set('000-0||0000-0||00000-0');
         fixture.detectChanges();
 
         component.form.setValue({
@@ -63,13 +62,13 @@ describe('Directive: Mask (Dynamic)', () => {
             return '';
         }
 
-        component.mask = '';
+        component.mask.set('');
         fixture.detectChanges();
 
         component.form.setValue({
             value: 9000000000000000000,
         });
-        component.mask = getMask();
+        component.mask.set(getMask());
         fixture.detectChanges();
 
         const inputEl = fixture.debugElement.query(By.css('input'));
@@ -79,7 +78,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('Change mask dynamically from mask several masks to one', async () => {
-        component.mask = '(000)0000-000||(000)0000-0000||00-00000-00000'; // China phone formats
+        component.mask.set('(000)0000-000||(000)0000-0000||00-00000-00000'); // China phone formats
         fixture.detectChanges();
 
         component.form.setValue({
@@ -109,7 +108,7 @@ describe('Directive: Mask (Dynamic)', () => {
             expect(inputEl.nativeElement.value).toEqual('12-34567-89012');
         });
 
-        component.mask = '00-00-00-00'; // For example Denmark phone format
+        component.mask.set('00-00-00-00'); // For example Denmark phone format
         fixture.detectChanges();
 
         component.form.setValue({
@@ -124,9 +123,9 @@ describe('Directive: Mask (Dynamic)', () => {
 
     it('The input value when set by the FormControl should be masked accordingly the dynamic mask', async () => {
         let inputEl: DebugElement;
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
 
         fixture.detectChanges();
 
@@ -156,7 +155,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('Should update position to the end of input when mask changes while typing', async () => {
-        component.mask = '(00) 00000000||+00 (00) 00000000';
+        component.mask.set('(00) 00000000||+00 (00) 00000000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -183,7 +182,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with number or letters', () => {
-        component.mask = '00||SS';
+        component.mask.set('00||SS');
         equal('0', '0', fixture);
         equal('11', '11', fixture);
         equal('D', 'D', fixture);
@@ -191,7 +190,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with number or letters', () => {
-        component.mask = '00||SS||000||000SS||0S0S';
+        component.mask.set('00||SS||000||000SS||0S0S');
         equal('0', '0', fixture);
         expect(component.form.valid).toBeFalse();
         equal('11', '11', fixture);
@@ -215,7 +214,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work for UK Post Codes', () => {
-        component.mask = 'S0 0SS||SAA 0SS||SS0A 0SS';
+        component.mask.set('S0 0SS||SAA 0SS||SS0A 0SS');
         equal('A', 'A', fixture);
         expect(component.form.valid).toBeFalse();
         equal('A0', 'A0', fixture);
@@ -229,7 +228,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with number or letters', () => {
-        component.mask = '00||SS||000||000SS';
+        component.mask.set('00||SS||000||000SS');
         equal('0', '0', fixture);
         expect(component.form.invalid).toBeTrue();
         equal('11', '11', fixture);
@@ -247,8 +246,8 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should be valid if mask dont changes  00000||00000-0000', () => {
-        component.mask = '00000||00000-0000';
-        component.showMaskTyped = true;
+        component.mask.set('00000||00000-0000');
+        component.showMaskTyped.set(true);
         equal('1', '1____', fixture);
         expect(component.form.invalid).toBeTrue();
         equal('11', '11___', fixture);
@@ -270,7 +269,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with when justPasted', () => {
-        component.mask = '00000||S0S 0S0';
+        component.mask.set('00000||S0S 0S0');
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
@@ -285,7 +284,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with only S', () => {
-        component.mask = 'S.||S.S.||S.S.S.||S.S.S.S.||S.S.S.S.S.';
+        component.mask.set('S.||S.S.||S.S.S.||S.S.S.S.||S.S.S.S.S.');
         equal('D', 'D.', fixture);
         equal('D.D', 'D.D.', fixture);
         equal('DDD', 'D.D.D.', fixture);
@@ -294,7 +293,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with only A', () => {
-        component.mask = 'A.||A.A.||A.A.A.||A.A.A.A.||A.A.A.A.A.';
+        component.mask.set('A.||A.A.||A.A.A.||A.A.A.A.||A.A.A.A.A.');
         equal('D', 'D.', fixture);
         equal('D.D', 'D.D.', fixture);
         equal('DDD', 'D.D.D.', fixture);
@@ -303,7 +302,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with only U', () => {
-        component.mask = 'U.||U.U.||U.U.U.||U.U.U.U.||U.U.U.U.U.';
+        component.mask.set('U.||U.U.||U.U.U.||U.U.U.U.||U.U.U.U.U.');
         equal('D', 'D.', fixture);
         equal('D.D', 'D.D.', fixture);
         equal('DDD', 'D.D.D.', fixture);
@@ -312,7 +311,7 @@ describe('Directive: Mask (Dynamic)', () => {
     });
 
     it('should work with only L', () => {
-        component.mask = 'L.||L.L.||L.L.L.||L.L.L.L.||L.L.L.L.L.';
+        component.mask.set('L.||L.L.||L.L.L.||L.L.L.L.||L.L.L.L.L.');
         equal('d', 'd.', fixture);
         equal('d.d', 'd.d.', fixture);
         equal('ddd', 'd.d.d.', fixture);

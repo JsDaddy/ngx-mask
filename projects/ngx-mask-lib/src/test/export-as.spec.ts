@@ -3,8 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { Component, viewChild } from '@angular/core';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',

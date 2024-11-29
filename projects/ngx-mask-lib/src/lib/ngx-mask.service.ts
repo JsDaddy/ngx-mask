@@ -9,32 +9,22 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
     public isNumberValue = false;
-
     public maskIsShown = '';
-
     public selStart: number | null = null;
-
     public selEnd: number | null = null;
-
+    public maskChanged = false;
+    public maskExpressionArray: string[] = [];
+    public triggerOnMaskChange = false;
+    public previousValue = '';
+    public currentValue = '';
     /**
      * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
      * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
      */
     public writingValue = false;
 
-    public maskChanged = false;
-    public _maskExpressionArray: string[] = [];
-
-    public triggerOnMaskChange = false;
-
-    public _previousValue = '';
-
-    public _currentValue = '';
-
     private _emitValue = false;
-
     private _start!: number;
-
     private _end!: number;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -123,7 +113,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.showMaskTyped &&
             !this.prefix
         ) {
-            newInputValue = this._currentValue;
+            newInputValue = this.currentValue;
         }
         if (this.deletedSpecialCharacter && newPosition) {
             if (
@@ -201,13 +191,13 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         if (result || result === '') {
-            this._previousValue = this._currentValue;
-            this._currentValue = result;
+            this.previousValue = this.currentValue;
+            this.currentValue = result;
             this._emitValue =
-                this._previousValue !== this._currentValue ||
+                this.previousValue !== this.currentValue ||
                 this.maskChanged ||
                 this.writingValue ||
-                (this._previousValue === this._currentValue && justPasted);
+                (this.previousValue === this.currentValue && justPasted);
         }
 
         // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions

@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -14,10 +13,10 @@ import { NgxMaskDirective } from '../lib/ngx-mask.directive';
 class TestMaskComponent {
     public form: FormControl = new FormControl('');
 
-    public isMaskFilled = false;
+    public isMaskFilled = signal<boolean>(false);
 
     public maskFilled(): void {
-        this.isMaskFilled = true;
+        this.isMaskFilled.set(true);
     }
 }
 
@@ -38,11 +37,11 @@ describe('Directive: Mask (Function maskFilled)', () => {
     });
     it('should call function maskFilled and isMaskFilled should be true', () => {
         component.form.setValue('9999');
-        expect(component.isMaskFilled).toBeTrue();
+        expect(component.isMaskFilled()).toBeTrue();
         expect(maskFilledSpy).toHaveBeenCalledOnceWith();
     });
     it('isMaskFilled should be false', () => {
         component.form.setValue('999');
-        expect(component.isMaskFilled).toBeFalse();
+        expect(component.isMaskFilled()).toBeFalse();
     });
 });

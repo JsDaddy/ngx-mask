@@ -4,8 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig } from 'ngx-mask';
 
@@ -24,12 +23,12 @@ describe('Directive: Mask (Custom patterns)', () => {
     });
 
     it('custom patterns', () => {
-        component.mask = 'FFF';
-        component.patterns = {
+        component.mask.set('FFF');
+        component.patterns.set({
             F: {
                 pattern: new RegExp('[0-9]'),
             },
-        };
+        });
         equal('F', '', fixture);
         equal('123', '123', fixture);
     });
@@ -58,7 +57,7 @@ describe('Directive: Mask (Provide custom patterns)', () => {
     });
 
     it('custom patterns B should be work like optional', () => {
-        component.mask = 'SSBB-0999';
+        component.mask.set('SSBB-0999');
 
         equal('F', 'F', fixture);
         equal('FF', 'FF', fixture);
@@ -101,29 +100,29 @@ describe('Directive: Mask (Provide custom patterns with symbol *)', () => {
     });
 
     it('custom patterns * should work with mask *-*', () => {
-        component.mask = '*-*';
+        component.mask.set('*-*');
         equal('22', '2-2', fixture);
     });
 
     it('custom patterns * should work with mask **-**', () => {
-        component.mask = '**-**';
+        component.mask.set('**-**');
         equal('22', '22', fixture);
         equal('123', '12-3', fixture);
         equal('1234', '12-34', fixture);
     });
 
     it('custom patterns * should work with mask ***-***', () => {
-        component.mask = '***-***';
+        component.mask.set('***-***');
         equal('123456', '123-456', fixture);
     });
 
     it('custom patterns * should work with mask ****-****', () => {
-        component.mask = '****-****';
+        component.mask.set('****-****');
         equal('12345678', '1234-5678', fixture);
     });
 
     it('custom patterns * should work with mask *****-*****', () => {
-        component.mask = '*****-*****';
+        component.mask.set('*****-*****');
         equal('1234567890', '12345-67890', fixture);
     });
 });
@@ -155,23 +154,23 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
     });
 
     it('custom patterns f* should work not delete space after setTimeout', () => {
-        component.mask = 'f*';
+        component.mask.set('f*');
         equal('test value', 'test value', fixture);
         equal('test value with', 'test value with', fixture);
         equal('test value with space', 'test value with space', fixture);
         setTimeout(() => {
-            component.mask = 'F*';
+            component.mask.set('F*');
             expect(component.form.value).toBe('test value with space');
         });
     });
 
     it('custom patterns F* should work not delete space after setTimeout', () => {
-        component.mask = 'F*';
+        component.mask.set('F*');
         equal('test value', 'test value', fixture);
         equal('test value with', 'test value with', fixture);
         equal('test value with space', 'test value with space', fixture);
         setTimeout(() => {
-            component.mask = 'f*';
+            component.mask.set('f*');
             expect(component.form.value).toBe('test value with space');
         });
     });
@@ -201,8 +200,9 @@ describe('Directive: Mask (Provide custom patterns with symbol B optional)', () 
     });
 
     it('custom mask with optional symbol should work correct mask=(000) 000-0000 x BBBBBBBBBB', () => {
-        component.mask = '(000) 000-0000 x BBBBBBBBBB';
-        component.specialCharacters = ['(', ')', ' ', '-', 'x'];
+        component.mask.set('(000) 000-0000 x BBBBBBBBBB');
+        component.specialCharacters.set(['(', ')', ' ', '-', 'x']);
+
         equal('1', '(1', fixture);
         equal('12', '(12', fixture);
         equal('123', '(123', fixture);
@@ -226,7 +226,8 @@ describe('Directive: Mask (Provide custom patterns with symbol B optional)', () 
     });
 
     it('custom mask with optional symbol should work correct mask=BBB-BBB-BBB', () => {
-        component.mask = 'BBB-BBB-BBB';
+        component.mask.set('BBB-BBB-BBB');
+
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
