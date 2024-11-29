@@ -1,3 +1,12 @@
+# 19.0.1(2024-11-29)
+
+### Feature
+
+-   change @Input to input in NgxMaskDirective
+-   change @Output output in NgxMaskDirective
+-   change variables to signals in NgxMaskDirective
+
+
 # 19.0.0(2024-11-22)
 
 ### Feature

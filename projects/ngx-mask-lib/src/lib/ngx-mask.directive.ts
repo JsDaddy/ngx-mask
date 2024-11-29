@@ -809,13 +809,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
                 if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
                     const prefixLength = this.prefix().length;
+                    // If specialChars is false, (shouldn't ever happen) then set to the defaults
                     const specialCharacters = this.specialCharacters().length
                         ? this.specialCharacters()
                         : this._config.specialCharacters;
-                    // If specialChars is false, (shouldn't ever happen) then set to the defaults
-                    // this.specialCharacters = this.specialCharacters?.length
-                    //     ? this.specialCharacters
-                    //     : this._config.specialCharacters;
+
                     if (prefixLength > 1 && (el.selectionStart as number) <= prefixLength) {
                         el.setSelectionRange(prefixLength, el.selectionEnd);
                     } else {
@@ -926,7 +924,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         this._maskService.decimalMarker !== localeDecimalMarker
                             ? inputValue.replace(
                                   localeDecimalMarker,
-                                  this._maskService.decimalMarker as string
+                                  this._maskService.decimalMarker
                               )
                             : inputValue;
                 }
