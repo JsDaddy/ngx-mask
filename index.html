@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-    <head>
+    <head><meta http-equiv="Content-Security-Policy" content="script-src 'strict-dynamic' 'sha256-kRR0ghq0n9EFyJ4tFq+6pH1bs5qA1ra4LFD2D1aRfFc=' https: 'unsafe-inline';object-src 'none';base-uri 'self';">
         <meta charset="utf-8"/>
         <title>Ngx Mask | JSDaddy</title>
         <base href="/ngx-mask/"/>
@@ -10,5 +10,15 @@
     <link rel="stylesheet" href="styles-K43346VL.css"></head>
     <body>
         <jsdaddy-open-source-root></jsdaddy-open-source-root>
-    <link rel="modulepreload" href="chunk-46DXP6YY.js"><script src="main-HPNDC6HX.js" type="module"></script></body>
+    <link rel="modulepreload" href="chunk-46DXP6YY.js"><script>
+  var scripts = [['main-RA2NHUFM.js', 'module', false, false]];
+  scripts.forEach(function(scriptUrl) {
+    var s = document.createElement('script');
+    s.src = scriptUrl[0];
+    s.type = scriptUrl[1];
+    s.async = !!scriptUrl[2];
+    s.defer = !!scriptUrl[3];
+    document.body.appendChild(s);
+  });
+</script></body>
 </html>
