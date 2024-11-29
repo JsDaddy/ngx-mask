@@ -111,7 +111,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         } = changes;
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
-                this._maskService.maskChanged.set(true);
+                this._maskService.maskChanged = true;
             }
             if (mask.currentValue && mask.currentValue.split(MaskExpression.OR).length > 1) {
                 this._maskExpressionArray.set(
@@ -123,53 +123,51 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             } else {
                 this._maskExpressionArray.set([]);
                 this._maskValue.set(mask.currentValue || MaskExpression.EMPTY_STRING);
-                this._maskService.maskExpression.set(this._maskValue());
+                this._maskService.maskExpression = this._maskValue();
             }
         }
         if (specialCharacters) {
             if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
                 return;
             } else {
-                this._maskService.specialCharacters.set(specialCharacters.currentValue || []);
+                this._maskService.specialCharacters = specialCharacters.currentValue || [];
             }
         }
         if (allowNegativeNumbers) {
-            this._maskService.allowNegativeNumbers.set(allowNegativeNumbers.currentValue);
-            if (this._maskService.allowNegativeNumbers()) {
-                this._maskService.specialCharacters.set(
-                    this._maskService
-                        .specialCharacters()
-                        .filter((c: string) => c !== MaskExpression.MINUS)
+            this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
+            if (this._maskService.allowNegativeNumbers) {
+                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
+                    (c: string) => c !== MaskExpression.MINUS
                 );
             }
         }
         // Only overwrite the mask available patterns if a pattern has actually been passed in
         if (patterns && patterns.currentValue) {
-            this._maskService.patterns.set(patterns.currentValue);
+            this._maskService.patterns = patterns.currentValue;
         }
         if (apm && apm.currentValue) {
-            this._maskService.apm.set(apm.currentValue);
+            this._maskService.apm = apm.currentValue;
         }
         if (prefix) {
-            this._maskService.prefix.set(prefix.currentValue);
+            this._maskService.prefix = prefix.currentValue;
         }
         if (suffix) {
-            this._maskService.suffix.set(suffix.currentValue);
+            this._maskService.suffix = suffix.currentValue;
         }
         if (thousandSeparator) {
-            this._maskService.thousandSeparator.set(thousandSeparator.currentValue);
+            this._maskService.thousandSeparator = thousandSeparator.currentValue;
         }
         if (decimalMarker) {
-            this._maskService.decimalMarker.set(decimalMarker.currentValue);
+            this._maskService.decimalMarker = decimalMarker.currentValue;
         }
         if (dropSpecialCharacters) {
-            this._maskService.dropSpecialCharacters.set(dropSpecialCharacters.currentValue);
+            this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
         }
         if (hiddenInput) {
-            this._maskService.hiddenInput.set(hiddenInput.currentValue);
+            this._maskService.hiddenInput = hiddenInput.currentValue;
         }
         if (showMaskTyped) {
-            this._maskService.showMaskTyped.set(showMaskTyped.currentValue);
+            this._maskService.showMaskTyped = showMaskTyped.currentValue;
             if (
                 showMaskTyped.previousValue === false &&
                 showMaskTyped.currentValue === true &&
@@ -181,242 +179,52 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             }
         }
         if (placeHolderCharacter) {
-            this._maskService.placeHolderCharacter.set(placeHolderCharacter.currentValue);
+            this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
         }
         if (shownMaskExpression) {
-            this._maskService.shownMaskExpression.set(shownMaskExpression.currentValue);
+            this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
         }
         if (clearIfNotMatch) {
-            this._maskService.clearIfNotMatch.set(clearIfNotMatch.currentValue);
+            this._maskService.clearIfNotMatch = clearIfNotMatch.currentValue;
         }
         if (validation) {
-            this._maskService.validation.set(validation.currentValue);
+            this._maskService.validation = validation.currentValue;
         }
         if (separatorLimit) {
-            this._maskService.separatorLimit.set(separatorLimit.currentValue);
+            this._maskService.separatorLimit = separatorLimit.currentValue;
         }
         if (leadZeroDateTime) {
-            this._maskService.leadZeroDateTime.set(leadZeroDateTime.currentValue);
+            this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
         }
         if (leadZero) {
-            this._maskService.leadZero.set(leadZero.currentValue);
+            this._maskService.leadZero = leadZero.currentValue;
         }
         if (triggerOnMaskChange) {
-            this._maskService.triggerOnMaskChange.set(triggerOnMaskChange.currentValue);
+            this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
         }
         if (inputTransformFn) {
-            this._maskService.inputTransformFn.set(inputTransformFn.currentValue);
+            this._maskService.inputTransformFn = inputTransformFn.currentValue;
         }
         if (outputTransformFn) {
-            this._maskService.outputTransformFn.set(outputTransformFn.currentValue);
+            this._maskService.outputTransformFn = outputTransformFn.currentValue;
         }
         if (keepCharacterPositions) {
-            this._maskService.keepCharacterPositions.set(keepCharacterPositions.currentValue);
+            this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
         }
         this._applyMask();
     }
 
-    // public ngOnChanges(changes: SimpleChanges): void {
-    //     const {
-    //         maskExpression,
-    //         specialCharacters,
-    //         patterns,
-    //         prefix,
-    //         suffix,
-    //         thousandSeparator,
-    //         decimalMarker,
-    //         dropSpecialCharacters,
-    //         hiddenInput,
-    //         showMaskTyped,
-    //         triggerOnMaskChange,
-    //         // apm,
-    //         inputTransformFn,
-    //         outputTransformFn,
-    //     } = changes;
-    //     if (maskExpression) {
-    //         if (
-    //             maskExpression.currentValue !== maskExpression.previousValue &&
-    //             !maskExpression.firstChange
-    //         ) {
-    //             this._maskService.maskChanged = true;
-    //         }
-    //         if (
-    //             maskExpression.currentValue &&
-    //             maskExpression.currentValue.split(MaskExpression.OR).length > 1
-    //         ) {
-    //             this._maskExpressionArray = maskExpression.currentValue
-    //                 .split(MaskExpression.OR)
-    //                 .sort((a: string, b: string) => {
-    //                     return a.length - b.length;
-    //                 });
-    //             this._setMask();
-    //         } else {
-    //             this._maskExpressionArray = [];
-    //             this._maskValue = maskExpression.currentValue || MaskExpression.EMPTY_STRING;
-    //             this._maskService.maskExpression = this._maskValue;
-    //         }
-    //     }
-    //     if (specialCharacters) {
-    //         if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
-    //             return;
-    //         } else {
-    //             this._maskService.specialCharacters = specialCharacters.currentValue || [];
-    //         }
-    //     }
-    //
-    //     // Only overwrite the mask available patterns if a pattern has actually been passed in
-    //     if (patterns && patterns.currentValue) {
-    //         this._maskService.patterns = patterns.currentValue;
-    //     }
-    //     // if (apm && apm.currentValue) {
-    //     //     this._maskService.apm = apm.currentValue;
-    //     // }
-    //     if (prefix) {
-    //         this._maskService.prefix = prefix.currentValue;
-    //     }
-    //     if (suffix) {
-    //         this._maskService.suffix = suffix.currentValue;
-    //     }
-    //     if (thousandSeparator) {
-    //         this._maskService.thousandSeparator = thousandSeparator.currentValue;
-    //     }
-    //     if (decimalMarker) {
-    //         this._maskService.decimalMarker = decimalMarker.currentValue;
-    //     }
-    //     if (dropSpecialCharacters) {
-    //         this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
-    //     }
-    //
-    //     if (hiddenInput) {
-    //         this._maskService.hiddenInput = hiddenInput.currentValue;
-    //     }
-    //
-    //     if (showMaskTyped) {
-    //         this._maskService.showMaskTyped = showMaskTyped.currentValue;
-    //         if (
-    //             showMaskTyped.previousValue === false &&
-    //             showMaskTyped.currentValue === true &&
-    //             this._isFocused
-    //         ) {
-    //             requestAnimationFrame(() => {
-    //                 this._maskService._elementRef?.nativeElement.click();
-    //             });
-    //         }
-    //     }
-    //
-    //     if (triggerOnMaskChange) {
-    //         this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
-    //     }
-    //     if (inputTransformFn) {
-    //         this._maskService.inputTransformFn = inputTransformFn.currentValue;
-    //     }
-    //     if (outputTransformFn) {
-    //         this._maskService.outputTransformFn = outputTransformFn.currentValue;
-    //     }
-    //     this._applyMask();
-    // }
-    //
-    // public constructor() {
-    //     effect(() => {
-    //         const validation = this.validation();
-    //         const separatorLimit = this.separatorLimit();
-    //         const leadZeroDateTime = this.leadZeroDateTime();
-    //         const leadZero = this.leadZero();
-    //         const keepCharacterPositions = this.keepCharacterPositions();
-    //         const clearIfNotMatch = this.clearIfNotMatch();
-    //         const showTemplate = this.showTemplate();
-    //         const shownMaskExpression = this.shownMaskExpression();
-    //         const placeHolderCharacter = this.placeHolderCharacter();
-    //         const allowNegativeNumbers = this.allowNegativeNumbers();
-    //
-    //         //             const hiddenInput = this.hiddenInput();
-    //         // if (hiddenInput !== null) {
-    //         //     this._maskService.hiddenInput = this.hiddenInput();
-    //         // }
-    //         // const apm = this.apm();
-    //         // if (apm !== null) {
-    //         //     this._maskService.apm = apm;
-    //         // }
-    //         // const prefix = this.prefix();
-    //         //
-    //         // if (prefix) {
-    //         //     this._maskService.prefix = prefix;
-    //         // }
-    //         // const suffix = this.suffix();
-    //         //
-    //         // if (suffix) {
-    //         //     this._maskService.suffix = suffix;
-    //         // }
-    //         const apm = this.apm();
-    //         if (apm !== null) {
-    //             this._maskService.apm = apm;
-    //         }
-    //         if (allowNegativeNumbers !== null) {
-    //             this._maskService.allowNegativeNumbers = allowNegativeNumbers;
-    //             if (this._maskService.allowNegativeNumbers) {
-    //                 this._maskService.specialCharacters =
-    //                     this._maskService.specialCharacters.filter(
-    //                         (c: string) => c !== MaskExpression.MINUS
-    //                     );
-    //             }
-    //         }
-    //
-    //         // const showMaskTyped = this.showMaskTyped();
-    //         // if (showMaskTyped !== null) {
-    //         //     this._maskService.showMaskTyped = showMaskTyped;
-    //         //     const previousShowMaskTyped = computedPrevious(signal(showMaskTyped));
-    //         //
-    //         //     if (!previousShowMaskTyped() && showMaskTyped && this._isFocused) {
-    //         //         requestAnimationFrame(() => {
-    //         //             this._maskService._elementRef?.nativeElement.click();
-    //         //         });
-    //         //     }
-    //         // }
-    //
-    //         if (placeHolderCharacter !== null) {
-    //             this._maskService.placeHolderCharacter = placeHolderCharacter;
-    //         }
-    //
-    //         if (shownMaskExpression !== null) {
-    //             this._maskService.shownMaskExpression = shownMaskExpression;
-    //         }
-    //
-    //         if (showTemplate !== null) {
-    //             this._maskService.showTemplate = showTemplate;
-    //         }
-    //
-    //         if (clearIfNotMatch !== null) {
-    //             this._maskService.clearIfNotMatch = clearIfNotMatch;
-    //         }
-    //
-    //         if (validation !== null) {
-    //             this._maskService.validation = validation;
-    //         }
-    //         if (separatorLimit !== null) {
-    //             this._maskService.separatorLimit = separatorLimit;
-    //         }
-    //         if (leadZeroDateTime !== null) {
-    //             this._maskService.leadZeroDateTime = leadZeroDateTime;
-    //         }
-    //         if (leadZero !== null) {
-    //             this._maskService.leadZero = leadZero;
-    //         }
-    //         if (keepCharacterPositions !== null) {
-    //             this._maskService.keepCharacterPositions = keepCharacterPositions;
-    //         }
-    //     });
-    // }
-
     public validate({ value }: FormControl): ValidationErrors | null {
         const processedValue: string = typeof value === 'number' ? String(value) : value;
         const maskValue = this._maskValue();
-        if (!this._maskService.validation() || !maskValue) {
+
+        if (!this._maskService.validation || !maskValue) {
             return null;
         }
-        if (this._maskService.ipError()) {
+        if (this._maskService.ipError) {
             return this._createValidationError(processedValue);
         }
-        if (this._maskService.cpfCnpjError()) {
+        if (this._maskService.cpfCnpjError) {
             return this._createValidationError(processedValue);
         }
         if (maskValue.startsWith(MaskExpression.SEPARATOR)) {
@@ -425,7 +233,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (withoutValidation.includes(maskValue)) {
             return null;
         }
-        if (this._maskService.clearIfNotMatch()) {
+        if (this._maskService.clearIfNotMatch) {
             return null;
         }
         if (timeMasks.includes(maskValue)) {
@@ -459,8 +267,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             if (maskValue.startsWith(MaskExpression.PERCENT)) {
                 return null;
             }
-            for (const key in this._maskService.patterns()) {
-                if (this._maskService.patterns()[key]?.optional) {
+            for (const key in this._maskService.patterns) {
+                if (this._maskService.patterns[key]?.optional) {
                     if (maskValue.indexOf(key) !== maskValue.lastIndexOf(key)) {
                         const opt: string = maskValue
                             .split(MaskExpression.EMPTY_STRING)
@@ -494,7 +302,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === -1
             ) {
                 const array = maskValue.split('*');
-                const length: number = this._maskService.dropSpecialCharacters()
+                const length: number = this._maskService.dropSpecialCharacters
                     ? maskValue.length -
                       this._maskService.checkDropSpecialCharAmount(maskValue) -
                       counterOfOpt
@@ -511,9 +319,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     const lastIndexArray = array[array.length - 1];
                     if (
                         lastIndexArray &&
-                        this._maskService
-                            .specialCharacters()
-                            .includes(lastIndexArray[0] as string) &&
+                        this._maskService.specialCharacters.includes(lastIndexArray[0] as string) &&
                         String(processedValue).includes(lastIndexArray[0] ?? '') &&
                         !this.dropSpecialCharacters()
                     ) {
@@ -523,11 +329,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                             : this._createValidationError(processedValue);
                     } else if (
                         ((lastIndexArray &&
-                            !this._maskService
-                                .specialCharacters()
-                                .includes(lastIndexArray[0] as string)) ||
+                            !this._maskService.specialCharacters.includes(
+                                lastIndexArray[0] as string
+                            )) ||
                             !lastIndexArray ||
-                            this._maskService.dropSpecialCharacters()) &&
+                            this._maskService.dropSpecialCharacters) &&
                         processedValue.length >= length - 1
                     ) {
                         return null;
@@ -566,10 +372,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             (value === MaskExpression.EMPTY_STRING ||
                 value === null ||
                 typeof value === 'undefined') &&
-            this._maskService.actualValue()
+            this._maskService.actualValue
         ) {
-            this._maskService.actualValue.set(
-                this._maskService.getActualValue(MaskExpression.EMPTY_STRING)
+            this._maskService.actualValue = this._maskService.getActualValue(
+                MaskExpression.EMPTY_STRING
             );
         }
     }
@@ -581,9 +387,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return;
         }
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        const inputTransformFn = this._maskService.inputTransformFn();
+        const transformedValue = this._maskService.inputTransformFn(el.value);
 
-        const transformedValue = inputTransformFn(el.value);
         if (el.type !== 'number') {
             if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
                 el.value = transformedValue.toString();
@@ -598,13 +403,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 let position: number =
                     el.selectionStart === 1
-                        ? (el.selectionStart as number) + this._maskService.prefix().length
+                        ? (el.selectionStart as number) + this._maskService.prefix.length
                         : (el.selectionStart as number);
 
                 if (
                     this.showMaskTyped() &&
                     this.keepCharacterPositions() &&
-                    this._maskService.placeHolderCharacter().length === 1
+                    this._maskService.placeHolderCharacter.length === 1
                 ) {
                     const suffix = this.suffix();
                     const prefix = this.prefix();
@@ -612,19 +417,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     const prefixLength = prefix.length;
                     const checkSymbols: boolean = this._maskService._checkSymbolMask(
                         inputSymbol,
-                        this._maskService.maskExpression()[position - 1 - prefixLength] ??
+                        this._maskService.maskExpression[position - 1 - prefixLength] ??
                             MaskExpression.EMPTY_STRING
                     );
 
                     const checkSpecialCharacter: boolean = this._maskService._checkSymbolMask(
                         inputSymbol,
-                        this._maskService.maskExpression()[position + 1 - prefixLength] ??
+                        this._maskService.maskExpression[position + 1 - prefixLength] ??
                             MaskExpression.EMPTY_STRING
                     );
                     const selectRangeBackspace: boolean =
-                        this._maskService.selStart() === this._maskService.selEnd();
-                    const selStart = Number(this._maskService.selStart()) - prefixLength;
-                    const selEnd = Number(this._maskService.selEnd()) - prefixLength;
+                        this._maskService.selStart === this._maskService.selEnd;
+                    const selStart = Number(this._maskService.selStart) - prefixLength;
+                    const selEnd = Number(this._maskService.selEnd) - prefixLength;
 
                     const backspaceOrDelete =
                         this._code() === MaskExpression.BACKSPACE ||
@@ -632,59 +437,46 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                     if (backspaceOrDelete) {
                         if (!selectRangeBackspace) {
-                            if (this._maskService.selStart() === prefixLength) {
-                                this._maskService.actualValue.set(
-                                    `${prefix}${this._maskService.maskIsShown().slice(0, selEnd)}${this._inputValue().split(prefix).join('')}`
-                                );
+                            if (this._maskService.selStart === prefixLength) {
+                                this._maskService.actualValue = `${prefix}${this._maskService.maskIsShown.slice(0, selEnd)}${this._inputValue().split(prefix).join('')}`;
                             } else if (
-                                this._maskService.selStart() ===
-                                this._maskService.maskIsShown().length + prefixLength
+                                this._maskService.selStart ===
+                                this._maskService.maskIsShown.length + prefixLength
                             ) {
-                                this._maskService.actualValue.set(
-                                    `${this._inputValue()}${this._maskService.maskIsShown().slice(selStart, selEnd)}`
-                                );
+                                this._maskService.actualValue = `${this._inputValue()}${this._maskService.maskIsShown.slice(selStart, selEnd)}`;
                             } else {
-                                this._maskService.actualValue.set(
-                                    `${prefix}${this._inputValue()
-                                        .split(prefix)
-                                        .join('')
-                                        .slice(
-                                            0,
-                                            selStart
-                                        )}${this._maskService.maskIsShown().slice(selStart, selEnd)}${this._maskService
-                                        .actualValue()
-                                        .slice(
-                                            selEnd + prefixLength,
-                                            this._maskService.maskIsShown().length + prefixLength
-                                        )}${suffix}`
-                                );
+                                this._maskService.actualValue = `${prefix}${this._inputValue()
+                                    .split(prefix)
+                                    .join('')
+                                    .slice(
+                                        0,
+                                        selStart
+                                    )}${this._maskService.maskIsShown.slice(selStart, selEnd)}${this._maskService.actualValue.slice(
+                                    selEnd + prefixLength,
+                                    this._maskService.maskIsShown.length + prefixLength
+                                )}${suffix}`;
                             }
                         } else if (
-                            !this._maskService
-                                .specialCharacters()
-                                .includes(
-                                    this._maskService
-                                        .maskExpression()
-                                        .slice(position - prefixLength, position + 1 - prefixLength)
-                                ) &&
+                            !this._maskService.specialCharacters.includes(
+                                this._maskService.maskExpression.slice(
+                                    position - prefixLength,
+                                    position + 1 - prefixLength
+                                )
+                            ) &&
                             selectRangeBackspace
                         ) {
                             if (selStart === 1 && prefix) {
-                                this._maskService.actualValue.set(
-                                    `${prefix}${this._maskService.placeHolderCharacter()}${el.value
-                                        .split(prefix)
-                                        .join('')
-                                        .split(suffix)
-                                        .join('')}${suffix}`
-                                );
+                                this._maskService.actualValue = `${prefix}${this._maskService.placeHolderCharacter}${el.value
+                                    .split(prefix)
+                                    .join('')
+                                    .split(suffix)
+                                    .join('')}${suffix}`;
 
                                 position = position - 1;
                             } else {
                                 const part1 = el.value.substring(0, position);
                                 const part2 = el.value.substring(position);
-                                this._maskService.actualValue.set(
-                                    `${part1}${this._maskService.placeHolderCharacter()}${part2}`
-                                );
+                                this._maskService.actualValue = `${part1}${this._maskService.placeHolderCharacter}${part2}`;
                             }
                         }
                         position = this._code() === MaskExpression.DELETE ? position + 1 : position;
@@ -693,32 +485,27 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         if (!checkSymbols && !checkSpecialCharacter && selectRangeBackspace) {
                             position = Number(el.selectionStart) - 1;
                         } else if (
-                            this._maskService
-                                .specialCharacters()
-                                .includes(el.value.slice(position, position + 1)) &&
+                            this._maskService.specialCharacters.includes(
+                                el.value.slice(position, position + 1)
+                            ) &&
                             checkSpecialCharacter &&
-                            !this._maskService
-                                .specialCharacters()
-                                .includes(el.value.slice(position + 1, position + 2))
+                            !this._maskService.specialCharacters.includes(
+                                el.value.slice(position + 1, position + 2)
+                            )
                         ) {
-                            this._maskService.actualValue.set(
-                                `${el.value.slice(0, position - 1)}${el.value.slice(position, position + 1)}${inputSymbol}${el.value.slice(position + 2)}`
-                            );
+                            this._maskService.actualValue = `${el.value.slice(0, position - 1)}${el.value.slice(position, position + 1)}${inputSymbol}${el.value.slice(position + 2)}`;
                             position = position + 1;
                         } else if (checkSymbols) {
                             if (el.value.length === 1 && position === 1) {
-                                this._maskService.actualValue.set(
-                                    `${prefix}${inputSymbol}${this._maskService
-                                        .maskIsShown()
-                                        .slice(1, this._maskService.maskIsShown().length)}${suffix}`
-                                );
+                                this._maskService.actualValue = `${prefix}${inputSymbol}${this._maskService.maskIsShown.slice(
+                                    1,
+                                    this._maskService.maskIsShown.length
+                                )}${suffix}`;
                             } else {
-                                this._maskService.actualValue.set(
-                                    `${el.value.slice(0, position - 1)}${inputSymbol}${el.value
-                                        .slice(position + 1)
-                                        .split(suffix)
-                                        .join('')}${suffix}`
-                                );
+                                this._maskService.actualValue = `${el.value.slice(0, position - 1)}${inputSymbol}${el.value
+                                    .slice(position + 1)
+                                    .split(suffix)
+                                    .join('')}${suffix}`;
                             }
                         } else if (
                             prefix &&
@@ -726,15 +513,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                             position - prefixLength === 1 &&
                             this._maskService._checkSymbolMask(
                                 el.value,
-                                this._maskService.maskExpression()[position - 1 - prefixLength] ??
+                                this._maskService.maskExpression[position - 1 - prefixLength] ??
                                     MaskExpression.EMPTY_STRING
                             )
                         ) {
-                            this._maskService.actualValue.set(
-                                `${prefix}${el.value}${this._maskService
-                                    .maskIsShown()
-                                    .slice(1, this._maskService.maskIsShown().length)}${suffix}`
-                            );
+                            this._maskService.actualValue = `${prefix}${el.value}${this._maskService.maskIsShown.slice(
+                                1,
+                                this._maskService.maskIsShown.length
+                            )}${suffix}`;
                         }
                     }
                 }
@@ -742,12 +528,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 let caretShift = 0;
                 let backspaceShift = false;
                 if (this._code() === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
-                    this._maskService.deletedSpecialCharacter.set(true);
+                    this._maskService.deletedSpecialCharacter = true;
                 }
                 if (
-                    this._inputValue().length >= this._maskService.maskExpression().length - 1 &&
+                    this._inputValue().length >= this._maskService.maskExpression.length - 1 &&
                     this._code() !== MaskExpression.BACKSPACE &&
-                    this._maskService.maskExpression() === MaskExpression.DAYS_MONTHS_YEARS &&
+                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
                     position < 10
                 ) {
                     const inputSymbol = this._inputValue().slice(position - 1, position);
@@ -757,7 +543,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         this._inputValue().slice(position + 1);
                 }
                 if (
-                    this._maskService.maskExpression() === MaskExpression.DAYS_MONTHS_YEARS &&
+                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
                     this.leadZeroDateTime()
                 ) {
                     if (
@@ -768,7 +554,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     }
                 }
                 if (
-                    this._maskService.maskExpression() === MaskExpression.HOURS_MINUTES_SECONDS &&
+                    this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
                     this.apm()
                 ) {
                     if (this._justPasted() && el.value.slice(0, 2) === MaskExpression.DOUBLE_ZERO) {
@@ -796,18 +582,18 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     return;
                 }
 
-                if (this._maskService.plusOnePosition()) {
+                if (this._maskService.plusOnePosition) {
                     position = position + 1;
-                    this._maskService.plusOnePosition.set(false);
+                    this._maskService.plusOnePosition = false;
                 }
                 // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
                 if (this._maskExpressionArray().length) {
                     if (this._code() === MaskExpression.BACKSPACE) {
                         const specialChartMinusOne = this.specialCharacters().includes(
-                            this._maskService.actualValue().slice(position - 1, position)
+                            this._maskService.actualValue.slice(position - 1, position)
                         );
                         const specialChartPlusOne = this.specialCharacters().includes(
-                            this._maskService.actualValue().slice(position, position + 1)
+                            this._maskService.actualValue.slice(position, position + 1)
                         );
                         if (this._allowFewMaskChangeMask() && !specialChartPlusOne) {
                             position = (el.selectionStart as number) + 1;
@@ -818,7 +604,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     } else {
                         position =
                             el.selectionStart === 1
-                                ? (el.selectionStart as number) + this._maskService.prefix().length
+                                ? (el.selectionStart as number) + this._maskService.prefix.length
                                 : (el.selectionStart as number);
                     }
                 }
@@ -835,7 +621,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                           : caretShift);
                 if (positionToApply > this._getActualInputLength()) {
                     positionToApply =
-                        el.value === this._maskService.decimalMarker() && el.value.length === 1
+                        el.value === this._maskService.decimalMarker && el.value.length === 1
                             ? this._getActualInputLength() + 1
                             : this._getActualInputLength();
                 }
@@ -883,17 +669,18 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (this._maskValue()) {
             const el: HTMLInputElement = e.target as HTMLInputElement;
             if (
-                this._maskService.leadZero() &&
+                this._maskService.leadZero &&
                 el.value.length > 0 &&
-                typeof this._maskService.decimalMarker() === 'string'
+                typeof this._maskService.decimalMarker === 'string'
             ) {
-                const maskExpression = this._maskService.maskExpression();
-                const decimalMarker = this._maskService.decimalMarker() as string;
-                const suffix = this._maskService.suffix();
+                const maskExpression = this._maskService.maskExpression;
+                const decimalMarker = this._maskService.decimalMarker as string;
+                const suffix = this._maskService.suffix;
                 const precision = Number(
-                    this._maskService
-                        .maskExpression()
-                        .slice(maskExpression.length - 1, maskExpression.length)
+                    this._maskService.maskExpression.slice(
+                        maskExpression.length - 1,
+                        maskExpression.length
+                    )
                 );
 
                 if (precision > 0) {
@@ -908,7 +695,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                           decimalMarker +
                           MaskExpression.NUMBER_ZERO.repeat(precision) +
                           suffix;
-                    this._maskService.actualValue.set(el.value);
+                    this._maskService.actualValue = el.value;
                 }
             }
             this._maskService.clearIfNotMatchFn();
@@ -931,26 +718,26 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             el !== null &&
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
-            el.selectionStart > this._maskService.prefix().length &&
+            el.selectionStart > this._maskService.prefix.length &&
             (e as any).keyCode !== 38
         ) {
-            if (this._maskService.showMaskTyped() && !this.keepCharacterPositions()) {
+            if (this._maskService.showMaskTyped && !this.keepCharacterPositions()) {
                 // We are showing the mask in the input
-                this._maskService.maskIsShown.set(this._maskService.showMaskInInput());
+                this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (
                     el.setSelectionRange &&
-                    this._maskService.prefix() + this._maskService.maskIsShown() === el.value
+                    this._maskService.prefix + this._maskService.maskIsShown === el.value
                 ) {
                     // the input ONLY contains the mask, so position the cursor at the start
                     el.focus();
                     el.setSelectionRange(posStart, posEnd);
                 } else {
                     // the input contains some characters already
-                    if (el.selectionStart > this._maskService.actualValue().length) {
+                    if (el.selectionStart > this._maskService.actualValue.length) {
                         // if the user clicked beyond our value's length, position the cursor at the end of our value
                         el.setSelectionRange(
-                            this._maskService.actualValue().length,
-                            this._maskService.actualValue().length
+                            this._maskService.actualValue.length,
+                            this._maskService.actualValue.length
                         );
                     }
                 }
@@ -958,8 +745,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         const nextValue: string | null =
             el &&
-            (el.value === this._maskService.prefix()
-                ? this._maskService.prefix() + this._maskService.maskIsShown()
+            (el.value === this._maskService.prefix
+                ? this._maskService.prefix + this._maskService.maskIsShown
                 : el.value);
 
         /** Fix of cursor position jumping to end in most browsers no matter where cursor is inserted onFocus */
@@ -971,19 +758,16 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             el &&
             el.type !== 'number' &&
             ((el.selectionStart as number) || (el.selectionEnd as number)) <=
-                this._maskService.prefix().length
+                this._maskService.prefix.length
         ) {
             const specialCharactersAtTheStart =
-                this._maskService.maskExpression().match(
+                this._maskService.maskExpression.match(
                     new RegExp(
-                        `^[${this._maskService
-                            .specialCharacters()
-                            .map((c) => `\\${c}`)
-                            .join('')}]+`
+                        `^[${this._maskService.specialCharacters.map((c) => `\\${c}`).join('')}]+`
                     )
                 )?.[0].length || 0;
 
-            el.selectionStart = this._maskService.prefix().length + specialCharactersAtTheStart;
+            el.selectionStart = this._maskService.prefix.length + specialCharactersAtTheStart;
             return;
         }
         /** select only inserted text */
@@ -1060,9 +844,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 }
                 this.checkSelectionOnDeletion(el);
                 if (
-                    this._maskService.prefix().length &&
-                    (el.selectionStart as number) <= this._maskService.prefix().length &&
-                    (el.selectionEnd as number) <= this._maskService.prefix().length
+                    this._maskService.prefix.length &&
+                    (el.selectionStart as number) <= this._maskService.prefix.length &&
+                    (el.selectionEnd as number) <= this._maskService.prefix.length
                 ) {
                     e.preventDefault();
                 }
@@ -1075,11 +859,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     el.value.length !== 0
                 ) {
                     this._position.set(
-                        this._maskService.prefix() ? this._maskService.prefix().length : 0
+                        this._maskService.prefix ? this._maskService.prefix.length : 0
                     );
                     this._maskService.applyMask(
-                        this._maskService.prefix(),
-                        this._maskService.maskExpression(),
+                        this._maskService.prefix,
+                        this._maskService.maskExpression,
                         this._position() as number
                     );
                 }
@@ -1100,8 +884,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 el.setSelectionRange(0, this._getActualInputLength());
                 e.preventDefault();
             }
-            this._maskService.selStart.set(el.selectionStart);
-            this._maskService.selEnd.set(el.selectionEnd);
+            this._maskService.selStart = el.selectionStart;
+            this._maskService.selEnd = el.selectionEnd;
         }
     }
 
@@ -1126,8 +910,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             typeof value === 'undefined'
         ) {
             if (value === null || typeof value === 'undefined' || value === '') {
-                this._maskService.currentValue.set('');
-                this._maskService.previousValue.set('');
+                this._maskService.currentValue = '';
+                this._maskService.previousValue = '';
             }
 
             let inputValue: string | number | null | undefined = value;
@@ -1137,32 +921,32 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             ) {
                 inputValue = String(inputValue);
                 const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
-                if (!Array.isArray(this._maskService.decimalMarker())) {
+                if (!Array.isArray(this._maskService.decimalMarker)) {
                     inputValue =
-                        this._maskService.decimalMarker() !== localeDecimalMarker
+                        this._maskService.decimalMarker !== localeDecimalMarker
                             ? inputValue.replace(
                                   localeDecimalMarker,
-                                  this._maskService.decimalMarker() as string
+                                  this._maskService.decimalMarker as string
                               )
                             : inputValue;
                 }
 
                 if (
-                    this._maskService.leadZero() &&
+                    this._maskService.leadZero &&
                     inputValue &&
                     this.mask() &&
                     this.dropSpecialCharacters() !== false
                 ) {
                     inputValue = this._maskService._checkPrecision(
-                        this._maskService.maskExpression(),
+                        this._maskService.maskExpression,
                         inputValue as string
                     );
                 }
 
                 if (
-                    this._maskService.decimalMarker() === MaskExpression.COMMA ||
-                    (Array.isArray(this._maskService.decimalMarker()) &&
-                        this._maskService.thousandSeparator() === MaskExpression.DOT)
+                    this._maskService.decimalMarker === MaskExpression.COMMA ||
+                    (Array.isArray(this._maskService.decimalMarker) &&
+                        this._maskService.thousandSeparator === MaskExpression.DOT)
                 ) {
                     inputValue = inputValue
                         .toString()
@@ -1172,11 +956,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     requestAnimationFrame(() => {
                         this._maskService.applyMask(
                             inputValue?.toString() ?? '',
-                            this._maskService.maskExpression()
+                            this._maskService.maskExpression
                         );
                     });
                 }
-                this._maskService.isNumberValue.set(true);
+                this._maskService.isNumberValue = true;
             }
 
             if (typeof inputValue !== 'string') {
@@ -1187,22 +971,22 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             this._setMask();
 
             if (
-                (inputValue && this._maskService.maskExpression()) ||
-                (this._maskService.maskExpression() &&
-                    (this._maskService.prefix() || this._maskService.showMaskTyped()))
+                (inputValue && this._maskService.maskExpression) ||
+                (this._maskService.maskExpression &&
+                    (this._maskService.prefix || this._maskService.showMaskTyped))
             ) {
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
                 if (typeof inputTransformFn !== 'function') {
-                    this._maskService.writingValue.set(true);
+                    this._maskService.writingValue = true;
                 }
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this._maskService.applyMask(inputValue, this._maskService.maskExpression()),
+                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
                 ];
                 // Let the service know we've finished writing value
                 if (typeof inputTransformFn !== 'function') {
-                    this._maskService.writingValue.set(false);
+                    this._maskService.writingValue = false;
                 }
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
@@ -1255,12 +1039,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private _applyMask(): any {
-        this._maskService.maskExpression.set(
-            this._maskService._repeatPatternSymbols(this._maskValue() || '')
+        this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
+            this._maskValue() || ''
         );
         this._maskService.formElementProperty = [
             'value',
-            this._maskService.applyMask(this._inputValue(), this._maskService.maskExpression()),
+            this._maskService.applyMask(this._inputValue(), this._maskService.maskExpression),
         ];
     }
 
@@ -1284,8 +1068,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _getActualInputLength() {
         return (
-            this._maskService.actualValue().length ||
-            this._maskService.actualValue().length + this._maskService.prefix().length
+            this._maskService.actualValue.length ||
+            this._maskService.actualValue.length + this._maskService.prefix.length
         );
     }
 
@@ -1300,11 +1084,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     private _setMask() {
         this._maskExpressionArray().some((mask): boolean | void => {
-            // let maskExpression = this.mask();
-
             const specialChart: boolean = mask
                 .split(MaskExpression.EMPTY_STRING)
-                .some((char) => this._maskService.specialCharacters().includes(char));
+                .some((char) => this._maskService.specialCharacters.includes(char));
             if (
                 (specialChart &&
                     this._inputValue() &&
@@ -1319,8 +1101,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         ? this._maskService._repeatPatternSymbols(mask)
                         : mask;
                     this._maskValue.set(maskValue);
-                    // maskExpression = maskValue;
-                    this._maskService.maskExpression.set(maskValue);
+                    this._maskService.maskExpression = maskValue;
                     return test;
                 } else {
                     if (this._code() === MaskExpression.BACKSPACE) {
@@ -1335,8 +1116,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         ? this._maskService._repeatPatternSymbols(expression)
                         : expression;
                     this._maskValue.set(maskValue);
-                    // this.maskExpression = maskValue;
-                    this._maskService.maskExpression.set(maskValue);
+                    this._maskService.maskExpression = maskValue;
                 }
             } else {
                 const check: boolean = this._maskService
@@ -1349,8 +1129,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 if (check || this._justPasted()) {
                     this._maskValue.set(mask);
-                    // this.maskExpression = mask;
-                    this._maskService.maskExpression.set(mask);
+                    this._maskService.maskExpression = mask;
                     return check;
                 }
             }
@@ -1358,7 +1137,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     private _areAllCharactersInEachStringSame(array: string[]): boolean {
-        const specialCharacters = this._maskService.specialCharacters();
+        const specialCharacters = this._maskService.specialCharacters;
+
         function removeSpecialCharacters(str: string): string {
             const regex = new RegExp(`[${specialCharacters.map((ch) => `\\${ch}`).join('')}]`, 'g');
             return str.replace(regex, '');

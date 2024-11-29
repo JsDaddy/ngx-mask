@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { NgxMaskDirective, provideNgxMask, NgxMaskPipe } from 'ngx-mask';
 
-xdescribe('Pipe: Mask', () => {
+describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
 
     beforeEach(() => {

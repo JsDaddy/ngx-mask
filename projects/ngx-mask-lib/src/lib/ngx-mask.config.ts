@@ -11,7 +11,7 @@ export type NgxMaskConfig = {
     thousandSeparator: string;
     decimalMarker: '.' | ',' | ['.', ','];
     clearIfNotMatch: boolean;
-    showTemplate: boolean;
+    // showTemplate: boolean;
     showMaskTyped: boolean;
     placeHolderCharacter: string;
     shownMaskExpression: string;
@@ -50,7 +50,7 @@ export const initialConfig: NgxMaskConfig = {
     thousandSeparator: ' ',
     decimalMarker: ['.', ','],
     clearIfNotMatch: false,
-    showTemplate: false,
+    // showTemplate: false,
     showMaskTyped: false,
     placeHolderCharacter: '_',
     dropSpecialCharacters: true,
