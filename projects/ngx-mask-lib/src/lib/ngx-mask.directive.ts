@@ -1,9 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import type { OnChanges, SimpleChanges } from '@angular/core';
-import { signal } from '@angular/core';
-import { input } from '@angular/core';
-import { output } from '@angular/core';
-import { Directive, HostListener, inject } from '@angular/core';
+import { signal, input, output, Directive, HostListener, inject } from '@angular/core';
 import type {
     ControlValueAccessor,
     FormControl,

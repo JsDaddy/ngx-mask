@@ -4,8 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { equal } from './utils/test-functions.component';
 
@@ -28,8 +27,8 @@ describe('Directive: Mask (Trigger on mask change)', () => {
     });
 
     it('should trigger form value update if mask is changed', async () => {
-        component.mask = '';
-        component.triggerOnMaskChange = true;
+        component.mask.set('');
+        component.triggerOnMaskChange.set(true);
         fixture.detectChanges();
 
         component.form.setValue('7912345678');
@@ -39,7 +38,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         expect(inputEl.nativeElement.value).toEqual('7912345678');
         expect(component.form.value).toEqual('7912345678');
 
-        component.mask = '00 000 00 00';
+        component.mask.set('00 000 00 00');
         fixture.detectChanges();
         await fixture.whenStable();
         inputEl = fixture.debugElement.query(By.css('input'));
@@ -48,8 +47,8 @@ describe('Directive: Mask (Trigger on mask change)', () => {
     });
 
     it('should trigger form value update if mask is changed', async () => {
-        component.mask = '00000||00000-0000';
-        component.triggerOnMaskChange = true;
+        component.mask.set('00000||00000-0000');
+        component.triggerOnMaskChange.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -59,7 +58,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         expect(inputTarget.value).toEqual('1234');
         expect(component.form.value).toBe('1234');
 
-        component.mask = 'S0S 0S0';
+        component.mask.set('S0S 0S0');
         equal(inputTarget.value, '', fixture, true);
         expect(component.form.value).toBe('');
     });

@@ -5,8 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 
 describe('Directive: Mask (Suffix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -23,24 +22,24 @@ describe('Directive: Mask (Suffix)', () => {
     });
 
     it('should clear if not match the mask!!!!', () => {
-        component.mask = '0000';
-        component.suffix = ' $';
+        component.mask.set('0000');
+        component.suffix.set(' $');
         equal('', '', fixture);
         equal('123', '123 $', fixture);
         equal('1234', '1234 $', fixture);
     });
 
     it('should clear if not match the mask!!!!', () => {
-        component.mask = '0*.00';
-        component.suffix = ' $';
+        component.mask.set('0*.00');
+        component.suffix.set(' $');
         equal('', '', fixture);
         equal('12345', '12345 $', fixture);
         equal('12344.44', '12344.44 $', fixture);
     });
 
     it('should work correct with suffix .com', () => {
-        component.mask = '0000';
-        component.suffix = '.com';
+        component.mask.set('0000');
+        component.suffix.set('.com');
         equal('', '', fixture);
         equal('12', '12.com', fixture);
         equal('12344', '1234.com', fixture);
@@ -49,15 +48,15 @@ describe('Directive: Mask (Suffix)', () => {
     });
 
     it('separator should work correct with suffix', () => {
-        component.mask = 'separator';
-        component.suffix = '$';
+        component.mask.set('separator');
+        component.suffix.set('$');
         equal('', '', fixture);
         equal('123', '123$', fixture);
         equal('1234', '1 234$', fixture);
     });
     it('should not delete suffix', () => {
-        component.mask = '0000';
-        component.suffix = '$';
+        component.mask.set('0000');
+        component.suffix.set('$');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -78,8 +77,8 @@ describe('Directive: Mask (Suffix)', () => {
         expect(inputTarget.selectionStart).toEqual(4);
     });
     it('should delete all if value and part of suffix are deleted', () => {
-        component.mask = 'A*';
-        component.suffix = ' test';
+        component.mask.set('A*');
+        component.suffix.set(' test');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -96,8 +95,8 @@ describe('Directive: Mask (Suffix)', () => {
         expect(inputTarget.value).toBe('');
     });
     it('should not delete suffix', () => {
-        component.mask = 'A{5}';
-        component.suffix = '.com';
+        component.mask.set('A{5}');
+        component.suffix.set('.com');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);

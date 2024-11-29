@@ -5,9 +5,7 @@ import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import { initialConfig } from 'ngx-mask';
+import { initialConfig, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -24,113 +22,113 @@ describe('Separator: Mask', () => {
     });
 
     it('separator for empty', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('', '', fixture);
     });
 
     it('separator for 100', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('100', '100', fixture);
     });
 
     it('separator for -100', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
         equal('-100', '-100', fixture);
     });
 
     it('separator for 1000', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('1000', '1 000', fixture);
     });
 
     it('separator for -1000', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
         equal('-1000', '-1 000', fixture);
     });
 
     it('separator for 10000', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('10000', '10 000', fixture);
     });
 
     it('separator for -10000', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
         equal('-10000', '-10 000', fixture);
     });
 
     it('separator for -100000', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
         equal('-100000', '-100 000', fixture);
     });
 
     it('separator for 100000', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('100000', '100 000', fixture);
     });
 
     it('separator for 1000000', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('1000000', '1 000 000', fixture);
     });
 
     it('separator for -1000000', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
         equal('-1000000', '-1 000 000', fixture);
     });
 
     it('should limit separator to 1000', () => {
-        component.mask = 'separator';
-        component.separatorLimit = '1000';
+        component.mask.set('separator');
+        component.separatorLimit.set('1000');
         equal('1000000', '1 000', fixture);
     });
 
     it('separator precision 2 for 1000000.00', () => {
-        component.mask = 'separator.2';
+        component.mask.set('separator.2');
         equal('1000000.00', '1 000 000.00', fixture);
     });
 
     it('separator precision 2 for -1000000.00', () => {
-        component.mask = 'separator.2';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.2');
+        component.allowNegativeNumbers.set(true);
         equal('-1000000.00', '-1 000 000.00', fixture);
     });
 
     it('should limit separator with precision 2 to 10000', () => {
-        component.mask = 'separator.2';
-        component.separatorLimit = '10000';
+        component.mask.set('separator.2');
+        component.separatorLimit.set('10000');
         equal('1000000.00', '10 000.00', fixture);
     });
     it('should limit separator with precision 2 to 10 000', () => {
-        component.mask = 'separator.2';
-        component.separatorLimit = '10 000';
+        component.mask.set('separator.2');
+        component.separatorLimit.set('10 000');
         equal('1000000.00', '10 000.00', fixture);
     });
 
     it('separator precision 0 for 1000000.00', () => {
-        component.mask = 'separator.0';
+        component.mask.set('separator.0');
         equal('1000000.00', '1 000 000', fixture);
     });
 
     it('separator precision 2 with 0 after point for 1000000.00', () => {
-        component.mask = 'separator.2';
+        component.mask.set('separator.2');
         equal('1000000.20', '1 000 000.20', fixture);
     });
 
     it('separator.2 with suffix', () => {
-        component.mask = 'separator.2';
-        component.suffix = '₽';
+        component.mask.set('separator.2');
+        component.suffix.set('₽');
         equal('50', '50₽', fixture);
         equal('123 4', '1 234₽', fixture);
         equal('50.50', '50.50₽', fixture);
     });
 
     it('separator for letters', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
         equal('a', '', fixture);
         equal('1a', '1', fixture);
         equal('1000a', '1 000', fixture);
@@ -138,122 +136,122 @@ describe('Separator: Mask', () => {
     });
 
     it('separator thousandSeparator . for 1000000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
         equal('1000000', '1.000.000', fixture);
     });
 
     it('should not add any sperator if thousandSeparator set as empty string', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '';
+        component.mask.set('separator');
+        component.thousandSeparator.set('');
         equal('1000000', '1000000', fixture);
     });
 
     it('should not accept more than one minus signal at the beginning of input for separator thousandSeparator . for --1000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.allowNegativeNumbers.set(true);
         equal('--1000', '-1.000', fixture);
     });
 
     it('should not accept more than one minus signal for separator thousandSeparator . for -100-0000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.allowNegativeNumbers.set(true);
         equal('-100-0000', '-1.000.000', fixture);
     });
 
     it('should limit separator thousandSeparator . to 100000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
-        component.separatorLimit = '100000';
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.separatorLimit.set('100000');
         equal('1000000', '100.000', fixture);
     });
 
     it('should limit separator thousandSeparator . to -100000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
-        component.separatorLimit = '100000';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.separatorLimit.set('100000');
+        component.allowNegativeNumbers.set(true);
         equal('-1000000', '-100.000', fixture);
     });
 
     it('separator thousandSeparator . precision 2 for 1000000.00', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
         equal('1000000,00', '1.000.000,00', fixture);
     });
 
     it('separator thousandSeparator . precision 2 for -1000000.00', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.allowNegativeNumbers.set(true);
         equal('-1000000,00', '-1.000.000,00', fixture);
     });
 
     it('separator thousandSeparator . precision 2 with 0 after point for 1000000.00', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
         equal('1000000,20', '1.000.000,20', fixture);
     });
 
     it('separator thousandSeparator . precision 0 for 1000000.00', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set('.');
         equal('1000000,00', '1.000.000', fixture);
     });
 
     it('separator thousandSeparator , for 1000000', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = ',';
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
         equal('1000000', '1,000,000', fixture);
     });
 
     it('separator thousandSeparator , precision 2 for 1000000.00', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         equal('1000000.00', '1,000,000.00', fixture);
     });
 
     it('separator thousandSeparator , precision 2 with 0 after point for 1000000.00', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         equal('1000000.20', '1,000,000.20', fixture);
     });
 
     it('separator thousandSeparator , precision 0 for 1000000.00', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
         equal('1000000.00', '1,000,000', fixture);
     });
 
     it(`separator thousandSeparator ' for 1000000`, () => {
-        component.mask = 'separator';
-        component.thousandSeparator = `'`;
+        component.mask.set('separator');
+        component.thousandSeparator.set(`'`);
         equal('1000000', `1'000'000`, fixture);
     });
 
     it(`separator thousandSeparator ' precision 2 for 1000000.00`, () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = `'`;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(`'`);
         equal('1000000.00', `1'000'000.00`, fixture);
     });
 
     it(`separator thousandSeparator ' precision 2 with 0 after point for 1000000.00`, () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = `'`;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(`'`);
         equal('1000000.20', `1'000'000.20`, fixture);
     });
 
     it(`separator thousandSeparator ' precision 0 for 1000000.00`, () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = `'`;
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(`'`);
         equal('1000000.00', `1'000'000`, fixture);
     });
 
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -268,8 +266,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -284,8 +282,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -300,8 +298,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -316,8 +314,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = ',';
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -332,8 +330,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(3);
     });
     it('should not shift cursor for input in-between digits', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = '.';
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -349,8 +347,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should not shift cursor for backspace on in-between digits', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -371,8 +369,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(4);
     });
     it('should not shift cursor for backspace on in-between digits', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -394,8 +392,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should not shift cursor for backspace on in-between digits', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -416,8 +414,8 @@ describe('Separator: Mask', () => {
         expect(inputTarget.selectionStart).toEqual(7);
     });
     it('should not shift cursor for backspace on in-between digits', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -439,8 +437,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should not shift cursor on backspace when result has no separator', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -462,8 +460,8 @@ describe('Separator: Mask', () => {
     });
 
     it('caret should remain in position when deleting the first digit', () => {
-        component.mask = 'separator';
-        component.thousandSeparator = ',';
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -484,9 +482,9 @@ describe('Separator: Mask', () => {
     });
 
     it('cursor should move forward if the input starts with -, or 0, or 0.0, or 0.00, or 0.0000000', () => {
-        component.mask = 'separator.8';
-        component.specialCharacters = [',', '.'];
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.8');
+        component.specialCharacters.set([',', '.']);
+        component.allowNegativeNumbers.set(true);
         component.form.setValue(0.723);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
@@ -519,38 +517,38 @@ describe('Separator: Mask', () => {
     });
 
     it('Should work right when reset decimalMarker', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
         equal('1000000,00', '1 000 000,00', fixture);
     });
 
     it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
         equal('12.345,67', '12.345,67', fixture);
     });
 
     it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
         equal('12345,67', '12.345,67', fixture);
     });
 
     it('check formControl value to be number when decimalMarker is comma', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(',');
 
         typeTest('12 345,67', fixture);
         expect(component.form.value).toBe('12345.67');
     });
 
     it('check formControl value to be number when decimalMarker is array', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.decimalMarker = ['.', ','];
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(['.', ',']);
 
         typeTest('12 345,67', fixture);
         expect(component.form.value).toBe('12345.67');
@@ -560,8 +558,8 @@ describe('Separator: Mask', () => {
     });
 
     it('right handle character after first 0 value', () => {
-        component.mask = 'separator';
-        component.decimalMarker = ',';
+        component.mask.set('separator');
+        component.decimalMarker.set(',');
         equal('0', '0', fixture);
         equal('0,', '0,', fixture);
         equal('0 ', '0', fixture);
@@ -570,7 +568,7 @@ describe('Separator: Mask', () => {
         equal('0@', '0', fixture);
         // TODO(inepipenko): strange thet return 0.
         // equal('0.', '0', fixture);
-        component.decimalMarker = '.';
+        component.decimalMarker.set('.');
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
         equal('0 ', '0', fixture);
@@ -578,7 +576,7 @@ describe('Separator: Mask', () => {
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
         equal('0,', '0.', fixture);
-        component.decimalMarker = ['.', ','];
+        component.decimalMarker.set(['.', ',']);
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
         equal('0,', '0.', fixture);
@@ -589,8 +587,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should add trailing zero when separator.1 and leadZero = true', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.leadZero = true;
+        component.mask.set('separator.1');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -614,8 +612,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('should not modify value with one decimal when separator.1 and leadZero = true', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.leadZero = true;
+        component.mask.set('separator.1');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -639,8 +637,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -712,10 +710,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -759,8 +757,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -828,10 +826,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -875,10 +873,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -922,10 +920,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display zeros at the end separator3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -969,9 +967,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display only 9 separator.2', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
 
         equal('999999999999999', '999,999,999,999,999', fixture);
         expect(component.form.value).toBe('999999999999999');
@@ -984,9 +982,9 @@ describe('Separator: Mask', () => {
     });
 
     it('should display only 9 separator.3', () => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.3');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
 
         equal('999999999999999', '999,999,999,999,999', fixture);
         expect(component.form.value).toBe('999999999999999');
@@ -1000,8 +998,9 @@ describe('Separator: Mask', () => {
         equal('999999999999999.999', '999,999,999,999,999.999', fixture);
         expect(component.form.value).toBe('999999999999999.999');
     });
+
     it('should keep the cursor position after deleting a character', () => {
-        component.mask = 'separator.2';
+        component.mask.set('separator.2');
         const inputElement = fixture.nativeElement.querySelector('input');
         inputElement.value = '123 456';
         inputElement.dispatchEvent(new Event('input'));
@@ -1017,8 +1016,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should change formValue separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1033,8 +1032,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('should change formValue separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1049,9 +1048,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.8 should return number value', fakeAsync(() => {
-        component.mask = 'separator.8';
-        component.thousandSeparator = '.';
-        component.decimalMarker = ',';
+        component.mask.set('separator.8');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
 
         equal('12,34', '12,34', fixture);
         tick();
@@ -1061,9 +1060,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1087,9 +1086,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display value in input with decimalMarker , and leadZero with separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
-        component.decimalMarker = ',';
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
+        component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1113,10 +1112,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display value in input with decimalMarker , and leadZero with separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.leadZero = true;
-        component.decimalMarker = ',';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.3');
+        component.leadZero.set(true);
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1140,10 +1139,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
-        component.decimalMarker = ',';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1166,152 +1165,152 @@ describe('Separator: Mask', () => {
         expect(inputTarget.value).toBe('3.000,40');
     }));
 
-    it('should not allow add two zeros to inputValue', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.leadZero = true;
-        component.decimalMarker = ',';
-        component.thousandSeparator = '.';
-        component.allowNegativeNumbers = true;
+    it('should not allow add two zeros to inputValue', () => {
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set('.');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-00', '-0,0', fixture);
-    }));
+    });
 
-    it('should not allow add two zeros to inputValue', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
-        component.thousandSeparator = ',';
-        component.allowNegativeNumbers = true;
+    it('should not allow add two zeros to inputValue', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
+        component.thousandSeparator.set(',');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-00', '-0.0', fixture);
-    }));
+    });
 
-    it('should not allow add two zeros to inputValue', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
-        component.thousandSeparator = '.';
-        component.allowNegativeNumbers = true;
+    it('should not allow add two zeros to inputValue', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set('.');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-00', '-0,0', fixture);
-    }));
+    });
 
-    it('should not allow add two zeros to inputValue', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
-        component.thousandSeparator = ' ';
-        component.allowNegativeNumbers = true;
+    it('should not allow add two zeros to inputValue', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set(' ');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-00', '-0,0', fixture);
-    }));
+    });
 
-    it('should allow minus after change it to true', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.allowNegativeNumbers = false;
+    it('should allow minus after change it to true', () => {
+        component.mask.set('separator.2');
+        component.allowNegativeNumbers.set(false);
         fixture.detectChanges();
 
         equal('-1234', '1 234', fixture);
-        component.allowNegativeNumbers = true;
+        component.allowNegativeNumbers.set(true);
         equal('-1234', '-1 234', fixture);
-    }));
+    });
 
-    it('should change value in formControl mask separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.allowNegativeNumbers = true;
-        component.specialCharacters = [...initialConfig.specialCharacters];
+    it('should change value in formControl mask separator.2', () => {
+        component.mask.set('separator.2');
+        component.allowNegativeNumbers.set(true);
+        component.specialCharacters.set([...initialConfig.specialCharacters]);
         fixture.detectChanges();
 
         equal('-1234.10', '-1 234.10', fixture);
         expect(component.form.value).toBe('-1234.10');
-    }));
+    });
 
-    it('should change value in formControl mask separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.allowNegativeNumbers = true;
-        component.specialCharacters = [...initialConfig.specialCharacters];
+    it('should change value in formControl mask separator.3', () => {
+        component.mask.set('separator.3');
+        component.allowNegativeNumbers.set(true);
+        component.specialCharacters.set([...initialConfig.specialCharacters]);
         fixture.detectChanges();
 
         equal('-1234.567', '-1 234.567', fixture);
         expect(component.form.value).toBe('-1234.567');
-    }));
+    });
 
-    it('should change value in formControl mask separator.1', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.allowNegativeNumbers = true;
-        component.specialCharacters = [...initialConfig.specialCharacters];
+    it('should change value in formControl mask separator.1', () => {
+        component.mask.set('separator.1');
+        component.allowNegativeNumbers.set(true);
+        component.specialCharacters.set([...initialConfig.specialCharacters]);
         fixture.detectChanges();
 
         equal('-1234.9', '-1 234.9', fixture);
         expect(component.form.value).toBe('-1234.9');
-    }));
+    });
 
-    it('should change value in formControl mask separator.0', fakeAsync(() => {
-        component.mask = 'separator.0';
-        component.allowNegativeNumbers = true;
-        component.specialCharacters = [...initialConfig.specialCharacters];
+    it('should change value in formControl mask separator.0', () => {
+        component.mask.set('separator.0');
+        component.allowNegativeNumbers.set(true);
+        component.specialCharacters.set([...initialConfig.specialCharacters]);
         fixture.detectChanges();
 
         equal('-1234', '-1 234', fixture);
         expect(component.form.value).toBe('-1234');
-    }));
+    });
 
-    it('should change value if user star from zero separator.0', fakeAsync(() => {
-        component.mask = 'separator.0';
+    it('should change value if user star from zero separator.0', () => {
+        component.mask.set('separator.0');
         fixture.detectChanges();
 
         equal('03', '3', fixture);
         equal('034', '34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = '.';
+    it('should change value if user star from zero separator.1', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set('.');
         fixture.detectChanges();
 
         equal('03', '0.3', fixture);
         equal('034', '0.3', fixture);
         equal('.3', '0.3', fixture);
         equal('.34', '0.3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = ',';
+    it('should change value if user star from zero separator.1', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set(',');
         fixture.detectChanges();
 
         equal('03', '0,3', fixture);
         equal('034', '0,3', fixture);
         equal(',3', '0,3', fixture);
         equal(',34', '0,3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
+    it('should change value if user star from zero separator.2', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
         fixture.detectChanges();
 
         equal('03', '0.3', fixture);
         equal('034', '0.34', fixture);
         equal('.3', '0.3', fixture);
         equal('.34', '0.34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
+    it('should change value if user star from zero separator.2', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
         fixture.detectChanges();
 
         equal('03', '0,3', fixture);
         equal('034', '0,34', fixture);
         equal(',3', '0,3', fixture);
         equal(',34', '0,34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = '.';
+    it('should change value if user star from zero separator.3', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set('.');
         fixture.detectChanges();
 
         equal('03', '0.3', fixture);
@@ -1319,11 +1318,11 @@ describe('Separator: Mask', () => {
         equal('.3', '0.3', fixture);
         equal('.34', '0.34', fixture);
         equal('.345', '0.345', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = ',';
+    it('should change value if user star from zero separator.3', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set(',');
         fixture.detectChanges();
 
         equal('03', '0,3', fixture);
@@ -1331,69 +1330,69 @@ describe('Separator: Mask', () => {
         equal(',3', '0,3', fixture);
         equal(',34', '0,34', fixture);
         equal(',345', '0,345', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.0 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.0';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.0 with allowNegativeNumber', () => {
+        component.mask.set('separator.0');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-3', fixture);
         equal('-034', '-34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.1 with allowNegativeNumber', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
         equal('-034', '-0.3', fixture);
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1 with allowNegativeNumber decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.1 with allowNegativeNumber decimalMarker= ,', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
         equal('-034', '-0,3', fixture);
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.2 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.2 with allowNegativeNumber', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
         equal('-034', '-0.34', fixture);
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.2 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.2 with allowNegativeNumber', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
         equal('-034', '-0,34', fixture);
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.3 with allowNegativeNumber', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
@@ -1402,12 +1401,12 @@ describe('Separator: Mask', () => {
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.34', fixture);
         equal('-.345', '-0.345', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3 with allowNegativeNumber', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+    it('should change value if user star from zero separator.3 with allowNegativeNumber', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
@@ -1416,65 +1415,65 @@ describe('Separator: Mask', () => {
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,34', fixture);
         equal('-,345', '-0,345', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
         equal('-034', '-0,3', fixture);
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.1');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
         equal('-034', '-0.3', fixture);
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.3', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.1 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
         equal('-034', '-0,34', fixture);
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.2 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.2 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
         equal('-034', '-0.34', fixture);
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.34', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0,3', fixture);
@@ -1482,13 +1481,13 @@ describe('Separator: Mask', () => {
         equal('-,3', '-0,3', fixture);
         equal('-,34', '-0,34', fixture);
         equal('-,345', '-0,345', fixture);
-    }));
+    });
 
-    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.decimalMarker = '.';
-        component.allowNegativeNumbers = true;
-        component.leadZero = true;
+    it('should change value if user star from zero separator.3 with allowNegativeNumber leadZero decimalMarker= ,', () => {
+        component.mask.set('separator.3');
+        component.decimalMarker.set('.');
+        component.allowNegativeNumbers.set(true);
+        component.leadZero.set(true);
         fixture.detectChanges();
 
         equal('-03', '-0.3', fixture);
@@ -1496,11 +1495,11 @@ describe('Separator: Mask', () => {
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.34', fixture);
         equal('-.345', '-0.345', fixture);
-    }));
+    });
 
     it('separator.2 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1515,8 +1514,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.3 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.3');
+        component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1530,8 +1529,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.1 thousandSeparator = . should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.thousandSeparator = '.';
-        component.mask = 'separator.1';
+        component.thousandSeparator.set('.');
+        component.mask.set('separator.1');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1547,8 +1546,8 @@ describe('Separator: Mask', () => {
     it('separator.2 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
         fixture.detectChanges();
 
@@ -1559,8 +1558,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.3 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.3');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1573,8 +1572,8 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.1 thousandSeparator = , should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.1';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.1');
+        component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1587,9 +1586,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.2 thousandSeparator = . leadZero should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
-        component.leadZero = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -1603,9 +1602,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.3 thousandSeparator = . leadZero should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = '.';
-        component.leadZero = true;
+        component.mask.set('separator.3');
+        component.thousandSeparator.set('.');
+        component.leadZero.set(true);
 
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
@@ -1620,9 +1619,9 @@ describe('Separator: Mask', () => {
     }));
 
     it('separator.1 thousandSeparator = . leadZero  should display correct value if decimalMarker is array 12345.67', fakeAsync(() => {
-        component.thousandSeparator = '.';
-        component.mask = 'separator.1';
-        component.leadZero = true;
+        component.thousandSeparator.set('.');
+        component.mask.set('separator.1');
+        component.leadZero.set(true);
 
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
@@ -1636,42 +1635,42 @@ describe('Separator: Mask', () => {
         });
     }));
 
-    it('should work when decimalMarker have default value separator.2', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+    it('should work when decimalMarker have default value separator.2', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
         fixture.detectChanges();
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
         equal('1234', '1,234', fixture);
-    }));
+    });
 
-    it('should work when decimalMarker have default value separator.3', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = ',';
+    it('should work when decimalMarker have default value separator.3', () => {
+        component.mask.set('separator.3');
+        component.thousandSeparator.set(',');
         fixture.detectChanges();
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
         equal('1234', '1,234', fixture);
-    }));
+    });
 
-    it('should work when decimalMarker have default value separator.1', fakeAsync(() => {
-        component.mask = 'separator.3';
-        component.thousandSeparator = ',';
+    it('should work when decimalMarker have default value separator.1', () => {
+        component.mask.set('separator.3');
+        component.thousandSeparator.set(',');
         fixture.detectChanges();
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
         equal('1234', '1,234', fixture);
-    }));
+    });
 
     it('should not delete decimalMarker ,', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
         const inputElement = fixture.nativeElement.querySelector('input');
 
         inputElement.value = '1,23';
@@ -1691,8 +1690,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should not delete decimalMarker .', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
         const inputElement = fixture.nativeElement.querySelector('input');
 
         inputElement.value = '12.23';
@@ -1712,9 +1711,9 @@ describe('Separator: Mask', () => {
     });
 
     it('should change position when click backspace thousandSeparator = .', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = ',';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.decimalMarker.set(',');
+        component.thousandSeparator.set('.');
         const inputElement = fixture.nativeElement.querySelector('input');
         inputElement.value = '1.234.567,89';
 
@@ -1740,9 +1739,9 @@ describe('Separator: Mask', () => {
     });
 
     it('should change position when click backspace thousandSeparator = ,', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
+        component.thousandSeparator.set(',');
         const inputElement = fixture.nativeElement.querySelector('input');
         inputElement.value = '1,234,567.89';
 
@@ -1768,9 +1767,9 @@ describe('Separator: Mask', () => {
     });
 
     it('should change position when click backspace thousandSeparator = ', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
-        component.thousandSeparator = ' ';
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
+        component.thousandSeparator.set(' ');
         const inputElement = fixture.nativeElement.querySelector('input');
         inputElement.value = '1 234 567.89';
 
@@ -1796,10 +1795,10 @@ describe('Separator: Mask', () => {
     });
 
     it('should show correct value with separator.9', fakeAsync(() => {
-        component.mask = 'separator.9';
-        component.decimalMarker = '.';
-        component.leadZero = true;
-        component.separatorLimit = '10';
+        component.mask.set('separator.9');
+        component.decimalMarker.set('.');
+        component.leadZero.set(true);
+        component.separatorLimit.set('10');
         fixture.detectChanges();
 
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
@@ -1816,10 +1815,10 @@ describe('Separator: Mask', () => {
     }));
 
     it('should show correct value with separator.10', fakeAsync(() => {
-        component.mask = 'separator.10';
-        component.decimalMarker = '.';
-        component.leadZero = true;
-        component.separatorLimit = '10';
+        component.mask.set('separator.10');
+        component.decimalMarker.set('.');
+        component.leadZero.set(true);
+        component.separatorLimit.set('10');
         fixture.detectChanges();
 
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
@@ -1836,7 +1835,7 @@ describe('Separator: Mask', () => {
     }));
 
     it('should support big numbers with separator', () => {
-        component.mask = 'separator';
+        component.mask.set('separator');
 
         equal('12345678910111215', '12 345 678 910 111 215', fixture);
         expect(component.form.value).toBe('12345678910111215');
@@ -1845,7 +1844,7 @@ describe('Separator: Mask', () => {
     });
 
     it('should support big numbers with separator 2', () => {
-        component.mask = 'separator.2';
+        component.mask.set('separator.2');
 
         equal('12345678910111215', '12 345 678 910 111 215', fixture);
         expect(component.form.value).toBe('12345678910111215');
@@ -1854,8 +1853,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should support big numbers with separator 2 thousand =.', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
 
         equal('12345678910111215', '12.345.678.910.111.215', fixture);
         expect(component.form.value).toBe('12345678910111215');
@@ -1864,8 +1863,8 @@ describe('Separator: Mask', () => {
     });
 
     it('should support big numbers with separator 2 thousand =,', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
 
         equal('12345678910111215', '12,345,678,910,111,215', fixture);
         expect(component.form.value).toBe('12345678910111215');

@@ -3,8 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
 
 describe('Directive: Mask (Validation)', () => {
@@ -22,7 +21,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be marked as not valid if not valid and validation attribute true', () => {
-        component.mask = '0000';
+        component.mask.set('0000');
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
@@ -31,7 +30,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
-        component.validation = false;
+        component.validation.set(false);
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
@@ -39,7 +38,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be marked as valid if valid and validation attribute true', () => {
-        component.mask = '0000';
+        component.mask.set('0000');
         component.form.addValidators(Validators.required);
 
         equal('1234', '1234', fixture);
@@ -47,8 +46,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
-        component.validation = false;
-        component.mask = '0000';
+        component.validation.set(false);
+        component.mask.set('0000');
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
@@ -56,8 +55,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be not valid email mask A*@A*.SSS', () => {
-        component.mask = 'A*@A*.SSS';
-        component.dropSpecialCharacters = false;
+        component.mask.set('A*@A*.SSS');
+        component.dropSpecialCharacters.set(false);
         component.form.addValidators(Validators.required);
 
         equal('a', 'a', fixture);
@@ -87,8 +86,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should valid email mask A*@A*.SSS', () => {
-        component.mask = 'A*@A*.SSS';
-        component.dropSpecialCharacters = false;
+        component.mask.set('A*@A*.SSS');
+        component.dropSpecialCharacters.set(false);
         component.form.addValidators(Validators.required);
 
         equal('testing@gmail.com', 'testing@gmail.com', fixture);
@@ -96,8 +95,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should be not valid mask A*@A*.SS', () => {
-        component.mask = 'A*@A*.SS';
-        component.dropSpecialCharacters = false;
+        component.mask.set('A*@A*.SS');
+        component.dropSpecialCharacters.set(false);
         component.form.addValidators(Validators.required);
 
         equal('d', 'd', fixture);
@@ -125,8 +124,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should valid email mask', () => {
-        component.mask = 'A*@A*.SS';
-        component.dropSpecialCharacters = false;
+        component.mask.set('A*@A*.SS');
+        component.dropSpecialCharacters.set(false);
         component.form.addValidators(Validators.required);
 
         equal('testing@some.ua', 'testing@some.ua', fixture);
@@ -134,7 +133,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should valid from one digit mask 0*', () => {
-        component.mask = '0*';
+        component.mask.set('0*');
         component.form.setValidators([Validators.required, Validators.min(1)]);
         component.form.updateValueAndValidity();
 
@@ -151,7 +150,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should valid from one digit mask S*', () => {
-        component.mask = 'S*';
+        component.mask.set('S*');
         component.form.setValidators([Validators.required, Validators.min(1)]);
         component.form.updateValueAndValidity();
 
@@ -162,7 +161,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('should valid from one digit mask A*', () => {
-        component.mask = 'A*';
+        component.mask.set('A*');
         component.form.setValidators([Validators.required, Validators.min(1)]);
         component.form.updateValueAndValidity();
 
@@ -175,10 +174,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('mask with number value should work as expected mask 0*', () => {
-        // public form: FormControl = new FormControl(44, Validators.required);
-        // public mask = '';
-        // public validate = true;
-        component.mask = '0*';
+        component.mask.set('0*');
         component.form.setValidators([Validators.required, Validators.min(1)]);
         component.form.updateValueAndValidity();
 
@@ -196,7 +192,7 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('mask with number value should work as expected mask 000.00', () => {
-        component.mask = '000.00';
+        component.mask.set('000.00');
         component.form.addValidators(Validators.required);
         component.form.setValue('');
 
@@ -226,9 +222,9 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('dropSpecialCharacters is different from specialCharacters', () => {
-        component.mask = '+000';
-        component.specialCharacters = ['+', ' '];
-        component.dropSpecialCharacters = [' '];
+        component.mask.set('+000');
+        component.specialCharacters.set(['+', ' ']);
+        component.dropSpecialCharacters.set([' ']);
         component.form.addValidators(Validators.required);
 
         equal('+37', '+37', fixture);
@@ -237,7 +233,7 @@ describe('Directive: Mask (Validation)', () => {
         equal('+373', '+373', fixture);
         expect(component.form.valid).toBe(true);
 
-        component.mask = '+000 000 00 000';
+        component.mask.set('+000 000 00 000');
 
         equal('+3736000000', '+373 600 00 00', fixture);
         expect(component.form.valid).toBe(false);
@@ -247,8 +243,8 @@ describe('Directive: Mask (Validation)', () => {
     });
 
     it('email Mask should validated correct', () => {
-        component.mask = 'A*@A*.A*';
-        component.dropSpecialCharacters = false;
+        component.mask.set('A*@A*.A*');
+        component.dropSpecialCharacters.set(false);
         component.form.addValidators(Validators.required);
 
         equal('validate', 'validate', fixture);
