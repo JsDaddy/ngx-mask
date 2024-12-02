@@ -3,8 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Add prefix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -21,13 +20,13 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should have a prefix', () => {
-        component.mask = '00-000-000-00';
-        component.prefix = '+7 ';
+        component.mask.set('00-000-000-00');
+        component.prefix.set('+7 ');
         equal('6', '+7 6', fixture);
 
-        component.mask = '(00) 0000-0000||(00) 0 0000-0000';
-        component.prefix = '+55 ';
-        component.showMaskTyped = true;
+        component.mask.set('(00) 0000-0000||(00) 0 0000-0000');
+        component.prefix.set('+55 ');
+        component.showMaskTyped.set(true);
         equal('1', '+55 (1_) ____-____', fixture);
         equal('12', '+55 (12) ____-____', fixture);
         equal('123', '+55 (12) 3___-____', fixture);
@@ -53,23 +52,23 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('+55 (12) 3 4567-8901', '+55 (12) 3 4567-8901', fixture, false, Paste);
     });
     it('dropSpecialCharacters false should return value with prefix', () => {
-        component.mask = '00-000-000-00';
-        component.dropSpecialCharacters = false;
-        component.prefix = '+7 ';
+        component.mask.set('00-000-000-00');
+        component.dropSpecialCharacters.set(false);
+        component.prefix.set('+7 ');
         equal('097', '+7 09-7', fixture);
         expect(component.form.value).toEqual('+7 09-7');
     });
     it('dropSpecialCharacters false should return value with suffix', () => {
-        component.mask = '00';
-        component.dropSpecialCharacters = false;
-        component.suffix = '$';
+        component.mask.set('00');
+        component.dropSpecialCharacters.set(false);
+        component.suffix.set('$');
         equal('97', '97$', fixture);
         expect(component.form.value).toEqual('97$');
     });
 
     it('should delete prefix in pasted content', () => {
-        component.mask = 'AAA-AAA-AAA';
-        component.prefix = 'FOO-';
+        component.mask.set('AAA-AAA-AAA');
+        component.prefix.set('FOO-');
         equal('FOO-D', 'FOO-D', fixture, false, Paste);
         equal('FOO-DD', 'FOO-DD', fixture, false, Paste);
         equal('FOO-DDD', 'FOO-DDD', fixture, false, Paste);
@@ -83,9 +82,9 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should delete prefix in pasted content', () => {
-        component.mask = 'AAA-AAA-AAA';
-        component.prefix = 'FOO-';
-        component.dropSpecialCharacters = false;
+        component.mask.set('AAA-AAA-AAA');
+        component.prefix.set('FOO-');
+        component.dropSpecialCharacters.set(false);
         equal('FOO-S', 'FOO-S', fixture, false, Paste);
         equal('FOO-SS', 'FOO-SS', fixture, false, Paste);
         equal('FOO-SSS', 'FOO-SSS', fixture, false, Paste);
@@ -99,9 +98,9 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should replace $ with minus', () => {
-        component.mask = '0000.00';
-        component.prefix = '$';
-        component.allowNegativeNumbers = true;
+        component.mask.set('0000.00');
+        component.prefix.set('$');
+        component.allowNegativeNumbers.set(true);
         equal('-1', '-$1', fixture);
         equal('-12', '-$12', fixture);
         equal('-123', '-$123', fixture);
@@ -111,9 +110,9 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should replace euro with minus', () => {
-        component.mask = '0000.00';
-        component.prefix = '€';
-        component.allowNegativeNumbers = true;
+        component.mask.set('0000.00');
+        component.prefix.set('€');
+        component.allowNegativeNumbers.set(true);
         equal('-1', '-€1', fixture);
         equal('-12', '-€12', fixture);
         equal('-123', '-€123', fixture);
@@ -123,20 +122,20 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should remove prefix when setValue triggerOnMaskChange = true', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = true;
-        component.triggerOnMaskChange = true;
+        component.mask.set('000 000');
+        component.prefix.set('KZ');
+        component.dropSpecialCharacters.set(true);
+        component.triggerOnMaskChange.set(true);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
         expect(component.form.value).toBe('123123');
     });
 
     it('should remove prefix when setValue triggerOnMaskChange =true', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = false;
-        component.triggerOnMaskChange = true;
+        component.mask.set('000 000');
+        component.prefix.set('KZ');
+        component.dropSpecialCharacters.set(false);
+        component.triggerOnMaskChange.set(true);
         component.form.setValue('KZ123123');
 
         equal('KZ123123', 'KZ123 123', fixture);
@@ -144,18 +143,18 @@ describe('Directive: Mask (Add prefix)', () => {
     });
 
     it('should remove prefix when setValue triggerOnMaskChange = false & dropSpecialCharacters = true', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = true;
+        component.mask.set('000 000');
+        component.prefix.set('KZ');
+        component.dropSpecialCharacters.set(true);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
         expect(component.form.value).toBe('123123');
     });
 
     it('should remove prefix when setValue triggerOnMaskChange = false & dropSpecialCharacters = false', () => {
-        component.mask = '000 000';
-        component.prefix = 'KZ';
-        component.dropSpecialCharacters = false;
+        component.mask.set('000 000');
+        component.prefix.set('KZ');
+        component.dropSpecialCharacters.set(false);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
         expect(component.form.value).toBe('KZ123 123');

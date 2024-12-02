@@ -12,8 +12,6 @@ export class NgxMaskApplierService {
 
     public hiddenInput: NgxMaskConfig['hiddenInput'] = this._config.hiddenInput;
 
-    public showTemplate!: NgxMaskConfig['showTemplate'];
-
     public clearIfNotMatch: NgxMaskConfig['clearIfNotMatch'] = this._config.clearIfNotMatch;
 
     public specialCharacters: NgxMaskConfig['specialCharacters'] = this._config.specialCharacters;
@@ -72,15 +70,6 @@ export class NgxMaskApplierService {
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
-
-    public applyMaskWithPattern(
-        inputValue: string,
-        maskAndPattern: [string, NgxMaskConfig['patterns']]
-    ): string {
-        const [mask, customPattern] = maskAndPattern;
-        this.customPattern = customPattern;
-        return this.applyMask(inputValue, mask);
-    }
 
     public applyMask(
         inputValue: string | object | boolean | null | undefined,

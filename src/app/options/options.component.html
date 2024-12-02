@@ -34,7 +34,7 @@
                 *ngTemplateOutlet="
                     exampleTmpl;
                     context: { $implicit: cardExamples()?.[i], placeholder: tile.header }
-                "></ng-container>
+                " />
         </div>
     </div>
 }
@@ -45,8 +45,7 @@
             *ngTemplateOutlet="
                 !ex._pipe ? inputTemplate : pipeTemplate;
                 context: { $implicit: ex, placeholder: placeholder }
-            ">
-        </ng-container>
+            " />
     </div>
 </ng-template>
 

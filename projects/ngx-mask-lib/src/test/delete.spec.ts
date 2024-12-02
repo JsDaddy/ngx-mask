@@ -5,8 +5,7 @@ import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
+import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 
 describe('Directive: Mask (Delete)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -23,7 +22,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('delete character in input', () => {
-        component.mask = '00/00/0000';
+        component.mask.set('00/00/0000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -45,7 +44,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('delete special character in input', () => {
-        component.mask = '00/00/0000';
+        component.mask.set('00/00/0000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -67,8 +66,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('delete special character in secure input', () => {
-        component.mask = 'XXX/X0/0000';
-        component.hiddenInput = true;
+        component.mask.set('XXX/X0/0000');
+        component.hiddenInput.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -91,7 +90,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('delete special character on 1 position', () => {
-        component.mask = '[00]';
+        component.mask.set('[00]');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -112,8 +111,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('delete suffix with backspace and delete', () => {
-        component.mask = 'A{5}';
-        component.suffix = '.com';
+        component.mask.set('A{5}');
+        component.suffix.set('.com');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -147,8 +146,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('prefix shouldn`t be deleted', () => {
-        component.mask = '00 00';
-        component.prefix = '+1';
+        component.mask.set('00 00');
+        component.prefix.set('+1');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -172,8 +171,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('prefix shouldn`t be deleted', () => {
-        component.mask = '00 00';
-        component.prefix = '+1 ';
+        component.mask.set('00 00');
+        component.prefix.set('+1 ');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -197,8 +196,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('prefix shouldn`t be deleted', () => {
-        component.mask = '(00) 00';
-        component.prefix = '+1';
+        component.mask.set('(00) 00');
+        component.prefix.set('+1');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -222,8 +221,8 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('prefix shouldn`t be deleted', () => {
-        component.mask = '(00) 00';
-        component.prefix = '+1 ';
+        component.mask.set('(00) 00');
+        component.prefix.set('+1 ');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
@@ -247,7 +246,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('date mask should show keep right value d0/M0/0000', () => {
-        component.mask = 'd0/M0/0000';
+        component.mask.set('d0/M0/0000');
         const inputElement = fixture.nativeElement.querySelector('input');
 
         inputElement.value = '4/4/4444';
@@ -270,7 +269,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('date mask should show keep right value d0:M0:0000', () => {
-        component.mask = 'd0:M0:0000';
+        component.mask.set('d0:M0:0000');
         const inputElement = fixture.nativeElement.querySelector('input');
 
         inputElement.value = '4:4:4444';
@@ -293,7 +292,7 @@ describe('Directive: Mask (Delete)', () => {
     });
 
     it('date mask should show keep right value d0-M0-0000', () => {
-        component.mask = 'd0-M0-0000';
+        component.mask.set('d0-M0-0000');
         const inputElement = fixture.nativeElement.querySelector('input');
 
         inputElement.value = '4-4-4444';
