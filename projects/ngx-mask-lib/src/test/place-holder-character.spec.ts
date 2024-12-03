@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Placeholder character)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask (Placeholder character)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,25 +21,25 @@ describe('Directive: Mask (Placeholder character)', () => {
     });
 
     it('should display the default placeholder when not configured', () => {
-        component.mask = '(000) 000-0000';
-        component.showMaskTyped = true;
+        component.mask.set('(000) 000-0000');
+        component.showMaskTyped.set(true);
         equal('', '(___) ___-____', fixture);
         equal('2345678', '(234) 567-8___', fixture);
 
-        component.prefix = '+7';
-        component.showMaskTyped = true;
+        component.prefix.set('+7');
+        component.showMaskTyped.set(true);
         equal('', '+7(___) ___-____', fixture);
         equal('2345678', '+7(234) 567-8___', fixture);
 
-        component.mask = 'IP';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('IP');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('', '_._._._', fixture);
         equal('1921681', '192.168.1_', fixture);
 
-        component.mask = 'CPF_CNPJ';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('CPF_CNPJ');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('', '___.___.___-__', fixture);
         equal('1', '1__.___.___-__', fixture);
         equal('12', '12_.___.___-__', fixture);
@@ -57,9 +56,9 @@ describe('Directive: Mask (Placeholder character)', () => {
         equal('1234567890123', '12.345.678/9012-3_', fixture);
         equal('12345678901234', '12.345.678/9012-34', fixture);
 
-        component.mask = '000.000.000-00||00.000.000/0000-00';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('000.000.000-00||00.000.000/0000-00');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('1', '1__.___.___-__', fixture);
         equal('12', '12_.___.___-__', fixture);
         equal('123', '123.___.___-__', fixture);
@@ -75,9 +74,9 @@ describe('Directive: Mask (Placeholder character)', () => {
         equal('1234567890123', '12.345.678/9012-3_', fixture);
         equal('12345678901234', '12.345.678/9012-34', fixture);
 
-        component.mask = '(00) 0000-0000||(00) 0 0000-0000';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('(00) 0000-0000||(00) 0 0000-0000');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('1', '(1_) ____-____', fixture);
         equal('12', '(12) ____-____', fixture);
         equal('123', '(12) 3___-____', fixture);
@@ -104,26 +103,26 @@ describe('Directive: Mask (Placeholder character)', () => {
     });
 
     it('should display the modified placeholder when configured', () => {
-        component.mask = '(000) 000-0000';
-        component.showMaskTyped = true;
-        component.placeHolderCharacter = '*';
+        component.mask.set('(000) 000-0000');
+        component.showMaskTyped.set(true);
+        component.placeHolderCharacter.set('*');
         equal('', '(***) ***-****', fixture);
         equal('2345678', '(234) 567-8***', fixture);
 
-        component.prefix = '+7';
-        component.showMaskTyped = true;
+        component.prefix.set('+7');
+        component.showMaskTyped.set(true);
         equal('', '+7(***) ***-****', fixture);
         equal('2345678', '+7(234) 567-8***', fixture);
 
-        component.mask = 'IP';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('IP');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('', '*.*.*.*', fixture);
         equal('1921681', '192.168.1*', fixture);
 
-        component.mask = 'CPF_CNPJ';
-        component.prefix = '';
-        component.showMaskTyped = true;
+        component.mask.set('CPF_CNPJ');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
         equal('', '***.***.***-**', fixture);
         equal('1', '1**.***.***-**', fixture);
         equal('12', '12*.***.***-**', fixture);

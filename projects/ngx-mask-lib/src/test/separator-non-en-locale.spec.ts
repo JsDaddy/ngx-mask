@@ -1,10 +1,11 @@
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { DebugElement, LOCALE_ID } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import type { DebugElement } from '@angular/core';
+import { LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { By } from '@angular/platform-browser';
 
 // FR locale uses comma as decimal marker
@@ -14,8 +15,7 @@ describe('Separator: Mask with FR locale', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask(), { provide: LOCALE_ID, useValue: 'fr' }],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -24,38 +24,38 @@ describe('Separator: Mask with FR locale', () => {
     });
 
     it('Should work right when reset decimalMarker', () => {
-        component.mask = 'separator.2';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.decimalMarker.set('.');
         equal('1000000.00', '1 000 000.00', fixture);
     });
 
     it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
         equal('12,345.67', '12,345.67', fixture);
     });
 
     it('separator precision 2 with thousandSeparator (.) decimalMarker (,) for 12345.67', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
         equal('12345.67', '12,345.67', fixture);
     });
 
     it('check formControl value to be number when decimalMarker is dot', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.decimalMarker = '.';
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set('.');
 
         typeTest('12 345.67', fixture);
         expect(component.form.value).toBe('12345.67');
     });
 
     it('check formControl value to be number when decimalMarker is array', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.decimalMarker = ['.', ','];
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(['.', ',']);
 
         typeTest('12 345,67', fixture);
         expect(component.form.value).toBe('12345.67');
@@ -65,10 +65,10 @@ describe('Separator: Mask with FR locale', () => {
     });
 
     it('should show - at input', fakeAsync(() => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);

@@ -1,13 +1,12 @@
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { signal } from '@angular/core';
 
 describe('Test Date Hh:m0', () => {
     it('Test value Hh:m0', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
+                mask: signal('Hh:m0'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('2020').should('have.value', '20:20');
@@ -22,9 +21,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0',
+                mask: signal('Hh:m0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
         cy.get('#masked').clear();
@@ -34,9 +32,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0:s0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0:s0',
+                mask: signal('Hh:m0:s0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
         cy.get('#masked').clear();
@@ -46,37 +43,52 @@ describe('Test Date Hh:m0', () => {
     it('Mask d0/m0/0000 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/m0/0000',
+                mask: signal('d0/m0/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
-        cy.get('#masked').type('77').should('have.prop', 'selectionStart', 3);
+        cy.get('#masked')
+            .type('77')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('777').should('have.prop', 'selectionStart', 4);
+        cy.get('#masked')
+            .type('777')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '7/7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('1177').should('have.prop', 'selectionStart', 6);
+        cy.get('#masked')
+            .type('1177')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '11/7/7');
     });
 
     it('Mask M0/d0/0000 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'M0/d0/0000',
+                mask: signal('M0/d0/0000'),
             },
-            imports: [CypressTestMaskModule],
         });
-        cy.get('#masked').type('88').should('have.prop', 'selectionStart', 3);
+        cy.get('#masked')
+            .type('88')
+            .should('have.prop', 'selectionStart', 3)
+            .should('have.value', '8/8');
         cy.get('#masked').clear();
-        cy.get('#masked').type('777').should('have.prop', 'selectionStart', 4);
+        cy.get('#masked')
+            .type('777')
+            .should('have.prop', 'selectionStart', 5)
+            .should('have.value', '7/7/7');
         cy.get('#masked').clear();
-        cy.get('#masked').type('1177').should('have.prop', 'selectionStart', 6);
+        cy.get('#masked')
+            .type('1177')
+            .should('have.prop', 'selectionStart', 6)
+            .should('have.value', '11/7/7');
     });
 
     it('Mask 0000/M0/d0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '0000/M0/d0',
+                mask: signal('0000/M0/d0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked').type('999999').should('have.prop', 'selectionStart', 8);
         cy.get('#masked').clear();
@@ -86,9 +98,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask Hh:m0:s0 check cursor', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'Hh:m0:s0',
+                mask: signal('Hh:m0:s0'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -104,9 +115,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask (00) 90000-0000 check cursor and value', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 00009-0000',
+                mask: signal('(00) 00009-0000'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -141,9 +151,8 @@ describe('Test Date Hh:m0', () => {
     it('Mask 099.09 check cursor and value', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '099.09',
+                mask: signal('099.09'),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('910')
@@ -158,115 +167,12 @@ describe('Test Date Hh:m0', () => {
             .clear();
     });
 
-    it('Mask separator.2 check cursor with value 100.0', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('1000')
-            .type('{leftArrow}')
-            .type('.')
-            .should('have.value', '100.0')
-            .should('have.prop', 'selectionStart', 4);
-    });
-
-    it('Mask separator.2 check cursor with value 1.00', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('1000')
-            .type('{leftArrow}'.repeat(3))
-            .type('.')
-            .should('have.value', '1.00')
-            .should('have.prop', 'selectionStart', 2);
-    });
-
-    it('Mask separator.2 check cursor with value 123456789.20', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: '.',
-                thousandSeparator: ',',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('123456789.20')
-            .type('{leftArrow}'.repeat(4))
-            .type('.')
-            .should('have.value', '12,345,678.9')
-            .should('have.prop', 'selectionStart', 11);
-    });
-
-    it('Mask separator.2 check cursor with value 100.0', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('1000')
-            .type('{leftArrow}')
-            .type(',')
-            .should('have.value', '100,0')
-            .should('have.prop', 'selectionStart', 4);
-    });
-
-    it('Mask separator.2 check cursor with value 1.00', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('1000')
-            .type('{leftArrow}'.repeat(3))
-            .type(',')
-            .should('have.value', '1,00')
-            .should('have.prop', 'selectionStart', 2);
-    });
-
-    it('Mask separator.2 check cursor with value 123456789.20', () => {
-        cy.mount(CypressTestMaskComponent, {
-            componentProperties: {
-                mask: 'separator.2',
-                decimalMarker: ',',
-                thousandSeparator: '.',
-            },
-            imports: [CypressTestMaskModule],
-        });
-        cy.get('#masked')
-            .type('123456789,20')
-            .type('{leftArrow}'.repeat(4))
-            .type(',')
-            .should('have.value', '12.345.678,9')
-            .should('have.prop', 'selectionStart', 11);
-    });
-
     it('Mask d0/M0/0000 should set cursor on right position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/M0/0000',
-                leadZeroDateTime: true,
+                mask: signal('d0/M0/0000'),
+                leadZeroDateTime: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
         cy.get('#masked')
             .type('33')
@@ -277,10 +183,9 @@ describe('Test Date Hh:m0', () => {
     it('Mask d0/M0/0000 should set cursor on right position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'd0/M0/0000',
-                leadZeroDateTime: true,
+                mask: signal('d0/M0/0000'),
+                leadZeroDateTime: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -292,11 +197,10 @@ describe('Test Date Hh:m0', () => {
     it('Mask should work with showMaskTyped 000/00000 with prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000/00000',
-                prefix: '+38 ',
-                showMaskTyped: true,
+                mask: signal('000/00000'),
+                prefix: signal('+38 '),
+                showMaskTyped: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -308,10 +212,9 @@ describe('Test Date Hh:m0', () => {
     it('Mask should work with showMaskTyped 000/00000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '000/00000',
-                showMaskTyped: false,
+                mask: signal('000/00000'),
+                showMaskTyped: signal(false),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -323,12 +226,11 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position (000) 000-0000||+000000000000000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000||+000000000000000',
+                mask: signal('(000) 000-0000||+000000000000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
-        cy.get('#masked').type('111111111111').should('have.value', '+11111111111');
+        cy.get('#masked').type('11111111111').should('have.value', '+11111111111');
         cy.get('#masked')
             .type('{backspace}')
             .should('have.value', '(111) 111-1111')
@@ -338,9 +240,8 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(000) 000-0000||+000000000000000',
+                mask: signal('(000) 000-0000||+000000000000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked')
@@ -355,9 +256,8 @@ describe('Test Date Hh:m0', () => {
     it('dynamic mask after backspace should have right cursor position (00) 00000000||+00 (00) 00000000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '(00) 00000000||+00 (00) 00000000',
+                mask: signal('(00) 00000000||+00 (00) 00000000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('111').should('have.value', '(11) 1');

@@ -1,12 +1,12 @@
-import { CypressTestMaskModule } from './utils/cypress-test.module';
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
+import { signal } from '@angular/core';
+
 describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: '00 00 00',
+                mask: signal('00 00 00'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('1dd').type('dd');
@@ -19,10 +19,9 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with hiddenINput', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'XX-XX-XX',
-                hiddenInput: true,
+                mask: signal('XX-XX-XX'),
+                hiddenInput: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('1dd').type('dd');
@@ -35,10 +34,9 @@ describe('Directive: Mask (emit-events)', () => {
     it('should add trailing zero when mask="separator.1" and leadZero="true"', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.1',
-                leadZero: true,
+                mask: signal('separator.1'),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('9').blur().should('have.value', '9.0');
@@ -47,10 +45,9 @@ describe('Directive: Mask (emit-events)', () => {
     it('should keep trailing decimal when mask="separator.1" and leadZero="true"', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.1',
-                leadZero: true,
+                mask: signal('separator.1'),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('7.7').blur().should('have.value', '7.7');
@@ -59,11 +56,10 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with suffix separator2', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                leadZero: true,
-                suffix: ' $',
+                mask: signal('separator.2'),
+                leadZero: signal(true),
+                suffix: signal(' $'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.00 $');
@@ -73,11 +69,10 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with suffix separator.3', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.3',
-                leadZero: true,
-                suffix: ' $',
+                mask: signal('separator.3'),
+                leadZero: signal(true),
+                suffix: signal(' $'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('10.0').blur().should('have.value', '10.000 $');
@@ -87,10 +82,9 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with separator2', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.2',
-                leadZero: true,
+                mask: signal('separator.2'),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.00');
@@ -100,10 +94,9 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with separator.3', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'separator.3',
-                leadZero: true,
+                mask: signal('separator.3'),
+                leadZero: signal(true),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.000');
@@ -113,9 +106,8 @@ describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct with SS000', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                mask: 'SS000',
+                mask: signal('SS000'),
             },
-            imports: [CypressTestMaskModule],
         });
 
         cy.get('#masked').type('SS11111DDDD11').blur().should('have.value', 'SS111');

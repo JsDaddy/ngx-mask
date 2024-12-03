@@ -5,19 +5,18 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
-export interface IConfig {
+export type NgxMaskConfig = {
     suffix: string;
     prefix: string;
     thousandSeparator: string;
     decimalMarker: '.' | ',' | ['.', ','];
     clearIfNotMatch: boolean;
-    showTemplate: boolean;
     showMaskTyped: boolean;
     placeHolderCharacter: string;
     shownMaskExpression: string;
     specialCharacters: string[] | readonly string[];
     dropSpecialCharacters: boolean | string[] | readonly string[];
-    hiddenInput: boolean | undefined;
+    hiddenInput: boolean | null;
     validation: boolean;
     separatorLimit: string;
     apm: boolean;
@@ -37,29 +36,27 @@ export interface IConfig {
             symbol?: string;
         }
     >;
-}
+};
 
-export type optionsConfig = Partial<IConfig>;
-export const NGX_MASK_CONFIG = new InjectionToken<IConfig>('ngx-mask config');
-export const NEW_CONFIG = new InjectionToken<IConfig>('new ngx-mask config');
-export const INITIAL_CONFIG = new InjectionToken<IConfig>('initial ngx-mask config');
+export type NgxMaskOptions = Partial<NgxMaskConfig>;
+export const NGX_MASK_CONFIG = new InjectionToken<NgxMaskConfig>('ngx-mask config');
+export const NEW_CONFIG = new InjectionToken<NgxMaskConfig>('new ngx-mask config');
+export const INITIAL_CONFIG = new InjectionToken<NgxMaskConfig>('initial ngx-mask config');
 
-export const initialConfig: IConfig = {
+export const initialConfig: NgxMaskConfig = {
     suffix: '',
     prefix: '',
     thousandSeparator: ' ',
     decimalMarker: ['.', ','],
     clearIfNotMatch: false,
-    showTemplate: false,
     showMaskTyped: false,
     placeHolderCharacter: '_',
     dropSpecialCharacters: true,
-    hiddenInput: undefined,
+    hiddenInput: null,
     shownMaskExpression: '',
     separatorLimit: '',
     allowNegativeNumbers: false,
     validation: true,
-
     specialCharacters: ['-', '/', '(', ')', '.', ':', ' ', '+', ',', '@', '[', ']', '"', "'"],
     leadZeroDateTime: false,
     apm: false,

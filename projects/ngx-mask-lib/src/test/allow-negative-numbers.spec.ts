@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Allow negative numbers)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask (Allow negative numbers)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,10 +21,10 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     });
 
     it('FormControl or NgModel should not allow negative numbers (default functionality)', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
-        component.allowNegativeNumbers = false;
-        component.dropSpecialCharacters = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.allowNegativeNumbers.set(false);
+        component.dropSpecialCharacters.set(true);
         equal('-10,000.00', '10,000.00', fixture);
 
         expect(component.form.value).toBe('10000.00');
@@ -36,10 +35,10 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     });
 
     it('FormControl and NgModel should be filled with negative values', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ',';
-        component.allowNegativeNumbers = true;
-        component.dropSpecialCharacters = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.allowNegativeNumbers.set(true);
+        component.dropSpecialCharacters.set(true);
         component.form.setValue(-123456);
 
         equal('-123456.00', '-123,456.00', fixture);
@@ -47,16 +46,16 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     });
 
     it('allowNegativeNumber to mask', () => {
-        component.mask = '000.00';
-        component.allowNegativeNumbers = true;
+        component.mask.set('000.00');
+        component.allowNegativeNumbers.set(true);
 
         equal('-123.00', '-123.00', fixture);
         equal('-311.9', '-311.9', fixture);
         equal('-311', '-311', fixture);
         equal('123.00', '123.00', fixture);
 
-        component.mask = '0000';
-        component.allowNegativeNumbers = true;
+        component.mask.set('0000');
+        component.allowNegativeNumbers.set(true);
 
         equal('-1230', '-1230', fixture);
         equal('-3119', '-3119', fixture);
@@ -67,16 +66,16 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     });
 
     it('allowNegativeNumber to percent', () => {
-        component.mask = 'percent';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent');
+        component.allowNegativeNumbers.set(true);
 
         equal('-101', '-10', fixture);
         equal('-100', '-100', fixture);
         equal('-999', '-99', fixture);
         equal('-20', '-20', fixture);
 
-        component.mask = 'percent.2';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.2');
+        component.allowNegativeNumbers.set(true);
 
         equal('-100.00', '-100.00', fixture);
         equal('-100.02', '-100.0', fixture);
@@ -85,8 +84,8 @@ describe('Directive: Mask (Allow negative numbers)', () => {
         equal('-11.11', '-11.11', fixture);
         equal('-12.30', '-12.30', fixture);
 
-        component.mask = 'percent.3';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.3');
+        component.allowNegativeNumbers.set(true);
 
         equal('-100.000', '-100.000', fixture);
         equal('-99.001', '-99.001', fixture);
@@ -97,16 +96,16 @@ describe('Directive: Mask (Allow negative numbers)', () => {
     });
 
     it('allowNegativeNumber to separator', () => {
-        component.mask = 'separator';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
 
         equal('-101', '-101', fixture);
         equal('-100', '-100', fixture);
         equal('-999', '-999', fixture);
         equal('-3000', '-3 000', fixture);
 
-        component.mask = 'separator.2';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.2');
+        component.allowNegativeNumbers.set(true);
 
         equal('-100.00', '-100.00', fixture);
         equal('-100.02', '-100.02', fixture);
@@ -115,8 +114,8 @@ describe('Directive: Mask (Allow negative numbers)', () => {
         equal('-91.11', '-91.11', fixture);
         equal('-1112.30', '-1 112.30', fixture);
 
-        component.mask = 'separator.3';
-        component.allowNegativeNumbers = true;
+        component.mask.set('separator.3');
+        component.allowNegativeNumbers.set(true);
 
         equal('-100.000', '-100.000', fixture);
         equal('-99.001', '-99.001', fixture);

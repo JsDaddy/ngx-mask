@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Repeat)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask (Repeat)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,40 +21,40 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('repeat mask', () => {
-        component.mask = '0{4}';
+        component.mask.set('0{4}');
         equal('1234', '1234', fixture);
     });
 
     it('should work when repeat value is more then 9', () => {
-        component.mask = 'A{12}';
+        component.mask.set('A{12}');
         equal('123456789ABC', '123456789ABC', fixture);
     });
 
     it('should correctly handle leading zeros', () => {
-        component.mask = 'A{02}';
+        component.mask.set('A{02}');
         equal('1234', '12', fixture);
 
-        component.mask = 'A{0000012}';
+        component.mask.set('A{0000012}');
         equal('123456789ABCDE', '123456789ABC', fixture);
     });
 
     it('should repeat digits only', () => {
-        component.mask = '0{6}';
+        component.mask.set('0{6}');
         equal('AbC12345678Bfc', '123456', fixture);
     });
 
     it('should repeat digits and letters', () => {
-        component.mask = 'A{6}';
+        component.mask.set('A{6}');
         equal('AbC12345678Bfc', 'AbC123', fixture);
     });
 
     it('should repeat only letters', () => {
-        component.mask = 'S{6}';
+        component.mask.set('S{6}');
         equal('AbC12345678Bfc', 'AbCBfc', fixture);
     });
 
     it('repeat mask date', () => {
-        component.mask = '0{2}/0{2}/0{4}';
+        component.mask.set('0{2}/0{2}/0{4}');
         equal('12345678', '12/34/5678', fixture);
     });
 
@@ -65,13 +64,13 @@ describe('Directive: Mask (Repeat)', () => {
     // });
 
     it('specialCharacters quotes', () => {
-        component.mask = '0-0-0*-0*-0*';
+        component.mask.set('0-0-0*-0*-0*');
         equal('123', '1-2-3', fixture);
         equal('123-42-', '1-2-3-42-', fixture);
     });
 
     it('should repeat digits only and work with dynamicMask', () => {
-        component.mask = '0{4}||0{6}';
+        component.mask.set('0{4}||0{6}');
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
@@ -81,7 +80,7 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('should repeat digits only and work with dynamicMask', () => {
-        component.mask = 'SS0{4}';
+        component.mask.set('SS0{4}');
         equal('d', 'd', fixture);
         equal('dd', 'dd', fixture);
         equal('dd1', 'dd1', fixture);
@@ -91,7 +90,7 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('should repeat digits only and work with dynamicMask', () => {
-        component.mask = 'A{5}.S{2}';
+        component.mask.set('A{5}.S{2}');
         equal('d', 'd', fixture);
         equal('dd', 'dd', fixture);
         equal('dd1', 'dd1', fixture);
@@ -102,7 +101,7 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('should A{8} be valid if length 8', () => {
-        component.mask = 'A{8}';
+        component.mask.set('A{8}');
         equal('1', '1', fixture);
         expect(component.form.valid).toBe(false);
         equal('12', '12', fixture);
@@ -128,7 +127,7 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('should A{9} be valid if length 9', () => {
-        component.mask = 'A{9}';
+        component.mask.set('A{9}');
         equal('1', '1', fixture);
         expect(component.form.valid).toBe(false);
         equal('12', '12', fixture);
@@ -157,7 +156,7 @@ describe('Directive: Mask (Repeat)', () => {
     });
 
     it('should A{10} be valid if length 10', () => {
-        component.mask = 'A{10}';
+        component.mask.set('A{10}');
         equal('1', '1', fixture);
         expect(component.form.valid).toBe(false);
         equal('12', '12', fixture);

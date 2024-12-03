@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -11,8 +11,7 @@ describe('Directive: Mask', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -21,8 +20,8 @@ describe('Directive: Mask', () => {
     });
 
     it('should clear if mask is not matched', async () => {
-        component.mask = '000.000-00';
-        component.clearIfNotMatch = true;
+        component.mask.set('000.000-00');
+        component.clearIfNotMatch.set(true);
         equal('', '', fixture, true);
         equal('2578989', '', fixture, true);
         equal('2578989888988', '257.898-98', fixture);
@@ -30,18 +29,18 @@ describe('Directive: Mask', () => {
     });
 
     it('should clear if mask is not matched with prefix', async () => {
-        component.mask = '000-000-00';
-        component.prefix = '+5';
-        component.clearIfNotMatch = true;
+        component.mask.set('000-000-00');
+        component.prefix.set('+5');
+        component.clearIfNotMatch.set(true);
         equal('', '', fixture, true);
         equal('2578989', '', fixture, true);
         equal('25789898', '+5257-898-98', fixture);
     });
 
     it('should clear if mask is not matched with another placeholderCharacter *', async () => {
-        component.mask = '0000';
-        component.placeHolderCharacter = '*';
-        component.clearIfNotMatch = true;
+        component.mask.set('0000');
+        component.placeHolderCharacter.set('*');
+        component.clearIfNotMatch.set(true);
         equal('', '', fixture, true);
         equal('333', '', fixture, true);
         equal('22', '', fixture, true);
@@ -49,9 +48,9 @@ describe('Directive: Mask', () => {
     });
 
     it('should clear if mask is not matched with another placeholderCharacter X', async () => {
-        component.mask = '00000';
-        component.placeHolderCharacter = 'X';
-        component.clearIfNotMatch = true;
+        component.mask.set('00000');
+        component.placeHolderCharacter.set('X');
+        component.clearIfNotMatch.set(true);
         equal('', '', fixture, true);
         equal('333', '', fixture, true);
         equal('22', '', fixture, true);

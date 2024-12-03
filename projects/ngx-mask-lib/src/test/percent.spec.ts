@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Percent)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask (Percent)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,60 +21,60 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for empty', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('', '', fixture);
     });
 
     it('percent for 100', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('100', '100', fixture);
     });
 
     it('percent for 99', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('99', '99', fixture);
     });
 
     it('percent for 123', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('123', '12', fixture);
     });
 
     it('percent for 99.99', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('99.99', '99.99', fixture);
     });
 
     it('percent for 99', () => {
-        component.mask = 'percent.0';
+        component.mask.set('percent.0');
         equal('99.99999', '99', fixture);
     });
 
     it('percent for 99.99', () => {
-        component.mask = 'percent.2';
+        component.mask.set('percent.2');
         equal('99.9999', '99.99', fixture);
     });
 
     it('percent for 1.123', () => {
-        component.mask = 'percent.3';
+        component.mask.set('percent.3');
         equal('1.12345', '1.123', fixture);
     });
 
     it('percent for 123.23', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('123.23', '12.23', fixture);
     });
 
     it('percent with suffix', () => {
-        component.mask = 'percent';
-        component.suffix = '%';
+        component.mask.set('percent');
+        component.suffix.set('%');
         equal('50', '50%', fixture);
         equal('123', '12%', fixture);
         equal('50.50', '50.50%', fixture);
     });
 
     it('percent for split zero percent.2', () => {
-        component.mask = 'percent.2';
+        component.mask.set('percent.2');
         equal('01.23', '1.23', fixture);
         equal('012.23', '12.23', fixture);
         equal('099.23', '99.23', fixture);
@@ -84,7 +83,7 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for split zero percent', () => {
-        component.mask = 'percent';
+        component.mask.set('percent');
         equal('01.23', '1.23', fixture);
         equal('012.23', '12.23', fixture);
         equal('099.23', '99.23', fixture);
@@ -93,7 +92,7 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for split zero percent.3', () => {
-        component.mask = 'percent.3';
+        component.mask.set('percent.3');
         equal('01.233', '1.233', fixture);
         equal('012.232', '12.232', fixture);
         equal('099.230', '99.230', fixture);
@@ -102,8 +101,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for split zero percent.2 should be valid', () => {
-        component.mask = 'percent.2';
-        component.validation = true;
+        component.mask.set('percent.2');
+        component.validation.set(true);
         fixture.detectChanges();
 
         equal('1', '1', fixture);
@@ -112,8 +111,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for split zero percent.3 should be valid', () => {
-        component.mask = 'percent.3';
-        component.validation = true;
+        component.mask.set('percent.3');
+        component.validation.set(true);
         fixture.detectChanges();
 
         equal('1', '1', fixture);
@@ -122,8 +121,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent for split zero percent should be valid', () => {
-        component.mask = 'percent';
-        component.validation = true;
+        component.mask.set('percent');
+        component.validation.set(true);
         fixture.detectChanges();
 
         equal('1', '1', fixture);
@@ -132,8 +131,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.2 ', () => {
-        component.mask = 'percent.2';
-        component.decimalMarker = ',';
+        component.mask.set('percent.2');
+        component.decimalMarker.set(',');
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
@@ -143,8 +142,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.3 ', () => {
-        component.mask = 'percent.3';
-        component.decimalMarker = ',';
+        component.mask.set('percent.3');
+        component.decimalMarker.set(',');
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
@@ -155,9 +154,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.2 drop false ', () => {
-        component.mask = 'percent.2';
-        component.dropSpecialCharacters = false;
-        component.decimalMarker = ',';
+        component.mask.set('percent.2');
+        component.dropSpecialCharacters.set(false);
+        component.decimalMarker.set(',');
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
@@ -167,9 +166,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.3 drop false ', () => {
-        component.mask = 'percent.3';
-        component.dropSpecialCharacters = false;
-        component.decimalMarker = ',';
+        component.mask.set('percent.3');
+        component.dropSpecialCharacters.set(false);
+        component.decimalMarker.set(',');
 
         equal('2', '2', fixture);
         equal('22', '22', fixture);
@@ -179,10 +178,10 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.2 drop false with suffix ', () => {
-        component.mask = 'percent.2';
-        component.dropSpecialCharacters = false;
-        component.decimalMarker = ',';
-        component.suffix = '%';
+        component.mask.set('percent.2');
+        component.dropSpecialCharacters.set(false);
+        component.decimalMarker.set(',');
+        component.suffix.set('%');
 
         equal('1', '1%', fixture);
         equal('12', '12%', fixture);
@@ -192,10 +191,10 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.3 drop false with suffix ', () => {
-        component.mask = 'percent.3';
-        component.dropSpecialCharacters = false;
-        component.suffix = '%';
-        component.decimalMarker = ',';
+        component.mask.set('percent.3');
+        component.dropSpecialCharacters.set(false);
+        component.suffix.set('%');
+        component.decimalMarker.set(',');
 
         equal('2', '2%', fixture);
         equal('22', '22%', fixture);
@@ -205,9 +204,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.2with suffix ', () => {
-        component.mask = 'percent.2';
-        component.suffix = '%';
-        component.decimalMarker = ',';
+        component.mask.set('percent.2');
+        component.suffix.set('%');
+        component.decimalMarker.set(',');
 
         equal('1', '1%', fixture);
         equal('12', '12%', fixture);
@@ -217,9 +216,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with decimalMarker = , percent.3  with suffix ', () => {
-        component.mask = 'percent.3';
-        component.suffix = '%';
-        component.decimalMarker = ',';
+        component.mask.set('percent.3');
+        component.suffix.set('%');
+        component.decimalMarker.set(',');
 
         equal('2', '2%', fixture);
         equal('22', '22%', fixture);
@@ -229,8 +228,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with allowNegative = true', () => {
-        component.mask = 'percent';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -240,8 +239,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with allowNegative = true', () => {
-        component.mask = 'percent.1';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.1');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -251,9 +250,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with allowNegative = true', () => {
-        component.mask = 'percent.1';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.1');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -263,8 +262,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent 2 with allowNegative = true', () => {
-        component.mask = 'percent.2';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.2');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -279,8 +278,8 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent 3 with allowNegative = true', () => {
-        component.mask = 'percent.3';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.3');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -297,9 +296,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent with allowNegative = true, decimalMarker = ,', () => {
-        component.mask = 'percent';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -309,9 +308,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent 2 with allowNegative = true, decimalMarker = ,', () => {
-        component.mask = 'percent.2';
-        component.decimalMarker = ',';
-        component.allowNegativeNumbers = true;
+        component.mask.set('percent.2');
+        component.decimalMarker.set(',');
+        component.allowNegativeNumbers.set(true);
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);
@@ -326,9 +325,9 @@ describe('Directive: Mask (Percent)', () => {
     });
 
     it('percent 3 with allowNegative = true, decimalMarker = ,', () => {
-        component.mask = 'percent.3';
-        component.allowNegativeNumbers = true;
-        component.decimalMarker = ',';
+        component.mask.set('percent.3');
+        component.allowNegativeNumbers.set(true);
+        component.decimalMarker.set(',');
 
         equal('-', '-', fixture);
         equal('-0', '-0', fixture);

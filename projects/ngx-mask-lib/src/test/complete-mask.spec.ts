@@ -1,20 +1,22 @@
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, signal } from '@angular/core';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [ReactiveFormsModule, NgxMaskDirective],
     template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 class TestMaskComponent {
     public form: FormControl = new FormControl('');
 
-    public isMaskFilled = false;
+    public isMaskFilled = signal<boolean>(false);
 
     public maskFilled(): void {
-        this.isMaskFilled = true;
+        this.isMaskFilled.set(true);
     }
 }
 
@@ -25,8 +27,7 @@ describe('Directive: Mask (Function maskFilled)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -36,11 +37,11 @@ describe('Directive: Mask (Function maskFilled)', () => {
     });
     it('should call function maskFilled and isMaskFilled should be true', () => {
         component.form.setValue('9999');
-        expect(component.isMaskFilled).toBeTrue();
+        expect(component.isMaskFilled()).toBeTrue();
         expect(maskFilledSpy).toHaveBeenCalledOnceWith();
     });
     it('isMaskFilled should be false', () => {
         component.form.setValue('999');
-        expect(component.isMaskFilled).toBeFalse();
+        expect(component.isMaskFilled()).toBeFalse();
     });
 });

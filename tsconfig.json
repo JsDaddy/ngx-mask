@@ -6,17 +6,18 @@
         "importHelpers": true,
         "outDir": "./dist/out-tsc",
         "sourceMap": true,
+        "esModuleInterop": true,
         "declaration": false,
-        "module": "esnext",
+        "module": "ES2022",
         "experimentalDecorators": true,
         "strict": true,
         "target": "ES2022",
-        "lib": ["es2020", "dom"],
+        "lib": ["ES2022", "dom"],
         "paths": {
-            "ngx-mask": ["projects/ngx-mask-lib/src"],
-            "ngx-mask/*": ["projects/ngx-mask-lib/src"],
+            "@libraries/*": ["src/libraries/*"],
             "@open-source/*": ["src/libraries/open-source/*"],
-            "@libraries/*": ["src/libraries/*"]
+            "ngx-mask": ["projects/ngx-mask-lib/src"],
+            "ngx-mask/*": ["projects/ngx-mask-lib/src"]
         },
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
@@ -25,12 +26,20 @@
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
         "noUncheckedIndexedAccess": true,
+        "useUnknownInCatchVariables": true,
+        "exactOptionalPropertyTypes": true,
+        "removeComments": true,
+        "resolveJsonModule": true,
+        "allowSyntheticDefaultImports": true,
         "noImplicitOverride": true,
         "noPropertyAccessFromIndexSignature": true,
-        "useDefineForClassFields": false,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "noImplicitAny": true,
+        "useDefineForClassFields": true,
+        "isolatedModules": true
     },
     "angularCompilerOptions": {
+        "strictStandalone": true,
         "enableI18nLegacyMessageIdFormat": false,
         "strictInjectionParameters": true,
         "preserveWhitespaces": true,
@@ -40,7 +49,8 @@
         "extendedDiagnostics": {
             "checks": {
                 "invalidBananaInBox": "error",
-                "nullishCoalescingNotNullable": "warning"
+                "nullishCoalescingNotNullable": "warning",
+                "unusedStandaloneImports": "error"
             },
             "defaultCategory": "suppress"
         }

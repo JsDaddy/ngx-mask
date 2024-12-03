@@ -1,9 +1,13 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [ReactiveFormsModule, NgxMaskDirective],
     styles: [
         'code { border: 1px solid #ddd; background-color: #eee; padding: 0 5px; border-radius: 3px; }',
     ],

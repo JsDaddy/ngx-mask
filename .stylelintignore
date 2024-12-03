@@ -6,6 +6,7 @@
 /.angular
 /test-reports
 /src/coverage
+
 /projects/ngx-mask-lib/coverage
 
 # Node

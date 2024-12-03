@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Event: paste', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Event: paste', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,7 +21,7 @@ describe('Event: paste', () => {
     });
 
     it('After paste to control cursor should be on the end of input)', () => {
-        component.mask = '00 - 0000 - 00000';
+        component.mask.set('00 - 0000 - 00000');
         fixture.detectChanges();
 
         const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
@@ -43,8 +42,8 @@ describe('Event: paste', () => {
         expect(inputDebuggerElement.nativeElement.selectionStart).toBe(15);
     });
     it('After paste to control cursor should be on the end of input for mask with separator', () => {
-        component.mask = 'separator.0';
-        component.thousandSeparator = ',';
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
         fixture.detectChanges();
 
         const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));

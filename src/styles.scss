@@ -1,1 +1,5 @@
-@import './libraries/styles/general';
+@use './libraries/styles/scroll-bar';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

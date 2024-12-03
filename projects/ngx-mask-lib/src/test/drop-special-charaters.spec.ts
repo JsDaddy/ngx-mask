@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask (Drop special characters)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask (Drop special characters)', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,32 +21,37 @@ describe('Directive: Mask (Drop special characters)', () => {
     });
 
     it('FormControl should be filled without special characters', () => {
-        component.mask = '00-00-00';
-        component.dropSpecialCharacters = false;
+        component.mask.set('00-00-00');
+        component.dropSpecialCharacters.set(false);
         equal('257898', '25-78-98', fixture);
 
         expect(component.form.value).toBe('25-78-98');
-
         equal('123456', '12-34-56', fixture);
 
         expect(component.form.value).toBe('12-34-56');
+    });
 
-        component.mask = '00-00/00';
-        component.dropSpecialCharacters = ['/'];
+    it('should correct value with mask 00-00/00 with dropSpecialCharacters = /', () => {
+        component.mask.set('00-00/00');
+        component.dropSpecialCharacters.set(['/']);
+
         equal('257898', '25-78/98', fixture);
         expect(component.form.value).toBe('25-7898');
+    });
 
-        component.mask = '0000.00';
-        component.dropSpecialCharacters = true;
+    it('should correct value with mask 0000.00 with dropSpecialCharacters = true', () => {
+        component.mask.set('0000.00');
+        component.dropSpecialCharacters.set(true);
         component.form.setValue(123456);
+
         equal('123456', '1234.56', fixture);
         expect(component.form.value).toBe(123456);
     });
 
     it('FormControl should be filled without special characters', () => {
-        component.mask = 'separator.4';
-        component.thousandSeparator = ',';
-        component.dropSpecialCharacters = true;
+        component.mask.set('separator.4');
+        component.thousandSeparator.set(',');
+        component.dropSpecialCharacters.set(true);
         component.form.setValue(2578.9812);
 
         equal('2578.9812', '2,578.9812', fixture);
@@ -55,9 +59,9 @@ describe('Directive: Mask (Drop special characters)', () => {
     });
 
     it('FormControl should normally handle the removal of whitespace', () => {
-        component.mask = 'separator.2';
-        component.thousandSeparator = ' ';
-        component.dropSpecialCharacters = true;
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.dropSpecialCharacters.set(true);
         component.form.setValue(1234567.89);
 
         // @todo add backspace event check
@@ -67,9 +71,9 @@ describe('Directive: Mask (Drop special characters)', () => {
     });
 
     it('dropSpecialCharacter test for valid', () => {
-        component.mask = '(000) 000-0000';
-        component.dropSpecialCharacters = true;
-        component.validation = true;
+        component.mask.set('(000) 000-0000');
+        component.dropSpecialCharacters.set(true);
+        component.validation.set(true);
         equal('1', '(1', fixture);
         expect(component.form.valid).toBe(false);
         equal('12', '(12', fixture);
@@ -93,9 +97,9 @@ describe('Directive: Mask (Drop special characters)', () => {
     });
 
     it('dropSpecialCharacter = false test for valid', () => {
-        component.mask = '(000) 000-0000';
-        component.dropSpecialCharacters = true;
-        component.validation = true;
+        component.mask.set('(000) 000-0000');
+        component.dropSpecialCharacters.set(true);
+        component.validation.set(true);
         equal('1', '(1', fixture);
         expect(component.form.valid).toBe(false);
         equal('12', '(12', fixture);
@@ -119,18 +123,18 @@ describe('Directive: Mask (Drop special characters)', () => {
     });
 
     it('dropSpecialCharacter = true test for valid with setValue', () => {
-        component.mask = '(000) 000-0000';
-        component.dropSpecialCharacters = true;
-        component.validation = true;
+        component.mask.set('(000) 000-0000');
+        component.dropSpecialCharacters.set(true);
+        component.validation.set(true);
         component.form.setValue('1234567890');
         equal('1234567890', '(123) 456-7890', fixture);
         expect(component.form.valid).toBe(true);
     });
 
     it('dropSpecialCharacter = false test for valid with setValue', () => {
-        component.mask = '(000) 000-0000';
-        component.dropSpecialCharacters = false;
-        component.validation = true;
+        component.mask.set('(000) 000-0000');
+        component.dropSpecialCharacters.set(false);
+        component.validation.set(true);
         equal('1', '(1', fixture);
         expect(component.form.valid).toBeFalsy();
         equal('12', '(12', fixture);

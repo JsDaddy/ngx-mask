@@ -1,20 +1,19 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { Component, ViewChild } from '@angular/core';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { Component, viewChild } from '@angular/core';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
+    standalone: true,
+    imports: [NgxMaskDirective],
     template: ` <input mask="" #refMask="mask" /> <input mask="" #refNgxMask="ngxMask" /> `,
 })
 export class TestMaskComponent {
-    @ViewChild('refMask')
-    public refMask!: NgxMaskDirective;
-
-    @ViewChild('refNgxMask')
-    public refNgxMask!: NgxMaskDirective;
+    public refNgxMask = viewChild<NgxMaskDirective>('refNgxMask');
+    public refMask = viewChild<NgxMaskDirective>('refMask');
 }
 
 describe('Directive: Mask export As', () => {
@@ -23,8 +22,7 @@ describe('Directive: Mask export As', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -33,9 +31,9 @@ describe('Directive: Mask export As', () => {
     });
 
     it('should export directive instance with exportAs api by name equal mask', () => {
-        expect(component.refMask).toBeInstanceOf(NgxMaskDirective);
+        expect(component.refMask()).toBeInstanceOf(NgxMaskDirective);
     });
     it('should export directive instance with exportAs api by name equal ngxMask', () => {
-        expect(component.refNgxMask).toBeInstanceOf(NgxMaskDirective);
+        expect(component.refNgxMask()).toBeInstanceOf(NgxMaskDirective);
     });
 });

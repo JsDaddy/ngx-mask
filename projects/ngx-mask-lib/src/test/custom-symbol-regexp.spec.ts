@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import type { ComponentFixture } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
-import { provideNgxMask } from '../lib/ngx-mask.providers';
-import { NgxMaskDirective } from '../lib/ngx-mask.directive';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -12,8 +12,7 @@ describe('Directive: Mask', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [TestMaskComponent],
-            imports: [ReactiveFormsModule, NgxMaskDirective],
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
             providers: [provideNgxMask()],
         });
         fixture = TestBed.createComponent(TestMaskComponent);
@@ -22,7 +21,7 @@ describe('Directive: Mask', () => {
     });
 
     it('custom patterns', () => {
-        component.mask = '00*.00';
+        component.mask.set('00*.00');
         equal('22222.333333', '22222.33', fixture);
         equal('22212323232', '22212323232', fixture);
     });
@@ -31,8 +30,8 @@ describe('Directive: Mask', () => {
         const testPattern = {
             S: { pattern: new RegExp('[A-Za-z-Áá]') },
         };
-        component.mask = 'S*';
-        component.patterns = testPattern;
+        component.mask.set('S*');
+        component.patterns.set(testPattern);
         equal('Fernándos', 'Fernándos', fixture);
         equal('Ánton', 'Ánton', fixture);
     });

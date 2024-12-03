@@ -1,6 +1,8 @@
-import { inject, Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { inject, Pipe, signal } from '@angular/core';
 
-import { IConfig, NGX_MASK_CONFIG } from './ngx-mask.config';
+import type { NgxMaskConfig } from './ngx-mask.config';
+import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -10,19 +12,20 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
-    private readonly defaultOptions = inject<IConfig>(NGX_MASK_CONFIG);
+    private readonly defaultOptions = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
     private readonly _maskService = inject(NgxMaskService);
 
-    private _maskExpressionArray: string[] = [];
-
-    private mask = '';
+    private _maskExpressionArray = signal<string[]>([]);
+    private _mask = signal<string>('');
 
     public transform(
         value: string | number,
         mask: string,
-        { patterns, ...config }: Partial<IConfig> = {} as Partial<IConfig>
+        { patterns, ...config }: Partial<NgxMaskConfig> = {} as Partial<NgxMaskConfig>
     ): string {
+        let processedValue: string | number = value;
+
         const currentConfig = {
             maskExpression: mask,
             ...this.defaultOptions,
@@ -32,28 +35,32 @@ export class NgxMaskPipe implements PipeTransform {
                 ...patterns,
             },
         };
-        Object.entries(currentConfig).forEach(([key, value]) => {
-            //eslint-disable-next-line  @typescript-eslint/no-explicit-any
-            (this._maskService as any)[key] = value;
+
+        Object.entries(currentConfig).forEach(([key, val]) => {
+            (this._maskService as any)[key] = val;
         });
+
         if (mask.includes('||')) {
-            if (mask.split('||').length > 1) {
-                this._maskExpressionArray = mask.split('||').sort((a: string, b: string) => {
-                    return a.length - b.length;
-                });
-                this._setMask(value as string);
-                return this._maskService.applyMask(`${value}`, this.mask);
+            const maskParts = mask.split('||');
+            if (maskParts.length > 1) {
+                this._maskExpressionArray.set(
+                    maskParts.sort((a: string, b: string) => a.length - b.length)
+                );
+                this._setMask(processedValue as string);
+                return this._maskService.applyMask(`${processedValue}`, this._mask());
             } else {
-                this._maskExpressionArray = [];
-                return this._maskService.applyMask(`${value}`, this.mask);
+                this._maskExpressionArray.set([]);
+                return this._maskService.applyMask(`${processedValue}`, this._mask());
             }
         }
+
         if (mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)) {
             return this._maskService.applyMask(
-                `${value}`,
+                `${processedValue}`,
                 this._maskService._repeatPatternSymbols(mask)
             );
         }
+
         if (mask.startsWith(MaskExpression.SEPARATOR)) {
             if (config.decimalMarker) {
                 this._maskService.decimalMarker = config.decimalMarker;
@@ -65,46 +72,58 @@ export class NgxMaskPipe implements PipeTransform {
                 this._maskService.leadZero = config.leadZero;
             }
 
-            value = String(value);
+            processedValue = String(processedValue);
             const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
+
             if (!Array.isArray(this._maskService.decimalMarker)) {
-                value =
+                processedValue =
                     this._maskService.decimalMarker !== localeDecimalMarker
-                        ? value.replace(localeDecimalMarker, this._maskService.decimalMarker)
-                        : value;
+                        ? (processedValue as string).replace(
+                              localeDecimalMarker,
+                              this._maskService.decimalMarker
+                          )
+                        : processedValue;
             }
+
             if (
                 this._maskService.leadZero &&
-                value &&
+                processedValue &&
                 this._maskService.dropSpecialCharacters !== false
             ) {
-                value = this._maskService._checkPrecision(mask, value as string);
+                processedValue = this._maskService._checkPrecision(mask, processedValue as string);
             }
+
             if (this._maskService.decimalMarker === MaskExpression.COMMA) {
-                value = value.toString().replace(MaskExpression.DOT, MaskExpression.COMMA);
+                processedValue = (processedValue as string).replace(
+                    MaskExpression.DOT,
+                    MaskExpression.COMMA
+                );
             }
+
             this._maskService.isNumberValue = true;
         }
-        if (value === null || value === undefined) {
+
+        if (processedValue === null || typeof processedValue === 'undefined') {
             return this._maskService.applyMask('', mask);
         }
-        return this._maskService.applyMask(`${value}`, mask);
+
+        return this._maskService.applyMask(`${processedValue}`, mask);
     }
 
     private _setMask(value: string) {
-        if (this._maskExpressionArray.length > 0) {
-            this._maskExpressionArray.some((mask): boolean | void => {
+        if (this._maskExpressionArray().length > 0) {
+            this._maskExpressionArray().some((mask): boolean | void => {
                 const test =
                     this._maskService.removeMask(value)?.length <=
                     this._maskService.removeMask(mask)?.length;
                 if (value && test) {
-                    this.mask = mask;
+                    this._mask.set(mask);
                     return test;
                 } else {
                     const expression =
-                        this._maskExpressionArray[this._maskExpressionArray.length - 1] ??
+                        this._maskExpressionArray()[this._maskExpressionArray.length - 1] ??
                         MaskExpression.EMPTY_STRING;
-                    this.mask = expression;
+                    this._mask.set(expression);
                 }
             });
         }
