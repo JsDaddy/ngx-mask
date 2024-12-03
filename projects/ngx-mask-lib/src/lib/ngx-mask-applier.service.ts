@@ -225,7 +225,11 @@ export class NgxMaskApplierService {
                       ? processedValue.slice(1, processedValue.length)
                       : processedValue;
             } else {
-                if (processedValue[0] === decimalMarker && processedValue.length > 1) {
+                if (
+                    processedValue[0] === decimalMarker &&
+                    processedValue.length > 1 &&
+                    !backspaced
+                ) {
                     processedValue =
                         MaskExpression.NUMBER_ZERO +
                         processedValue.slice(0, processedValue.length + 1);
@@ -275,11 +279,20 @@ export class NgxMaskApplierService {
                     processedValue[processedPosition] === MaskExpression.NUMBER_ZERO ||
                     processedValue[processedPosition] === decimalMarker;
                 const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
+                const firstIndexNumberZero = processedValue[1] === MaskExpression.NUMBER_ZERO;
                 const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
                 const zeroIndexThousand = processedValue[0] === this.thousandSeparator;
                 const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
-                const firstIndexNumberZero = processedValue[1] === MaskExpression.NUMBER_ZERO;
+                const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
                 const secondIndexDecimalMarker = processedValue[2] === decimalMarker;
+
+                if (zeroIndexNumberZero && firstIndexDecimalMarker && processedPosition === 0) {
+                    return processedValue;
+                }
+
+                if (zeroIndexDecimalMarker && processedPosition === 0) {
+                    processedValue = inputValueAfterZero;
+                }
 
                 if (
                     zeroIndexNumberZero &&

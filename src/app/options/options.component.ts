@@ -57,4 +57,13 @@ export class OptionsComponent {
             this.accordionService.onChangeAccordion(this.cards());
         });
     }
+    public value = '';
+    public value1 = '';
+
+    public customPatterns = { c: { pattern: new RegExp(/^[^'=<>()]*$/u) } };
+
+    public mask = 'BBBBB';
+    // public customPatterns = {
+    //     B: { pattern: /^[0-9]{4}(,[0-9]{4})*$/ }, // Поддержка 4-значных чисел с необязательными запятыми
+    // };
 }

@@ -65,7 +65,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private _position = signal<number | null>(null);
     private _code = signal<string>('');
     private _maskExpressionArray = signal<string[]>([]);
-    private _allowFewMaskChangeMask = signal<boolean>(false);
     private _justPasted = signal<boolean>(false);
     private _isFocused = signal<boolean>(false);
     /**For IME composition event */
@@ -592,12 +591,15 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                         const specialChartMinusOne = this.specialCharacters().includes(
                             this._maskService.actualValue.slice(position - 1, position)
                         );
+                        const allowFewMaskChangeMask =
+                            this._maskService.removeMask(this._inputValue())?.length ===
+                            this._maskService.removeMask(this._maskService.maskExpression)?.length;
+
                         const specialChartPlusOne = this.specialCharacters().includes(
                             this._maskService.actualValue.slice(position, position + 1)
                         );
-                        if (this._allowFewMaskChangeMask() && !specialChartPlusOne) {
+                        if (allowFewMaskChangeMask && !specialChartPlusOne) {
                             position = (el.selectionStart as number) + 1;
-                            this._allowFewMaskChangeMask.set(false);
                         } else {
                             position = specialChartMinusOne ? position - 1 : position;
                         }
@@ -1102,10 +1104,6 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.maskExpression = maskValue;
                     return test;
                 } else {
-                    if (this._code() === MaskExpression.BACKSPACE) {
-                        this._allowFewMaskChangeMask.set(true);
-                    }
-
                     const expression =
                         this._maskExpressionArray()[this._maskExpressionArray().length - 1] ??
                         MaskExpression.EMPTY_STRING;
