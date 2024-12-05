@@ -1,3 +1,12 @@
+# 19.0.2(2024-12-03)
+
+### Fix
+
+-   Fix ([#1456](https://github.com/JsDaddy/ngx-mask/issues/1456))
+-   Fix ([#1458](https://github.com/JsDaddy/ngx-mask/issues/1458))
+-   Fix ([#1446](https://github.com/JsDaddy/ngx-mask/issues/1446))
+-   Fix ([#1457](https://github.com/JsDaddy/ngx-mask/issues/1457))
+
 # 19.0.1(2024-11-29)
 
 ### Feature
@@ -5,7 +14,6 @@
 -   change @Input to input in NgxMaskDirective
 -   change @Output output in NgxMaskDirective
 -   change variables to signals in NgxMaskDirective
-
 
 # 19.0.0(2024-11-22)
 

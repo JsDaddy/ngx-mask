@@ -597,7 +597,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     private formControlResult(inputValue: string): void {
         if (this.writingValue && !inputValue) {
-            this.onChange('');
+            this.onChange(this.outputTransformFn(''));
             return;
         }
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
@@ -713,6 +713,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (char) => char !== MaskExpression.WHITE_SPACE
             );
         }
+
         return this._removeMask(result, specialCharacters as string[]);
     }
 
@@ -747,9 +748,11 @@ export class NgxMaskService extends NgxMaskApplierService {
         const separatorPrecision: number | null = this._retrieveSeparatorPrecision(
             this.maskExpression
         );
-        const separatorValue: string = this._replaceDecimalMarkerToDot(
-            this._retrieveSeparatorValue(processedResult)
-        );
+
+        const separatorValue: string =
+            this.specialCharacters.length === 0
+                ? this._retrieveSeparatorValue(processedResult)
+                : this._replaceDecimalMarkerToDot(this._retrieveSeparatorValue(processedResult));
 
         if (!this.isNumberValue) {
             return separatorValue;

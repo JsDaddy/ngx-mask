@@ -432,4 +432,34 @@ describe('Test Date Hh:m0', () => {
             .type('{backspace}')
             .should('have.value', '4');
     });
+
+    it('should correct work after backspace separator.2 when first digit 0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+            },
+        });
+
+        cy.get('#masked')
+            .type('50.05')
+            .should('have.value', '50.05')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}')
+            .should('have.value', '5.05');
+    });
+
+    it('should correct work after backspace separator.2 when first digit 0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+            },
+        });
+
+        cy.get('#masked')
+            .type('0.05')
+            .should('have.value', '0.05')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}')
+            .should('have.value', '5');
+    });
 });
