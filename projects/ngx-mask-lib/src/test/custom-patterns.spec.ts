@@ -248,3 +248,35 @@ describe('Directive: Mask (Provide custom patterns with symbol B optional)', () 
         equal('123-45-6', '123-45-6', fixture);
     });
 });
+
+describe('Directive: Mask (Provide custom patterns with symbol C with specialCharacter = [])', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+    const ngxMaskCustomPatterns = {
+        c: { pattern: new RegExp(/^[^'=<>()]*$/u) },
+    };
+
+    const ngxMaskConfigValue: Partial<NgxMaskConfig> = {
+        patterns: { ...initialConfig.patterns, ...ngxMaskCustomPatterns },
+    };
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask(ngxMaskConfigValue)],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('custom mask with c{10} should work correct with specialCharacter = []', () => {
+        component.mask.set('c{10}');
+        component.specialCharacters.set([]);
+
+        equal(',', ',', fixture);
+        equal(',.', ',.', fixture);
+        equal(',./', ',./', fixture);
+        expect(component.form.value).toBe(',./');
+    });
+});
