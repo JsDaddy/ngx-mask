@@ -15,7 +15,6 @@
 -   change @Output output in NgxMaskDirective
 -   change variables to signals in NgxMaskDirective
 
-
 # 19.0.0(2024-11-22)
 
 ### Feature
