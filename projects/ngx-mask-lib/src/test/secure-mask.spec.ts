@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, typeTest } from './utils/test-functions.component';
+import { equal, typeTest, pasteTest } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
@@ -109,7 +109,7 @@ describe('Directive: Mask (Secure)', () => {
         fixture.detectChanges();
         expect(component.form.dirty).toBeTruthy();
         expect(component.form.pristine).toBeFalsy();
-        fixture.whenStable().then(() => {
+        return fixture.whenStable().then(() => {
             expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
         });
     });
@@ -136,7 +136,7 @@ describe('Directive: Mask (Secure)', () => {
         component.hiddenInput.set(true);
         component.mask.set('XXX/X0/0000');
         equal('54321', '***/*1', fixture);
-        typeTest('1', fixture);
+        pasteTest('1', fixture);
         expect(component.form.value).toBe('1');
         component.form.reset();
         expect(component.form.value).toBe(null);
@@ -235,9 +235,11 @@ describe('Directive: Mask (Secure)', () => {
         component.hiddenInput.set(true);
         equal('123456789', '***/**/****', fixture);
         expect(component.form.value).toBe('123456789');
-        fixture.detectChanges();
         component.hiddenInput.set(false);
-        equal(inputTarget.value, '123/45/6789', fixture, true);
-        expect(component.form.value).toBe('123456789');
+        fixture.detectChanges();
+        return fixture.whenStable().then(() => {
+            expect(inputTarget.value).toBe('123/45/6789');
+            expect(component.form.value).toBe('123456789');
+        });
     });
 });

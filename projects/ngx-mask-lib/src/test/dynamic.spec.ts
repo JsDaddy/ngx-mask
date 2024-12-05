@@ -219,7 +219,7 @@ describe('Directive: Mask (Dynamic)', () => {
         expect(component.form.valid).toBeFalse();
         equal('A0', 'A0', fixture);
         expect(component.form.valid).toBeFalse();
-        equal('A00', 'A00', fixture);
+        equal('A00', 'A0 0', fixture);
         expect(component.form.valid).toBeFalse();
         equal('AAA0DD', 'AAA 0DD', fixture);
         expect(component.form.valid).toBeTrue();

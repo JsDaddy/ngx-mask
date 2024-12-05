@@ -487,7 +487,7 @@ export class NgxMaskApplierService {
                                 ? processedPosition + 1
                                 : processedPosition;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(cursor);
                             i--;
                             if (this.leadZeroDateTime) {
                                 result += '0';
@@ -527,7 +527,7 @@ export class NgxMaskApplierService {
                                 ? processedPosition + 1
                                 : processedPosition;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(cursor);
                             i--;
                             if (this.leadZeroDateTime) {
                                 result += '0';
@@ -576,7 +576,7 @@ export class NgxMaskApplierService {
                                 ? processedPosition + 1
                                 : processedPosition;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(cursor);
                             i--;
 
                             if (this.leadZeroDateTime) {
@@ -649,7 +649,7 @@ export class NgxMaskApplierService {
                                 ? processedPosition + 1
                                 : processedPosition;
                             cursor += 1;
-                            this._shiftStep(maskExpression, cursor, inputArray.length);
+                            this._shiftStep(cursor);
                             i--;
                             if (this.leadZeroDateTime) {
                                 result += '0';
@@ -672,13 +672,13 @@ export class NgxMaskApplierService {
                 ) {
                     result += maskExpression[cursor];
                     cursor++;
-                    this._shiftStep(maskExpression, cursor, inputArray.length);
+                    this._shiftStep(cursor);
                     i--;
                 } else if (
                     maskExpression[cursor] === MaskExpression.NUMBER_NINE &&
                     this.showMaskTyped
                 ) {
-                    this._shiftStep(maskExpression, cursor, inputArray.length);
+                    this._shiftStep(cursor);
                 } else if (
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional
@@ -982,11 +982,8 @@ export class NgxMaskApplierService {
         return char;
     }
 
-    private _shiftStep(maskExpression: string, cursor: number, inputLength: number) {
-        const shiftStep: number = /[*?]/g.test(maskExpression.slice(0, cursor))
-            ? inputLength
-            : cursor;
-        this._shift.add(shiftStep + this.prefix.length || 0);
+    private _shiftStep(cursor: number) {
+        this._shift.add(cursor + this.prefix.length || 0);
     }
 
     protected _compareOrIncludes<T>(value: T, comparedValue: T | T[], excludedValue: T): boolean {
