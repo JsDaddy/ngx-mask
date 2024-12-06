@@ -113,11 +113,11 @@ Important Notes:
 Reserved Characters: Certain characters (h, d, m, s) are reserved for date patterns and should not be used in custom patterns to avoid conflicts.
 
 ```html
-Special Symbol *: The * character is reserved for patterns like 0*, which means any length of digits can appear before the asterisk. Avoid using this symbol in custom patterns.
-    
-<input type="text"  mask="A*" />
-```
+Special Symbol *: The * character is reserved for patterns like 0*, which means any length of digits
+can appear before the asterisk. Avoid using this symbol in custom patterns.
 
+<input type="text" mask="A*" />
+```
 
 ```typescript
 pattern = {

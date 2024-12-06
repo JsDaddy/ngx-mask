@@ -195,7 +195,7 @@ ngx-mask follows the official Angular support policy, supporting the Active and 
 
 Projects using Angular versions outside the supported range (e.g., older than v17) should use the last compatible version of ngx-mask. However, these versions will no longer receive updates, bug fixes, or new features.
 
-For detailed information about Angular's versioning and support schedule, visit the official  [Angular releases page](https://angular.dev/reference/releases#actively-supported-versions).
+For detailed information about Angular's versioning and support schedule, visit the official [Angular releases page](https://angular.dev/reference/releases#actively-supported-versions).
 
 ## Usage
 
