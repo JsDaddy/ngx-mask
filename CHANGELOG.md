@@ -1,554 +1,565 @@
+# 19.0.3(2024-12-05)
+
+### Contributing Fix
+
+- Fix ([#1455](https://github.com/JsDaddy/ngx-mask/pull/1455))
+
+### Fix
+
+- Fix ([#1472](https://github.com/JsDaddy/ngx-mask/pull/1472))
+- Fix ([#1415](https://github.com/JsDaddy/ngx-mask/pull/1415))
+
 # 19.0.2(2024-12-03)
 
 ### Fix
 
--   Fix ([#1456](https://github.com/JsDaddy/ngx-mask/issues/1456))
--   Fix ([#1458](https://github.com/JsDaddy/ngx-mask/issues/1458))
--   Fix ([#1446](https://github.com/JsDaddy/ngx-mask/issues/1446))
--   Fix ([#1457](https://github.com/JsDaddy/ngx-mask/issues/1457))
+- Fix ([#1456](https://github.com/JsDaddy/ngx-mask/issues/1456))
+- Fix ([#1458](https://github.com/JsDaddy/ngx-mask/issues/1458))
+- Fix ([#1446](https://github.com/JsDaddy/ngx-mask/issues/1446))
+- Fix ([#1457](https://github.com/JsDaddy/ngx-mask/issues/1457))
 
 # 19.0.1(2024-11-29)
 
 ### Feature
 
--   change @Input to input in NgxMaskDirective
--   change @Output output in NgxMaskDirective
--   change variables to signals in NgxMaskDirective
+- change @Input to input in NgxMaskDirective
+- change @Output output in NgxMaskDirective
+- change variables to signals in NgxMaskDirective
 
 # 19.0.0(2024-11-22)
 
 ### Feature
 
--   update ng 19.x
+- update ng 19.x
 
 # 18.0.4(2024-11-11)
 
 ### Fix
 
--   Fix ([#1449](https://github.com/JsDaddy/ngx-mask/issues/1449))
+- Fix ([#1449](https://github.com/JsDaddy/ngx-mask/issues/1449))
 
 # 18.0.3(2024-11-05)
 
 ### Fix
 
--   Fix ([#1372](https://github.com/JsDaddy/ngx-mask/issues/1372))
--   Fix ([#1441](https://github.com/JsDaddy/ngx-mask/issues/1441))
--   Fix ([#1442](https://github.com/JsDaddy/ngx-mask/issues/1442))
--   Fix ([#1440](https://github.com/JsDaddy/ngx-mask/issues/1440))
--   Fix ([#1409](https://github.com/JsDaddy/ngx-mask/issues/1409))
+- Fix ([#1372](https://github.com/JsDaddy/ngx-mask/issues/1372))
+- Fix ([#1441](https://github.com/JsDaddy/ngx-mask/issues/1441))
+- Fix ([#1442](https://github.com/JsDaddy/ngx-mask/issues/1442))
+- Fix ([#1440](https://github.com/JsDaddy/ngx-mask/issues/1440))
+- Fix ([#1409](https://github.com/JsDaddy/ngx-mask/issues/1409))
 
 # 18.0.2(2024-11-01)
 
 ### Fix
 
--   Fix ([#1427](https://github.com/JsDaddy/ngx-mask/issues/1427))
--   Fix ([#1405](https://github.com/JsDaddy/ngx-mask/issues/1405))
--   Fix ([#1426](https://github.com/JsDaddy/ngx-mask/issues/1426))
--   Fix ([#1406](https://github.com/JsDaddy/ngx-mask/issues/1406))
--   Fix ([#1420](https://github.com/JsDaddy/ngx-mask/issues/1420))
--   Fix ([#1416](https://github.com/JsDaddy/ngx-mask/issues/1416))
+- Fix ([#1427](https://github.com/JsDaddy/ngx-mask/issues/1427))
+- Fix ([#1405](https://github.com/JsDaddy/ngx-mask/issues/1405))
+- Fix ([#1426](https://github.com/JsDaddy/ngx-mask/issues/1426))
+- Fix ([#1406](https://github.com/JsDaddy/ngx-mask/issues/1406))
+- Fix ([#1420](https://github.com/JsDaddy/ngx-mask/issues/1420))
+- Fix ([#1416](https://github.com/JsDaddy/ngx-mask/issues/1416))
 
 # 18.0.1(2024-10-29)
 
 ### Breaking Changes
 
--   rename "IConfig" to "NgxMaskConfig"
--   rename "optionsConfig" to "NgxMaskOptions"
--   change interface to type
+- rename "IConfig" to "NgxMaskConfig"
+- rename "optionsConfig" to "NgxMaskOptions"
+- change interface to type
 
 ### Fix
 
--   Fix ([#1410](https://github.com/JsDaddy/ngx-mask/issues/1410))
+- Fix ([#1410](https://github.com/JsDaddy/ngx-mask/issues/1410))
 
 # 17.1.8(2024-07-16)
 
 ### Fix
 
--   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
--   Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
+- Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
+- Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
 
 # 17.1.8(2024-07-16)
 
 ### Fix
 
--   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
--   Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
+- Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
+- Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
 
 # 17.1.7(2024-07-18)
 
 ### Fix
 
--   Fix ([#1399](https://github.com/JsDaddy/ngx-mask/issues/1399))
--   Fix ([#1360](https://github.com/JsDaddy/ngx-mask/issues/1360))
--   Fix ([#1357](https://github.com/JsDaddy/ngx-mask/issues/1357))
--   Fix ([#1364](https://github.com/JsDaddy/ngx-mask/issues/1364))
+- Fix ([#1399](https://github.com/JsDaddy/ngx-mask/issues/1399))
+- Fix ([#1360](https://github.com/JsDaddy/ngx-mask/issues/1360))
+- Fix ([#1357](https://github.com/JsDaddy/ngx-mask/issues/1357))
+- Fix ([#1364](https://github.com/JsDaddy/ngx-mask/issues/1364))
 
 # 17.1.6(2024-07-16)
 
 ### Fix
 
--   Fix ([#1342](https://github.com/JsDaddy/ngx-mask/issues/1342))
+- Fix ([#1342](https://github.com/JsDaddy/ngx-mask/issues/1342))
 
 # 17.1.5(2024-07-16)
 
 ### Fix
 
--   Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
+- Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
 
 # 17.1.4(2024-07-16)
 
 ### Fix
 
--   Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
+- Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
 
 # 17.1.3(2024-07-16)
 
 ### Fix
 
--   Fix ([#1386](https://github.com/JsDaddy/ngx-mask/issues/1386))
--   Fix ([#1370](https://github.com/JsDaddy/ngx-mask/issues/1370))
+- Fix ([#1386](https://github.com/JsDaddy/ngx-mask/issues/1386))
+- Fix ([#1370](https://github.com/JsDaddy/ngx-mask/issues/1370))
 
 # 17.1.2(2024-07-15)
 
 ### Fix
 
--   Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
--   Fix ([#1390](https://github.com/JsDaddy/ngx-mask/issues/1390))
+- Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
+- Fix ([#1390](https://github.com/JsDaddy/ngx-mask/issues/1390))
 
 # 17.1.1(2024-07-05)
 
 ### Fix
 
--   Fix ([#1383](https://github.com/JsDaddy/ngx-mask/issues/1383))
+- Fix ([#1383](https://github.com/JsDaddy/ngx-mask/issues/1383))
 
 # 17.1.0(2024-07-05)
 
 ### Fix
 
--   Fix ([#1294](https://github.com/JsDaddy/ngx-mask/issues/1294))
--   Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
--   Fix ([#1365](https://github.com/JsDaddy/ngx-mask/issues/1365))
+- Fix ([#1294](https://github.com/JsDaddy/ngx-mask/issues/1294))
+- Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
+- Fix ([#1365](https://github.com/JsDaddy/ngx-mask/issues/1365))
 
 # 17.0.9(2024-07-02)
 
 ### Fix
 
--   Fix ([#1349](https://github.com/JsDaddy/ngx-mask/issues/1349))
--   Fix ([#1354](https://github.com/JsDaddy/ngx-mask/issues/1354))
--   Fix ([#1369](https://github.com/JsDaddy/ngx-mask/issues/1369))
--   Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
--   Fix ([#1377](https://github.com/JsDaddy/ngx-mask/issues/1377))
+- Fix ([#1349](https://github.com/JsDaddy/ngx-mask/issues/1349))
+- Fix ([#1354](https://github.com/JsDaddy/ngx-mask/issues/1354))
+- Fix ([#1369](https://github.com/JsDaddy/ngx-mask/issues/1369))
+- Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
+- Fix ([#1377](https://github.com/JsDaddy/ngx-mask/issues/1377))
 
 # 17.0.8(2024-04-30)
 
 ### Fix
 
--   Fix ([#1358](https://github.com/JsDaddy/ngx-mask/issues/1358))
+- Fix ([#1358](https://github.com/JsDaddy/ngx-mask/issues/1358))
 
 # 17.0.7(2024-03-28)
 
 ### Fix
 
--   Fix ([#1298](https://github.com/JsDaddy/ngx-mask/issues/1298))
--   Fix ([#1307](https://github.com/JsDaddy/ngx-mask/issues/1307))
--   Fix ([#1306](https://github.com/JsDaddy/ngx-mask/issues/1306))
+- Fix ([#1298](https://github.com/JsDaddy/ngx-mask/issues/1298))
+- Fix ([#1307](https://github.com/JsDaddy/ngx-mask/issues/1307))
+- Fix ([#1306](https://github.com/JsDaddy/ngx-mask/issues/1306))
 
 # 17.0.6(2024-03-27)
 
 ### Fix
 
--   Fix ([#1301](https://github.com/JsDaddy/ngx-mask/issues/1301))
--   Fix ([#1302](https://github.com/JsDaddy/ngx-mask/issues/1302))
--   Fix ([#1292](https://github.com/JsDaddy/ngx-mask/issues/1292))
+- Fix ([#1301](https://github.com/JsDaddy/ngx-mask/issues/1301))
+- Fix ([#1302](https://github.com/JsDaddy/ngx-mask/issues/1302))
+- Fix ([#1292](https://github.com/JsDaddy/ngx-mask/issues/1292))
 
 # 17.0.5(2024-03-25)
 
 ### Fix
 
--   Fix ([#1295](https://github.com/JsDaddy/ngx-mask/issues/1295))
--   Fix ([#1292](https://github.com/JsDaddy/ngx-mask/issues/1292))
--   Fix ([#1314](https://github.com/JsDaddy/ngx-mask/issues/1314))
--   Fix ([#1310](https://github.com/JsDaddy/ngx-mask/issues/1310))
--   Fix ([#1304](https://github.com/JsDaddy/ngx-mask/issues/1304))
--   Fix ([#1308](https://github.com/JsDaddy/ngx-mask/issues/1308))
--   Fix ([#1299](https://github.com/JsDaddy/ngx-mask/issues/1299))
+- Fix ([#1295](https://github.com/JsDaddy/ngx-mask/issues/1295))
+- Fix ([#1292](https://github.com/JsDaddy/ngx-mask/issues/1292))
+- Fix ([#1314](https://github.com/JsDaddy/ngx-mask/issues/1314))
+- Fix ([#1310](https://github.com/JsDaddy/ngx-mask/issues/1310))
+- Fix ([#1304](https://github.com/JsDaddy/ngx-mask/issues/1304))
+- Fix ([#1308](https://github.com/JsDaddy/ngx-mask/issues/1308))
+- Fix ([#1299](https://github.com/JsDaddy/ngx-mask/issues/1299))
 
 # 17.0.4(2023-12-01)
 
 ### Feat
 
--   update v16.4.2
--   update v15.2.3
--   update v14.3.3
--   update v13.2.2
+- update v16.4.2
+- update v15.2.3
+- update v14.3.3
+- update v13.2.2
 
 # 17.0.3(2023-11-30)
 
 ### Feat
 
--   update dependencies
+- update dependencies
 
 # 17.0.2(2023-11-29)
 
 ### Feat
 
--   update dependencies
+- update dependencies
 
 # 17.0.2(2023-11-29)
 
 ### Fix
 
--   Fix ([#1272](https://github.com/JsDaddy/ngx-mask/issues/1272))
--   Fix ([#1270](https://github.com/JsDaddy/ngx-mask/issues/1270))
--   Fix ([#1259](https://github.com/JsDaddy/ngx-mask/issues/1259))
--   Fix ([#1240](https://github.com/JsDaddy/ngx-mask/issues/1240))
--   Fix ([#1274](https://github.com/JsDaddy/ngx-mask/issues/1274))
+- Fix ([#1272](https://github.com/JsDaddy/ngx-mask/issues/1272))
+- Fix ([#1270](https://github.com/JsDaddy/ngx-mask/issues/1270))
+- Fix ([#1259](https://github.com/JsDaddy/ngx-mask/issues/1259))
+- Fix ([#1240](https://github.com/JsDaddy/ngx-mask/issues/1240))
+- Fix ([#1274](https://github.com/JsDaddy/ngx-mask/issues/1274))
 
 # 17.0.1(2023-11-28)
 
 ### Fix
 
--   Fix ([#1271](https://github.com/JsDaddy/ngx-mask/issues/1271))
--   Fix ([#1278](https://github.com/JsDaddy/ngx-mask/issues/1278))
--   Fix ([#1277](https://github.com/JsDaddy/ngx-mask/issues/1277))
--   Fix ([#1269](https://github.com/JsDaddy/ngx-mask/issues/1269))
--   Fix ([#1276](https://github.com/JsDaddy/ngx-mask/issues/1276))
--   Fix ([#1279](https://github.com/JsDaddy/ngx-mask/issues/1279))
+- Fix ([#1271](https://github.com/JsDaddy/ngx-mask/issues/1271))
+- Fix ([#1278](https://github.com/JsDaddy/ngx-mask/issues/1278))
+- Fix ([#1277](https://github.com/JsDaddy/ngx-mask/issues/1277))
+- Fix ([#1269](https://github.com/JsDaddy/ngx-mask/issues/1269))
+- Fix ([#1276](https://github.com/JsDaddy/ngx-mask/issues/1276))
+- Fix ([#1279](https://github.com/JsDaddy/ngx-mask/issues/1279))
 
 # 17.0.0(2023-11-08)
 
 ### Feature
 
--   update ng 17.x
+- update ng 17.x
 -
 
 ### Feature 16.4.2
 
--   Upgrade version 16.4.2 with more fixes since version 17.x.x
+- Upgrade version 16.4.2 with more fixes since version 17.x.x
 
 # 16.4.1(2023-11-08)
 
 ### Fix
 
--   Fix ([#1251](https://github.com/JsDaddy/ngx-mask/issues/1251))
+- Fix ([#1251](https://github.com/JsDaddy/ngx-mask/issues/1251))
 
 # 16.4.0(2023-11-07)
 
 ### Fix
 
--   Fix ([#1261](https://github.com/JsDaddy/ngx-mask/issues/1261))
--   Fix ([#1258](https://github.com/JsDaddy/ngx-mask/issues/1258))
--   Fix ([#1262](https://github.com/JsDaddy/ngx-mask/issues/1262))
--   Fix ([#1254](https://github.com/JsDaddy/ngx-mask/issues/1254))
--   Fix ([#1256](https://github.com/JsDaddy/ngx-mask/issues/1256))
+- Fix ([#1261](https://github.com/JsDaddy/ngx-mask/issues/1261))
+- Fix ([#1258](https://github.com/JsDaddy/ngx-mask/issues/1258))
+- Fix ([#1262](https://github.com/JsDaddy/ngx-mask/issues/1262))
+- Fix ([#1254](https://github.com/JsDaddy/ngx-mask/issues/1254))
+- Fix ([#1256](https://github.com/JsDaddy/ngx-mask/issues/1256))
 
 # 16.3.9(2023-10-02)
 
 ### Fix
 
--   Fix ([#1248](https://github.com/JsDaddy/ngx-mask/issues/1248))
--   Fix ([#1246](https://github.com/JsDaddy/ngx-mask/issues/1246))
--   Fix ([#1247](https://github.com/JsDaddy/ngx-mask/issues/1247))
+- Fix ([#1248](https://github.com/JsDaddy/ngx-mask/issues/1248))
+- Fix ([#1246](https://github.com/JsDaddy/ngx-mask/issues/1246))
+- Fix ([#1247](https://github.com/JsDaddy/ngx-mask/issues/1247))
 
 # 16.3.8(2023-09-18)
 
 ### Fix
 
--   Change README.md
--   Fix ([#1242](https://github.com/JsDaddy/ngx-mask/issues/1242))
+- Change README.md
+- Fix ([#1242](https://github.com/JsDaddy/ngx-mask/issues/1242))
 
 # 16.3.7(2023-09-18)
 
 ### Fix
 
--   Fix ([#1238](https://github.com/JsDaddy/ngx-mask/issues/1238))
+- Fix ([#1238](https://github.com/JsDaddy/ngx-mask/issues/1238))
 
 # 16.3.6(2023-09-15)
 
 ### Fix
 
--   Fix ([#1232](https://github.com/JsDaddy/ngx-mask/issues/1232))
+- Fix ([#1232](https://github.com/JsDaddy/ngx-mask/issues/1232))
 
 # 16.3.5(2023-09-14)
 
 ### Fix
 
--   Fix ([#1225](https://github.com/JsDaddy/ngx-mask/issues/1225))
+- Fix ([#1225](https://github.com/JsDaddy/ngx-mask/issues/1225))
 
 # 16.3.4(2023-09-13)
 
 ### Feat
 
--   update version
+- update version
 
 # 16.3.3(2023-09-13)
 
 ### Fix
 
--   Fix ([#1222](https://github.com/JsDaddy/ngx-mask/issues/1222))
+- Fix ([#1222](https://github.com/JsDaddy/ngx-mask/issues/1222))
 
 # 16.3.2(2023-09-13)
 
 ### Fix
 
--   Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
+- Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
 
 # 16.3.1(2023-09-01)
 
 ### Fix
 
--   Fix ([#877](https://github.com/JsDaddy/ngx-mask/issues/877))
--   Fix ([#613](https://github.com/JsDaddy/ngx-mask/issues/613))
--   Fix ([#644](https://github.com/JsDaddy/ngx-mask/issues/644))
--   Fix ([#788](https://github.com/JsDaddy/ngx-mask/issues/788))
+- Fix ([#877](https://github.com/JsDaddy/ngx-mask/issues/877))
+- Fix ([#613](https://github.com/JsDaddy/ngx-mask/issues/613))
+- Fix ([#644](https://github.com/JsDaddy/ngx-mask/issues/644))
+- Fix ([#788](https://github.com/JsDaddy/ngx-mask/issues/788))
 
 # 16.3.0(2023-08-28)
 
 ### Fix
 
--   Fix ([#1212](https://github.com/JsDaddy/ngx-mask/issues/1212))
--   Fix ([#1215](https://github.com/JsDaddy/ngx-mask/issues/1215))
--   Fix ([#1210](https://github.com/JsDaddy/ngx-mask/issues/1210))
--   Fix ([#1213](https://github.com/JsDaddy/ngx-mask/issues/1213))
--   Fix ([#1217](https://github.com/JsDaddy/ngx-mask/issues/1217))
--   Fix ([#1206](https://github.com/JsDaddy/ngx-mask/issues/1206))
--   Fix ([#1211](https://github.com/JsDaddy/ngx-mask/issues/1211))
+- Fix ([#1212](https://github.com/JsDaddy/ngx-mask/issues/1212))
+- Fix ([#1215](https://github.com/JsDaddy/ngx-mask/issues/1215))
+- Fix ([#1210](https://github.com/JsDaddy/ngx-mask/issues/1210))
+- Fix ([#1213](https://github.com/JsDaddy/ngx-mask/issues/1213))
+- Fix ([#1217](https://github.com/JsDaddy/ngx-mask/issues/1217))
+- Fix ([#1206](https://github.com/JsDaddy/ngx-mask/issues/1206))
+- Fix ([#1211](https://github.com/JsDaddy/ngx-mask/issues/1211))
 
 # 16.2.9(2023-08-08)
 
 ### Fix
 
--   Fix ([#1076](https://github.com/JsDaddy/ngx-mask/issues/1076))
--   Fix ([#890](https://github.com/JsDaddy/ngx-mask/issues/890))
--   Fix ([#841](https://github.com/JsDaddy/ngx-mask/issues/841))
--   Fix ([#1162](https://github.com/JsDaddy/ngx-mask/issues/1162))
+- Fix ([#1076](https://github.com/JsDaddy/ngx-mask/issues/1076))
+- Fix ([#890](https://github.com/JsDaddy/ngx-mask/issues/890))
+- Fix ([#841](https://github.com/JsDaddy/ngx-mask/issues/841))
+- Fix ([#1162](https://github.com/JsDaddy/ngx-mask/issues/1162))
 
 # 16.2.7(2023-08-08)
 
 ### Fix
 
--   Fix ([#843](https://github.com/JsDaddy/ngx-mask/issues/843))
--   Fix ([#1200](https://github.com/JsDaddy/ngx-mask/issues/1200))
+- Fix ([#843](https://github.com/JsDaddy/ngx-mask/issues/843))
+- Fix ([#1200](https://github.com/JsDaddy/ngx-mask/issues/1200))
 
 # 16.2.6(2023-08-03)
 
 ### Fix
 
--   Fix ([#613](https://github.com/JsDaddy/ngx-mask/issues/613))
--   Fix ([#671](https://github.com/JsDaddy/ngx-mask/issues/671))
--   Fix ([#774](https://github.com/JsDaddy/ngx-mask/issues/774))
--   Fix ([#1202](https://github.com/JsDaddy/ngx-mask/issues/1202))
--   Fix ([#1203](https://github.com/JsDaddy/ngx-mask/issues/1203))
+- Fix ([#613](https://github.com/JsDaddy/ngx-mask/issues/613))
+- Fix ([#671](https://github.com/JsDaddy/ngx-mask/issues/671))
+- Fix ([#774](https://github.com/JsDaddy/ngx-mask/issues/774))
+- Fix ([#1202](https://github.com/JsDaddy/ngx-mask/issues/1202))
+- Fix ([#1203](https://github.com/JsDaddy/ngx-mask/issues/1203))
 
 # 16.2.5(2023-07-24)
 
 ### Fix
 
--   Fix ([#838](https://github.com/JsDaddy/ngx-mask/issues/838))
--   Fix ([#1193](https://github.com/JsDaddy/ngx-mask/issues/1193))
--   Fix ([#1199](https://github.com/JsDaddy/ngx-mask/issues/1199))
+- Fix ([#838](https://github.com/JsDaddy/ngx-mask/issues/838))
+- Fix ([#1193](https://github.com/JsDaddy/ngx-mask/issues/1193))
+- Fix ([#1199](https://github.com/JsDaddy/ngx-mask/issues/1199))
 
 # 16.2.4(2023-07-12)
 
 ### Fix
 
--   Fix ([#1182](https://github.com/JsDaddy/ngx-mask/issues/1182))
--   Fix ([#1191](https://github.com/JsDaddy/ngx-mask/issues/1191))
--   Fix ([#941](https://github.com/JsDaddy/ngx-mask/issues/941))
+- Fix ([#1182](https://github.com/JsDaddy/ngx-mask/issues/1182))
+- Fix ([#1191](https://github.com/JsDaddy/ngx-mask/issues/1191))
+- Fix ([#941](https://github.com/JsDaddy/ngx-mask/issues/941))
 
 # 16.2.3(2023-07-05)
 
 ### Fix
 
--   Fix ([#842](https://github.com/JsDaddy/ngx-mask/issues/842))
--   Fix ([#623](https://github.com/JsDaddy/ngx-mask/issues/623))
--   Fix ([#836](https://github.com/JsDaddy/ngx-mask/issues/836))
--   Fix ([#752](https://github.com/JsDaddy/ngx-mask/issues/752))
+- Fix ([#842](https://github.com/JsDaddy/ngx-mask/issues/842))
+- Fix ([#623](https://github.com/JsDaddy/ngx-mask/issues/623))
+- Fix ([#836](https://github.com/JsDaddy/ngx-mask/issues/836))
+- Fix ([#752](https://github.com/JsDaddy/ngx-mask/issues/752))
 
 # 16.2.2(2023-07-03)
 
 ### Fix
 
--   Fix ([#1186](https://github.com/JsDaddy/ngx-mask/issues/1186))
+- Fix ([#1186](https://github.com/JsDaddy/ngx-mask/issues/1186))
 
 # 16.2.1(2023-06-30)
 
 ### Fix
 
--   Fix ([#906](https://github.com/JsDaddy/ngx-mask/issues/906))
--   Fix ([#958](https://github.com/JsDaddy/ngx-mask/issues/958))
--   Fix ([#977](https://github.com/JsDaddy/ngx-mask/issues/977))
+- Fix ([#906](https://github.com/JsDaddy/ngx-mask/issues/906))
+- Fix ([#958](https://github.com/JsDaddy/ngx-mask/issues/958))
+- Fix ([#977](https://github.com/JsDaddy/ngx-mask/issues/977))
 
 # 16.2.0(2023-06-27)
 
 ### Fix
 
--   Fix ([#724](https://github.com/JsDaddy/ngx-mask/issues/724))
--   Fix ([#731](https://github.com/JsDaddy/ngx-mask/issues/731))
+- Fix ([#724](https://github.com/JsDaddy/ngx-mask/issues/724))
+- Fix ([#731](https://github.com/JsDaddy/ngx-mask/issues/731))
 
 # 16.1.9(2023-06-21)
 
 ### Fix
 
--   Fix ([#812](https://github.com/JsDaddy/ngx-mask/issues/812))
--   Fix ([#636](https://github.com/JsDaddy/ngx-mask/issues/636))
+- Fix ([#812](https://github.com/JsDaddy/ngx-mask/issues/812))
+- Fix ([#636](https://github.com/JsDaddy/ngx-mask/issues/636))
 
 # 16.1.8(2023-06-19)
 
 ### Fix
 
--   Fix ([#1166](https://github.com/JsDaddy/ngx-mask/issues/1166))
--   Fix ([#865](https://github.com/JsDaddy/ngx-mask/issues/865))
+- Fix ([#1166](https://github.com/JsDaddy/ngx-mask/issues/1166))
+- Fix ([#865](https://github.com/JsDaddy/ngx-mask/issues/865))
 
 # 16.1.7(2023-06-14)
 
 ### Fix
 
--   Fix ([#1171](https://github.com/JsDaddy/ngx-mask/issues/1171))
+- Fix ([#1171](https://github.com/JsDaddy/ngx-mask/issues/1171))
 
 # 16.1.6(2023-06-14)
 
 ### Fix
 
--   Fix ([#797](https://github.com/JsDaddy/ngx-mask/issues/797))
+- Fix ([#797](https://github.com/JsDaddy/ngx-mask/issues/797))
 
 # 16.1.5(2023-06-13)
 
 ### Fix
 
--   Fix ([#1167](https://github.com/JsDaddy/ngx-mask/issues/1167))
--   Fix ([#1169](https://github.com/JsDaddy/ngx-mask/issues/1169))
--   Fix ([#934](https://github.com/JsDaddy/ngx-mask/issues/934))
+- Fix ([#1167](https://github.com/JsDaddy/ngx-mask/issues/1167))
+- Fix ([#1169](https://github.com/JsDaddy/ngx-mask/issues/1169))
+- Fix ([#934](https://github.com/JsDaddy/ngx-mask/issues/934))
 
 # 16.1.4(2023-06-13)
 
 ### Fix
 
--   Fix ([#929](https://github.com/JsDaddy/ngx-mask/issues/929))
--   Fix ([#944](https://github.com/JsDaddy/ngx-mask/issues/944))
+- Fix ([#929](https://github.com/JsDaddy/ngx-mask/issues/929))
+- Fix ([#944](https://github.com/JsDaddy/ngx-mask/issues/944))
 
 # 16.1.3(2023-06-08)
 
 ### Fix
 
--   Fix ([#601](https://github.com/JsDaddy/ngx-mask/issues/601))
--   Fix ([#1042](https://github.com/JsDaddy/ngx-mask/issues/1042))
--   Fix ([#680](https://github.com/JsDaddy/ngx-mask/issues/680))
+- Fix ([#601](https://github.com/JsDaddy/ngx-mask/issues/601))
+- Fix ([#1042](https://github.com/JsDaddy/ngx-mask/issues/1042))
+- Fix ([#680](https://github.com/JsDaddy/ngx-mask/issues/680))
 
 # 16.1.2(2023-06-05)
 
 ### Fix
 
--   Fix ([#772](https://github.com/JsDaddy/ngx-mask/issues/722))
+- Fix ([#772](https://github.com/JsDaddy/ngx-mask/issues/722))
 
 # 16.1.1(2023-06-05)
 
 ### Fix
 
--   Fix ([#1071](https://github.com/JsDaddy/ngx-mask/issues/1071))
+- Fix ([#1071](https://github.com/JsDaddy/ngx-mask/issues/1071))
 
 # 16.1.0(2023-06-01)
 
 ### Fix
 
--   Fix ([#889](https://github.com/JsDaddy/ngx-mask/issues/889))
--   Fix ([#881](https://github.com/JsDaddy/ngx-mask/issues/881))
--   Fix ([#1024](https://github.com/JsDaddy/ngx-mask/issues/1024))
+- Fix ([#889](https://github.com/JsDaddy/ngx-mask/issues/889))
+- Fix ([#881](https://github.com/JsDaddy/ngx-mask/issues/881))
+- Fix ([#1024](https://github.com/JsDaddy/ngx-mask/issues/1024))
 
 # 16.0.9(2023-05-24)
 
 ### Fix
 
--   Fix ([#933](https://github.com/JsDaddy/ngx-mask/issues/933))
--   Fix ([#773](https://github.com/JsDaddy/ngx-mask/issues/773))
--   Fix ([#905](https://github.com/JsDaddy/ngx-mask/issues/905))
--   Fix ([#932](https://github.com/JsDaddy/ngx-mask/issues/932))
--   Fix ([#853](https://github.com/JsDaddy/ngx-mask/issues/853))
--   Fix ([#908](https://github.com/JsDaddy/ngx-mask/issues/908))
--   Fix ([#866](https://github.com/JsDaddy/ngx-mask/issues/866))
--   Fix ([#722](https://github.com/JsDaddy/ngx-mask/issues/722))
+- Fix ([#933](https://github.com/JsDaddy/ngx-mask/issues/933))
+- Fix ([#773](https://github.com/JsDaddy/ngx-mask/issues/773))
+- Fix ([#905](https://github.com/JsDaddy/ngx-mask/issues/905))
+- Fix ([#932](https://github.com/JsDaddy/ngx-mask/issues/932))
+- Fix ([#853](https://github.com/JsDaddy/ngx-mask/issues/853))
+- Fix ([#908](https://github.com/JsDaddy/ngx-mask/issues/908))
+- Fix ([#866](https://github.com/JsDaddy/ngx-mask/issues/866))
+- Fix ([#722](https://github.com/JsDaddy/ngx-mask/issues/722))
 
 # 16.0.8(2023-05-29)
 
 ### Fix
 
--   Fix ([#1018](https://github.com/JsDaddy/ngx-mask/issues/1018))
+- Fix ([#1018](https://github.com/JsDaddy/ngx-mask/issues/1018))
 
 # 16.0.7(2023-05-26)
 
 ### Fix
 
--   Fix ([#916](https://github.com/JsDaddy/ngx-mask/issues/916))
+- Fix ([#916](https://github.com/JsDaddy/ngx-mask/issues/916))
 
 # 16.0.6(2023-05-25)
 
 ### Fix
 
--   Fix ([#880](https://github.com/JsDaddy/ngx-mask/issues/880))
+- Fix ([#880](https://github.com/JsDaddy/ngx-mask/issues/880))
 
 # 16.0.5(2023-05-24)
 
 ### Fix
 
--   Fix ([#697](https://github.com/JsDaddy/ngx-mask/issues/697))
--   Fix ([#850](https://github.com/JsDaddy/ngx-mask/issues/850))
--   Fix ([#786](https://github.com/JsDaddy/ngx-mask/issues/786))
+- Fix ([#697](https://github.com/JsDaddy/ngx-mask/issues/697))
+- Fix ([#850](https://github.com/JsDaddy/ngx-mask/issues/850))
+- Fix ([#786](https://github.com/JsDaddy/ngx-mask/issues/786))
 
 # 16.0.4(2023-05-19)
 
 ### Fix
 
--   Fix ([#911](https://github.com/JsDaddy/ngx-mask/issues/911))
--   Fix ([#854](https://github.com/JsDaddy/ngx-mask/issues/854))
+- Fix ([#911](https://github.com/JsDaddy/ngx-mask/issues/911))
+- Fix ([#854](https://github.com/JsDaddy/ngx-mask/issues/854))
 
 # 16.0.3(2023-05-18)
 
 ### Fix
 
--   Fix ([#1135](https://github.com/JsDaddy/ngx-mask/issues/1135))
--   Fix ([#1066](https://github.com/JsDaddy/ngx-mask/issues/1066))
--   Fix ([#870](https://github.com/JsDaddy/ngx-mask/issues/870))
--   Fix ([#1019](https://github.com/JsDaddy/ngx-mask/issues/1019))
+- Fix ([#1135](https://github.com/JsDaddy/ngx-mask/issues/1135))
+- Fix ([#1066](https://github.com/JsDaddy/ngx-mask/issues/1066))
+- Fix ([#870](https://github.com/JsDaddy/ngx-mask/issues/870))
+- Fix ([#1019](https://github.com/JsDaddy/ngx-mask/issues/1019))
 
 # 16.0.2(2023-05-16)
 
 ### Fix
 
--   Fix ([#1146](https://github.com/JsDaddy/ngx-mask/issues/1146))
+- Fix ([#1146](https://github.com/JsDaddy/ngx-mask/issues/1146))
 
 # 16.0.1(2023-05-16)
 
 ### Fix
 
--   Fix ([#871](https://github.com/JsDaddy/ngx-mask/issues/871))
--   Fix ([#920](https://github.com/JsDaddy/ngx-mask/issues/920))
--   Fix ([#785](https://github.com/JsDaddy/ngx-mask/issues/785))
--   Fix ([#718](https://github.com/JsDaddy/ngx-mask/issues/718))
--   Fix ([725](https://github.com/JsDaddy/ngx-mask/issues/725))
--   Fix ([#903](https://github.com/JsDaddy/ngx-mask/issues/903))
--   Fix ([#860](https://github.com/JsDaddy/ngx-mask/issues/860))
+- Fix ([#871](https://github.com/JsDaddy/ngx-mask/issues/871))
+- Fix ([#920](https://github.com/JsDaddy/ngx-mask/issues/920))
+- Fix ([#785](https://github.com/JsDaddy/ngx-mask/issues/785))
+- Fix ([#718](https://github.com/JsDaddy/ngx-mask/issues/718))
+- Fix ([725](https://github.com/JsDaddy/ngx-mask/issues/725))
+- Fix ([#903](https://github.com/JsDaddy/ngx-mask/issues/903))
+- Fix ([#860](https://github.com/JsDaddy/ngx-mask/issues/860))
 
 # 16.0.0(2023-05-13)
 
 ### Feature
 
--   update ng 16.x
+- update ng 16.x
 
 <a name=15.1.5></a>
 
 ### Feature 15.2.3
 
--   Upgrade version 15.2.3 with more fixes since version 17.x.x
+- Upgrade version 15.2.3 with more fixes since version 17.x.x
 
 ### Feature 15.2.1
 
--   Upgrade version 15.2.1 with more fixes since version 16.x.x
+- Upgrade version 15.2.1 with more fixes since version 16.x.x
 
 # 15.1.5(2023-05-12)
 
 ### Fix
 
--   Fix ([#837](https://github.com/JsDaddy/ngx-mask/issues/837))
+- Fix ([#837](https://github.com/JsDaddy/ngx-mask/issues/837))
 
 <a name=15.1.4></a>
 
@@ -556,10 +567,10 @@
 
 ### Fix
 
--   Fix ([#1078](https://github.com/JsDaddy/ngx-mask/issues/1078))
--   Fix ([#816](https://github.com/JsDaddy/ngx-mask/issues/816))
--   Fix ([#925](https://github.com/JsDaddy/ngx-mask/issues/925))
--   Fix ([#811](https://github.com/JsDaddy/ngx-mask/issues/811))
+- Fix ([#1078](https://github.com/JsDaddy/ngx-mask/issues/1078))
+- Fix ([#816](https://github.com/JsDaddy/ngx-mask/issues/816))
+- Fix ([#925](https://github.com/JsDaddy/ngx-mask/issues/925))
+- Fix ([#811](https://github.com/JsDaddy/ngx-mask/issues/811))
 
 <a name=15.1.3></a>
 
@@ -567,7 +578,7 @@
 
 ### Fix
 
--   Fix ([#1103](https://github.com/JsDaddy/ngx-mask/issues/1103))
+- Fix ([#1103](https://github.com/JsDaddy/ngx-mask/issues/1103))
 
 <a name="15.1.2"></a>
 
@@ -575,8 +586,8 @@
 
 ### Fix
 
--   Fix ([#1101](https://github.com/JsDaddy/ngx-mask/issues/1101))
--   Fix ([#1009](https://github.com/JsDaddy/ngx-mask/issues/1009))
+- Fix ([#1101](https://github.com/JsDaddy/ngx-mask/issues/1101))
+- Fix ([#1009](https://github.com/JsDaddy/ngx-mask/issues/1009))
 
 <a name="15.1.1"></a>
 
@@ -584,7 +595,7 @@
 
 ### Fix
 
--   Close non public API
+- Close non public API
 
 <a name="15.1.0"></a>
 
@@ -592,7 +603,7 @@
 
 ### Fix
 
--   Fix ([#1077](https://github.com/JsDaddy/ngx-mask/issues/1077))
+- Fix ([#1077](https://github.com/JsDaddy/ngx-mask/issues/1077))
 
 <a name="15.0.3"></a>
 
@@ -600,7 +611,7 @@
 
 ### Fix
 
--   Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
+- Fix ([#1069](https://github.com/JsDaddy/ngx-mask/issues/1069))
 
 <a name="15.0.2"></a>
 
@@ -608,7 +619,7 @@
 
 ### Fix
 
--   Fix README.md
+- Fix README.md
 
 <a name="15.0.0"></a>
 
@@ -616,7 +627,7 @@
 
 ### Fix
 
--   separate `provideEnvironmentNgxMask` and `provideNgxMask`
+- separate `provideEnvironmentNgxMask` and `provideNgxMask`
 
 <a name="15.0.0"></a>
 
@@ -624,29 +635,29 @@
 
 ### Fix
 
--   update ng 15.x
--   usage new standalone API
+- update ng 15.x
+- usage new standalone API
 
 <a name="14.2.4"></a>
 
 ### Feature 14.3.3
 
--   Upgrade version 15.2.2 with more fixes since version 17.x.x
+- Upgrade version 15.2.2 with more fixes since version 17.x.x
 
 ### Feature 14.3.2
 
--   Upgrade version 14.3.2 with more fixes since version 16.x.x
--   Change MaskPipe => NgxMaskPipe
--   Change MaskService => NgxMaskService
--   Change MaskApplierService => NgxMaskApplierService
--   Change MaskDirective => NgxMaskMaskDirective
+- Upgrade version 14.3.2 with more fixes since version 16.x.x
+- Change MaskPipe => NgxMaskPipe
+- Change MaskService => NgxMaskService
+- Change MaskApplierService => NgxMaskApplierService
+- Change MaskDirective => NgxMaskMaskDirective
 
 # 14.2.4(2022-10-27)
 
 ### Fix
 
--   Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
--   new code and styles linting rules formatting
+- Fix ([#1039](https://github.com/JsDaddy/ngx-mask/issues/1039))
+- new code and styles linting rules formatting
 
 <a name="14.2.3"></a>
 
@@ -654,7 +665,7 @@
 
 ### Fix
 
--   Fix ([#1030](https://github.com/JsDaddy/ngx-mask/issues/1030))
+- Fix ([#1030](https://github.com/JsDaddy/ngx-mask/issues/1030))
 
 <a name="14.2.2"></a>
 
@@ -662,9 +673,9 @@
 
 ### Fix
 
--   Fix ([#960](https://github.com/JsDaddy/ngx-mask/issues/960))
--   Fix ([#946](https://github.com/JsDaddy/ngx-mask/issues/946))
--   Fix ([#1027](https://github.com/JsDaddy/ngx-mask/issues/1027))
+- Fix ([#960](https://github.com/JsDaddy/ngx-mask/issues/960))
+- Fix ([#946](https://github.com/JsDaddy/ngx-mask/issues/946))
+- Fix ([#1027](https://github.com/JsDaddy/ngx-mask/issues/1027))
 
 <a name="14.2.1"></a>
 
@@ -672,7 +683,7 @@
 
 ### Fix
 
--   package build process
+- package build process
 
 <a name="14.2.0"></a>
 
@@ -680,8 +691,8 @@
 
 ### Fix
 
--   update ng 14.2.1
--   Fix ([#1029](https://github.com/JsDaddy/ngx-mask/issues/1029))
+- update ng 14.2.1
+- Fix ([#1029](https://github.com/JsDaddy/ngx-mask/issues/1029))
 
 <a name="14.0.3"></a>
 
@@ -689,14 +700,14 @@
 
 ### Fix
 
--   Fix ([#1017](https://github.com/JsDaddy/ngx-mask/issues/1017))
--   Fix ([#1008](https://github.com/JsDaddy/ngx-mask/issues/1008))
+- Fix ([#1017](https://github.com/JsDaddy/ngx-mask/issues/1017))
+- Fix ([#1008](https://github.com/JsDaddy/ngx-mask/issues/1008))
 
 <a name="14.0.2"></a>
 
 # 14.0.2(2022-06-09)
 
--   Fix ([#688](https://github.com/JsDaddy/ngx-mask/issues/688))
+- Fix ([#688](https://github.com/JsDaddy/ngx-mask/issues/688))
 
 <a name="14.0.1"></a>
 
@@ -708,21 +719,21 @@
 
 ### Feature
 
--   Update to Angular 14
+- Update to Angular 14
 
 <a name="13.1.15"></a>
 
 ### Feature 13.3.2
 
--   Upgrade version 13.2.2 with more fixes since version 17.x.x
+- Upgrade version 13.2.2 with more fixes since version 17.x.x
 
 ### Feature 13.2.1
 
--   Upgrade version 13.2.1 with more fixes since version 16.x.x
--   Change MaskPipe => NgxMaskPipe
--   Change MaskService => NgxMaskService
--   Change MaskApplierService => NgxMaskApplierService
--   Change MaskDirective => NgxMaskMaskDirective
+- Upgrade version 13.2.1 with more fixes since version 16.x.x
+- Change MaskPipe => NgxMaskPipe
+- Change MaskService => NgxMaskService
+- Change MaskApplierService => NgxMaskApplierService
+- Change MaskDirective => NgxMaskMaskDirective
 
 <a name="13.2.1"></a>
 
@@ -730,7 +741,7 @@
 
 ### Fix
 
--   Fix ([#648](https://github.com/JsDaddy/ngx-mask/issues/648))
+- Fix ([#648](https://github.com/JsDaddy/ngx-mask/issues/648))
 
 <a name="13.1.14"></a>
 
@@ -738,7 +749,7 @@
 
 ### Fix
 
--   Fix ([#984](https://github.com/JsDaddy/ngx-mask/issues/984))
+- Fix ([#984](https://github.com/JsDaddy/ngx-mask/issues/984))
 
 <a name="13.1.13"></a>
 
@@ -746,7 +757,7 @@
 
 ### Fix
 
--   Fix ([#915](https://github.com/JsDaddy/ngx-mask/issues/915))
+- Fix ([#915](https://github.com/JsDaddy/ngx-mask/issues/915))
 
 <a name="13.1.12"></a>
 
@@ -754,8 +765,8 @@
 
 ### Fix
 
--   Fixed issue where active elements within a shadowRoot would not be found by mask
--   Fix ([#909](https://github.com/JsDaddy/ngx-mask/issues/909))
+- Fixed issue where active elements within a shadowRoot would not be found by mask
+- Fix ([#909](https://github.com/JsDaddy/ngx-mask/issues/909))
 
 <a name="13.1.11"></a>
 
@@ -763,7 +774,7 @@
 
 ### Fix
 
--   Fix ([#1000](https://github.com/JsDaddy/ngx-mask/issues/1000))
+- Fix ([#1000](https://github.com/JsDaddy/ngx-mask/issues/1000))
 
 <a name="13.1.10"></a>
 
@@ -771,7 +782,7 @@
 
 ### Fix
 
--   Fix ([#948](https://github.com/JsDaddy/ngx-mask/issues/948))
+- Fix ([#948](https://github.com/JsDaddy/ngx-mask/issues/948))
 
 <a name="13.1.9"></a>
 
@@ -779,7 +790,7 @@
 
 ### Fix
 
--   Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
+- Fix ([#923](https://github.com/JsDaddy/ngx-mask/pull/923))
 
 <a name="13.1.8"></a>
 
@@ -787,8 +798,8 @@
 
 ### Feature
 
--   Added lowercase and uppercase mask support
--   Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
+- Added lowercase and uppercase mask support
+- Feature ([#947](https://github.com/JsDaddy/ngx-mask/issues/947))
 
 <a name="13.1.6"></a>
 
@@ -796,8 +807,8 @@
 
 ### Fix
 
--   Ghost characters shown in input when toggling mask on/off
--   Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
+- Ghost characters shown in input when toggling mask on/off
+- Fix ([#897](https://github.com/JsDaddy/ngx-mask/issues/897))
 
 <a name="13.1.5"></a>
 
@@ -805,7 +816,7 @@
 
 ### Fix
 
--   Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
+- Fixed ([#848](https://github.com/JsDaddy/ngx-mask/issues/848))
 
 <a name="13.1.4"></a>
 
@@ -813,8 +824,8 @@
 
 ### Feature
 
--   Function maskFilled is added
--   Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
+- Function maskFilled is added
+- Feature ([#917](https://github.com/JsDaddy/ngx-mask/issues/917))
 
 <a name="13.1.3"></a>
 
@@ -831,7 +842,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Features
 
--   added triggerOnMaskChange, allow mask change to trigger onChange
+- added triggerOnMaskChange, allow mask change to trigger onChange
 
 <a name="13.1.1"></a>
 
@@ -839,8 +850,8 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Fixes
 
--   Revision for separator logic.
--   Set default decimalMarker to [".",","] instead "."
+- Revision for separator logic.
+- Set default decimalMarker to [".",","] instead "."
 
 <a name="13.1.0"></a>
 
@@ -848,12 +859,12 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Features
 
--   Enable non-zero-selections
--   Deletion of special mask character moves just the cursor instead of deleting the character next to it
+- Enable non-zero-selections
+- Deletion of special mask character moves just the cursor instead of deleting the character next to it
 
 ### Test/CI fixes
 
--   Enable cypress component testing
+- Enable cypress component testing
 
 <a name="13.0.1"></a>
 
@@ -861,9 +872,9 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Test/CI fixes
 
--   the same that in 13.0.0
--   fix test
--   fix CI
+- the same that in 13.0.0
+- fix test
+- fix CI
 
 <a name="13.0.0"></a>
 
@@ -871,10 +882,10 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 ### Angular 13 release
 
--   up all dependencies to latest
--   move from tslint to eslint
--   add more strict rules for tsconfig and code quality config
--   build library with IVY and new angular package structure
+- up all dependencies to latest
+- move from tslint to eslint
+- add more strict rules for tsconfig and code quality config
+- build library with IVY and new angular package structure
 
 <a name="12.0.0"></a>
 

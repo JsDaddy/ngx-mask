@@ -1020,4 +1020,12 @@ describe('Directive: Mask', () => {
 
         expect(inputTarget.value).toBe('');
     });
+
+    it('should show correct value d0.M0.', () => {
+        component.mask.set('d0.M0.');
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('122', '12.2', fixture);
+        equal('12.22', '12.2.', fixture);
+    });
 });

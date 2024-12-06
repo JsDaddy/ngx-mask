@@ -738,6 +738,7 @@ export class NgxMaskApplierService {
             }
         }
         if (
+            result[processedPosition - 1] &&
             result.length + 1 === maskExpression.length &&
             this.specialCharacters.indexOf(
                 maskExpression[maskExpression.length - 1] ?? MaskExpression.EMPTY_STRING

@@ -597,7 +597,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     private formControlResult(inputValue: string): void {
         if (this.writingValue && !inputValue) {
-            this.onChange(this.outputTransformFn(''));
+            this.onChange(this.outputTransformFn(null));
             return;
         }
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
