@@ -189,6 +189,14 @@ const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
 
 Then, just define masks in inputs.
 
+## Actively supported versions
+
+ngx-mask follows the official Angular support policy, supporting the Active and LTS (Long-Term Support) versions of Angular. As of the latest release, Angular v17 and newer are supported.
+
+Projects using Angular versions outside the supported range (e.g., older than v17) should use the last compatible version of ngx-mask. However, these versions will no longer receive updates, bug fixes, or new features.
+
+For detailed information about Angular's versioning and support schedule, visit the official  [Angular releases page](https://angular.dev/reference/releases#actively-supported-versions).
+
 ## Usage
 
 Text [documentation](https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md)

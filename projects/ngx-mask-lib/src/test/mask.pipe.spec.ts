@@ -358,7 +358,10 @@ describe('Pipe: Mask', () => {
         const valueWithPrefix: string | number = maskPipe.transform('55555', '00 (000)', {
             prefix: 'DDD ',
         });
-        expect(valueWithSuffix).toEqual('55 (555) DDD');
-        expect(valueWithPrefix).toEqual('DDD 55 (555)');
+
+        requestAnimationFrame(() => {
+            expect(valueWithSuffix).toEqual('55 (555) DDD');
+            expect(valueWithPrefix).toEqual('DDD 55 (555)');
+        });
     });
 });

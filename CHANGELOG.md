@@ -1,3 +1,14 @@
+# 19.0.3(2024-12-05)
+
+### Contributing Fix
+
+-   Fix ([#1455](https://github.com/JsDaddy/ngx-mask/pull/1455))
+
+### Fix
+
+-   Fix ([#1472](https://github.com/JsDaddy/ngx-mask/pull/1472))
+-   Fix ([#1415](https://github.com/JsDaddy/ngx-mask/pull/1415))
+
 # 19.0.2(2024-12-03)
 
 ### Fix
