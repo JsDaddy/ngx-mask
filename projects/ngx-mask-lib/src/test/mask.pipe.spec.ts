@@ -352,12 +352,13 @@ describe('Pipe: Mask', () => {
     });
 
     it('should show second pipe without suffix', () => {
-        const valueWithSuffix: string | number = maskPipe.transform('55555', '00 (000)', {
+        const valueWithSuffix: string | number = maskPipe.transform('55555 ', '00 (000)', {
             suffix: ' DDD',
         });
-        const valueWithPrefix: string | number = maskPipe.transform('55555', '00 (000)', {
+        const valueWithPrefix: string | number = maskPipe.transform('55555 ', '00 (000)', {
             prefix: 'DDD ',
         });
+
         expect(valueWithSuffix).toEqual('55 (555) DDD');
         expect(valueWithPrefix).toEqual('DDD 55 (555)');
     });

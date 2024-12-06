@@ -16,7 +16,7 @@ export type NgxMaskConfig = {
     shownMaskExpression: string;
     specialCharacters: string[] | readonly string[];
     dropSpecialCharacters: boolean | string[] | readonly string[];
-    hiddenInput: boolean | null;
+    hiddenInput: boolean;
     validation: boolean;
     separatorLimit: string;
     apm: boolean;
@@ -52,7 +52,7 @@ export const initialConfig: NgxMaskConfig = {
     showMaskTyped: false,
     placeHolderCharacter: '_',
     dropSpecialCharacters: true,
-    hiddenInput: null,
+    hiddenInput: false,
     shownMaskExpression: '',
     separatorLimit: '',
     allowNegativeNumbers: false,

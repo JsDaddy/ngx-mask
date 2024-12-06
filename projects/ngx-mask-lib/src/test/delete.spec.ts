@@ -5,7 +5,6 @@ import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 
 describe('Directive: Mask (Delete)', () => {
@@ -84,8 +83,9 @@ describe('Directive: Mask (Delete)', () => {
             target: inputTarget,
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
+        debugElement.triggerEventHandler('ngModelChange', { target: inputTarget });
 
-        equal(inputTarget.value, '***/*5/6789', fixture);
+        expect(inputTarget.value).toEqual('***/*5/6789');
         expect(inputTarget.selectionStart).toEqual(6);
     });
 

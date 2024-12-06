@@ -164,6 +164,9 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (hiddenInput) {
             this._maskService.hiddenInput = hiddenInput.currentValue;
+            if (hiddenInput.previousValue === true && hiddenInput.currentValue === false) {
+                this._inputValue.set(this._maskService.actualValue);
+            }
         }
         if (showMaskTyped) {
             this._maskService.showMaskTyped = showMaskTyped.currentValue;
@@ -1115,11 +1118,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     this._maskService.maskExpression = maskValue;
                 }
             } else {
+                const cleanMask = this._maskService.removeMask(mask);
                 const check: boolean = this._maskService
                     .removeMask(this._inputValue())
                     ?.split(MaskExpression.EMPTY_STRING)
                     .every((character, index) => {
-                        const indexMask = mask.charAt(index);
+                        const indexMask = cleanMask.charAt(index);
                         return this._maskService._checkSymbolMask(character, indexMask);
                     });
 

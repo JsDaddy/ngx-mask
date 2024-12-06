@@ -104,10 +104,20 @@ Input value: 789HelloWorld
 Masked value: (Hel-loW)
 ```
 
-### Custom pattern for this
+### Custom Pattern Definition for Input Masks
 
-You can define custom pattern and specify symbol to be rendered in input field.
-Patterns may conflict with such letters as h, d, m, s, because we use these characters for dates.
+You can define a custom pattern and specify a unique symbol to be rendered in the input field.
+
+Important Notes:
+
+Reserved Characters: Certain characters (h, d, m, s) are reserved for date patterns and should not be used in custom patterns to avoid conflicts.
+
+```html
+Special Symbol *: The * character is reserved for patterns like 0*, which means any length of digits
+can appear before the asterisk. Avoid using this symbol in custom patterns.
+
+<input type="text" mask="A*" />
+```
 
 ```typescript
 pattern = {
