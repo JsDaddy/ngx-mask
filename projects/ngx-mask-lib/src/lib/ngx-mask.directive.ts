@@ -57,6 +57,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public inputTransformFn = input<NgxMaskConfig['inputTransformFn'] | null>(null);
     public outputTransformFn = input<NgxMaskConfig['outputTransformFn'] | null>(null);
     public keepCharacterPositions = input<NgxMaskConfig['keepCharacterPositions'] | null>(null);
+    public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
     public maskFilled = output<void>();
 
@@ -107,6 +108,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             inputTransformFn,
             outputTransformFn,
             keepCharacterPositions,
+            instantPrefix,
         } = changes;
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
@@ -146,6 +148,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (apm && apm.currentValue) {
             this._maskService.apm = apm.currentValue;
+        }
+
+        if (instantPrefix) {
+            this._maskService.instantPrefix = instantPrefix.currentValue;
         }
         if (prefix) {
             this._maskService.prefix = prefix.currentValue;
@@ -966,7 +972,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskService.isNumberValue = true;
             }
 
-            if (typeof inputValue !== 'string') {
+            if (typeof inputValue !== 'string' || value === null || typeof value === 'undefined') {
                 inputValue = '';
             }
 

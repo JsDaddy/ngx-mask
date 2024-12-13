@@ -53,6 +53,8 @@ export class NgxMaskApplierService {
     public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] =
         this._config.keepCharacterPositions;
 
+    public instantPrefix: NgxMaskConfig['instantPrefix'] = this._config.instantPrefix;
+
     private _shift = new Set<number>();
 
     public plusOnePosition = false;
@@ -777,7 +779,7 @@ export class NgxMaskApplierService {
         }`;
 
         if (result.length === 0) {
-            res = !this.dropSpecialCharacters ? `${this.prefix}${result}` : `${result}`;
+            res = this.instantPrefix ? `${this.prefix}${result}` : `${result}`;
         }
 
         const isSpecialCharacterMaskFirstSymbol =

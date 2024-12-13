@@ -132,11 +132,27 @@ pattern = {
 
 You can add prefix to you masked value
 
+
 #### Usage
 
 ```html
 <input type="text" prefix="+7" mask="(000) 000 00 00" />
 ```
+
+### instantPrefix
+
+The input property instantPrefix controls the display behavior of a prefix in the input.
+
+When set to true, the prefix is displayed even if the model is empty.
+When set to false, the prefix only becomes visible when a value is present in the model.
+
+#### Usage
+
+```html
+<input type="text" prefix="+7" instantPrefix="false" mask="(000) 000 00 00" />
+<input type="text" prefix="+7" instantPrefix="true"  mask="(000) 000 00 00" />
+```
+
 
 ### suffix (string)
 

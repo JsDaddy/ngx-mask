@@ -159,4 +159,52 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('KZ123123', 'KZ123 123', fixture);
         expect(component.form.value).toBe('KZ123 123');
     });
+
+    it('should show prefix if value is empty mask 0000', () => {
+        component.mask.set('0000');
+        component.prefix.set('+38 ');
+        component.instantPrefix.set(true);
+
+        equal('', '+38 ', fixture);
+        equal('1', '+38 1', fixture);
+        equal('12', '+38 12', fixture);
+        equal('123', '+38 123', fixture);
+        equal('1234', '+38 1234', fixture);
+    });
+
+    it('should show prefix if value is empty mask 0000 with dropSpecialCharacter false', () => {
+        component.mask.set('0000');
+        component.prefix.set('+38 ');
+        component.dropSpecialCharacters.set(false);
+        component.instantPrefix.set(true);
+
+        equal('', '+38 ', fixture);
+        equal('1', '+38 1', fixture);
+        equal('12', '+38 12', fixture);
+        equal('123', '+38 123', fixture);
+        equal('1234', '+38 1234', fixture);
+    });
+
+    it('should doesnt show prefix if value is empty mask 0000', () => {
+        component.mask.set('0000');
+        component.prefix.set('+38 ');
+
+        equal('', '', fixture);
+        equal('1', '+38 1', fixture);
+        equal('12', '+38 12', fixture);
+        equal('123', '+38 123', fixture);
+        equal('1234', '+38 1234', fixture);
+    });
+
+    it('should doesnt show prefix if value is empty mask 0000 with dropSpecialCharacter false', () => {
+        component.mask.set('0000');
+        component.prefix.set('+38 ');
+        component.dropSpecialCharacters.set(false);
+
+        equal('', '', fixture);
+        equal('1', '+38 1', fixture);
+        equal('12', '+38 12', fixture);
+        equal('123', '+38 123', fixture);
+        equal('1234', '+38 1234', fixture);
+    });
 });
