@@ -648,7 +648,7 @@ describe('Directive: Mask', () => {
         expect(component.form.value).toBe('foo/257');
         expect(component.form.valid).toBeFalse();
 
-        equal('', 'foo/', fixture);
+        equal('', '', fixture);
         expect(component.form.value).toBe('');
     });
 
@@ -1027,5 +1027,14 @@ describe('Directive: Mask', () => {
         equal('12', '12', fixture);
         equal('122', '12.2', fixture);
         equal('12.22', '12.2.', fixture);
+    });
+
+    it('should show default state after reset control 0000', () => {
+        component.mask.set('0000');
+
+        equal('1234', '1234', fixture);
+        component.form.reset();
+        expect(component.form.dirty).toBe(false);
+        expect(component.form.pristine).toBe(true);
     });
 });

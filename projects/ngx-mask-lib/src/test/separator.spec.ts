@@ -1871,4 +1871,35 @@ describe('Separator: Mask', () => {
         equal('12345678910111215.9999', '12,345,678,910,111,215.99', fixture);
         expect(component.form.value).toBe('12345678910111215.99');
     });
+
+    it('should show default state after reset control separator.2', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+
+        equal('1234', '1,234', fixture);
+        component.form.reset();
+        expect(component.form.dirty).toBe(false);
+        expect(component.form.pristine).toBe(true);
+    });
+
+    it('should show default state after reset control separator.0', () => {
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
+
+        equal('1234', '1,234', fixture);
+        component.form.reset();
+        expect(component.form.dirty).toBe(false);
+        expect(component.form.pristine).toBe(true);
+    });
+
+    it('should show default state after reset control separator.2 and leadZero', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        component.leadZero.set(true);
+
+        equal('1234', '1,234', fixture);
+        component.form.reset();
+        expect(component.form.dirty).toBe(false);
+        expect(component.form.pristine).toBe(true);
+    });
 });

@@ -32,6 +32,7 @@ import { NgxMaskDirective } from 'ngx-mask';
             [apm]="apm()"
             [validation]="validation()"
             [inputTransformFn]="inputTransformFn()"
+            [instantPrefix]="instantPrefix()"
             [outputTransformFn]="outputTransformFn()"
             [triggerOnMaskChange]="triggerOnMaskChange()" />
     `,
@@ -84,4 +85,5 @@ export class TestMaskComponent {
     public triggerOnMaskChange = signal<NgxMaskConfig['triggerOnMaskChange']>(
         this._config.triggerOnMaskChange
     );
+    public instantPrefix = signal<NgxMaskConfig['instantPrefix']>(this._config.instantPrefix);
 }

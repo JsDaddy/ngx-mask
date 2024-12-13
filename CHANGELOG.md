@@ -1,3 +1,14 @@
+# 19.0.4(2024-12-13)
+
+### Feature
+
+- add input property instantPrefix 
+
+### Fix
+
+- Fix ([#1477](https://github.com/JsDaddy/ngx-mask/issues/1477))
+- Fix ([#1476](https://github.com/JsDaddy/ngx-mask/issues/1476))
+
 # 19.0.3(2024-12-05)
 
 ### Contributing Fix
