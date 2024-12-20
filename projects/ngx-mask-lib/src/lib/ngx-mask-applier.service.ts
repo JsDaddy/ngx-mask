@@ -200,13 +200,18 @@ export class NgxMaskApplierService {
             let decimalMarker = this.decimalMarker;
 
             if (Array.isArray(this.decimalMarker)) {
-                const marker = this.decimalMarker.find((dm) => dm !== this.thousandSeparator);
-
-                decimalMarker = marker
-                    ? marker
-                    : this.actualValue.includes(this.decimalMarker[0])
-                      ? this.decimalMarker[0]
-                      : this.decimalMarker[1];
+                if (
+                    this.actualValue.includes(this.decimalMarker[0]) ||
+                    this.actualValue.includes(this.decimalMarker[1])
+                ) {
+                    decimalMarker = this.actualValue.includes(this.decimalMarker[0])
+                        ? this.decimalMarker[0]
+                        : this.decimalMarker[1];
+                } else {
+                    decimalMarker = this.decimalMarker.find(
+                        (dm) => dm !== this.thousandSeparator
+                    ) as '.' | ',';
+                }
             }
 
             if (backspaced) {
