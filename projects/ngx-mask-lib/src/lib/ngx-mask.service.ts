@@ -611,6 +611,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                       )
                   )
                 : '';
+            this.writingValue = false;
             this.maskChanged = false;
             return;
         }

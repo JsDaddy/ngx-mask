@@ -132,7 +132,6 @@ pattern = {
 
 You can add prefix to you masked value
 
-
 #### Usage
 
 ```html
@@ -150,9 +149,8 @@ When set to false, the prefix only becomes visible when a value is present in th
 
 ```html
 <input type="text" prefix="+7" instantPrefix="false" mask="(000) 000 00 00" />
-<input type="text" prefix="+7" instantPrefix="true"  mask="(000) 000 00 00" />
+<input type="text" prefix="+7" instantPrefix="true" mask="(000) 000 00 00" />
 ```
-
 
 ### suffix (string)
 

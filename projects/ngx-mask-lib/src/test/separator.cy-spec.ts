@@ -297,7 +297,7 @@ describe('Test Date Hh:m0', () => {
             .type('{leftArrow}'.repeat(2))
             .type('{backspace}')
             .should('have.value', '-0.14')
-            .type('{leftArrow}'.repeat(2))
+            .type('{leftArrow}')
             .type('{backspace}')
             .should('have.value', '-14');
     });
@@ -317,6 +317,7 @@ describe('Test Date Hh:m0', () => {
             .type('{leftArrow}'.repeat(2))
             .type('{backspace}')
             .should('have.value', '-1')
+            .type('{rightArrow}')
             .type('{backspace}')
             .should('have.value', '-');
     });
@@ -461,5 +462,48 @@ describe('Test Date Hh:m0', () => {
             .type('{leftArrow}'.repeat(3))
             .type('{backspace}')
             .should('have.value', '5');
+    });
+
+    it('should correct work after backspace separator.2 when after first digit 0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                decimalMarker: signal(','),
+                thousandSeparator: signal(' '),
+            },
+        });
+
+        cy.get('#masked')
+            .type('1 000 000,05')
+            .should('have.value', '1 000 000,05')
+            .type('{leftArrow}'.repeat(11))
+            .type('{backspace}')
+            .should('have.value', '0,05');
+
+        cy.get('#masked').clear();
+
+        cy.get('#masked')
+            .type('60,05')
+            .should('have.value', '60,05')
+            .type('{leftArrow}'.repeat(4))
+            .type('{backspace}')
+            .should('have.value', '0,05');
+    });
+
+    it('should correct work after backspace separator.2 when after first digit 0', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                decimalMarker: signal('.'),
+                thousandSeparator: signal(' '),
+            },
+        });
+
+        cy.get('#masked')
+            .type('200.05')
+            .should('have.value', '200.05')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '0.05');
     });
 });
