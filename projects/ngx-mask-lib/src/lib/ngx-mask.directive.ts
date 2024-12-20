@@ -161,6 +161,32 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         }
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
+            if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
+                const previousDecimalMarker = this._maskService.decimalMarker;
+
+                if (thousandSeparator.currentValue === this._maskService.decimalMarker) {
+                    this._maskService.decimalMarker =
+                        thousandSeparator.currentValue === MaskExpression.COMMA
+                            ? MaskExpression.DOT
+                            : MaskExpression.COMMA;
+                }
+                if (this._maskService.dropSpecialCharacters === true) {
+                    this._maskService.specialCharacters = this._config.specialCharacters;
+                }
+                if (
+                    typeof previousDecimalMarker === 'string' &&
+                    typeof this._maskService.decimalMarker === 'string'
+                ) {
+                    this._inputValue.set(
+                        this._inputValue()
+                            .split(thousandSeparator.previousValue)
+                            .join('')
+                            .replace(previousDecimalMarker, this._maskService.decimalMarker)
+                    );
+                    this._maskService.actualValue = this._inputValue();
+                }
+                this._maskService.writingValue = true;
+            }
         }
         if (decimalMarker) {
             this._maskService.decimalMarker = decimalMarker.currentValue;

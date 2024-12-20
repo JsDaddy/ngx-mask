@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, Paste, typeTest } from './utils/test-functions.component';
+import { equal, Paste, Type, typeTest } from './utils/test-functions.component';
 import { initialConfig, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 describe('Separator: Mask', () => {
@@ -1901,5 +1901,68 @@ describe('Separator: Mask', () => {
         component.form.reset();
         expect(component.form.dirty).toBe(false);
         expect(component.form.pristine).toBe(true);
+    });
+
+    it('should show correct value in model after changing thousandSeparator', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(',');
+
+        const inputElement = fixture.nativeElement.querySelector('input');
+        inputElement.value = '100000.00';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(component.form.value).toBe('100000.00');
+
+        component.thousandSeparator.set('.');
+        fixture.detectChanges();
+
+        expect(component.form.value).toBe('100000.00');
+
+        component.thousandSeparator.set('-');
+        fixture.detectChanges();
+
+        expect(component.form.value).toBe('100000.00');
+
+        component.thousandSeparator.set(',');
+        fixture.detectChanges();
+
+        expect(component.form.value).toBe('100000.00');
+    });
+
+    it('should show correct value in input after changing thousandSeparator', () => {
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        fixture.detectChanges();
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(' ');
+        component.decimalMarker.set(',');
+
+        equal('123456,10', '123 456,10', fixture, false, Type);
+        expect(inputTarget.value).toBe('123 456,10');
+        expect(component.form.value).toBe('123456.10');
+
+        component.thousandSeparator.set('.');
+        fixture.detectChanges();
+
+        equal('123456,10', '123.456,10', fixture, false, Type);
+        expect(inputTarget.value).toBe('123.456,10');
+        expect(component.form.value).toBe('123456.10');
+
+        component.thousandSeparator.set('-');
+        fixture.detectChanges();
+
+        equal('123456,10', '123-456,10', fixture, false, Type);
+        expect(inputTarget.value).toBe('123-456,10');
+        expect(component.form.value).toBe('123456.10');
+
+        component.thousandSeparator.set(',');
+        fixture.detectChanges();
+
+        equal('123456.10', '123,456.10', fixture, false, Type);
+        expect(inputTarget.value).toBe('123,456.10');
+        expect(component.form.value).toBe('123456.10');
     });
 });
