@@ -1,5 +1,6 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
 import { signal } from '@angular/core';
+import type { NgxMaskConfig } from 'ngx-mask';
 
 describe('Test Date Hh:m0', () => {
     it('Mask separator.2 check cursor with value 100.0', () => {
@@ -505,5 +506,83 @@ describe('Test Date Hh:m0', () => {
             .type('{leftArrow}'.repeat(5))
             .type('{backspace}')
             .should('have.value', '0.05');
+    });
+
+    it('should correct work after backspace separator.2 with default values', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                decimalMarker: signal(['.', ','] as NgxMaskConfig['decimalMarker']),
+                thousandSeparator: signal(' '),
+            },
+        });
+
+        cy.get('#masked')
+            .type('1000000,35')
+            .should('have.value', '1 000 000,35')
+            .type('{leftArrow}'.repeat(11))
+            .type('{backspace}')
+            .should('have.value', '0,35');
+
+        cy.get('#masked').clear();
+
+        cy.get('#masked')
+            .type('1000000.35')
+            .should('have.value', '1 000 000.35')
+            .type('{leftArrow}'.repeat(11))
+            .type('{backspace}')
+            .should('have.value', '0.35');
+    });
+
+    it('should correct work after backspace separator.2 with default values', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                decimalMarker: signal(['.', ','] as NgxMaskConfig['decimalMarker']),
+                thousandSeparator: signal(' '),
+            },
+        });
+
+        cy.get('#masked')
+            .type('60,35')
+            .should('have.value', '60,35')
+            .type('{leftArrow}'.repeat(4))
+            .type('{backspace}')
+            .should('have.value', '0,35');
+
+        cy.get('#masked').clear();
+
+        cy.get('#masked')
+            .type('60.35')
+            .should('have.value', '60.35')
+            .type('{leftArrow}'.repeat(4))
+            .type('{backspace}')
+            .should('have.value', '0.35');
+    });
+
+    it('should correct work after backspace separator.2 with default values', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                decimalMarker: signal(['.', ','] as NgxMaskConfig['decimalMarker']),
+                thousandSeparator: signal(' '),
+            },
+        });
+
+        cy.get('#masked')
+            .type('200,35')
+            .should('have.value', '200,35')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '0,35');
+
+        cy.get('#masked').clear();
+
+        cy.get('#masked')
+            .type('200.35')
+            .should('have.value', '200.35')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '0.35');
     });
 });
