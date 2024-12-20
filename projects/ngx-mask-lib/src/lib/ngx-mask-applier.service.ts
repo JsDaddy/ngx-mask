@@ -197,11 +197,62 @@ export class NgxMaskApplierService {
             }
 
             const precision: number = this.getPrecision(maskExpression);
-            const decimalMarker = Array.isArray(this.decimalMarker)
-                ? this.thousandSeparator === MaskExpression.DOT
-                    ? MaskExpression.COMMA
-                    : MaskExpression.DOT
-                : this.decimalMarker;
+            let decimalMarker = this.decimalMarker;
+
+            if (Array.isArray(this.decimalMarker)) {
+                const marker = this.decimalMarker.find((dm) => dm !== this.thousandSeparator);
+
+                decimalMarker = marker
+                    ? marker
+                    : this.actualValue.includes(this.decimalMarker[0])
+                      ? this.decimalMarker[0]
+                      : this.decimalMarker[1];
+            }
+
+            if (backspaced) {
+                const { decimalMarkerIndex, nonZeroIndex } = this._findFirstNonZeroAndDecimalIndex(
+                    processedValue,
+                    decimalMarker as '.' | ','
+                );
+                const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
+                const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
+                const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
+                const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
+
+                if (
+                    (zeroIndexDecimalMarker && !nonZeroIndex) ||
+                    (zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex) ||
+                    (zeroIndexNumberZero && !decimalMarkerIndex && !nonZeroIndex)
+                ) {
+                    processedValue = MaskExpression.NUMBER_ZERO;
+                }
+
+                if (
+                    decimalMarkerIndex &&
+                    nonZeroIndex &&
+                    zeroIndexMinus &&
+                    processedPosition === 1
+                ) {
+                    if (decimalMarkerIndex < nonZeroIndex || decimalMarkerIndex > nonZeroIndex) {
+                        processedValue = MaskExpression.MINUS + processedValue.slice(nonZeroIndex);
+                    }
+                }
+
+                if (!decimalMarkerIndex && nonZeroIndex && processedValue.length > nonZeroIndex) {
+                    processedValue = zeroIndexMinus
+                        ? MaskExpression.MINUS + processedValue.slice(nonZeroIndex)
+                        : processedValue.slice(nonZeroIndex);
+                }
+
+                if (decimalMarkerIndex && nonZeroIndex && processedPosition === 0) {
+                    if (decimalMarkerIndex < nonZeroIndex) {
+                        processedValue = processedValue.slice(decimalMarkerIndex - 1);
+                    }
+                    if (decimalMarkerIndex > nonZeroIndex) {
+                        processedValue = processedValue.slice(nonZeroIndex);
+                    }
+                }
+            }
 
             if (precision === 0) {
                 processedValue = this.allowNegativeNumbers
@@ -240,7 +291,8 @@ export class NgxMaskApplierService {
                 if (
                     processedValue[0] === MaskExpression.NUMBER_ZERO &&
                     processedValue[1] !== decimalMarker &&
-                    processedValue[1] !== this.thousandSeparator
+                    processedValue[1] !== this.thousandSeparator &&
+                    !backspaced
                 ) {
                     processedValue =
                         processedValue.length > 1
@@ -252,6 +304,7 @@ export class NgxMaskApplierService {
                 }
                 if (
                     this.allowNegativeNumbers &&
+                    !backspaced &&
                     processedValue[0] === MaskExpression.MINUS &&
                     (processedValue[1] === decimalMarker ||
                         processedValue[1] === MaskExpression.NUMBER_ZERO)
@@ -272,61 +325,6 @@ export class NgxMaskApplierService {
                 }
             }
 
-            if (backspaced) {
-                const inputValueAfterZero = processedValue.slice(
-                    this._findFirstNonZeroDigitIndex(processedValue),
-                    processedValue.length
-                );
-                const positionOfZeroOrDecimalMarker =
-                    processedValue[processedPosition] === MaskExpression.NUMBER_ZERO ||
-                    processedValue[processedPosition] === decimalMarker;
-                const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
-                const firstIndexNumberZero = processedValue[1] === MaskExpression.NUMBER_ZERO;
-                const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
-                const zeroIndexThousand = processedValue[0] === this.thousandSeparator;
-                const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
-                const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
-                const secondIndexDecimalMarker = processedValue[2] === decimalMarker;
-
-                if (zeroIndexNumberZero && firstIndexDecimalMarker && processedPosition === 0) {
-                    return processedValue;
-                }
-
-                if (zeroIndexDecimalMarker && processedPosition === 0) {
-                    processedValue = inputValueAfterZero;
-                }
-
-                if (
-                    zeroIndexNumberZero &&
-                    firstIndexDecimalMarker &&
-                    positionOfZeroOrDecimalMarker &&
-                    processedPosition < 2
-                ) {
-                    processedValue = inputValueAfterZero;
-                }
-                if (
-                    zeroIndexMinus &&
-                    firstIndexNumberZero &&
-                    secondIndexDecimalMarker &&
-                    positionOfZeroOrDecimalMarker &&
-                    processedPosition < 3
-                ) {
-                    processedValue = MaskExpression.MINUS + inputValueAfterZero;
-                }
-
-                if (
-                    inputValueAfterZero !== MaskExpression.MINUS &&
-                    ((processedPosition === 0 && (zeroIndexNumberZero || zeroIndexThousand)) ||
-                        (this.allowNegativeNumbers &&
-                            processedPosition === 1 &&
-                            zeroIndexMinus &&
-                            !firstIndexNumberZero))
-                ) {
-                    processedValue = zeroIndexMinus
-                        ? MaskExpression.MINUS + inputValueAfterZero
-                        : inputValueAfterZero;
-                }
-            }
             // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
             //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK
 
@@ -1036,13 +1034,29 @@ export class NgxMaskApplierService {
         }
     }
 
-    private _findFirstNonZeroDigitIndex(inputString: string): number {
+    private _findFirstNonZeroAndDecimalIndex(inputString: string, decimalMarker: '.' | ',') {
+        let decimalMarkerIndex: number | null = null;
+        let nonZeroIndex: number | null = null;
+
         for (let i = 0; i < inputString.length; i++) {
             const char = inputString[i];
-            if (char && char >= '1' && char <= '9') {
-                return i;
+
+            if (char === decimalMarker && decimalMarkerIndex === null) {
+                decimalMarkerIndex = i;
+            }
+
+            if (char && char >= '1' && char <= '9' && nonZeroIndex === null) {
+                nonZeroIndex = i;
+            }
+
+            if (decimalMarkerIndex !== null && nonZeroIndex !== null) {
+                break;
             }
         }
-        return -1;
+
+        return {
+            decimalMarkerIndex,
+            nonZeroIndex,
+        };
     }
 }
