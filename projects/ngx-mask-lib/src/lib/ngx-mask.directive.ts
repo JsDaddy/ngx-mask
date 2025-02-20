@@ -421,7 +421,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             return;
         }
         const el: HTMLInputElement = e.target as HTMLInputElement;
-        const transformedValue = this._maskService.inputTransformFn(el.value);
+
+        const transformedValue = this._maskService.inputTransformFn
+            ? this._maskService.inputTransformFn(el.value)
+            : el.value;
 
         if (el.type !== 'number') {
             if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
@@ -1011,18 +1014,14 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                     (this._maskService.prefix || this._maskService.showMaskTyped))
             ) {
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
-                if (typeof inputTransformFn !== 'function') {
-                    this._maskService.writingValue = true;
-                }
+                this._maskService.writingValue = true;
 
                 this._maskService.formElementProperty = [
                     'value',
                     this._maskService.applyMask(inputValue, this._maskService.maskExpression),
                 ];
                 // Let the service know we've finished writing value
-                if (typeof inputTransformFn !== 'function') {
-                    this._maskService.writingValue = false;
-                }
+                this._maskService.writingValue = false;
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
             }

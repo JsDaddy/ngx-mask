@@ -46,9 +46,11 @@ export class NgxMaskApplierService {
 
     public apm: NgxMaskConfig['apm'] = this._config.apm;
 
-    public inputTransformFn: NgxMaskConfig['inputTransformFn'] = this._config.inputTransformFn;
+    public inputTransformFn: NgxMaskConfig['inputTransformFn'] | null =
+        this._config.inputTransformFn;
 
-    public outputTransformFn: NgxMaskConfig['outputTransformFn'] = this._config.outputTransformFn;
+    public outputTransformFn: NgxMaskConfig['outputTransformFn'] | null =
+        this._config.outputTransformFn;
 
     public keepCharacterPositions: NgxMaskConfig['keepCharacterPositions'] =
         this._config.keepCharacterPositions;
