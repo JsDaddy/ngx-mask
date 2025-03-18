@@ -927,7 +927,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     /** It writes the value in the input */
     public async writeValue(controlValue: unknown): Promise<void> {
         let value = controlValue;
-        const inputTransformFn = this.inputTransformFn();
+        const inputTransformFn = this._maskService.inputTransformFn;
         if (typeof value === 'object' && value !== null && 'value' in value) {
             if ('disable' in value) {
                 this.setDisabledState(Boolean(value.disable));
