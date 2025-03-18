@@ -14,7 +14,6 @@ export class NgxMaskService extends NgxMaskApplierService {
     public selEnd: number | null = null;
     public maskChanged = false;
     public maskExpressionArray: string[] = [];
-    public triggerOnMaskChange = false;
     public previousValue = '';
     public currentValue = '';
     /**

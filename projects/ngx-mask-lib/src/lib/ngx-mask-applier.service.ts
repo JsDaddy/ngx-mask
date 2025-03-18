@@ -55,6 +55,9 @@ export class NgxMaskApplierService {
 
     public instantPrefix: NgxMaskConfig['instantPrefix'] = this._config.instantPrefix;
 
+    public triggerOnMaskChange: NgxMaskConfig['triggerOnMaskChange'] =
+        this._config.triggerOnMaskChange;
+
     private _shift = new Set<number>();
 
     public plusOnePosition = false;
@@ -65,7 +68,8 @@ export class NgxMaskApplierService {
 
     public showKeepCharacterExp = '';
 
-    public shownMaskExpression = '';
+    public shownMaskExpression: NgxMaskConfig['shownMaskExpression'] =
+        this._config.shownMaskExpression;
 
     public deletedSpecialCharacter = false;
 
