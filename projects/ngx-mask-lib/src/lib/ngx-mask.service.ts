@@ -801,7 +801,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         if (
             separatorExpression.indexOf('2') > 0 ||
-            (this.leadZero && Number(separatorPrecision) > 0)
+            (this.leadZero && separatorPrecision != Infinity && Number(separatorPrecision) > 0)
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
                 value = value.replace(',', '.');
