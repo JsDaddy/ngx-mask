@@ -266,6 +266,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.currentValue = result;
             this._emitValue =
                 this.previousValue !== this.currentValue ||
+                newInputValue !== this.currentValue ||
                 this.maskChanged ||
                 this.writingValue ||
                 (this.previousValue === this.currentValue && justPasted);
