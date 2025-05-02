@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostBinding, signal } from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -44,6 +44,9 @@ export class AppComponent {
     public readonly chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
     private readonly selectedCardId = signal<number>(1);
+
+    @HostBinding('class')
+    public readonly hostClassname = 'block h-full';
 
     public switchCard(cardId: number): void {
         if (this.selectedCardId() === cardId) {

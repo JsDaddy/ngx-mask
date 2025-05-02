@@ -1,3 +1,9 @@
+# 19.0.7(2024-05-01)
+
+### Feature
+
+- update dependencies
+
 # 19.0.6(2024-12-20)
 
 ### Fix
