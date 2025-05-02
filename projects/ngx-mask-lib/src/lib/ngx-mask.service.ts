@@ -596,15 +596,16 @@ export class NgxMaskService extends NgxMaskApplierService {
      * @param inputValue the current form input value
      */
     private formControlResult(inputValue: string): void {
+        const outputTransformFn = this.outputTransformFn ? this.outputTransformFn : (v: any) => v;
         if (this.writingValue && !inputValue) {
-            this.onChange(this.outputTransformFn(null));
+            this.onChange(outputTransformFn(null));
             return;
         }
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
             // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
             this.triggerOnMaskChange && this.maskChanged
                 ? this.onChange(
-                      this.outputTransformFn(
+                      outputTransformFn(
                           this._toNumber(
                               this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
                           )
@@ -617,7 +618,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this.outputTransformFn(
+                outputTransformFn(
                     this._toNumber(
                         this._checkSymbols(
                             this._removeMask(
@@ -633,14 +634,14 @@ export class NgxMaskService extends NgxMaskApplierService {
             (!this.dropSpecialCharacters && this.prefix === inputValue)
         ) {
             this.onChange(
-                this.outputTransformFn(
+                outputTransformFn(
                     this._toNumber(
                         this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
                     )
                 )
             );
         } else {
-            this.onChange(this.outputTransformFn(this._toNumber(inputValue)));
+            this.onChange(outputTransformFn(this._toNumber(inputValue)));
         }
     }
 
