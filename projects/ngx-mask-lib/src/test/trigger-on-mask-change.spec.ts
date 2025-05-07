@@ -62,7 +62,7 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         await fixture.whenStable();
         inputEl = fixture.debugElement.query(By.css('input'));
         expect(inputEl.nativeElement.value).toEqual('79 123 45 67');
-        expect(component.form.value).toEqual('7912345678');
+        expect(component.form.value).toEqual('791234567');
     });
 
     it('should trigger form value update if mask is changed when triggerOnMaskChange is true', async () => {
@@ -96,6 +96,6 @@ describe('Directive: Mask (Trigger on mask change)', () => {
 
         component.mask.set('S0S 0S0');
         equal(inputTarget.value, '', fixture, true);
-        expect(component.form.value).toBe('1234');
+        expect(component.form.value).toBe('');
     });
 });

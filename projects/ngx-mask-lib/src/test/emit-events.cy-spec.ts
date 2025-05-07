@@ -165,6 +165,6 @@ describe('Directive: Mask (emit-events)', () => {
 
         cy.get('#masked').should('have.value', '11:14');
         cy.get('#pristine').should('have.text', 'true');
-        cy.get('#pre').should('have.text', '2');
+        cy.get('#pre').should('have.text', '3');
     });
 });

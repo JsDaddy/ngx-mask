@@ -23,10 +23,18 @@ You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-cop
 
 ## Installing
 
-Angular version 17.x.x
+## Angular version 17.x.x
+
+## npm
 
 ```bash
 $ npm install --save ngx-mask
+```
+
+## bun
+
+```bash
+$ bun install --save ngx-mask
 ```
 
 Angular version 16.x.x

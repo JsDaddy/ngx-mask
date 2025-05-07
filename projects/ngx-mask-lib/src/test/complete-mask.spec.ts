@@ -35,13 +35,25 @@ describe('Directive: Mask (Function maskFilled)', () => {
         fixture.detectChanges();
         maskFilledSpy = spyOn(component, 'maskFilled').and.callThrough();
     });
+
     it('should call function maskFilled and isMaskFilled should be true', () => {
-        component.form.setValue('9999');
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '9999';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
         expect(component.isMaskFilled()).toBeTrue();
         expect(maskFilledSpy).toHaveBeenCalledOnceWith();
     });
+
     it('isMaskFilled should be false', () => {
-        component.form.setValue('999');
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '999';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
         expect(component.isMaskFilled()).toBeFalse();
     });
 });

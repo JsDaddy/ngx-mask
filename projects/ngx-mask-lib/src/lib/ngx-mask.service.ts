@@ -266,19 +266,13 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.currentValue = result;
             this._emitValue =
                 this.previousValue !== this.currentValue ||
-                newInputValue !== this.currentValue ||
-                this.maskChanged ||
-                this.writingValue ||
+                (newInputValue !== this.currentValue && this.writingValue) ||
                 (this.previousValue === this.currentValue && justPasted);
         }
 
         // Propagate the input value back to the Angular model
         // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-        this._emitValue
-            ? this.writingValue && this.triggerOnMaskChange
-                ? requestAnimationFrame(() => this.formControlResult(result))
-                : this.formControlResult(result)
-            : '';
+        this._emitValue ? this.formControlResult(result) : '';
 
         // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -596,22 +590,21 @@ export class NgxMaskService extends NgxMaskApplierService {
      * @param inputValue the current form input value
      */
     private formControlResult(inputValue: string): void {
-        const outputTransformFn = this.outputTransformFn ? this.outputTransformFn : (v: any) => v;
+        const outputTransformFn = this.outputTransformFn
+            ? this.outputTransformFn
+            : (v: unknown) => v;
         if (this.writingValue && !inputValue) {
             this.onChange(outputTransformFn(null));
             return;
         }
         if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
-            // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-            this.triggerOnMaskChange && this.maskChanged
-                ? this.onChange(
-                      outputTransformFn(
-                          this._toNumber(
-                              this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
-                          )
-                      )
-                  )
-                : '';
+            this.onChange(
+                outputTransformFn(
+                    this._toNumber(
+                        this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+                    )
+                )
+            );
             this.writingValue = false;
             this.maskChanged = false;
             return;

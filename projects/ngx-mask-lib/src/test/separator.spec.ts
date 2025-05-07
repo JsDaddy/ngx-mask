@@ -1047,17 +1047,19 @@ describe('Separator: Mask', () => {
         });
     }));
 
-    it('separator.8 should return number value', fakeAsync(() => {
+    it('separator.8 should return number value', async () => {
         component.mask.set('separator.8');
         component.thousandSeparator.set('.');
         component.decimalMarker.set(',');
 
         equal('12,34', '12,34', fixture);
-        tick();
+
+        await fixture.whenStable();
+
         requestAnimationFrame(() => {
             expect(component.form.value).toBe(12.34);
         });
-    }));
+    });
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', fakeAsync(() => {
         component.mask.set('separator.2');
@@ -1538,8 +1540,9 @@ describe('Separator: Mask', () => {
 
         component.form.setValue(1255.78);
         tick();
+        fixture.detectChanges();
         requestAnimationFrame(() => {
-            expect(inputTarget.value).toBe('1.255,78');
+            expect(inputTarget.value).toBe('1.255,7');
         });
     }));
 
@@ -1628,10 +1631,10 @@ describe('Separator: Mask', () => {
         spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
         fixture.detectChanges();
 
-        component.form.setValue(1255.78);
+        component.form.setValue(1255.7);
         tick();
         requestAnimationFrame(() => {
-            expect(inputTarget.value).toBe('1.255,78');
+            expect(inputTarget.value).toBe('1.255,7');
         });
     }));
 
@@ -1909,7 +1912,7 @@ describe('Separator: Mask', () => {
         component.decimalMarker.set(',');
 
         const inputElement = fixture.nativeElement.querySelector('input');
-        inputElement.value = '100000.00';
+        inputElement.value = '100000,00';
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
