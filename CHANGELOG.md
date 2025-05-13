@@ -6,6 +6,8 @@
 - PR ([#1522](https://github.com/JsDaddy/ngx-mask/issues/1522))
 - PR ([#1509](https://github.com/JsDaddy/ngx-mask/issues/1509))
 - Fix ([#1508](https://github.com/JsDaddy/ngx-mask/issues/1508))
+- Fix ([#1487](https://github.com/JsDaddy/ngx-mask/issues/1487))
+- Fix ([#1525](https://github.com/JsDaddy/ngx-mask/issues/1525))
 
 # 19.0.6(2024-12-20)
 

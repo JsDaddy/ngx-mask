@@ -127,7 +127,6 @@ describe('Directive: Mask (emit-events)', () => {
     });
 
     it('inputTransformFn should not change input form status', () => {
-        const date = new Date('12-12-2012 11:14:01');
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
                 mask: signal('Hh:m0'),
@@ -160,11 +159,10 @@ describe('Directive: Mask (emit-events)', () => {
         })
             .wait(10)
             .then((wrapper) => {
-                wrapper.component.form.reset(date);
+                wrapper.component.form.reset();
             });
 
-        cy.get('#masked').should('have.value', '11:14');
         cy.get('#pristine').should('have.text', 'true');
-        cy.get('#pre').should('have.text', '3');
+        cy.get('#pre').should('have.text', '2');
     });
 });

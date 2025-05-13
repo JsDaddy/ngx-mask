@@ -264,6 +264,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (result || result === '') {
             this.previousValue = this.currentValue;
             this.currentValue = result;
+
             this._emitValue =
                 this.previousValue !== this.currentValue ||
                 (newInputValue !== this.currentValue && this.writingValue) ||
@@ -593,22 +594,24 @@ export class NgxMaskService extends NgxMaskApplierService {
         const outputTransformFn = this.outputTransformFn
             ? this.outputTransformFn
             : (v: unknown) => v;
-        if (this.writingValue && !inputValue) {
-            this.onChange(outputTransformFn(null));
-            return;
-        }
-        if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
-            this.onChange(
-                outputTransformFn(
-                    this._toNumber(
-                        this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
-                    )
-                )
-            );
-            this.writingValue = false;
-            this.maskChanged = false;
-            return;
-        }
+        this.writingValue = false;
+        this.maskChanged = false;
+        // if (this.writingValue && !inputValue) {
+        //     this.onChange(outputTransformFn(null));
+        //     return;
+        // }
+        // if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
+        //     this.onChange(
+        //         outputTransformFn(
+        //             this._toNumber(
+        //                 this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
+        //             )
+        //         )
+        //     );
+        //     this.writingValue = false;
+        //     this.maskChanged = false;
+        //     return;
+        // }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 outputTransformFn(
