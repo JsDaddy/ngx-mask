@@ -596,22 +596,6 @@ export class NgxMaskService extends NgxMaskApplierService {
             : (v: unknown) => v;
         this.writingValue = false;
         this.maskChanged = false;
-        // if (this.writingValue && !inputValue) {
-        //     this.onChange(outputTransformFn(null));
-        //     return;
-        // }
-        // if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
-        //     this.onChange(
-        //         outputTransformFn(
-        //             this._toNumber(
-        //                 this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
-        //             )
-        //         )
-        //     );
-        //     this.writingValue = false;
-        //     this.maskChanged = false;
-        //     return;
-        // }
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 outputTransformFn(
