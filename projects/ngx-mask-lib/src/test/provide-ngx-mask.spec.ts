@@ -2,13 +2,8 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import {
-    provideEnvironmentNgxMask,
-    NgxMaskDirective,
-    NgxMaskService,
-    NgxMaskConfig,
-} from 'ngx-mask';
-import type { NgxMaskOptions } from 'ngx-mask';
+import { provideEnvironmentNgxMask, NgxMaskDirective, NgxMaskService } from 'ngx-mask';
+import type { NgxMaskOptions, NgxMaskConfig } from 'ngx-mask';
 import { Component, EventEmitter } from '@angular/core';
 
 function createComponentWithDefaultConfigAndSimpleInputs(
