@@ -362,4 +362,26 @@ describe('Pipe: Mask', () => {
         expect(valueWithSuffix).toEqual('55 (555) DDD');
         expect(valueWithPrefix).toEqual('DDD 55 (555)');
     });
+
+    it('should work as expected with few mask in one expression 0000||00000', () => {
+        const value: string | number = maskPipe.transform('1234', '0000||00000');
+        const value1: string | number = maskPipe.transform('12345', '0000||00000');
+
+        expect(value).toEqual('1234');
+        expect(value1).toEqual('12345');
+    });
+
+    it('should work as expected with few mask in one expression 0000||00000', () => {
+        const value: string | number = maskPipe.transform(
+            '1234567890',
+            '(00) 0000-0000||(00) 0.0000-0000'
+        );
+        const value1: string | number = maskPipe.transform(
+            '12345678901',
+            '(00) 0000-0000||(00) 0.0000-0000'
+        );
+
+        expect(value).toEqual('(12) 3456-7890');
+        expect(value1).toEqual('(12) 3.4567-8901');
+    });
 });

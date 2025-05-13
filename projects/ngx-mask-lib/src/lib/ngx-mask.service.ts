@@ -14,7 +14,6 @@ export class NgxMaskService extends NgxMaskApplierService {
     public selEnd: number | null = null;
     public maskChanged = false;
     public maskExpressionArray: string[] = [];
-    public triggerOnMaskChange = false;
     public previousValue = '';
     public currentValue = '';
     /**
@@ -265,20 +264,16 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (result || result === '') {
             this.previousValue = this.currentValue;
             this.currentValue = result;
+
             this._emitValue =
                 this.previousValue !== this.currentValue ||
-                this.maskChanged ||
-                this.writingValue ||
+                (newInputValue !== this.currentValue && this.writingValue) ||
                 (this.previousValue === this.currentValue && justPasted);
         }
 
         // Propagate the input value back to the Angular model
         // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-        this._emitValue
-            ? this.writingValue && this.triggerOnMaskChange
-                ? requestAnimationFrame(() => this.formControlResult(result))
-                : this.formControlResult(result)
-            : '';
+        this._emitValue ? this.formControlResult(result) : '';
 
         // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -596,28 +591,14 @@ export class NgxMaskService extends NgxMaskApplierService {
      * @param inputValue the current form input value
      */
     private formControlResult(inputValue: string): void {
-        if (this.writingValue && !inputValue) {
-            this.onChange(this.outputTransformFn(null));
-            return;
-        }
-        if (this.writingValue || (!this.triggerOnMaskChange && this.maskChanged)) {
-            // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-            this.triggerOnMaskChange && this.maskChanged
-                ? this.onChange(
-                      this.outputTransformFn(
-                          this._toNumber(
-                              this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
-                          )
-                      )
-                  )
-                : '';
-            this.writingValue = false;
-            this.maskChanged = false;
-            return;
-        }
+        const outputTransformFn = this.outputTransformFn
+            ? this.outputTransformFn
+            : (v: unknown) => v;
+        this.writingValue = false;
+        this.maskChanged = false;
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
-                this.outputTransformFn(
+                outputTransformFn(
                     this._toNumber(
                         this._checkSymbols(
                             this._removeMask(
@@ -633,14 +614,14 @@ export class NgxMaskService extends NgxMaskApplierService {
             (!this.dropSpecialCharacters && this.prefix === inputValue)
         ) {
             this.onChange(
-                this.outputTransformFn(
+                outputTransformFn(
                     this._toNumber(
                         this._checkSymbols(this._removeSuffix(this._removePrefix(inputValue)))
                     )
                 )
             );
         } else {
-            this.onChange(this.outputTransformFn(this._toNumber(inputValue)));
+            this.onChange(outputTransformFn(this._toNumber(inputValue)));
         }
     }
 

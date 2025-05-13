@@ -13,14 +13,11 @@ import { NgxMaskDirective } from 'ngx-mask';
     ],
     template: `
         <div>
-            <label>
-                <input type="radio" [formControl]="radio" value="de" />
-                DE
-            </label>
-            <label>
-                <input type="radio" [formControl]="radio" value="ch" />
-                CH
-            </label>
+            <label for="radio-de">DE</label>
+            <input id="radio-de" type="radio" [formControl]="radio" value="de" />
+
+            <label for="radio-ch">CH</label>
+            <input id="radio-ch" type="radio" [formControl]="radio" value="ch" />
 
             <input
                 id="masked"

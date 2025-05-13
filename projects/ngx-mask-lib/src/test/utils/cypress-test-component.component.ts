@@ -31,10 +31,13 @@ import { toSignal } from '@angular/core/rxjs-interop';
             [patterns]="patterns()"
             [keepCharacterPositions]="keepCharacterPositions()"
             [separatorLimit]="separatorLimit()"
-            [hiddenInput]="hiddenInput()" />
+            [hiddenInput]="hiddenInput()"
+            [inputTransformFn]="inputTransformFn()"
+            [outputTransformFn]="outputTransformFn()" />
 
         <pre id="pre">{{ counter$() }}</pre>
         <pre id="pre1">{{ form.value }}</pre>
+        <pre id="pristine">{{ form.pristine }}</pre>
         <div>
             {{ leadZeroDateTime() }}
         </div>
@@ -87,6 +90,14 @@ export class CypressTestMaskComponent {
 
     public specialCharacters = input<NgxMaskConfig['specialCharacters']>(
         this._config.specialCharacters
+    );
+
+    public inputTransformFn = input<NgxMaskConfig['inputTransformFn'] | null>(
+        this._config.inputTransformFn
+    );
+
+    public outputTransformFn = input<NgxMaskConfig['outputTransformFn'] | null>(
+        this._config.outputTransformFn
     );
 
     public form: FormControl = new FormControl('');
