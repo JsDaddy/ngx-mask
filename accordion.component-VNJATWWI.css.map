@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/libraries/open-source/accordion/accordion.component.scss"],
+  "sourcesContent": [".active {\n    .chevron-default,\n    .default-svg {\n        display: none;\n    }\n    .chevron-active,\n    .active-svg,\n    .panel {\n        display: block;\n    }\n\n    .accordion-title {\n        color: #ffd64d;\n    }\n}\n\n.non-active {\n    .accordion-title {\n        color: #ffffff;\n    }\n    .panel,\n    .chevron-active,\n    .active-svg {\n        display: none;\n    }\n    .chevron-default,\n    .default-svg {\n        display: block;\n    }\n\n    &:hover {\n        .chevron-default,\n        .default-svg {\n            display: none;\n        }\n        .chevron-active,\n        .active-svg {\n            display: block;\n        }\n    }\n}\n"],
+  "mappings": ";AACI,CAAA,OAAA,CAAA;AAAA,CAAA,OAAA,CAAA;AAEI,WAAA;;AAEJ,CAJA,OAIA,CAAA;AAAA,CAJA,OAIA,CAAA;AAAA,CAJA,OAIA,CAAA;AAGI,WAAA;;AAGJ,CAVA,OAUA,CAAA;AACI,SAAA;;AAKJ,CAAA,WAAA,CANA;AAOI,SAAA;;AAEJ,CAHA,WAGA,CAfA;AAeA,CAHA,WAGA,CAfA;AAeA,CAHA,WAGA,CAfA;AAkBI,WAAA;;AAEJ,CARA,WAQA,CAxBA;AAwBA,CARA,WAQA,CAxBA;AA0BI,WAAA;;AAIA,CAdJ,UAcI,OAAA,CA9BJ;AA8BI,CAdJ,UAcI,OAAA,CA9BJ;AAgCQ,WAAA;;AAEJ,CAlBJ,UAkBI,OAAA,CA9BJ;AA8BI,CAlBJ,UAkBI,OAAA,CA9BJ;AAgCQ,WAAA;;",
+  "names": []
+}

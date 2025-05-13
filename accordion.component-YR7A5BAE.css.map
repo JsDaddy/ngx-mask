@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/libraries/open-source/accordion/accordion.component.scss"],
-  "sourcesContent": [".non-active {\n    .accordion-title {\n        @apply text-full-white;\n    }\n    .panel,\n    .chevron-active,\n    .active-svg {\n        @apply hidden;\n    }\n    .chevron-default,\n    .default-svg {\n        @apply block;\n    }\n\n    &:hover {\n        .chevron-default,\n        .default-svg {\n            @apply hidden;\n        }\n        .chevron-active,\n        .active-svg {\n            @apply block;\n        }\n    }\n}\n\n.active {\n    .chevron-default,\n    .default-svg {\n        @apply hidden;\n    }\n    .chevron-active,\n    .active-svg,\n    .panel {\n        @apply block;\n    }\n\n    .accordion-title {\n        @apply text-yellow;\n    }\n}\n"],
-  "mappings": ";AAEQ,CAAA,WAAA,CAAA;AAAA,qBAAA;AAAA,SAAA,IAAA,IAAA,IAAA,IAAA,EAAA,IAAA,iBAAA,EAAA;AAAA;AAKA,CALA,WAKA,CAAA;CALA;CAAA;AAKA,WAAA;AAAA;AAIA,CATA,WASA,CAAA;CATA;AASA,WAAA;AAAA;AAMI,CAfJ,UAeI,OAAA,CANJ;CATA;AAeI,WAAA;AAAA;AAIA,CAnBJ,UAmBI,OAAA;CAnBJ;AAmBI,WAAA;AAAA;AAQJ,CAAA,OAAA,CAlBA;CAkBA;AAAA,WAAA;AAAA;AAKA,CALA,OAKA;CALA;CAAA,QAtBA;AA2BA,WAAA;AAAA;AAIA,CATA,OASA,CApCA;AAoCA,qBAAA;AAAA,SAAA,IAAA,IAAA,IAAA,GAAA,EAAA,IAAA,iBAAA,EAAA;AAAA;",
-  "names": []
-}
