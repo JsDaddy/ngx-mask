@@ -1,11 +1,17 @@
 # NGX-MASK
 
 <p align="center">
-  <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy Logo">
+  A powerful Angular directive for input masking with customizable patterns
 </p>
 
 <p align="center">
-  A powerful Angular directive for input masking with customizable patterns
+  Created with ❤️ by
+</p>
+
+<p align="center">
+  <a href="https://jsdaddy.io">
+    <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy" width="250">
+  </a>
 </p>
 
 <p align="center">
@@ -157,18 +163,3 @@ import { NgxMaskModule } from 'ngx-mask';
 @NgModule({ imports: [NgxMaskModule.forChild()] })
 export class FeatureModule {}
 ```
-
-## 📚 Documentation
-
-For detailed usage instructions and examples, please refer to our [Usage Documentation](https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md).
-
-## 🔗 Related Projects
-
-Check out our other Angular utilities:
-
-- [NGX Loader Indicator](https://www.npmjs.com/package/ngx-loader-indicator)
-- [NGX Copypaste](https://www.npmjs.com/package/ngx-copypaste)
-
-## 👥 Contributing
-
-We welcome contributions! Please read our [Contributing Guide](https://github.com/JsDaddy/ngx-mask/blob/develop/CONTRIBUTING.md) to get started.
