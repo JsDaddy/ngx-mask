@@ -1,214 +1,174 @@
-<a href="http://jsdaddy.io/img/logo.png">
-  <h1 align="center">NGX MASK</h1>
-</a>
+# NGX-MASK
 
 <p align="center">
-  NGX MASK is the best directive to solve masking input with needed pattern
+  <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy Logo">
 </p>
 
-[![CI](https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop)](https://github.com/JsDaddy/ngx-mask/actions/workflows/main.yml)
-[![npm](https://img.shields.io/npm/v/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
-[![npm downloads](https://img.shields.io/npm/dt/ngx-mask.svg)](https://npmjs.org/ngx-mask)
+<p align="center">
+  A powerful Angular directive for input masking with customizable patterns
+</p>
 
-[![npm](https://img.shields.io/npm/dm/ngx-mask.svg)](https://www.npmjs.com/package/ngx-mask)
+<p align="center">
+  <a href="https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml">
+    <img src="https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop" alt="CI">
+  </a>
+  <a href="https://www.npmjs.com/package/ngx-mask">
+    <img src="https://img.shields.io/npm/v/ngx-mask.svg" alt="npm version">
+  </a>
+  <a href="https://npmjs.org/ngx-mask">
+    <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads">
+  </a>
+  <a href="https://www.npmjs.com/package/ngx-mask">
+    <img src="https://img.shields.io/npm/dm/ngx-mask.svg" alt="npm monthly downloads">
+  </a>
+  <a href="https://github.com/JSDaddy/ngx-mask">
+    <img src="https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat" alt="GitHub contributors">
+  </a>
+  <a href="https://github.com/JSDaddy/ngx-mask">
+    <img src="https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat" alt="GitHub Stars">
+  </a>
+</p>
 
-[![GitHub contributors](https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat)](https://github.com/JSDaddy/ngx-mask)
+## 📖 Table of Contents
 
-[![GitHub stars](https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat)](https://github.com/JSDaddy/ngx-mask)
+- [Features](#features)
+- [Demo](#demo)
+- [Installation](#installation)
+- [Version Compatibility](#version-compatibility)
+- [Quick Start](#quick-start)
+    - [For Angular 15+ (Standalone)](#for-angular-15-standalone)
+    - [For Angular Modules](#for-angular-modules)
+- [Documentation](#documentation)
+- [Related Projects](#related-projects)
+- [Contributing](#contributing)
 
-You can also try our NGX LOADER INDICATOR [check](https://www.npmjs.com/package/ngx-loader-indicator).
-You can also try our NGX COPYPASTE [check](https://www.npmjs.com/package/ngx-copypaste).
+## ✨ Features
 
-### You can try live [documentation](https://jsdaddy.github.io/ngx-mask/) with examples
+NGX-MASK is a feature-rich input mask directive for Angular applications that helps you:
 
-## Installing
+- Format input values according to predefined patterns
+- Validate input against mask patterns
+- Support custom validation rules
+- Provide real-time input formatting
 
-## Angular version 17.x.x
+## 🚀 Demo
 
-## npm
+Check out our [live documentation and examples](https://jsdaddy.github.io/ngx-mask/)
+
+## 📦 Installation
 
 ```bash
-$ npm install --save ngx-mask
+# For Angular 17 and above
+$ npm install ngx-mask    # Using npm
+$ bun add ngx-mask       # Using bun
+
+# For specific Angular versions:
+# Angular 16.x.x
+$ npm install ngx-mask@16.4.2    # Using npm
+$ bun add ngx-mask@16.4.2       # Using bun
+
+# Angular 15.x.x
+$ npm install ngx-mask@15.2.3    # Using npm
+$ bun add ngx-mask@15.2.3       # Using bun
+
+# Angular 14.x.x
+$ npm install ngx-mask@14.3.3    # Using npm
+$ bun add ngx-mask@14.3.3       # Using bun
+
+# Angular 13.x.x or 12.x.x
+$ npm install ngx-mask@13.2.2    # Using npm
+$ bun add ngx-mask@13.2.2       # Using bun
 ```
 
-## bun
+> **Package Manager Note**: You can use either npm or bun based on your preference. Both package managers will work equally well with ngx-mask.
 
-```bash
-$ bun install --save ngx-mask
-```
+## 🔄 Version Compatibility
 
-Angular version 16.x.x
+NGX-MASK follows Angular's official support policy, supporting Active and LTS versions. Currently supported:
 
-```bash
-$ npm install --save ngx-mask@16.4.2
-```
+- Angular 17 and newer (latest features and updates)
+- For older Angular versions, use the corresponding NGX-MASK version as specified above
 
-Angular version 15.x.x
+> **Note**: Versions for Angular older than v17 will not receive new features or updates.
 
-```bash
-$ npm install --save ngx-mask@15.2.3
-```
+## 🚀 Quick Start
 
-Angular version 14.x.x
+### For Angular 15+ (Standalone)
 
-```bash
-$ npm install --save ngx-mask@14.3.3
-```
-
-Angular version 13.x.x or 12.x.x
-
-```bash
-$ npm install --save ngx-mask@13.2.2
-```
-
-## Quickstart if ngx-mask version >= 15.0.0
-
-Import **ngx-mask** directive, pipe and provide NgxMask providers with `provideNgxMask` function.
-
-### With default config options application level
+#### Application-wide Setup with Default Config
 
 ```typescript
-bootstrapApplication(AppComponent, {
-    providers: [
-        (...)
-        provideEnvironmentNgxMask(),
-        (...)
-    ],
-}).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, { providers: [provideEnvironmentNgxMask()] }).catch((err) =>
+    console.error(err)
+);
 ```
 
-### Passing your own mask config options
+#### With Custom Configuration
 
 ```typescript
-import { NgxMaskConfig } from 'ngx-mask'
+import { NgxMaskConfig } from 'ngx-mask';
 
-const maskConfig: Partial<NgxMaskConfig> = {
-  validation: false,
-};
+const maskConfig: Partial<NgxMaskConfig> = { validation: false };
 
-bootstrapApplication(AppComponent, {
-    providers: [
-        (...)
-        provideEnvironmentNgxMask(maskConfig),
-        (...)
-    ],
-}).catch((err) => console.error(err));
+bootstrapApplication(AppComponent, { providers: [provideEnvironmentNgxMask(maskConfig)] }).catch(
+    (err) => console.error(err)
+);
 ```
 
-### Using a function to configure:
-
-```typescript
-const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
-  return {
-    validation: false,
-  };
-};
-
-bootstrapApplication(AppComponent, {
-    providers: [
-         (...)
-         provideEnvironmentNgxMask(maskConfigFunction),
-         (...)
-],
-}).catch((err) => console.error(err));
-```
-
-### With config options feature level
+#### Feature-level Configuration
 
 ```typescript
 @Component({
     selector: 'my-feature',
-    templateUrl: './my-feature.component.html',
-    styleUrls: ['./my-feature.component.css'],
     standalone: true,
-    imports: [NgxMaskDirective, (...)],
-    providers: [
-          (...)
-          provideNgxMask(),
-          (...)
-    ],
+    imports: [NgxMaskDirective],
+    providers: [provideNgxMask()],
 })
 export class MyFeatureComponent {}
 ```
 
-Then, import directive, pipe to needed standalone component and just define masks in inputs.
+### For Angular < 15 (NgModule)
 
-### With Angular modules
-
-```typescript
-@NgModule({
-  imports: [
-      NgxMaskDirective, NgxMaskPipe
-  ],
-  providers: [provideNgxMask()]
-})
-```
-
-## Quickstart if ngx-mask version < 15.0.0
-
-For version ngx-mask < 15.0.0
-Import **ngx-mask** module in Angular app.
-
-### With default mask config options
+#### Application-wide Setup with Default Config
 
 ```typescript
-import { NgxMaskModule, NgxMaskConfig } from 'ngx-mask'
+import { NgxMaskModule } from 'ngx-mask';
 
-export const options: Partial<null | NgxMaskConfig> | (() => Partial<NgxMaskConfig>) = null;
-
-@NgModule({
-  imports: [
-    NgxMaskModule.forRoot(),
-  ],
-})
+@NgModule({ imports: [NgxMaskModule.forRoot()] })
+export class AppModule {}
 ```
 
-### Passing in your own mask config options
+#### With Custom Configuration
 
 ```typescript
-import { NgxMaskModule, NgxMaskConfig } from 'ngx-mask'
+import { NgxMaskModule, NgxMaskConfig } from 'ngx-mask';
 
-const maskConfig: Partial<NgxMaskConfig> = {
-  validation: false,
-};
+const maskConfig: Partial<NgxMaskConfig> = { validation: false };
 
-@NgModule({
-  imports: [
-    NgxMaskModule.forRoot(maskConfig),
-  ],
-})
+@NgModule({ imports: [NgxMaskModule.forRoot(maskConfig)] })
+export class AppModule {}
 ```
 
-Or using a function to get the config:
+#### Feature-level Configuration
 
 ```typescript
-const maskConfigFunction: () => Partial<NgxMaskConfig> = () => {
-  return {
-    validation: false,
-  };
-};
+import { NgxMaskModule } from 'ngx-mask';
 
-@NgModule({
-  imports: [
-    NgxMaskModule.forRoot(maskConfigFunction),
-  ],
-})
+@NgModule({ imports: [NgxMaskModule.forChild()] })
+export class FeatureModule {}
 ```
 
-Then, just define masks in inputs.
+## 📚 Documentation
 
-## Actively supported versions
+For detailed usage instructions and examples, please refer to our [Usage Documentation](https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md).
 
-ngx-mask follows the official Angular support policy, supporting the Active and LTS (Long-Term Support) versions of Angular. As of the latest release, Angular v17 and newer are supported.
+## 🔗 Related Projects
 
-Projects using Angular versions outside the supported range (e.g., older than v17) should use the last compatible version of ngx-mask. However, these versions will no longer receive updates, bug fixes, or new features.
+Check out our other Angular utilities:
 
-For detailed information about Angular's versioning and support schedule, visit the official [Angular releases page](https://angular.dev/reference/releases#actively-supported-versions).
+- [NGX Loader Indicator](https://www.npmjs.com/package/ngx-loader-indicator)
+- [NGX Copypaste](https://www.npmjs.com/package/ngx-copypaste)
 
-## Usage
+## 👥 Contributing
 
-Text [documentation](https://github.com/JsDaddy/ngx-mask/blob/develop/USAGE.md)
-
-## Contributing
-
-We would love some contributions! Check out this [document](https://github.com/JsDaddy/ngx-mask/blob/develop/CONTRIBUTING.md) to get started.
+We welcome contributions! Please read our [Contributing Guide](https://github.com/JsDaddy/ngx-mask/blob/develop/CONTRIBUTING.md) to get started.

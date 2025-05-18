@@ -1,17 +1,27 @@
 name: build and quality
 
-on: [push]
+on:
+    push:
+        branches:
+            - '**'
+    pull_request:
+        branches:
+            - main
+            - develop
+        types: [opened, synchronize, reopened]
 
 jobs:
     quality-check:
         runs-on: ubuntu-latest
         permissions:
             contents: write
+            pull-requests: write
         steps:
             - uses: actions/checkout@v4
               with:
                   submodules: true
-                  ref: ${{ env.REF }}
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
             - uses: oven-sh/setup-bun@v2
               with:
                   bun-version: latest
