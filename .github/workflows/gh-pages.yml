@@ -60,7 +60,7 @@ jobs:
         steps:
             - name: Post to a Slack channel
               id: slack
-              uses: slackapi/slack-github-action@v1.27.0
+              uses: slackapi/slack-github-action@v1.28.0
               with:
                   channel-id: 'deployments'
                   payload: |

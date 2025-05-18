@@ -6,6 +6,8 @@
         "no-empty-source": null,
         "scss/comment-no-empty": null,
         "no-descending-specificity": null,
+        "at-rule-no-unknown": null,
+        "at-rule-no-deprecated": null,
         "selector-type-no-unknown": [
             true,
             {
