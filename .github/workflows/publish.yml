@@ -45,9 +45,11 @@ jobs:
         steps:
             - name: Post to a Slack channel
               id: slack
-              uses: slackapi/slack-github-action@v1.28.0
+              uses: slackapi/slack-github-action@v2.0.0
               with:
+                  method: chat.postMessage
                   channel-id: 'deployments'
+                  token: ${{ secrets.SLACK_BOT_TOKEN }}
                   payload: |
                       {
                         "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
