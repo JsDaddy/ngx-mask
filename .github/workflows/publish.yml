@@ -48,11 +48,11 @@ jobs:
               uses: slackapi/slack-github-action@v2.0.0
               with:
                   method: chat.postMessage
-                  channel: 'deployments'
                   token: ${{ secrets.SLACK_BOT_TOKEN }}
                   payload: |
                       {
                         "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
+                        "channel": "deployments",
                         "blocks": [
                           {
                             "type": "section",
