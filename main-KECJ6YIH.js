@@ -50199,7 +50199,7 @@ var AppComponent = class _AppComponent {
   static \u0275fac = function AppComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AppComponent)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.17.2" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.17.3" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0);
       \u0275\u0275text(1, "\n    ");
@@ -50259,7 +50259,7 @@ var AppComponent = class _AppComponent {
       SubHeaderComponent,
       AccordionComponent,
       FooterComponent
-    ], providers: [{ provide: VersionToken, useValue: "1.17.2" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-5KU22IJE.css.map */\n"] }]
+    ], providers: [{ provide: VersionToken, useValue: "1.17.3" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-5KU22IJE.css.map */\n"] }]
   }], null, null);
 })();
 (() => {
@@ -54734,4 +54734,4 @@ bootstrapApplication(AppComponent, {
    * found in the LICENSE file at https://angular.dev/license
    *)
 */
-//# sourceMappingURL=main-2DVENWCA.js.map
+//# sourceMappingURL=main-KECJ6YIH.js.map
