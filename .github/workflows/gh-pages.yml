@@ -21,7 +21,7 @@ jobs:
 
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 22
 
             - name: Install deps
               run: |
@@ -63,7 +63,7 @@ jobs:
               uses: slackapi/slack-github-action@v2.0.0
               with:
                   method: chat.postMessage
-                  channel-id: 'deployments'
+                  channel: 'deployments'
                   token: ${{ secrets.SLACK_BOT_TOKEN }}
                   payload: |
                       {
