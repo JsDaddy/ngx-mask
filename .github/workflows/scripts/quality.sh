@@ -4,8 +4,6 @@ set -e
 
 bun lint
 
-# run snyk:auth -- $snyk_token
-# bun run snyk:test
 
 output=$(bun run type-coverage)
 if echo "$output" | grep -q "lower than "; then
