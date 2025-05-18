@@ -11,7 +11,16 @@ on:
         types: [opened, synchronize, reopened]
 
 jobs:
+    should-run:
+        runs-on: ubuntu-latest
+        outputs:
+            should-run-check: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository }}
+        steps:
+            - run: echo "Checking if workflow should run"
+
     quality-check:
+        needs: should-run
+        if: needs.should-run.outputs.should-run-check == 'true'
         runs-on: ubuntu-latest
         permissions:
             contents: write
