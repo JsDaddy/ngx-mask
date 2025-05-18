@@ -1,7 +1,7 @@
-# NGX-MASK
+<h1 align="center">NGX-MASK</h1>
 
 <p align="center">
-  A powerful Angular directive for input masking with customizable patterns
+A powerful Angular directive for input masking with customizable patterns
 </p>
 
 <p align="center">
@@ -38,13 +38,6 @@
 ## Table of Contents
 
 - [Features](#features)
-    - [Flexible Masking Patterns](#flexible-masking-patterns)
-    - [Number Formatting](#number-formatting)
-    - [Advanced Input Control](#advanced-input-control)
-    - [Date and Time Formatting](#date-and-time-formatting)
-    - [Customization Options](#customization-options)
-    - [Form Integration](#form-integration)
-    - [User Experience](#user-experience)
 - [Demo](#demo)
 - [Installation](#installation)
 - [Version Compatibility](#version-compatibility)
@@ -56,58 +49,92 @@
 
 ## Features
 
-NGX-MASK is a feature-rich input mask directive for Angular applications that helps you:
+NGX-MASK is a feature-rich input mask directive for Angular applications that provides:
 
-### Flexible Masking Patterns
+<table>
+<tr>
+<td width="33%" valign="top">
 
-- Support for custom mask patterns and expressions
-- Multiple mask patterns using OR operator (|)
-- Built-in patterns for common use cases (dates, numbers, etc.)
-- Custom prefix and suffix support
+### 🎯 Masking Patterns
 
-### Number Formatting
+• Custom patterns & expressions
 
-- Configurable thousand separators
-- Decimal marker customization
-- Negative numbers support
-- Leading zeros handling
+• Multiple mask patterns (|)
 
-### Advanced Input Control
+• Built-in common patterns
 
-- Real-time input validation
-- Clear on non-match option
-- Show/hide mask typing
-- Keep character positions feature
-- Instant prefix application
-- Hidden input support
+• Prefix & suffix support
 
-### Date and Time Formatting
+</td>
+<td width="33%" valign="top">
 
-- Leading zero handling for date/time
-- AM/PM support
-- Configurable separators
-- Multiple date formats
+### 🔢 Number Formatting
 
-### Customization Options
+• Thousand separators
 
-- Custom placeholder characters
-- Special characters handling
-- Input/Output transformation functions
-- Custom validation rules
+• Decimal markers
 
-### Form Integration
+• Negative numbers
 
-- Works with Angular Reactive Forms
-- Implements ControlValueAccessor
-- Built-in form validation
-- Supports standalone and NgModule setups
+• Leading zeros
 
-### User Experience
+</td>
+<td width="33%" valign="top">
 
-- IME composition support
-- Copy/paste handling
-- Cursor position management
-- Mobile-friendly input handling
+### ⚡ Input Control
+
+• Real-time validation
+
+• Clear on non-match
+
+• Show/hide mask typing
+
+• Keep character positions
+
+</td>
+</tr>
+<tr>
+<td width="33%" valign="top">
+
+### 📅 Date & Time
+
+• Leading zero handling
+
+• AM/PM support
+
+• Custom separators
+
+• Multiple formats
+
+</td>
+<td width="33%" valign="top">
+
+### 🛠️ Customization
+
+• Custom placeholders
+
+• Special characters
+
+• Transform functions
+
+• Custom validation
+
+</td>
+<td width="33%" valign="top">
+
+### 📋 Form Integration
+
+• Reactive Forms
+
+• ControlValueAccessor
+
+• Built-in validation
+
+• Standalone support
+
+</td>
+</tr>
+</table>
 
 ## Demo
 
