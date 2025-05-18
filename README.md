@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="https://jsdaddy.io">
-    <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy" width="250">
+    <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy" width="75">
   </a>
 </p>
 
@@ -35,33 +35,85 @@
   </a>
 </p>
 
-## 📖 Table of Contents
+## Table of Contents
 
 - [Features](#features)
+    - [Flexible Masking Patterns](#flexible-masking-patterns)
+    - [Number Formatting](#number-formatting)
+    - [Advanced Input Control](#advanced-input-control)
+    - [Date and Time Formatting](#date-and-time-formatting)
+    - [Customization Options](#customization-options)
+    - [Form Integration](#form-integration)
+    - [User Experience](#user-experience)
 - [Demo](#demo)
 - [Installation](#installation)
 - [Version Compatibility](#version-compatibility)
 - [Quick Start](#quick-start)
     - [For Angular 15+ (Standalone)](#for-angular-15-standalone)
     - [For Angular Modules](#for-angular-modules)
-- [Documentation](#documentation)
 - [Related Projects](#related-projects)
 - [Contributing](#contributing)
 
-## ✨ Features
+## Features
 
 NGX-MASK is a feature-rich input mask directive for Angular applications that helps you:
 
-- Format input values according to predefined patterns
-- Validate input against mask patterns
-- Support custom validation rules
-- Provide real-time input formatting
+### Flexible Masking Patterns
 
-## 🚀 Demo
+- Support for custom mask patterns and expressions
+- Multiple mask patterns using OR operator (|)
+- Built-in patterns for common use cases (dates, numbers, etc.)
+- Custom prefix and suffix support
+
+### Number Formatting
+
+- Configurable thousand separators
+- Decimal marker customization
+- Negative numbers support
+- Leading zeros handling
+
+### Advanced Input Control
+
+- Real-time input validation
+- Clear on non-match option
+- Show/hide mask typing
+- Keep character positions feature
+- Instant prefix application
+- Hidden input support
+
+### Date and Time Formatting
+
+- Leading zero handling for date/time
+- AM/PM support
+- Configurable separators
+- Multiple date formats
+
+### Customization Options
+
+- Custom placeholder characters
+- Special characters handling
+- Input/Output transformation functions
+- Custom validation rules
+
+### Form Integration
+
+- Works with Angular Reactive Forms
+- Implements ControlValueAccessor
+- Built-in form validation
+- Supports standalone and NgModule setups
+
+### User Experience
+
+- IME composition support
+- Copy/paste handling
+- Cursor position management
+- Mobile-friendly input handling
+
+## Demo
 
 Check out our [live documentation and examples](https://jsdaddy.github.io/ngx-mask/)
 
-## 📦 Installation
+## Installation
 
 ```bash
 # For Angular 17 and above
@@ -88,7 +140,7 @@ $ bun add ngx-mask@13.2.2       # Using bun
 
 > **Package Manager Note**: You can use either npm or bun based on your preference. Both package managers will work equally well with ngx-mask.
 
-## 🔄 Version Compatibility
+## Version Compatibility
 
 NGX-MASK follows Angular's official support policy, supporting Active and LTS versions. Currently supported:
 
@@ -97,7 +149,7 @@ NGX-MASK follows Angular's official support policy, supporting Active and LTS ve
 
 > **Note**: Versions for Angular older than v17 will not receive new features or updates.
 
-## 🚀 Quick Start
+## Quick Start
 
 ### For Angular 15+ (Standalone)
 
@@ -163,3 +215,14 @@ import { NgxMaskModule } from 'ngx-mask';
 @NgModule({ imports: [NgxMaskModule.forChild()] })
 export class FeatureModule {}
 ```
+
+## Related Projects
+
+Check out other projects by JSDaddy:
+
+- [ngx-copypaste](https://github.com/JsDaddy/ngx-copypaste)
+- [ngx-loader-indicator](https://github.com/JsDaddy/ngx-loader-indicator)
+
+## Contributing
+
+We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) to learn about our development process and how you can propose bugfixes and improvements.
