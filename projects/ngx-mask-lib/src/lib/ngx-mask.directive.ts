@@ -14,6 +14,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { NgxMaskFaultDetectionService } from './ngx-mask-fault-detection.service';
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
@@ -30,6 +31,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
             multi: true,
         },
         NgxMaskService,
+        NgxMaskFaultDetectionService,
     ],
     exportAs: 'mask,ngxMask',
 })
@@ -73,11 +75,11 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     public _maskService = inject(NgxMaskService, { self: true });
 
-    private readonly document = inject(DOCUMENT);
+    public _maskFaultDetector = inject(NgxMaskFaultDetectionService, { self: true });
 
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public onChange = (_: any) => {};
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -1018,7 +1020,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+                    this.getNextValue(inputValue),
                 ];
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
@@ -1030,9 +1032,19 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
             // eslint-disable-next-line no-console
             console.warn(
                 'Ngx-mask writeValue work with string | number, your current value:',
-                typeof value
+                typeof controlValue
             );
         }
+    }
+
+    private getNextValue(inputValue: string): string {
+        const maskedValue = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+        const maskingFault = this._maskFaultDetector.maskApplicationFault(maskedValue, inputValue); 
+        if (!maskingFault) {
+            return maskedValue;
+        }
+        
+        return inputValue;
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

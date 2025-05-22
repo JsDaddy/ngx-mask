@@ -4,6 +4,7 @@ import { inject, makeEnvironmentProviders } from '@angular/core';
 import type { NgxMaskOptions } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, INITIAL_CONFIG, initialConfig, NEW_CONFIG } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
+import { NgxMaskFaultDetectionService } from './ngx-mask-fault-detection.service';
 
 /**
  * @internal
@@ -32,6 +33,7 @@ export function provideNgxMask(configValue?: NgxMaskOptions | (() => NgxMaskOpti
             useFactory: _configFactory,
         },
         NgxMaskService,
+        NgxMaskFaultDetectionService
     ];
 }
 
