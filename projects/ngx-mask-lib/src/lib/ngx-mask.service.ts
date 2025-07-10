@@ -1,5 +1,5 @@
-import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
-import { DOCUMENT } from '@angular/common';
+import { ElementRef, inject, Injectable, Renderer2, DOCUMENT } from '@angular/core';
+
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';

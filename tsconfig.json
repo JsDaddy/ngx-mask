@@ -1,42 +1,51 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "baseUrl": "./",
-        "downlevelIteration": true,
-        "importHelpers": true,
-        "outDir": "./dist/out-tsc",
-        "sourceMap": true,
-        "esModuleInterop": true,
-        "declaration": false,
-        "module": "ES2022",
-        "experimentalDecorators": true,
-        "strict": true,
-        "target": "ES2022",
-        "lib": ["ES2022", "dom"],
-        "paths": {
-            "@libraries/*": ["src/libraries/*"],
-            "@open-source/*": ["src/libraries/open-source/*"],
-            "ngx-mask": ["projects/ngx-mask-lib/src"],
-            "ngx-mask/*": ["projects/ngx-mask-lib/src"]
-        },
-        "moduleResolution": "node",
-        "forceConsistentCasingInFileNames": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
-        "noUncheckedIndexedAccess": true,
-        "useUnknownInCatchVariables": true,
-        "exactOptionalPropertyTypes": true,
-        "removeComments": true,
-        "resolveJsonModule": true,
-        "allowSyntheticDefaultImports": true,
-        "noImplicitOverride": true,
-        "noPropertyAccessFromIndexSignature": true,
-        "skipLibCheck": true,
-        "noImplicitAny": true,
-        "useDefineForClassFields": true,
-        "isolatedModules": true
+      "baseUrl": "./",
+      "importHelpers": true,
+      "outDir": "./dist/out-tsc",
+      "sourceMap": true,
+      "esModuleInterop": true,
+      "declaration": false,
+      "module": "ES2022",
+      "experimentalDecorators": true,
+      "strict": true,
+      "target": "ES2022",
+      "lib": [
+        "ES2022",
+        "dom"
+      ],
+      "paths": {
+        "@libraries/*": [
+          "src/libraries/*"
+        ],
+        "@open-source/*": [
+          "src/libraries/open-source/*"
+        ],
+        "ngx-mask": [
+          "projects/ngx-mask-lib/src"
+        ],
+        "ngx-mask/*": [
+          "projects/ngx-mask-lib/src"
+        ]
+      },
+      "moduleResolution": "bundler",
+      "forceConsistentCasingInFileNames": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUncheckedIndexedAccess": true,
+      "useUnknownInCatchVariables": true,
+      "exactOptionalPropertyTypes": true,
+      "removeComments": true,
+      "resolveJsonModule": true,
+      "noImplicitOverride": true,
+      "noPropertyAccessFromIndexSignature": true,
+      "skipLibCheck": true,
+      "noImplicitAny": true,
+      "useDefineForClassFields": true,
+      "isolatedModules": true
     },
     "angularCompilerOptions": {
         "strictStandalone": true,
