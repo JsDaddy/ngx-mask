@@ -72,6 +72,7 @@
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
                         "inlineStyleLanguage": "scss",
+                        "sourceMap": true,
                         "assets": ["src/favicon.ico", "src/assets"],
                         "polyfills": ["zone.js", "zone.js/testing"],
                         "styles": ["src/styles.scss"],
