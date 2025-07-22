@@ -62,7 +62,7 @@ describe('Separator: Mask', () => {
     it('separator for -100000', () => {
         component.mask.set('separator');
         component.allowNegativeNumbers.set(true);
-        equal('-100000', '-100 000', fixture);
+        equal('-100000', '-100 000111', fixture);
     });
 
     it('separator for 100000', () => {
