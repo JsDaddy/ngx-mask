@@ -19,7 +19,7 @@
             "ngx-mask": ["projects/ngx-mask-lib/src"],
             "ngx-mask/*": ["projects/ngx-mask-lib/src"]
         },
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "forceConsistentCasingInFileNames": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
