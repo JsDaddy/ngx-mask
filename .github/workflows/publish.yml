@@ -19,7 +19,7 @@ jobs:
                   bun-version: latest
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 22
                   registry-url: https://registry.npmjs.org/
             - name: Build library
               run: |
@@ -45,12 +45,14 @@ jobs:
         steps:
             - name: Post to a Slack channel
               id: slack
-              uses: slackapi/slack-github-action@v1.27.0
+              uses: slackapi/slack-github-action@v2.0.0
               with:
-                  channel-id: 'deployments'
+                  method: chat.postMessage
+                  token: ${{ secrets.SLACK_BOT_TOKEN }}
                   payload: |
                       {
                         "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
+                        "channel": "deployments",
                         "blocks": [
                           {
                             "type": "section",

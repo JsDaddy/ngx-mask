@@ -1,23 +1,42 @@
 name: build and quality
 
-on: [push]
+on:
+    push:
+        branches:
+            - '**'
+    pull_request:
+        branches:
+            - main
+            - develop
+        types: [opened, synchronize, reopened]
 
 jobs:
+    should-run:
+        runs-on: ubuntu-latest
+        outputs:
+            should-run-check: ${{ github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository }}
+        steps:
+            - run: echo "Checking if workflow should run"
+
     quality-check:
+        needs: should-run
+        if: needs.should-run.outputs.should-run-check == 'true'
         runs-on: ubuntu-latest
         permissions:
             contents: write
+            pull-requests: write
         steps:
             - uses: actions/checkout@v4
               with:
                   submodules: true
-                  ref: ${{ env.REF }}
+                  ref: ${{ github.event.pull_request.head.sha }}
+                  fetch-depth: 0
             - uses: oven-sh/setup-bun@v2
               with:
                   bun-version: latest
             - uses: actions/setup-node@v4
               with:
-                  node-version: 20
+                  node-version: 22
             - name: Check quality
               run: |
                   bun i

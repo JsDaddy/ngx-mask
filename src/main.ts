@@ -8,11 +8,11 @@ import { provideHttpClient } from '@angular/common/http';
 import { BaseHttpService } from '@libraries/base-http/base-http.service';
 import { DOMAIN } from '@libraries/token/token';
 import { GithubStarsService } from '@libraries/github/github-stars.service';
-import { provideExperimentalZonelessChangeDetection } from '@angular/core';
+import { provideZonelessChangeDetection } from '@angular/core';
 
 bootstrapApplication(AppComponent, {
     providers: [
-        provideExperimentalZonelessChangeDetection(),
+        provideZonelessChangeDetection(),
         GithubStarsService,
         provideHttpClient(),
         {
