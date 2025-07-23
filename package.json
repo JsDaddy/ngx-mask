@@ -127,6 +127,9 @@
         "cssnano": "7.1.0",
         "postcss-scss": "4.0.9"
     },
+    "overrides": {
+        "stylus": "0.0.1-security"
+    },
     "typeCoverage": {
         "atLeast": 91,
         "ignoreObject": true,
