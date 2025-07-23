@@ -77,8 +77,7 @@
         "rxjs": "7.8.2",
         "semantic-release": "24.2.7",
         "semantic-release-export-data": "1.1.1",
-        "snyk": "1.1298.1",
-        "stylus": "^0.0.1-security"
+        "snyk": "1.1298.1"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "20.1.1",
@@ -127,6 +126,9 @@
         "postcss-nesting": "13.0.2",
         "cssnano": "7.1.0",
         "postcss-scss": "4.0.9"
+    },
+    "overrides": {
+        "stylus": "0.0.1-security"
     },
     "typeCoverage": {
         "atLeast": 91,
