@@ -67,16 +67,16 @@ describe('Separator: Mask', () => {
         expect(component.form.value).toBe('10.200');
     });
 
-    // it('separator.8 should return number value', async () => {
-    //     component.mask.set('separator.8');
-    //     component.thousandSeparator.set('.');
-    //     component.decimalMarker.set(',');
-    //
-    //     equal('12,34', '12,34', fixture);
-    //
-    //     await fixture.whenStable();
-    //     expect(component.form.value).toBe(12.34);
-    // });
+    it('separator.8 should return value', async () => {
+        component.mask.set('separator.8');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+
+        equal('12,34', '12,34', fixture);
+
+        await fixture.whenStable();
+        expect(component.form.value).toBe('12.34');
+    });
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', async () => {
         component.mask.set('separator.2');
