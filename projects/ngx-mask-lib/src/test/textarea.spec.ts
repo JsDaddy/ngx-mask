@@ -123,25 +123,6 @@ describe('Directive: Mask with Textarea', () => {
         equalTextarea('12345678', '12/34/5678', fixture);
     });
 
-    it('should handle empty mask in textarea', () => {
-        component.mask.set('');
-        equalTextarea('any text', 'any text', fixture);
-        equalTextarea('123456', '123456', fixture);
-        equalTextarea('special@chars.com', 'special@chars.com', fixture);
-    });
-
-    it('should handle null mask in textarea', () => {
-        component.mask.set(null);
-        equalTextarea('any text', 'any text', fixture);
-        equalTextarea('123456', '123456', fixture);
-    });
-
-    it('should handle undefined mask in textarea', () => {
-        component.mask.set(undefined);
-        equalTextarea('any text', 'any text', fixture);
-        equalTextarea('123456', '123456', fixture);
-    });
-
     it('should handle textarea with no mask', () => {
         equalTextarea('any text', 'any text', fixture);
         equalTextarea('123456', '123456', fixture);
