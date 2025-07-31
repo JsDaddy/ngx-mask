@@ -207,4 +207,18 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('123', '+38 123', fixture);
         equal('1234', '+38 1234', fixture);
     });
+
+    it('should not remove prefix-like digits from pasted value if it is not a real prefix', () => {
+        component.mask.set('000/00000');
+        component.prefix.set('06');
+
+        equal('06774/41561', '06774/41561', fixture, false, Paste);
+    });
+
+    it('should remove prefix only if pasted value is real prefix', () => {
+        component.mask.set('000/00000');
+        component.prefix.set('06');
+
+        equal('06062/41561', '06062/41561', fixture, false, Paste);
+    });
 });
