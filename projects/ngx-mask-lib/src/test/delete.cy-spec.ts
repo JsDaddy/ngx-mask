@@ -362,4 +362,38 @@ describe('Directive: Mask (Delete)', () => {
             .type('{backspace}'.repeat(5))
             .should('have.value', '__:__');
     });
+
+    it('separator with suffix should replace cursor in right place with thousandSeparator ,', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                suffix: signal(' EUR'),
+                thousandSeparator: signal(','),
+            },
+        });
+
+        cy.get('#masked')
+            .type('123000')
+            .should('have.value', '123,000 EUR')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 3);
+    });
+
+    it('separator with suffix should replace cursor in right place with thousandSeparator .', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                suffix: signal(' EUR'),
+                thousandSeparator: signal('.'),
+            },
+        });
+
+        cy.get('#masked')
+            .type('123000')
+            .should('have.value', '123.000 EUR')
+            .type('{leftArrow}'.repeat(3))
+            .type('{backspace}')
+            .should('have.prop', 'selectionStart', 3);
+    });
 });
