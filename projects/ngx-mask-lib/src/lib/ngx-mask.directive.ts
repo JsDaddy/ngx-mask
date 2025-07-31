@@ -835,8 +835,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._inputValue.set(el.value);
         this._setMask();
 
+        const isTextarea = el.tagName.toLowerCase() === 'textarea';
+
         if (el.type !== 'number') {
-            if (e.key === MaskExpression.ARROW_UP) {
+            if (e.key === MaskExpression.ARROW_UP && !isTextarea) {
                 e.preventDefault();
             }
             if (

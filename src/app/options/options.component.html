@@ -1,3 +1,12 @@
+<div class="flex flex-col gap-2.5 bg-black rounded-10px p-15px">
+    <textarea
+        class="w-24 h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-black border-b-2px border-b-white rounded-10px focus:border-b-yellow hover:border-b-yellow hover:bg-full-white/25 focus:bg-full-white/25"
+        rows="5"
+        cols="10"
+        mask="A*">
+    </textarea>
+</div>
+
 @for (tile of cardDocs(); track tile.id; let i = $index) {
     <div
         class="flex flex-col p-2.5 gap-2.5 bg-dark/[.02] rounded-15px"
