@@ -22,7 +22,6 @@
         "semantic-release": "24.2.7",
         "semantic-release-export-data": "1.1.1",
         "snyk": "1.1298.1",
-        "stylus": "^0.0.1-security",
       },
       "devDependencies": {
         "@angular-devkit/build-angular": "20.1.1",
