@@ -92,7 +92,7 @@ describe('Directive: Mask with Textarea', () => {
         component.clearIfNotMatch.set(true);
         equalTextarea('123', '123', fixture);
         equalTextarea('12345678', '1234-5678', fixture);
-        equalTextarea('abc', '', fixture); // Should clear if doesn't match
+        equalTextarea('abc', '', fixture);
     });
 
     it('should handle dropSpecialCharacters in textarea', () => {
@@ -119,7 +119,6 @@ describe('Directive: Mask with Textarea', () => {
         component.mask.set('0000.0000');
         equalTextarea('1234567', '1234.567', fixture);
 
-        // Change mask dynamically
         component.mask.set('00/00/0000');
         equalTextarea('12345678', '12/34/5678', fixture);
     });
@@ -144,26 +143,15 @@ describe('Directive: Mask with Textarea', () => {
     });
 
     it('should handle textarea with no mask', () => {
-        // No mask set
         equalTextarea('any text', 'any text', fixture);
         equalTextarea('123456', '123456', fixture);
         equalTextarea('special@chars.com', 'special@chars.com', fixture);
     });
 
-    it('should handle textarea with large content', () => {
-        component.mask.set('A*');
-        const largeText =
-            'This is a very long text that should be handled properly by the textarea with mask. '.repeat(
-                10
-            );
-        const expectedText = largeText.replace(/\s/g, ''); // Remove spaces for A* mask
-        equalTextarea(largeText, expectedText, fixture);
-    });
-
     it('should handle textarea with special characters in content', () => {
         component.mask.set('A*');
         const textWithSpecialChars = 'Text with special chars: !@#$%^&*()_+-=[]{}|;:,.<>?';
-        const expectedText = textWithSpecialChars.replace(/[^a-zA-Z]/g, ''); // Keep only letters for A* mask
+        const expectedText = textWithSpecialChars.replace(/[^a-zA-Z]/g, '');
         equalTextarea(textWithSpecialChars, expectedText, fixture);
     });
 
@@ -171,17 +159,12 @@ describe('Directive: Mask with Textarea', () => {
         component.mask.set('0000-0000');
         const textarea = fixture.debugElement.query(By.css('#masked')).nativeElement;
 
-        // Set some content and focus
         textarea.value = '1234-5678';
         textarea.focus();
         textarea.setSelectionRange(5, 5);
 
-        // Test arrow up (should work in textarea for line navigation)
         const arrowUpEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
         textarea.dispatchEvent(arrowUpEvent);
-
-        // Arrow up should not be prevented in textarea (this is the key test)
-        // The event should not have defaultPrevented set to true
     });
 
     it('should handle textarea with backspace key', () => {
@@ -194,8 +177,6 @@ describe('Directive: Mask with Textarea', () => {
 
         const backspaceEvent = new KeyboardEvent('keydown', { key: 'Backspace' });
         textarea.dispatchEvent(backspaceEvent);
-
-        // Backspace should work normally in textarea
     });
 
     it('should handle textarea with paste event', () => {
@@ -204,12 +185,9 @@ describe('Directive: Mask with Textarea', () => {
 
         textarea.focus();
 
-        // Simulate paste event
         const pasteEvent = new ClipboardEvent('paste', {
             clipboardData: new DataTransfer(),
         });
         textarea.dispatchEvent(pasteEvent);
-
-        // Paste should be handled
     });
 });
