@@ -100,8 +100,14 @@ export class NgxMaskApplierService {
         let processedValue = inputValue;
         let processedPosition = position;
 
-        if (processedValue.slice(0, this.prefix.length) === this.prefix) {
-            processedValue = processedValue.slice(this.prefix.length, processedValue.length);
+        const startsWithPrefix = processedValue.slice(0, this.prefix.length) === this.prefix;
+        const pastedFullWithPrefix =
+            justPasted && processedValue.length === this.prefix.length + maskExpression.length;
+        const looksLikeFullPrefixPaste =
+            processedValue === this.prefix + processedValue.slice(this.prefix.length);
+
+        if (startsWithPrefix && (pastedFullWithPrefix || looksLikeFullPrefixPaste)) {
+            processedValue = processedValue.slice(this.prefix.length);
         }
         if (!!this.suffix && processedValue.length > 0) {
             processedValue = this.checkAndRemoveSuffix(processedValue);
@@ -387,7 +393,9 @@ export class NgxMaskApplierService {
                 result.indexOf(MaskExpression.COMMA) - processedValue.indexOf(MaskExpression.COMMA);
             const shiftStep: number = result.length - processedValue.length;
             const backspacedDecimalMarkerWithSeparatorLimit =
-                backspaced && result.length < inputValue.length && this.separatorLimit;
+                backspaced &&
+                result.length < inputValue.length - this.suffix.length &&
+                this.separatorLimit;
 
             if (
                 (result[processedPosition - 1] === this.thousandSeparator ||
