@@ -44,6 +44,46 @@ export function typeTest(inputValue: string, fixture: any): string {
     return inputElement.value;
 }
 
+// Functions for textarea
+export function pasteTestTextarea(inputValue: string, fixture: any): string {
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('textarea').value = inputValue;
+
+    fixture.nativeElement.querySelector('textarea').dispatchEvent(new Event('paste'));
+    fixture.nativeElement.querySelector('textarea').dispatchEvent(new Event('input'));
+    fixture.nativeElement.querySelector('textarea').dispatchEvent(new Event('ngModelChange'));
+
+    return fixture.nativeElement.querySelector('textarea').value;
+}
+
+export function typeTestTextarea(inputValue: string, fixture: any): string {
+    fixture.detectChanges();
+    const inputArray = inputValue.split('');
+    const textareaElement = fixture.nativeElement.querySelector('textarea');
+
+    textareaElement.value = '';
+    textareaElement.dispatchEvent(new Event('input'));
+    textareaElement.dispatchEvent(new Event('ngModelChange'));
+
+    {
+        for (const element of inputArray) {
+            textareaElement.dispatchEvent(new KeyboardEvent('keydown'), { key: element });
+            const selectionStart = textareaElement.selectionStart || 0;
+            const selectionEnd = textareaElement.selectionEnd || 0;
+            textareaElement.value =
+                textareaElement.value.slice(0, selectionStart) +
+                element +
+                textareaElement.value.slice(selectionEnd);
+
+            textareaElement.selectionStart = selectionStart + 1;
+            textareaElement.dispatchEvent(new Event('input'));
+            textareaElement.dispatchEvent(new Event('ngModelChange'));
+        }
+    }
+    return textareaElement.value;
+}
+
 export function equal(
     value: string,
     expectedValue: string,
@@ -64,4 +104,26 @@ export function equal(
         return;
     }
     expect(fixture.nativeElement.querySelector('input').value).toBe(expectedValue);
+}
+
+export function equalTextarea(
+    value: string,
+    expectedValue: string,
+    fixture: any,
+    async = false,
+    testType: typeof Paste | typeof Type = Type
+): void {
+    if (testType === Paste) {
+        pasteTestTextarea(value, fixture);
+    } else {
+        typeTestTextarea(value, fixture);
+    }
+
+    if (async) {
+        Promise.resolve().then(() => {
+            expect(fixture.nativeElement.querySelector('textarea').value).toBe(expectedValue);
+        });
+        return;
+    }
+    expect(fixture.nativeElement.querySelector('textarea').value).toBe(expectedValue);
 }
