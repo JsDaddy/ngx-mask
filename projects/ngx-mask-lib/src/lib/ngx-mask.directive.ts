@@ -1030,6 +1030,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 this._maskService.formElementProperty = ['value', inputValue];
                 this._maskService.isInitialized = true;
             }
+            this._inputValue.set(inputValue);
         } else {
             // eslint-disable-next-line no-console
             console.warn(
