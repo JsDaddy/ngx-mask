@@ -416,6 +416,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     @HostListener('input', ['$event'])
     public onInput(e: CustomKeyboardEvent): void {
+        this._maskService.isInitialized = true;
         // If IME is composing text, we wait for the composed text.
         if (this._isComposing()) {
             return;
@@ -1024,8 +1025,10 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
                 ];
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
+                this._maskService.isInitialized = true;
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
+                this._maskService.isInitialized = true;
             }
             this._inputValue.set(inputValue);
         } else {

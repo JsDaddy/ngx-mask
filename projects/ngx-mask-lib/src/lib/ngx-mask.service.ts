@@ -21,6 +21,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
      */
     public writingValue = false;
+    public isInitialized = false;
 
     private _emitValue = false;
     private _start!: number;
@@ -267,7 +268,6 @@ export class NgxMaskService extends NgxMaskApplierService {
 
             this._emitValue =
                 this.previousValue !== this.currentValue ||
-                (newInputValue !== this.currentValue && this.writingValue) ||
                 (this.previousValue === this.currentValue && justPasted);
         }
 
@@ -594,8 +594,14 @@ export class NgxMaskService extends NgxMaskApplierService {
         const outputTransformFn = this.outputTransformFn
             ? this.outputTransformFn
             : (v: unknown) => v;
+
         this.writingValue = false;
         this.maskChanged = false;
+
+        if (!this.isInitialized && this._emitValue) {
+            return;
+        }
+
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 outputTransformFn(
