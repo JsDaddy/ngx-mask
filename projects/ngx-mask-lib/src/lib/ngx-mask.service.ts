@@ -595,6 +595,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             ? this.outputTransformFn
             : (v: unknown) => v;
 
+        if (this.writingValue) {
+            return;
+        }
+
         this.writingValue = false;
         this.maskChanged = false;
 
