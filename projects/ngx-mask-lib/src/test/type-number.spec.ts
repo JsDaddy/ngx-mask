@@ -11,7 +11,7 @@ import { equal } from './utils/test-functions.component';
     imports: [ReactiveFormsModule, NgxMaskDirective],
     template: ` <input id="maska" type="number" [mask]="mask()" [formControl]="form" /> `,
 })
-// eslint-disable-next-line @angular-eslint/component-class-suffix
+ 
 export class TestTypeNumber {
     public form: FormControl = new FormControl('');
     public mask = signal<string>('');

@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "ngx-mask",
@@ -56,6 +57,7 @@
         "lint-staged": "16.1.2",
         "markdownlint-cli": "0.45.0",
         "ng-packagr": "20.1.0",
+        "ngx-cva-test-suite": "^2.0.1",
         "npm-check-updates": "18.0.1",
         "postcss": "8.5.6",
         "postcss-nesting": "13.0.2",
@@ -2431,6 +2433,8 @@
     "ng-dynamic-component": ["ng-dynamic-component@10.8.2", "", { "dependencies": { "tslib": "^2.0.0" }, "peerDependencies": { "@angular/common": ">=14.1.3", "@angular/core": ">=14.1.3", "rxjs": ">=6.0.0" } }, "sha512-iBj2xHp72lFp/pv7NsY4SMtH03Rpyt4ebReb35lj/6WtjRA+7mZySSLyDKF7qF9l/1cHYE2MstFwIWnoqDCtdg=="],
 
     "ng-packagr": ["ng-packagr@20.1.0", "", { "dependencies": { "@ampproject/remapping": "^2.3.0", "@rollup/plugin-json": "^6.1.0", "@rollup/wasm-node": "^4.24.0", "ajv": "^8.17.1", "ansi-colors": "^4.1.3", "browserslist": "^4.22.1", "chokidar": "^4.0.1", "commander": "^14.0.0", "dependency-graph": "^1.0.0", "esbuild": "^0.25.0", "find-cache-directory": "^6.0.0", "injection-js": "^2.4.0", "jsonc-parser": "^3.3.1", "less": "^4.2.0", "ora": "^8.2.0", "piscina": "^5.0.0", "postcss": "^8.4.47", "rollup-plugin-dts": "^6.2.0", "rxjs": "^7.8.1", "sass": "^1.81.0", "tinyglobby": "^0.2.12" }, "optionalDependencies": { "rollup": "^4.24.0" }, "peerDependencies": { "@angular/compiler-cli": "^20.0.0 || ^20.1.0-next.0 || ^20.2.0-next.0", "tailwindcss": "^2.0.0 || ^3.0.0 || ^4.0.0", "tslib": "^2.3.0", "typescript": ">=5.8 <5.9" }, "optionalPeers": ["tailwindcss"], "bin": { "ng-packagr": "src/cli/main.js" } }, "sha512-objHk39HWnSSv54KD0Ct4A02rug6HiqbmXo1KJW39npzuVc37QWfiZy94afltH1zIx+mQqollmGaCmwibmagvQ=="],
+
+    "ngx-cva-test-suite": ["ngx-cva-test-suite@2.0.1", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": ">=12.0.0", "@angular/forms": ">=12.0.0", "@angular/platform-browser": ">=12.0.0" } }, "sha512-Q6JrUVFXq1J4AdxOoD6KMO4vTZei+l8GYQdlWbT2vExUNu7KW6bulqXsl+OBNHiQ6tj3BKS/+K42HEOuaSfNWg=="],
 
     "ngx-highlightjs": ["ngx-highlightjs@14.0.1", "", { "dependencies": { "highlight.js": "^11.11.1", "tslib": "^2.3.0" }, "peerDependencies": { "@angular/cdk": ">=19.0.0", "@angular/common": ">=19.0.0", "@angular/core": ">=19.0.0", "rxjs": ">=7.0.0" } }, "sha512-pa4YPChIho+Qs6P036oMvTt8pmTlMwberz/kGBojKVMEHSj9t4PT1YzBplM+RMK0VWgLK4zRbJbxivQrLPr1fQ=="],
 
