@@ -63,7 +63,7 @@
         "@angular/animations": "20.1.2",
         "@angular/common": "20.1.2",
         "@angular/compiler": "20.1.2",
-        "@angular/core": "20.1.2",
+        "@angular/core": "20.3.16",
         "@angular/forms": "20.1.2",
         "@angular/platform-browser": "20.1.2",
         "@angular/platform-browser-dynamic": "20.1.2",
