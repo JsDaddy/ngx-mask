@@ -3,6 +3,7 @@ export const enum MaskExpression {
     PERCENT = 'percent',
     IP = 'IP',
     CPF_CNPJ = 'CPF_CNPJ',
+    CPF_CNPJ_ALPHA = 'CPF_CNPJ_ALPHA',
     MONTH = 'M',
     MONTHS = 'M0',
     MINUTE = 'm',

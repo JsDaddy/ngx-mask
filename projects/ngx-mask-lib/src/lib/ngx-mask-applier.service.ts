@@ -136,11 +136,16 @@ export class NgxMaskApplierService {
                 arr.push(processedValue[i] ?? MaskExpression.EMPTY_STRING);
             }
         }
-        if (maskExpression === MaskExpression.CPF_CNPJ) {
+        const isCpfCnpjAlpha = maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        if (maskExpression === MaskExpression.CPF_CNPJ || isCpfCnpjAlpha) {
             this.cpfCnpjError = arr.length !== 11 && arr.length !== 14;
-            if (arr.length > 11) {
+            const valueHasAnyLetter = /[a-zA-Z]/.test(processedValue);
+            if (valueHasAnyLetter && isCpfCnpjAlpha) {
                 // eslint-disable-next-line no-param-reassign
-                maskExpression = '00.000.000/0000-00';
+                maskExpression = 'AA.AAA.AAA/AAAA-00';
+            } else if (arr.length > 11) {
+                // eslint-disable-next-line no-param-reassign
+                maskExpression = isCpfCnpjAlpha ? 'AA.AAA.AAA/AAAA-00' : '00.000.000/0000-00';
             } else {
                 // eslint-disable-next-line no-param-reassign
                 maskExpression = '000.000.000-00';

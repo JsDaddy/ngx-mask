@@ -56,6 +56,25 @@ describe('Directive: Mask (Placeholder character)', () => {
         equal('1234567890123', '12.345.678/9012-3_', fixture);
         equal('12345678901234', '12.345.678/9012-34', fixture);
 
+        component.mask.set('CPF_CNPJ_ALPHA');
+        component.prefix.set('');
+        component.showMaskTyped.set(true);
+        equal('', '___.___.___-__', fixture);
+        equal('A', 'A_.___.___/____-__', fixture);
+        equal('AB', 'AB.___.___/____-__', fixture);
+        equal('ABC', 'AB.C__.___/____-__', fixture);
+        equal('ABCD', 'AB.CD_.___/____-__', fixture);
+        equal('ABCDE', 'AB.CDE.___/____-__', fixture);
+        equal('ABCDEF', 'AB.CDE.F__/____-__', fixture);
+        equal('ABCDEF0', 'AB.CDE.F0_/____-__', fixture);
+        equal('ABCDEF01', 'AB.CDE.F01/____-__', fixture);
+        equal('ABCDEF012', 'AB.CDE.F01/2___-__', fixture);
+        equal('ABCDEF0123', 'AB.CDE.F01/23__-__', fixture);
+        equal('ABCDEF01234', 'AB.CDE.F01/234_-__', fixture);
+        equal('ABCDEF012345', 'AB.CDE.F01/2345-__', fixture);
+        equal('ABCDEF0123456', 'AB.CDE.F01/2345-6_', fixture);
+        equal('ABCDEF01234567', 'AB.CDE.F01/2345-67', fixture);
+
         component.mask.set('000.000.000-00||00.000.000/0000-00');
         component.prefix.set('');
         component.showMaskTyped.set(true);

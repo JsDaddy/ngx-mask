@@ -71,7 +71,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
-        if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
+        const isCpfCnpjMask =
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        if (isCpfCnpjMask && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
 
@@ -292,7 +295,8 @@ export class NgxMaskService extends NgxMaskApplierService {
             return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
         } else if (
             this.maskExpression === MaskExpression.IP ||
-            this.maskExpression === MaskExpression.CPF_CNPJ
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
         ) {
             return `${result}${prefNmask}`;
         }
@@ -435,7 +439,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                 if (this.maskExpression === MaskExpression.IP) {
                     return this._checkForIp(inputVal);
                 }
-                if (this.maskExpression === MaskExpression.CPF_CNPJ) {
+                if (
+                    this.maskExpression === MaskExpression.CPF_CNPJ ||
+                    this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
+                ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
             }
@@ -533,6 +540,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (inputVal === MaskExpression.HASH) {
             return cpf;
         }
+
+        const isCpfCnpjAlpha = this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        const hasAnyLetter = /[a-zA-Z]/.test(inputVal);
         const arr: string[] = [];
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < inputVal.length; i++) {
@@ -540,21 +550,25 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (!value) {
                 continue;
             }
-            if (value.match('\\d')) {
+            if (!isCpfCnpjAlpha && value.match('\\d')) {
                 arr.push(value);
             }
         }
-        if (arr.length <= 3) {
-            return cpf.slice(arr.length, cpf.length);
-        }
-        if (arr.length > 3 && arr.length <= 6) {
-            return cpf.slice(arr.length + 1, cpf.length);
-        }
-        if (arr.length > 6 && arr.length <= 9) {
-            return cpf.slice(arr.length + 2, cpf.length);
-        }
-        if (arr.length > 9 && arr.length < 11) {
-            return cpf.slice(arr.length + 3, cpf.length);
+        if (isCpfCnpjAlpha && hasAnyLetter) {
+            return cnpj.slice(arr.length, cnpj.length);
+        } else {
+            if (arr.length <= 3) {
+                return cpf.slice(arr.length, cpf.length);
+            }
+            if (arr.length > 3 && arr.length <= 6) {
+                return cpf.slice(arr.length + 1, cpf.length);
+            }
+            if (arr.length > 6 && arr.length <= 9) {
+                return cpf.slice(arr.length + 2, cpf.length);
+            }
+            if (arr.length > 9 && arr.length < 11) {
+                return cpf.slice(arr.length + 3, cpf.length);
+            }
         }
         if (arr.length === 11) {
             return '';
