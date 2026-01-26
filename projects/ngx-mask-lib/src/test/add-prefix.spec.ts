@@ -56,14 +56,14 @@ describe('Directive: Mask (Add prefix)', () => {
         component.dropSpecialCharacters.set(false);
         component.prefix.set('+7 ');
         equal('097', '+7 09-7', fixture);
-        expect(component.form.value).toEqual('+7 09-7');
+        expect(component.form.value).equal('+7 09-7');
     });
     it('dropSpecialCharacters false should return value with suffix', () => {
         component.mask.set('00');
         component.dropSpecialCharacters.set(false);
         component.suffix.set('$');
         equal('97', '97$', fixture);
-        expect(component.form.value).toEqual('97$');
+        expect(component.form.value).equal('97$');
     });
 
     it('should delete prefix in pasted content', () => {
@@ -78,7 +78,7 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('FOO-DDD-DDD-D', 'FOO-DDD-DDD-D', fixture, false, Paste);
         equal('FOO-DDD-DDD-DD', 'FOO-DDD-DDD-DD', fixture, false, Paste);
         equal('FOO-DDD-DDD-DDD', 'FOO-DDD-DDD-DDD', fixture, false, Paste);
-        expect(component.form.value).toEqual('DDDDDDDDD');
+        expect(component.form.value).equal('DDDDDDDDD');
     });
 
     it('should delete prefix in pasted content', () => {
@@ -94,7 +94,7 @@ describe('Directive: Mask (Add prefix)', () => {
         equal('FOO-SSS-SSS-S', 'FOO-SSS-SSS-S', fixture, false, Paste);
         equal('FOO-SSS-SSS-SS', 'FOO-SSS-SSS-SS', fixture, false, Paste);
         equal('FOO-SSS-SSS-SSS', 'FOO-SSS-SSS-SSS', fixture, false, Paste);
-        expect(component.form.value).toEqual('FOO-SSS-SSS-SSS');
+        expect(component.form.value).equal('FOO-SSS-SSS-SSS');
     });
 
     it('should replace $ with minus', () => {
@@ -128,7 +128,7 @@ describe('Directive: Mask (Add prefix)', () => {
         component.triggerOnMaskChange.set(true);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
-        expect(component.form.value).toBe('123123');
+        expect(component.form.value).equal('123123');
     });
 
     it('should remove prefix when setValue triggerOnMaskChange =true', () => {
@@ -139,7 +139,7 @@ describe('Directive: Mask (Add prefix)', () => {
         component.form.setValue('KZ123123');
 
         equal('KZ123123', 'KZ123 123', fixture);
-        expect(component.form.value).toBe('KZ123 123');
+        expect(component.form.value).equal('KZ123 123');
     });
 
     it('should remove prefix when setValue triggerOnMaskChange = false & dropSpecialCharacters = true', () => {
@@ -148,7 +148,7 @@ describe('Directive: Mask (Add prefix)', () => {
         component.dropSpecialCharacters.set(true);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
-        expect(component.form.value).toBe('123123');
+        expect(component.form.value).equal('123123');
     });
 
     it('should remove prefix when setValue triggerOnMaskChange = false & dropSpecialCharacters = false', () => {
@@ -157,7 +157,7 @@ describe('Directive: Mask (Add prefix)', () => {
         component.dropSpecialCharacters.set(false);
         component.form.setValue('KZ123123');
         equal('KZ123123', 'KZ123 123', fixture);
-        expect(component.form.value).toBe('KZ123 123');
+        expect(component.form.value).equal('KZ123 123');
     });
 
     it('should show prefix if value is empty mask 0000', () => {

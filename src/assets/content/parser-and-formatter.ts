@@ -1,5 +1,4 @@
-import { UntypedFormControl } from '@angular/forms';
-import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
 export const ParserAndFormatterDocs: ComDoc[] = [
     {
@@ -99,14 +98,14 @@ export const ParserAndFormatterDocs: ComDoc[] = [
     },
 ];
 
-export const FormatAndParserExamples: TExample<MaskOptions>[] = [
+export const FormatAndParserExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'S*',
         _mask: 'S*',
         _inputTransformFn: (value: unknown): string => String(value).toUpperCase(),
         _outputTransformFn: (value: string | number | undefined | null): string =>
             String(value).toUpperCase(),
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Hh:m0',
@@ -136,8 +135,8 @@ export const FormatAndParserExamples: TExample<MaskOptions>[] = [
             return;
         },
         control: {
-            form: new UntypedFormControl(new Date()),
-            model: new Date() as never,
+            initialValue: new Date().toISOString().split('T')[0] ?? '',
+            model: new Date().toISOString().split('T')[0] ?? '',
         },
     },
     {
@@ -150,7 +149,7 @@ export const FormatAndParserExamples: TExample<MaskOptions>[] = [
             }
             return String(value).split(' ').join('');
         },
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'separator.3',
@@ -166,6 +165,6 @@ export const FormatAndParserExamples: TExample<MaskOptions>[] = [
             }
             return Number(formattedValue);
         },
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 ];

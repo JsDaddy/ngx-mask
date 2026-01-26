@@ -118,7 +118,7 @@ describe('Directive: Mask', () => {
     });
 
     // TODO(inepipenko) for issue #880
-    xit('should work right with security input', () => {
+    it.skip('should work right with security input', () => {
         component.mask.set('000-0X-XXXX');
         component.showMaskTyped.set(true);
         equal('', '___-__-____', fixture);
@@ -194,19 +194,19 @@ describe('Directive: Mask', () => {
         component.showMaskTyped.set(false);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
-        expect(inputTarget.selectionStart).toBe(3);
+        expect(inputTarget.selectionStart).equal(3);
         component.showMaskTyped.set(true);
         inputTarget.focus();
 
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('123/_____');
+        expect(inputTarget.value).equal('123/_____');
     });
 
     it('should work with showMaskTyped 000/00000 with prefix', async () => {
@@ -215,18 +215,18 @@ describe('Directive: Mask', () => {
         component.showMaskTyped.set(false);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         equal('+38 1', '+38 1', fixture, false, Paste);
         equal('+38 12', '+38 12', fixture, false, Paste);
         equal('+38 123', '+38 123', fixture, false, Paste);
-        expect(inputTarget.selectionStart).toBe(7);
+        expect(inputTarget.selectionStart).equal(7);
         component.showMaskTyped.set(true);
         inputTarget.focus();
 
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('+38 123/_____');
+        expect(inputTarget.value).equal('+38 123/_____');
     });
 });

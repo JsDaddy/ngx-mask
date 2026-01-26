@@ -37,9 +37,9 @@ describe('Event: paste', () => {
 
         fixture.detectChanges();
 
-        expect(inputDebuggerElement.nativeElement.value).toBe('12 - 3456 - 789');
+        expect(inputDebuggerElement.nativeElement.value).equal('12 - 3456 - 789');
 
-        expect(inputDebuggerElement.nativeElement.selectionStart).toBe(15);
+        expect(inputDebuggerElement.nativeElement.selectionStart).equal(15);
     });
     it('After paste to control cursor should be on the end of input for mask with separator', () => {
         component.mask.set('separator.0');
@@ -59,8 +59,8 @@ describe('Event: paste', () => {
 
         fixture.detectChanges();
 
-        expect(inputDebuggerElement.nativeElement.value).toBe('1,234,567');
+        expect(inputDebuggerElement.nativeElement.value).equal('1,234,567');
 
-        expect(inputDebuggerElement.nativeElement.selectionStart).toBe(9);
+        expect(inputDebuggerElement.nativeElement.selectionStart).equal(9);
     });
 });

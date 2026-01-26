@@ -44,7 +44,7 @@ describe('Directive: Mask', () => {
         equal('andr', 'andr', fixture);
         equal('andre', 'andre', fixture);
         equal('andrey', 'andrey', fixture);
-        expect(component.form.value).toBe('ANDREY');
+        expect(component.form.value).equal('ANDREY');
     });
 
     it('inputTransformFn should return value formValue toUpperCase but input value to lowerCase', () => {
@@ -60,7 +60,7 @@ describe('Directive: Mask', () => {
         equal('ANDR', 'andr', fixture);
         equal('ANDRE', 'andre', fixture);
         equal('ANDREY', 'andrey', fixture);
-        expect(component.form.value).toBe('ANDREY');
+        expect(component.form.value).equal('ANDREY');
     });
 
     it('separator.2 should replace dot in model', () => {
@@ -74,13 +74,13 @@ describe('Directive: Mask', () => {
         });
 
         equal('10.2', '10.2', fixture);
-        expect(component.form.value).toBe('10,2');
+        expect(component.form.value).equal('10,2');
 
         equal('109.2', '109.2', fixture);
-        expect(component.form.value).toBe('109,2');
+        expect(component.form.value).equal('109,2');
 
         equal('1000.2', '1 000.2', fixture);
-        expect(component.form.value).toBe('1000,2');
+        expect(component.form.value).equal('1000,2');
     });
 
     it('separator.3 should toFixed value in model and return Number', () => {
@@ -96,13 +96,13 @@ describe('Directive: Mask', () => {
         });
 
         equal('237.356', '237.356', fixture);
-        expect(component.form.value).toBe(237.36);
+        expect(component.form.value).equal(237.36);
 
         equal('11.123', '11.123', fixture);
-        expect(component.form.value).toBe(11.12);
+        expect(component.form.value).equal(11.12);
 
         equal('1234.356', '1 234.356', fixture);
-        expect(component.form.value).toBe(1234.36);
+        expect(component.form.value).equal(1234.36);
     });
 
     it('mask 000.00 should replace dot in model', () => {
@@ -116,10 +116,10 @@ describe('Directive: Mask', () => {
         });
 
         equal('100.22', '100.22', fixture);
-        expect(component.form.value).toBe('100,22');
+        expect(component.form.value).equal('100,22');
 
         equal('12', '12', fixture);
-        expect(component.form.value).toBe('12');
+        expect(component.form.value).equal('12');
     });
 
     it('mask separator.1 should return number', () => {
@@ -130,16 +130,16 @@ describe('Directive: Mask', () => {
         );
 
         equal('123,2', '123,2', fixture);
-        expect(component.form.value).toBe(123.2);
+        expect(component.form.value).equal(123.2);
 
         equal('10,2', '10,2', fixture);
-        expect(component.form.value).toBe(10.2);
+        expect(component.form.value).equal(10.2);
 
         equal('1,1', '1,1', fixture);
-        expect(component.form.value).toBe(1.1);
+        expect(component.form.value).equal(1.1);
 
         equal('1000,2', '1 000,2', fixture);
-        expect(component.form.value).toBe(1000.2);
+        expect(component.form.value).equal(1000.2);
     });
 
     it('mask separator.1 should return number decimalMarker dot', () => {
@@ -150,16 +150,16 @@ describe('Directive: Mask', () => {
         );
 
         equal('123.4', '123.4', fixture);
-        expect(component.form.value).toBe(123.4);
+        expect(component.form.value).equal(123.4);
 
         equal('12.2', '12.2', fixture);
-        expect(component.form.value).toBe(12.2);
+        expect(component.form.value).equal(12.2);
 
         equal('1.1', '1.1', fixture);
-        expect(component.form.value).toBe(1.1);
+        expect(component.form.value).equal(1.1);
 
         equal('1000.2', '1 000.2', fixture);
-        expect(component.form.value).toBe(1000.2);
+        expect(component.form.value).equal(1000.2);
     });
 
     it('mask percent should replace dot in model', () => {
@@ -171,13 +171,13 @@ describe('Directive: Mask', () => {
             return String(value);
         });
         equal('1.2', '1.2', fixture);
-        expect(component.form.value).toBe('1,2');
+        expect(component.form.value).equal('1,2');
 
         equal('12.2', '12.2', fixture);
-        expect(component.form.value).toBe('12,2');
+        expect(component.form.value).equal('12,2');
 
         equal('34.34', '34.34', fixture);
-        expect(component.form.value).toBe('34,34');
+        expect(component.form.value).equal('34,34');
     });
 
     it('mask percent should replace dot in model', () => {
@@ -211,6 +211,6 @@ describe('Directive: Mask', () => {
             )}`;
         });
         component.form.setValue(new Date().toString());
-        expect(component.form.value).toBe(date.toString());
+        expect(component.form.value).equal(date.toString());
     });
 });

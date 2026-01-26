@@ -14,7 +14,7 @@ else
     echo "Type coverage is good! 🎉"
 fi
 
-bun run test
+bun run test -- --watch=false
 
 bun run cypress:bash
 

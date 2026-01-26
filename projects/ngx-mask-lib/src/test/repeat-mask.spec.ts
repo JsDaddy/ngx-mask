@@ -103,87 +103,87 @@ describe('Directive: Mask (Repeat)', () => {
     it('should A{8} be valid if length 8', () => {
         component.mask.set('A{8}');
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123', '123', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234', '1234', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345', '12345', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123456', '123456', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234567', '1234567', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345678', '12345678', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should A{9} be valid if length 9', () => {
         component.mask.set('A{9}');
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123', '123', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234', '1234', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345', '12345', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123456', '123456', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234567', '1234567', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345678', '12345678', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123456789', '123456789', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should A{10} be valid if length 10', () => {
         component.mask.set('A{10}');
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123', '123', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234', '1234', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345', '12345', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123456', '123456', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234567', '1234567', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('12345678', '12345678', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('123456789', '123456789', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('1234567890', '1234567890', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 });

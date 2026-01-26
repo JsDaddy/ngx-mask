@@ -1,5 +1,4 @@
-import { UntypedFormControl } from '@angular/forms';
-import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
 export const OptDocs: ComDoc[] = [
     {
@@ -81,74 +80,74 @@ export const OptDocs: ComDoc[] = [
     },
 ];
 
-export const OptExamples: TExample<MaskOptions>[] = [
+export const OptExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'prefix',
         _prefix: '+7 ',
         _mask: '(00) 000 000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'suffix',
         _suffix: ' $',
         _mask: '0 000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'dropSpecialCharacters',
         _dropSpecialCharacters: false,
         _mask: '000-000.00',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'showMaskTyped',
         _showMaskTyped: true,
         _prefix: '+7',
         _mask: '(000) 000-0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'clearIfNotMatch',
         _clearIfNotMatch: true,
         _mask: '000-000.00',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'validation',
         _validation: true,
         _mask: '00 00',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '000-000-000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '00/00/0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _mask: '0000 0000 0000 0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _suffix: '$',
         _mask: '0 000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _showMaskTyped: true,
         _keepCharacterPositions: true,
         _prefix: '$',
         _mask: '0000.00',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 ];

@@ -32,7 +32,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         let inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('123-4');
+            expect(inputEl.nativeElement.value).equal('123-4');
         });
 
         component.form.setValue({
@@ -41,7 +41,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('1234-5');
+            expect(inputEl.nativeElement.value).equal('1234-5');
         });
 
         component.form.setValue({
@@ -50,7 +50,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('12345-6');
+            expect(inputEl.nativeElement.value).equal('12345-6');
         });
     });
 
@@ -73,7 +73,7 @@ describe('Directive: Mask (Dynamic)', () => {
 
         const inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('9000 0000 0000 0000 000');
+            expect(inputEl.nativeElement.value).equal('9000 0000 0000 0000 000');
         });
     });
 
@@ -87,7 +87,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         let inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('(123)4567-890');
+            expect(inputEl.nativeElement.value).equal('(123)4567-890');
         });
 
         component.form.setValue({
@@ -96,7 +96,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('(123)4567-8901');
+            expect(inputEl.nativeElement.value).equal('(123)4567-8901');
         });
 
         component.form.setValue({
@@ -105,7 +105,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('12-34567-89012');
+            expect(inputEl.nativeElement.value).equal('12-34567-89012');
         });
 
         component.mask.set('00-00-00-00'); // For example Denmark phone format
@@ -117,7 +117,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('12-34-56-78');
+            expect(inputEl.nativeElement.value).equal('12-34-56-78');
         });
     });
 
@@ -136,7 +136,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('12.345,67');
+            expect(inputEl.nativeElement.value).equal('12.345,67');
         });
 
         component.form.setValue({
@@ -146,7 +146,7 @@ describe('Directive: Mask (Dynamic)', () => {
         fixture.detectChanges();
         inputEl = fixture.debugElement.query(By.css('input'));
         Promise.resolve().then(() => {
-            expect(inputEl.nativeElement.value).toEqual('12.345,67');
+            expect(inputEl.nativeElement.value).equal('12.345,67');
         });
 
         component.form.setValue({
@@ -158,7 +158,7 @@ describe('Directive: Mask (Dynamic)', () => {
         component.mask.set('(00) 00000000||+00 (00) 00000000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '5549362216';
@@ -166,8 +166,8 @@ describe('Directive: Mask (Dynamic)', () => {
         inputTarget.selectionEnd = 13;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('(55) 49362216');
-        expect(inputTarget.selectionStart).toEqual(13);
+        expect(inputTarget.value).equal('(55) 49362216');
+        expect(inputTarget.selectionStart).equal(13);
 
         debugElement.nativeElement.value += '8';
 
@@ -177,8 +177,8 @@ describe('Directive: Mask (Dynamic)', () => {
 
         fixture.detectChanges();
 
-        expect(inputTarget.value).toBe('+55 (49) 3622168');
-        expect(inputTarget.selectionStart).toEqual(16);
+        expect(inputTarget.value).equal('+55 (49) 3622168');
+        expect(inputTarget.selectionStart).equal(16);
     });
 
     it('should work with number or letters', () => {
@@ -192,23 +192,23 @@ describe('Directive: Mask (Dynamic)', () => {
     it('should work with number or letters', () => {
         component.mask.set('00||SS||000||000SS||0S0S');
         equal('0', '0', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('11', '11', fixture);
         expect(component.form.valid).toBeTruthy();
         equal('112', '112', fixture);
         expect(component.form.valid).toBeTruthy();
         equal('112A', '112A', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('112DS', '112DS', fixture);
         expect(component.form.valid).toBeTruthy();
         equal('D', 'D', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('DD', 'DD', fixture);
         expect(component.form.valid).toBeTruthy();
         equal('9D', '9D', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('0A0', '0A0', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('2D2D', '2D2D', fixture);
         expect(component.form.valid).toBeTruthy();
     });
@@ -216,56 +216,56 @@ describe('Directive: Mask (Dynamic)', () => {
     it('should work for UK Post Codes', () => {
         component.mask.set('S0 0SS||SAA 0SS||SS0A 0SS');
         equal('A', 'A', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('A0', 'A0', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('A00', 'A0 0', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('AAA0DD', 'AAA 0DD', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
         equal('AB17NC', 'AB1 7NC', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
     });
 
     it('should work with number or letters', () => {
         component.mask.set('00||SS||000||000SS');
         equal('0', '0', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('11', '11', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
         equal('D', 'D', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('DD', 'DD', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
         equal('123', '123', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
         equal('123S', '123S', fixture);
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.valid).equal(false);
         equal('123SD', '123SD', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
     });
 
     it('should be valid if mask dont changes  00000||00000-0000', () => {
         component.mask.set('00000||00000-0000');
         component.showMaskTyped.set(true);
         equal('1', '1____', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('11', '11___', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('123', '123__', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('1234', '1234_', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('12345', '12345', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
         equal('123456', '12345-6___', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('1234567', '12345-67__', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('12345678', '12345-678_', fixture);
-        expect(component.form.invalid).toBeTrue();
+        expect(component.form.invalid).equal(true);
         equal('123456789', '12345-6789', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
     });
 
     it('should work with when justPasted', () => {

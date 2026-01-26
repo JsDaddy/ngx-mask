@@ -254,7 +254,7 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,5000,000';
@@ -262,15 +262,15 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15,000,000');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15,000,000');
+        expect(inputTarget.selectionStart).equal(3);
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask.set('separator.0');
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1.5000.000';
@@ -278,15 +278,15 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15.000.000');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15.000.000');
+        expect(inputTarget.selectionStart).equal(3);
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask.set('separator.2');
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,5000,000.00';
@@ -294,15 +294,15 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15,000,000.00');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15,000,000.00');
+        expect(inputTarget.selectionStart).equal(3);
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask.set('separator.2');
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1.5000.000,00';
@@ -310,15 +310,15 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15.000.000,00');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15.000.000,00');
+        expect(inputTarget.selectionStart).equal(3);
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask.set('separator');
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,5000,000.000';
@@ -326,15 +326,15 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15,000,000.000');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15,000,000.000');
+        expect(inputTarget.selectionStart).equal(3);
     });
     it('should not shift cursor for input in-between digits', () => {
         component.mask.set('separator');
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1.5000.000,000';
@@ -342,8 +342,8 @@ describe('Separator: Mask', () => {
         inputTarget.selectionEnd = 3;
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('15.000.000,000');
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.value).equal('15.000.000,000');
+        expect(inputTarget.selectionStart).equal(3);
     });
 
     it('should not shift cursor for backspace on in-between digits', () => {
@@ -351,7 +351,7 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,234,67';
@@ -365,15 +365,15 @@ describe('Separator: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('123,467');
-        expect(inputTarget.selectionStart).toEqual(4);
+        expect(inputTarget.value).equal('123,467');
+        expect(inputTarget.selectionStart).equal(4);
     });
     it('should not shift cursor for backspace on in-between digits', () => {
         component.mask.set('separator.0');
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1.234.67';
@@ -387,8 +387,8 @@ describe('Separator: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('123.467');
-        expect(inputTarget.selectionStart).toEqual(4);
+        expect(inputTarget.value).equal('123.467');
+        expect(inputTarget.selectionStart).equal(4);
     });
 
     it('should not shift cursor for backspace on in-between digits', () => {
@@ -396,7 +396,7 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,234,67.00';
@@ -410,15 +410,15 @@ describe('Separator: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('123,467.00');
-        expect(inputTarget.selectionStart).toEqual(7);
+        expect(inputTarget.value).equal('123,467.00');
+        expect(inputTarget.selectionStart).equal(7);
     });
     it('should not shift cursor for backspace on in-between digits', () => {
         component.mask.set('separator.2');
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1.234.67,00';
@@ -432,8 +432,8 @@ describe('Separator: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('123.467,00');
-        expect(inputTarget.selectionStart).toEqual(7);
+        expect(inputTarget.value).equal('123.467,00');
+        expect(inputTarget.selectionStart).equal(7);
     });
 
     it('should not shift cursor on backspace when result has no separator', () => {
@@ -441,7 +441,7 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,34';
@@ -455,8 +455,8 @@ describe('Separator: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('134');
-        expect(inputTarget.selectionStart).toEqual(0);
+        expect(inputTarget.value).equal('134');
+        expect(inputTarget.selectionStart).equal(0);
     });
 
     it('caret should remain in position when deleting the first digit', () => {
@@ -464,7 +464,7 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '1,000';
@@ -478,6 +478,6 @@ describe('Separator: Mask', () => {
             target: inputTarget,
         });
 
-        expect(inputTarget.selectionStart).toEqual(0);
+        expect(inputTarget.selectionStart).equal(0);
     });
 });

@@ -25,10 +25,10 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.dropSpecialCharacters.set(false);
         equal('257898', '25-78-98', fixture);
 
-        expect(component.form.value).toBe('25-78-98');
+        expect(component.form.value).equal('25-78-98');
         equal('123456', '12-34-56', fixture);
 
-        expect(component.form.value).toBe('12-34-56');
+        expect(component.form.value).equal('12-34-56');
     });
 
     it('should correct value with mask 00-00/00 with dropSpecialCharacters = /', () => {
@@ -36,7 +36,7 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.dropSpecialCharacters.set(['/']);
 
         equal('257898', '25-78/98', fixture);
-        expect(component.form.value).toBe('25-7898');
+        expect(component.form.value).equal('25-7898');
     });
 
     it('should correct value with mask 0000.00 with dropSpecialCharacters = true', () => {
@@ -45,7 +45,7 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.form.setValue(123456);
 
         equal('123456', '1234.56', fixture);
-        expect(component.form.value).toBe(123456);
+        expect(component.form.value).equal(123456);
     });
 
     it('FormControl should be filled without special characters', () => {
@@ -55,7 +55,7 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.form.setValue(2578.9812);
 
         equal('2578.9812', '2,578.9812', fixture);
-        expect(component.form.value).toBe(2578.9812);
+        expect(component.form.value).equal(2578.9812);
     });
 
     it('FormControl should normally handle the removal of whitespace', () => {
@@ -67,7 +67,7 @@ describe('Directive: Mask (Drop special characters)', () => {
         // @todo add backspace event check
 
         equal('1234567.89', '1 234 567.89', fixture);
-        expect(component.form.value).toBe(1234567.89);
+        expect(component.form.value).equal(1234567.89);
     });
 
     it('dropSpecialCharacter test for valid', () => {
@@ -75,25 +75,25 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.dropSpecialCharacters.set(true);
         component.validation.set(true);
         equal('1', '(1', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12', '(12', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123', '(123', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234', '(123) 4', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12345', '(123) 45', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123456', '(123) 456', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234567', '(123) 456-7', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12345678', '(123) 456-78', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123456789', '(123) 456-789', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234567890', '(123) 456-7890', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('dropSpecialCharacter = false test for valid', () => {
@@ -101,25 +101,25 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.dropSpecialCharacters.set(true);
         component.validation.set(true);
         equal('1', '(1', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12', '(12', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123', '(123', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234', '(123) 4', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12345', '(123) 45', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123456', '(123) 456', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234567', '(123) 456-7', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('12345678', '(123) 456-78', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('123456789', '(123) 456-789', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1234567890', '(123) 456-7890', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('dropSpecialCharacter = true test for valid with setValue', () => {
@@ -128,7 +128,7 @@ describe('Directive: Mask (Drop special characters)', () => {
         component.validation.set(true);
         component.form.setValue('1234567890');
         equal('1234567890', '(123) 456-7890', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('dropSpecialCharacter = false test for valid with setValue', () => {
@@ -154,6 +154,6 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('123456789', '(123) 456-789', fixture);
         expect(component.form.valid).toBeFalsy();
         equal('1234567890', '(123) 456-7890', fixture);
-        expect(component.form.valid).toBeTrue();
+        expect(component.form.valid).equal(true);
     });
 });

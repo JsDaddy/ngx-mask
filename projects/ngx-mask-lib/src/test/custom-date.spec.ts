@@ -39,6 +39,6 @@ describe('Directive: Mask (Custom date)', () => {
         inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
         fixture.detectChanges();
 
-        expect(inputElement.selectionStart).toBe(3);
+        expect(inputElement.selectionStart).equal(3);
     });
 });

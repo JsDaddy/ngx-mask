@@ -33,8 +33,8 @@ describe('Separator: Mask', () => {
         inputElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'Delete' }));
         fixture.detectChanges();
 
-        expect(inputElement.selectionStart).toBe(4);
-        expect(inputElement.value).toBe('123 456');
+        expect(inputElement.selectionStart).equal(4);
+        expect(inputElement.value).equal('123 456');
     });
 
     it('should change formValue separator.2', async () => {
@@ -42,14 +42,14 @@ describe('Separator: Mask', () => {
         component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue('10.2');
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('10.20');
-        expect(component.form.value).toBe('10.20');
+        expect(inputTarget.value).equal('10.20');
+        expect(component.form.value).equal('10.20');
     });
 
     it('should change formValue separator.3', async () => {
@@ -57,14 +57,14 @@ describe('Separator: Mask', () => {
         component.leadZero.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue('10.2');
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('10.200');
-        expect(component.form.value).toBe('10.200');
+        expect(inputTarget.value).equal('10.200');
+        expect(component.form.value).equal('10.200');
     });
 
     it('separator.8 should return value', async () => {
@@ -75,7 +75,7 @@ describe('Separator: Mask', () => {
         equal('12,34', '12,34', fixture);
 
         await fixture.whenStable();
-        expect(component.form.value).toBe('12.34');
+        expect(component.form.value).equal('12.34');
     });
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', async () => {
@@ -84,28 +84,28 @@ describe('Separator: Mask', () => {
         component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue(0.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('0,40');
+        expect(inputTarget.value).equal('0,40');
 
         component.form.setValue(10.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('10,40');
+        expect(inputTarget.value).equal('10,40');
 
         component.form.setValue(100.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('100,40');
+        expect(inputTarget.value).equal('100,40');
 
         component.form.setValue(1000.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('1 000,40');
+        expect(inputTarget.value).equal('1 000,40');
     });
 
     it('should display value in input with decimalMarker , and leadZero with separator.3', async () => {
@@ -114,28 +114,28 @@ describe('Separator: Mask', () => {
         component.decimalMarker.set(',');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue(0.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('0,400');
+        expect(inputTarget.value).equal('0,400');
 
         component.form.setValue(20.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('20,400');
+        expect(inputTarget.value).equal('20,400');
 
         component.form.setValue(200.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('200,400');
+        expect(inputTarget.value).equal('200,400');
 
         component.form.setValue(2000.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('2 000,400');
+        expect(inputTarget.value).equal('2 000,400');
     });
 
     it('should display value in input with decimalMarker , and leadZero with separator.3', async () => {
@@ -145,28 +145,28 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue(0.3);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('0,300');
+        expect(inputTarget.value).equal('0,300');
 
         component.form.setValue(30.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('30,400');
+        expect(inputTarget.value).equal('30,400');
 
         component.form.setValue(300.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('300,400');
+        expect(inputTarget.value).equal('300,400');
 
         component.form.setValue(3000.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('3.000,400');
+        expect(inputTarget.value).equal('3.000,400');
     });
 
     it('should display value in input with decimalMarker , and leadZero with separator.2', async () => {
@@ -176,28 +176,28 @@ describe('Separator: Mask', () => {
         component.thousandSeparator.set('.');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue(0.3);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('0,30');
+        expect(inputTarget.value).equal('0,30');
 
         component.form.setValue(30.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('30,40');
+        expect(inputTarget.value).equal('30,40');
 
         component.form.setValue(300.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('300,40');
+        expect(inputTarget.value).equal('300,40');
 
         component.form.setValue(3000.4);
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('3.000,40');
+        expect(inputTarget.value).equal('3.000,40');
     });
 
     it('should not allow add two zeros to inputValue', () => {
@@ -258,7 +258,7 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         equal('-1234.10', '-1 234.10', fixture);
-        expect(component.form.value).toBe('-1234.10');
+        expect(component.form.value).equal('-1234.10');
     });
 
     it('should change value in formControl mask separator.3', () => {
@@ -268,7 +268,7 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         equal('-1234.567', '-1 234.567', fixture);
-        expect(component.form.value).toBe('-1234.567');
+        expect(component.form.value).equal('-1234.567');
     });
 
     it('should change value in formControl mask separator.1', () => {
@@ -278,7 +278,7 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         equal('-1234.9', '-1 234.9', fixture);
-        expect(component.form.value).toBe('-1234.9');
+        expect(component.form.value).equal('-1234.9');
     });
 
     it('should change value in formControl mask separator.0', () => {
@@ -288,7 +288,7 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         equal('-1234', '-1 234', fixture);
-        expect(component.form.value).toBe('-1234');
+        expect(component.form.value).equal('-1234');
     });
 
     it('should change value if user star from zero separator.0', () => {

@@ -39,6 +39,7 @@ export function typeTest(inputValue: string, fixture: any): string {
             }
             inputElement.dispatchEvent(new Event('input'));
             inputElement.dispatchEvent(new Event('ngModelChange'));
+            fixture.detectChanges();
         }
     }
     return inputElement.value;
@@ -79,6 +80,7 @@ export function typeTestTextarea(inputValue: string, fixture: any): string {
             textareaElement.selectionStart = selectionStart + 1;
             textareaElement.dispatchEvent(new Event('input'));
             textareaElement.dispatchEvent(new Event('ngModelChange'));
+            fixture.detectChanges();
         }
     }
     return textareaElement.value;
@@ -90,7 +92,7 @@ export function equal(
     fixture: any,
     async = false,
     testType: typeof Paste | typeof Type = Type
-): void {
+): void | Promise<void> {
     if (testType === Paste) {
         pasteTest(value, fixture);
     } else {
@@ -98,12 +100,13 @@ export function equal(
     }
 
     if (async) {
-        Promise.resolve().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe(expectedValue);
-        });
-        return;
+        return (async () => {
+            await fixture.whenStable();
+            fixture.detectChanges();
+            expect(fixture.nativeElement.querySelector('input').value).equal(expectedValue);
+        })();
     }
-    expect(fixture.nativeElement.querySelector('input').value).toBe(expectedValue);
+    expect(fixture.nativeElement.querySelector('input').value).equal(expectedValue);
 }
 
 export function equalTextarea(
@@ -112,7 +115,7 @@ export function equalTextarea(
     fixture: any,
     async = false,
     testType: typeof Paste | typeof Type = Type
-): void {
+): void | Promise<void> {
     if (testType === Paste) {
         pasteTestTextarea(value, fixture);
     } else {
@@ -120,10 +123,11 @@ export function equalTextarea(
     }
 
     if (async) {
-        Promise.resolve().then(() => {
-            expect(fixture.nativeElement.querySelector('textarea').value).toBe(expectedValue);
-        });
-        return;
+        return (async () => {
+            await fixture.whenStable();
+            fixture.detectChanges();
+            expect(fixture.nativeElement.querySelector('textarea').value).equal(expectedValue);
+        })();
     }
-    expect(fixture.nativeElement.querySelector('textarea').value).toBe(expectedValue);
+    expect(fixture.nativeElement.querySelector('textarea').value).equal(expectedValue);
 }

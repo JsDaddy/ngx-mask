@@ -1,5 +1,5 @@
 import type { ComponentFixture } from '@angular/core/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import type { DebugElement } from '@angular/core';
 import { LOCALE_ID } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -49,7 +49,7 @@ describe('Separator: Mask with FR locale', () => {
         component.decimalMarker.set('.');
 
         typeTest('12 345.67', fixture);
-        expect(component.form.value).toBe('12345.67');
+        expect(component.form.value).equal('12345.67');
     });
 
     it('check formControl value to be number when decimalMarker is array', () => {
@@ -58,25 +58,25 @@ describe('Separator: Mask with FR locale', () => {
         component.decimalMarker.set(['.', ',']);
 
         typeTest('12 345,67', fixture);
-        expect(component.form.value).toBe('12345.67');
+        expect(component.form.value).equal('12345.67');
 
         typeTest('123 456.78', fixture);
-        expect(component.form.value).toBe('123456.78');
+        expect(component.form.value).equal('123456.78');
     });
 
-    it('should show - at input', fakeAsync(() => {
+    it('should show - at input', async () => {
         component.mask.set('separator.2');
         component.thousandSeparator.set(' ');
         component.decimalMarker.set(',');
         component.allowNegativeNumbers.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.form.setValue(-78);
-        tick();
-        expect(inputTarget.value).toBe('-78');
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('-78');
         equal('-78', '-78', fixture);
-    }));
+    });
 });
