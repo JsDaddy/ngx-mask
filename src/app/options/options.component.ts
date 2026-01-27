@@ -10,8 +10,8 @@ import {
     untracked,
     viewChildren,
 } from '@angular/core';
-import { JsonPipe, NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { form, FormField } from '@angular/forms/signals';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
@@ -36,9 +36,9 @@ import type {
     standalone: true,
     providers: [ScrollService, AccordionService],
     imports: [
-        JsonPipe,
         NgTemplateOutlet,
         FormsModule,
+        ReactiveFormsModule,
         FormField,
         HighlightModule,
         NgxMaskDirective,
@@ -79,7 +79,7 @@ export class OptionsComponent {
     public readonly activeCardId = toSignal(this.scrollService.activeCard$);
 
     public constructor() {
-        // Effect to create FieldTrees when config changes
+        // Effect to create all form types when config changes
         // This runs in injection context (constructor)
         effect(() => {
             const configs = this.cardExamplesConfig();
@@ -89,24 +89,35 @@ export class OptionsComponent {
             }
 
             untracked(() => {
-                runInInjectionContext(this.injector, () => {
-                    const runtimeExamples = configs.map((config) => {
-                        if ('_pipe' in config) {
-                            return config;
-                        }
-                        // Create FieldTree from config (form() requires injection context)
-                        const modelSignal = signal<string | null>(config.control.initialValue);
-                        return {
-                            ...config,
-                            control: {
-                                form: form(modelSignal),
-                                model: config.control.model,
-                            },
-                        } as TExample<MaskOptions>;
-                    });
+                const runtimeExamples = configs.map((config) => {
+                    if ('_pipe' in config) {
+                        return config;
+                    }
+                    const initialValue = config.control.initialValue;
 
-                    this.cardExamples.set(runtimeExamples);
+                    // Create FormControl for Reactive Forms
+                    const formControl = new FormControl<string | null>(initialValue);
+
+                    // Create signal for ngModel (Template-driven)
+                    const modelSignal = signal<string | null>(initialValue);
+
+                    // Create FieldTree for Signal Forms (requires injection context)
+                    const signalFormModel = signal({ value: initialValue });
+                    const signalForm = runInInjectionContext(this.injector, () =>
+                        form(signalFormModel)
+                    );
+
+                    return {
+                        ...config,
+                        control: {
+                            formControl,
+                            model: modelSignal,
+                            signalForm,
+                        },
+                    } as TExample<MaskOptions>;
                 });
+
+                this.cardExamples.set(runtimeExamples);
             });
         });
 

@@ -49,6 +49,9 @@
                             "outputHashing": "all"
                         },
                         "development": {
+                            "define": {
+                                "VERSION": "'dev'"
+                            },
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
@@ -58,14 +61,15 @@
                 },
                 "serve": {
                     "builder": "@angular/build:dev-server",
-                    "options": {
-                        "buildTarget": "ngx-mask:build"
-                    },
                     "configurations": {
                         "production": {
                             "buildTarget": "ngx-mask:build:production"
+                        },
+                        "development": {
+                            "buildTarget": "ngx-mask:build:development"
                         }
-                    }
+                    },
+                    "defaultConfiguration": "development"
                 },
                 "test": {
                     "builder": "@angular/build:unit-test",

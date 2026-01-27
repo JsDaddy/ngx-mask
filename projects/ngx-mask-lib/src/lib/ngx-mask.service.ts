@@ -707,7 +707,15 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(
-            specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'),
+            specialCharactersForRemove
+                .map((item: string) => {
+                    // Only escape characters that have special meaning in regex
+                    if (/[.*+?^${}()|[\]\\/-]/.test(item)) {
+                        return `\\${item}`;
+                    }
+                    return item;
+                })
+                .join('|'),
             'gi'
         );
     }

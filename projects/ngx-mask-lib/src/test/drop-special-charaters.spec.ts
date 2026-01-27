@@ -157,4 +157,14 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('1234567890', '(123) 456-7890', fixture);
         expect(component.form.valid).equal(true);
     });
+
+    it('should drop all special characters including letters from mask like ext.', () => {
+        component.mask.set('(000) 000-0000 ext. 000000');
+        component.specialCharacters.set(['e', 'x', 't', ' ', '(', ')', '-', '.']);
+        component.dropSpecialCharacters.set(true);
+        component.showMaskTyped.set(true);
+
+        equal('1231231123112333', '(123) 123-1123 ext. 112333', fixture);
+        expect(component.form.value).equal('1231231123112333');
+    });
 });
