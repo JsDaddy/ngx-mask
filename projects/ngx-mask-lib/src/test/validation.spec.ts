@@ -1,11 +1,10 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
-
+import { expect } from 'vitest';
 describe('Directive: Mask (Validation)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;

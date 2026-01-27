@@ -40,7 +40,7 @@
         "release:patch": "bun run version:patch && bun run build:lib && bun run pack:lib && bun run publish:lib",
         "start": "ng serve",
         "start-prod": "angular-http-server --path dist/ngx-mask --p 3000 --silent",
-        "test": "ng test",
+        "test": "ng test --watch=false",
         "cypress:open": "cypress open",
         "cypress:bash": "npx cypress run --component",
         "test:all": "bun run test:app && bun run test:lib",

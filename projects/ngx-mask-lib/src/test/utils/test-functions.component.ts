@@ -1,3 +1,4 @@
+import { expect } from 'vitest';
 export const Paste = 'Paste';
 export const Type = 'Type';
 

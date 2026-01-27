@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Type } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
 
 describe('Separator: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

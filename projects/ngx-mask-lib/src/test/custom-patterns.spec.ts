@@ -7,6 +7,7 @@ import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Directive: Mask (Custom patterns)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

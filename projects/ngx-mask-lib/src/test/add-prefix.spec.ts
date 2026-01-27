@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Directive: Mask (Add prefix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

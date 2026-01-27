@@ -29,6 +29,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
             [dropSpecialCharacters]="dropSpecialCharacters()"
             [specialCharacters]="specialCharacters()"
             [patterns]="patterns()"
+            [placeHolderCharacter]="placeHolderCharacter()"
             [keepCharacterPositions]="keepCharacterPositions()"
             [separatorLimit]="separatorLimit()"
             [hiddenInput]="hiddenInput()"

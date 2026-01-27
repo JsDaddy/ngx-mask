@@ -5,6 +5,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
 import type { NgxMaskOptions } from 'ngx-mask';
 import { By } from '@angular/platform-browser';
+import { expect } from 'vitest';
 
 function createComponentWithDefaultConfig(
     defaultConfig?: NgxMaskOptions

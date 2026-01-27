@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { equal } from './utils/test-functions.component';
-import { vi } from 'vitest';
+import { vi, expect } from 'vitest';
 
 describe('Directive: Mask (Trigger on mask change)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

@@ -7,6 +7,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import type { DebugElement } from '@angular/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { equal } from './utils/test-functions.component';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Dynamic)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

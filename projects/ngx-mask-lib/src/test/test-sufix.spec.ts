@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Suffix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

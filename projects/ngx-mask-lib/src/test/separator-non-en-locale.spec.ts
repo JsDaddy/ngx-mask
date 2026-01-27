@@ -7,6 +7,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, typeTest } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { By } from '@angular/platform-browser';
+import { expect, vi } from 'vitest';
 
 // FR locale uses comma as decimal marker
 describe('Separator: Mask with FR locale', () => {

@@ -7,6 +7,7 @@ import { equal, typeTest, pasteTest } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Secure)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

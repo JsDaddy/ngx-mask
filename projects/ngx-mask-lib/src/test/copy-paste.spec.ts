@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Event: paste', () => {
     let fixture: ComponentFixture<TestMaskComponent>;

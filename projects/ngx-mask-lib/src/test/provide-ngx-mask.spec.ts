@@ -5,6 +5,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective, NgxMaskService } from 'ngx-mask';
 import type { NgxMaskOptions, NgxMaskConfig } from 'ngx-mask';
 import { Component, EventEmitter } from '@angular/core';
+import { expect } from 'vitest';
 
 function createComponentWithDefaultConfigAndSimpleInputs(
     defaultConfig?: NgxMaskOptions

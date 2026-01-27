@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { NgxMaskDirective, provideNgxMask, NgxMaskPipe } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
