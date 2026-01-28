@@ -52,14 +52,9 @@ import type {
 export class OptionsComponent {
     public cardDocs = input<ComDoc[]>();
     public cardExamplesConfig = input<(TExampleConfig<MaskOptions> | { _pipe: string })[]>([], {
-        //eslint-disable-next-line @angular-eslint/no-input-rename
         alias: 'cardExamples',
     });
 
-    /**
-     * Runtime examples with FieldTrees.
-     * Updated via effect when cardExamplesConfig changes.
-     */
     public cardExamples = signal<(TExample<MaskOptions> | { _pipe: string })[]>([]);
 
     public cards = viewChildren<string, ElementRef<HTMLElement>>('cards', {
@@ -79,8 +74,6 @@ export class OptionsComponent {
     public readonly activeCardId = toSignal(this.scrollService.activeCard$);
 
     public constructor() {
-        // Effect to create all form types when config changes
-        // This runs in injection context (constructor)
         effect(() => {
             const configs = this.cardExamplesConfig();
             if (!configs) {
@@ -94,15 +87,10 @@ export class OptionsComponent {
                         return config;
                     }
                     const initialValue = config.control.initialValue;
-
-                    // Create FormControl for Reactive Forms
                     const formControl = new FormControl<string | null>(initialValue);
-
-                    // Create signal for ngModel (Template-driven)
                     const modelSignal = signal<string | null>(initialValue);
-
-                    // Create FieldTree for Signal Forms (requires injection context)
                     const signalFormModel = signal({ value: initialValue });
+
                     const signalForm = runInInjectionContext(this.injector, () =>
                         form(signalFormModel)
                     );

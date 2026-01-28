@@ -72,71 +72,19 @@ export class NgxMaskDirective
     public keepCharacterPositions = input<NgxMaskConfig['keepCharacterPositions'] | null>(null);
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
-    // ===== Signal Forms Support (FormValueControl interface) =====
-    /**
-     * Two-way bound value for Signal Forms integration.
-     * This is the main value binding when used with [formField] directive.
-     */
     public value = model<string>('');
-
-    /**
-     * Validation errors from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public errors = input<readonly WithOptionalField<ValidationError>[]>([]);
-
-    /**
-     * Disabled state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public disabled = input<boolean>(false);
-
-    /**
-     * Touched state for Signal Forms.
-     * Can be two-way bound when using [formField] directive.
-     */
     public touched = model<boolean>(false);
-
-    /**
-     * Dirty state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public dirty = input<boolean>(false);
-
-    /**
-     * Invalid state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public invalid = input<boolean>(false);
-
-    /**
-     * Pending state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public pending = input<boolean>(false);
-
-    /**
-     * Readonly state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public readonly = input<boolean>(false);
-
-    /**
-     * Required state from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public required = input<boolean>(false);
-
-    /**
-     * Field name from Signal Forms FieldState.
-     * Automatically bound when using [formField] directive.
-     */
     public name = input<string>('');
 
-    // ===== Outputs =====
     public maskFilled = output<void>();
 
-    // ===== Private Signals =====
     private _maskValue = signal<string>('');
     private _inputValue = signal<string>('');
     private _position = signal<number | null>(null);
@@ -149,12 +97,10 @@ export class NgxMaskDirective
     /** Track if we're using Signal Forms mode */
     private _isSignalFormsMode = signal<boolean>(false);
 
-    // ===== Injected Dependencies =====
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
-    // ===== ControlValueAccessor callbacks =====
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: any) => {};
 
@@ -162,10 +108,8 @@ export class NgxMaskDirective
     public onTouch = () => {};
 
     public constructor() {
-        // Effect to sync Signal Forms value changes to internal state
         effect(() => {
             const signalValue = this.value();
-            // Only process if we're in Signal Forms mode and the value is different
             if (this._isSignalFormsMode() && signalValue !== untracked(() => this._inputValue())) {
                 untracked(() => {
                     this.writeValue(signalValue);
@@ -173,7 +117,6 @@ export class NgxMaskDirective
             }
         });
 
-        // Effect to handle disabled state from Signal Forms
         effect(() => {
             const isDisabled = this.disabled();
             untracked(() => {
