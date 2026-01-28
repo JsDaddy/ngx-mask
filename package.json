@@ -75,7 +75,7 @@
         "ngx-highlightjs": "14.0.1",
         "ngxtension": "5.1.0",
         "rxjs": "7.8.2",
-        "semantic-release": "24.2.7",
+        "semantic-release": "25.0.0",
         "semantic-release-export-data": "1.1.1",
         "snyk": "1.1298.1"
     },
