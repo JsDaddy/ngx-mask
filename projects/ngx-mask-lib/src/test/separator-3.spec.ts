@@ -455,6 +455,7 @@ describe('Separator: Mask', () => {
         component.mask.set('separator.2');
         component.thousandSeparator.set(' ');
         component.decimalMarker.set(',');
+        fixture.detectChanges();
 
         const inputElement = fixture.nativeElement.querySelector('input');
         inputElement.value = '100000,00';

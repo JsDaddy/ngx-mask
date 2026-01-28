@@ -272,8 +272,17 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // Propagate the input value back to the Angular model
-        // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-        this._emitValue ? this.formControlResult(result) : '';
+        // Only emit if:
+        // 1. _emitValue is true (value changed), AND
+        // 2. Either mask didn't change, OR triggerOnMaskChange is true
+        const shouldEmit = this._emitValue && (!this.maskChanged || this.triggerOnMaskChange);
+        if (shouldEmit) {
+            this.formControlResult(result);
+        }
+        // Reset maskChanged flag even if we didn't emit
+        if (this.maskChanged && !this.triggerOnMaskChange) {
+            this.maskChanged = false;
+        }
 
         // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
