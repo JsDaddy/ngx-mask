@@ -22,8 +22,8 @@ describe('Directive: Mask', () => {
     it('should clear if mask is not matched', async () => {
         component.mask.set('000.000-00');
         component.clearIfNotMatch.set(true);
-        equal('', '', fixture, true);
-        equal('2578989', '', fixture, true);
+        await equal('', '', fixture, true);
+        await equal('2578989', '', fixture, true);
         equal('2578989888988', '257.898-98', fixture);
         equal('111.111-11', '111.111-11', fixture);
     });
@@ -32,8 +32,8 @@ describe('Directive: Mask', () => {
         component.mask.set('000-000-00');
         component.prefix.set('+5');
         component.clearIfNotMatch.set(true);
-        equal('', '', fixture, true);
-        equal('2578989', '', fixture, true);
+        await equal('', '', fixture, true);
+        await equal('2578989', '', fixture, true);
         equal('25789898', '+5257-898-98', fixture);
     });
 
@@ -41,9 +41,9 @@ describe('Directive: Mask', () => {
         component.mask.set('0000');
         component.placeHolderCharacter.set('*');
         component.clearIfNotMatch.set(true);
-        equal('', '', fixture, true);
-        equal('333', '', fixture, true);
-        equal('22', '', fixture, true);
+        await equal('', '', fixture, true);
+        await equal('333', '', fixture, true);
+        await equal('22', '', fixture, true);
         equal('2222', '2222', fixture);
     });
 
@@ -51,10 +51,10 @@ describe('Directive: Mask', () => {
         component.mask.set('00000');
         component.placeHolderCharacter.set('X');
         component.clearIfNotMatch.set(true);
-        equal('', '', fixture, true);
-        equal('333', '', fixture, true);
-        equal('22', '', fixture, true);
-        equal('2222', '', fixture, true);
+        await equal('', '', fixture, true);
+        await equal('333', '', fixture, true);
+        await equal('22', '', fixture, true);
+        await equal('2222', '', fixture, true);
         equal('12345', '12345', fixture);
     });
 });

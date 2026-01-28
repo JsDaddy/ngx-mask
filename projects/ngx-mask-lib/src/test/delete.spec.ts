@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Delete)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -25,7 +26,7 @@ describe('Directive: Mask (Delete)', () => {
         component.mask.set('00/00/0000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '2/34/5678';
@@ -39,15 +40,15 @@ describe('Directive: Mask (Delete)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('23/45/678');
-        expect(inputTarget.selectionStart).toEqual(1);
+        expect(inputTarget.value).equal('23/45/678');
+        expect(inputTarget.selectionStart).equal(1);
     });
 
     it('delete special character in input', () => {
         component.mask.set('00/00/0000');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '12/34/5678';
@@ -61,8 +62,8 @@ describe('Directive: Mask (Delete)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('12/34/5678');
-        expect(inputTarget.selectionStart).toEqual(2);
+        expect(inputTarget.value).equal('12/34/5678');
+        expect(inputTarget.selectionStart).equal(2);
     });
 
     it('delete special character in secure input', () => {
@@ -70,7 +71,7 @@ describe('Directive: Mask (Delete)', () => {
         component.hiddenInput.set(true);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '123/45/6789';
@@ -85,15 +86,15 @@ describe('Directive: Mask (Delete)', () => {
         debugElement.triggerEventHandler('input', { target: inputTarget });
         debugElement.triggerEventHandler('ngModelChange', { target: inputTarget });
 
-        expect(inputTarget.value).toEqual('***/*5/6789');
-        expect(inputTarget.selectionStart).toEqual(6);
+        expect(inputTarget.value).equal('***/*5/6789');
+        expect(inputTarget.selectionStart).equal(6);
     });
 
     it('delete special character on 1 position', () => {
         component.mask.set('[00]');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '[12]';
@@ -107,7 +108,7 @@ describe('Directive: Mask (Delete)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.selectionStart).toEqual(1);
+        expect(inputTarget.selectionStart).equal(1);
     });
 
     it('delete suffix with backspace and delete', () => {
@@ -115,7 +116,7 @@ describe('Directive: Mask (Delete)', () => {
         component.suffix.set('.com');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '123.com';
@@ -129,7 +130,7 @@ describe('Directive: Mask (Delete)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.selectionStart).equal(3);
 
         inputTarget.selectionStart = 4;
         inputTarget.selectionEnd = 4;
@@ -142,7 +143,7 @@ describe('Directive: Mask (Delete)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.selectionStart).equal(3);
     });
 
     it('prefix shouldn`t be deleted', () => {
@@ -150,7 +151,7 @@ describe('Directive: Mask (Delete)', () => {
         component.prefix.set('+1');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '+100 00';
@@ -167,7 +168,7 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
-        expect(inputTarget.selectionStart).toEqual(2);
+        expect(inputTarget.selectionStart).equal(2);
     });
 
     it('prefix shouldn`t be deleted', () => {
@@ -175,7 +176,7 @@ describe('Directive: Mask (Delete)', () => {
         component.prefix.set('+1 ');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '+1 00 00';
@@ -192,7 +193,7 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.selectionStart).equal(3);
     });
 
     it('prefix shouldn`t be deleted', () => {
@@ -200,7 +201,7 @@ describe('Directive: Mask (Delete)', () => {
         component.prefix.set('+1');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '+1(00) 00';
@@ -217,7 +218,7 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
-        expect(inputTarget.selectionStart).toEqual(2);
+        expect(inputTarget.selectionStart).equal(2);
     });
 
     it('prefix shouldn`t be deleted', () => {
@@ -225,7 +226,7 @@ describe('Directive: Mask (Delete)', () => {
         component.prefix.set('+1 ');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '+1 (00) 00';
@@ -242,7 +243,7 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
-        expect(inputTarget.selectionStart).toEqual(3);
+        expect(inputTarget.selectionStart).equal(3);
     });
 
     it('date mask should show keep right value d0/M0/0000', () => {
@@ -265,7 +266,7 @@ describe('Directive: Mask (Delete)', () => {
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(inputElement.value).toBe('4/4/4');
+        expect(inputElement.value).equal('4/4/4');
     });
 
     it('date mask should show keep right value d0:M0:0000', () => {
@@ -288,7 +289,7 @@ describe('Directive: Mask (Delete)', () => {
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(inputElement.value).toBe('4:4:4');
+        expect(inputElement.value).equal('4:4:4');
     });
 
     it('date mask should show keep right value d0-M0-0000', () => {
@@ -311,6 +312,6 @@ describe('Directive: Mask (Delete)', () => {
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(inputElement.value).toBe('4-4-4');
+        expect(inputElement.value).equal('4-4-4');
     });
 });

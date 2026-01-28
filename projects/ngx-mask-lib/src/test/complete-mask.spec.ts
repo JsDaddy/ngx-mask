@@ -1,8 +1,10 @@
+import type { Mock } from 'vitest';
 import { Component, signal } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { vi, expect } from 'vitest';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -23,7 +25,7 @@ class TestMaskComponent {
 describe('Directive: Mask (Function maskFilled)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
-    let maskFilledSpy: jasmine.Spy<jasmine.Func>;
+    let maskFilledSpy: Mock;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -33,7 +35,7 @@ describe('Directive: Mask (Function maskFilled)', () => {
         fixture = TestBed.createComponent(TestMaskComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
-        maskFilledSpy = spyOn(component, 'maskFilled').and.callThrough();
+        maskFilledSpy = vi.spyOn(component, 'maskFilled');
     });
 
     it('should call function maskFilled and isMaskFilled should be true', () => {
@@ -43,8 +45,9 @@ describe('Directive: Mask (Function maskFilled)', () => {
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(component.isMaskFilled()).toBeTrue();
-        expect(maskFilledSpy).toHaveBeenCalledOnceWith();
+        expect(component.isMaskFilled()).equal(true);
+        expect(maskFilledSpy).toHaveBeenCalledTimes(1);
+        expect(maskFilledSpy).toHaveBeenCalledWith();
     });
 
     it('isMaskFilled should be false', () => {
@@ -54,6 +57,6 @@ describe('Directive: Mask (Function maskFilled)', () => {
         inputElement.dispatchEvent(new Event('input'));
         fixture.detectChanges();
 
-        expect(component.isMaskFilled()).toBeFalse();
+        expect(component.isMaskFilled()).equal(false);
     });
 });

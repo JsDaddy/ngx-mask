@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Directive: Mask (Percent)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -106,7 +107,7 @@ describe('Directive: Mask (Percent)', () => {
         fixture.detectChanges();
 
         equal('1', '1', fixture);
-        expect(component.form.value).toBe('1');
+        expect(component.form.value).equal('1');
         expect(component.form.valid).toBeTruthy();
     });
 
@@ -116,7 +117,7 @@ describe('Directive: Mask (Percent)', () => {
         fixture.detectChanges();
 
         equal('1', '1', fixture);
-        expect(component.form.value).toBe('1');
+        expect(component.form.value).equal('1');
         expect(component.form.valid).toBeTruthy();
     });
 
@@ -126,7 +127,7 @@ describe('Directive: Mask (Percent)', () => {
         fixture.detectChanges();
 
         equal('1', '1', fixture);
-        expect(component.form.value).toBe('1');
+        expect(component.form.value).equal('1');
         expect(component.form.valid).toBeTruthy();
     });
 
@@ -138,7 +139,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('12', '12', fixture);
         equal('12,2', '12,2', fixture);
         equal('12,22', '12,22', fixture);
-        expect(component.form.value).toBe('12.22');
+        expect(component.form.value).equal('12.22');
     });
 
     it('percent with decimalMarker = , percent.3 ', () => {
@@ -150,7 +151,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('12,2', '12,2', fixture);
         equal('12,22', '12,22', fixture);
         equal('12,222', '12,222', fixture);
-        expect(component.form.value).toBe('12.222');
+        expect(component.form.value).equal('12.222');
     });
 
     it('percent with decimalMarker = , percent.2 drop false ', () => {
@@ -162,7 +163,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('12', '12', fixture);
         equal('12,2', '12,2', fixture);
         equal('12,22', '12,22', fixture);
-        expect(component.form.value).toBe('12,22');
+        expect(component.form.value).equal('12,22');
     });
 
     it('percent with decimalMarker = , percent.3 drop false ', () => {
@@ -174,7 +175,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('22', '22', fixture);
         equal('12,2', '12,2', fixture);
         equal('12,221', '12,221', fixture);
-        expect(component.form.value).toBe('12,221');
+        expect(component.form.value).equal('12,221');
     });
 
     it('percent with decimalMarker = , percent.2 drop false with suffix ', () => {
@@ -187,7 +188,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('12', '12%', fixture);
         equal('12,2', '12,2%', fixture);
         equal('12,22', '12,22%', fixture);
-        expect(component.form.value).toBe('12,22%');
+        expect(component.form.value).equal('12,22%');
     });
 
     it('percent with decimalMarker = , percent.3 drop false with suffix ', () => {
@@ -200,7 +201,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('22', '22%', fixture);
         equal('12,2', '12,2%', fixture);
         equal('12,221', '12,221%', fixture);
-        expect(component.form.value).toBe('12,221%');
+        expect(component.form.value).equal('12,221%');
     });
 
     it('percent with decimalMarker = , percent.2with suffix ', () => {
@@ -212,7 +213,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('12', '12%', fixture);
         equal('12,2', '12,2%', fixture);
         equal('12,22', '12,22%', fixture);
-        expect(component.form.value).toBe('12.22');
+        expect(component.form.value).equal('12.22');
     });
 
     it('percent with decimalMarker = , percent.3  with suffix ', () => {
@@ -224,7 +225,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('22', '22%', fixture);
         equal('12,2', '12,2%', fixture);
         equal('12,221', '12,221%', fixture);
-        expect(component.form.value).toBe('12.221');
+        expect(component.form.value).equal('12.221');
     });
 
     it('percent with allowNegative = true', () => {
@@ -235,7 +236,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-0', '-0', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
-        expect(component.form.value).toBe('-12');
+        expect(component.form.value).equal('-12');
     });
 
     it('percent with allowNegative = true', () => {
@@ -246,7 +247,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-0', '-0', fixture);
         equal('-0.', '-0.', fixture);
         equal('-0.1', '-0.1', fixture);
-        expect(component.form.value).toBe('-0.1');
+        expect(component.form.value).equal('-0.1');
     });
 
     it('percent with allowNegative = true', () => {
@@ -258,7 +259,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-0', '-0', fixture);
         equal('-0,', '-0,', fixture);
         equal('-0,1', '-0,1', fixture);
-        expect(component.form.value).toBe('-0.1');
+        expect(component.form.value).equal('-0.1');
     });
 
     it('percent 2 with allowNegative = true', () => {
@@ -274,7 +275,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-12', '-12', fixture);
         equal('-12.3', '-12.3', fixture);
         equal('-12.34', '-12.34', fixture);
-        expect(component.form.value).toBe('-12.34');
+        expect(component.form.value).equal('-12.34');
     });
 
     it('percent 3 with allowNegative = true', () => {
@@ -292,7 +293,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-12.3', '-12.3', fixture);
         equal('-12.34', '-12.34', fixture);
         equal('-12.345', '-12.345', fixture);
-        expect(component.form.value).toBe('-12.345');
+        expect(component.form.value).equal('-12.345');
     });
 
     it('percent with allowNegative = true, decimalMarker = ,', () => {
@@ -304,7 +305,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-0', '-0', fixture);
         equal('-1', '-1', fixture);
         equal('-12', '-12', fixture);
-        expect(component.form.value).toBe('-12');
+        expect(component.form.value).equal('-12');
     });
 
     it('percent 2 with allowNegative = true, decimalMarker = ,', () => {
@@ -321,7 +322,7 @@ describe('Directive: Mask (Percent)', () => {
         equal('-12', '-12', fixture);
         equal('-12,3', '-12,3', fixture);
         equal('-12,34', '-12,34', fixture);
-        expect(component.form.value).toBe('-12.34');
+        expect(component.form.value).equal('-12.34');
     });
 
     it('percent 3 with allowNegative = true, decimalMarker = ,', () => {
@@ -340,6 +341,6 @@ describe('Directive: Mask (Percent)', () => {
         equal('-12,3', '-12,3', fixture);
         equal('-12,34', '-12,34', fixture);
         equal('-12,345', '-12,345', fixture);
-        expect(component.form.value).toBe('-12.345');
+        expect(component.form.value).equal('-12.345');
     });
 });

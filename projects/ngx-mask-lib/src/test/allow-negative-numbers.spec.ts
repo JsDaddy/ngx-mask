@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Directive: Mask (Allow negative numbers)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -27,11 +28,11 @@ describe('Directive: Mask (Allow negative numbers)', () => {
         component.dropSpecialCharacters.set(true);
         equal('-10,000.00', '10,000.00', fixture);
 
-        expect(component.form.value).toBe('10000.00');
+        expect(component.form.value).equal('10000.00');
 
         component.form.setValue(-123456);
         equal('-123456.00', '123,456.00', fixture);
-        expect(component.form.value).toBe(123456);
+        expect(component.form.value).equal(123456);
     });
 
     it('FormControl and NgModel should be filled with negative values', () => {
@@ -41,7 +42,7 @@ describe('Directive: Mask (Allow negative numbers)', () => {
         component.dropSpecialCharacters.set(true);
         component.form.setValue(-123456);
 
-        expect(component.form.value).toBe(-123456);
+        expect(component.form.value).equal(-123456);
         equal('-123456.00', '-123,456.00', fixture);
     });
 

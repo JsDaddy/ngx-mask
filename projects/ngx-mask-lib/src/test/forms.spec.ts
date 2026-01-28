@@ -3,6 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -57,7 +58,7 @@ describe('Directive: Forms', () => {
         const inputElement = testBed.nativeElement.querySelector('input');
 
         // Check that the form is not dirty on initial load
-        expect(formElement.classList.contains('ng-dirty')).toBe(false);
-        expect(inputElement.classList.contains('ng-dirty')).toBe(false);
+        expect(formElement.classList.contains('ng-dirty')).equal(false);
+        expect(inputElement.classList.contains('ng-dirty')).equal(false);
     });
 });

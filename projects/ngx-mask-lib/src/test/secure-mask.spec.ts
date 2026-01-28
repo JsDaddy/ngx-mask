@@ -1,5 +1,4 @@
 import type { ComponentFixture } from '@angular/core/testing';
-import { fakeAsync, tick } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -8,6 +7,7 @@ import { equal, typeTest, pasteTest } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Secure)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -27,42 +27,42 @@ describe('Directive: Mask (Secure)', () => {
         component.mask.set('XXX/X0/0000');
         component.hiddenInput.set(true);
         equal('1234', '***/*', fixture);
-        expect(component.form.value).toBe('1234');
+        expect(component.form.value).equal('1234');
     });
 
     it('it checks secure input functionality ', () => {
         component.mask.set('XXX/XX/0000');
         component.hiddenInput.set(true);
         equal('123456789', '***/**/6789', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
     });
 
     it('it checks secure input functionality ', () => {
         component.mask.set('XXX/XX/XXX0');
         component.hiddenInput.set(true);
         equal('123456789', '***/**/***9', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
     });
 
     it('it checks secure input functionality ', () => {
         component.mask.set('XXX/XX/XXXX');
         component.hiddenInput.set(true);
         equal('123456789', '***/**/****', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
     });
 
     it('it checks secure input functionality ', () => {
         component.mask.set('0000-00-XXXX');
         component.hiddenInput.set(true);
         equal('123456789', '1234-56-***', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
     });
 
     it('it checks secure input functionality ', () => {
         component.mask.set('0000-X0-XXXX');
         component.hiddenInput.set(true);
         equal('123456789', '1234-*6-***', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
     });
 
     it('it checks secure input functionality on reset', () => {
@@ -73,7 +73,7 @@ describe('Directive: Mask (Secure)', () => {
 
         component.form.setValue('98765');
         fixture.whenStable().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5');
+            expect(fixture.nativeElement.querySelector('input').value).equal('***/*5');
         });
     });
 
@@ -93,7 +93,7 @@ describe('Directive: Mask (Secure)', () => {
 
         component.form.setValue('1234567');
         fixture.whenStable().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('***/*5/67');
+            expect(fixture.nativeElement.querySelector('input').value).equal('***/*5/67');
         });
     });
 
@@ -110,7 +110,7 @@ describe('Directive: Mask (Secure)', () => {
         expect(component.form.dirty).toBeTruthy();
         expect(component.form.pristine).toBeFalsy();
         return fixture.whenStable().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
+            expect(fixture.nativeElement.querySelector('input').value).equal('123/45/6789');
         });
     });
 
@@ -128,7 +128,7 @@ describe('Directive: Mask (Secure)', () => {
         expect(component.form.dirty).toBeTruthy();
         expect(component.form.pristine).toBeFalsy();
         fixture.whenStable().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('123/45/6789');
+            expect(fixture.nativeElement.querySelector('input').value).equal('123/45/6789');
         });
     });
 
@@ -137,11 +137,11 @@ describe('Directive: Mask (Secure)', () => {
         component.mask.set('XXX/X0/0000');
         equal('54321', '***/*1', fixture);
         pasteTest('1', fixture);
-        expect(component.form.value).toBe('1');
+        expect(component.form.value).equal('1');
         component.form.reset();
-        expect(component.form.value).toBe(null);
+        expect(component.form.value).equal(null);
         equal('2', '*', fixture);
-        expect(component.form.value).toBe('2');
+        expect(component.form.value).equal('2');
     });
 
     it('mask changes should work with null input', () => {
@@ -151,7 +151,7 @@ describe('Directive: Mask (Secure)', () => {
         component.form.reset();
         component.mask.set('XXX/X0/0000');
         equal('54321', '***/*1', fixture);
-        expect(component.form.value).toBe('54321');
+        expect(component.form.value).equal('54321');
     });
 
     it('it checks secure input functionality on reset then typed', () => {
@@ -163,7 +163,7 @@ describe('Directive: Mask (Secure)', () => {
         equal('', '___/__/____', fixture);
     });
 
-    it('should select text in input and paste new value', fakeAsync(() => {
+    it('should select text in input and paste new value', async () => {
         const inputValue = '111111';
         const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('#mask');
         inputElement.value = '000000';
@@ -177,10 +177,10 @@ describe('Directive: Mask (Secure)', () => {
         inputElement.dispatchEvent(new Event('input'));
         inputElement.dispatchEvent(new Event('change'));
         fixture.detectChanges();
-        tick();
+        await fixture.whenStable();
 
-        expect(component.form.value).toBe(inputValue);
-    }));
+        expect(component.form.value).equal(inputValue);
+    });
 
     it('hideInput with showMaskTyped mask=XXXX', () => {
         component.mask.set('XXXX');
@@ -203,7 +203,7 @@ describe('Directive: Mask (Secure)', () => {
     it('change hiddenInput to false ', async () => {
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
         component.mask.set('XXX-XX-XXXX');
         component.hiddenInput.set(true);
@@ -216,7 +216,7 @@ describe('Directive: Mask (Secure)', () => {
     it('change hiddenInput to false ', async () => {
         const debug: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
         component.mask.set('XXX-XX-XXXX');
         component.hiddenInput.set(true);
@@ -229,17 +229,17 @@ describe('Directive: Mask (Secure)', () => {
     it('change hiddenInput to false when mask is full', async () => {
         const debug: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
         component.mask.set('XXX/XX/XXXX');
         component.hiddenInput.set(true);
         equal('123456789', '***/**/****', fixture);
-        expect(component.form.value).toBe('123456789');
+        expect(component.form.value).equal('123456789');
         component.hiddenInput.set(false);
         fixture.detectChanges();
         return fixture.whenStable().then(() => {
-            expect(inputTarget.value).toBe('123/45/6789');
-            expect(component.form.value).toBe('123456789');
+            expect(inputTarget.value).equal('123/45/6789');
+            expect(component.form.value).equal('123456789');
         });
     });
 });

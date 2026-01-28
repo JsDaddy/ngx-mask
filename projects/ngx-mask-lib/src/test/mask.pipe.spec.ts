@@ -1,6 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { NgxMaskDirective, provideNgxMask, NgxMaskPipe } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Pipe: Mask', () => {
     let maskPipe: NgxMaskPipe;
@@ -17,18 +18,18 @@ describe('Pipe: Mask', () => {
     it('should mask a string', () => {
         const maskedString: string = maskPipe.transform('abcdef', 'SS-SS-SS');
 
-        expect(maskedString).toEqual('ab-cd-ef');
+        expect(maskedString).equal('ab-cd-ef');
     });
 
     it('should mask a number', () => {
         const maskedNumber: string = maskPipe.transform(123456789, '999-999-999');
 
-        expect(maskedNumber).toEqual('123-456-789');
+        expect(maskedNumber).equal('123-456-789');
     });
 
     it('should mask a number and string', () => {
         const maskedNumberAndString: string | number = maskPipe.transform('123abc', '09A/SAS');
-        expect(maskedNumberAndString).toEqual('123/abc');
+        expect(maskedNumberAndString).equal('123/abc');
     });
 
     it('should custom pattern', () => {
@@ -38,75 +39,75 @@ describe('Pipe: Mask', () => {
             },
         };
         const maskedNumber: string = maskPipe.transform(123456789, 'PPP-PP-PPP', { patterns });
-        expect(maskedNumber).toEqual('123-45-678');
+        expect(maskedNumber).equal('123-45-678');
     });
 
     it('should mask a zero number', () => {
         const maskedNumberAndString: string | number = maskPipe.transform(0, '0');
-        expect(maskedNumberAndString).toEqual('0');
+        expect(maskedNumberAndString).equal('0');
     });
 
     it('should mask separator', () => {
         const value: string | number = maskPipe.transform('123123123', 'separator.0');
-        expect(value).toEqual('123 123 123');
+        expect(value).equal('123 123 123');
     });
 
     it('should mask separator with thousandSeparator .', () => {
         const value: string | number = maskPipe.transform('123123123', 'separator.0', {
             thousandSeparator: '.',
         });
-        expect(value).toEqual('123.123.123');
+        expect(value).equal('123.123.123');
     });
 
     it('should mask separator with thousandSeparator ,', () => {
         const value: string | number = maskPipe.transform('123123123', 'separator.0', {
             thousandSeparator: ',',
         });
-        expect(value).toEqual('123,123,123');
+        expect(value).equal('123,123,123');
     });
 
     it('should mask separator.2 with thousandSeparator ,', () => {
         const value: string | number = maskPipe.transform('12312312.3', 'separator.2', {
             thousandSeparator: ',',
         });
-        expect(value).toEqual('12,312,312.3');
+        expect(value).equal('12,312,312.3');
     });
 
     it('should work with *', () => {
         let value: string | number = maskPipe.transform("11'1", "0*'09");
-        expect(value).toEqual("11'1");
+        expect(value).equal("11'1");
         value = maskPipe.transform('111111', "0*'09");
-        expect(value).toEqual('111111');
+        expect(value).equal('111111');
     });
 
     it('should work with suffix', () => {
         const value: string | number = maskPipe.transform("11'1", "0*'09", { suffix: ' sm' });
-        expect(value).toEqual("11'1 sm");
+        expect(value).equal("11'1 sm");
     });
 
     it('should work with suffix', () => {
         const value: string | number = maskPipe.transform("11'111", '00-00', {
             dropSpecialCharacters: true,
         });
-        expect(value).toEqual('11-11');
+        expect(value).equal('11-11');
     });
     it('should work with showMaskTyped', () => {
         const value: string | number = maskPipe.transform('11', '00-00', {
             showMaskTyped: true,
         });
-        expect(value).toEqual('11-__');
+        expect(value).equal('11-__');
     });
     it('should work with showMaskTyped', () => {
         const value: string | number = maskPipe.transform('12312312', '(000)-00-00', {
             prefix: '+380 ',
         });
-        expect(value).toEqual('+380 (123)-12-31');
+        expect(value).equal('+380 (123)-12-31');
     });
     it('should work with shownMaskExpression', () => {
         const value: string | number = maskPipe.transform('12312312', '(000)-00-00', {
             prefix: '+380 ',
         });
-        expect(value).toEqual('+380 (123)-12-31');
+        expect(value).equal('+380 (123)-12-31');
     });
     it('should work with dynamicMask 0,00||00,00||000,00||0000,00||00.000,00', () => {
         const value: string | number = maskPipe.transform(
@@ -129,11 +130,11 @@ describe('Pipe: Mask', () => {
             '1232222',
             '0,00||00,00||000,00||0000,00||00.000,00'
         );
-        expect(value).toEqual('1,23');
-        expect(value1).toEqual('12,32');
-        expect(value2).toEqual('123,22');
-        expect(value3).toEqual('1232,22');
-        expect(value4).toEqual('12.322,22');
+        expect(value).equal('1,23');
+        expect(value1).equal('12,32');
+        expect(value2).equal('123,22');
+        expect(value3).equal('1232,22');
+        expect(value4).equal('12.322,22');
     });
 
     it('should work with dynamicMask 0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000', () => {
@@ -150,9 +151,9 @@ describe('Pipe: Mask', () => {
             '0000 0000 0000 0000||0000 0000 0000 0000 00||0000 0000 0000 0000 000'
         );
 
-        expect(value).toEqual('1234 1234 1234 1234');
-        expect(value1).toEqual('1234 1234 1234 1234 12');
-        expect(value2).toEqual('1234 1234 1234 1234 123');
+        expect(value).equal('1234 1234 1234 1234');
+        expect(value1).equal('1234 1234 1234 1234 12');
+        expect(value2).equal('1234 1234 1234 1234 123');
     });
 
     it('should work with dynamicMask (00) 0000-0000||(00) 00000-0000', () => {
@@ -165,8 +166,8 @@ describe('Pipe: Mask', () => {
             '(00) 0000-0000||(00) 00000-0000'
         );
 
-        expect(value).toEqual('(12) 3412-3412');
-        expect(value1).toEqual('(12) 34123-4123');
+        expect(value).equal('(12) 3412-3412');
+        expect(value1).equal('(12) 34123-4123');
     });
 
     it('should work with custom pattern and hideInput', () => {
@@ -202,13 +203,13 @@ describe('Pipe: Mask', () => {
             hiddenInput: true,
             patterns: SSN_PATTERNS,
         });
-        expect(value).toEqual('●●● - ●● - 22');
-        expect(value1).toEqual('●●● - ●● - 2');
-        expect(value2).toEqual('●●● - ●●');
-        expect(value3).toEqual('●●● - ●');
-        expect(value4).toEqual('●●●');
-        expect(value5).toEqual('●●');
-        expect(value6).toEqual('●');
+        expect(value).equal('●●● - ●● - 22');
+        expect(value1).equal('●●● - ●● - 2');
+        expect(value2).equal('●●● - ●●');
+        expect(value3).equal('●●● - ●');
+        expect(value4).equal('●●●');
+        expect(value5).equal('●●');
+        expect(value6).equal('●');
     });
 
     it('should work with repeatMask A{4}', () => {
@@ -217,10 +218,10 @@ describe('Pipe: Mask', () => {
         const value2: string | number = maskPipe.transform('12', 'A{4}');
         const value3: string | number = maskPipe.transform('123', 'A{4}');
 
-        expect(value).toEqual('1234');
-        expect(value1).toEqual('1');
-        expect(value2).toEqual('12');
-        expect(value3).toEqual('123');
+        expect(value).equal('1234');
+        expect(value1).equal('1');
+        expect(value2).equal('12');
+        expect(value3).equal('123');
     });
 
     it('should work with repeatMask A{4}', () => {
@@ -229,10 +230,10 @@ describe('Pipe: Mask', () => {
         const value2: string | number = maskPipe.transform('12', 'A{4}');
         const value3: string | number = maskPipe.transform('123', 'A{4}');
 
-        expect(value).toEqual('1234');
-        expect(value1).toEqual('1');
-        expect(value2).toEqual('12');
-        expect(value3).toEqual('123');
+        expect(value).equal('1234');
+        expect(value1).equal('1');
+        expect(value2).equal('12');
+        expect(value3).equal('123');
     });
 
     it('should work with repeatMask SS0{4}', () => {
@@ -243,12 +244,12 @@ describe('Pipe: Mask', () => {
         const value4: string | number = maskPipe.transform('dd123', 'SS0{4}');
         const value5: string | number = maskPipe.transform('dd1234', 'SS0{4}');
 
-        expect(value).toEqual('d');
-        expect(value1).toEqual('dd');
-        expect(value2).toEqual('dd1');
-        expect(value3).toEqual('dd12');
-        expect(value4).toEqual('dd123');
-        expect(value5).toEqual('dd1234');
+        expect(value).equal('d');
+        expect(value1).equal('dd');
+        expect(value2).equal('dd1');
+        expect(value3).equal('dd12');
+        expect(value4).equal('dd123');
+        expect(value5).equal('dd1234');
     });
 
     it('should work with leadZero separator.2', () => {
@@ -265,10 +266,10 @@ describe('Pipe: Mask', () => {
             leadZero: true,
         });
 
-        expect(value).toEqual('3 000.00');
-        expect(value1).toEqual('1.00');
-        expect(value2).toEqual('12.00');
-        expect(value3).toEqual('123.00');
+        expect(value).equal('3 000.00');
+        expect(value1).equal('1.00');
+        expect(value2).equal('12.00');
+        expect(value3).equal('123.00');
     });
 
     it('should work with leadZero separator.3', () => {
@@ -285,10 +286,10 @@ describe('Pipe: Mask', () => {
             leadZero: true,
         });
 
-        expect(value).toEqual('3 000.000');
-        expect(value1).toEqual('1.000');
-        expect(value2).toEqual('12.000');
-        expect(value3).toEqual('123.000');
+        expect(value).equal('3 000.000');
+        expect(value1).equal('1.000');
+        expect(value2).equal('12.000');
+        expect(value3).equal('123.000');
     });
 
     it('should work with leadZero separator.2 thousandSeparator decimalMarker', () => {
@@ -297,7 +298,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: '.',
             decimalMarker: ',',
         });
-        expect(value).toEqual('3.000,00');
+        expect(value).equal('3.000,00');
     });
 
     it('should work with leadZero separator.2 thousandSeparator decimalMarker', () => {
@@ -306,7 +307,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: ',',
             decimalMarker: '.',
         });
-        expect(value).toEqual('3,000.00');
+        expect(value).equal('3,000.00');
     });
 
     it('should work with leadZero separator.3 thousandSeparator decimalMarker', () => {
@@ -315,7 +316,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: '.',
             decimalMarker: ',',
         });
-        expect(value).toEqual('3.000,000');
+        expect(value).equal('3.000,000');
     });
 
     it('should work with leadZero separator.3 thousandSeparator decimalMarker', () => {
@@ -324,7 +325,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: ',',
             decimalMarker: '.',
         });
-        expect(value).toEqual('3,000.000');
+        expect(value).equal('3,000.000');
     });
 
     it('should work with  separator.3 thousandSeparator decimalMarker', () => {
@@ -332,7 +333,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: ',',
             decimalMarker: '.',
         });
-        expect(value).toEqual('3,000');
+        expect(value).equal('3,000');
     });
 
     it('should work with  separator.2 thousandSeparator decimalMarker', () => {
@@ -340,7 +341,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: ',',
             decimalMarker: '.',
         });
-        expect(value).toEqual('3,000');
+        expect(value).equal('3,000');
     });
 
     it('should work with  separator.2 thousandSeparator decimalMarker', () => {
@@ -348,7 +349,7 @@ describe('Pipe: Mask', () => {
             thousandSeparator: '.',
             decimalMarker: ',',
         });
-        expect(value).toEqual('3.000');
+        expect(value).equal('3.000');
     });
 
     it('should show second pipe without suffix', () => {
@@ -359,16 +360,16 @@ describe('Pipe: Mask', () => {
             prefix: 'DDD ',
         });
 
-        expect(valueWithSuffix).toEqual('55 (555) DDD');
-        expect(valueWithPrefix).toEqual('DDD 55 (555)');
+        expect(valueWithSuffix).equal('55 (555) DDD');
+        expect(valueWithPrefix).equal('DDD 55 (555)');
     });
 
     it('should work as expected with few mask in one expression 0000||00000', () => {
         const value: string | number = maskPipe.transform('1234', '0000||00000');
         const value1: string | number = maskPipe.transform('12345', '0000||00000');
 
-        expect(value).toEqual('1234');
-        expect(value1).toEqual('12345');
+        expect(value).equal('1234');
+        expect(value1).equal('12345');
     });
 
     it('should work as expected with few mask in one expression 0000||00000', () => {
@@ -381,7 +382,7 @@ describe('Pipe: Mask', () => {
             '(00) 0000-0000||(00) 0.0000-0000'
         );
 
-        expect(value).toEqual('(12) 3456-7890');
-        expect(value1).toEqual('(12) 3.4567-8901');
+        expect(value).equal('(12) 3456-7890');
+        expect(value1).equal('(12) 3.4567-8901');
     });
 });

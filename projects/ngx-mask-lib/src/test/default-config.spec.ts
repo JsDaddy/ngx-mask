@@ -5,6 +5,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective } from 'ngx-mask';
 import type { NgxMaskOptions } from 'ngx-mask';
 import { By } from '@angular/platform-browser';
+import { expect } from 'vitest';
 
 function createComponentWithDefaultConfig(
     defaultConfig?: NgxMaskOptions
@@ -28,7 +29,7 @@ describe('Default config', () => {
         component.form = new FormControl(1234.56);
         fixture.detectChanges();
         fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('1.234,56');
+            expect(fixture.nativeElement.querySelector('input').value).equal('1.234,56');
         });
     });
 
@@ -42,7 +43,7 @@ describe('Default config', () => {
         component.form = new FormControl(1234.56);
         fixture.detectChanges();
         fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('1 234.56');
+            expect(fixture.nativeElement.querySelector('input').value).equal('1 234.56');
         });
     });
 
@@ -60,7 +61,7 @@ describe('Default config', () => {
         component.specialCharacters.set(['/']); // Explicit set needed to prevent bug in ngx-mask.directive.ts OnChanges event (if specialCharacters is undefined, OnChanges function will return prematurely and won't apply provided thousandSeparator and decimalMarker)
         fixture.detectChanges();
         fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('1.234,56');
+            expect(fixture.nativeElement.querySelector('input').value).equal('1.234,56');
         });
     });
 
@@ -77,7 +78,7 @@ describe('Default config', () => {
         component.form = new FormControl(123);
         fixture.detectChanges();
         fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('123,00');
+            expect(fixture.nativeElement.querySelector('input').value).equal('123,00');
         });
     });
 
@@ -94,7 +95,7 @@ describe('Default config', () => {
         component.form = new FormControl(15000.33);
         fixture.detectChanges();
         fixture.whenRenderingDone().then(() => {
-            expect(fixture.nativeElement.querySelector('input').value).toBe('15 000,33 €');
+            expect(fixture.nativeElement.querySelector('input').value).equal('15 000,33 €');
         });
     });
 
@@ -110,15 +111,15 @@ describe('Default config', () => {
         fixture.detectChanges();
         await fixture.whenStable();
         let inputEl = fixture.debugElement.query(By.css('input'));
-        expect(inputEl.nativeElement.value).toEqual('7912345678');
-        expect(component.form.value).toEqual('7912345678');
+        expect(inputEl.nativeElement.value).equal('7912345678');
+        expect(component.form.value).equal('7912345678');
 
         component.mask.set('00 000 00 00');
         fixture.detectChanges();
         await fixture.whenStable();
         inputEl = fixture.debugElement.query(By.css('input'));
-        expect(inputEl.nativeElement.value).toEqual('79 123 45 67');
-        expect(component.form.value).toEqual('791234567');
+        expect(inputEl.nativeElement.value).equal('79 123 45 67');
+        expect(component.form.value).equal('791234567');
     });
 
     it('default config overridden - triggerOnMaskChange', async () => {
@@ -135,14 +136,14 @@ describe('Default config', () => {
         fixture.detectChanges();
         await fixture.whenStable();
         let inputEl = fixture.debugElement.query(By.css('input'));
-        expect(inputEl.nativeElement.value).toEqual('7912345678');
-        expect(component.form.value).toEqual('7912345678');
+        expect(inputEl.nativeElement.value).equal('7912345678');
+        expect(component.form.value).equal('7912345678');
 
         component.mask.set('00 000 00 00');
         fixture.detectChanges();
         await fixture.whenStable();
         inputEl = fixture.debugElement.query(By.css('input'));
-        expect(inputEl.nativeElement.value).toEqual('79 123 45 67');
-        expect(component.form.value).toEqual('791234567');
+        expect(inputEl.nativeElement.value).equal('79 123 45 67');
+        expect(component.form.value).equal('791234567');
     });
 });

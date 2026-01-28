@@ -6,6 +6,7 @@ import { By } from '@angular/platform-browser';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Suffix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -59,7 +60,7 @@ describe('Directive: Mask (Suffix)', () => {
         component.suffix.set('$');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '5678$';
@@ -73,33 +74,33 @@ describe('Directive: Mask (Suffix)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('5678$');
-        expect(inputTarget.selectionStart).toEqual(4);
+        expect(inputTarget.value).equal('5678$');
+        expect(inputTarget.selectionStart).equal(4);
     });
     it('should delete all if value and part of suffix are deleted', () => {
         component.mask.set('A*');
         component.suffix.set(' test');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = '10 test';
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('10 test');
+        expect(inputTarget.value).equal('10 test');
 
         inputTarget.value = 'st';
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
     it('should not delete suffix', () => {
         component.mask.set('A{5}');
         component.suffix.set('.com');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = 'qwert.com';
@@ -113,7 +114,7 @@ describe('Directive: Mask (Suffix)', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
 
-        expect(inputTarget.value).toBe('qwert.com');
-        expect(inputTarget.selectionStart).toEqual(5);
+        expect(inputTarget.value).equal('qwert.com');
+        expect(inputTarget.selectionStart).equal(5);
     });
 });

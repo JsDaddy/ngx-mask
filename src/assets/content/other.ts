@@ -1,5 +1,4 @@
-import { UntypedFormControl } from '@angular/forms';
-import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
 export const OthDocs: ComDoc[] = [
     {
@@ -42,12 +41,12 @@ export const OthDocs: ComDoc[] = [
     },
 ];
 
-export const OthExamples: (TExample<MaskOptions> | { _pipe: string })[] = [
+export const OthExamples: (TExampleConfig<MaskOptions> | { _pipe: string })[] = [
     {
         _placeholder: 'Secure input',
         _hiddenInput: true,
         _mask: 'XXX/X0/0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _pipe: '(000) 000-0000',
@@ -56,18 +55,18 @@ export const OthExamples: (TExample<MaskOptions> | { _pipe: string })[] = [
         _placeholder: 'specialCharacters',
         _specialCharacters: `[ '[' ,']' , '\\' ]`,
         _mask: '[00][000]',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: '12 hour format',
         _mask: 'Hh:m0:s0',
         _apm: true,
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: '12 hour format',
         _mask: 'percent.2',
         _decimalMarker: ',',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 ];

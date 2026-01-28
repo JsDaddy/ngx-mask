@@ -7,6 +7,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste, pasteTest } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { vi, expect } from 'vitest';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -135,34 +136,34 @@ describe('Directive: Mask', () => {
         it('form should be invalid', () => {
             component.mask.set('IP');
             equal('192.168.1.78', '192.168.1.78', fixture);
-            expect(component.form.valid).toBeTrue();
+            expect(component.form.valid).equal(true);
             equal('127.001.1.1', '127.001.1.1', fixture);
-            expect(component.form.valid).toBeTrue();
+            expect(component.form.valid).equal(true);
             equal('12.1.12.1', '12.1.12.1', fixture);
-            expect(component.form.valid).toBeTrue();
+            expect(component.form.valid).equal(true);
             equal('1.1.1.1', '1.1.1.1', fixture);
-            expect(component.form.valid).toBeTrue();
+            expect(component.form.valid).equal(true);
         });
         it('form should be valid', () => {
             component.mask.set('IP');
             equal('1.1.1.', '1.1.1.', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('12.1.12', '12.1.12', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('127.1.', '127.1.', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('192.168', '192.168', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('192', '192', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('1', '1', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('', '', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('256.2.3.1', '256.2.3.1', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
             equal('255.900.300.1', '255.900.300.1', fixture);
-            expect(component.form.valid).toBeFalse();
+            expect(component.form.valid).equal(false);
         });
     });
 
@@ -338,14 +339,14 @@ describe('Directive: Mask', () => {
     it('should strip special characters from form control value', () => {
         component.mask.set('00/00/0000');
         pasteTest('30/08/19921', fixture);
-        expect(component.form.value).toBe('30081992');
+        expect(component.form.value).equal('30081992');
     });
 
     it('model values shouldnt be bigger length than masks', () => {
         component.mask.set('00-00-00');
         component.dropSpecialCharacters.set(false);
         equal('2578989', '25-78-98', fixture);
-        expect(component.form.value).toBe('25-78-98');
+        expect(component.form.value).equal('25-78-98');
     });
 
     it('should work with custom special characters', () => {
@@ -411,7 +412,7 @@ describe('Directive: Mask', () => {
 
         equal('1234567', '1234567', fixture);
 
-        expect(component.form.value).toBe('1234567');
+        expect(component.form.value).equal('1234567');
     });
 
     it('should be a UA phone', () => {
@@ -433,7 +434,7 @@ describe('Directive: Mask', () => {
         component.mask.set('AAAAAA');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = 'abcdef';
@@ -443,7 +444,7 @@ describe('Directive: Mask', () => {
 
         const directiveInstance: NgxMaskDirective =
             debugElement.injector.get<NgxMaskDirective>(NgxMaskDirective);
-        spyOn(directiveInstance._maskService, 'applyMask');
+        vi.spyOn(directiveInstance._maskService, 'applyMask');
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
             key: 'Backspace',
@@ -457,7 +458,7 @@ describe('Directive: Mask', () => {
         component.mask.set('AAAAAA');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         inputTarget.value = 'abcdef';
@@ -467,7 +468,7 @@ describe('Directive: Mask', () => {
 
         const directiveInstance: NgxMaskDirective =
             debugElement.injector.get<NgxMaskDirective>(NgxMaskDirective);
-        spyOn(directiveInstance._maskService, 'applyMask');
+        vi.spyOn(directiveInstance._maskService, 'applyMask');
         debugElement.triggerEventHandler('keydown', {
             code: 'Backspace',
             keyCode: 8,
@@ -486,7 +487,7 @@ describe('Directive: Mask', () => {
         fixture.detectChanges();
         const inputEl = fixture.debugElement.query(By.css('input'));
         return Promise.resolve().then(() => {
-            expect(inputEl.properties['disabled']).toEqual(true);
+            expect(inputEl.properties['disabled']).equal(true);
         });
     });
 
@@ -504,7 +505,7 @@ describe('Directive: Mask', () => {
         });
         debugElement.triggerEventHandler('input', { target: inputTarget });
         debugElement.triggerEventHandler('ngModelChange', { target: inputTarget });
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
 
     it('should remove ghost character on toggling mask', () => {
@@ -512,9 +513,9 @@ describe('Directive: Mask', () => {
         component.triggerOnMaskChange.set(true);
         component.form.setValue('1111a');
         equal('1111a', '1111', fixture);
-        expect(component.form.value).toBe('1111');
+        expect(component.form.value).equal('1111');
         component.mask.set(null);
-        expect(component.form.value).toBe('1111');
+        expect(component.form.value).equal('1111');
     });
 
     it('Masks with letters uppercase', () => {
@@ -539,7 +540,7 @@ describe('Directive: Mask', () => {
         fixture.detectChanges();
         component.form.setValue(0.0000004);
         equal('0.0000004', '0.0000004', fixture);
-        expect(component.form.value).toBe(0.0000004);
+        expect(component.form.value).equal(0.0000004);
     });
     it('mask 0000 0000 0000 9999 9999', () => {
         component.mask.set('0000 0000 0000 9999 9999');
@@ -633,65 +634,65 @@ describe('Directive: Mask', () => {
         component.prefix.set('foo/');
         component.dropSpecialCharacters.set(false);
         equal('2574', 'foo/2574', fixture);
-        expect(component.form.value).toBe('foo/2574');
+        expect(component.form.value).equal('foo/2574');
         expect(component.form.valid).toBeTruthy();
 
         equal('2', 'foo/2', fixture);
-        expect(component.form.value).toBe('foo/2');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('foo/2');
+        expect(component.form.valid).equal(false);
 
         equal('25', 'foo/25', fixture);
-        expect(component.form.value).toBe('foo/25');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('foo/25');
+        expect(component.form.valid).equal(false);
 
         equal('257', 'foo/257', fixture);
-        expect(component.form.value).toBe('foo/257');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('foo/257');
+        expect(component.form.valid).equal(false);
 
         equal('', '', fixture);
-        expect(component.form.value).toBe('');
+        expect(component.form.value).equal('');
     });
 
     it('Should be not valid if length of input doesnt match mask', () => {
         component.mask.set('000 000-00-00');
         component.prefix.set('+7 ');
         equal('2', '+7 2', fixture);
-        expect(component.form.value).toBe('2');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('2');
+        expect(component.form.valid).equal(false);
         equal('23', '+7 23', fixture);
-        expect(component.form.value).toBe('23');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('23');
+        expect(component.form.valid).equal(false);
 
         equal('234', '+7 234', fixture);
-        expect(component.form.value).toBe('234');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('234');
+        expect(component.form.valid).equal(false);
 
         equal('2234', '+7 223 4', fixture);
-        expect(component.form.value).toBe('2234');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('2234');
+        expect(component.form.valid).equal(false);
 
         equal('22345', '+7 223 45', fixture);
-        expect(component.form.value).toBe('22345');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('22345');
+        expect(component.form.valid).equal(false);
 
         equal('223456', '+7 223 456', fixture);
-        expect(component.form.value).toBe('223456');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('223456');
+        expect(component.form.valid).equal(false);
 
         equal('2234562', '+7 223 456-2', fixture);
-        expect(component.form.value).toBe('2234562');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('2234562');
+        expect(component.form.valid).equal(false);
 
         equal('22345622', '+7 223 456-22', fixture);
-        expect(component.form.value).toBe('22345622');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('22345622');
+        expect(component.form.valid).equal(false);
 
         equal('223456223', '+7 223 456-22-3', fixture);
-        expect(component.form.value).toBe('223456223');
-        expect(component.form.valid).toBeFalse();
+        expect(component.form.value).equal('223456223');
+        expect(component.form.valid).equal(false);
 
         equal('2234562233', '+7 223 456-22-33', fixture);
-        expect(component.form.value).toBe('2234562233');
+        expect(component.form.value).equal('2234562233');
         expect(component.form.valid).toBeTruthy();
     });
 
@@ -774,7 +775,7 @@ describe('Directive: Mask', () => {
         component.mask.set('0000');
         equal('1234', '1234', fixture);
         component.form.setValue(null);
-        expect(component.form.value).toBe(null);
+        expect(component.form.value).equal(null);
     });
 
     it('after resetValue should show in model same value', () => {
@@ -782,7 +783,7 @@ describe('Directive: Mask', () => {
         equal('1', '1', fixture);
         component.form.reset();
         equal('1', '1', fixture);
-        expect(component.form.value).toBe('1');
+        expect(component.form.value).equal('1');
     });
 
     it('after resetValue should show in model same value', () => {
@@ -790,7 +791,7 @@ describe('Directive: Mask', () => {
         equal('2', '2', fixture);
         component.form.reset();
         equal('2', '2', fixture);
-        expect(component.form.value).toBe('2');
+        expect(component.form.value).equal('2');
     });
 
     it('should work with optional mask 09.09', () => {
@@ -808,7 +809,7 @@ describe('Directive: Mask', () => {
         equal('2', '2', fixture);
         component.form.setValue('');
         equal('2', '2', fixture);
-        expect(component.form.value).toBe('2');
+        expect(component.form.value).equal('2');
     });
 
     it('should work change value after setValue to empty string mask 0', () => {
@@ -816,7 +817,7 @@ describe('Directive: Mask', () => {
         equal('4', '4', fixture);
         component.form.setValue('');
         equal('4', '4', fixture);
-        expect(component.form.value).toBe('4');
+        expect(component.form.value).equal('4');
     });
 
     it('should return empty string if first character not same in mask (000) 000-0000', () => {
@@ -934,7 +935,7 @@ describe('Directive: Mask', () => {
     it('mask 00/00/0000 with keepCharacterPositions should work after setValue', () => {
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         component.mask.set('00/00/0000');
@@ -952,28 +953,28 @@ describe('Directive: Mask', () => {
         component.mask.set('separator.0');
         component.form.setValue('2');
 
-        expect(component.form.dirty).toBe(false);
+        expect(component.form.dirty).equal(false);
     });
 
     it('mask sepator.2 after setValue should be dont dirty', () => {
         component.mask.set('separator.0');
         component.form.setValue('2002');
 
-        expect(component.form.dirty).toBe(false);
+        expect(component.form.dirty).equal(false);
     });
 
     it('mask 00/00/0000 after setValue should be dont dirty', () => {
         component.mask.set('separator.0');
         component.form.setValue('12312312');
 
-        expect(component.form.dirty).toBe(false);
+        expect(component.form.dirty).equal(false);
     });
 
     it('mask sepator.2 after setValue should be dont dirty', () => {
         component.mask.set('separator.0');
         component.form.setValue('2002');
 
-        expect(component.form.dirty).toBe(false);
+        expect(component.form.dirty).equal(false);
     });
 
     it('should return empty string in formControl mask SSS-SSS-SSS', () => {
@@ -981,10 +982,10 @@ describe('Directive: Mask', () => {
         component.form.setValue('978-1-93624-386-0');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
 
     it('should return empty string in formControl mask AAA-AAA-AAA', () => {
@@ -992,10 +993,10 @@ describe('Directive: Mask', () => {
         component.form.setValue('978-123-936');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
 
     it('should return empty string in formControl mask (000) 000-000', () => {
@@ -1003,10 +1004,10 @@ describe('Directive: Mask', () => {
         component.form.setValue('978-123-936');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
 
     it('should return empty string in formControl mask (000) 000-000 with prefix +7', () => {
@@ -1015,10 +1016,10 @@ describe('Directive: Mask', () => {
         component.form.setValue('978-123-936');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
-        expect(inputTarget.value).toBe('');
+        expect(inputTarget.value).equal('');
     });
 
     it('should show correct value d0.M0.', () => {
@@ -1034,7 +1035,7 @@ describe('Directive: Mask', () => {
 
         equal('1234', '1234', fixture);
         component.form.reset();
-        expect(component.form.dirty).toBe(false);
-        expect(component.form.pristine).toBe(true);
+        expect(component.form.dirty).equal(false);
+        expect(component.form.pristine).equal(true);
     });
 });

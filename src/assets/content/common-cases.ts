@@ -1,5 +1,4 @@
-import { UntypedFormControl } from '@angular/forms';
-import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
 export const ComDocs: ComDoc[] = [
     {
@@ -107,31 +106,31 @@ export const ComDocs: ComDoc[] = [
     },
 ];
 
-export const ComExamples: TExample<MaskOptions>[] = [
+export const ComExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'Date',
         _mask: 'd0/M0/0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Date and Hour',
         _mask: 'd0/M0/0000 Hh:m0:s0',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Valid 24 hour format',
         _mask: 'Hh:m0:s0',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Mixed Type',
         _mask: 'AAA 000-S0S',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Valid date start with years',
         _mask: '0000.M0.d0',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Mask with specialCharacters',
@@ -139,56 +138,56 @@ export const ComExamples: TExample<MaskOptions>[] = [
         _showMaskTyped: true,
         _shownMaskExpression: '(___) ___-____ ext. ______',
         _specialCharacters: ['e', 'x', 't', ' ', '(', ')', '-', '.'],
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Optional mask',
         _mask: '9999 999 999',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Valid email',
         _mask: 'A*@A*.SSS',
         _validation: true,
         _dropSpecialCharacters: false,
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Valid email',
         _validation: true,
         _dropSpecialCharacters: false,
         _mask: 'A*@A*.A*',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 
     {
         _placeholder: 'allowNegativeNumbers mask',
         _allowNegativeNumbers: true,
         _mask: '0000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers separator',
         _allowNegativeNumbers: true,
         _decimalMarker: '.',
         _mask: 'separator',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'allowNegativeNumbers percent',
         _decimalMarker: '.',
         _allowNegativeNumbers: true,
         _mask: 'percent.2',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Allow few mask in one expression',
         _mask: '(00) 00000000||+00 (00) 00000000',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Allow few mask in one expression',
         _mask: '00||SS',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 ];

@@ -272,8 +272,17 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // Propagate the input value back to the Angular model
-        // eslint-disable-next-line no-unused-expressions,@typescript-eslint/no-unused-expressions
-        this._emitValue ? this.formControlResult(result) : '';
+        // Only emit if:
+        // 1. _emitValue is true (value changed), AND
+        // 2. Either mask didn't change, OR triggerOnMaskChange is true
+        const shouldEmit = this._emitValue && (!this.maskChanged || this.triggerOnMaskChange);
+        if (shouldEmit) {
+            this.formControlResult(result);
+        }
+        // Reset maskChanged flag even if we didn't emit
+        if (this.maskChanged && !this.triggerOnMaskChange) {
+            this.maskChanged = false;
+        }
 
         // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -467,10 +476,12 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this._renderer || !this._elementRef) {
             return;
         }
-        //[TODO]: andriikamaldinov1 find better solution
-        Promise.resolve().then(() =>
-            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
-        );
+        // Use queueMicrotask to defer DOM updates to next microtask.
+        // This prevents ExpressionChangedAfterItHasBeenCheckedError
+        // and ensures proper timing with Angular's change detection.
+        queueMicrotask(() => {
+            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value);
+        });
     }
 
     public checkDropSpecialCharAmount(mask: string): number {
@@ -707,7 +718,15 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(
-            specialCharactersForRemove.map((item: string) => `\\${item}`).join('|'),
+            specialCharactersForRemove
+                .map((item: string) => {
+                    // Only escape characters that have special meaning in regex
+                    if (/[.*+?^${}()|[\]\\/-]/.test(item)) {
+                        return `\\${item}`;
+                    }
+                    return item;
+                })
+                .join('|'),
             'gi'
         );
     }
