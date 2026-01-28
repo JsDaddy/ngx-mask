@@ -467,10 +467,12 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (!this._renderer || !this._elementRef) {
             return;
         }
-        //[TODO]: andriikamaldinov1 find better solution
-        Promise.resolve().then(() =>
-            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value)
-        );
+        // Use queueMicrotask to defer DOM updates to next microtask.
+        // This prevents ExpressionChangedAfterItHasBeenCheckedError
+        // and ensures proper timing with Angular's change detection.
+        queueMicrotask(() => {
+            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value);
+        });
     }
 
     public checkDropSpecialCharAmount(mask: string): number {

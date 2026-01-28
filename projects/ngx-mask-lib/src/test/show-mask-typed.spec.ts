@@ -230,4 +230,59 @@ describe('Directive: Mask', () => {
         await fixture.whenStable();
         expect(inputTarget.value).equal('+38 123/_____');
     });
+
+    it('should display initial value with showMaskTyped when setValue is used', async () => {
+        component.mask.set('000-000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value via FormControl
+        component.form.setValue('123456');
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // The input should show the value with mask, not just the placeholder
+        expect(inputTarget.value).equal('123-456');
+        expect(component.form.value).equal('123456');
+    });
+
+    it('should display initial value with showMaskTyped when setValue is used with number', async () => {
+        component.mask.set('00000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value as number (like value = 65432)
+        component.form.setValue(65432);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // The input should show the value, not just the placeholder mask
+        expect(inputTarget.value).equal('65432');
+        expect(component.form.value).equal(65432);
+    });
+
+    it('should display initial value with showMaskTyped when config provided at application level', async () => {
+        // This simulates the user's scenario where showMaskTyped is provided at app level
+        component.mask.set('(000) 000-0000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value
+        component.form.setValue('1234567890');
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // Should show formatted value, not just (___) ___-____
+        expect(inputTarget.value).equal('(123) 456-7890');
+        expect(component.form.value).equal('1234567890');
+    });
 });
