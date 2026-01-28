@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/libraries/chip/chip.component.scss", "src/libraries/chip/chip.component.scss"],
+  "sourcesContent": ["div {\n    width: max-content;\n    padding: 5px 15px;\n    border-radius: 25px;\n    &.is-active {\n        background: #ffd64d !important;\n    }\n}\n", "div {\n  width: max-content;\n  padding: 5px 15px;\n  border-radius: 25px;\n}\ndiv.is-active {\n  background: #ffd64d !important;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL2hvbWUvcnVubmVyL3dvcmsvbmd4LW1hc2svbmd4LW1hc2svc3JjL2xpYnJhcmllcy9jaGlwL2NoaXAuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSTtFQUNBO0VBQ0E7O0FBQ0E7RUFDSSIsInNvdXJjZXNDb250ZW50IjpbImRpdiB7XG4gICAgd2lkdGg6IG1heC1jb250ZW50O1xuICAgIHBhZGRpbmc6IDVweCAxNXB4O1xuICAgIGJvcmRlci1yYWRpdXM6IDI1cHg7XG4gICAgJi5pcy1hY3RpdmUge1xuICAgICAgICBiYWNrZ3JvdW5kOiAjZmZkNjRkICFpbXBvcnRhbnQ7XG4gICAgfVxufVxuIl19 */"],
+  "mappings": ";AAAA;AACI,SAAA;AACA,WAAA,IAAA;AACA,iBAAA;ACCJ;ADAI,GAAA,CAAA;AACI,cAAA;ACER;",
+  "names": []
+}

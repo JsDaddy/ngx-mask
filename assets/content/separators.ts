@@ -1,5 +1,4 @@
-import { UntypedFormControl } from '@angular/forms';
-import type { ComDoc, MaskOptions, TExample } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
 export const SepDocs: ComDoc[] = [
     {
@@ -39,34 +38,34 @@ export const SepDocs: ComDoc[] = [
     },
 ];
 
-export const SepExamples: TExample<MaskOptions>[] = [
+export const SepExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'Separator',
         _mask: 'separator',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'Separator 2 leadZero',
         _leadZero: true,
         _mask: 'separator.2',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'separator.2',
         _mask: 'separator.2',
         _thousandSeparator: '.',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'separator.2',
         _mask: 'separator.2',
         _thousandSeparator: ',',
         _decimalMarker: '.',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'separator.0',
         _mask: 'separator.0',
-        control: { form: new UntypedFormControl(''), model: '' },
+        control: { initialValue: '', model: '' },
     },
 ];
