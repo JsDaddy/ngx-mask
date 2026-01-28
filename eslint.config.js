@@ -105,6 +105,7 @@ module.exports = tseslint.config(
             'no-unused-private-class-members': 'error',
             'no-invalid-regexp': 'error',
             curly: ['error', 'all'],
+            '@angular-eslint/no-input-rename': 'off',
             '@typescript-eslint/restrict-template-expressions': 'error',
             '@typescript-eslint/no-explicit-any': 'off',
             '@typescript-eslint/adjacent-overload-signatures': 'error',

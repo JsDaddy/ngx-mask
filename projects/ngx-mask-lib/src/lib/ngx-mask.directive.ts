@@ -1,6 +1,16 @@
 import { DOCUMENT } from '@angular/common';
-import type { OnChanges, SimpleChanges } from '@angular/core';
-import { signal, input, output, Directive, HostListener, inject } from '@angular/core';
+import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import {
+    signal,
+    input,
+    output,
+    model,
+    effect,
+    Directive,
+    HostListener,
+    inject,
+    untracked,
+} from '@angular/core';
 import type {
     ControlValueAccessor,
     FormControl,
@@ -8,8 +18,8 @@ import type {
     Validator,
 } from '@angular/forms';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
 
-import type { CustomKeyboardEvent } from './custom-keyboard-event';
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
@@ -33,7 +43,10 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     ],
     exportAs: 'mask,ngxMask',
 })
-export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Validator {
+export class NgxMaskDirective
+    implements ControlValueAccessor, OnChanges, OnInit, Validator, FormValueControl<string>
+{
+    // ===== Mask Configuration Inputs =====
     public mask = input<string | undefined | null>('');
     public specialCharacters = input<NgxMaskConfig['specialCharacters']>([]);
     public patterns = input<NgxMaskConfig['patterns']>({});
@@ -59,6 +72,17 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     public keepCharacterPositions = input<NgxMaskConfig['keepCharacterPositions'] | null>(null);
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
+    public value = model<string>('');
+    public errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+    public disabled = input<boolean>(false);
+    public touched = model<boolean>(false);
+    public dirty = input<boolean>(false);
+    public invalid = input<boolean>(false);
+    public pending = input<boolean>(false);
+    public readonly = input<boolean>(false);
+    public required = input<boolean>(false);
+    public name = input<string>('');
+
     public maskFilled = output<void>();
 
     private _maskValue = signal<string>('');
@@ -68,13 +92,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     private _maskExpressionArray = signal<string[]>([]);
     private _justPasted = signal<boolean>(false);
     private _isFocused = signal<boolean>(false);
-    /**For IME composition event */
+    /** For IME composition event */
     private _isComposing = signal<boolean>(false);
+    /** Track if we're using Signal Forms mode */
+    private _isSignalFormsMode = signal<boolean>(false);
 
     public _maskService = inject(NgxMaskService, { self: true });
-
     private readonly document = inject(DOCUMENT);
-
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -82,6 +106,32 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
+
+    public constructor() {
+        effect(() => {
+            const signalValue = this.value();
+            if (this._isSignalFormsMode() && signalValue !== untracked(() => this._inputValue())) {
+                untracked(() => {
+                    this.writeValue(signalValue);
+                });
+            }
+        });
+
+        effect(() => {
+            const isDisabled = this.disabled();
+            untracked(() => {
+                this.setDisabledState(isDisabled);
+            });
+        });
+    }
+
+    public ngOnInit(): void {
+        // Detect if we're being used with Signal Forms
+        // Signal Forms will set the value model from outside
+        if (this.value() !== '') {
+            this._isSignalFormsMode.set(true);
+        }
+    }
 
     public ngOnChanges(changes: SimpleChanges): void {
         const {
@@ -395,12 +445,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         this._justPasted.set(true);
     }
 
-    @HostListener('focus', ['$event']) public onFocus() {
+    @HostListener('focus')
+    public onFocus(): void {
         this._isFocused.set(true);
     }
 
     @HostListener('ngModelChange', ['$event'])
-    public onModelChange(value: string | undefined | null | number): void {
+    public onModelChange(value: unknown): void {
         // on form reset we need to update the actualValue
         if (
             (value === MaskExpression.EMPTY_STRING ||
@@ -415,13 +466,13 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     @HostListener('input', ['$event'])
-    public onInput(e: CustomKeyboardEvent): void {
+    public onInput(e: Event): void {
         this._maskService.isInitialized = true;
         // If IME is composing text, we wait for the composed text.
         if (this._isComposing()) {
             return;
         }
-        const el: HTMLInputElement = e.target as HTMLInputElement;
+        const el: HTMLInputElement = (e as InputEvent).target as HTMLInputElement;
 
         const transformedValue = this._maskService.inputTransformFn
             ? this._maskService.inputTransformFn(el.value)
@@ -692,23 +743,23 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     // IME starts
-    @HostListener('compositionstart', ['$event'])
+    @HostListener('compositionstart')
     public onCompositionStart(): void {
         this._isComposing.set(true);
     }
 
     // IME completes
     @HostListener('compositionend', ['$event'])
-    public onCompositionEnd(e: CustomKeyboardEvent): void {
+    public onCompositionEnd(e: Event): void {
         this._isComposing.set(false);
         this._justPasted.set(true);
         this.onInput(e);
     }
 
     @HostListener('blur', ['$event'])
-    public onBlur(e: CustomKeyboardEvent): void {
+    public onBlur(e: Event): void {
         if (this._maskValue()) {
-            const el: HTMLInputElement = e.target as HTMLInputElement;
+            const el: HTMLInputElement = (e as FocusEvent).target as HTMLInputElement;
             if (
                 this._maskService.leadZero &&
                 el.value.length > 0 &&
@@ -746,12 +797,12 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     @HostListener('click', ['$event'])
-    public onClick(e: MouseEvent | CustomKeyboardEvent): void {
+    public onClick(e: Event): void {
         if (!this._maskValue()) {
             return;
         }
 
-        const el: HTMLInputElement = e.target as HTMLInputElement;
+        const el: HTMLInputElement = (e as MouseEvent).target as HTMLInputElement;
         const posStart = 0;
         const posEnd = 0;
 
@@ -818,7 +869,8 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     @HostListener('keydown', ['$event'])
-    public onKeyDown(e: CustomKeyboardEvent): void {
+    public onKeyDown(event: Event): void {
+        const e = event as KeyboardEvent;
         if (!this._maskValue()) {
             return;
         }
@@ -826,7 +878,7 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
         if (this._isComposing()) {
             // User finalize their choice from IME composition, so trigger onInput() for the composed text.
             if (e.key === 'Enter') {
-                this.onCompositionEnd(e);
+                this.onCompositionEnd(event);
             }
             return;
         }
@@ -1041,11 +1093,37 @@ export class NgxMaskDirective implements ControlValueAccessor, OnChanges, Valida
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
-        this._maskService.onChange = this.onChange = fn;
+        // Wrap the original onChange to also update Signal Forms value
+        const originalFn = fn;
+        this._maskService.onChange = this.onChange = (value: any) => {
+            originalFn(value);
+            // Update Signal Forms value model if in use
+            if (this._isSignalFormsMode()) {
+                const stringValue =
+                    value === null || typeof value === 'undefined' ? '' : String(value);
+                if (this.value() !== stringValue) {
+                    this.value.set(stringValue);
+                }
+            }
+        };
     }
 
     public registerOnTouched(fn: typeof this.onTouch): void {
-        this.onTouch = fn;
+        this.onTouch = () => {
+            fn();
+            // Update Signal Forms touched state
+            if (this._isSignalFormsMode() && !this.touched()) {
+                this.touched.set(true);
+            }
+        };
+    }
+
+    /**
+     * Focus the input element.
+     * Required by FormValueControl interface for Signal Forms.
+     */
+    public focus(): void {
+        this._maskService._elementRef?.nativeElement?.focus();
     }
 
     private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {

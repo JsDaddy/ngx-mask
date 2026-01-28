@@ -11,7 +11,7 @@ jobs:
         permissions:
             contents: write
         steps:
-            - uses: actions/checkout@v4
+            - uses: actions/checkout@v6
               with:
                   submodules: true
 
@@ -19,7 +19,7 @@ jobs:
               with:
                   bun-version: latest
 
-            - uses: actions/setup-node@v4
+            - uses: actions/setup-node@v6
               with:
                   node-version: 22
 
@@ -45,7 +45,7 @@ jobs:
                   bun run build
 
             - name: Deploy demo
-              uses: peaceiris/actions-gh-pages@v3
+              uses: peaceiris/actions-gh-pages@v4
               with:
                   github_token: ${{ secrets.GITHUB_TOKEN }}
                   publish_dir: ./dist/ngx-mask/browser

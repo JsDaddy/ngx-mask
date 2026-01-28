@@ -1,5 +1,4 @@
 import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { FormControl } from '@angular/forms';
 import { signal } from '@angular/core';
 
 describe('Directive: Mask (Delete)', () => {
@@ -170,7 +169,6 @@ describe('Directive: Mask (Delete)', () => {
         ];
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
-                form: new FormControl('12345678'),
                 mask: signal('00D : 00H : 00M : 00S'),
                 shownMaskExpression: signal('00D : 00H : 00M : 00S'),
                 showMaskTyped: signal(true),
@@ -182,6 +180,8 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
         cy.get('#masked')
+            .type('12345678')
+            .should('have.value', '12D : 34H : 56M : 78S')
             .type('{rightArrow}'.repeat(1))
             .type('{leftArrow}'.repeat(3))
             .type('{backspace}')

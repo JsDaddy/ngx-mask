@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { Component, viewChild } from '@angular/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { expect } from 'vitest';
 
 @Component({
     selector: 'jsdaddy-open-source-test',

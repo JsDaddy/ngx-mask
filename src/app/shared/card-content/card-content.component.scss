@@ -1,10 +1,14 @@
 :host {
-    @apply flex flex-col mt-5 text-full-white;
-
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    color: #ffffff;
     .green-view {
-        @apply text-green bg-green/[.10];
+        color: #1ab77e;
+        background-color: rgba(26, 183, 126, 0.1);
     }
     .yellow-view {
-        @apply text-yellow bg-yellow/[.10];
+        color: #ffd64d;
+        background-color: rgba(255, 214, 77, 0.2);
     }
 }

@@ -8,6 +8,7 @@ import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
+import { expect, vi } from 'vitest';
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -118,7 +119,7 @@ describe('Directive: Mask', () => {
     });
 
     // TODO(inepipenko) for issue #880
-    xit('should work right with security input', () => {
+    it.skip('should work right with security input', () => {
         component.mask.set('000-0X-XXXX');
         component.showMaskTyped.set(true);
         equal('', '___-__-____', fixture);
@@ -194,19 +195,19 @@ describe('Directive: Mask', () => {
         component.showMaskTyped.set(false);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         equal('1', '1', fixture);
         equal('12', '12', fixture);
         equal('123', '123', fixture);
-        expect(inputTarget.selectionStart).toBe(3);
+        expect(inputTarget.selectionStart).equal(3);
         component.showMaskTyped.set(true);
         inputTarget.focus();
 
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('123/_____');
+        expect(inputTarget.value).equal('123/_____');
     });
 
     it('should work with showMaskTyped 000/00000 with prefix', async () => {
@@ -215,18 +216,73 @@ describe('Directive: Mask', () => {
         component.showMaskTyped.set(false);
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
-        spyOnProperty(document, 'activeElement').and.returnValue(inputTarget);
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
 
         equal('+38 1', '+38 1', fixture, false, Paste);
         equal('+38 12', '+38 12', fixture, false, Paste);
         equal('+38 123', '+38 123', fixture, false, Paste);
-        expect(inputTarget.selectionStart).toBe(7);
+        expect(inputTarget.selectionStart).equal(7);
         component.showMaskTyped.set(true);
         inputTarget.focus();
 
         fixture.detectChanges();
         await fixture.whenStable();
-        expect(inputTarget.value).toBe('+38 123/_____');
+        expect(inputTarget.value).equal('+38 123/_____');
+    });
+
+    it('should display initial value with showMaskTyped when setValue is used', async () => {
+        component.mask.set('000-000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value via FormControl
+        component.form.setValue('123456');
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // The input should show the value with mask, not just the placeholder
+        expect(inputTarget.value).equal('123-456');
+        expect(component.form.value).equal('123456');
+    });
+
+    it('should display initial value with showMaskTyped when setValue is used with number', async () => {
+        component.mask.set('00000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value as number (like value = 65432)
+        component.form.setValue(65432);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // The input should show the value, not just the placeholder mask
+        expect(inputTarget.value).equal('65432');
+        expect(component.form.value).equal(65432);
+    });
+
+    it('should display initial value with showMaskTyped when config provided at application level', async () => {
+        // This simulates the user's scenario where showMaskTyped is provided at app level
+        component.mask.set('(000) 000-0000');
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        // Set initial value
+        component.form.setValue('1234567890');
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        // Should show formatted value, not just (___) ___-____
+        expect(inputTarget.value).equal('(123) 456-7890');
+        expect(component.form.value).equal('1234567890');
     });
 });

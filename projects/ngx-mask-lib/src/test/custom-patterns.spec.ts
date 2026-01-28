@@ -7,6 +7,7 @@ import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig } from 'ngx-mask';
+import { expect } from 'vitest';
 
 describe('Directive: Mask (Custom patterns)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -160,7 +161,7 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
         equal('test value with space', 'test value with space', fixture);
         setTimeout(() => {
             component.mask.set('F*');
-            expect(component.form.value).toBe('test value with space');
+            expect(component.form.value).equal('test value with space');
         });
     });
 
@@ -171,7 +172,7 @@ describe('Directive: Mask (Provide custom patterns with symbol f and F)', () => 
         equal('test value with space', 'test value with space', fixture);
         setTimeout(() => {
             component.mask.set('f*');
-            expect(component.form.value).toBe('test value with space');
+            expect(component.form.value).equal('test value with space');
         });
     });
 });
@@ -277,6 +278,6 @@ describe('Directive: Mask (Provide custom patterns with symbol C with specialCha
         equal(',', ',', fixture);
         equal(',.', ',.', fixture);
         equal(',./', ',./', fixture);
-        expect(component.form.value).toBe(',./');
+        expect(component.form.value).equal(',./');
     });
 });

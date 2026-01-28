@@ -5,6 +5,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective, NgxMaskService } from 'ngx-mask';
 import type { NgxMaskOptions, NgxMaskConfig } from 'ngx-mask';
 import { Component, EventEmitter } from '@angular/core';
+import { expect } from 'vitest';
 
 function createComponentWithDefaultConfigAndSimpleInputs(
     defaultConfig?: NgxMaskOptions
@@ -33,43 +34,43 @@ describe('provideNgxMask', () => {
             suffix: 'aaa',
         });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.suffix).toBe('aaa');
+        expect(service.suffix).equal('aaa');
     });
 
     it('config - prefix', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ prefix: 'bbb' });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.prefix).toBe('bbb');
+        expect(service.prefix).equal('bbb');
     });
 
     it('config - thousandSeparator', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ thousandSeparator: '-' });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.thousandSeparator).toBe('-');
+        expect(service.thousandSeparator).equal('-');
     });
 
     it('config - decimalMarker', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ decimalMarker: '.' });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.decimalMarker).toBe('.');
+        expect(service.decimalMarker).equal('.');
     });
 
     it('config - clearIfNotMatch', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ clearIfNotMatch: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.clearIfNotMatch).toBeTrue();
+        expect(service.clearIfNotMatch).equal(true);
     });
 
     it('config - showMaskTyped', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ showMaskTyped: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.showMaskTyped).toBeTrue();
+        expect(service.showMaskTyped).equal(true);
     });
 
     it('config - placeHolderCharacter', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ placeHolderCharacter: 'ccc' });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.placeHolderCharacter).toBe('ccc');
+        expect(service.placeHolderCharacter).equal('ccc');
     });
 
     it('config - shownMaskExpression', async () => {
@@ -77,79 +78,79 @@ describe('provideNgxMask', () => {
             shownMaskExpression: 'ddd',
         });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.shownMaskExpression).toBe('ddd');
+        expect(service.shownMaskExpression).equal('ddd');
     });
 
     it('config - specialCharacters', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ specialCharacters: ['a'] });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.specialCharacters).toEqual(['a']);
+        expect(service.specialCharacters).to.deep.equal(['a']);
     });
 
     it('config - dropSpecialCharacters', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ dropSpecialCharacters: ['a'] });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.dropSpecialCharacters).toEqual(['a']);
+        expect(service.dropSpecialCharacters).to.deep.equal(['a']);
     });
 
     it('config - hiddenInput', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ hiddenInput: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.hiddenInput).toBeTrue();
+        expect(service.hiddenInput).equal(true);
     });
 
     it('config - validation', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ validation: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.validation).toBeTrue();
+        expect(service.validation).equal(true);
     });
 
     it('config - instantPrefix', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ instantPrefix: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.instantPrefix).toBeTrue();
+        expect(service.instantPrefix).equal(true);
     });
 
     it('config - separatorLimit', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ separatorLimit: 'a' });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.separatorLimit).toBe('a');
+        expect(service.separatorLimit).equal('a');
     });
 
     it('config - apm', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ apm: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.apm).toBeTrue();
+        expect(service.apm).equal(true);
     });
 
     it('config - allowNegativeNumbers', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ allowNegativeNumbers: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.allowNegativeNumbers).toBeTrue();
+        expect(service.allowNegativeNumbers).equal(true);
     });
 
     it('config - leadZeroDateTime', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ leadZeroDateTime: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.leadZeroDateTime).toBeTrue();
+        expect(service.leadZeroDateTime).equal(true);
     });
 
     it('config - leadZero', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ leadZero: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.leadZero).toBeTrue();
+        expect(service.leadZero).equal(true);
     });
 
     it('config - triggerOnMaskChange', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ triggerOnMaskChange: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.triggerOnMaskChange).toBeTrue();
+        expect(service.triggerOnMaskChange).equal(true);
     });
 
     it('config - keepCharacterPositions', async () => {
         createComponentWithDefaultConfigAndSimpleInputs({ keepCharacterPositions: true });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.keepCharacterPositions).toBeTrue();
+        expect(service.keepCharacterPositions).equal(true);
     });
 
     it('config - inputTransformFn', async () => {
@@ -158,7 +159,7 @@ describe('provideNgxMask', () => {
             inputTransformFn: mockInputTransformFn,
         });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.inputTransformFn).toBe(mockInputTransformFn);
+        expect(service.inputTransformFn).equal(mockInputTransformFn);
     });
 
     it('config - outputTransformFn', async () => {
@@ -167,7 +168,7 @@ describe('provideNgxMask', () => {
             outputTransformFn: mockOutputTransformFn,
         });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.outputTransformFn).toBe(mockOutputTransformFn);
+        expect(service.outputTransformFn).equal(mockOutputTransformFn);
     });
 
     it('config - patterns', async () => {
@@ -180,7 +181,7 @@ describe('provideNgxMask', () => {
             patterns: mockPatterns,
         });
         const service = TestBed.inject(NgxMaskService);
-        expect(service.patterns).toBe(mockPatterns);
+        expect(service.patterns).equal(mockPatterns);
     });
 
     it('config - all values', async () => {
@@ -223,7 +224,7 @@ describe('provideNgxMask', () => {
         // Ensure that all provided config values are passed through to the service.
         for (const key of Object.keys(allConfigValues)) {
             if (!excludeConfig.includes(key)) {
-                expect((service as any)[key]).toEqual((allConfigValues as any)[key]);
+                expect((service as any)[key]).equal((allConfigValues as any)[key]);
             }
         }
     });

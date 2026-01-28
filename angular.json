@@ -11,7 +11,7 @@
             "schematics": {},
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:application",
+                    "builder": "@angular/build:application",
                     "options": {
                         "security": { "autoCsp": true },
                         "outputPath": "dist/ngx-mask",
@@ -50,6 +50,9 @@
                             "outputHashing": "all"
                         },
                         "development": {
+                            "define": {
+                                "VERSION": "'dev'"
+                            },
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": true
@@ -58,25 +61,21 @@
                     "defaultConfiguration": "production"
                 },
                 "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {
-                        "buildTarget": "ngx-mask:build"
-                    },
+                    "builder": "@angular/build:dev-server",
                     "configurations": {
                         "production": {
                             "buildTarget": "ngx-mask:build:production"
+                        },
+                        "development": {
+                            "buildTarget": "ngx-mask:build:development"
                         }
-                    }
+                    },
+                    "defaultConfiguration": "development"
                 },
                 "test": {
-                    "builder": "@angular-devkit/build-angular:web-test-runner",
+                    "builder": "@angular/build:unit-test",
                     "options": {
-                        "tsConfig": "tsconfig.spec.json",
-                        "inlineStyleLanguage": "scss",
-                        "assets": ["src/favicon.ico", "src/assets"],
-                        "polyfills": ["zone.js", "zone.js/testing"],
-                        "styles": ["src/styles.scss"],
-                        "scripts": []
+                        "setupFiles": ["src/test-setup.ts"]
                     }
                 },
                 "lint": {
@@ -94,7 +93,7 @@
             "prefix": "app",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "builder": "@angular/build:ng-packagr",
                     "options": {
                         "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json",
                         "project": "projects/ngx-mask-lib/ng-package.json"
@@ -103,6 +102,10 @@
                         "production": {
                             "project": "projects/ngx-mask-lib/ng-package.prod.json",
                             "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.prod.json"
+                        },
+                        "development": {
+                            "project": "projects/ngx-mask-lib/ng-package.json",
+                            "tsConfig": "projects/ngx-mask-lib/tsconfig.lib.json"
                         }
                     }
                 },
@@ -118,6 +121,13 @@
                         "cypressConfig": "projects/ngx-mask-lib/cypress.json",
                         "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
                         "testingType": "component"
+                    }
+                },
+                "test": {
+                    "builder": "@angular/build:unit-test",
+                    "options": {
+                        "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
+                        "setupFiles": ["src/test-setup.ts"]
                     }
                 }
             }

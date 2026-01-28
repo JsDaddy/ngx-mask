@@ -1,11 +1,10 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-
 import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
-
+import { expect } from 'vitest';
 describe('Directive: Mask (Validation)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
@@ -25,8 +24,8 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(false);
-        expect(component.form.hasError('mask')).toBe(true);
+        expect(component.form.valid).equal(false);
+        expect(component.form.hasError('mask')).equal(true);
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
@@ -34,7 +33,7 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should be marked as valid if valid and validation attribute true', () => {
@@ -42,7 +41,7 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('1234', '1234', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should be marked as valid if not valid and validation attribute false', () => {
@@ -51,7 +50,7 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('12', '12', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should be not valid email mask A*@A*.SSS', () => {
@@ -60,29 +59,29 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('a', 'a', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('as', 'as', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('asd', 'asd', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andr', 'andr', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing', 'testing', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@', 'testing@', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@a', 'testing@a', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@aa', 'testing@aa', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@gmail', 'testing@gmail', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@gmail.', 'testing@gmail.', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@gmail.c', 'testing@gmail.c', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('testing@email.ua', 'testing@email.ua', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
     });
 
     it('should valid email mask A*@A*.SSS', () => {
@@ -91,7 +90,7 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('testing@gmail.com', 'testing@gmail.com', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should be not valid mask A*@A*.SS', () => {
@@ -100,27 +99,27 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('d', 'd', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('dd', 'dd', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('ddd', 'ddd', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('dddd', 'dddd', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andre', 'andre', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey', 'andrey', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey@', 'andrey@', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey@a', 'andrey@a', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey@te', 'andrey@te', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey@test', 'andrey@test', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('andrey@test.c', 'andrey@test.c', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
     });
 
     it('should valid email mask', () => {
@@ -129,7 +128,7 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('testing@some.ua', 'testing@some.ua', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should valid from one digit mask 0*', () => {
@@ -138,15 +137,15 @@ describe('Directive: Mask (Validation)', () => {
         component.form.updateValueAndValidity();
 
         equal('', '', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('0', '0', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('00', '00', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
         equal('01', '01', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should valid from one digit mask S*', () => {
@@ -155,9 +154,9 @@ describe('Directive: Mask (Validation)', () => {
         component.form.updateValueAndValidity();
 
         equal('', '', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('d', 'd', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('should valid from one digit mask A*', () => {
@@ -166,11 +165,11 @@ describe('Directive: Mask (Validation)', () => {
         component.form.updateValueAndValidity();
 
         equal('', '', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
         equal('d', 'd', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('mask with number value should work as expected mask 0*', () => {
@@ -179,16 +178,16 @@ describe('Directive: Mask (Validation)', () => {
         component.form.updateValueAndValidity();
 
         equal('44', '44', fixture);
-        expect(component.form.valid).toBe(true);
-        expect(component.form.value).toBe('44');
+        expect(component.form.valid).equal(true);
+        expect(component.form.value).equal('44');
 
         equal('', '', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('');
 
         equal('1', '1', fixture);
-        expect(component.form.valid).toBe(true);
-        expect(component.form.value).toBe('1');
+        expect(component.form.valid).equal(true);
+        expect(component.form.value).equal('1');
     });
 
     it('mask with number value should work as expected mask 000.00', () => {
@@ -197,28 +196,28 @@ describe('Directive: Mask (Validation)', () => {
         component.form.setValue('');
 
         equal('', '', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('');
 
         equal('44', '44', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('44');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('44');
 
         equal('1', '1', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('1');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('1');
 
         equal('444', '444', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('444');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('444');
 
         equal('444.3', '444.3', fixture);
-        expect(component.form.invalid).toBe(true);
-        expect(component.form.value).toBe('4443');
+        expect(component.form.invalid).equal(true);
+        expect(component.form.value).equal('4443');
 
         equal('444.31', '444.31', fixture);
-        expect(component.form.valid).toBe(true);
-        expect(component.form.value).toBe('44431');
+        expect(component.form.valid).equal(true);
+        expect(component.form.value).equal('44431');
     });
 
     it('dropSpecialCharacters is different from specialCharacters', () => {
@@ -228,18 +227,18 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('+37', '+37', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('+373', '+373', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
 
         component.mask.set('+000 000 00 000');
 
         equal('+3736000000', '+373 600 00 00', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('+37360000000', '+373 600 00 000', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 
     it('email Mask should validated correct', () => {
@@ -248,24 +247,24 @@ describe('Directive: Mask (Validation)', () => {
         component.form.addValidators(Validators.required);
 
         equal('validate', 'validate', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('validate@', 'validate@', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('validate@some', 'validate@some', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('validate@some.', 'validate@some.', fixture);
-        expect(component.form.valid).toBe(false);
+        expect(component.form.valid).equal(false);
 
         equal('validate@some.e', 'validate@some.e', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
 
         equal('validate@some.eu', 'validate@some.eu', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
 
         equal('validate@some.com', 'validate@some.com', fixture);
-        expect(component.form.valid).toBe(true);
+        expect(component.form.valid).equal(true);
     });
 });
