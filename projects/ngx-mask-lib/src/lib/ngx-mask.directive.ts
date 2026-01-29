@@ -1046,11 +1046,20 @@ export class NgxMaskDirective
                         .replace(MaskExpression.DOT, MaskExpression.COMMA);
                 }
                 if (this.mask()?.startsWith(MaskExpression.SEPARATOR) && this.leadZero()) {
+                    const isFirstWrite = !this._maskService.isInitialized;
                     requestAnimationFrame(() => {
+                        // On initial load, temporarily set isInitialized to false
+                        // so formControlResult returns early and doesn't mark form as dirty
+                        if (isFirstWrite) {
+                            this._maskService.isInitialized = false;
+                        }
                         this._maskService.applyMask(
                             inputValue?.toString() ?? '',
                             this._maskService.maskExpression
                         );
+                        if (isFirstWrite) {
+                            this._maskService.isInitialized = true;
+                        }
                     });
                 }
                 this._maskService.isNumberValue = true;
