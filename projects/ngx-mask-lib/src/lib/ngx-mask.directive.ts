@@ -110,9 +110,11 @@ export class NgxMaskDirective
     public constructor() {
         effect(() => {
             const signalValue = this.value();
-            if (this._isSignalFormsMode() && signalValue !== untracked(() => this._inputValue())) {
+            if (this._isSignalFormsMode()) {
                 untracked(() => {
-                    this.writeValue(signalValue);
+                    if (String(signalValue) !== String(this._inputValue())) {
+                        this.writeValue(signalValue);
+                    }
                 });
             }
         });
@@ -448,6 +450,7 @@ export class NgxMaskDirective
     @HostListener('focus')
     public onFocus(): void {
         this._isFocused.set(true);
+        this._maskService._isFocused.set(true);
     }
 
     @HostListener('ngModelChange', ['$event'])
@@ -781,18 +784,22 @@ export class NgxMaskDirective
 
                     el.value = el.value.includes(decimalMarker)
                         ? el.value +
-                          MaskExpression.NUMBER_ZERO.repeat(precision - decimalPart.length) +
+                          MaskExpression.NUMBER_ZERO.repeat(
+                              precision - (decimalPart?.length || 0)
+                          ) +
                           suffix
                         : el.value +
                           decimalMarker +
                           MaskExpression.NUMBER_ZERO.repeat(precision) +
                           suffix;
                     this._maskService.actualValue = el.value;
+                    this.onChange(this._maskService.actualValue);
                 }
             }
             this._maskService.clearIfNotMatchFn();
         }
         this._isFocused.set(false);
+        this._maskService._isFocused.set(false);
         this.onTouch();
     }
 
@@ -1072,6 +1079,16 @@ export class NgxMaskDirective
             this._inputValue.set(inputValue);
             this._setMask();
 
+            if (this._isSignalFormsMode()) {
+                untracked(() => {
+                    const stringValue =
+                        value === null || typeof value === 'undefined' ? '' : String(value);
+                    if (String(this.value()) !== stringValue) {
+                        this.value.set(stringValue);
+                    }
+                });
+            }
+
             if (
                 (inputValue && this._maskService.maskExpression) ||
                 (this._maskService.maskExpression &&
@@ -1087,11 +1104,18 @@ export class NgxMaskDirective
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
                 this._maskService.isInitialized = true;
+                if (this._isSignalFormsMode()) {
+                    untracked(() => {
+                        const actualValue = this._maskService.actualValue;
+                        if (String(this.value()) !== actualValue) {
+                            this.value.set(actualValue);
+                        }
+                    });
+                }
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
                 this._maskService.isInitialized = true;
             }
-            this._inputValue.set(inputValue);
         } else {
             // eslint-disable-next-line no-console
             console.warn(
@@ -1110,9 +1134,11 @@ export class NgxMaskDirective
             if (this._isSignalFormsMode()) {
                 const stringValue =
                     value === null || typeof value === 'undefined' ? '' : String(value);
-                if (this.value() !== stringValue) {
-                    this.value.set(stringValue);
-                }
+                untracked(() => {
+                    if (String(this.value()) !== stringValue) {
+                        this.value.set(stringValue);
+                    }
+                });
             }
         };
     }

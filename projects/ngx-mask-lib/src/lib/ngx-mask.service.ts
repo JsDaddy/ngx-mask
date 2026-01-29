@@ -1,4 +1,4 @@
-import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
@@ -22,6 +22,8 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     public writingValue = false;
     public isInitialized = false;
+
+    public _isFocused = signal<boolean>(false);
 
     private _emitValue = false;
     private _start!: number;
@@ -806,8 +808,11 @@ export class NgxMaskService extends NgxMaskApplierService {
         let value = separatorValue;
 
         if (
-            separatorExpression.indexOf('2') > 0 ||
-            (this.leadZero && Number(separatorPrecision) > 0 && Number.isFinite(separatorPrecision))
+            (separatorExpression.indexOf('2') > 0 && !this._isFocused()) ||
+            (this.leadZero &&
+                !this._isFocused() &&
+                Number(separatorPrecision) > 0 &&
+                Number.isFinite(separatorPrecision))
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
                 value = value.replace(',', '.');
