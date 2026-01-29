@@ -1117,163 +1117,6 @@ var BehaviorSubject = class extends Subject {
   }
 };
 
-// node_modules/rxjs/dist/esm/internal/scheduler/dateTimestampProvider.js
-var dateTimestampProvider = {
-  now() {
-    return (dateTimestampProvider.delegate || Date).now();
-  },
-  delegate: void 0
-};
-
-// node_modules/rxjs/dist/esm/internal/scheduler/Action.js
-var Action = class extends Subscription {
-  constructor(scheduler, work) {
-    super();
-  }
-  schedule(state, delay = 0) {
-    return this;
-  }
-};
-
-// node_modules/rxjs/dist/esm/internal/scheduler/intervalProvider.js
-var intervalProvider = {
-  setInterval(handler, timeout, ...args) {
-    const { delegate } = intervalProvider;
-    if (delegate === null || delegate === void 0 ? void 0 : delegate.setInterval) {
-      return delegate.setInterval(handler, timeout, ...args);
-    }
-    return setInterval(handler, timeout, ...args);
-  },
-  clearInterval(handle) {
-    const { delegate } = intervalProvider;
-    return ((delegate === null || delegate === void 0 ? void 0 : delegate.clearInterval) || clearInterval)(handle);
-  },
-  delegate: void 0
-};
-
-// node_modules/rxjs/dist/esm/internal/scheduler/AsyncAction.js
-var AsyncAction = class extends Action {
-  constructor(scheduler, work) {
-    super(scheduler, work);
-    this.scheduler = scheduler;
-    this.work = work;
-    this.pending = false;
-  }
-  schedule(state, delay = 0) {
-    var _a;
-    if (this.closed) {
-      return this;
-    }
-    this.state = state;
-    const id = this.id;
-    const scheduler = this.scheduler;
-    if (id != null) {
-      this.id = this.recycleAsyncId(scheduler, id, delay);
-    }
-    this.pending = true;
-    this.delay = delay;
-    this.id = (_a = this.id) !== null && _a !== void 0 ? _a : this.requestAsyncId(scheduler, this.id, delay);
-    return this;
-  }
-  requestAsyncId(scheduler, _id, delay = 0) {
-    return intervalProvider.setInterval(scheduler.flush.bind(scheduler, this), delay);
-  }
-  recycleAsyncId(_scheduler, id, delay = 0) {
-    if (delay != null && this.delay === delay && this.pending === false) {
-      return id;
-    }
-    if (id != null) {
-      intervalProvider.clearInterval(id);
-    }
-    return void 0;
-  }
-  execute(state, delay) {
-    if (this.closed) {
-      return new Error("executing a cancelled action");
-    }
-    this.pending = false;
-    const error = this._execute(state, delay);
-    if (error) {
-      return error;
-    } else if (this.pending === false && this.id != null) {
-      this.id = this.recycleAsyncId(this.scheduler, this.id, null);
-    }
-  }
-  _execute(state, _delay) {
-    let errored = false;
-    let errorValue;
-    try {
-      this.work(state);
-    } catch (e) {
-      errored = true;
-      errorValue = e ? e : new Error("Scheduled action threw falsy error");
-    }
-    if (errored) {
-      this.unsubscribe();
-      return errorValue;
-    }
-  }
-  unsubscribe() {
-    if (!this.closed) {
-      const { id, scheduler } = this;
-      const { actions } = scheduler;
-      this.work = this.state = this.scheduler = null;
-      this.pending = false;
-      arrRemove(actions, this);
-      if (id != null) {
-        this.id = this.recycleAsyncId(scheduler, id, null);
-      }
-      this.delay = null;
-      super.unsubscribe();
-    }
-  }
-};
-
-// node_modules/rxjs/dist/esm/internal/Scheduler.js
-var Scheduler = class _Scheduler {
-  constructor(schedulerActionCtor, now = _Scheduler.now) {
-    this.schedulerActionCtor = schedulerActionCtor;
-    this.now = now;
-  }
-  schedule(work, delay = 0, state) {
-    return new this.schedulerActionCtor(this, work).schedule(state, delay);
-  }
-};
-Scheduler.now = dateTimestampProvider.now;
-
-// node_modules/rxjs/dist/esm/internal/scheduler/AsyncScheduler.js
-var AsyncScheduler = class extends Scheduler {
-  constructor(SchedulerAction, now = Scheduler.now) {
-    super(SchedulerAction, now);
-    this.actions = [];
-    this._active = false;
-  }
-  flush(action) {
-    const { actions } = this;
-    if (this._active) {
-      actions.push(action);
-      return;
-    }
-    let error;
-    this._active = true;
-    do {
-      if (error = action.execute(action.state, action.delay)) {
-        break;
-      }
-    } while (action = actions.shift());
-    this._active = false;
-    if (error) {
-      while (action = actions.shift()) {
-        action.unsubscribe();
-      }
-      throw error;
-    }
-  }
-};
-
-// node_modules/rxjs/dist/esm/internal/scheduler/async.js
-var asyncScheduler = new AsyncScheduler(AsyncAction);
-
 // node_modules/rxjs/dist/esm/internal/observable/empty.js
 var EMPTY = new Observable((subscriber) => subscriber.complete());
 
@@ -1953,46 +1796,6 @@ function forkJoin(...args) {
   return resultSelector ? result.pipe(mapOneOrManyArgs(resultSelector)) : result;
 }
 
-// node_modules/rxjs/dist/esm/internal/observable/fromEvent.js
-var nodeEventEmitterMethods = ["addListener", "removeListener"];
-var eventTargetMethods = ["addEventListener", "removeEventListener"];
-var jqueryMethods = ["on", "off"];
-function fromEvent(target, eventName, options, resultSelector) {
-  if (isFunction(options)) {
-    resultSelector = options;
-    options = void 0;
-  }
-  if (resultSelector) {
-    return fromEvent(target, eventName, options).pipe(mapOneOrManyArgs(resultSelector));
-  }
-  const [add, remove2] = isEventTarget(target) ? eventTargetMethods.map((methodName) => (handler) => target[methodName](eventName, handler, options)) : isNodeStyleEventEmitter(target) ? nodeEventEmitterMethods.map(toCommonHandlerRegistry(target, eventName)) : isJQueryStyleEventEmitter(target) ? jqueryMethods.map(toCommonHandlerRegistry(target, eventName)) : [];
-  if (!add) {
-    if (isArrayLike(target)) {
-      return mergeMap((subTarget) => fromEvent(subTarget, eventName, options))(innerFrom(target));
-    }
-  }
-  if (!add) {
-    throw new TypeError("Invalid event target");
-  }
-  return new Observable((subscriber) => {
-    const handler = (...args) => subscriber.next(1 < args.length ? args : args[0]);
-    add(handler);
-    return () => remove2(handler);
-  });
-}
-function toCommonHandlerRegistry(target, eventName) {
-  return (methodName) => (handler) => target[methodName](eventName, handler);
-}
-function isNodeStyleEventEmitter(target) {
-  return isFunction(target.addListener) && isFunction(target.removeListener);
-}
-function isJQueryStyleEventEmitter(target) {
-  return isFunction(target.on) && isFunction(target.off);
-}
-function isEventTarget(target) {
-  return isFunction(target.addEventListener) && isFunction(target.removeEventListener);
-}
-
 // node_modules/rxjs/dist/esm/internal/operators/filter.js
 function filter(predicate, thisArg) {
   return operate((source, subscriber) => {
@@ -2025,72 +1828,9 @@ function catchError(selector) {
   });
 }
 
-// node_modules/rxjs/dist/esm/internal/operators/scanInternals.js
-function scanInternals(accumulator, seed, hasSeed, emitOnNext, emitBeforeComplete) {
-  return (source, subscriber) => {
-    let hasState = hasSeed;
-    let state = seed;
-    let index = 0;
-    source.subscribe(createOperatorSubscriber(subscriber, (value) => {
-      const i = index++;
-      state = hasState ? accumulator(state, value, i) : (hasState = true, value);
-      emitOnNext && subscriber.next(state);
-    }, emitBeforeComplete && (() => {
-      hasState && subscriber.next(state);
-      subscriber.complete();
-    })));
-  };
-}
-
-// node_modules/rxjs/dist/esm/internal/operators/reduce.js
-function reduce(accumulator, seed) {
-  return operate(scanInternals(accumulator, seed, arguments.length >= 2, false, true));
-}
-
 // node_modules/rxjs/dist/esm/internal/operators/concatMap.js
 function concatMap(project, resultSelector) {
   return isFunction(resultSelector) ? mergeMap(project, resultSelector, 1) : mergeMap(project, 1);
-}
-
-// node_modules/rxjs/dist/esm/internal/operators/debounceTime.js
-function debounceTime(dueTime, scheduler = asyncScheduler) {
-  return operate((source, subscriber) => {
-    let activeTask = null;
-    let lastValue = null;
-    let lastTime = null;
-    const emit = () => {
-      if (activeTask) {
-        activeTask.unsubscribe();
-        activeTask = null;
-        const value = lastValue;
-        lastValue = null;
-        subscriber.next(value);
-      }
-    };
-    function emitWhenIdle() {
-      const targetTime = lastTime + dueTime;
-      const now = scheduler.now();
-      if (now < targetTime) {
-        activeTask = this.schedule(void 0, targetTime - now);
-        subscriber.add(activeTask);
-        return;
-      }
-      emit();
-    }
-    source.subscribe(createOperatorSubscriber(subscriber, (value) => {
-      lastValue = value;
-      lastTime = scheduler.now();
-      if (!activeTask) {
-        activeTask = scheduler.schedule(emitWhenIdle, dueTime);
-        subscriber.add(activeTask);
-      }
-    }, () => {
-      emit();
-      subscriber.complete();
-    }, void 0, () => {
-      lastValue = activeTask = null;
-    }));
-  });
 }
 
 // node_modules/rxjs/dist/esm/internal/operators/defaultIfEmpty.js
@@ -2450,7 +2190,7 @@ var Version = class {
     this.patch = parts.slice(2).join(".");
   }
 };
-var VERSION2 = /* @__PURE__ */ new Version("21.1.1");
+var VERSION2 = /* @__PURE__ */ new Version("21.1.2");
 var DOC_PAGE_BASE_URL = (() => {
   const full = VERSION2.full;
   const isPreRelease = full.includes("-next") || full.includes("-rc") || full === "0.0.0-PLACEHOLDER";
@@ -6288,8 +6028,9 @@ function getNodeInjectable(lView, tView, index, tNode, flags) {
     const factory = value;
     ngDevMode && injectionPath.push(factory.name ?? "unknown");
     if (factory.resolving) {
-      const token2 = stringifyForError(tData[index]);
+      let token2 = "";
       if (ngDevMode) {
+        token2 = stringifyForError(tData[index]);
         throw cyclicDependencyErrorWithDetails(token2, injectionPath);
       } else {
         throw cyclicDependencyError(token2);
@@ -12103,7 +11844,7 @@ var ComponentFactory2 = class extends ComponentFactory$1 {
   }
 };
 function createRootTView(rootSelectorOrNode, componentDef, componentBindings, directives) {
-  const tAttributes = rootSelectorOrNode ? ["ng-version", "21.1.1"] : extractAttrsAndClassesFromSelector(componentDef.selectors[0]);
+  const tAttributes = rootSelectorOrNode ? ["ng-version", "21.1.2"] : extractAttrsAndClassesFromSelector(componentDef.selectors[0]);
   let creationBindings = null;
   let updateBindings = null;
   let varsToAllocate = 0;
@@ -19807,14 +19548,14 @@ function \u0275\u0275text(index, value = "") {
   const adjustedIndex = index + HEADER_OFFSET;
   ngDevMode && assertTNodeCreationIndex(lView, index);
   const tNode = tView.firstCreatePass ? getOrCreateTNode(tView, adjustedIndex, 1, value, null) : tView.data[adjustedIndex];
-  const textNative = _locateOrCreateTextNode(tView, lView, tNode, value, index);
+  const textNative = _locateOrCreateTextNode(tView, lView, tNode, value);
   lView[adjustedIndex] = textNative;
   if (wasLastNodeCreated()) {
     appendChild(tView, lView, textNative, tNode);
   }
   setCurrentTNode(tNode, false);
 }
-var _locateOrCreateTextNode = (tView, lView, tNode, value, index) => {
+var _locateOrCreateTextNode = (tView, lView, tNode, value) => {
   lastNodeWasCreated(true);
   return createTextNode(lView[RENDERER], value);
 };
@@ -21913,6 +21654,14 @@ function upgradeLinkedSignalGetter(getter, debugName) {
   upgradedGetter.asReadonly = signalAsReadonlyFn.bind(getter);
   return upgradedGetter;
 }
+function resource(options) {
+  if (ngDevMode && !options?.injector) {
+    assertInInjectionContext(resource);
+  }
+  const oldNameForParams = options.request;
+  const params = options.params ?? oldNameForParams ?? (() => null);
+  return new ResourceImpl(params, getLoader(options), options.defaultValue, options.equal ? wrapEqualityFn(options.equal) : void 0, options.debugName, options.injector ?? inject2(Injector));
+}
 var BaseWritableResource = class {
   value;
   isLoading;
@@ -22126,6 +21875,28 @@ var ResourceImpl = class extends BaseWritableResource {
     this.resolvePendingTask = void 0;
   }
 };
+function wrapEqualityFn(equal) {
+  return (a, b) => a === void 0 || b === void 0 ? a === b : equal(a, b);
+}
+function getLoader(options) {
+  if (isStreamingResourceOptions(options)) {
+    return options.stream;
+  }
+  return async (params) => {
+    try {
+      return signal({
+        value: await options.loader(params)
+      }, ngDevMode ? createDebugNameObject(options.debugName, "stream") : void 0);
+    } catch (err) {
+      return signal({
+        error: encapsulateResourceError(err)
+      }, ngDevMode ? createDebugNameObject(options.debugName, "stream") : void 0);
+    }
+  };
+}
+function isStreamingResourceOptions(options) {
+  return !!options.stream;
+}
 function projectStatusOfState(state) {
   switch (state.status) {
     case "loading":
@@ -33335,7 +33106,7 @@ var ngModelWithFormGroupExample = `
       <input [(ngModel)]="showMoreControls" [ngModelOptions]="{standalone: true}">
   </div>
 `;
-var VERSION3 = /* @__PURE__ */ new Version("21.1.1");
+var VERSION3 = /* @__PURE__ */ new Version("21.1.2");
 function controlParentException(nameOrIndex) {
   return new RuntimeError(1050, `formControlName must be used with a parent formGroup or formArray directive. You'll want to add a formGroup/formArray
       directive and pass it an existing FormGroup/FormArray instance (you can create one in your class).
@@ -39395,6 +39166,9 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
         } else if (maskExpression[cursor] === MaskExpression.NUMBER_NINE && this.showMaskTyped) {
           this._shiftStep(cursor);
         } else if (this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] && this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional) {
+          if (inputSymbol.trim() === MaskExpression.EMPTY_STRING) {
+            continue;
+          }
           if (!!inputArray[cursor] && maskExpression !== "099.099.099.099" && maskExpression !== "000.000.000-00" && maskExpression !== "00.000.000/0000-00" && !maskExpression.match(/^9+\.0+$/) && !this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional) {
             result += inputArray[cursor];
           }
@@ -40756,8 +40530,15 @@ var NgxMaskDirective = class _NgxMaskDirective {
           inputValue = inputValue.toString().replace(MaskExpression.DOT, MaskExpression.COMMA);
         }
         if (this.mask()?.startsWith(MaskExpression.SEPARATOR) && this.leadZero()) {
+          const isFirstWrite = !this._maskService.isInitialized;
           requestAnimationFrame(() => {
+            if (isFirstWrite) {
+              this._maskService.isInitialized = false;
+            }
             this._maskService.applyMask(inputValue?.toString() ?? "", this._maskService.maskExpression);
+            if (isFirstWrite) {
+              this._maskService.isInitialized = true;
+            }
           });
         }
         this._maskService.isNumberValue = true;
@@ -46707,7 +46488,7 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
     const {
       navigationEvent
     } = this.currentNavigation;
-    if (navigationEvent && (navigationEvent.navigationType === "traverse" || navigationEvent.navigationType === "reload") && this.eventAndRouterDestinationsMatch(navigationEvent, transition)) {
+    if (navigationEvent && navigationEvent.navigationType === "traverse" && this.eventAndRouterDestinationsMatch(navigationEvent, transition)) {
       return;
     }
     this.currentNavigation.removeAbortListener?.();
@@ -46784,7 +46565,7 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
     this.rawUrlTree = traversalReset ? this.stateMemento.rawUrlTree : this.urlHandlingStrategy.merge(this.currentUrlTree, finalUrl ?? this.rawUrlTree);
   }
   handleNavigate(event) {
-    if (!event.canIntercept) {
+    if (!event.canIntercept || event.navigationType === "reload") {
       return;
     }
     const routerInfo = event?.info?.\u0275routerInfo;
@@ -47143,111 +46924,39 @@ function provideRouterInitializer() {
   }];
 }
 
-// node_modules/@angular/core/fesm2022/rxjs-interop.mjs
-function takeUntilDestroyed(destroyRef) {
-  if (!destroyRef) {
-    ngDevMode && assertInInjectionContext(takeUntilDestroyed);
-    destroyRef = inject2(DestroyRef);
-  }
-  const destroyed$ = new Observable((subscriber) => {
-    if (destroyRef.destroyed) {
-      subscriber.next();
-      return;
-    }
-    const unregisterFn = destroyRef.onDestroy(subscriber.next.bind(subscriber));
-    return unregisterFn;
-  });
-  return (source) => {
-    return source.pipe(takeUntil(destroyed$));
-  };
-}
-function toSignal(source, options) {
-  typeof ngDevMode !== "undefined" && ngDevMode && assertNotInReactiveContext(toSignal, "Invoking `toSignal` causes new subscriptions every time. Consider moving `toSignal` outside of the reactive context and read the signal value where needed.");
-  const requiresCleanup = !options?.manualCleanup;
-  if (ngDevMode && requiresCleanup && !options?.injector) {
-    assertInInjectionContext(toSignal);
-  }
-  const cleanupRef = requiresCleanup ? options?.injector?.get(DestroyRef) ?? inject2(DestroyRef) : null;
-  const equal = makeToSignalEqual(options?.equal);
-  let state;
-  if (options?.requireSync) {
-    state = signal({
-      kind: 0
-    }, __spreadValues({
-      equal
-    }, ngDevMode ? createDebugNameObject2(options?.debugName, "state") : void 0));
-  } else {
-    state = signal({
-      kind: 1,
-      value: options?.initialValue
-    }, __spreadValues({
-      equal
-    }, ngDevMode ? createDebugNameObject2(options?.debugName, "state") : void 0));
-  }
-  let destroyUnregisterFn;
-  const sub = source.subscribe({
-    next: (value) => state.set({
-      kind: 1,
-      value
-    }),
-    error: (error) => {
-      state.set({
-        kind: 2,
-        error
-      });
-      destroyUnregisterFn?.();
-    },
-    complete: () => {
-      destroyUnregisterFn?.();
-    }
-  });
-  if (options?.requireSync && state().kind === 0) {
-    throw new RuntimeError(601, (typeof ngDevMode === "undefined" || ngDevMode) && "`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.");
-  }
-  destroyUnregisterFn = cleanupRef?.onDestroy(sub.unsubscribe.bind(sub));
-  return computed(() => {
-    const current = state();
-    switch (current.kind) {
-      case 1:
-        return current.value;
-      case 2:
-        throw current.error;
-      case 0:
-        throw new RuntimeError(601, (typeof ngDevMode === "undefined" || ngDevMode) && "`toSignal()` called with `requireSync` but `Observable` did not emit synchronously.");
-    }
-  }, __spreadValues({
-    equal: options?.equal
-  }, ngDevMode ? createDebugNameObject2(options?.debugName, "source") : void 0));
-}
-function makeToSignalEqual(userEquality = Object.is) {
-  return (a, b) => a.kind === 1 && b.kind === 1 && userEquality(a.value, b.value);
-}
-function createDebugNameObject2(toSignalDebugName, internalSignalDebugName) {
-  return {
-    debugName: `toSignal${toSignalDebugName ? "#" + toSignalDebugName : ""}.${internalSignalDebugName}`
-  };
-}
-
 // src/libraries/open-source/scroll/scroll.service.ts
 var ScrollService = class _ScrollService {
-  activeCardId$$ = new BehaviorSubject(1);
   router = inject2(Router);
   minusTopHeight = 300;
   minusTopMobileHeight = 150;
   document = inject2(DOCUMENT);
   platformId = inject2(PLATFORM_ID);
-  destroyRef = inject2(DestroyRef);
-  activeCard$ = this.activeCardId$$.asObservable();
+  activeCard = signal(1, ...ngDevMode ? [{ debugName: "activeCard" }] : []);
+  cards = signal([], ...ngDevMode ? [{ debugName: "cards" }] : []);
+  scrollHandler = null;
+  debounceTimer = null;
   onScroll(cards) {
-    fromEvent(document, "scroll").pipe(debounceTime(100), takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      const scrollIdCard = cards.find((e) => this.isInViewport(e.nativeElement))?.nativeElement.id;
-      if (this.activeCardId$$.value !== Number(scrollIdCard) && scrollIdCard) {
-        this.activeCardId$$.next(Number(scrollIdCard));
-        void this.router.navigate(["/"], {
-          fragment: scrollIdCard
-        });
-      }
+    this.cards.set(cards);
+    afterNextRender(() => {
+      this.scrollHandler = () => {
+        if (this.debounceTimer) {
+          clearTimeout(this.debounceTimer);
+        }
+        this.debounceTimer = setTimeout(() => {
+          this.handleScroll();
+        }, 100);
+      };
+      document.addEventListener("scroll", this.scrollHandler);
     });
+  }
+  handleScroll() {
+    const scrollIdCard = this.cards().find((e) => this.isInViewport(e.nativeElement))?.nativeElement.id;
+    if (this.activeCard() !== Number(scrollIdCard) && scrollIdCard) {
+      this.activeCard.set(Number(scrollIdCard));
+      void this.router.navigate(["/"], {
+        fragment: scrollIdCard
+      });
+    }
   }
   isInViewport(elm) {
     if (isPlatformServer(this.platformId)) {
@@ -47278,17 +46987,18 @@ var ScrollService = class _ScrollService {
 var AccordionService = class _AccordionService {
   platformId = inject2(PLATFORM_ID);
   document = inject2(DOCUMENT);
-  destroyRef = inject2(DestroyRef);
   onChangeAccordion(cards) {
     if (isPlatformServer(this.platformId)) {
       return;
     }
-    of(cards).pipe(map((el) => el[0]), filter(Boolean), takeUntilDestroyed(this.destroyRef)).subscribe((elementRef) => {
-      const firstNativeElement = this.document.getElementById(elementRef.nativeElement.id);
-      if (firstNativeElement) {
-        firstNativeElement.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
-    });
+    const firstCard = cards[0];
+    if (!firstCard) {
+      return;
+    }
+    const firstNativeElement = this.document.getElementById(firstCard.nativeElement.id);
+    if (firstNativeElement) {
+      firstNativeElement.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
   }
   static \u0275fac = function AccordionService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AccordionService)();
@@ -47527,7 +47237,7 @@ var OptionsComponent = class _OptionsComponent {
   scrollService = inject2(ScrollService);
   accordionService = inject2(AccordionService);
   injector = inject2(Injector);
-  activeCardId = toSignal(this.scrollService.activeCard$);
+  activeCardId = this.scrollService.activeCard;
   constructor() {
     effect(() => {
       const configs = this.cardExamplesConfig();
@@ -47780,7 +47490,7 @@ var OptionsComponent = class _OptionsComponent {
   }), { isSignal: true })] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OptionsComponent, { className: "OptionsComponent", filePath: "src/app/options/options.component.ts", lineNumber: 52 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OptionsComponent, { className: "OptionsComponent", filePath: "src/app/options/options.component.ts", lineNumber: 51 });
 })();
 
 // src/libraries/link/link.path.ts
@@ -48182,56 +47892,27 @@ var ChipComponent = class _ChipComponent {
   (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(ChipComponent, { className: "ChipComponent", filePath: "src/libraries/chip/chip.component.ts", lineNumber: 9 });
 })();
 
-// src/libraries/token/token.ts
-var DOMAIN = new InjectionToken("DOMAIN");
-
-// src/libraries/base-http/base-http.service.ts
-var BaseHttpService = class _BaseHttpService {
-  domain = inject2(DOMAIN);
-  http = inject2(HttpClient);
-  platformId = inject2(PLATFORM_ID);
-  transferState = inject2(TransferState);
-  getData(path, defaultValue, key) {
-    if (key) {
-      const hasKey = this.transferState.hasKey(key);
-      const storedData = this.transferState.get(key, defaultValue);
-      if (hasKey) {
-        return of(storedData);
-      }
-    }
-    const domain = isPlatformBrowser(this.platformId) ? this.domain[1] : this.domain[0];
-    return this.http.get(path.startsWith("http") ? path : `${domain}/${path}`).pipe(tap((data) => {
-      if (key) {
-        this.transferState.set(key, data);
-      }
-    }), catchError(() => {
-      if (key) {
-        this.transferState.set(key, defaultValue);
-      }
-      return of(defaultValue);
-    }));
-  }
-  static \u0275fac = function BaseHttpService_Factory(__ngFactoryType__) {
-    return new (__ngFactoryType__ || _BaseHttpService)();
-  };
-  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _BaseHttpService, factory: _BaseHttpService.\u0275fac });
-};
-(() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BaseHttpService, [{
-    type: Injectable
-  }], null, null);
-})();
-
 // src/libraries/github/github-stars.service.ts
 var GithubStarsService = class _GithubStarsService {
-  http = inject2(BaseHttpService);
   platformId = inject2(PLATFORM_ID);
-  getAllStars() {
+  reposResource = resource(__spreadProps(__spreadValues({}, ngDevMode ? { debugName: "reposResource" } : {}), { loader: async () => {
     if (isPlatformServer(this.platformId)) {
-      return of(0);
+      return [];
     }
-    return this.http.getData(`https://api.github.com/users/JsDaddy/repos`, [], makeStateKey("all-stars")).pipe(concatAll(), reduce((acc, { stargazers_count }) => acc + stargazers_count, 0));
-  }
+    try {
+      const response = await fetch("https://api.github.com/users/JsDaddy/repos");
+      if (!response.ok) {
+        return [];
+      }
+      return await response.json();
+    } catch {
+      return [];
+    }
+  } }));
+  allStars = computed(() => {
+    const repos = this.reposResource.value() ?? [];
+    return repos.reduce((acc, { stargazers_count }) => acc + stargazers_count, 0);
+  }, ...ngDevMode ? [{ debugName: "allStars" }] : []);
   static \u0275fac = function GithubStarsService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _GithubStarsService)();
   };
@@ -48248,7 +47929,7 @@ var _c04 = ["title", ""];
 var GithubButtonsComponent = class _GithubButtonsComponent {
   title = input.required(...ngDevMode ? [{ debugName: "title" }] : []);
   jsdaddyGithub = "https://github.com/JsDaddy/";
-  countOfStarsOnGithub = toSignal(inject2(GithubStarsService).getAllStars());
+  countOfStarsOnGithub = inject2(GithubStarsService).allStars;
   static \u0275fac = function GithubButtonsComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _GithubButtonsComponent)();
   };
@@ -48302,7 +47983,7 @@ var GithubButtonsComponent = class _GithubButtonsComponent {
   }], null, { title: [{ type: Input, args: [{ isSignal: true, alias: "title", required: true }] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(GithubButtonsComponent, { className: "GithubButtonsComponent", filePath: "src/libraries/github-buttons/github-buttons.component.ts", lineNumber: 15 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(GithubButtonsComponent, { className: "GithubButtonsComponent", filePath: "src/libraries/github-buttons/github-buttons.component.ts", lineNumber: 14 });
 })();
 
 // src/libraries/open-source/sub-header/sub-header.component.ts
@@ -48479,15 +48160,29 @@ var AccordionComponent = class _AccordionComponent {
   router = inject2(Router);
   platformId = inject2(PLATFORM_ID);
   document = inject2(DOCUMENT);
-  destroyRef = inject2(DestroyRef);
+  clickHandler = null;
+  fragmentSubscription = null;
   ngAfterViewInit() {
-    fromEvent(window, "click").pipe(filter((event) => this.showAccordion() && event.target !== this.accordionBlockElement()?.nativeElement), takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.showAccordionBlock();
-    });
+    this.clickHandler = (event) => {
+      if (this.showAccordion() && event.target !== this.accordionBlockElement()?.nativeElement) {
+        this.showAccordionBlock();
+      }
+    };
+    window.addEventListener("click", this.clickHandler);
     this.openFirstAccordion();
-    this.activatedRoute.fragment.pipe(filter(Boolean), takeUntilDestroyed(this.destroyRef)).subscribe((itemId) => {
-      this.itemInAccordion.set(Number(itemId));
+    this.fragmentSubscription = this.activatedRoute.fragment.subscribe((itemId) => {
+      if (itemId) {
+        this.itemInAccordion.set(Number(itemId));
+      }
     });
+  }
+  ngOnDestroy() {
+    if (this.clickHandler) {
+      window.removeEventListener("click", this.clickHandler);
+    }
+    if (this.fragmentSubscription) {
+      this.fragmentSubscription.unsubscribe();
+    }
   }
   showAccordionBlock() {
     this.showAccordion.set(!this.showAccordion());
@@ -48700,7 +48395,7 @@ var AccordionComponent = class _AccordionComponent {
   }), { isSignal: true })] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AccordionComponent, { className: "AccordionComponent", filePath: "src/libraries/open-source/accordion/accordion.component.ts", lineNumber: 33 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AccordionComponent, { className: "AccordionComponent", filePath: "src/libraries/open-source/accordion/accordion.component.ts", lineNumber: 29 });
 })();
 
 // src/libraries/version/version.token.ts
@@ -48946,7 +48641,7 @@ var AppComponent = class _AppComponent {
   static \u0275fac = function AppComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AppComponent)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.21.0" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.21.1" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0);
       \u0275\u0275text(1, "\n    ");
@@ -49006,7 +48701,7 @@ var AppComponent = class _AppComponent {
       SubHeaderComponent,
       AccordionComponent,
       FooterComponent
-    ], providers: [{ provide: VersionToken, useValue: "1.21.0" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */\n"] }]
+    ], providers: [{ provide: VersionToken, useValue: "1.21.1" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */\n"] }]
   }], null, null);
 })();
 (() => {
@@ -53364,6 +53059,41 @@ var NoopAnimationsModule = class _NoopAnimationsModule {
   }], null, null);
 })();
 
+// src/libraries/token/token.ts
+var DOMAIN = new InjectionToken("DOMAIN");
+
+// src/libraries/base-http/base-http.service.ts
+var BaseHttpService = class _BaseHttpService {
+  domain = inject2(DOMAIN);
+  platformId = inject2(PLATFORM_ID);
+  getResource(path, defaultValue) {
+    const domain = isPlatformBrowser(this.platformId) ? this.domain[1] : this.domain[0];
+    const url = path.startsWith("http") ? path : `${domain}/${path}`;
+    return resource({
+      loader: async () => {
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            return defaultValue;
+          }
+          return await response.json();
+        } catch {
+          return defaultValue;
+        }
+      }
+    });
+  }
+  static \u0275fac = function BaseHttpService_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _BaseHttpService)();
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({ token: _BaseHttpService, factory: _BaseHttpService.\u0275fac });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(BaseHttpService, [{
+    type: Injectable
+  }], null, null);
+})();
+
 // src/main.ts
 bootstrapApplication(AppComponent, {
   providers: [
@@ -53415,15 +53145,14 @@ bootstrapApplication(AppComponent, {
 @angular/router/fesm2022/_router-chunk.mjs:
 @angular/router/fesm2022/_router_module-chunk.mjs:
 @angular/router/fesm2022/router.mjs:
-@angular/core/fesm2022/rxjs-interop.mjs:
 @angular/animations/fesm2022/_private_export-chunk.mjs:
 @angular/animations/fesm2022/_util-chunk.mjs:
 @angular/animations/fesm2022/browser.mjs:
 @angular/platform-browser/fesm2022/animations.mjs:
   (**
-   * @license Angular v21.1.1
+   * @license Angular v21.1.2
    * (c) 2010-2026 Google LLC. https://angular.dev/
    * License: MIT
    *)
 */
-//# sourceMappingURL=main-CLRKRMN3.js.map
+//# sourceMappingURL=main-W3FMEWOC.js.map
