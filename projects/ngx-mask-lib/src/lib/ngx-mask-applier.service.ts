@@ -702,6 +702,12 @@ export class NgxMaskApplierService {
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING] &&
                     this.patterns[maskExpression[cursor] ?? MaskExpression.EMPTY_STRING]?.optional
                 ) {
+                    // If the input symbol is whitespace or doesn't match the pattern,
+                    // skip it without consuming the mask position
+                    if (inputSymbol.trim() === MaskExpression.EMPTY_STRING) {
+                        // Skip whitespace input, don't advance mask cursor
+                        continue;
+                    }
                     if (
                         !!inputArray[cursor] &&
                         maskExpression !== '099.099.099.099' &&
