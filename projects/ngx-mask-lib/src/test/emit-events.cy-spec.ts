@@ -10,10 +10,10 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('1dd').type('dd');
-        cy.get('#pre').should('have.text', '2');
+        cy.get('#pre').should('have.text', '1');
 
         cy.get('#masked').type('121212').type('dd');
-        cy.get('#pre').should('have.text', '7');
+        cy.get('#pre').should('have.text', '6');
     });
 
     it('should emit event only when mask is correct with hiddenINput', () => {
@@ -25,10 +25,10 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('1dd').type('dd');
-        cy.get('#pre').should('have.text', '2');
+        cy.get('#pre').should('have.text', '1');
 
         cy.get('#masked').type('121212').type('dd');
-        cy.get('#pre').should('have.text', '7');
+        cy.get('#pre').should('have.text', '6');
     });
 
     it('should add trailing zero when mask="separator.1" and leadZero="true"', () => {
@@ -63,7 +63,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.00 $');
-        cy.get('#pre').should('have.text', '3');
+        cy.get('#pre').should('have.text', '2');
     });
 
     it('should emit event only when mask is correct with suffix separator.3', () => {
@@ -76,7 +76,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('10.0').blur().should('have.value', '10.000 $');
-        cy.get('#pre').should('have.text', '5');
+        cy.get('#pre').should('have.text', '4');
     });
 
     it('should emit event only when mask is correct with separator2', () => {
@@ -88,7 +88,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.00');
-        cy.get('#pre').should('have.text', '3');
+        cy.get('#pre').should('have.text', '2');
     });
 
     it('should emit event only when mask is correct with separator.3', () => {
@@ -100,7 +100,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('10').blur().should('have.value', '10.000');
-        cy.get('#pre').should('have.text', '3');
+        cy.get('#pre').should('have.text', '2');
     });
 
     it('should emit event only when mask is correct with SS000', () => {
@@ -111,7 +111,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('SS11111DDDD11').blur().should('have.value', 'SS111');
-        cy.get('#pre').should('have.text', '6');
+        cy.get('#pre').should('have.text', '5');
     });
 
     it("inputTransformFn should not break if it's null", () => {
@@ -123,7 +123,7 @@ describe('Directive: Mask (emit-events)', () => {
         });
 
         cy.get('#masked').type('123456789').blur().should('have.value', '12345-6789');
-        cy.get('#pre').should('have.text', '10');
+        cy.get('#pre').should('have.text', '9');
     });
 
     it('inputTransformFn should not change input form status', () => {
@@ -163,6 +163,6 @@ describe('Directive: Mask (emit-events)', () => {
             });
 
         cy.get('#pristine').should('have.text', 'true');
-        cy.get('#pre').should('have.text', '2');
+        cy.get('#pre').should('have.text', '1');
     });
 });

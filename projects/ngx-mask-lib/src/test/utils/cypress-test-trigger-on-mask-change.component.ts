@@ -1,7 +1,6 @@
 import type { OnDestroy, OnInit } from '@angular/core';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Subject, takeUntil } from 'rxjs';
 import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
@@ -22,35 +21,34 @@ import { NgxMaskDirective } from 'ngx-mask';
             <input
                 id="masked"
                 [formControl]="form"
-                [mask]="mask"
+                [mask]="mask()"
                 [hiddenInput]="false"
                 [triggerOnMaskChange]="true"
                 prefix="" />
         </div>
         <div>
-            <span>Mask:&nbsp;</span><code class="mask">{{ mask }}</code>
+            <span>Mask:&nbsp;</span><code class="mask">{{ mask() }}</code>
             <br />
             <span>Form Value:&nbsp;</span><code class="formvalue">{{ form.value }}</code>
         </div>
     `,
 })
 export class CypressTestTriggerOnMaskChangeComponent implements OnInit, OnDestroy {
-    public mask = '';
+    public mask = signal('');
 
     public form: FormControl = new FormControl('');
 
     public radio: FormControl = new FormControl('de');
 
-    private destroyed = new Subject<void>();
+    private subscription: { unsubscribe: () => void } | null = null;
 
     public ngOnInit(): void {
-        this.radio.valueChanges.pipe(takeUntil(this.destroyed)).subscribe((value) => {
-            this.mask = value === 'de' ? '' : '00 000 00 00';
+        this.subscription = this.radio.valueChanges.subscribe((value) => {
+            this.mask.set(value === 'de' ? '' : '00 000 00 00');
         });
     }
 
     public ngOnDestroy(): void {
-        this.destroyed.next();
-        this.destroyed.complete();
+        this.subscription?.unsubscribe();
     }
 }

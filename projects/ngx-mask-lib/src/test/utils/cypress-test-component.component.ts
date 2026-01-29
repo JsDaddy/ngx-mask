@@ -1,11 +1,10 @@
-import { Component, inject, input } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, input, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { scan, startWith } from 'rxjs';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { provideNgxMask } from 'ngx-mask';
 import { NgxMaskDirective } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
-import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'jsdaddy-open-source-test',
@@ -36,7 +35,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
             [inputTransformFn]="inputTransformFn()"
             [outputTransformFn]="outputTransformFn()" />
 
-        <pre id="pre">{{ counter$() }}</pre>
+        <pre id="pre">{{ counter() }}</pre>
         <pre id="pre1">{{ form.value }}</pre>
         <pre id="pristine">{{ form.pristine }}</pre>
         <div>
@@ -44,7 +43,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
         </div>
     `,
 })
-export class CypressTestMaskComponent {
+export class CypressTestMaskComponent implements OnInit, OnDestroy {
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     public mask = input('');
 
@@ -103,11 +102,17 @@ export class CypressTestMaskComponent {
 
     public form: FormControl = new FormControl('');
 
-    public readonly counter$ = toSignal(
-        this.form.valueChanges.pipe(
-            startWith(0),
+    public readonly counter = signal(0);
 
-            scan((acc) => acc + 1, 0)
-        )
-    );
+    private subscription: { unsubscribe: () => void } | null = null;
+
+    public ngOnInit(): void {
+        this.subscription = this.form.valueChanges.subscribe(() => {
+            this.counter.update((c) => c + 1);
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.subscription?.unsubscribe();
+    }
 }
