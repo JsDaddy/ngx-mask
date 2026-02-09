@@ -10,6 +10,7 @@ import {
     HostListener,
     inject,
     untracked,
+    booleanAttribute,
 } from '@angular/core';
 import type {
     ControlValueAccessor,
@@ -18,7 +19,7 @@ import type {
     Validator,
 } from '@angular/forms';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
+import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
@@ -73,15 +74,8 @@ export class NgxMaskDirective
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
     public value = model<string>('');
-    public errors = input<readonly WithOptionalField<ValidationError>[]>([]);
-    public disabled = input<boolean>(false);
+    public disabled = input(false, { transform: booleanAttribute });
     public touched = model<boolean>(false);
-    public dirty = input<boolean>(false);
-    public invalid = input<boolean>(false);
-    public pending = input<boolean>(false);
-    public readonly = input<boolean>(false);
-    public required = input<boolean>(false);
-    public name = input<string>('');
 
     public maskFilled = output<void>();
 
