@@ -1,9 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'jsdaddy-open-source-card-content[title][color][value]',
     templateUrl: './card-content.component.html',
     styleUrls: ['./card-content.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
 })
 export class CardContentComponent {

@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective, NgxMaskService } from 'ngx-mask';
 import type { NgxMaskOptions, NgxMaskConfig } from 'ngx-mask';
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { expect } from 'vitest';
 
 function createComponentWithDefaultConfigAndSimpleInputs(
@@ -21,6 +21,7 @@ function createComponentWithDefaultConfigAndSimpleInputs(
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input [mask]="mask" [formControl]="form" />`,
 })
 export class TestMaskSimpleInputsComponent {

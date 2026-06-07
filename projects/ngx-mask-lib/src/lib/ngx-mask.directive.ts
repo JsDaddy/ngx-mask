@@ -18,7 +18,11 @@ import type {
     Validator,
 } from '@angular/forms';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
+import type {
+    FormValueControl,
+    ValidationError,
+    WithOptionalFieldTree,
+} from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
@@ -73,7 +77,7 @@ export class NgxMaskDirective
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
     public value = model<string>('');
-    public errors = input<readonly WithOptionalField<ValidationError>[]>([]);
+    public errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
     public disabled = input<boolean>(false);
     public touched = model<boolean>(false);
     public dirty = input<boolean>(false);

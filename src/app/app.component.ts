@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -36,6 +36,7 @@ declare const VERSION: string;
         AccordionComponent,
         FooterComponent,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [{ provide: VersionToken, useValue: VERSION }],
 })
 export class AppComponent {

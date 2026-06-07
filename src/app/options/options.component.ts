@@ -9,6 +9,7 @@ import {
     signal,
     untracked,
     viewChildren,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -34,6 +35,7 @@ import type {
     styleUrls: ['./options.component.scss'],
     standalone: true,
     providers: [ScrollService, AccordionService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [
         NgTemplateOutlet,
         FormsModule,
