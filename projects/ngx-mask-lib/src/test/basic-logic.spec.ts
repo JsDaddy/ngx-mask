@@ -252,6 +252,65 @@ describe('Directive: Mask', () => {
         equal('12.345.678/9012-34', '12.345.678/9012-34', fixture);
     });
 
+    it('Masks with CPF_CNPJ_ALPHA', () => {
+        component.mask.set('CPF_CNPJ_ALPHA');
+        equal('', '', fixture);
+        equal('1', '1', fixture);
+        equal('12', '12', fixture);
+        equal('123', '123', fixture);
+        equal('1234', '123.4', fixture);
+        equal('12345', '123.45', fixture);
+        equal('123456', '123.456', fixture);
+        equal('1234567', '123.456.7', fixture);
+        equal('12345678', '123.456.78', fixture);
+        equal('123456789', '123.456.789', fixture);
+        equal('1234567890', '123.456.789-0', fixture);
+        equal('12345678901', '123.456.789-01', fixture);
+        equal('123456789012', '12.345.678/9012', fixture);
+        equal('1234567890123', '12.345.678/9012-3', fixture);
+        equal('12345678901234', '12.345.678/9012-34', fixture);
+        equal('123.4', '123.4', fixture);
+        equal('123.45', '123.45', fixture);
+        equal('123.456', '123.456', fixture);
+        equal('123.4567', '123.456.7', fixture);
+        equal('123.456.78', '123.456.78', fixture);
+        equal('123.456.789', '123.456.789', fixture);
+        equal('123.456.789-0', '123.456.789-0', fixture);
+        equal('123.456.789-01', '123.456.789-01', fixture);
+        equal('12.345.678/9012', '12.345.678/9012', fixture);
+        equal('12.345.678/9012-3', '12.345.678/9012-3', fixture);
+        equal('12.345.678/9012-34', '12.345.678/9012-34', fixture);
+        equal('A', 'A', fixture);
+        equal('AB', 'AB', fixture);
+        equal('ABC', 'AB.C', fixture);
+        equal('ABCD', 'AB.CD', fixture);
+        equal('ABCDE', 'AB.CDE', fixture);
+        equal('ABCDEF', 'AB.CDE.F', fixture);
+        equal('ABCDEF0', 'AB.CDE.F0', fixture);
+        equal('ABCDEF01', 'AB.CDE.F01', fixture);
+        equal('ABCDEF012', 'AB.CDE.F01/2', fixture);
+        equal('ABCDEF0123', 'AB.CDE.F01/23', fixture);
+        equal('ABCDEF01234', 'AB.CDE.F01/234', fixture);
+        equal('ABCDEF012345', 'AB.CDE.F01/2345', fixture);
+        equal('ABCDEF0123456', 'AB.CDE.F01/2345-6', fixture);
+        equal('ABCDEF01234567', 'AB.CDE.F01/2345-67', fixture);
+        equal('AB.C', 'AB.C', fixture);
+        equal('AB.CD', 'AB.CD', fixture);
+        equal('AB.CDE', 'AB.CDE', fixture);
+        equal('AB.CDE.F', 'AB.CDE.F', fixture);
+        equal('AB.CDE.F0', 'AB.CDE.F0', fixture);
+        equal('AB.CDE.F01', 'AB.CDE.F01', fixture);
+        equal('AB.CDE.F01/2', 'AB.CDE.F01/2', fixture);
+        equal('AB.CDE.F01/23', 'AB.CDE.F01/23', fixture);
+        equal('AB.CDE.F01/234', 'AB.CDE.F01/234', fixture);
+        equal('AB.CDE.F01/2345', 'AB.CDE.F01/2345', fixture);
+        equal('AB.CDE.F01/2345-6', 'AB.CDE.F01/2345-6', fixture);
+        equal('AB.CDE.F01/2345-67', 'AB.CDE.F01/2345-67', fixture);
+
+        equal('0123456789', '012.345.678-9', fixture);
+        equal('0123456789A', '01.234.567/89A', fixture);
+    });
+
     it('Dynamic Masks CPF_CNPJ', () => {
         component.mask.set('000.000.000-00||00.000.000/0000-00');
         equal('', '', fixture);

@@ -425,6 +425,14 @@ You can hide symbols in input field and get the actual value in `formcontrol`.
 <input mask="CPF_CNPJ" />
 ```
 
+### CPF_CNPJ_ALPHA valid mask
+
+#### Usage
+
+```html
+<input mask="CPF_CNPJ_ALPHA" />
+```
+
 ### Allow few mask in one expression
 
 #### Usage
