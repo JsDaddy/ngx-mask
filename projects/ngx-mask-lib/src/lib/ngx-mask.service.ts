@@ -73,7 +73,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
-        if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
+        const isCpfCnpjMask =
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        if (isCpfCnpjMask && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
 
@@ -298,14 +301,19 @@ export class NgxMaskService extends NgxMaskApplierService {
         const prefNmask = `${this.prefix}${this.maskIsShown}${this.suffix}`;
 
         // Handle specific mask expressions
-        if (this.maskExpression.includes(MaskExpression.HOURS)) {
-            const countSkipedSymbol = this._numberSkipedSymbols(result);
-            return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
-        } else if (
+        // NOTE: IP/CPF_CNPJ/CPF_CNPJ_ALPHA are checked via exact equality BEFORE the HOURS
+        // substring check below, because MaskExpression.HOURS is the single character 'H' and
+        // 'CPF_CNPJ_ALPHA' contains 'H' (from "ALPHA"), which previously caused CPF_CNPJ_ALPHA
+        // to be misrouted into the HOURS branch instead of its own branch.
+        if (
             this.maskExpression === MaskExpression.IP ||
-            this.maskExpression === MaskExpression.CPF_CNPJ
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
         ) {
             return `${result}${prefNmask}`;
+        } else if (this.maskExpression.includes(MaskExpression.HOURS)) {
+            const countSkipedSymbol = this._numberSkipedSymbols(result);
+            return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
         }
 
         return `${result}${prefNmask.slice(resLen)}`;
@@ -446,7 +454,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                 if (this.maskExpression === MaskExpression.IP) {
                     return this._checkForIp(inputVal);
                 }
-                if (this.maskExpression === MaskExpression.CPF_CNPJ) {
+                if (
+                    this.maskExpression === MaskExpression.CPF_CNPJ ||
+                    this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
+                ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
             }
@@ -546,6 +557,9 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (inputVal === MaskExpression.HASH) {
             return cpf;
         }
+
+        const isCpfCnpjAlpha = this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        const hasAnyLetter = /[a-zA-Z]/.test(inputVal);
         const arr: string[] = [];
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < inputVal.length; i++) {
@@ -553,21 +567,41 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (!value) {
                 continue;
             }
-            if (value.match('\\d')) {
+            if (isCpfCnpjAlpha ? value.match('[a-zA-Z0-9]') : value.match('\\d')) {
                 arr.push(value);
             }
         }
-        if (arr.length <= 3) {
-            return cpf.slice(arr.length, cpf.length);
-        }
-        if (arr.length > 3 && arr.length <= 6) {
-            return cpf.slice(arr.length + 1, cpf.length);
-        }
-        if (arr.length > 6 && arr.length <= 9) {
-            return cpf.slice(arr.length + 2, cpf.length);
-        }
-        if (arr.length > 9 && arr.length < 11) {
-            return cpf.slice(arr.length + 3, cpf.length);
+        if (isCpfCnpjAlpha && hasAnyLetter) {
+            // CNPJ_ALPHA shape is "AA.AAA.AAA/AAAA-00": separators fall after the 2nd, 5th,
+            // 8th and 12th typed character, so the placeholder slice offset must account for
+            // however many separators `result` has already passed through, mirroring the
+            // numeric CPF/CNPJ bucketed offsets below.
+            if (arr.length <= 2) {
+                return cnpj.slice(arr.length, cnpj.length);
+            }
+            if (arr.length > 2 && arr.length <= 5) {
+                return cnpj.slice(arr.length + 1, cnpj.length);
+            }
+            if (arr.length > 5 && arr.length <= 8) {
+                return cnpj.slice(arr.length + 2, cnpj.length);
+            }
+            if (arr.length > 8 && arr.length <= 12) {
+                return cnpj.slice(arr.length + 3, cnpj.length);
+            }
+            return cnpj.slice(arr.length + 4, cnpj.length);
+        } else {
+            if (arr.length <= 3) {
+                return cpf.slice(arr.length, cpf.length);
+            }
+            if (arr.length > 3 && arr.length <= 6) {
+                return cpf.slice(arr.length + 1, cpf.length);
+            }
+            if (arr.length > 6 && arr.length <= 9) {
+                return cpf.slice(arr.length + 2, cpf.length);
+            }
+            if (arr.length > 9 && arr.length < 11) {
+                return cpf.slice(arr.length + 3, cpf.length);
+            }
         }
         if (arr.length === 11) {
             return '';

@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import type { OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import type { OnChanges, SimpleChanges } from '@angular/core';
 import {
     signal,
     input,
@@ -10,6 +10,7 @@ import {
     HostListener,
     inject,
     untracked,
+    booleanAttribute,
 } from '@angular/core';
 import type {
     ControlValueAccessor,
@@ -18,7 +19,7 @@ import type {
     Validator,
 } from '@angular/forms';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { FormValueControl, ValidationError, WithOptionalField } from '@angular/forms/signals';
+import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
@@ -44,7 +45,7 @@ import { MaskExpression } from './ngx-mask-expression.enum';
     exportAs: 'mask,ngxMask',
 })
 export class NgxMaskDirective
-    implements ControlValueAccessor, OnChanges, OnInit, Validator, FormValueControl<string>
+    implements ControlValueAccessor, OnChanges, Validator, FormValueControl<string>
 {
     // ===== Mask Configuration Inputs =====
     public mask = input<string | undefined | null>('');
@@ -73,15 +74,8 @@ export class NgxMaskDirective
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
 
     public value = model<string>('');
-    public errors = input<readonly WithOptionalField<ValidationError>[]>([]);
-    public disabled = input<boolean>(false);
+    public disabled = input(false, { transform: booleanAttribute });
     public touched = model<boolean>(false);
-    public dirty = input<boolean>(false);
-    public invalid = input<boolean>(false);
-    public pending = input<boolean>(false);
-    public readonly = input<boolean>(false);
-    public required = input<boolean>(false);
-    public name = input<string>('');
 
     public maskFilled = output<void>();
 
@@ -94,8 +88,17 @@ export class NgxMaskDirective
     private _isFocused = signal<boolean>(false);
     /** For IME composition event */
     private _isComposing = signal<boolean>(false);
-    /** Track if we're using Signal Forms mode */
-    private _isSignalFormsMode = signal<boolean>(false);
+    /**
+     * True once Angular has driven this directive through the classic
+     * `ControlValueAccessor` contract (`registerOnChange`). When bound via Signal Forms
+     * `[formField]`, Angular treats this directive as a custom control (it exposes a `value`
+     * model input) and never calls the CVA methods — so this flag stays `false` and lets us
+     * tell the two modes apart WITHOUT injecting `FormField`, which would create a circular
+     * dependency (`FormField` injects `NG_VALUE_ACCESSOR` -> this directive -> `FormField`).
+     */
+    private _isCvaMode = signal<boolean>(false);
+    /** Guards against the value effect echoing back a value we just propagated ourselves. */
+    private _skipNextValueEffect = signal<boolean>(false);
 
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
@@ -108,15 +111,31 @@ export class NgxMaskDirective
     public onTouch = () => {};
 
     public constructor() {
+        // Default onChange used in Signal Forms mode, where Angular never calls registerOnChange.
+        // It pushes the unmasked value into the `value` model so the `valueChange` output fires.
+        // registerOnChange() overrides this to additionally invoke Angular's CVA callback.
+        this._maskService.onChange = this.onChange = (value: any) => {
+            this._propagateToValueModel(value);
+        };
+
+        // Signal Forms drives the `value` model input directly (custom-control mode).
+        // In classic CVA mode `writeValue` handles rendering instead, so this effect is a no-op
+        // there. We skip the pass immediately following our own onChange propagation to avoid
+        // clobbering the raw `_inputValue` with the masked value echoed back from the model.
         effect(() => {
             const signalValue = this.value();
-            if (this._isSignalFormsMode()) {
-                untracked(() => {
-                    if (String(signalValue) !== String(this._inputValue())) {
-                        this.writeValue(signalValue);
-                    }
-                });
-            }
+            untracked(() => {
+                if (this._isCvaMode()) {
+                    return;
+                }
+                if (this._skipNextValueEffect()) {
+                    this._skipNextValueEffect.set(false);
+                    return;
+                }
+                if (String(signalValue) !== String(this._inputValue())) {
+                    this.writeValue(signalValue);
+                }
+            });
         });
 
         effect(() => {
@@ -125,14 +144,6 @@ export class NgxMaskDirective
                 this.setDisabledState(isDisabled);
             });
         });
-    }
-
-    public ngOnInit(): void {
-        // Detect if we're being used with Signal Forms
-        // Signal Forms will set the value model from outside
-        if (this.value() !== '') {
-            this._isSignalFormsMode.set(true);
-        }
     }
 
     public ngOnChanges(changes: SimpleChanges): void {
@@ -1079,16 +1090,6 @@ export class NgxMaskDirective
             this._inputValue.set(inputValue);
             this._setMask();
 
-            if (this._isSignalFormsMode()) {
-                untracked(() => {
-                    const stringValue =
-                        value === null || typeof value === 'undefined' ? '' : String(value);
-                    if (String(this.value()) !== stringValue) {
-                        this.value.set(stringValue);
-                    }
-                });
-            }
-
             if (
                 (inputValue && this._maskService.maskExpression) ||
                 (this._maskService.maskExpression &&
@@ -1104,14 +1105,6 @@ export class NgxMaskDirective
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
                 this._maskService.isInitialized = true;
-                if (this._isSignalFormsMode()) {
-                    untracked(() => {
-                        const actualValue = this._maskService.actualValue;
-                        if (String(this.value()) !== actualValue) {
-                            this.value.set(actualValue);
-                        }
-                    });
-                }
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
                 this._maskService.isInitialized = true;
@@ -1126,31 +1119,39 @@ export class NgxMaskDirective
     }
 
     public registerOnChange(fn: typeof this.onChange): void {
-        // Wrap the original onChange to also update Signal Forms value
+        // Angular only calls this in classic ControlValueAccessor mode (reactive/template forms).
+        // Its invocation is therefore our reliable signal that we are NOT in Signal Forms mode.
+        this._isCvaMode.set(true);
         const originalFn = fn;
         this._maskService.onChange = this.onChange = (value: any) => {
             originalFn(value);
-            // Update Signal Forms value model if in use
-            if (this._isSignalFormsMode()) {
-                const stringValue =
-                    value === null || typeof value === 'undefined' ? '' : String(value);
-                untracked(() => {
-                    if (String(this.value()) !== stringValue) {
-                        this.value.set(stringValue);
-                    }
-                });
-            }
+            this._propagateToValueModel(value);
         };
     }
 
     public registerOnTouched(fn: typeof this.onTouch): void {
         this.onTouch = () => {
             fn();
-            // Update Signal Forms touched state
-            if (this._isSignalFormsMode() && !this.touched()) {
+            if (!this.touched()) {
                 this.touched.set(true);
             }
         };
+    }
+
+    /**
+     * Pushes the current unmasked value into the `value` model input. In Signal Forms mode this
+     * fires the `valueChange` output that Angular listens to; in CVA mode it is a harmless write
+     * to a model nobody reads. We flag `_skipNextValueEffect` so the resulting model change does
+     * not bounce back through the value effect and overwrite the raw `_inputValue`.
+     */
+    private _propagateToValueModel(value: unknown): void {
+        const stringValue = value === null || typeof value === 'undefined' ? '' : String(value);
+        untracked(() => {
+            if (String(this.value()) !== stringValue) {
+                this._skipNextValueEffect.set(true);
+                this.value.set(stringValue);
+            }
+        });
     }
 
     /**
