@@ -220,6 +220,67 @@ function pasteValue(
     return inputElement.value;
 }
 
+type FormMode = 'reactive' | 'template' | 'signal';
+
+const FORM_MODE_CONFIG = {
+    reactive: { componentClass: TestReactiveComponent, inputId: 'reactive-input' },
+    template: { componentClass: TestTemplateComponent, inputId: 'template-input' },
+    signal: { componentClass: TestSignalComponent, inputId: 'signal-input' },
+} as const;
+
+function createFixture<T extends FormMode>(
+    mode: T
+): ComponentFixture<InstanceType<(typeof FORM_MODE_CONFIG)[T]['componentClass']>> {
+    type Instance = InstanceType<(typeof FORM_MODE_CONFIG)[T]['componentClass']>;
+    const { componentClass } = FORM_MODE_CONFIG[mode];
+    TestBed.configureTestingModule({
+        imports: [componentClass],
+        providers: [provideNgxMask()],
+    });
+    // Mode-to-class mapping is exhaustive over FORM_MODE_CONFIG, so this cast is safe.
+    const fixture = TestBed.createComponent(
+        componentClass as unknown as new () => Instance
+    ) as unknown as ComponentFixture<Instance>;
+    fixture.detectChanges();
+    return fixture;
+}
+
+function runMaskCasesForMode(
+    mode: FormMode,
+    testCases: MaskTestConfig[],
+    verifyFormValue = false
+): void {
+    let fixture: ComponentFixture<
+        TestReactiveComponent | TestTemplateComponent | TestSignalComponent
+    >;
+    let component: TestReactiveComponent | TestTemplateComponent | TestSignalComponent;
+    const { inputId } = FORM_MODE_CONFIG[mode];
+
+    beforeEach(() => {
+        fixture = createFixture(mode);
+        component = fixture.componentInstance;
+    });
+
+    testCases.forEach((testCase) => {
+        it(`should apply ${testCase.name}`, () => {
+            applyOptions(component, testCase);
+            fixture.detectChanges();
+
+            const result = typeValue(testCase.testInput, fixture, inputId);
+
+            expect(result).equal(testCase.expectedDisplay);
+            if (
+                verifyFormValue &&
+                mode === 'reactive' &&
+                testCase.expectedFormValue &&
+                component instanceof TestReactiveComponent
+            ) {
+                expect(component.formControl.value).equal(testCase.expectedFormValue);
+            }
+        });
+    });
+}
+
 function applyOptions<
     T extends TestReactiveComponent | TestTemplateComponent | TestSignalComponent,
 >(component: T, testCase: MaskTestConfig): void {
@@ -350,84 +411,15 @@ describe('Demo App - Common Cases', () => {
     ];
 
     describe('Reactive Forms', () => {
-        let fixture: ComponentFixture<TestReactiveComponent>;
-        let component: TestReactiveComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        commonCasesTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'reactive-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-                if (testCase.expectedFormValue) {
-                    expect(component.formControl.value).equal(testCase.expectedFormValue);
-                }
-            });
-        });
+        runMaskCasesForMode('reactive', commonCasesTests, true);
     });
 
     describe('Template-driven Forms', () => {
-        let fixture: ComponentFixture<TestTemplateComponent>;
-        let component: TestTemplateComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        commonCasesTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'template-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('template', commonCasesTests);
     });
 
     describe('Signal Forms', () => {
-        let fixture: ComponentFixture<TestSignalComponent>;
-        let component: TestSignalComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        commonCasesTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'signal-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('signal', commonCasesTests);
     });
 });
 
@@ -480,86 +472,17 @@ describe('Demo App - Options', () => {
     // See: projects/ngx-mask-lib/src/test/keep-character-position.cy-spec.ts
 
     describe('Reactive Forms', () => {
-        let fixture: ComponentFixture<TestReactiveComponent>;
-        let component: TestReactiveComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        optionsTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'reactive-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-                if (testCase.expectedFormValue) {
-                    expect(component.formControl.value).equal(testCase.expectedFormValue);
-                }
-            });
-        });
+        runMaskCasesForMode('reactive', optionsTests, true);
     });
 
     // Note: Template-driven Forms also have issues with keepCharacterPositions - only testing base options
     describe('Template-driven Forms', () => {
-        let fixture: ComponentFixture<TestTemplateComponent>;
-        let component: TestTemplateComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        optionsTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'template-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('template', optionsTests);
     });
 
     // Note: Signal Forms have issues with keepCharacterPositions - only testing base options
     describe('Signal Forms', () => {
-        let fixture: ComponentFixture<TestSignalComponent>;
-        let component: TestSignalComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        optionsTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'signal-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('signal', optionsTests);
 
         // TODO: keepCharacterPositions tests fail with Signal Forms - potential bug to investigate
         // keepCharacterPositionsTests.forEach((testCase) => {
@@ -611,55 +534,11 @@ describe('Demo App - Separators', () => {
     ];
 
     describe('Reactive Forms', () => {
-        let fixture: ComponentFixture<TestReactiveComponent>;
-        let component: TestReactiveComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        separatorTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'reactive-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('reactive', separatorTests);
     });
 
     describe('Template-driven Forms', () => {
-        let fixture: ComponentFixture<TestTemplateComponent>;
-        let component: TestTemplateComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        separatorTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'template-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('template', separatorTests);
     });
 
     describe('Signal Forms', () => {
@@ -667,13 +546,8 @@ describe('Demo App - Separators', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         separatorTests.forEach((testCase) => {
@@ -755,81 +629,15 @@ describe('Demo App - Other Cases', () => {
     ];
 
     describe('Reactive Forms', () => {
-        let fixture: ComponentFixture<TestReactiveComponent>;
-        let component: TestReactiveComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        otherTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'reactive-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('reactive', otherTests);
     });
 
     describe('Template-driven Forms', () => {
-        let fixture: ComponentFixture<TestTemplateComponent>;
-        let component: TestTemplateComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        otherTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'template-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('template', otherTests);
     });
 
     describe('Signal Forms', () => {
-        let fixture: ComponentFixture<TestSignalComponent>;
-        let component: TestSignalComponent;
-
-        beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
-            component = fixture.componentInstance;
-            fixture.detectChanges();
-        });
-
-        otherTests.forEach((testCase) => {
-            it(`should apply ${testCase.name}`, () => {
-                applyOptions(component, testCase);
-                fixture.detectChanges();
-
-                const result = typeValue(testCase.testInput, fixture, 'signal-input');
-
-                expect(result).equal(testCase.expectedDisplay);
-            });
-        });
+        runMaskCasesForMode('signal', otherTests);
     });
 });
 
@@ -839,13 +647,8 @@ describe('Demo App - Email Masks', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply email mask with 3-letter domain (A*@A*.SSS)', () => {
@@ -878,13 +681,8 @@ describe('Demo App - Email Masks', () => {
         let component: TestTemplateComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
+            fixture = createFixture('template');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply email mask with 3-letter domain (A*@A*.SSS)', () => {
@@ -915,13 +713,8 @@ describe('Demo App - Email Masks', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply email mask with 3-letter domain (A*@A*.SSS)', () => {
@@ -954,13 +747,8 @@ describe('Demo App - Mask with specialCharacters', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply phone mask with custom specialCharacters and shownMaskExpression', () => {
@@ -982,13 +770,8 @@ describe('Demo App - Mask with specialCharacters', () => {
         let component: TestTemplateComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
+            fixture = createFixture('template');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply phone mask with custom specialCharacters and shownMaskExpression', () => {
@@ -1009,13 +792,8 @@ describe('Demo App - Mask with specialCharacters', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply phone mask with custom specialCharacters and shownMaskExpression', () => {
@@ -1040,13 +818,8 @@ describe('Demo App - ClearIfNotMatch', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply mask correctly when clearIfNotMatch is enabled', () => {
@@ -1075,13 +848,8 @@ describe('Demo App - ClearIfNotMatch', () => {
         let component: TestTemplateComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
+            fixture = createFixture('template');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply mask correctly when clearIfNotMatch is enabled', () => {
@@ -1100,13 +868,8 @@ describe('Demo App - ClearIfNotMatch', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should apply mask correctly when clearIfNotMatch is enabled', () => {
@@ -1127,13 +890,8 @@ describe('Demo App - Allow negative numbers', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should allow negative numbers with separator mask', () => {
@@ -1164,13 +922,8 @@ describe('Demo App - Allow negative numbers', () => {
         let component: TestTemplateComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
+            fixture = createFixture('template');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should allow negative numbers with separator mask', () => {
@@ -1201,13 +954,8 @@ describe('Demo App - Allow negative numbers', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should allow negative numbers with separator mask', () => {
@@ -1241,13 +989,8 @@ describe('Demo App - Secure input (hiddenInput)', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should hide X positions with * in mask XXX/XX/XXXX', () => {
@@ -1292,13 +1035,8 @@ describe('Demo App - Paste functionality', () => {
         let component: TestReactiveComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestReactiveComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestReactiveComponent);
+            fixture = createFixture('reactive');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should handle paste for date mask', () => {
@@ -1325,13 +1063,8 @@ describe('Demo App - Paste functionality', () => {
         let component: TestTemplateComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestTemplateComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestTemplateComponent);
+            fixture = createFixture('template');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should handle paste for date mask', () => {
@@ -1349,13 +1082,8 @@ describe('Demo App - Paste functionality', () => {
         let component: TestSignalComponent;
 
         beforeEach(() => {
-            TestBed.configureTestingModule({
-                imports: [TestSignalComponent],
-                providers: [provideNgxMask()],
-            });
-            fixture = TestBed.createComponent(TestSignalComponent);
+            fixture = createFixture('signal');
             component = fixture.componentInstance;
-            fixture.detectChanges();
         });
 
         it('should handle paste for date mask', () => {
