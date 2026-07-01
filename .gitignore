@@ -57,3 +57,8 @@ test-reports/
 .dccache
 
 .output.txt
+
+# stray local test-run output
+/*test_output*.txt
+/*test_report*.txt
+/*test_results*.txt
