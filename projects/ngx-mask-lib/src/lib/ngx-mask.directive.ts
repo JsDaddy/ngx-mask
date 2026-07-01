@@ -1,6 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import type { OnChanges, SimpleChanges } from '@angular/core';
 import {
+    Injector,
     signal,
     input,
     output,
@@ -11,6 +12,7 @@ import {
     inject,
     untracked,
     booleanAttribute,
+    ChangeDetectorRef,
 } from '@angular/core';
 import type {
     ControlValueAccessor,
@@ -18,6 +20,7 @@ import type {
     ValidationErrors,
     Validator,
 } from '@angular/forms';
+import { NgControl } from '@angular/forms';
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { FormValueControl } from '@angular/forms/signals';
 
@@ -103,6 +106,30 @@ export class NgxMaskDirective
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
+    /**
+     * Under zoneless change detection, writing to the underlying FormControl programmatically
+     * (e.g. `setValue`/`patchValue` from outside a signal/effect context, or from a callback
+     * zone.js used to auto-flush like `requestAnimationFrame`/`queueMicrotask`) does not itself
+     * trigger a CD run. Bindings that read `form.pristine`/`form.dirty`/`form.value` on the host
+     * template need an explicit `markForCheck()` once the directive finishes reacting to a
+     * programmatic value write, otherwise the view stays stale until something else schedules CD.
+     */
+    private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+
+    // Injector is used to lazily resolve NgControl. NgControl cannot be injected directly:
+    // this directive is registered as the control's NG_VALUE_ACCESSOR, so a direct
+    // inject(NgControl) would form a circular dependency. Resolving it lazily on first use
+    // (after the control graph is wired) sidesteps the cycle.
+    private readonly _injector = inject(Injector);
+
+    private _ngControl: NgControl | null | undefined;
+
+    private _resolveNgControl(): NgControl | null {
+        if (typeof this._ngControl === 'undefined') {
+            this._ngControl = this._injector.get(NgControl, null);
+        }
+        return this._ngControl;
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: any) => {};
@@ -1000,8 +1027,35 @@ export class NgxMaskDirective
         }
     }
 
+    /**
+     * Restores the control's pristine/untouched state after a writeValue-driven emission.
+     *
+     * writeValue is a one-way model->view sync. When the mask normalizes the written value
+     * (e.g. leadZero '10.2' -> '10.20'), the directive must still emit the corrected value so
+     * the model adopts it — but that emission runs through Angular's view-change pipeline, which
+     * calls markAsDirty()/markAsTouched(). A programmatic setValue/patchValue must leave the
+     * control pristine, so we undo that side effect here when the control was pristine before
+     * the write. `onlySelf: true` keeps parent group state untouched.
+     */
+    private _restoreControlStateAfterWrite(wasPristine: boolean, wasUntouched: boolean): void {
+        const ngControl = this._resolveNgControl();
+        const control = ngControl?.control;
+        if (!control) {
+            return;
+        }
+        if (wasPristine && ngControl.dirty && typeof control.markAsPristine === 'function') {
+            control.markAsPristine({ onlySelf: true });
+        }
+        if (wasUntouched && ngControl.touched && typeof control.markAsUntouched === 'function') {
+            control.markAsUntouched({ onlySelf: true });
+        }
+    }
+
     /** It writes the value in the input */
     public async writeValue(controlValue: unknown): Promise<void> {
+        const ngControl = this._resolveNgControl();
+        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
         let value = controlValue;
         const inputTransformFn = this._maskService.inputTransformFn;
         if (typeof value === 'object' && value !== null && 'value' in value) {
@@ -1067,7 +1121,13 @@ export class NgxMaskDirective
                     const isFirstWrite = !this._maskService.isInitialized;
                     requestAnimationFrame(() => {
                         // On initial load, temporarily set isInitialized to false
-                        // so formControlResult returns early and doesn't mark form as dirty
+                        // so formControlResult returns early and doesn't mark form as dirty.
+                        // On later writeValue-driven writes, leave isInitialized as-is: this pass
+                        // may legitimately need to push a leadZero-normalized value (e.g.
+                        // '10.2' -> '10.20') back to the FormControl, which Angular's forms
+                        // pipeline can only do via the same onChange callback used for real user
+                        // edits — see the `should change formValue` unit tests, which assert the
+                        // normalized value lands in `form.value` after a programmatic setValue.
                         if (isFirstWrite) {
                             this._maskService.isInitialized = false;
                         }
@@ -1078,6 +1138,13 @@ export class NgxMaskDirective
                         if (isFirstWrite) {
                             this._maskService.isInitialized = true;
                         }
+                        // The leadZero normalization above emits the corrected value through the
+                        // view-change pipeline, which dirties/touches the control. Undo that so a
+                        // programmatic write stays pristine.
+                        this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+                        // Zoneless CD does not auto-flush after requestAnimationFrame; request
+                        // a check so form.pristine/form.value bindings reflect the new state.
+                        this._changeDetectorRef.markForCheck();
                     });
                 }
                 this._maskService.isNumberValue = true;
@@ -1109,6 +1176,13 @@ export class NgxMaskDirective
                 this._maskService.formElementProperty = ['value', inputValue];
                 this._maskService.isInitialized = true;
             }
+            // A writeValue-driven emission may have dirtied/touched the control via the
+            // view-change pipeline; undo that so programmatic writes stay pristine.
+            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+            // Programmatic writes (setValue/patchValue called outside a signal/effect context)
+            // don't schedule CD under zoneless change detection. Request a check so bindings
+            // reading form.pristine/form.dirty/form.value on the host template stay in sync.
+            this._changeDetectorRef.markForCheck();
         } else {
             // eslint-disable-next-line no-console
             console.warn(
