@@ -560,17 +560,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         const isCpfCnpjAlpha = this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
         const hasAnyLetter = /[a-zA-Z]/.test(inputVal);
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
-            if (!value) {
-                continue;
-            }
-            if (isCpfCnpjAlpha ? value.match('[a-zA-Z0-9]') : value.match('\\d')) {
-                arr.push(value);
-            }
-        }
+        const arr = this._countCpfCnpjTypedChars(inputVal, isCpfCnpjAlpha);
         if (isCpfCnpjAlpha && hasAnyLetter) {
             // CNPJ_ALPHA shape is "AA.AAA.AAA/AAAA-00": separators fall after the 2nd, 5th,
             // 8th and 12th typed character, so the placeholder slice offset must account for
@@ -616,6 +606,23 @@ export class NgxMaskService extends NgxMaskApplierService {
             return cnpj.slice(arr.length + 4, cnpj.length);
         }
         return '';
+    }
+
+    /** Collects the characters counted as "typed" for CPF/CNPJ progress tracking: digits only
+     *  for the numeric mask, alphanumerics for CPF_CNPJ_ALPHA. */
+    private _countCpfCnpjTypedChars(inputVal: string, isCpfCnpjAlpha: boolean): string[] {
+        const arr: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < inputVal.length; i++) {
+            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
+            if (!value) {
+                continue;
+            }
+            if (isCpfCnpjAlpha ? value.match('[a-zA-Z0-9]') : value.match('\\d')) {
+                arr.push(value);
+            }
+        }
+        return arr;
     }
 
     /**
