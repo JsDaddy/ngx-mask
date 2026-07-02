@@ -12,6 +12,10 @@
 - Fix ([#1532](https://github.com/JsDaddy/ngx-mask/issues/1532)) — `separator` mask without explicit precision no longer throws `toFixed()` RangeError
 - Fix ([#1607](https://github.com/JsDaddy/ngx-mask/issues/1607), [#1614](https://github.com/JsDaddy/ngx-mask/issues/1614)) — directive no longer overrides `FormControl` disabled state on init; initially-disabled controls stay disabled
 - Fix ([#1355](https://github.com/JsDaddy/ngx-mask/issues/1355), [#1578](https://github.com/JsDaddy/ngx-mask/issues/1578)) — deleting the leading digit of a separator value no longer collapses remaining zeros (`1,000,000` → `000,000`, consistent for all lengths)
+- Fix ([#1512](https://github.com/JsDaddy/ngx-mask/issues/1512)) — an explicitly bound empty `[specialCharacters]="[]"` is respected instead of silently falling back to defaults
+- Fix ([#1551](https://github.com/JsDaddy/ngx-mask/issues/1551)) — pasting a value starting with doubled prefix characters no longer strips a prefix occurrence (regression from 18.0.1)
+- Fix ([#1571](https://github.com/JsDaddy/ngx-mask/issues/1571)) — caret lands at the end after pasting into a separator mask with a prefix
+- Fix ([#1347](https://github.com/JsDaddy/ngx-mask/issues/1347)) — multi-character `placeHolderCharacter` now emits a one-time warning (single character required)
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
