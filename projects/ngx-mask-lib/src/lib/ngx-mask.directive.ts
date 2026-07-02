@@ -503,6 +503,13 @@ export class NgxMaskDirective
 
                 if (array.length === 1) {
                     if (processedValue.length < length) {
+                        // #1583: for `||` multi-masks, a value shorter than the selected
+                        // alternative can still be complete: it must stop exactly at a
+                        // special-character boundary of the selected alternative and satisfy
+                        // the length requirement of another (shorter) alternative.
+                        if (this._isCompleteAlternativeBoundary(processedValue)) {
+                            return null;
+                        }
                         return this._createValidationError(processedValue);
                     }
                 }
@@ -792,6 +799,21 @@ export class NgxMaskDirective
                         }
                     }
                     this._maskService.keepCharacterPositionsHandled = kcpHandled;
+                }
+
+                // A literal '*' typed into the VALUE (custom pattern allowing asterisks) makes
+                // the service's applyMask take its hiddenInput shadow-value branch, whose
+                // equal/shorter-length cases restore the stale pre-edit actualValue and discard
+                // a selection replacement (#1504). Without hiddenInput there is no shadow state
+                // to preserve, so drop it and let the edited value flow through regular masking.
+                if (
+                    !this._maskService.hiddenInput &&
+                    !this._maskService.showMaskTyped &&
+                    !this.keepCharacterPositions() &&
+                    this._maskService.selStart !== this._maskService.selEnd &&
+                    el.value.includes(MaskExpression.SYMBOL_STAR)
+                ) {
+                    this._maskService.actualValue = MaskExpression.EMPTY_STRING;
                 }
 
                 let caretShift = 0;
@@ -1159,14 +1181,23 @@ export class NgxMaskDirective
                     el.selectionEnd === el.value.length &&
                     el.value.length !== 0
                 ) {
-                    this._position.set(
-                        this._maskService.prefix ? this._maskService.prefix.length : 0
-                    );
-                    this._maskService.applyMask(
-                        this._maskService.prefix,
+                    // Handle the clear fully here instead of emitting the model change and
+                    // relying on the browser's default deletion + input event to update the
+                    // view: Firefox can drop the default action after the emission below
+                    // triggers change detection (DOM churn around the input), leaving the
+                    // model empty but the view untouched until a second Backspace (#1350).
+                    e.preventDefault();
+                    const displayValue = this._maskService.applyMask(
+                        MaskExpression.EMPTY_STRING,
                         this._maskService.maskExpression,
-                        this._position() as number
+                        0,
+                        false,
+                        true
                     );
+                    el.value = displayValue;
+                    this._inputValue.set(displayValue);
+                    const caret = Math.min(this._maskService.prefix.length, displayValue.length);
+                    el.setSelectionRange(caret, caret);
                 }
             }
             if (
@@ -1515,6 +1546,56 @@ export class NgxMaskDirective
             this._maskService.actualValue.length ||
             this._maskService.actualValue.length + this._maskService.prefix.length
         );
+    }
+
+    /**
+     * For `||` multi-masks only (#1583): a value shorter than the currently selected
+     * alternative is still valid when it is a pattern-valid prefix of that alternative
+     * ending exactly at a special-character boundary (e.g. `0` for `0,N`) and it meets
+     * the length requirement of at least one alternative (e.g. `1`). Values stopping
+     * mid-pattern-block (e.g. `112A` for `000SS`) remain invalid.
+     */
+    private _isCompleteAlternativeBoundary(processedValue: string): boolean {
+        const alternatives = this._maskExpressionArray();
+        if (!alternatives.length) {
+            return false;
+        }
+        const maskValue = this._maskValue();
+        const cleanValue = this._maskService.removeMask(processedValue);
+        const cleanMask = this._maskService.removeMask(maskValue);
+        const isPatternPrefix = cleanValue
+            .split(MaskExpression.EMPTY_STRING)
+            .every((character, index) =>
+                this._maskService._checkSymbolMask(character, cleanMask.charAt(index))
+            );
+        if (!isPatternPrefix) {
+            return false;
+        }
+        let patternCount = 0;
+        let boundaryCharacter: string = MaskExpression.EMPTY_STRING;
+        for (const maskCharacter of maskValue) {
+            if (patternCount === cleanValue.length) {
+                boundaryCharacter = maskCharacter;
+                break;
+            }
+            if (!this._maskService.specialCharacters.includes(maskCharacter)) {
+                patternCount++;
+            }
+        }
+        if (
+            !boundaryCharacter ||
+            !this._maskService.specialCharacters.includes(boundaryCharacter)
+        ) {
+            return false;
+        }
+        return alternatives.some((alternative) => {
+            const requiredLength = this._maskService.dropSpecialCharacters
+                ? alternative.length - this._maskService.checkDropSpecialCharAmount(alternative)
+                : this.prefix()
+                  ? alternative.length + this.prefix().length
+                  : alternative.length;
+            return processedValue.length >= requiredLength;
+        });
     }
 
     private _createValidationError(actualValue: string): ValidationErrors {
