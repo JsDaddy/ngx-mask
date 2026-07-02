@@ -429,4 +429,52 @@ describe('Directive: Mask (Delete)', () => {
 
         expect(inputTarget.value).equal('0.');
     });
+
+    it('should keep decimal marker when deleting all leading integer digits (issue #1516)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        component.leadZero.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 12,34 — user selects '12' and deletes it -> native value is ',34'
+        inputTarget.value = ',34';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal(',34');
+    });
+
+    it('should keep dot decimal marker when deleting all leading integer digits (issue #1516)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 12.34 — user selects '12' and deletes it -> native value is '.34'
+        inputTarget.value = '.34';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('.34');
+    });
 });

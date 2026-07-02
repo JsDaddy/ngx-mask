@@ -237,6 +237,36 @@ export class NgxMaskApplierService {
                 }
             }
 
+            // Issue #1547: a pasted value may contain grouping separators that are
+            // also configured decimal markers (default decimalMarker is ['.', ',']),
+            // e.g. '1,234.56'. Only the last marker character can actually be the
+            // decimal marker — treat the earlier ones as thousand separators and
+            // strip them, otherwise formatting cuts the value off at the first one.
+            if (justPasted && Array.isArray(this.decimalMarker)) {
+                const markerPositions: number[] = [];
+                for (let i = 0; i < processedValue.length; i++) {
+                    const char = processedValue[i] as string;
+                    if (
+                        char !== this.thousandSeparator &&
+                        this.decimalMarker.includes(
+                            char as MaskExpression.COMMA | MaskExpression.DOT
+                        )
+                    ) {
+                        markerPositions.push(i);
+                    }
+                }
+                if (markerPositions.length > 1) {
+                    const lastMarkerPosition = markerPositions[markerPositions.length - 1];
+                    processedValue = processedValue
+                        .split(MaskExpression.EMPTY_STRING)
+                        .filter(
+                            (_, index) =>
+                                index === lastMarkerPosition || !markerPositions.includes(index)
+                        )
+                        .join(MaskExpression.EMPTY_STRING);
+                }
+            }
+
             if (backspaced) {
                 const { decimalMarkerIndex, nonZeroIndex } = this._findFirstNonZeroAndDecimalIndex(
                     processedValue,
@@ -267,7 +297,14 @@ export class NgxMaskApplierService {
                     }
                 }
 
-                if (!decimalMarkerIndex && nonZeroIndex && processedValue.length > nonZeroIndex) {
+                // Issue #1516: decimalMarkerIndex is 0 when the remainder starts with
+                // the decimal marker (',34' after deleting the integer part) — a truthy
+                // check would treat it as "no decimal marker" and slice the marker off.
+                if (
+                    decimalMarkerIndex === null &&
+                    nonZeroIndex &&
+                    processedValue.length > nonZeroIndex
+                ) {
                     processedValue = zeroIndexMinus
                         ? MaskExpression.MINUS + processedValue.slice(nonZeroIndex)
                         : processedValue.slice(nonZeroIndex);
