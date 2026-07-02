@@ -900,10 +900,26 @@ export class NgxMaskDirective
                     positionToApply += this._maskService.prefix.length;
                 }
                 if (positionToApply > this._getActualInputLength()) {
-                    positionToApply =
-                        el.value === this._maskService.decimalMarker && el.value.length === 1
-                            ? this._getActualInputLength() + 1
-                            : this._getActualInputLength();
+                    // A bare decimal marker ('.' or, with a prefix, '$.') is not a number:
+                    // formControlResult has just emitted null for it, which the ngModelChange
+                    // reset handler treats as a form reset and clears actualValue. The plain
+                    // length clamp would then land the caret BEFORE the marker — keep it right
+                    // after the marker instead (#1572).
+                    const decimalMarker = this._maskService.decimalMarker;
+                    const prefix = this._maskService.prefix;
+                    const valueWithoutPrefix = el.value.startsWith(prefix)
+                        ? el.value.slice(prefix.length)
+                        : el.value;
+                    const isBareDecimalMarker =
+                        valueWithoutPrefix.length === 1 &&
+                        (Array.isArray(decimalMarker)
+                            ? decimalMarker.includes(
+                                  valueWithoutPrefix as MaskExpression.DOT | MaskExpression.COMMA
+                              )
+                            : valueWithoutPrefix === decimalMarker);
+                    positionToApply = isBareDecimalMarker
+                        ? this._getActualInputLength() + 1
+                        : this._getActualInputLength();
                 }
                 if (positionToApply < 0) {
                     positionToApply = 0;
@@ -1335,7 +1351,7 @@ export class NgxMaskDirective
 
                 this._maskService.formElementProperty = [
                     'value',
-                    this._maskService.applyMask(inputValue, this._maskService.maskExpression),
+                    this._maskedOrVerbatim(inputValue),
                 ];
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
@@ -1440,8 +1456,40 @@ export class NgxMaskDirective
         );
         this._maskService.formElementProperty = [
             'value',
-            this._maskService.applyMask(this._inputValue(), this._maskService.maskExpression),
+            this._maskedOrVerbatim(this._inputValue()),
         ];
+    }
+
+    /**
+     * Renders `inputValue` through the mask, falling back to the raw value verbatim when the
+     * mask cannot process ANY of it (#1615, e.g. a sentinel like 'ONGOING' written into a
+     * digits-only control). Values that PARTIALLY match keep regular masking.
+     *
+     * Shared by writeValue() and _applyMask() (called from every ngOnChanges pass, including
+     * ones triggered by an UNRELATED input like `disabled`) so the verbatim verdict for a
+     * value written once via writeValue() is not lost on a later re-render that replays the
+     * same raw `inputValue` outside of writeValue — which would otherwise re-run regular
+     * masking, produce an empty result, and emit it through onChange, clobbering the model.
+     *
+     * Excludes an actual mask RECONFIGURATION (`maskChanged`): when the mask itself just
+     * changed, a value that no longer matches must clear through the regular path (see
+     * trigger-on-mask-change.spec.ts) — verbatim passthrough only covers re-renders of the
+     * SAME mask.
+     */
+    private _maskedOrVerbatim(inputValue: string): string {
+        // Snapshot before applyMask(): it resets maskChanged internally as part of emitting
+        // (or skipping) the change, so it must be read before the call, not after.
+        const wasMaskChanged = this._maskService.maskChanged;
+        const maskedResult = this._maskService.applyMask(
+            inputValue,
+            this._maskService.maskExpression
+        );
+        return !maskedResult &&
+            inputValue &&
+            !wasMaskChanged &&
+            this._maskService.removeMask(inputValue)
+            ? inputValue
+            : maskedResult;
     }
 
     private _validateTime(value: string): ValidationErrors | null {

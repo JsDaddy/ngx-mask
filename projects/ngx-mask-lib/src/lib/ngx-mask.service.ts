@@ -263,6 +263,30 @@ export class NgxMaskService extends NgxMaskApplierService {
             cb
         );
 
+        // #1615: a value the mask cannot process AT ALL (masking leaves nothing of it) is
+        // rendered verbatim instead of being destroyed, and must not reach formControlResult
+        // — the empty remnant would clobber the model that holds the sentinel (e.g.
+        // setValue('ONGOING') on a digits mask). Values that PARTIALLY match keep regular
+        // masking. Two cases reach this:
+        // 1. this.writingValue: the originating writeValue() call itself.
+        // 2. currentValue === inputValue (and the mask didn't just change): a LATER re-render
+        //    replaying the exact same already-verbatim value outside of writeValue (e.g.
+        //    ngOnChanges re-running applyMask via the directive's _applyMask() when an
+        //    UNRELATED input like `disabled` changes) — without this, that pass would fall
+        //    through to regular masking, emit the empty result via onChange, and clobber the
+        //    model even though the DOM would still show the sentinel correctly.
+        if (
+            (this.writingValue || (!this.maskChanged && inputValue === this.currentValue)) &&
+            inputValue &&
+            !result &&
+            this.removeMask(inputValue)
+        ) {
+            this.actualValue = inputValue;
+            this.previousValue = this.currentValue;
+            this.currentValue = inputValue;
+            return inputValue;
+        }
+
         this.actualValue = this.getActualValue(result);
 
         // handle some separator implications:

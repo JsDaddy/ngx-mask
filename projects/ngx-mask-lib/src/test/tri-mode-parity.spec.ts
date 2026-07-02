@@ -218,6 +218,39 @@ describe('Directive: Mask (tri-mode parity — mode-level integration)', () => {
             expect(harness.isInputDisabled()).equal(false);
         });
 
+        it(`should keep a value the mask cannot process verbatim in ${mode} mode (#1615)`, async () => {
+            // Sentinel-value scenario: the app writes a non-maskable marker (e.g. 'ONGOING')
+            // into a numeric control and disables it. When masking leaves NOTHING of the
+            // written value, it is displayed verbatim and the model keeps it — the mask
+            // must not transform, clear, or clobber it (regression after v18.0.4).
+            const harness = await createTriModeFixture(mode, { mask: '0000' });
+
+            await harness.setBoundValue('1234');
+            expect(harness.getInput().value).equal('1234');
+
+            await harness.setBoundValue('ONGOING');
+            expect(harness.getInput().value).equal('ONGOING');
+            expect(harness.getBoundValue()).equal('ONGOING');
+
+            // The issue's exact flow disables the control while the sentinel is shown.
+            await harness.setDisabled(true);
+            expect(harness.getInput().value).equal('ONGOING');
+            expect(harness.getBoundValue()).equal('ONGOING');
+        });
+
+        it(`should keep masking a partially matching programmatic write in ${mode} mode (#1615)`, async () => {
+            // Only values the mask cannot process AT ALL pass through verbatim; a value
+            // that PARTIALLY matches keeps the regular masking behavior.
+            const harness = await createTriModeFixture(mode, { mask: '0000' });
+
+            await harness.setBoundValue('ON2GO4ING');
+            expect(harness.getInput().value).equal('24');
+
+            await harness.setBoundValue('5678');
+            expect(harness.getInput().value).equal('5678');
+            expect(harness.getBoundValue()).equal('5678');
+        });
+
         it(`should mark user interaction (dirty/touched equivalent) after typing and blur in ${mode} mode`, async () => {
             const harness = await createTriModeFixture(mode, { mask: '0000' });
 
