@@ -887,11 +887,27 @@ export class NgxMaskApplierService {
             this.specialCharacters.includes(maskExpression[0] as string) &&
             processedValue !== maskExpression[0];
 
-        if (
-            !this._checkSymbolMask(processedValue, maskExpression[1] as string) &&
-            isSpecialCharacterMaskFirstSymbol
-        ) {
-            return '';
+        if (isSpecialCharacterMaskFirstSymbol) {
+            // The mask may start with several literal special characters in a row
+            // (e.g. '+(000) 000-0000'). A single typed character must be checked
+            // against the first PATTERN position of the mask, not literally against
+            // index 1 — otherwise a valid digit is rejected and the leading literals
+            // are never auto-filled (#1498).
+            let firstPatternIndex = 1;
+            while (
+                firstPatternIndex < maskExpression.length &&
+                this.specialCharacters.includes(maskExpression[firstPatternIndex] as string)
+            ) {
+                firstPatternIndex++;
+            }
+            if (
+                !this._checkSymbolMask(
+                    processedValue,
+                    maskExpression[firstPatternIndex] ?? MaskExpression.EMPTY_STRING
+                )
+            ) {
+                return '';
+            }
         }
 
         if (result.includes(MaskExpression.MINUS) && this.prefix && this.allowNegativeNumbers) {

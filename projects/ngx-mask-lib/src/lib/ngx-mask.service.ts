@@ -77,6 +77,34 @@ export class NgxMaskService extends NgxMaskApplierService {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
 
+        // #1492: a numeric FormControl value like 0.0000007 or 1e21 stringifies to
+        // exponential notation ('7e-7'); separator masking would strip the 'e'/'-' and
+        // render garbage ('77'). Expand scientific notation to plain decimal form before
+        // masking. Covers writeValue-driven flows and the pipe; a keystroke value can
+        // never match, since separator masking never lets a letter through.
+        if (
+            maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            inputValue &&
+            /\d[eE][+-]?\d/.test(inputValue)
+        ) {
+            const expandedNumber = Number(this._replaceDecimalMarkerToDot(inputValue));
+            if (!Number.isNaN(expandedNumber)) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = expandedNumber.toLocaleString('fullwide', {
+                    useGrouping: false,
+                    maximumFractionDigits: 20,
+                });
+                if (
+                    this.decimalMarker === MaskExpression.COMMA ||
+                    (Array.isArray(this.decimalMarker) &&
+                        this.thousandSeparator === MaskExpression.DOT)
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = inputValue.replace(MaskExpression.DOT, MaskExpression.COMMA);
+                }
+            }
+        }
+
         // Show mask in input if required
         this.maskIsShown = this.showMaskTyped
             ? this.showMaskInInput()
@@ -477,12 +505,12 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return String(value);
         }
-        return Number(value)
-            .toLocaleString('fullwide', {
-                useGrouping: false,
-                maximumFractionDigits: 20,
-            })
-            .replace(`/${MaskExpression.MINUS}/`, MaskExpression.MINUS);
+        // NOTE: a historical `.replace('/-/', '-')` no-op (a literal string that looked like
+        // a regex) was removed here — 'fullwide' already yields a plain ASCII minus.
+        return Number(value).toLocaleString('fullwide', {
+            useGrouping: false,
+            maximumFractionDigits: 20,
+        });
     }
 
     public showMaskInInput(inputVal?: string): string {
@@ -901,11 +929,52 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
                 value = value.replace(',', '.');
             }
-            return this.leadZero
-                ? Number(value).toFixed(Number(separatorPrecision))
-                : Number(value).toFixed(2);
+            const precision = this.leadZero ? Number(separatorPrecision) : 2;
+            // #1567: Number(value).toFixed() corrupts values with more significant digits
+            // than an IEEE-754 double can hold (e.g. '999999999999999.99' becomes
+            // '1000000000000000.00'). Round such values textually instead; safe-range
+            // values keep the original toFixed() semantics.
+            if (this._exceedsDoublePrecision(value)) {
+                return this._stringToFixed(value, precision);
+            }
+            return Number(value).toFixed(precision);
         }
         return this.numberToString(value);
+    }
+
+    /**
+     * True when the plain decimal string carries more significant digits than an IEEE-754
+     * double can represent exactly (15 is the guaranteed round-trip digit count), meaning a
+     * Number() round-trip would corrupt it (#1567).
+     */
+    private _exceedsDoublePrecision(value: string): boolean {
+        if (!/^-?\d+(\.\d+)?$/.test(value)) {
+            return false;
+        }
+        const significantDigits = value.replace(/\D/g, '').replace(/^0+/, '');
+        return significantDigits.length > 15;
+    }
+
+    /**
+     * Exact string-based equivalent of Number.prototype.toFixed (round half away from zero)
+     * for plain decimal strings beyond double precision (#1567).
+     */
+    private _stringToFixed(value: string, precision: number): string {
+        const isNegative = value.startsWith(MaskExpression.MINUS);
+        const absValue = isNegative ? value.slice(1) : value;
+        const [integerPart = '0', fractionPart = ''] = absValue.split(MaskExpression.DOT);
+        const paddedFraction = fractionPart.padEnd(precision + 1, '0');
+        const keptFraction = paddedFraction.slice(0, precision);
+        const shouldRoundUp = (paddedFraction.charCodeAt(precision) || 0) >= 53; // '5'
+        let scaled = BigInt(integerPart + keptFraction);
+        if (shouldRoundUp) {
+            scaled += 1n;
+        }
+        const digits = scaled.toString().padStart(precision + 1, '0');
+        const sign = isNegative && scaled > 0n ? MaskExpression.MINUS : '';
+        return precision > 0
+            ? `${sign}${digits.slice(0, -precision)}.${digits.slice(-precision)}`
+            : `${sign}${digits}`;
     }
 
     public _repeatPatternSymbols(maskExp: string): string {

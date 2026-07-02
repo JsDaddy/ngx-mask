@@ -509,6 +509,8 @@ describe('Directive: Mask', () => {
             key: 'Backspace',
             keyCode: 8,
             target: inputTarget,
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            preventDefault: () => {},
         });
         expect(directiveInstance._maskService.applyMask).toHaveBeenCalled();
     });
@@ -957,6 +959,24 @@ describe('Directive: Mask', () => {
         equal('[', '', fixture);
         equal(']', '', fixture);
         equal('=', '', fixture);
+    });
+
+    it('should auto-fill several leading special characters when typing a digit +(000) 000-0000 (#1498)', () => {
+        component.mask.set('+(000) 000-0000');
+
+        equal('1', '+(1', fixture);
+        equal('1234567890', '+(123) 456-7890', fixture);
+    });
+
+    it('should still reject a wrong single character with several leading special characters +(000) 000-0000 (#1498)', () => {
+        component.mask.set('+(000) 000-0000');
+
+        equal('@', '', fixture);
+        equal('!', '', fixture);
+        equal('.', '', fixture);
+        equal('-', '', fixture);
+        equal('=', '', fixture);
+        equal('a', '', fixture);
     });
 
     it('optional mask should work correct 99-99', () => {

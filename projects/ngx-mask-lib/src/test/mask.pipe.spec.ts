@@ -385,4 +385,43 @@ describe('Pipe: Mask', () => {
         expect(value).equal('(12) 3456-7890');
         expect(value1).equal('(12) 3.4567-8901');
     });
+
+    // #1567: string values with more significant digits than an IEEE-754 double can hold
+    // must not round-trip through Number ('999999999999999.99' became '1000000000000000.00').
+    it('should not corrupt a number beyond double precision with separator.2 (#1567)', () => {
+        const value: string | number = maskPipe.transform('999999999999999.99', 'separator.2', {
+            thousandSeparator: ',',
+        });
+        expect(value).equal('999,999,999,999,999.99');
+    });
+
+    it('should not corrupt a number beyond double precision with separator.2 and leadZero (#1567)', () => {
+        const value: string | number = maskPipe.transform('999999999999999.99', 'separator.2', {
+            thousandSeparator: ',',
+            leadZero: true,
+        });
+        expect(value).equal('999,999,999,999,999.99');
+    });
+
+    it('should round textually beyond double precision with separator.2 and leadZero (#1567)', () => {
+        const value: string | number = maskPipe.transform('999999999999999.996', 'separator.2', {
+            thousandSeparator: ',',
+            leadZero: true,
+        });
+        expect(value).equal('1,000,000,000,000,000.00');
+    });
+
+    it('should keep toFixed rounding for safe-range values with separator.2 and leadZero (#1567)', () => {
+        const value: string | number = maskPipe.transform('10.555', 'separator.2', {
+            thousandSeparator: ',',
+            leadZero: true,
+        });
+        expect(value).equal('10.55');
+    });
+
+    // #1492: exponential-notation values must be expanded before separator masking.
+    it('should expand an exponential-format number with separator mask (#1492)', () => {
+        const value: string | number = maskPipe.transform(0.0000007, 'separator');
+        expect(value).equal('0.0000007');
+    });
 });

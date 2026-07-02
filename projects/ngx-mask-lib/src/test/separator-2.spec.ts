@@ -504,4 +504,80 @@ describe('Separator: Mask', () => {
         equal('-.3', '-0.3', fixture);
         equal('-.34', '-0.34', fixture);
     });
+
+    // #1492: numbers that stringify to exponential notation must be expanded to plain
+    // decimal form before separator masking (String(0.0000007) === '7e-7' used to render '77').
+    it('should display exponential-format small number from a number FormControl (#1492)', async () => {
+        component.mask.set('separator');
+        const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+            .nativeElement as HTMLInputElement;
+        fixture.detectChanges();
+
+        component.form.setValue(0.0000007);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('0.0000007');
+        expect(component.form.value).equal(0.0000007);
+    });
+
+    it('should display exponential-format large number from a number FormControl (#1492)', async () => {
+        component.mask.set('separator');
+        const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+            .nativeElement as HTMLInputElement;
+        fixture.detectChanges();
+
+        component.form.setValue(1e21);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('1 000 000 000 000 000 000 000');
+        expect(String(component.form.value)).equal('1000000000000000000000');
+    });
+
+    it('should display negative exponential-format number from a number FormControl (#1492)', async () => {
+        component.mask.set('separator');
+        component.allowNegativeNumbers.set(true);
+        const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+            .nativeElement as HTMLInputElement;
+        fixture.detectChanges();
+
+        component.form.setValue(-0.0000007);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('-0.0000007');
+    });
+
+    it('should keep normal number FormControl values unchanged (#1492)', async () => {
+        component.mask.set('separator');
+        const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+            .nativeElement as HTMLInputElement;
+        fixture.detectChanges();
+
+        component.form.setValue(1234.5);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('1 234.5');
+    });
+
+    // #1567: values with more significant digits than an IEEE-754 double can hold must not
+    // round-trip through Number ('999999999999999.99' used to become '1000000000000000.00').
+    it('should not corrupt a number beyond double precision when typing (#1567)', () => {
+        component.mask.set('separator.2');
+        fixture.detectChanges();
+
+        equal('999999999999999.99', '999 999 999 999 999.99', fixture);
+    });
+
+    it('should not corrupt a number beyond double precision with leadZero on setValue (#1567)', async () => {
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+            .nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue('999999999999999.99');
+        fixture.detectChanges();
+        await fixture.whenStable();
+        expect(inputTarget.value).equal('999 999 999 999 999.99');
+    });
 });
