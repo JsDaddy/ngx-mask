@@ -237,14 +237,15 @@ export class NgxMaskApplierService {
                     decimalMarker as '.' | ','
                 );
                 const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
-                const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
                 const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
                 const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
 
+                // Issues #1355/#1578: an all-zero remainder (e.g. '00' from '500', '00,000'
+                // from '100,000') must keep its zeros, matching the ',000,000' case.
+                // Only collapse when nothing but a bare decimal marker (or '-.') remains.
                 if (
                     (zeroIndexDecimalMarker && !nonZeroIndex) ||
-                    (zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex) ||
-                    (zeroIndexNumberZero && !decimalMarkerIndex && !nonZeroIndex)
+                    (zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex)
                 ) {
                     processedValue = MaskExpression.NUMBER_ZERO;
                 }
@@ -276,7 +277,10 @@ export class NgxMaskApplierService {
                 }
             }
 
-            if (precision === 0) {
+            // Leading-zero stripping is a typing-time rule ('05' -> '5'). When backspaced,
+            // leading zeros before a non-zero digit were already removed above, and an
+            // all-zero remainder must keep its zeros (issues #1355/#1578).
+            if (precision === 0 && !backspaced) {
                 processedValue = this.allowNegativeNumbers
                     ? processedValue.length > 2 &&
                       processedValue[0] === MaskExpression.MINUS &&
