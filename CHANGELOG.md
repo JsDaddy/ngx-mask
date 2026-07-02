@@ -16,6 +16,7 @@
 - Fix ([#1551](https://github.com/JsDaddy/ngx-mask/issues/1551)) — pasting a value starting with doubled prefix characters no longer strips a prefix occurrence (regression from 18.0.1)
 - Fix ([#1571](https://github.com/JsDaddy/ngx-mask/issues/1571)) — caret lands at the end after pasting into a separator mask with a prefix
 - Fix ([#1347](https://github.com/JsDaddy/ngx-mask/issues/1347)) — multi-character `placeHolderCharacter` now emits a one-time warning (single character required)
+- Fix ([#1527](https://github.com/JsDaddy/ngx-mask/issues/1527), [#1543](https://github.com/JsDaddy/ngx-mask/issues/1543), [#1544](https://github.com/JsDaddy/ngx-mask/issues/1544), [#1545](https://github.com/JsDaddy/ngx-mask/issues/1545), [#1489](https://github.com/JsDaddy/ngx-mask/issues/1489)) — `keepCharacterPositions` overhaul: works without `showMaskTyped`, mid-value deletion leaves placeholder gaps, selection replacement preserves layout, keystrokes are no longer eaten at special-character boundaries, plays well with `leadZeroDateTime`
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
