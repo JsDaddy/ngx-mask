@@ -21,6 +21,8 @@
 - Fix ([#1547](https://github.com/JsDaddy/ngx-mask/issues/1547)) — pasting values containing both `.` and `,` with the default array `decimalMarker` no longer drops digits (last marker wins as decimal)
 - Fix ([#1516](https://github.com/JsDaddy/ngx-mask/issues/1516)) — deleting digits before the decimal marker keeps the decimal part (`0.05` → `.05`, no more silent value corruption)
 - Fix ([#1572](https://github.com/JsDaddy/ngx-mask/issues/1572)) — caret lands after the decimal marker when typing `.` with a prefix and `leadZero`
+- Fix ([#1611](https://github.com/JsDaddy/ngx-mask/issues/1611)) — pasted/pre-populated dates parse correctly in month-first masks (`M0/d0/0000`: `01071941` → `01/07/1941`)
+- Fix ([#1612](https://github.com/JsDaddy/ngx-mask/issues/1612)) — `hiddenInput` with a custom pattern symbol no longer deletes two characters on a single backspace
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
