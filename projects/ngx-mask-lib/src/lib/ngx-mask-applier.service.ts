@@ -101,12 +101,18 @@ export class NgxMaskApplierService {
         let processedPosition = position;
 
         const startsWithPrefix = processedValue.slice(0, this.prefix.length) === this.prefix;
-        const pastedFullWithPrefix =
-            justPasted && processedValue.length === this.prefix.length + maskExpression.length;
-        const looksLikeFullPrefixPaste =
-            processedValue === this.prefix + processedValue.slice(this.prefix.length);
+        // On paste with showMaskTyped, NgxMaskService.applyMask has already removed the
+        // prefix via removeMask() before delegating here (unless the value consisted of
+        // the prefix alone, in which case the raw value falls through). Stripping again
+        // would eat leading characters that merely look like the prefix (#1551).
+        const prefixAlreadyRemovedByCaller =
+            justPasted &&
+            this.showMaskTyped &&
+            this.placeHolderCharacter.length === 1 &&
+            !this.leadZeroDateTime &&
+            processedValue !== this.prefix;
 
-        if (startsWithPrefix && (pastedFullWithPrefix || looksLikeFullPrefixPaste)) {
+        if (startsWithPrefix && !prefixAlreadyRemovedByCaller) {
             processedValue = processedValue.slice(this.prefix.length);
         }
         if (!!this.suffix && processedValue.length > 0) {
@@ -743,20 +749,27 @@ export class NgxMaskApplierService {
                     i--;
                 } else if (
                     this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR &&
-                    this._findSpecialChar(
+                    // A typed char that exactly matches the mask's literal char at cursor+2
+                    // (e.g. the '@' in 'A*@A*.A*') always terminates the 'A*' run, regardless
+                    // of whether that literal is registered in `specialCharacters` — an
+                    // explicitly empty `specialCharacters` list must not make mask literals
+                    // unmatchable (#1512).
+                    (this._findSpecialChar(
                         this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
-                    ) &&
-                    this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
+                    )
+                        ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]
+                        : inputSymbol === this.maskExpression[cursor + 2]) &&
                     multi
                 ) {
                     cursor += 3;
                     result += inputSymbol;
                 } else if (
                     this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION &&
-                    this._findSpecialChar(
+                    (this._findSpecialChar(
                         this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
-                    ) &&
-                    this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
+                    )
+                        ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]
+                        : inputSymbol === this.maskExpression[cursor + 2]) &&
                     multi
                 ) {
                     cursor += 3;
