@@ -23,6 +23,12 @@
 - Fix ([#1572](https://github.com/JsDaddy/ngx-mask/issues/1572)) — caret lands after the decimal marker when typing `.` with a prefix and `leadZero`
 - Fix ([#1611](https://github.com/JsDaddy/ngx-mask/issues/1611)) — pasted/pre-populated dates parse correctly in month-first masks (`M0/d0/0000`: `01071941` → `01/07/1941`)
 - Fix ([#1612](https://github.com/JsDaddy/ngx-mask/issues/1612)) — `hiddenInput` with a custom pattern symbol no longer deletes two characters on a single backspace
+- Fix ([#1498](https://github.com/JsDaddy/ngx-mask/issues/1498)) — masks with multiple leading literals (`+(000)...`) auto-fill them again on the first typed character (regression from v17)
+- Fix ([#1492](https://github.com/JsDaddy/ngx-mask/issues/1492)) — numeric `FormControl` values in exponential notation (`7e-7`, `1e21`) expand to plain decimals instead of rendering garbage
+- Fix ([#1567](https://github.com/JsDaddy/ngx-mask/issues/1567)) — values beyond IEEE-754 precision (>15 significant digits) no longer get corrupted by rounding (`999999999999999.99` stays exact)
+- Fix ([#1504](https://github.com/JsDaddy/ngx-mask/issues/1504)) — selection replacement works when the value contains a literal `*`
+- Fix ([#1350](https://github.com/JsDaddy/ngx-mask/issues/1350)) — select-all + Backspace clears the input in one press (deterministic clear, fixes Firefox)
+- Fix ([#1583](https://github.com/JsDaddy/ngx-mask/issues/1583)) — `||` alternation masks validate short values that complete a shorter alternative (`1||0,N`: single `0` is valid again)
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
