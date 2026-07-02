@@ -136,6 +136,8 @@ export class NgxMaskDirective
      * input has explicitly driven the state to `true` at least once.
      */
     private _disabledEverSet = false;
+    /** Ensures the multi-character placeHolderCharacter warning (#1347) is emitted only once. */
+    private _warnedAboutMultiCharPlaceholder = false;
 
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
@@ -259,11 +261,12 @@ export class NgxMaskDirective
             }
         }
         if (specialCharacters) {
-            if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
-                return;
-            } else {
-                this._maskService.specialCharacters = specialCharacters.currentValue || [];
+            if (Array.isArray(specialCharacters.currentValue)) {
+                this._maskService.specialCharacters = specialCharacters.currentValue;
             }
+            // A non-array value (e.g. null from an unset dynamic config) keeps the current
+            // service value (config defaults) and must not abort the whole ngOnChanges pass,
+            // otherwise sibling inputs changed in the same cycle would be silently ignored (#1512).
         }
         if (allowNegativeNumbers) {
             this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
@@ -345,6 +348,18 @@ export class NgxMaskDirective
         }
         if (placeHolderCharacter) {
             this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
+            if (
+                typeof placeHolderCharacter.currentValue === 'string' &&
+                placeHolderCharacter.currentValue.length > 1 &&
+                !this._warnedAboutMultiCharPlaceholder
+            ) {
+                this._warnedAboutMultiCharPlaceholder = true;
+                // eslint-disable-next-line no-console
+                console.warn(
+                    'Ngx-mask: placeHolderCharacter should be a single character; behavior with multi-character values is undefined (e.g. keepCharacterPositions will not work). Current value:',
+                    placeHolderCharacter.currentValue
+                );
+            }
         }
         if (shownMaskExpression) {
             this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
@@ -583,6 +598,15 @@ export class NgxMaskDirective
                     return;
                 }
 
+                // On paste of a raw value that does not yet carry the prefix, the caret
+                // position reported by the element is prefix.length short of where it must
+                // land once applyMask prepends the prefix (#1571). Captured here because the
+                // applyValueChanges callback below resets the _justPasted flag.
+                const pastedValueWithoutPrefix =
+                    this._justPasted() &&
+                    !!this._maskService.prefix &&
+                    !el.value.startsWith(this._maskService.prefix);
+
                 let position: number =
                     el.selectionStart === 1
                         ? (el.selectionStart as number) + this._maskService.prefix.length
@@ -804,6 +828,14 @@ export class NgxMaskDirective
                       (this._code() === MaskExpression.BACKSPACE && !backspaceShift
                           ? 0
                           : caretShift);
+                // For separator masks the applier's caret shift is computed on the raw
+                // (prefix-less) value, so account for the prefix the mask just added (#1571).
+                if (
+                    pastedValueWithoutPrefix &&
+                    this._maskValue().startsWith(MaskExpression.SEPARATOR)
+                ) {
+                    positionToApply += this._maskService.prefix.length;
+                }
                 if (positionToApply > this._getActualInputLength()) {
                     positionToApply =
                         el.value === this._maskService.decimalMarker && el.value.length === 1
@@ -1001,10 +1033,10 @@ export class NgxMaskDirective
                 }
                 if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
                     const prefixLength = this.prefix().length;
-                    // If specialChars is false, (shouldn't ever happen) then set to the defaults
-                    const specialCharacters = this.specialCharacters().length
-                        ? this.specialCharacters()
-                        : this._config.specialCharacters;
+                    // Use the service value: it holds the config defaults when the input is not
+                    // bound and the bound value otherwise, so an explicitly bound empty array is
+                    // respected instead of silently falling back to the defaults (#1512).
+                    const specialCharacters = this._maskService.specialCharacters;
 
                     if (prefixLength > 1 && (el.selectionStart as number) <= prefixLength) {
                         el.setSelectionRange(prefixLength, el.selectionEnd);

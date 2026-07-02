@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+import { afterEach, expect, vi } from 'vitest';
 
 describe('Directive: Mask (Placeholder character)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -157,5 +158,44 @@ describe('Directive: Mask (Placeholder character)', () => {
         equal('123456789012', '12.345.678/9012-**', fixture);
         equal('1234567890123', '12.345.678/9012-3*', fixture);
         equal('12345678901234', '12.345.678/9012-34', fixture);
+    });
+
+    describe('multi-character placeHolderCharacter (#1347)', () => {
+        afterEach(() => {
+            vi.restoreAllMocks();
+        });
+
+        it('should warn once when a multi-character placeHolderCharacter is configured with keepCharacterPositions', () => {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+            component.mask.set('dd-mm-yyyy');
+            component.showMaskTyped.set(true);
+            component.keepCharacterPositions.set(true);
+            component.placeHolderCharacter.set('dd-mm-yyyy');
+            fixture.detectChanges();
+
+            expect(warnSpy).toHaveBeenCalledTimes(1);
+            expect(warnSpy.mock.calls[0]?.[0]).toContain(
+                'placeHolderCharacter should be a single character'
+            );
+
+            // Setting the same value again must not re-warn.
+            component.placeHolderCharacter.set('dd-mm-yyyy');
+            fixture.detectChanges();
+            expect(warnSpy).toHaveBeenCalledTimes(1);
+        });
+
+        it('should not warn for a single-character placeHolderCharacter', () => {
+            // eslint-disable-next-line @typescript-eslint/no-empty-function
+            const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+            component.mask.set('(000) 000-0000');
+            component.showMaskTyped.set(true);
+            component.placeHolderCharacter.set('*');
+            fixture.detectChanges();
+
+            expect(warnSpy).not.toHaveBeenCalled();
+        });
     });
 });
