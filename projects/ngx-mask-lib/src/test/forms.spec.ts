@@ -417,11 +417,13 @@ describe('Directive: Signal Forms (separator.2 decimal reflow)', () => {
         await Promise.resolve();
         testFixture.detectChanges();
 
-        // With leadZero active, the Signal Forms writeValue echo pads the typed bare integer
-        // with a ".00" decimal suffix while reflowing the thousand separator grouping in the
-        // DISPLAY. The model holds the unmasked value (dropSpecialCharacters default): thousand
-        // separators dropped, leadZero decimal part kept.
-        expect(inputElement.value).equal('1 234 500.00');
+        // Parity with Reactive Forms: while typing, the DISPLAY keeps the typed reflow —
+        // leadZero pads only the propagated MODEL value (formControlResult → _checkPrecision)
+        // plus the display on blur. The FormField model echo of the just-propagated value is
+        // skipped (see _lastPropagatedValue in ngx-mask.directive.ts), so the display is no
+        // longer rewritten to '1 234 500.00' mid-typing — the exact same split Reactive Forms
+        // shows (form.value '1234500.00', display '1 234 500').
+        expect(inputElement.value).equal('1 234 500');
         expect(component.signalForm.value().value()).equal('1234500.00');
     });
 

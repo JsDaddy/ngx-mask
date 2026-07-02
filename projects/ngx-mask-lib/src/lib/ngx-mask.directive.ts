@@ -105,6 +105,15 @@ export class NgxMaskDirective
     /** Guards against the value effect echoing back a value we just propagated ourselves. */
     private _skipNextValueEffect = signal<boolean>(false);
     /**
+     * The exact stringified value last pushed through `onChange` (view → model). Signal Forms'
+     * `FormField` echoes every model update back through `writeValue()` — including updates that
+     * originated from the view. Re-masking that unmasked echo is at best a redundant re-render
+     * and at worst destructive for masks whose unmasked form is ambiguous (e.g. IP:
+     * '192168178' cannot reconstruct the typed dots of '192.168.1.78'). `writeValue()` consumes
+     * this marker to skip exactly that echo. `null` = no pending propagation.
+     */
+    private _lastPropagatedValue: string | null = null;
+    /**
      * True once the first `ngOnChanges` pass has applied the mask configuration to the service.
      * Signal Forms' `FormField` syncs its field value through the template `ɵɵcontrol` update
      * instruction, which runs BEFORE the sibling directives' first `ngOnChanges` on the same
@@ -1086,6 +1095,19 @@ export class NgxMaskDirective
             this._hasPendingInitialValue = true;
             return;
         }
+        // Skip the model echo of a value we just propagated ourselves (see the
+        // _lastPropagatedValue doc). Empty writes are never skipped: form reset('') must
+        // always clear the display and the currentValue/previousValue service state below.
+        const lastPropagated = this._lastPropagatedValue;
+        this._lastPropagatedValue = null;
+        if (
+            lastPropagated !== null &&
+            lastPropagated !== '' &&
+            (typeof controlValue === 'string' || typeof controlValue === 'number') &&
+            String(controlValue) === lastPropagated
+        ) {
+            return;
+        }
         const ngControl = this._resolveNgControl();
         const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
         const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
@@ -1253,6 +1275,7 @@ export class NgxMaskDirective
      */
     private _propagateToValueModel(value: unknown): void {
         const stringValue = value === null || typeof value === 'undefined' ? '' : String(value);
+        this._lastPropagatedValue = stringValue;
         untracked(() => {
             if (String(this.value()) !== stringValue) {
                 this._skipNextValueEffect.set(true);
