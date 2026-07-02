@@ -75,6 +75,12 @@ export class NgxMaskApplierService {
 
     public deletedSpecialCharacter = false;
 
+    /**
+     * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
+     * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
+     */
+    public writingValue = false;
+
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
@@ -628,6 +634,19 @@ export class NgxMaskApplierService {
                         const startWithMonthInput: boolean =
                             maskExpression.slice(0, 2) === MaskExpression.MONTHS &&
                             this.specialCharacters.includes(inputValueCursorMinusTwo);
+                        // Issue #1611: `cursor` indexes the mask, `i` indexes the input.
+                        // On paste/writeValue of a bare digit string the cursor runs
+                        // ahead of the input by every emitted separator, so cursor-based
+                        // slices read year digits instead of the day — anchor the day
+                        // window on the input index in those flows. Keystroke flows keep
+                        // the historical cursor anchor (with showMaskTyped the value also
+                        // carries placeholder chars, where the input anchor misreads).
+                        const dayWindowStart = justPasted || this.writingValue ? i : cursor;
+                        const dayWindowSlice = processedValue.slice(
+                            dayWindowStart,
+                            dayWindowStart + 2
+                        );
+                        const dayWindowNext = processedValue[dayWindowStart + 1] as string;
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             (!maskStartWithMonth &&
@@ -639,9 +658,8 @@ export class NgxMaskApplierService {
                                   (!this.specialCharacters.includes(inputValueCursor) &&
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
-                                : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                                      !backspaced))
+                                : Number(dayWindowSlice) > daysCount ||
+                                  (this.specialCharacters.includes(dayWindowNext) && !backspaced))
                         ) {
                             processedPosition = !this.leadZeroDateTime
                                 ? processedPosition + 1

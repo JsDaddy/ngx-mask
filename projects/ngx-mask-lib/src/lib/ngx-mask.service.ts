@@ -16,11 +16,8 @@ export class NgxMaskService extends NgxMaskApplierService {
     public maskExpressionArray: string[] = [];
     public previousValue = '';
     public currentValue = '';
-    /**
-     * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
-     * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
-     */
-    public writingValue = false;
+    // `writingValue` is declared on NgxMaskApplierService: applyMask needs it to
+    // distinguish the writeValue flow from keystroke flows (#1611).
     public isInitialized = false;
     /**
      * Set by the directive's keepCharacterPositions handling for the current edit:
@@ -115,8 +112,12 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0)) &&
             !this.writingValue
         ) {
+            // Seed from the raw input only when the user typed the FIRST character (the
+            // single char is the raw symbol, actualValue is empty/stale). On backspace a
+            // length-1 value is the remaining masked display (e.g. '*'), so the hidden
+            // characters must come from actualValue or the deletion destroys both (#1612).
             let actualResult: string[] =
-                inputValue && inputValue.length === 1
+                inputValue && inputValue.length === 1 && !backspaced
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
                     : this.actualValue.split(MaskExpression.EMPTY_STRING);
 
