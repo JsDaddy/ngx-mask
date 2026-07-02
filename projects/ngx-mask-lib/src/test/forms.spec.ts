@@ -48,6 +48,15 @@ class TestSignalMaskComponent {
     public signalForm = runInInjectionContext(this.injector, () => form(this.model));
 }
 
+@Component({
+    selector: 'jsdaddy-initially-disabled-test',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    template: `<input mask="0000" [formControl]="form" />`,
+})
+class TestInitiallyDisabledMaskComponent {
+    public form: FormControl = new FormControl({ value: '123', disabled: true });
+}
+
 // External signal read inside the schema logic function so tests can flip it per-case.
 const disabledFieldSignal = signal(false);
 
@@ -208,6 +217,53 @@ describe('Directive: Forms', () => {
         // Check that the form is not dirty on initial load
         expect(formElement.classList.contains('ng-dirty')).equal(false);
         expect(inputElement.classList.contains('ng-dirty')).equal(false);
+    });
+
+    // The disabled DOM write is deferred via queueMicrotask (formElementProperty setter),
+    // so every assertion needs a microtask flush + change detection round.
+    const flushDisabledWrites = async (testBed: ComponentFixture<unknown>): Promise<void> => {
+        testBed.detectChanges();
+        await testBed.whenStable();
+        testBed.detectChanges();
+        await Promise.resolve();
+        testBed.detectChanges();
+    };
+
+    it('should keep an initially-disabled FormControl disabled after init (#1614)', async () => {
+        const testBed = TestBed.createComponent(TestInitiallyDisabledMaskComponent);
+        await flushDisabledWrites(testBed);
+
+        const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
+
+        expect(inputElement.disabled).equal(true);
+        expect(inputElement.value).equal('123');
+    });
+
+    it('should respect FormControl.disable() and enable() after init (#1607)', async () => {
+        const testBed = TestBed.createComponent(TestMaskComponent);
+        const component = testBed.componentInstance;
+        await flushDisabledWrites(testBed);
+
+        const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
+        expect(inputElement.disabled).equal(false);
+
+        component.form.disable();
+        await flushDisabledWrites(testBed);
+        expect(inputElement.disabled).equal(true);
+
+        component.form.enable();
+        await flushDisabledWrites(testBed);
+        expect(inputElement.disabled).equal(false);
+    });
+
+    it('should keep a FormControl disabled when disable() is called right after creation (#1607)', async () => {
+        const testBed = TestBed.createComponent(TestMaskComponent);
+        const component = testBed.componentInstance;
+        component.form.disable();
+        await flushDisabledWrites(testBed);
+
+        const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
+        expect(inputElement.disabled).equal(true);
     });
 });
 

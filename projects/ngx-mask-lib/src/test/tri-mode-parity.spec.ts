@@ -205,6 +205,19 @@ describe('Directive: Mask (tri-mode parity — mode-level integration)', () => {
             expect(harness.isInputDisabled()).equal(false);
         });
 
+        it(`should keep an initially-disabled control disabled after init in ${mode} mode (#1607, #1614)`, async () => {
+            // Regression: the disabled-input effect's first run used to queue a
+            // ['disabled', false] DOM write AFTER Angular Forms' own setDisabledState(true)
+            // for initially-disabled controls, re-enabling the input.
+            const harness = await createTriModeFixture(mode, { mask: '00-00' }, '1234', true);
+
+            expect(harness.isInputDisabled()).equal(true);
+            expect(harness.getInput().value).equal('12-34');
+
+            await harness.setDisabled(false);
+            expect(harness.isInputDisabled()).equal(false);
+        });
+
         it(`should mark user interaction (dirty/touched equivalent) after typing and blur in ${mode} mode`, async () => {
             const harness = await createTriModeFixture(mode, { mask: '0000' });
 

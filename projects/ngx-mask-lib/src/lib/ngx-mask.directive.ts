@@ -125,6 +125,17 @@ export class NgxMaskDirective
     private _configApplied = false;
     private _pendingInitialValue: unknown;
     private _hasPendingInitialValue = false;
+    /**
+     * True once the `disabled` input has ever delivered `true`. The disabled effect's very
+     * first run fires with the input's default `false` even when nothing binds `[disabled]`.
+     * Because effects run after Angular Forms' `setUpControl` (which calls
+     * `setDisabledState(true)` for initially-disabled controls) and both DOM writes are
+     * queueMicrotask-deferred in FIFO order, forwarding that default `false` would land last
+     * and re-enable an initially-disabled control (#1607, #1614). An initial `false` write is
+     * never needed — inputs are enabled by default — so `false` is only forwarded after the
+     * input has explicitly driven the state to `true` at least once.
+     */
+    private _disabledEverSet = false;
 
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
@@ -191,6 +202,13 @@ export class NgxMaskDirective
         effect(() => {
             const isDisabled = this.disabled();
             untracked(() => {
+                // Never force-enable on the default `false`: it would clobber Angular Forms'
+                // own setDisabledState(true) for initially-disabled controls (see
+                // _disabledEverSet). `false` is forwarded only after an explicit `true`.
+                if (!isDisabled && !this._disabledEverSet) {
+                    return;
+                }
+                this._disabledEverSet = true;
                 this.setDisabledState(isDisabled);
             });
         });

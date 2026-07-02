@@ -281,7 +281,9 @@ function buildHarness(
 export async function createTriModeFixture(
     mode: TriMode,
     config: TriModeMaskConfig,
-    initialValue?: string
+    initialValue?: string,
+    /** Disables the control BEFORE the first change detection pass (initially-disabled control). */
+    initialDisabled?: boolean
 ): Promise<TriModeHarness> {
     TestBed.configureTestingModule({
         imports: [NgxMaskDirective],
@@ -297,6 +299,9 @@ export async function createTriModeFixture(
             applyConfig(component, config);
             if (typeof initialValue === 'string') {
                 component.form.setValue(initialValue);
+            }
+            if (initialDisabled) {
+                component.form.disable();
             }
             harness = buildHarness(fixture, {
                 getBoundValue: () => component.form.value,
@@ -321,6 +326,9 @@ export async function createTriModeFixture(
             if (typeof initialValue === 'string') {
                 component.value.set(initialValue);
             }
+            if (initialDisabled) {
+                component.disabledField.set(true);
+            }
             harness = buildHarness(fixture, {
                 getBoundValue: () => component.value(),
                 setBoundValue: (value: string) => {
@@ -342,6 +350,9 @@ export async function createTriModeFixture(
             applyConfig(component, config);
             if (typeof initialValue === 'string') {
                 component.model.set({ value: initialValue });
+            }
+            if (initialDisabled) {
+                component.disabledField.set(true);
             }
             harness = buildHarness(fixture, {
                 getBoundValue: () => component.signalForm.value().value(),
