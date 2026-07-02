@@ -17,6 +17,10 @@
 - Fix ([#1571](https://github.com/JsDaddy/ngx-mask/issues/1571)) — caret lands at the end after pasting into a separator mask with a prefix
 - Fix ([#1347](https://github.com/JsDaddy/ngx-mask/issues/1347)) — multi-character `placeHolderCharacter` now emits a one-time warning (single character required)
 - Fix ([#1527](https://github.com/JsDaddy/ngx-mask/issues/1527), [#1543](https://github.com/JsDaddy/ngx-mask/issues/1543), [#1544](https://github.com/JsDaddy/ngx-mask/issues/1544), [#1545](https://github.com/JsDaddy/ngx-mask/issues/1545), [#1489](https://github.com/JsDaddy/ngx-mask/issues/1489)) — `keepCharacterPositions` overhaul: works without `showMaskTyped`, mid-value deletion leaves placeholder gaps, selection replacement preserves layout, keystrokes are no longer eaten at special-character boundaries, plays well with `leadZeroDateTime`
+- Fix ([#1615](https://github.com/JsDaddy/ngx-mask/issues/1615)) — programmatically-set values the mask cannot process at all (e.g. sentinel strings) pass through verbatim instead of being mangled (regression from 18.0.4)
+- Fix ([#1547](https://github.com/JsDaddy/ngx-mask/issues/1547)) — pasting values containing both `.` and `,` with the default array `decimalMarker` no longer drops digits (last marker wins as decimal)
+- Fix ([#1516](https://github.com/JsDaddy/ngx-mask/issues/1516)) — deleting digits before the decimal marker keeps the decimal part (`0.05` → `.05`, no more silent value corruption)
+- Fix ([#1572](https://github.com/JsDaddy/ngx-mask/issues/1572)) — caret lands after the decimal marker when typing `.` with a prefix and `leadZero`
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
