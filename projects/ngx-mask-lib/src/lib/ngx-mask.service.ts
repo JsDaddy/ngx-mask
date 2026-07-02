@@ -22,6 +22,16 @@ export class NgxMaskService extends NgxMaskApplierService {
      */
     public writingValue = false;
     public isInitialized = false;
+    /**
+     * Set by the directive's keepCharacterPositions handling for the current edit:
+     * true — the directive fully resolved the resulting display value into actualValue,
+     * so applyMask must short-circuit and render actualValue as-is;
+     * false — the edit must flow through regular masking (no short-circuit);
+     * null — the directive was not involved in this applyMask call (legacy behavior).
+     * Consumed and reset by applyMask. This lets keepCharacterPositions work without
+     * showMaskTyped (#1545, #1543).
+     */
+    public keepCharacterPositionsHandled: boolean | null = null;
 
     public _isFocused = signal<boolean>(false);
 
@@ -59,6 +69,12 @@ export class NgxMaskService extends NgxMaskApplierService {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): string {
+        // Consume the directive's keepCharacterPositions verdict for this edit (see the
+        // keepCharacterPositionsHandled doc). Reset immediately so it never leaks into
+        // applyMask calls that do not originate from the directive's input handling.
+        const kcpHandled = this.keepCharacterPositionsHandled;
+        this.keepCharacterPositionsHandled = null;
+
         // If no mask expression, return the input value or the actual value
         if (!maskExpression) {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
@@ -218,9 +234,11 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
         }
 
-        // Handle showMaskTyped and keepCharacterPositions
+        // Handle keepCharacterPositions: when the directive resolved the display for this
+        // edit (kcpHandled === true), or legacily whenever showMaskTyped is on and the
+        // directive gave no explicit verdict, render actualValue as-is.
         if (
-            this.showMaskTyped &&
+            (kcpHandled ?? this.showMaskTyped) &&
             this.keepCharacterPositions &&
             this.actualValue &&
             !justPasted &&
