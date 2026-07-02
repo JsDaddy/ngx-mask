@@ -1,3 +1,24 @@
+# 21.1.0(2026-07-02)
+
+### Feature
+
+- Add `CPF_CNPJ_ALPHA` alphanumeric CNPJ mask (PR [#1592](https://github.com/JsDaddy/ngx-mask/pull/1592))
+- Signal Forms (`[formField]`) fully supported: initial values, disabled schema, dynamic masks, validation — verified equivalent to Reactive and Template-driven across all mask types
+
+### Fix
+
+- Fix ([#1601](https://github.com/JsDaddy/ngx-mask/issues/1601)) — relax `FormValueControl` surface; no more conflicts with native `required`/`readonly`
+- Fix ([#1560](https://github.com/JsDaddy/ngx-mask/issues/1560)) — `onChange` no longer fires during `writeValue`; programmatic `setValue`/`patchValue` keeps the form pristine
+- Fix ([#1532](https://github.com/JsDaddy/ngx-mask/issues/1532)) — `separator` mask without explicit precision no longer throws `toFixed()` RangeError
+- Fix ([#1607](https://github.com/JsDaddy/ngx-mask/issues/1607), [#1614](https://github.com/JsDaddy/ngx-mask/issues/1614)) — directive no longer overrides `FormControl` disabled state on init; initially-disabled controls stay disabled
+- Fix ([#1355](https://github.com/JsDaddy/ngx-mask/issues/1355), [#1578](https://github.com/JsDaddy/ngx-mask/issues/1578)) — deleting the leading digit of a separator value no longer collapses remaining zeros (`1,000,000` → `000,000`, consistent for all lengths)
+- Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
+- Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
+
+### Breaking
+
+- `NgxMaskDirective` no longer exposes `errors`, `dirty`, `invalid`, `pending`, `readonly`, `required`, `name` inputs (Signal Forms surface reduced to `value`/`disabled`/`touched`)
+
 # 21.0.1(2026-01-29)
 
 ### fix
