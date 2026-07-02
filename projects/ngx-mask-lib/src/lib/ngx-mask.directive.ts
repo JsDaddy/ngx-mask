@@ -92,16 +92,30 @@ export class NgxMaskDirective
     /** For IME composition event */
     private _isComposing = signal<boolean>(false);
     /**
-     * True once Angular has driven this directive through the classic
-     * `ControlValueAccessor` contract (`registerOnChange`). When bound via Signal Forms
-     * `[formField]`, Angular treats this directive as a custom control (it exposes a `value`
-     * model input) and never calls the CVA methods — so this flag stays `false` and lets us
-     * tell the two modes apart WITHOUT injecting `FormField`, which would create a circular
-     * dependency (`FormField` injects `NG_VALUE_ACCESSOR` -> this directive -> `FormField`).
+     * True once Angular has driven this directive through the `ControlValueAccessor` contract
+     * (`registerOnChange`). NOTE: Signal Forms' `FormField` ALSO takes this path — it prefers a
+     * host-provided `NG_VALUE_ACCESSOR` over the custom-control `value` model binding (see
+     * `FormField.ɵngControlCreate`), so it calls `registerOnChange`/`writeValue` too and this
+     * flag is `true` in both modes. That is fine: with the flag set, the `value`-model effect
+     * below is a no-op and all rendering goes through `writeValue()`. The `value` model is only
+     * driven directly (flag stays `false`) when the directive is used standalone with a
+     * `[(value)]` binding and no forms integration.
      */
     private _isCvaMode = signal<boolean>(false);
     /** Guards against the value effect echoing back a value we just propagated ourselves. */
     private _skipNextValueEffect = signal<boolean>(false);
+    /**
+     * True once the first `ngOnChanges` pass has applied the mask configuration to the service.
+     * Signal Forms' `FormField` syncs its field value through the template `ɵɵcontrol` update
+     * instruction, which runs BEFORE the sibling directives' first `ngOnChanges` on the same
+     * element — so the very first `writeValue()` would otherwise see an unconfigured service
+     * (empty `maskExpression`, default `leadZero`/`thousandSeparator`/...) and render the raw
+     * value. Until this flag is set, `writeValue()` stashes the incoming value and `ngOnChanges`
+     * replays it once the configuration is in place.
+     */
+    private _configApplied = false;
+    private _pendingInitialValue: unknown;
+    private _hasPendingInitialValue = false;
 
     public _maskService = inject(NgxMaskService, { self: true });
     private readonly document = inject(DOCUMENT);
@@ -336,6 +350,17 @@ export class NgxMaskDirective
             this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
         }
         this._applyMask();
+        if (!this._configApplied) {
+            this._configApplied = true;
+            if (this._hasPendingInitialValue) {
+                // Replay the writeValue() call that arrived before this first ngOnChanges pass
+                // (see _configApplied) now that the mask configuration is applied.
+                this._hasPendingInitialValue = false;
+                const pendingValue = this._pendingInitialValue;
+                this._pendingInitialValue = null;
+                void this.writeValue(pendingValue);
+            }
+        }
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
@@ -1053,6 +1078,14 @@ export class NgxMaskDirective
 
     /** It writes the value in the input */
     public async writeValue(controlValue: unknown): Promise<void> {
+        if (!this._configApplied && this.mask()) {
+            // Called before the first ngOnChanges pass configured the mask service (happens with
+            // Signal Forms' [formField], whose control-sync instruction runs before sibling
+            // directives' ngOnChanges). Defer and replay once the configuration is applied.
+            this._pendingInitialValue = controlValue;
+            this._hasPendingInitialValue = true;
+            return;
+        }
         const ngControl = this._resolveNgControl();
         const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
         const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
