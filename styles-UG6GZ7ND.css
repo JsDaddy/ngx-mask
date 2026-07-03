@@ -105,7 +105,7 @@ code.hljs {
 }
 
 /* src/styles.scss */
-/*! tailwindcss v4.1.18 | MIT License | https://tailwindcss.com */
+/*! tailwindcss v4.3.2 | MIT License | https://tailwindcss.com */
 @layer properties;
 ::-webkit-scrollbar {
   width: 6px;
@@ -346,6 +346,9 @@ code.hljs {
   }
 }
 @layer utilities {
+  .collapse {
+    visibility: collapse;
+  }
   .invisible {
     visibility: hidden;
   }
@@ -359,13 +362,13 @@ code.hljs {
     position: relative;
   }
   .top-0 {
-    top: calc(var(--spacing) * 0);
+    top: 0;
   }
   .top-\[68px\] {
     top: 68px;
   }
   .right-0 {
-    right: calc(var(--spacing) * 0);
+    right: 0;
   }
   .right-5 {
     right: calc(var(--spacing) * 5);
@@ -374,7 +377,7 @@ code.hljs {
     bottom: calc(var(--spacing) * 5);
   }
   .left-0 {
-    left: calc(var(--spacing) * 0);
+    left: 0;
   }
   .z-10 {
     z-index: 10;
@@ -509,7 +512,7 @@ code.hljs {
     justify-content: center;
   }
   .gap-1 {
-    gap: calc(var(--spacing) * 1);
+    gap: var(--spacing);
   }
   .gap-2\.5 {
     gap: calc(var(--spacing) * 2.5);
@@ -602,7 +605,7 @@ code.hljs {
     background-color: color-mix(in oklab, #FFD64D 5%, transparent);
   }
   .p-0 {
-    padding: calc(var(--spacing) * 0);
+    padding: 0;
   }
   .p-2\.5 {
     padding: calc(var(--spacing) * 2.5);
@@ -796,6 +799,10 @@ code.hljs {
     --tw-outline-style: none;
     outline-style: none;
   }
+  .select-all {
+    -webkit-user-select: all;
+    user-select: all;
+  }
   .placeholder\:text-white\/25::placeholder {
     color: color-mix(in oklab, #F8F8F8 25%, transparent);
   }
@@ -830,7 +837,7 @@ code.hljs {
   }
   @media (width >= 1279px) {
     .desk\:mt-0 {
-      margin-top: calc(var(--spacing) * 0);
+      margin-top: 0;
     }
   }
   @media (width >= 1279px) {
@@ -1072,4 +1079,4 @@ code.hljs {
 }
 
 /* angular:styles/global:styles */
-/*# sourceMappingURL=styles-IR2RNXY5.css.map */
+/*# sourceMappingURL=styles-UG6GZ7ND.css.map */

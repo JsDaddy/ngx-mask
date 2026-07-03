@@ -2,9 +2,14 @@ import {
   __objRest,
   __spreadProps,
   __spreadValues
-} from "./chunk-46DXP6YY.js";
+} from "./chunk-FDMHZOCR.js";
 
 // node_modules/@angular/core/fesm2022/_effect-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var activeConsumer = null;
 var inNotificationPhase = false;
 var epoch = 1;
@@ -271,8 +276,7 @@ function createComputed(computation, equal) {
   };
   computed2[SIGNAL] = node;
   if (typeof ngDevMode !== "undefined" && ngDevMode) {
-    const debugName = node.debugName ? " (" + node.debugName + ")" : "";
-    computed2.toString = () => `[Computed${debugName}: ${String(node.value)}]`;
+    computed2.toString = () => `[Computed${node.debugName ? " (" + node.debugName + ")" : ""}: ${String(node.value)}]`;
   }
   runPostProducerCreatedFn(node);
   return computed2;
@@ -338,8 +342,7 @@ function createSignal(initialValue, equal) {
   const getter = () => signalGetFn(node);
   getter[SIGNAL] = node;
   if (typeof ngDevMode !== "undefined" && ngDevMode) {
-    const debugName = node.debugName ? " (" + node.debugName + ")" : "";
-    getter.toString = () => `[Signal${debugName}: ${String(node.value)}]`;
+    getter.toString = () => `[Signal${node.debugName ? " (" + node.debugName + ")" : ""}: ${String(node.value)}]`;
   }
   runPostProducerCreatedFn(node);
   const set = (newValue) => signalSetFn(node, newValue);
@@ -377,14 +380,6 @@ function signalValueChanged(node) {
   producerIncrementEpoch();
   producerNotifyConsumers(node);
   postSignalSetFn?.(node);
-}
-function untracked(nonReactiveReadsFn) {
-  const prevConsumer = setActiveConsumer(null);
-  try {
-    return nonReactiveReadsFn();
-  } finally {
-    setActiveConsumer(prevConsumer);
-  }
 }
 var BASE_EFFECT_NODE = /* @__PURE__ */ (() => __spreadProps(__spreadValues({}, REACTIVE_NODE), {
   consumerIsAlwaysLive: true,
@@ -1983,6 +1978,11 @@ function tap(observerOrNext, error, complete) {
 }
 
 // node_modules/@angular/core/fesm2022/_not_found-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var _currentInjector = void 0;
 function getCurrentInjector() {
   return _currentInjector;
@@ -1997,7 +1997,12 @@ function isNotFound(e) {
   return e === NOT_FOUND || e?.name === "\u0275NotFound";
 }
 
-// node_modules/@angular/core/fesm2022/_linked_signal-chunk.mjs
+// node_modules/@angular/core/fesm2022/_untracked-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 function createLinkedSignal(sourceFn, computationFn, equalityFn) {
   const node = Object.create(LINKED_SIGNAL_NODE);
   node.source = sourceFn;
@@ -2016,8 +2021,7 @@ function createLinkedSignal(sourceFn, computationFn, equalityFn) {
   const getter = linkedSignalGetter;
   getter[SIGNAL] = node;
   if (typeof ngDevMode !== "undefined" && ngDevMode) {
-    const debugName = node.debugName ? " (" + node.debugName + ")" : "";
-    getter.toString = () => `[LinkedSignal${debugName}: ${String(node.value)}]`;
+    getter.toString = () => `[LinkedSignal${node.debugName ? " (" + node.debugName + ")" : ""}: ${String(node.value)}]`;
   }
   runPostProducerCreatedFn(node);
   return getter;
@@ -2029,6 +2033,9 @@ function linkedSignalSetFn(node, newValue) {
 }
 function linkedSignalUpdateFn(node, updater) {
   producerUpdateValueVersion(node);
+  if (node.value === ERRORED) {
+    throw node.error;
+  }
   signalUpdateFn(node, updater);
   producerMarkClean(node);
 }
@@ -2050,21 +2057,25 @@ var LINKED_SIGNAL_NODE = /* @__PURE__ */ (() => {
       node.value = COMPUTING;
       const prevConsumer = consumerBeforeComputation(node);
       let newValue;
+      let wasEqual = false;
       try {
         const newSourceValue = node.source();
-        const prev = oldValue === UNSET || oldValue === ERRORED ? void 0 : {
+        const oldValueValid = oldValue !== UNSET && oldValue !== ERRORED;
+        const prev = oldValueValid ? {
           source: node.sourceValue,
           value: oldValue
-        };
+        } : void 0;
         newValue = node.computation(newSourceValue, prev);
         node.sourceValue = newSourceValue;
+        setActiveConsumer(null);
+        wasEqual = oldValueValid && newValue !== ERRORED && node.equal(oldValue, newValue);
       } catch (err) {
         newValue = ERRORED;
         node.error = err;
       } finally {
         consumerAfterComputation(node, prevConsumer);
       }
-      if (oldValue !== UNSET && newValue !== ERRORED && node.equal(oldValue, newValue)) {
+      if (wasEqual) {
         node.value = oldValue;
         return;
       }
@@ -2073,8 +2084,21 @@ var LINKED_SIGNAL_NODE = /* @__PURE__ */ (() => {
     }
   });
 })();
+function untracked(nonReactiveReadsFn) {
+  const prevConsumer = setActiveConsumer(null);
+  try {
+    return nonReactiveReadsFn();
+  } finally {
+    setActiveConsumer(prevConsumer);
+  }
+}
 
 // node_modules/@angular/core/fesm2022/primitives-signals.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var formatter = {
   header: (sig, config2) => {
     if (!isSignal(sig) || config2?.ngSkipFormatting) return null;
@@ -2176,7 +2200,19 @@ if (typeof ngDevMode === "undefined" || ngDevMode) {
   installDevToolsSignalFormatter();
 }
 
-// node_modules/@angular/core/fesm2022/_untracked-chunk.mjs
+// node_modules/@angular/core/fesm2022/primitives-di.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
+
+// node_modules/@angular/core/fesm2022/_effect-chunk2.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var Version = class {
   full;
   major;
@@ -2190,7 +2226,7 @@ var Version = class {
     this.patch = parts.slice(2).join(".");
   }
 };
-var VERSION2 = /* @__PURE__ */ new Version("21.1.2");
+var VERSION2 = /* @__PURE__ */ new Version("21.2.17");
 var DOC_PAGE_BASE_URL = (() => {
   const full = VERSION2.full;
   const isPreRelease = full.includes("-next") || full.includes("-rc") || full === "0.0.0-PLACEHOLDER";
@@ -2293,14 +2329,22 @@ function concatStringsWithSpace(before, after) {
   if (!after) return before;
   return `${before} ${after}`;
 }
+function truncateMiddle(str, maxLength = 100) {
+  if (!str || maxLength < 1 || str.length <= maxLength) return str;
+  if (maxLength == 1) return str.substring(0, 1) + "...";
+  const halfLimit = Math.round(maxLength / 2);
+  return str.substring(0, halfLimit) + "..." + str.substring(str.length - halfLimit);
+}
 var __forward_ref__ = getClosureSafeProperty({
   __forward_ref__: getClosureSafeProperty
 });
 function forwardRef(forwardRefFn) {
   forwardRefFn.__forward_ref__ = forwardRef;
-  forwardRefFn.toString = function() {
-    return stringify(this());
-  };
+  if (ngDevMode) {
+    forwardRefFn.toString = function() {
+      return stringify(this());
+    };
+  }
   return forwardRefFn;
 }
 function resolveForwardRef(type) {
@@ -2705,9 +2749,9 @@ function throwInvalidProviderError(ngModuleType, providers, provider) {
     throw new Error(`Invalid provider for the NgModule '${stringify(ngModuleType)}' - only instances of Provider and Type are allowed, got: [${providerDetail.join(", ")}]`);
   } else if (isEnvironmentProviders(provider)) {
     if (provider.\u0275fromNgModule) {
-      throw new RuntimeError(207, `Invalid providers from 'importProvidersFrom' present in a non-environment injector. 'importProvidersFrom' can't be used for component providers.`);
+      throw new RuntimeError(-207, `Invalid providers from 'importProvidersFrom' present in a non-environment injector. 'importProvidersFrom' can't be used for component providers.`);
     } else {
-      throw new RuntimeError(207, `Invalid providers present in a non-environment injector. 'EnvironmentProviders' can't be used for component providers.`);
+      throw new RuntimeError(-207, `Invalid providers present in a non-environment injector. 'EnvironmentProviders' can't be used for component providers.`);
     }
   } else {
     throw new Error("Invalid provider");
@@ -3379,12 +3423,15 @@ var R3Injector = class extends EnvironmentInjector {
     }
   }
   toString() {
-    const tokens = [];
-    const records = this.records;
-    for (const token of records.keys()) {
-      tokens.push(stringify(token));
+    if (ngDevMode) {
+      const tokens = [];
+      const records = this.records;
+      for (const token of records.keys()) {
+        tokens.push(stringify(token));
+      }
+      return `R3Injector[${tokens.join(", ")}]`;
     }
-    return `R3Injector[${tokens.join(", ")}]`;
+    return "R3Injector[...]";
   }
   processProvider(provider) {
     provider = resolveForwardRef(provider);
@@ -3426,7 +3473,7 @@ var R3Injector = class extends EnvironmentInjector {
     const prevConsumer = setActiveConsumer(null);
     try {
       if (record.value === CIRCULAR) {
-        throw cyclicDependencyError(stringify(token));
+        throw cyclicDependencyError(ngDevMode ? stringify(token) : "");
       } else if (record.value === NOT_YET) {
         record.value = CIRCULAR;
         if (ngDevMode) {
@@ -3472,17 +3519,17 @@ function injectableDefOrInjectorDefFactory(token) {
     return factory;
   }
   if (token instanceof InjectionToken) {
-    throw new RuntimeError(204, ngDevMode && `Token ${stringify(token)} is missing a \u0275prov definition.`);
+    throw new RuntimeError(-204, ngDevMode && `Token ${stringify(token)} is missing a \u0275prov definition.`);
   }
   if (token instanceof Function) {
     return getUndecoratedInjectableFactory(token);
   }
-  throw new RuntimeError(204, ngDevMode && "unreachable");
+  throw new RuntimeError(-204, ngDevMode && "unreachable");
 }
 function getUndecoratedInjectableFactory(token) {
   const paramLength = token.length;
   if (paramLength > 0) {
-    throw new RuntimeError(204, ngDevMode && `Can't resolve all parameters for ${stringify(token)}: (${newArray(paramLength, "?").join(", ")}).`);
+    throw new RuntimeError(-204, ngDevMode && `Can't resolve all parameters for ${stringify(token)}: (${newArray(paramLength, "?").join(", ")}).`);
   }
   const inheritedInjectableDef = getInheritedInjectableDef(token);
   if (inheritedInjectableDef !== null) {
@@ -3530,7 +3577,7 @@ function providerToFactory(provider, ngModuleType, providers) {
 }
 function assertNotDestroyed(injector) {
   if (injector.destroyed) {
-    throw new RuntimeError(205, ngDevMode && "Injector has already been destroyed.");
+    throw new RuntimeError(-205, ngDevMode && "Injector has already been destroyed.");
   }
 }
 function makeRecord(factory, value, multi = false) {
@@ -4217,8 +4264,11 @@ function createInjector(defType, parent = null, additionalProviders = null, name
 }
 function createInjectorWithoutInjectorInstances(defType, parent = null, additionalProviders = null, name, scopes = /* @__PURE__ */ new Set()) {
   const providers = [additionalProviders || EMPTY_ARRAY, importProvidersFrom(defType)];
-  name = name || (typeof defType === "object" ? void 0 : stringify(defType));
-  return new R3Injector(providers, parent || getNullInjector(), name || null, scopes);
+  let source = void 0;
+  if (ngDevMode) {
+    source = name || (typeof defType === "object" ? void 0 : stringify(defType));
+  }
+  return new R3Injector(providers, parent || getNullInjector(), source || null, scopes);
 }
 var Injector = class _Injector {
   static THROW_IF_NOT_FOUND = THROW_IF_NOT_FOUND;
@@ -4753,9 +4803,10 @@ function signal(initialValue, options) {
   signalFn.set = set;
   signalFn.update = update;
   signalFn.asReadonly = signalAsReadonlyFn.bind(signalFn);
-  if (ngDevMode) {
-    signalFn.toString = () => `[Signal: ${signalFn()}]`;
-    node.debugName = options?.debugName;
+  if (typeof ngDevMode !== "undefined" && ngDevMode) {
+    const debugName = options?.debugName;
+    node.debugName = debugName;
+    signalFn.toString = () => `[Signal${debugName ? " (" + debugName + ")" : ""}: ${signalFn()}]`;
   }
   return signalFn;
 }
@@ -5028,11 +5079,13 @@ function createEffectFn(node, fn) {
     fn((cleanupFn) => (node.cleanupFns ??= []).push(cleanupFn));
   };
 }
-function untracked2(nonReactiveReadsFn) {
-  return untracked(nonReactiveReadsFn);
-}
 
 // node_modules/@angular/core/fesm2022/_debug_node-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 function noSideEffects(fn) {
   return {
     toString: fn
@@ -6152,7 +6205,7 @@ function lookupTokenUsingEmbeddedInjector(tNode, lView, token, flags, notFoundVa
     if (!parentTNode) {
       const embeddedViewInjector = currentLView[EMBEDDED_VIEW_INJECTOR];
       if (embeddedViewInjector) {
-        const embeddedViewInjectorValue = embeddedViewInjector.get(token, NOT_FOUND2, flags);
+        const embeddedViewInjectorValue = embeddedViewInjector.get(token, NOT_FOUND2, flags & -5);
         if (embeddedViewInjectorValue !== NOT_FOUND2) {
           return embeddedViewInjectorValue;
         }
@@ -6178,9 +6231,9 @@ function getTNodeFromLView(lView) {
 function \u0275\u0275injectAttribute(attrNameToInject) {
   return injectAttributeImpl(getCurrentTNode(), attrNameToInject);
 }
-var Attribute = makeParamDecorator("Attribute", (attributeName2) => ({
-  attributeName: attributeName2,
-  __NG_ELEMENT_ID__: () => \u0275\u0275injectAttribute(attributeName2)
+var Attribute = makeParamDecorator("Attribute", (attributeName) => ({
+  attributeName,
+  __NG_ELEMENT_ID__: () => \u0275\u0275injectAttribute(attributeName)
 }));
 var _reflect = null;
 function getReflect() {
@@ -6220,7 +6273,7 @@ function reflectDependency(dep) {
         meta.token = param.token;
       } else if (param instanceof Attribute) {
         if (param.attributeName === void 0) {
-          throw new RuntimeError(204, ngDevMode && `Attribute name must be defined.`);
+          throw new RuntimeError(-204, ngDevMode && `Attribute name must be defined.`);
         }
         meta.attribute = param.attributeName;
       } else {
@@ -6412,6 +6465,7 @@ function hasInSkipHydrationBlockFlag(tNode) {
 var ChangeDetectionStrategy;
 (function(ChangeDetectionStrategy2) {
   ChangeDetectionStrategy2[ChangeDetectionStrategy2["OnPush"] = 0] = "OnPush";
+  ChangeDetectionStrategy2[ChangeDetectionStrategy2["Eager"] = 1] = "Eager";
   ChangeDetectionStrategy2[ChangeDetectionStrategy2["Default"] = 1] = "Default";
 })(ChangeDetectionStrategy || (ChangeDetectionStrategy = {}));
 var TRACKED_LVIEWS = /* @__PURE__ */ new Map();
@@ -6745,7 +6799,7 @@ function getDirectiveMetadata$1(directiveOrComponentInstance) {
       inputs,
       outputs: componentDef.outputs,
       encapsulation: componentDef.encapsulation,
-      changeDetection: componentDef.onPush ? ChangeDetectionStrategy.OnPush : ChangeDetectionStrategy.Default
+      changeDetection: componentDef.onPush ? ChangeDetectionStrategy.OnPush : ChangeDetectionStrategy.Eager
     };
   }
   const directiveDef = getDirectiveDef(constructor);
@@ -6909,12 +6963,12 @@ var TransferState = class _TransferState {
         }
       }
     }
-    return JSON.stringify(this.store).replace(/</g, "\\u003C");
+    return JSON.stringify(this.store).replace(/</g, "\\u003C").replace(/\//g, "\\u002F");
   }
 };
 function retrieveTransferredState(doc, appId) {
   const script = doc.getElementById(appId + "-state");
-  if (script?.textContent) {
+  if (script?.tagName === "SCRIPT" && script.textContent) {
     try {
       return JSON.parse(script.textContent);
     } catch (e) {
@@ -7073,6 +7127,16 @@ function getIntersectionObserverKey(options) {
 var JSACTION_EVENT_CONTRACT = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "EVENT_CONTRACT_DETAILS" : "", {
   factory: () => ({})
 });
+var handledEventElements = /* @__PURE__ */ new WeakMap();
+function markEventHandledForElement(event, element) {
+  if (event == null || typeof event !== "object") return;
+  let elements = handledEventElements.get(event);
+  if (!elements) {
+    elements = /* @__PURE__ */ new WeakSet();
+    handledEventElements.set(event, elements);
+  }
+  elements.add(element);
+}
 var _stashEventListenerImpl = (lView, target, eventName, wrappedListener) => {
 };
 function stashEventListenerImpl(lView, target, eventName, wrappedListener) {
@@ -7743,7 +7807,34 @@ var SecurityContext;
   SecurityContext2[SecurityContext2["SCRIPT"] = 3] = "SCRIPT";
   SecurityContext2[SecurityContext2["URL"] = 4] = "URL";
   SecurityContext2[SecurityContext2["RESOURCE_URL"] = 5] = "RESOURCE_URL";
+  SecurityContext2[SecurityContext2["ATTRIBUTE_NO_BINDING"] = 6] = "ATTRIBUTE_NO_BINDING";
 })(SecurityContext || (SecurityContext = {}));
+var _SECURITY_SCHEMA;
+var SVG_NAMESPACE2 = "svg";
+var MATH_ML_NAMESPACE2 = "math";
+function SECURITY_SCHEMA() {
+  if (!_SECURITY_SCHEMA) {
+    _SECURITY_SCHEMA = {};
+    registerContext(SecurityContext.HTML, void 0, [["iframe", ["srcdoc"]], ["*", ["innerHTML", "outerHTML"]]]);
+    registerContext(SecurityContext.STYLE, void 0, [["*", ["style"]]]);
+    registerContext(SecurityContext.URL, void 0, [["*", ["formAction"]], ["area", ["href"]], ["a", ["href", "xlink:href"]], ["form", ["action"]], ["img", ["src"]], ["video", ["src"]]]);
+    registerContext(SecurityContext.URL, MATH_ML_NAMESPACE2, [["annotation", ["href", "xlink:href"]], ["annotation-xml", ["href", "xlink:href"]], ["maction", ["href", "xlink:href"]], ["malignmark", ["href", "xlink:href"]], ["math", ["href", "xlink:href"]], ["mroot", ["href", "xlink:href"]], ["msqrt", ["href", "xlink:href"]], ["merror", ["href", "xlink:href"]], ["mfrac", ["href", "xlink:href"]], ["mglyph", ["href", "xlink:href"]], ["msub", ["href", "xlink:href"]], ["msup", ["href", "xlink:href"]], ["msubsup", ["href", "xlink:href"]], ["mmultiscripts", ["href", "xlink:href"]], ["mprescripts", ["href", "xlink:href"]], ["mi", ["href", "xlink:href"]], ["mn", ["href", "xlink:href"]], ["mo", ["href", "xlink:href"]], ["mpadded", ["href", "xlink:href"]], ["mphantom", ["href", "xlink:href"]], ["mrow", ["href", "xlink:href"]], ["ms", ["href", "xlink:href"]], ["mspace", ["href", "xlink:href"]], ["mstyle", ["href", "xlink:href"]], ["mtable", ["href", "xlink:href"]], ["mtd", ["href", "xlink:href"]], ["mtr", ["href", "xlink:href"]], ["mtext", ["href", "xlink:href"]], ["mover", ["href", "xlink:href"]], ["munder", ["href", "xlink:href"]], ["munderover", ["href", "xlink:href"]], ["semantics", ["href", "xlink:href"]], ["none", ["href", "xlink:href"]]]);
+    registerContext(SecurityContext.RESOURCE_URL, void 0, [["base", ["href"]], ["embed", ["src"]], ["frame", ["src"]], ["iframe", ["src"]], ["link", ["href"]], ["object", ["codebase", "data"]]]);
+    registerContext(SecurityContext.URL, SVG_NAMESPACE2, [["a", ["href", "xlink:href"]]]);
+    registerContext(SecurityContext.ATTRIBUTE_NO_BINDING, SVG_NAMESPACE2, [["animate", ["attributeName", "values", "to", "from"]], ["set", ["to", "attributeName"]], ["animateMotion", ["attributeName"]], ["animateTransform", ["attributeName"]]]);
+    registerContext(SecurityContext.ATTRIBUTE_NO_BINDING, void 0, [["unknown", ["attributeName", "values", "to", "from", "sandbox", "allow", "allowFullscreen", "referrerPolicy", "csp", "fetchPriority"]], ["iframe", ["sandbox", "allow", "allowFullscreen", "referrerPolicy", "csp", "fetchPriority"]]]);
+  }
+  return _SECURITY_SCHEMA;
+}
+function registerContext(ctx, namespace, specs) {
+  for (const [element, attributeNames] of specs) {
+    let tagName = namespace && element !== "*" && element !== "unknown" ? `:${namespace}:${element}` : element;
+    tagName = tagName.toLowerCase();
+    for (const attr of attributeNames) {
+      _SECURITY_SCHEMA[`${tagName}|${attr.toLowerCase()}`] = ctx;
+    }
+  }
+}
 function \u0275\u0275sanitizeHtml(unsafeHtml) {
   const sanitizer = getSanitizer();
   if (sanitizer) {
@@ -7806,10 +7897,32 @@ function \u0275\u0275trustConstantResourceUrl(url) {
   }
   return trustedScriptURLFromString(url[0]);
 }
-var SRC_RESOURCE_TAGS = /* @__PURE__ */ new Set(["embed", "frame", "iframe", "media", "script"]);
-var HREF_RESOURCE_TAGS = /* @__PURE__ */ new Set(["base", "link", "script"]);
+var RESOURCE_MAP = {
+  "embed": {
+    "src": true
+  },
+  "frame": {
+    "src": true
+  },
+  "iframe": {
+    "src": true
+  },
+  "media": {
+    "src": true
+  },
+  "base": {
+    "href": true
+  },
+  "link": {
+    "href": true
+  },
+  "object": {
+    "data": true,
+    "codebase": true
+  }
+};
 function getUrlSanitizer(tag, prop) {
-  const isResource = prop === "src" && SRC_RESOURCE_TAGS.has(tag) || prop === "href" && HREF_RESOURCE_TAGS.has(tag) || prop === "xlink:href" && tag === "script";
+  const isResource = RESOURCE_MAP[tag.toLowerCase()]?.[prop.toLowerCase()] === true;
   return isResource ? \u0275\u0275sanitizeResourceUrl : \u0275\u0275sanitizeUrl;
 }
 function \u0275\u0275sanitizeUrlOrResourceUrl(unsafeUrl, tag, prop) {
@@ -7822,42 +7935,84 @@ If '${name}' is a directive input, make sure the directive is imported by the cu
     throw new RuntimeError(306, errorMessage);
   }
 }
-function validateAgainstEventAttributes(name) {
-  if (name.toLowerCase().startsWith("on")) {
-    const errorMessage = `Binding to event attribute '${name}' is disallowed for security reasons, please use (${name.slice(2)})=...`;
-    throw new RuntimeError(306, errorMessage);
-  }
-}
 function getSanitizer() {
   const lView = getLView();
   return lView && lView[ENVIRONMENT].sanitizer;
 }
-var attributeName = /* @__PURE__ */ new Set(["attributename"]);
+var SECURITY_SENSITIVE_ATTRIBUTE_NAMES = /* @__PURE__ */ new Set(["href", "xlink:href"]);
+var SVG_ANIMATION_ATTRIBUTE_NAME_CANDIDATES = ["attributeName", "attributename"];
 var SECURITY_SENSITIVE_ELEMENTS = {
-  "iframe": /* @__PURE__ */ new Set(["sandbox", "allow", "allowfullscreen", "referrerpolicy", "csp", "fetchpriority"]),
-  "animate": attributeName,
-  "set": attributeName,
-  "animatemotion": attributeName,
-  "animatetransform": attributeName
+  "iframe": {
+    "sandbox": true,
+    "allow": true,
+    "allowfullscreen": true,
+    "referrerpolicy": true,
+    "csp": true,
+    "fetchpriority": true
+  },
+  ":svg:animate": {
+    "attributename": true,
+    "to": SECURITY_SENSITIVE_ATTRIBUTE_NAMES,
+    "values": SECURITY_SENSITIVE_ATTRIBUTE_NAMES,
+    "from": SECURITY_SENSITIVE_ATTRIBUTE_NAMES
+  },
+  ":svg:set": {
+    "attributename": true,
+    "to": SECURITY_SENSITIVE_ATTRIBUTE_NAMES
+  },
+  ":svg:animatemotion": {
+    "attributename": true
+  },
+  ":svg:animatetransform": {
+    "attributename": true
+  }
 };
-function \u0275\u0275validateAttribute(value, tagName, attributeName2) {
+function \u0275\u0275validateAttribute(value, tagName, attributeName) {
   const lowerCaseTagName = tagName.toLowerCase();
-  const lowerCaseAttrName = attributeName2.toLowerCase();
-  if (!SECURITY_SENSITIVE_ELEMENTS[lowerCaseTagName]?.has(lowerCaseAttrName)) {
+  const lowerCaseAttrName = attributeName.toLowerCase();
+  const index = getSelectedIndex();
+  const tNode = index === -1 ? null : getSelectedTNode();
+  if (tNode && tNode.type !== 2) {
     return value;
   }
-  const tNode = getSelectedTNode();
-  if (tNode.type !== 2) {
+  const fullTagName = lowerCaseTagName[0] !== ":" && tNode?.namespace ? `:${tNode.namespace}:${lowerCaseTagName}` : lowerCaseTagName;
+  const validationConfig = SECURITY_SENSITIVE_ELEMENTS[fullTagName]?.[lowerCaseAttrName];
+  if (!validationConfig) {
     return value;
   }
   const lView = getLView();
-  if (lowerCaseTagName === "iframe") {
+  if (tNode && lowerCaseTagName === "iframe") {
     const element = getNativeByTNode(tNode, lView);
     enforceIframeSecurity(element);
   }
-  const errorMessage = ngDevMode && `Angular has detected that the \`${attributeName2}\` was applied as a binding to the <${tagName}> element${getTemplateLocationDetails(lView)}. For security reasons, the \`${attributeName2}\` can be set on the <${tagName}> element as a static attribute only. 
-To fix this, switch the \`${attributeName2}\` binding to a static attribute in a template or in host bindings section.`;
+  const displayTagName = tagName[0] === ":" ? tagName.split(":").pop() : tagName;
+  if (typeof validationConfig !== "boolean") {
+    if (!tNode) {
+      const errorMessage2 = ngDevMode && `Angular has detected that the \`${attributeName}\` was applied as a binding to the <${tagName}> element. For security reasons, the \`${attributeName}\` can be set on the <${tagName}> element as a static attribute only. 
+To fix this, switch the \`${attributeName}\` binding to a static attribute in a template or in host bindings section.`;
+      throw new RuntimeError(-910, errorMessage2);
+    }
+    const element = getNativeByTNode(tNode, lView);
+    const attributeNameValue = getSecuritySensitiveSVGAnimationAttributeName(element, validationConfig);
+    if (attributeNameValue) {
+      const errorMessage2 = ngDevMode && `Angular has detected that the \`${attributeName}\` was applied as a binding to the <${displayTagName}> element${getTemplateLocationDetails(lView)}. For security reasons, the \`${attributeName}\` can be set on the <${displayTagName}> element as a static attribute only when the "attributeName" is set to '${attributeNameValue}'. 
+To fix this, switch the \`${attributeNameValue}\` binding to a static attribute in a template or in host bindings section.`;
+      throw new RuntimeError(-910, errorMessage2);
+    }
+    return value;
+  }
+  const errorMessage = ngDevMode && `Angular has detected that the \`${attributeName}\` was applied as a binding to the <${displayTagName}> element${tNode ? getTemplateLocationDetails(lView) : ""}. For security reasons, the \`${attributeName}\` can be set on the <${displayTagName}> element as a static attribute only. 
+To fix this, switch the \`${attributeName}\` binding to a static attribute in a template or in host bindings section.`;
   throw new RuntimeError(-910, errorMessage);
+}
+function getSecuritySensitiveSVGAnimationAttributeName(element, validationConfig) {
+  for (const attributeName of SVG_ANIMATION_ATTRIBUTE_NAME_CANDIDATES) {
+    const attributeNameValue = element.getAttribute(attributeName);
+    if (attributeNameValue !== null && validationConfig.has(attributeNameValue.toLowerCase())) {
+      return attributeNameValue;
+    }
+  }
+  return null;
 }
 var NG_REFLECT_ATTRS_FLAG_DEFAULT = false;
 var NG_REFLECT_ATTRS_FLAG = new InjectionToken(typeof ngDevMode === "undefined" || ngDevMode ? "NG_REFLECT_FLAG" : "", {
@@ -7947,18 +8102,18 @@ function constructDetailsForInterpolation(lView, rootIndex, expressionIndex, met
 }
 function getExpressionChangedErrorDetails(lView, bindingIndex, oldValue, newValue) {
   const tData = lView[TVIEW].data;
-  const metadata = tData[bindingIndex];
-  if (typeof metadata === "string") {
-    if (metadata.indexOf(INTERPOLATION_DELIMITER) > -1) {
-      return constructDetailsForInterpolation(lView, bindingIndex, bindingIndex, metadata, newValue);
+  const metadata2 = tData[bindingIndex];
+  if (typeof metadata2 === "string") {
+    if (metadata2.indexOf(INTERPOLATION_DELIMITER) > -1) {
+      return constructDetailsForInterpolation(lView, bindingIndex, bindingIndex, metadata2, newValue);
     }
     return {
-      propName: metadata,
+      propName: metadata2,
       oldValue,
       newValue
     };
   }
-  if (metadata === null) {
+  if (metadata2 === null) {
     let idx = bindingIndex - 1;
     while (typeof tData[idx] !== "string" && tData[idx + 1] === null) {
       idx--;
@@ -8429,6 +8584,174 @@ function ensureIcuContainerVisitorLoaded(loader) {
     _icuContainerIterate = loader();
   }
 }
+var ANIMATIONS_DISABLED = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "AnimationsDisabled" : "", {
+  factory: () => false
+});
+var MAX_ANIMATION_TIMEOUT = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "MaxAnimationTimeout" : "", {
+  factory: () => MAX_ANIMATION_TIMEOUT_DEFAULT
+});
+var MAX_ANIMATION_TIMEOUT_DEFAULT = 4e3;
+var DEFAULT_ANIMATIONS_DISABLED = false;
+var areAnimationSupported = typeof document !== "undefined" && typeof document?.documentElement?.getAnimations === "function";
+function areAnimationsDisabled(lView) {
+  const injector = lView[INJECTOR];
+  return injector.get(ANIMATIONS_DISABLED, DEFAULT_ANIMATIONS_DISABLED);
+}
+function assertAnimationTypes(value, instruction) {
+  if (value == null || typeof value !== "string" && typeof value !== "function") {
+    throw new RuntimeError(650, `'${instruction}' value must be a string of CSS classes or an animation function, got ${stringify(value)}`);
+  }
+}
+function assertElementNodes(nativeElement, instruction) {
+  if (nativeElement.nodeType !== Node.ELEMENT_NODE) {
+    throw new RuntimeError(650, `'${instruction}' can only be used on an element node, got ${stringify(nativeElement.nodeType)}`);
+  }
+}
+function trackEnterClasses(el, classList, cleanupFns) {
+  const elementData = enterClassMap.get(el);
+  if (elementData) {
+    for (const klass of classList) {
+      elementData.classList.push(klass);
+    }
+    for (const fn of cleanupFns) {
+      elementData.cleanupFns.push(fn);
+    }
+  } else {
+    enterClassMap.set(el, {
+      classList,
+      cleanupFns
+    });
+  }
+}
+function cleanupEnterClassData(element) {
+  const elementData = enterClassMap.get(element);
+  if (elementData) {
+    for (const fn of elementData.cleanupFns) {
+      fn();
+    }
+    enterClassMap.delete(element);
+  }
+  longestAnimations.delete(element);
+}
+var noOpAnimationComplete = () => {
+};
+var enterClassMap = /* @__PURE__ */ new WeakMap();
+var longestAnimations = /* @__PURE__ */ new WeakMap();
+var leavingNodes = /* @__PURE__ */ new WeakMap();
+var reusedNodes = /* @__PURE__ */ new WeakSet();
+function clearLeavingNodes(tNode, el) {
+  const nodes = leavingNodes.get(tNode);
+  if (nodes && nodes.length > 0) {
+    const ix = nodes.findIndex((node) => node === el);
+    if (ix > -1) nodes.splice(ix, 1);
+  }
+  if (nodes?.length === 0) {
+    leavingNodes.delete(tNode);
+  }
+}
+function cancelLeavingNodes(tNode, newElement) {
+  const nodes = leavingNodes.get(tNode);
+  if (!nodes || nodes.length === 0) return;
+  const newParent = newElement.parentNode;
+  const prevSibling = newElement.previousSibling;
+  for (let i = nodes.length - 1; i >= 0; i--) {
+    const leavingEl = nodes[i];
+    const leavingParent = leavingEl.parentNode;
+    if (leavingEl === newElement) {
+      nodes.splice(i, 1);
+      reusedNodes.add(leavingEl);
+      leavingEl.dispatchEvent(new CustomEvent("animationend", {
+        detail: {
+          cancel: true
+        }
+      }));
+    } else if (prevSibling && leavingEl === prevSibling || leavingParent && newParent && leavingParent !== newParent) {
+      nodes.splice(i, 1);
+      leavingEl.dispatchEvent(new CustomEvent("animationend", {
+        detail: {
+          cancel: true
+        }
+      }));
+      leavingEl.parentNode?.removeChild(leavingEl);
+    }
+  }
+}
+function trackLeavingNodes(tNode, el) {
+  const nodes = leavingNodes.get(tNode);
+  if (nodes) {
+    if (!nodes.includes(el)) {
+      nodes.push(el);
+    }
+  } else {
+    leavingNodes.set(tNode, [el]);
+  }
+}
+function getLViewEnterAnimations(lView) {
+  const animationData = lView[ANIMATIONS] ??= {};
+  return animationData.enter ??= /* @__PURE__ */ new Map();
+}
+function getLViewLeaveAnimations(lView) {
+  const animationData = lView[ANIMATIONS] ??= {};
+  return animationData.leave ??= /* @__PURE__ */ new Map();
+}
+function getClassListFromValue(value) {
+  const classes = typeof value === "function" ? value() : value;
+  let classList = Array.isArray(classes) ? classes : null;
+  if (typeof classes === "string") {
+    classList = classes.trim().split(/\s+/).filter((k) => k);
+  }
+  return classList;
+}
+function cancelAnimationsIfRunning(element, renderer) {
+  if (!areAnimationSupported) return;
+  const elementData = enterClassMap.get(element);
+  if (elementData && elementData.classList.length > 0 && elementHasClassList(element, elementData.classList)) {
+    for (const klass of elementData.classList) {
+      renderer.removeClass(element, klass);
+    }
+  }
+  cleanupEnterClassData(element);
+}
+function elementHasClassList(element, classList) {
+  for (const className of classList) {
+    if (element.classList.contains(className)) return true;
+  }
+  return false;
+}
+function getEventTarget(event) {
+  return event.composedPath ? event.composedPath()[0] : event.target;
+}
+function isLongestAnimation(event, nativeElement) {
+  const longestAnimation = longestAnimations.get(nativeElement);
+  if (longestAnimation === void 0) return true;
+  return nativeElement === getEventTarget(event) && (longestAnimation.animationName !== void 0 && event.animationName === longestAnimation.animationName || longestAnimation.propertyName !== void 0 && (longestAnimation.propertyName === "all" || event.propertyName === longestAnimation.propertyName));
+}
+function addAnimationToLView(animations, tNode, fn) {
+  const nodeAnimations = animations.get(tNode.index) ?? {
+    animateFns: []
+  };
+  nodeAnimations.animateFns.push(fn);
+  animations.set(tNode.index, nodeAnimations);
+}
+function cleanupAfterLeaveAnimations(resolvers, cleanupFns) {
+  if (resolvers) {
+    for (const fn of resolvers) {
+      fn();
+    }
+  }
+  for (const fn of cleanupFns) {
+    fn();
+  }
+}
+function clearLViewNodeAnimationResolvers(lView, tNode) {
+  const nodeAnimations = getLViewLeaveAnimations(lView).get(tNode.index);
+  if (nodeAnimations) nodeAnimations.resolvers = void 0;
+}
+function leaveAnimationFunctionCleanup(lView, tNode, nativeElement, resolvers, cleanupFns) {
+  clearLeavingNodes(tNode, nativeElement);
+  cleanupAfterLeaveAnimations(resolvers, cleanupFns);
+  clearLViewNodeAnimationResolvers(lView, tNode);
+}
 function parseCssTimeUnitsToMs(value) {
   if (!value) return 0;
   const multiplier = value.toLowerCase().indexOf("ms") > -1 ? 1 : 1e3;
@@ -8460,6 +8783,7 @@ function getLongestComputedAnimation(computedStyle) {
   const rawNames = parseCssPropertyValue(computedStyle, "animation-name");
   const rawDelays = parseCssPropertyValue(computedStyle, "animation-delay");
   const rawDurations = parseCssPropertyValue(computedStyle, "animation-duration");
+  const rawIterationCounts = parseCssPropertyValue(computedStyle, "animation-iteration-count");
   const longest = {
     animationName: "",
     propertyName: void 0,
@@ -8467,7 +8791,8 @@ function getLongestComputedAnimation(computedStyle) {
   };
   for (let i = 0; i < rawNames.length; i++) {
     const duration = parseCssTimeUnitsToMs(rawDelays[i]) + parseCssTimeUnitsToMs(rawDurations[i]);
-    if (duration > longest.duration) {
+    const iterationCount = rawIterationCounts[i];
+    if (duration > longest.duration && iterationCount !== "infinite") {
       longest.animationName = rawNames[i];
       longest.duration = duration;
     }
@@ -8503,8 +8828,15 @@ function determineLongestAnimationFromElementAnimations(el, animationsMap, anima
   };
   for (const animation of animations) {
     const timing = animation.effect?.getTiming();
+    if (timing?.iterations === Infinity) {
+      continue;
+    }
     const animDuration = typeof timing?.duration === "number" ? timing.duration : 0;
     let duration = (timing?.delay ?? 0) + animDuration;
+    const playbackRate = animation.playbackRate;
+    if (playbackRate !== void 0 && playbackRate !== 0 && playbackRate !== 1) {
+      duration /= Math.abs(playbackRate);
+    }
     let propertyName;
     let animationName;
     if (animation.animationName) {
@@ -8810,11 +9142,21 @@ function applyToElementOrContainer(action, renderer, injector, parent, lNodeToHa
     } else if (action === 1 && parent !== null) {
       maybeQueueEnterAnimation(parentLView, parent, tNode, injector);
       nativeInsertBefore(renderer, parent, rNode, beforeNode || null, true);
+      cancelLeavingNodes(tNode, rNode);
     } else if (action === 2) {
+      if (parentLView?.[ANIMATIONS]?.leave?.has(tNode.index)) {
+        trackLeavingNodes(tNode, rNode);
+      }
+      reusedNodes.delete(rNode);
       runLeaveAnimationsWithCallback(parentLView, tNode, injector, (nodeHasLeaveAnimations) => {
+        if (reusedNodes.has(rNode)) {
+          reusedNodes.delete(rNode);
+          return;
+        }
         nativeRemoveNode(renderer, rNode, isComponent2, nodeHasLeaveAnimations);
       });
     } else if (action === 3) {
+      reusedNodes.delete(rNode);
       runLeaveAnimationsWithCallback(parentLView, tNode, injector, () => {
         renderer.destroyNode(rNode);
       });
@@ -9282,6 +9624,9 @@ function locateHostElement(renderer, elementOrSelector, encapsulation, injector)
   const preserveHostContent = injector.get(PRESERVE_HOST_CONTENT, PRESERVE_HOST_CONTENT_DEFAULT);
   const preserveContent = preserveHostContent || encapsulation === ViewEncapsulation.ShadowDom || encapsulation === ViewEncapsulation.ExperimentalIsolatedShadowDom;
   const rootElement = renderer.selectRootElement(elementOrSelector, preserveContent);
+  if (rootElement.tagName.toLowerCase() === "script") {
+    throw new RuntimeError(905, ngDevMode && `"<script>" tag is not allowed as a component host element.`);
+  }
   applyRootElementTransform(rootElement);
   return rootElement;
 }
@@ -9316,7 +9661,9 @@ function setDomProperty(tNode, lView, propName, value, renderer, sanitizer) {
   if (tNode.type & 3) {
     const element = getNativeByTNode(tNode, lView);
     if (ngDevMode) {
-      validateAgainstEventProperties(propName);
+      if (lView[TVIEW].firstUpdatePass) {
+        validateAgainstEventProperties(propName);
+      }
       if (!isPropertyValid(element, propName, tNode.value, lView[TVIEW].schemas)) {
         handleUnknownPropertyError(propName, tNode.value, tNode.type, lView);
       }
@@ -9458,7 +9805,6 @@ function findDirectiveDefMatches(tView, tNode) {
 function elementAttributeInternal(tNode, lView, name, value, sanitizer, namespace) {
   if (ngDevMode) {
     assertNotSame(value, NO_CHANGE, "Incoming value should never be NO_CHANGE.");
-    validateAgainstEventAttributes(name);
     assertTNodeType(tNode, 2, `Attempted to set attribute \`${name}\` on a container node. Host bindings are not valid on ng-container or ng-template.`);
   }
   const element = getNativeByTNode(tNode, lView);
@@ -9629,7 +9975,7 @@ function renderView(tView, lView, context2) {
     }
     throw error;
   } finally {
-    lView[FLAGS] &= ~4;
+    lView[FLAGS] &= -5;
     leaveView();
   }
 }
@@ -10006,7 +10352,7 @@ function detectChangesInView(lView, mode) {
   if (consumer) {
     consumer.dirty = false;
   }
-  lView[FLAGS] &= ~(8192 | 1024);
+  lView[FLAGS] &= -9217;
   if (shouldRefreshView) {
     refreshView(tView, lView, tView.template, lView[CONTEXT]);
   } else if (flags & 8192) {
@@ -10130,7 +10476,7 @@ function detachView(lContainer, removeIndex) {
     }
     viewToDetach[PARENT] = null;
     viewToDetach[NEXT] = null;
-    viewToDetach[FLAGS] &= ~128;
+    viewToDetach[FLAGS] &= -129;
   }
   return viewToDetach;
 }
@@ -10236,7 +10582,7 @@ var ViewRef = class {
     markViewDirty(this._cdRefInjectingView || this._lView, 4);
   }
   detach() {
-    this._lView[FLAGS] &= ~128;
+    this._lView[FLAGS] &= -129;
   }
   reattach() {
     updateAncestorTraversalFlagsOnAttach(this._lView);
@@ -10319,6 +10665,7 @@ function createTemplateRef(hostTNode, hostLView) {
   return null;
 }
 var AT_THIS_LOCATION = "<-- AT THIS LOCATION";
+var THIRD_PARTY_SCRIPTS_URL = `/guide/hydration#third-party-scripts-with-dom-manipulation`;
 function getFriendlyStringFromTNodeType(tNodeType) {
   switch (tNodeType) {
     case 4:
@@ -10476,6 +10823,7 @@ function getHydrationErrorFooter(componentClassName) {
   return `To fix this problem:
   * check ${componentInfo} component for hydration-related issues
   * check to see if your template has valid HTML structure
+  * check if there are any third-party scripts that manipulate the DOM. More info: ${DOC_PAGE_BASE_URL}${THIRD_PARTY_SCRIPTS_URL}
   * or skip hydration by adding the \`ngSkipHydration\` attribute to its host node in a template
 
 `;
@@ -10582,12 +10930,13 @@ function createTNode(tView, tParent, type, index, value, attrs) {
     directiveEnd: -1,
     directiveStylingLast: -1,
     componentOffset: -1,
-    fieldIndex: -1,
+    controlDirectiveIndex: -1,
     customControlIndex: -1,
     propertyBindings: null,
     flags,
     providerIndexes: 0,
     value,
+    namespace: getNamespace(),
     attrs,
     mergedAttrs: null,
     localNames: null,
@@ -10963,10 +11312,10 @@ function verifyStandaloneImport(depType, importingType) {
   }
 }
 var DepsTracker = class {
-  ownerNgModule = /* @__PURE__ */ new Map();
+  ownerNgModule = /* @__PURE__ */ new WeakMap();
   ngModulesWithSomeUnresolvedDecls = /* @__PURE__ */ new Set();
-  ngModulesScopeCache = /* @__PURE__ */ new Map();
-  standaloneComponentsScopeCache = /* @__PURE__ */ new Map();
+  ngModulesScopeCache = /* @__PURE__ */ new WeakMap();
+  standaloneComponentsScopeCache = /* @__PURE__ */ new WeakMap();
   resolveNgModulesDecls() {
     if (this.ngModulesWithSomeUnresolvedDecls.size === 0) {
       return;
@@ -11602,9 +11951,12 @@ function bindingUpdated4(lView, bindingIndex, exp1, exp2, exp3, exp4) {
   const different = bindingUpdated2(lView, bindingIndex, exp1, exp2);
   return bindingUpdated2(lView, bindingIndex + 2, exp3, exp4) || different;
 }
-var \u0275CONTROL = /* @__PURE__ */ Symbol("CONTROL");
 function wrapListener(tNode, lView, listenerFn) {
   return function wrapListenerIn_markDirtyAndPreventDefault(event) {
+    const nativeEl = wrapListenerIn_markDirtyAndPreventDefault.__ngNativeEl__;
+    if (nativeEl !== void 0) {
+      markEventHandledForElement(event, nativeEl);
+    }
     const startView = isComponentHost(tNode) ? getComponentLViewByIndex(tNode.index, lView) : lView;
     markViewDirty(startView, 5);
     const context2 = lView[CONTEXT];
@@ -11647,6 +11999,9 @@ function listenToDomEvent(tNode, tView, lView, eventTargetResolver, renderer, ev
     const native = getNativeByTNode(tNode, lView);
     const target = eventTargetResolver ? eventTargetResolver(native) : native;
     stashEventListenerImpl(lView, target, eventName, wrappedListener);
+    if (!eventTargetResolver) {
+      wrappedListener.__ngNativeEl__ = native;
+    }
     const cleanupFn = renderer.listen(target, eventName, wrappedListener);
     if (!isAnimationEventType(eventName)) {
       const idxOrTargetGetter = eventTargetResolver ? (_lView) => eventTargetResolver(unwrapRNode(_lView[tNode.index])) : tNode.index;
@@ -11698,7 +12053,163 @@ function listenToOutput(tNode, lView, directiveIndex, lookupName, eventName, lis
 function isOutputSubscribable(value) {
   return value != null && typeof value.subscribe === "function";
 }
+function \u0275\u0275controlCreate() {
+  controlCreateInternal();
+}
+function controlCreateInternal() {
+  const lView = getLView();
+  const tView = getTView();
+  const tNode = getCurrentTNode();
+  if (tView.firstCreatePass) {
+    initializeControlFirstCreatePass(tView, tNode);
+  }
+  if (tNode.controlDirectiveIndex === -1) {
+    return;
+  }
+  performanceMarkFeature("NgSignalForms");
+  const instance = lView[tNode.controlDirectiveIndex];
+  const controlDef = tView.data[tNode.controlDirectiveIndex].controlDef;
+  controlDef.create(instance, new ControlDirectiveHostImpl(lView, tView, tNode));
+}
+function \u0275\u0275control() {
+  controlUpdateInternal();
+}
+function controlUpdateInternal() {
+  if (ngDevMode && isInCheckNoChangesMode()) {
+    return;
+  }
+  const lView = getLView();
+  const tView = getTView();
+  const tNode = getSelectedTNode();
+  if (tNode.controlDirectiveIndex === -1) {
+    return;
+  }
+  const controlDef = tView.data[tNode.controlDirectiveIndex].controlDef;
+  const instance = lView[tNode.controlDirectiveIndex];
+  controlDef.update(instance, new ControlDirectiveHostImpl(lView, tView, tNode));
+}
+var ControlDirectiveHostImpl = class {
+  lView;
+  tView;
+  tNode;
+  hasPassThrough;
+  constructor(lView, tView, tNode) {
+    this.lView = lView;
+    this.tView = tView;
+    this.tNode = tNode;
+    this.hasPassThrough = !!(tNode.flags & 4096);
+  }
+  get customControl() {
+    return this.tNode.customControlIndex !== -1 ? this.lView[this.tNode.customControlIndex] : void 0;
+  }
+  get descriptor() {
+    if (ngDevMode && isComponentHost(this.tNode)) {
+      const componentIndex = this.tNode.directiveStart + this.tNode.componentOffset;
+      const componentDef = this.tView.data[componentIndex];
+      return `Component ${debugStringifyTypeForError(componentDef.type)}`;
+    }
+    return `<${this.tNode.value}>`;
+  }
+  listenToCustomControlOutput(outputName, callback) {
+    if (!hasOutput(this.tView.data[this.tNode.customControlIndex], outputName)) {
+      return;
+    }
+    listenToOutput(this.tNode, this.lView, this.tNode.customControlIndex, outputName, outputName, wrapListener(this.tNode, this.lView, callback));
+  }
+  listenToCustomControlModel(listener) {
+    const modelName = this.tNode.flags & 1024 ? "valueChange" : "checkedChange";
+    listenToOutput(this.tNode, this.lView, this.tNode.customControlIndex, modelName, modelName, wrapListener(this.tNode, this.lView, listener));
+  }
+  listenToDom(eventName, listener) {
+    listenToDomEvent(this.tNode, this.tView, this.lView, void 0, this.lView[RENDERER], eventName, listener, wrapListener(this.tNode, this.lView, listener));
+  }
+  setInputOnDirectives(inputName, value) {
+    const directiveIndices = this.tNode.inputs?.[inputName];
+    const hostDirectiveInputs = this.tNode.hostDirectiveInputs?.[inputName];
+    if (!directiveIndices && !hostDirectiveInputs) {
+      return false;
+    }
+    if (directiveIndices) {
+      for (const index of directiveIndices) {
+        const directiveDef = this.tView.data[index];
+        const directive = this.lView[index];
+        writeToDirectiveInput(directiveDef, directive, inputName, value);
+      }
+    }
+    if (hostDirectiveInputs) {
+      for (let i = 0; i < hostDirectiveInputs.length; i += 2) {
+        const index = hostDirectiveInputs[i];
+        const internalName = hostDirectiveInputs[i + 1];
+        const directiveDef = this.tView.data[index];
+        const directive = this.lView[index];
+        writeToDirectiveInput(directiveDef, directive, internalName, value);
+      }
+    }
+    return true;
+  }
+  setCustomControlModelInput(value) {
+    const directive = this.lView[this.tNode.customControlIndex];
+    const directiveDef = this.tView.data[this.tNode.customControlIndex];
+    const modelName = this.tNode.flags & 1024 ? "value" : "checked";
+    writeToDirectiveInput(directiveDef, directive, modelName, value);
+  }
+  customControlHasInput(inputName) {
+    if (this.tNode.customControlIndex === -1) {
+      return false;
+    }
+    const directiveDef = this.tView.data[this.tNode.customControlIndex];
+    return directiveDef.inputs[inputName] != void 0;
+  }
+};
+function initializeControlFirstCreatePass(tView, tNode, lView) {
+  ngDevMode && assertFirstCreatePass(tView);
+  for (let i = tNode.directiveStart; i < tNode.directiveEnd; i++) {
+    const directiveDef = tView.data[i];
+    if (directiveDef.controlDef) {
+      tNode.controlDirectiveIndex = i;
+      break;
+    }
+  }
+  if (tNode.controlDirectiveIndex === -1) {
+    return;
+  }
+  const controlDef = tView.data[tNode.controlDirectiveIndex].controlDef;
+  if (controlDef.passThroughInput) {
+    if ((tNode.inputs?.[controlDef.passThroughInput]?.length ?? 0) > 1) {
+      tNode.flags |= 4096;
+      return;
+    }
+  }
+  initializeCustomControlStatus(tView, tNode);
+}
+function initializeCustomControlStatus(tView, tNode) {
+  for (let i = tNode.directiveStart; i < tNode.directiveEnd; i++) {
+    const directiveDef = tView.data[i];
+    if (hasModelInput(directiveDef, "value")) {
+      tNode.flags |= 1024;
+      tNode.customControlIndex = i;
+      return;
+    }
+    if (hasModelInput(directiveDef, "checked")) {
+      tNode.flags |= 2048;
+      tNode.customControlIndex = i;
+      return;
+    }
+  }
+}
+function hasModelInput(directiveDef, name) {
+  return hasInput(directiveDef, name) && hasOutput(directiveDef, name + "Change");
+}
+function hasInput(directiveDef, name) {
+  return name in directiveDef.inputs;
+}
+function hasOutput(directiveDef, name) {
+  return name in directiveDef.outputs;
+}
 var BINDING = /* @__PURE__ */ Symbol("BINDING");
+function getComponentName(def) {
+  return def.debugInfo?.className || def.type.name || null;
+}
 var ComponentFactoryResolver2 = class extends ComponentFactoryResolver$1 {
   ngModule;
   constructor(ngModule) {
@@ -11753,6 +12264,9 @@ function createRootLViewEnvironment(rootLViewInjector) {
   }
   const sanitizer = rootLViewInjector.get(Sanitizer, null);
   const changeDetectionScheduler = rootLViewInjector.get(ChangeDetectionScheduler, null);
+  const tracingService = rootLViewInjector.get(TracingService, null, {
+    optional: true
+  });
   let ngReflect = false;
   if (typeof ngDevMode === "undefined" || ngDevMode) {
     ngReflect = rootLViewInjector.get(NG_REFLECT_ATTRS_FLAG, NG_REFLECT_ATTRS_FLAG_DEFAULT);
@@ -11761,7 +12275,8 @@ function createRootLViewEnvironment(rootLViewInjector) {
     rendererFactory,
     sanitizer,
     changeDetectionScheduler,
-    ngReflect
+    ngReflect,
+    tracingService
   };
 }
 function createHostElement(componentDef, renderer) {
@@ -11804,47 +12319,56 @@ var ComponentFactory2 = class extends ComponentFactory$1 {
     try {
       const cmpDef = this.componentDef;
       ngDevMode && verifyNotAnOrphanComponent(cmpDef);
-      const rootTView = createRootTView(rootSelectorOrNode, cmpDef, componentBindings, directives);
       const rootViewInjector = createRootViewInjector(cmpDef, environmentInjector || this.ngModule, injector);
       const environment = createRootLViewEnvironment(rootViewInjector);
-      const hostRenderer = environment.rendererFactory.createRenderer(null, cmpDef);
-      const hostElement = rootSelectorOrNode ? locateHostElement(hostRenderer, rootSelectorOrNode, cmpDef.encapsulation, rootViewInjector) : createHostElement(cmpDef, hostRenderer);
-      const hasInputBindings = componentBindings?.some(isInputBinding) || directives?.some((d) => typeof d !== "function" && d.bindings.some(isInputBinding));
-      const rootLView = createLView(null, rootTView, null, 512 | getInitialLViewFlagsFromDef(cmpDef), null, null, environment, hostRenderer, rootViewInjector, null, retrieveHydrationInfo(hostElement, rootViewInjector, true));
-      rootLView[HEADER_OFFSET] = hostElement;
-      enterView(rootLView);
-      let componentView = null;
-      try {
-        const hostTNode = directiveHostFirstCreatePass(HEADER_OFFSET, rootLView, 2, "#host", () => rootTView.directiveRegistry, true, 0);
-        setupStaticAttributes(hostRenderer, hostElement, hostTNode);
-        attachPatchData(hostElement, rootLView);
-        createDirectivesInstances(rootTView, rootLView, hostTNode);
-        executeContentQueries(rootTView, hostTNode, rootLView);
-        directiveHostEndFirstCreatePass(rootTView, hostTNode);
-        if (projectableNodes !== void 0) {
-          projectNodes(hostTNode, this.ngContentSelectors, projectableNodes);
-        }
-        componentView = getComponentLViewByIndex(hostTNode.index, rootLView);
-        rootLView[CONTEXT] = componentView[CONTEXT];
-        renderView(rootTView, rootLView, null);
-      } catch (e) {
-        if (componentView !== null) {
-          unregisterLView(componentView);
-        }
-        unregisterLView(rootLView);
-        throw e;
-      } finally {
-        profiler(ProfilerEvent.DynamicComponentEnd);
-        leaveView();
+      const tracingService = environment.tracingService;
+      if (tracingService && tracingService.componentCreate) {
+        return tracingService.componentCreate(getComponentName(cmpDef), () => this.createComponentRef(environment, rootViewInjector, projectableNodes, rootSelectorOrNode, directives, componentBindings));
+      } else {
+        return this.createComponentRef(environment, rootViewInjector, projectableNodes, rootSelectorOrNode, directives, componentBindings);
       }
-      return new ComponentRef2(this.componentType, rootLView, !!hasInputBindings);
     } finally {
       setActiveConsumer(prevConsumer);
     }
   }
+  createComponentRef(environment, rootViewInjector, projectableNodes, rootSelectorOrNode, directives, componentBindings) {
+    const cmpDef = this.componentDef;
+    const rootTView = createRootTView(rootSelectorOrNode, cmpDef, componentBindings, directives);
+    const hostRenderer = environment.rendererFactory.createRenderer(null, cmpDef);
+    const hostElement = rootSelectorOrNode ? locateHostElement(hostRenderer, rootSelectorOrNode, cmpDef.encapsulation, rootViewInjector) : createHostElement(cmpDef, hostRenderer);
+    const hasInputBindings = componentBindings?.some(isInputBinding) || directives?.some((d) => typeof d !== "function" && d.bindings.some(isInputBinding));
+    const rootLView = createLView(null, rootTView, null, 512 | getInitialLViewFlagsFromDef(cmpDef), null, null, environment, hostRenderer, rootViewInjector, null, retrieveHydrationInfo(hostElement, rootViewInjector, true));
+    rootLView[HEADER_OFFSET] = hostElement;
+    enterView(rootLView);
+    let componentView = null;
+    try {
+      const hostTNode = directiveHostFirstCreatePass(HEADER_OFFSET, rootLView, 2, "#host", () => rootTView.directiveRegistry, true, 0);
+      setupStaticAttributes(hostRenderer, hostElement, hostTNode);
+      attachPatchData(hostElement, rootLView);
+      createDirectivesInstances(rootTView, rootLView, hostTNode);
+      executeContentQueries(rootTView, hostTNode, rootLView);
+      directiveHostEndFirstCreatePass(rootTView, hostTNode);
+      if (projectableNodes !== void 0) {
+        projectNodes(hostTNode, this.ngContentSelectors, projectableNodes);
+      }
+      componentView = getComponentLViewByIndex(hostTNode.index, rootLView);
+      rootLView[CONTEXT] = componentView[CONTEXT];
+      renderView(rootTView, rootLView, null);
+    } catch (e) {
+      if (componentView !== null) {
+        unregisterLView(componentView);
+      }
+      unregisterLView(rootLView);
+      throw e;
+    } finally {
+      profiler(ProfilerEvent.DynamicComponentEnd);
+      leaveView();
+    }
+    return new ComponentRef2(this.componentType, rootLView, !!hasInputBindings);
+  }
 };
 function createRootTView(rootSelectorOrNode, componentDef, componentBindings, directives) {
-  const tAttributes = rootSelectorOrNode ? ["ng-version", "21.1.2"] : extractAttrsAndClassesFromSelector(componentDef.selectors[0]);
+  const tAttributes = rootSelectorOrNode ? ["ng-version", "21.2.17"] : extractAttrsAndClassesFromSelector(componentDef.selectors[0]);
   let creationBindings = null;
   let updateBindings = null;
   let varsToAllocate = 0;
@@ -11980,8 +12504,7 @@ function injectViewContainerRef() {
   const previousTNode = getCurrentTNode();
   return createContainerRef(previousTNode, getLView());
 }
-var VE_ViewContainerRef = ViewContainerRef;
-var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
+var R3ViewContainerRef = class _R3ViewContainerRef extends ViewContainerRef {
   _lContainer;
   _hostTNode;
   _hostLView;
@@ -12090,7 +12613,7 @@ var R3ViewContainerRef = class ViewContainerRef2 extends VE_ViewContainerRef {
       } else {
         const prevLContainer = lView[PARENT];
         ngDevMode && assertEqual(isLContainer(prevLContainer), true, "An attached view should have its PARENT point to a container.");
-        const prevVCRef = new R3ViewContainerRef(prevLContainer, prevLContainer[T_HOST], prevLContainer[PARENT]);
+        const prevVCRef = new _R3ViewContainerRef(prevLContainer, prevLContainer[T_HOST], prevLContainer[PARENT]);
         prevVCRef.detach(prevVCRef.indexOf(viewRef));
       }
     }
@@ -12298,8 +12821,8 @@ var TQuery_ = class _TQuery_ {
   crossesNgTemplate = false;
   _declarationNodeIndex;
   _appliesToNextNode = true;
-  constructor(metadata, nodeIndex = -1) {
-    this.metadata = metadata;
+  constructor(metadata2, nodeIndex = -1) {
+    this.metadata = metadata2;
     this._declarationNodeIndex = nodeIndex;
   }
   elementStart(tView, tNode) {
@@ -12506,9 +13029,9 @@ function createContentQuery(directiveIndex, predicate, flags, read) {
 function splitQueryMultiSelectors(locator) {
   return locator.split(",").map((s) => s.trim());
 }
-function createTQuery(tView, metadata, nodeIndex) {
+function createTQuery(tView, metadata2, nodeIndex) {
   if (tView.queries === null) tView.queries = new TQueries_();
-  tView.queries.track(new TQuery_(metadata, nodeIndex));
+  tView.queries.track(new TQuery_(metadata2, nodeIndex));
 }
 function saveContentQueryAndDirectiveIndex(tView, directiveIndex) {
   const tViewContentQueries = tView.contentQueries || (tView.contentQueries = []);
@@ -12627,9 +13150,9 @@ async function resolveComponentResources(resourceResolver) {
   });
   await Promise.all(resolutionPromises);
 }
-function maybeQueueResolutionOfComponentResources(type, metadata) {
-  if (componentNeedsResolution(metadata)) {
-    componentResourceResolutionQueue.set(type, metadata);
+function maybeQueueResolutionOfComponentResources(type, metadata2) {
+  if (componentNeedsResolution(metadata2)) {
+    componentResourceResolutionQueue.set(type, metadata2);
     componentDefPendingResolution.add(type);
   }
 }
@@ -12925,6 +13448,7 @@ function getNgDirectiveDef(directiveDefinition) {
     setInput: null,
     resolveHostDirectives: null,
     hostDirectives: null,
+    controlDef: null,
     inputs: parseAndConvertInputsForDefinition(directiveDefinition.inputs, declaredInputs),
     outputs: parseAndConvertOutputsForDefinition(directiveDefinition.outputs),
     debugInfo: null
@@ -12975,6 +13499,19 @@ function getComponentId(componentDef) {
     }
   }
   return compId;
+}
+function \u0275\u0275ControlFeature(passThroughInput) {
+  return (definition) => {
+    definition.controlDef = {
+      create: (inst, host) => {
+        inst?.\u0275ngControlCreate(host);
+      },
+      update: (inst, host) => {
+        inst?.\u0275ngControlUpdate?.(host);
+      },
+      passThroughInput
+    };
+  };
 }
 function \u0275\u0275HostDirectivesFeature(rawHostDirectives) {
   const feature = (definition) => {
@@ -13108,15 +13645,17 @@ function \u0275\u0275InheritDefinitionFeature(definition) {
   let superType = getSuperType(definition.type);
   let shouldInheritFields = true;
   const inheritanceChain = [definition];
-  while (superType) {
+  while (superType && superType !== Function.prototype && superType !== Object.prototype) {
     let superDef = void 0;
+    const cmpDef = Object.hasOwn(superType, NG_COMP_DEF) ? superType[NG_COMP_DEF] : void 0;
+    const dirDef = Object.hasOwn(superType, NG_DIR_DEF) ? superType[NG_DIR_DEF] : void 0;
     if (isComponentDef(definition)) {
-      superDef = superType.\u0275cmp || superType.\u0275dir;
+      superDef = cmpDef ?? dirDef;
     } else {
-      if (superType.\u0275cmp) {
+      if (cmpDef) {
         throw new RuntimeError(903, ngDevMode && `Directives cannot inherit Components. Directive ${stringifyForError(definition.type)} is attempting to extend component ${stringifyForError(superType)}`);
       }
-      superDef = superType.\u0275dir;
+      superDef = dirDef;
     }
     if (superDef) {
       if (shouldInheritFields) {
@@ -14238,6 +14777,7 @@ function findDeferBlocks(node, lView, results) {
         minimumTime: tDetails.placeholderBlockConfig?.[MINIMUM_SLOT] ?? null
       },
       triggers: tDetails.debug?.triggers ? Array.from(tDetails.debug.triggers).sort() : [],
+      hostNode: details.lContainer[HOST],
       rootNodes
     };
     results.push(data);
@@ -15308,13 +15848,13 @@ var ApplicationRef = class _ApplicationRef {
   }
   synchronizeOnce() {
     if (this.dirtyFlags & 16) {
-      this.dirtyFlags &= ~16;
+      this.dirtyFlags &= -17;
       this.rootEffectScheduler.flush();
     }
     let ranDetectChanges = false;
     if (this.dirtyFlags & 7) {
       const useGlobalCheck = Boolean(this.dirtyFlags & 1);
-      this.dirtyFlags &= ~7;
+      this.dirtyFlags &= -8;
       this.dirtyFlags |= 8;
       for (let {
         _lView
@@ -15326,7 +15866,7 @@ var ApplicationRef = class _ApplicationRef {
         detectChangesInternal(_lView, mode);
         ranDetectChanges = true;
       }
-      this.dirtyFlags &= ~4;
+      this.dirtyFlags &= -5;
       this.syncDirtyFlagsWithViews();
       if (this.dirtyFlags & (7 | 16)) {
         return;
@@ -15337,7 +15877,7 @@ var ApplicationRef = class _ApplicationRef {
       this._rendererFactory?.end?.();
     }
     if (this.dirtyFlags & 8) {
-      this.dirtyFlags &= ~8;
+      this.dirtyFlags &= -9;
       this.afterRenderManager.execute();
     }
     this.syncDirtyFlagsWithViews();
@@ -15349,7 +15889,7 @@ var ApplicationRef = class _ApplicationRef {
       this.dirtyFlags |= 2;
       return;
     } else {
-      this.dirtyFlags &= ~7;
+      this.dirtyFlags &= -8;
     }
   }
   attachView(viewRef) {
@@ -15513,9 +16053,11 @@ function triggerResourceLoading(tDetails, lView, tNode) {
   }
   tDetails.loadingPromise = Promise.allSettled(dependenciesFn()).then((results) => {
     let failed = false;
+    let failedReason = null;
     const directiveDefs = [];
     const pipeDefs = [];
-    for (const result of results) {
+    for (let i = 0; i < results.length; i++) {
+      const result = results[i];
       if (result.status === "fulfilled") {
         const dependency = result.value;
         const directiveDef = getComponentDef(dependency) || getDirectiveDef(dependency);
@@ -15529,6 +16071,7 @@ function triggerResourceLoading(tDetails, lView, tNode) {
         }
       } else {
         failed = true;
+        failedReason = result.reason instanceof Error ? result.reason : new Error(String(result.reason));
         break;
       }
     }
@@ -15536,7 +16079,32 @@ function triggerResourceLoading(tDetails, lView, tNode) {
       tDetails.loadingState = DeferDependenciesLoadingState.FAILED;
       if (tDetails.errorTmplIndex === null) {
         const templateLocation = ngDevMode ? getTemplateLocationDetails(lView) : "";
-        const error = new RuntimeError(-750, ngDevMode && `Loading dependencies for \`@defer\` block failed, but no \`@error\` block was configured${templateLocation}. Consider using the \`@error\` block to render an error state.`);
+        let errorMsg = "";
+        if (ngDevMode) {
+          errorMsg = `Loading dependencies for \`@defer\` block failed, but no \`@error\` block was configured${templateLocation}. Consider using the \`@error\` block to render an error state.`;
+          const depsFn = tDetails.dependencyResolverFn;
+          const errorReason = failedReason?.message;
+          if (depsFn) {
+            errorMsg += `
+
+Angular tried to invoke the following dependency function (compiler-generated):
+\`\`\`
+${depsFn.toString()}
+\`\`\``;
+          }
+          if (errorReason) {
+            errorMsg += depsFn ? `
+
+but it resulted in the following error:
+
+${errorReason}` : `
+
+The loading resulted in the following error:
+
+${errorReason}`;
+          }
+        }
+        const error = new RuntimeError(-750, errorMsg);
         handleUncaughtError(lView, error);
       }
     } else {
@@ -16163,155 +16731,6 @@ function \u0275\u0275attribute(name, value, sanitizer, namespace) {
   }
   return \u0275\u0275attribute;
 }
-var ANIMATIONS_DISABLED = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "AnimationsDisabled" : "", {
-  factory: () => false
-});
-var MAX_ANIMATION_TIMEOUT = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "MaxAnimationTimeout" : "", {
-  factory: () => MAX_ANIMATION_TIMEOUT_DEFAULT
-});
-var MAX_ANIMATION_TIMEOUT_DEFAULT = 4e3;
-var DEFAULT_ANIMATIONS_DISABLED = false;
-var areAnimationSupported = typeof document !== "undefined" && typeof document?.documentElement?.getAnimations === "function";
-function areAnimationsDisabled(lView) {
-  const injector = lView[INJECTOR];
-  return injector.get(ANIMATIONS_DISABLED, DEFAULT_ANIMATIONS_DISABLED);
-}
-function assertAnimationTypes(value, instruction) {
-  if (value == null || typeof value !== "string" && typeof value !== "function") {
-    throw new RuntimeError(650, `'${instruction}' value must be a string of CSS classes or an animation function, got ${stringify(value)}`);
-  }
-}
-function assertElementNodes(nativeElement, instruction) {
-  if (nativeElement.nodeType !== Node.ELEMENT_NODE) {
-    throw new RuntimeError(650, `'${instruction}' can only be used on an element node, got ${stringify(nativeElement.nodeType)}`);
-  }
-}
-function trackEnterClasses(el, classList, cleanupFns) {
-  const elementData = enterClassMap.get(el);
-  if (elementData) {
-    for (const klass of classList) {
-      elementData.classList.push(klass);
-    }
-    for (const fn of cleanupFns) {
-      elementData.cleanupFns.push(fn);
-    }
-  } else {
-    enterClassMap.set(el, {
-      classList,
-      cleanupFns
-    });
-  }
-}
-function cleanupEnterClassData(element) {
-  const elementData = enterClassMap.get(element);
-  if (elementData) {
-    for (const fn of elementData.cleanupFns) {
-      fn();
-    }
-    enterClassMap.delete(element);
-  }
-  longestAnimations.delete(element);
-}
-var noOpAnimationComplete = () => {
-};
-var enterClassMap = /* @__PURE__ */ new WeakMap();
-var longestAnimations = /* @__PURE__ */ new WeakMap();
-var leavingNodes = /* @__PURE__ */ new WeakMap();
-function clearLeavingNodes(tNode, el) {
-  const nodes = leavingNodes.get(tNode);
-  if (nodes && nodes.length > 0) {
-    const ix = nodes.findIndex((node) => node === el);
-    if (ix > -1) nodes.splice(ix, 1);
-  }
-  if (nodes?.length === 0) {
-    leavingNodes.delete(tNode);
-  }
-}
-function cancelLeavingNodes(tNode, lView) {
-  const leavingEl = leavingNodes.get(tNode)?.shift();
-  const lContainer = lView[DECLARATION_LCONTAINER];
-  if (lContainer) {
-    const beforeNode = getBeforeNodeForView(tNode.index, lContainer);
-    const previousNode = beforeNode?.previousSibling;
-    if (leavingEl && previousNode && leavingEl === previousNode) {
-      leavingEl.dispatchEvent(new CustomEvent("animationend", {
-        detail: {
-          cancel: true
-        }
-      }));
-    }
-  }
-}
-function trackLeavingNodes(tNode, el) {
-  if (leavingNodes.has(tNode)) {
-    leavingNodes.get(tNode)?.push(el);
-  } else {
-    leavingNodes.set(tNode, [el]);
-  }
-}
-function getLViewEnterAnimations(lView) {
-  const animationData = lView[ANIMATIONS] ??= {};
-  return animationData.enter ??= /* @__PURE__ */ new Map();
-}
-function getLViewLeaveAnimations(lView) {
-  const animationData = lView[ANIMATIONS] ??= {};
-  return animationData.leave ??= /* @__PURE__ */ new Map();
-}
-function getClassListFromValue(value) {
-  const classes = typeof value === "function" ? value() : value;
-  let classList = Array.isArray(classes) ? classes : null;
-  if (typeof classes === "string") {
-    classList = classes.trim().split(/\s+/).filter((k) => k);
-  }
-  return classList;
-}
-function cancelAnimationsIfRunning(element, renderer) {
-  if (!areAnimationSupported) return;
-  const elementData = enterClassMap.get(element);
-  if (elementData && elementData.classList.length > 0 && elementHasClassList(element, elementData.classList)) {
-    for (const klass of elementData.classList) {
-      renderer.removeClass(element, klass);
-    }
-  }
-  cleanupEnterClassData(element);
-}
-function elementHasClassList(element, classList) {
-  for (const className of classList) {
-    if (element.classList.contains(className)) return true;
-  }
-  return false;
-}
-function isLongestAnimation(event, nativeElement) {
-  const longestAnimation = longestAnimations.get(nativeElement);
-  if (longestAnimation === void 0) return true;
-  return nativeElement === event.target && (longestAnimation.animationName !== void 0 && event.animationName === longestAnimation.animationName || longestAnimation.propertyName !== void 0 && event.propertyName === longestAnimation.propertyName);
-}
-function addAnimationToLView(animations, tNode, fn) {
-  const nodeAnimations = animations.get(tNode.index) ?? {
-    animateFns: []
-  };
-  nodeAnimations.animateFns.push(fn);
-  animations.set(tNode.index, nodeAnimations);
-}
-function cleanupAfterLeaveAnimations(resolvers, cleanupFns) {
-  if (resolvers) {
-    for (const fn of resolvers) {
-      fn();
-    }
-  }
-  for (const fn of cleanupFns) {
-    fn();
-  }
-}
-function clearLViewNodeAnimationResolvers(lView, tNode) {
-  const nodeAnimations = getLViewLeaveAnimations(lView).get(tNode.index);
-  if (nodeAnimations) nodeAnimations.resolvers = void 0;
-}
-function leaveAnimationFunctionCleanup(lView, tNode, nativeElement, resolvers, cleanupFns) {
-  clearLeavingNodes(tNode, nativeElement);
-  cleanupAfterLeaveAnimations(resolvers, cleanupFns);
-  clearLViewNodeAnimationResolvers(lView, tNode);
-}
 function \u0275\u0275animateEnter(value) {
   performanceMarkFeature("NgAnimateEnter");
   if (!areAnimationSupported) {
@@ -16323,28 +16742,31 @@ function \u0275\u0275animateEnter(value) {
     return \u0275\u0275animateEnter;
   }
   const tNode = getCurrentTNode();
-  cancelLeavingNodes(tNode, lView);
-  addAnimationToLView(getLViewEnterAnimations(lView), tNode, () => runEnterAnimation(lView, tNode, value));
+  const ngZone = lView[INJECTOR].get(NgZone);
+  addAnimationToLView(getLViewEnterAnimations(lView), tNode, () => runEnterAnimation(lView, tNode, value, ngZone));
   initializeAnimationQueueScheduler(lView[INJECTOR]);
   queueEnterAnimations(lView[INJECTOR], getLViewEnterAnimations(lView));
   return \u0275\u0275animateEnter;
 }
-function runEnterAnimation(lView, tNode, value) {
+function runEnterAnimation(lView, tNode, value, ngZone) {
   const nativeElement = getNativeByTNode(tNode, lView);
   ngDevMode && assertElementNodes(nativeElement, "animate.enter");
   const renderer = lView[RENDERER];
-  const ngZone = lView[INJECTOR].get(NgZone);
   const activeClasses = getClassListFromValue(value);
   const cleanupFns = [];
+  let hasCompleted = false;
   const handleEnterAnimationStart = (event) => {
-    if (event.target !== nativeElement) return;
+    if (getEventTarget(event) !== nativeElement) return;
     const eventName = event instanceof AnimationEvent ? "animationend" : "transitionend";
     ngZone.runOutsideAngular(() => {
       renderer.listen(nativeElement, eventName, handleEnterAnimationEnd);
     });
   };
   const handleEnterAnimationEnd = (event) => {
-    if (event.target !== nativeElement) return;
+    if (getEventTarget(event) !== nativeElement) return;
+    if (isLongestAnimation(event, nativeElement)) {
+      hasCompleted = true;
+    }
     enterAnimationEnd(event, nativeElement, renderer);
   };
   if (activeClasses && activeClasses.length > 0) {
@@ -16358,6 +16780,7 @@ function runEnterAnimation(lView, tNode, value) {
     }
     ngZone.runOutsideAngular(() => {
       requestAnimationFrame(() => {
+        if (hasCompleted) return;
         determineLongestAnimation(nativeElement, longestAnimations, areAnimationSupported);
         if (!longestAnimations.has(nativeElement)) {
           for (const klass of activeClasses) {
@@ -16371,9 +16794,9 @@ function runEnterAnimation(lView, tNode, value) {
 }
 function enterAnimationEnd(event, nativeElement, renderer) {
   const elementData = enterClassMap.get(nativeElement);
-  if (event.target !== nativeElement || !elementData) return;
+  if (getEventTarget(event) !== nativeElement || !elementData) return;
   if (isLongestAnimation(event, nativeElement)) {
-    event.stopImmediatePropagation();
+    event.stopPropagation();
     for (const klass of elementData.classList) {
       renderer.removeClass(nativeElement, klass);
     }
@@ -16391,7 +16814,6 @@ function \u0275\u0275animateEnterListener(value) {
     return \u0275\u0275animateEnterListener;
   }
   const tNode = getCurrentTNode();
-  cancelLeavingNodes(tNode, lView);
   addAnimationToLView(getLViewEnterAnimations(lView), tNode, () => runEnterAnimationFunction(lView, tNode, value));
   initializeAnimationQueueScheduler(lView[INJECTOR]);
   queueEnterAnimations(lView[INJECTOR], getLViewEnterAnimations(lView));
@@ -16417,12 +16839,12 @@ function \u0275\u0275animateLeave(value) {
     return \u0275\u0275animateLeave;
   }
   const tNode = getCurrentTNode();
-  cancelLeavingNodes(tNode, lView);
-  addAnimationToLView(getLViewLeaveAnimations(lView), tNode, () => runLeaveAnimations(lView, tNode, value));
+  const ngZone = lView[INJECTOR].get(NgZone);
+  addAnimationToLView(getLViewLeaveAnimations(lView), tNode, () => runLeaveAnimations(lView, tNode, value, ngZone));
   initializeAnimationQueueScheduler(lView[INJECTOR]);
   return \u0275\u0275animateLeave;
 }
-function runLeaveAnimations(lView, tNode, value) {
+function runLeaveAnimations(lView, tNode, value, ngZone) {
   const {
     promise,
     resolve
@@ -16430,7 +16852,6 @@ function runLeaveAnimations(lView, tNode, value) {
   const nativeElement = getNativeByTNode(tNode, lView);
   ngDevMode && assertElementNodes(nativeElement, "animate.leave");
   const renderer = lView[RENDERER];
-  const ngZone = lView[INJECTOR].get(NgZone);
   allLeavingAnimations.add(lView[ID]);
   (getLViewLeaveAnimations(lView).get(tNode.index).resolvers ??= []).push(resolve);
   const activeClasses = getClassListFromValue(value);
@@ -16447,11 +16868,16 @@ function runLeaveAnimations(lView, tNode, value) {
 function animateLeaveClassRunner(el, tNode, lView, classList, renderer, ngZone) {
   cancelAnimationsIfRunning(el, renderer);
   const cleanupFns = [];
-  const resolvers = getLViewLeaveAnimations(lView).get(tNode.index)?.resolvers;
+  const componentResolvers = getLViewLeaveAnimations(lView).get(tNode.index)?.resolvers;
+  let fallbackTimeoutId;
+  let hasCompleted = false;
   const handleOutAnimationEnd = (event) => {
-    if (event.target !== el) return;
-    if (event instanceof CustomEvent || isLongestAnimation(event, el)) {
-      event.stopImmediatePropagation();
+    const target = getEventTarget(event);
+    if (target !== el && event.type !== "animation-fallback") return;
+    if (event.type === "animation-fallback" || isLongestAnimation(event, el)) {
+      hasCompleted = true;
+      if (fallbackTimeoutId) clearTimeout(fallbackTimeoutId);
+      if (event.type !== "animation-fallback") event.stopPropagation();
       longestAnimations.delete(el);
       clearLeavingNodes(tNode, el);
       if (Array.isArray(tNode.projection)) {
@@ -16459,7 +16885,7 @@ function animateLeaveClassRunner(el, tNode, lView, classList, renderer, ngZone) 
           renderer.removeClass(el, item);
         }
       }
-      cleanupAfterLeaveAnimations(resolvers, cleanupFns);
+      cleanupAfterLeaveAnimations(componentResolvers, cleanupFns);
       clearLViewNodeAnimationResolvers(lView, tNode);
     }
   };
@@ -16473,11 +16899,18 @@ function animateLeaveClassRunner(el, tNode, lView, classList, renderer, ngZone) 
   }
   ngZone.runOutsideAngular(() => {
     requestAnimationFrame(() => {
+      if (hasCompleted) return;
       determineLongestAnimation(el, longestAnimations, areAnimationSupported);
-      if (!longestAnimations.has(el)) {
+      const longest = longestAnimations.get(el);
+      if (!longest) {
         clearLeavingNodes(tNode, el);
-        cleanupAfterLeaveAnimations(resolvers, cleanupFns);
+        cleanupAfterLeaveAnimations(componentResolvers, cleanupFns);
         clearLViewNodeAnimationResolvers(lView, tNode);
+      } else {
+        fallbackTimeoutId = setTimeout(() => {
+          handleOutAnimationEnd(new CustomEvent("animation-fallback"));
+        }, longest.duration + 50);
+        cleanupFns.push(() => clearTimeout(fallbackTimeoutId));
       }
     });
   });
@@ -16490,13 +16923,14 @@ function \u0275\u0275animateLeaveListener(value) {
   ngDevMode && assertAnimationTypes(value, "animate.leave");
   const lView = getLView();
   const tNode = getCurrentTNode();
-  cancelLeavingNodes(tNode, lView);
   allLeavingAnimations.add(lView[ID]);
-  addAnimationToLView(getLViewLeaveAnimations(lView), tNode, () => runLeaveAnimationFunction(lView, tNode, value));
+  const ngZone = lView[INJECTOR].get(NgZone);
+  const maxAnimationTimeout = lView[INJECTOR].get(MAX_ANIMATION_TIMEOUT);
+  addAnimationToLView(getLViewLeaveAnimations(lView), tNode, () => runLeaveAnimationFunction(lView, tNode, value, ngZone, maxAnimationTimeout));
   initializeAnimationQueueScheduler(lView[INJECTOR]);
   return \u0275\u0275animateLeaveListener;
 }
-function runLeaveAnimationFunction(lView, tNode, value) {
+function runLeaveAnimationFunction(lView, tNode, value, ngZone, maxAnimationTimeout) {
   const {
     promise,
     resolve
@@ -16506,8 +16940,6 @@ function runLeaveAnimationFunction(lView, tNode, value) {
   const cleanupFns = [];
   const renderer = lView[RENDERER];
   const animationsDisabled = areAnimationsDisabled(lView);
-  const ngZone = lView[INJECTOR].get(NgZone);
-  const maxAnimationTimeout = lView[INJECTOR].get(MAX_ANIMATION_TIMEOUT);
   (getLViewLeaveAnimations(lView).get(tNode.index).resolvers ??= []).push(resolve);
   const resolvers = getLViewLeaveAnimations(lView).get(tNode.index)?.resolvers;
   if (animationsDisabled) {
@@ -16541,514 +16973,6 @@ function \u0275\u0275componentInstance() {
   const instance = getLView()[DECLARATION_COMPONENT_VIEW][CONTEXT];
   ngDevMode && assertDefined(instance, "Expected component instance to be defined");
   return instance;
-}
-function \u0275\u0275controlCreate() {
-  const lView = getLView();
-  const tView = getTView();
-  const tNode = getCurrentTNode();
-  if (tView.firstCreatePass) {
-    initializeControlFirstCreatePass(tView, tNode, lView);
-  }
-  const fieldDirective = getFieldDirective(tNode, lView);
-  if (!fieldDirective) {
-    return;
-  }
-  performanceMarkFeature("NgSignalForms");
-  if (tNode.flags & 1024) {
-    initializeCustomControl(lView, tNode, fieldDirective, "value");
-  } else if (tNode.flags & 2048) {
-    initializeCustomControl(lView, tNode, fieldDirective, "checked");
-  } else if (tNode.flags & 4096) {
-    initializeInteropControl(fieldDirective);
-  } else if (tNode.flags & 8192) {
-    initializeNativeControl(lView, tNode, fieldDirective);
-  }
-  fieldDirective.registerAsBinding(getCustomControl(tNode, lView));
-}
-function \u0275\u0275control(value, name, sanitizer) {
-  const lView = getLView();
-  const tNode = getSelectedTNode();
-  const bindingIndex = nextBindingIndex();
-  if (bindingUpdated(lView, bindingIndex, value)) {
-    const tView = getTView();
-    setPropertyAndInputs(tNode, lView, name, value, lView[RENDERER], sanitizer);
-    ngDevMode && storePropertyBindingMetadata(tView.data, tNode, name, bindingIndex);
-  }
-  updateControl(lView, tNode);
-}
-function \u0275controlUpdate() {
-  const lView = getLView();
-  const tNode = getSelectedTNode();
-  updateControl(lView, tNode);
-}
-function updateControl(lView, tNode) {
-  const fieldDirective = getFieldDirective(tNode, lView);
-  if (fieldDirective) {
-    updateControlClasses(lView, tNode, fieldDirective);
-    if (tNode.flags & 1024) {
-      updateCustomControl(tNode, lView, fieldDirective, "value");
-    } else if (tNode.flags & 2048) {
-      updateCustomControl(tNode, lView, fieldDirective, "checked");
-    } else if (tNode.flags & 4096) {
-      updateInteropControl(tNode, lView, fieldDirective);
-    } else {
-      updateNativeControl(tNode, lView, fieldDirective);
-    }
-  }
-  nextBindingIndex();
-}
-function initializeControlFirstCreatePass(tView, tNode, lView) {
-  ngDevMode && assertFirstCreatePass(tView);
-  const directiveIndices = tNode.inputs?.["formField"];
-  if (!directiveIndices) {
-    return;
-  }
-  if (isComponentHost(tNode) && directiveIndices.includes(tNode.directiveStart + tNode.componentOffset)) {
-    return;
-  }
-  const controlIndex = directiveIndices.find((index) => \u0275CONTROL in lView[index]);
-  if (controlIndex === void 0) {
-    return;
-  }
-  tNode.fieldIndex = controlIndex;
-  const foundControl = isInteropControlFirstCreatePass(tNode, lView) || isCustomControlFirstCreatePass(tView, tNode);
-  if (isNativeControlFirstCreatePass(tNode) || foundControl) {
-    return;
-  }
-  throw new RuntimeError(318, ngDevMode && `${describeElement(tView, tNode)} is an invalid [formField] directive host. The host must be a native form control (such as <input>', '<select>', or '<textarea>') or a custom form control with a 'value' or 'checked' model.`);
-}
-function describeElement(tView, tNode) {
-  if (ngDevMode && isComponentHost(tNode)) {
-    const componentIndex = tNode.directiveStart + tNode.componentOffset;
-    const componentDef = tView.data[componentIndex];
-    return `Component ${debugStringifyTypeForError(componentDef.type)}`;
-  }
-  return `<${tNode.value}>`;
-}
-function isInteropControlFirstCreatePass(tNode, lView) {
-  const control = lView[tNode.fieldIndex];
-  if (control.\u0275interopControl) {
-    tNode.flags |= 4096;
-    return true;
-  }
-  return false;
-}
-function isCustomControlFirstCreatePass(tView, tNode) {
-  for (let i = tNode.directiveStart; i < tNode.directiveEnd; i++) {
-    const directiveDef = tView.data[i];
-    if (hasModelInput(directiveDef, "value")) {
-      tNode.flags |= 1024;
-      tNode.customControlIndex = i;
-      return true;
-    }
-    if (hasModelInput(directiveDef, "checked")) {
-      tNode.flags |= 2048;
-      tNode.customControlIndex = i;
-      return true;
-    }
-  }
-  return false;
-}
-function isNativeControlFirstCreatePass(tNode) {
-  if (!isNativeControl(tNode)) {
-    return false;
-  }
-  tNode.flags |= 8192;
-  if (isNumericInput(tNode)) {
-    tNode.flags |= 16384;
-  }
-  if (isTextControl(tNode)) {
-    tNode.flags |= 32768;
-  }
-  return true;
-}
-function getFieldDirective(tNode, lView) {
-  const index = tNode.fieldIndex;
-  return index === -1 ? void 0 : lView[index];
-}
-function getCustomControl(tNode, lView) {
-  const index = tNode.customControlIndex;
-  return index === -1 ? void 0 : lView[index];
-}
-function hasModelInput(directiveDef, name) {
-  return hasInput(directiveDef, name) && hasOutput(directiveDef, name + "Change");
-}
-function hasInput(directiveDef, name) {
-  return name in directiveDef.inputs;
-}
-function hasOutput(directiveDef, name) {
-  return name in directiveDef.outputs;
-}
-function initializeCustomControl(lView, tNode, fieldDirective, modelName) {
-  const tView = getTView();
-  const directiveIndex = tNode.customControlIndex;
-  const outputName = modelName + "Change";
-  listenToOutput(tNode, lView, directiveIndex, outputName, outputName, wrapListener(tNode, lView, (value) => fieldDirective.state().setControlValue(value)));
-  const directiveDef = tView.data[directiveIndex];
-  const touchedOutputName = "touchedChange";
-  if (hasOutput(directiveDef, touchedOutputName)) {
-    listenToOutput(tNode, lView, directiveIndex, touchedOutputName, touchedOutputName, wrapListener(tNode, lView, () => fieldDirective.state().markAsTouched()));
-  }
-}
-function initializeInteropControl(fieldDirective) {
-  const interopControl = fieldDirective.\u0275interopControl;
-  interopControl.registerOnChange((value) => fieldDirective.state().setControlValue(value));
-  interopControl.registerOnTouched(() => fieldDirective.state().markAsTouched());
-}
-function isNativeControl(tNode) {
-  if (tNode.type !== 2) {
-    return false;
-  }
-  const tagName = tNode.value;
-  return tagName === "input" || tagName === "textarea" || tagName === "select";
-}
-function initializeNativeControl(lView, tNode, fieldDirective) {
-  const tView = getTView();
-  const renderer = lView[RENDERER];
-  const element = getNativeByTNode(tNode, lView);
-  const inputListener = () => {
-    const state = fieldDirective.state();
-    state.setControlValue(getNativeControlValue(element, state.value));
-  };
-  listenToDomEvent(tNode, tView, lView, void 0, renderer, "input", inputListener, wrapListener(tNode, lView, inputListener));
-  const blurListener = () => {
-    fieldDirective.state().markAsTouched();
-  };
-  listenToDomEvent(tNode, tView, lView, void 0, renderer, "blur", blurListener, wrapListener(tNode, lView, blurListener));
-  if (tNode.type === 2 && tNode.value === "select" && typeof MutationObserver === "function") {
-    const observer = observeSelectMutations(element, fieldDirective);
-    storeCleanupWithContext(tView, lView, observer, observer.disconnect);
-  }
-}
-function observeSelectMutations(select, controlDirective) {
-  const observer = new MutationObserver((mutations) => {
-    if (mutations.some((m) => isRelevantSelectMutation(m))) {
-      select.value = controlDirective.state().value();
-    }
-  });
-  observer.observe(select, {
-    attributes: true,
-    attributeFilter: ["value"],
-    characterData: true,
-    childList: true,
-    subtree: true
-  });
-  return observer;
-}
-function isRelevantSelectMutation(mutation) {
-  if (mutation.type === "childList" || mutation.type === "characterData") {
-    if (mutation.target instanceof Comment) {
-      return false;
-    }
-    for (const node of mutation.addedNodes) {
-      if (!(node instanceof Comment)) {
-        return true;
-      }
-    }
-    for (const node of mutation.removedNodes) {
-      if (!(node instanceof Comment)) {
-        return true;
-      }
-    }
-    return false;
-  }
-  if (mutation.type === "attributes" && mutation.target instanceof HTMLOptionElement) {
-    return true;
-  }
-  return false;
-}
-function updateControlClasses(lView, tNode, control) {
-  if (control.classes) {
-    const bindings = getControlBindings(lView);
-    bindings.classes ??= {};
-    control.state();
-    const renderer = lView[RENDERER];
-    const element = getNativeByTNode(tNode, lView);
-    for (const [className, enabled] of control.classes) {
-      const isEnabled = enabled();
-      if (controlClassBindingUpdated(bindings.classes, className, isEnabled)) {
-        if (isEnabled) {
-          renderer.addClass(element, className);
-        } else {
-          renderer.removeClass(element, className);
-        }
-      }
-    }
-  }
-}
-function updateCustomControl(tNode, lView, control, modelName) {
-  const tView = getTView();
-  const directiveIndex = tNode.customControlIndex;
-  const directive = lView[directiveIndex];
-  const directiveDef = tView.data[directiveIndex];
-  const state = control.state();
-  const bindings = getControlBindings(lView);
-  const controlValue = state.controlValue();
-  if (controlBindingUpdated(bindings, CONTROL_VALUE, controlValue)) {
-    writeToDirectiveInput(directiveDef, directive, modelName, controlValue);
-  }
-  const isNative = (tNode.flags & 8192) !== 0;
-  const element = isNative ? getNativeByTNode(tNode, lView) : null;
-  const renderer = lView[RENDERER];
-  for (const key of CONTROL_BINDING_KEYS) {
-    const value = state[key]?.();
-    if (controlBindingUpdated(bindings, key, value)) {
-      const inputName = CONTROL_BINDING_NAMES[key];
-      updateDirectiveInputs(tNode, lView, inputName, value);
-      if (isNative && !(inputName in directiveDef.inputs)) {
-        updateNativeProperty(tNode, renderer, element, key, value, inputName);
-      }
-    }
-  }
-}
-function updateInteropControl(tNode, lView, control) {
-  const interopControl = control.\u0275interopControl;
-  const bindings = getControlBindings(lView);
-  const state = control.state();
-  const isNative = (tNode.flags & 8192) !== 0;
-  const element = isNative ? getNativeByTNode(tNode, lView) : null;
-  const renderer = lView[RENDERER];
-  const value = state.value();
-  if (controlBindingUpdated(bindings, CONTROL_VALUE, value)) {
-    untracked2(() => interopControl.writeValue(value));
-  }
-  for (const key of CONTROL_BINDING_KEYS) {
-    const value2 = state[key]?.();
-    if (controlBindingUpdated(bindings, key, value2)) {
-      const inputName = CONTROL_BINDING_NAMES[key];
-      const didUpdateInput = updateDirectiveInputs(tNode, lView, inputName, value2);
-      if (key === DISABLED) {
-        if (interopControl.setDisabledState) {
-          untracked2(() => interopControl.setDisabledState(value2));
-        }
-      } else if (isNative && !didUpdateInput) {
-        updateNativeProperty(tNode, renderer, element, key, value2, inputName);
-      }
-    }
-  }
-}
-function updateNativeControl(tNode, lView, control) {
-  const element = getNativeByTNode(tNode, lView);
-  const renderer = lView[RENDERER];
-  const state = control.state();
-  const bindings = getControlBindings(lView);
-  const controlValue = state.controlValue();
-  if (controlBindingUpdated(bindings, CONTROL_VALUE, controlValue)) {
-    setNativeControlValue(element, controlValue);
-  }
-  for (const key of CONTROL_BINDING_KEYS) {
-    const value = state[key]?.();
-    if (controlBindingUpdated(bindings, key, value)) {
-      const inputName = CONTROL_BINDING_NAMES[key];
-      updateNativeProperty(tNode, renderer, element, key, value, inputName);
-      updateDirectiveInputs(tNode, lView, inputName, value);
-    }
-  }
-}
-function updateDirectiveInputs(tNode, lView, inputName, value) {
-  const directiveIndices = tNode.inputs?.[inputName];
-  if (directiveIndices) {
-    const tView = getTView();
-    for (const index of directiveIndices) {
-      const directiveDef = tView.data[index];
-      const directive = lView[index];
-      writeToDirectiveInput(directiveDef, directive, inputName, value);
-    }
-    return true;
-  }
-  return false;
-}
-function updateNativeProperty(tNode, renderer, element, key, value, name) {
-  switch (key) {
-    case NAME:
-      renderer.setAttribute(element, name, value);
-      break;
-    case DISABLED:
-    case READONLY:
-    case REQUIRED:
-      setBooleanAttribute(renderer, element, name, value);
-      break;
-    case MAX:
-    case MIN:
-      if (tNode.flags & 16384) {
-        setOptionalAttribute(renderer, element, name, value);
-      }
-      break;
-    case MAX_LENGTH:
-    case MIN_LENGTH:
-      if (tNode.flags & 32768) {
-        setOptionalAttribute(renderer, element, name, value);
-      }
-      break;
-  }
-}
-function isDateOrNull(value) {
-  return value === null || value instanceof Date;
-}
-function isNumericInput(tNode) {
-  if (!tNode.attrs || tNode.value !== "input") {
-    return false;
-  }
-  for (let i = 0; i < tNode.attrs.length; i += 2) {
-    const name = tNode.attrs[i];
-    if (isNameOnlyAttributeMarker(name)) {
-      break;
-    }
-    if (name === "type") {
-      const value = tNode.attrs[i + 1];
-      return value === "date" || value === "datetime-local" || value === "month" || value === "number" || value === "range" || value === "time" || value === "week";
-    }
-  }
-  return false;
-}
-function isTextControl(tNode) {
-  return tNode.value !== "select";
-}
-function getNativeControlValue(element, currentValue) {
-  switch (element.type) {
-    case "checkbox":
-      return element.checked;
-    case "number":
-    case "range":
-    case "datetime-local":
-      if (typeof currentValue() === "number") {
-        return element.valueAsNumber;
-      }
-      break;
-    case "date":
-    case "month":
-    case "time":
-    case "week":
-      const value = currentValue();
-      if (isDateOrNull(value)) {
-        return element.valueAsDate;
-      } else if (typeof value === "number") {
-        return element.valueAsNumber;
-      }
-      break;
-  }
-  return element.value;
-}
-function setNativeControlValue(element, value) {
-  switch (element.type) {
-    case "checkbox":
-      element.checked = value;
-      return;
-    case "radio":
-      element.checked = value === element.value;
-      return;
-    case "number":
-    case "range":
-    case "datetime-local":
-      if (typeof value === "number") {
-        setNativeNumberControlValue(element, value);
-        return;
-      }
-      break;
-    case "date":
-    case "month":
-    case "time":
-    case "week":
-      if (isDateOrNull(value)) {
-        element.valueAsDate = value;
-        return;
-      } else if (typeof value === "number") {
-        setNativeNumberControlValue(element, value);
-        return;
-      }
-  }
-  element.value = value;
-}
-function setNativeNumberControlValue(element, value) {
-  if (isNaN(value)) {
-    element.value = "";
-  } else {
-    element.valueAsNumber = value;
-  }
-}
-var DISABLED = /* @__PURE__ */ getClosureSafeProperty({
-  disabled: getClosureSafeProperty
-});
-var MAX = /* @__PURE__ */ getClosureSafeProperty({
-  max: getClosureSafeProperty
-});
-var MAX_LENGTH = /* @__PURE__ */ getClosureSafeProperty({
-  maxLength: getClosureSafeProperty
-});
-var MIN = /* @__PURE__ */ getClosureSafeProperty({
-  min: getClosureSafeProperty
-});
-var MIN_LENGTH = /* @__PURE__ */ getClosureSafeProperty({
-  minLength: getClosureSafeProperty
-});
-var NAME = /* @__PURE__ */ getClosureSafeProperty({
-  name: getClosureSafeProperty
-});
-var READONLY = /* @__PURE__ */ getClosureSafeProperty({
-  readonly: getClosureSafeProperty
-});
-var REQUIRED = /* @__PURE__ */ getClosureSafeProperty({
-  required: getClosureSafeProperty
-});
-var CONTROL_VALUE = /* @__PURE__ */ getClosureSafeProperty({
-  controlValue: getClosureSafeProperty
-});
-var CONTROL_BINDING_NAMES = {
-  disabled: "disabled",
-  disabledReasons: "disabledReasons",
-  dirty: "dirty",
-  errors: "errors",
-  hidden: "hidden",
-  invalid: "invalid",
-  max: "max",
-  maxLength: "maxLength",
-  min: "min",
-  minLength: "minLength",
-  name: "name",
-  pattern: "pattern",
-  pending: "pending",
-  readonly: "readonly",
-  required: "required",
-  touched: "touched"
-};
-var CONTROL_BINDING_KEYS = /* @__PURE__ */ (() => Object.keys(CONTROL_BINDING_NAMES))();
-function getControlBindings(lView) {
-  const bindingIndex = getBindingIndex();
-  let bindings = lView[bindingIndex];
-  if (bindings === NO_CHANGE) {
-    bindings = lView[bindingIndex] = {};
-  }
-  return bindings;
-}
-function controlBindingUpdated(bindings, key, value) {
-  const oldValue = bindings[key];
-  if (Object.is(oldValue, value)) {
-    return false;
-  }
-  bindings[key] = value;
-  return true;
-}
-function controlClassBindingUpdated(bindings, className, value) {
-  const oldValue = bindings[className];
-  if (Object.is(oldValue, value)) {
-    return false;
-  }
-  bindings[className] = value;
-  return true;
-}
-function setBooleanAttribute(renderer, element, name, value) {
-  if (value) {
-    renderer.setAttribute(element, name, "");
-  } else {
-    renderer.removeAttribute(element, name);
-  }
-}
-function setOptionalAttribute(renderer, element, name, value) {
-  if (value !== void 0) {
-    renderer.setAttribute(element, name, value.toString());
-  } else {
-    renderer.removeAttribute(element, name);
-  }
 }
 var LiveCollection = class {
   destroy(item) {
@@ -17388,8 +17312,8 @@ function \u0275\u0275repeaterCreate(index, templateFn, decls, vars, tagName, att
   const hasEmptyBlock = emptyTemplateFn !== void 0;
   const hostLView = getLView();
   const boundTrackBy = trackByUsesComponentInstance ? trackByFn.bind(hostLView[DECLARATION_COMPONENT_VIEW][CONTEXT]) : trackByFn;
-  const metadata = new RepeaterMetadata(hasEmptyBlock, boundTrackBy);
-  hostLView[HEADER_OFFSET + index] = metadata;
+  const metadata2 = new RepeaterMetadata(hasEmptyBlock, boundTrackBy);
+  hostLView[HEADER_OFFSET + index] = metadata2;
   declareNoDirectiveHostTemplate(lView, tView, index + 1, templateFn, decls, vars, tagName, getConstant(tView.consts, attrsIndex), 256);
   if (hasEmptyBlock) {
     ngDevMode && assertDefined(emptyDecls, "Missing number of declarations for the empty repeater block.");
@@ -17482,23 +17406,23 @@ function \u0275\u0275repeater(collection) {
   try {
     const hostLView = getLView();
     const hostTView = hostLView[TVIEW];
-    const metadata = hostLView[metadataSlotIdx];
+    const metadata2 = hostLView[metadataSlotIdx];
     const containerIndex = metadataSlotIdx + 1;
     const lContainer = getLContainer(hostLView, containerIndex);
-    if (metadata.liveCollection === void 0) {
+    if (metadata2.liveCollection === void 0) {
       const itemTemplateTNode = getExistingTNode(hostTView, containerIndex);
-      metadata.liveCollection = new LiveCollectionLContainerImpl(lContainer, hostLView, itemTemplateTNode);
+      metadata2.liveCollection = new LiveCollectionLContainerImpl(lContainer, hostLView, itemTemplateTNode);
     } else {
-      metadata.liveCollection.reset();
+      metadata2.liveCollection.reset();
     }
-    const liveCollection = metadata.liveCollection;
-    reconcile(liveCollection, collection, metadata.trackByFn, prevConsumer);
-    if (ngDevMode && metadata.trackByFn === \u0275\u0275repeaterTrackByIdentity && liveCollection.operationsCounter?.wasReCreated(liveCollection.length) && isViewExpensiveToRecreate(getExistingLViewFromLContainer(lContainer, 0))) {
+    const liveCollection = metadata2.liveCollection;
+    reconcile(liveCollection, collection, metadata2.trackByFn, prevConsumer);
+    if (ngDevMode && metadata2.trackByFn === \u0275\u0275repeaterTrackByIdentity && liveCollection.operationsCounter?.wasReCreated(liveCollection.length) && isViewExpensiveToRecreate(getExistingLViewFromLContainer(lContainer, 0))) {
       const message = formatRuntimeError(-956, `The configured tracking expression (track by identity) caused re-creation of the entire collection of size ${liveCollection.length}. This is an expensive operation requiring destruction and subsequent creation of DOM nodes, directives, components etc. Please review the "track expression" and make sure that it uniquely identifies items in a collection.`);
       console.warn(message);
     }
     liveCollection.updateIndexes();
-    if (metadata.hasEmptyBlock) {
+    if (metadata2.hasEmptyBlock) {
       const bindingIndex = nextBindingIndex();
       const isCollectionEmpty = liveCollection.length === 0;
       if (bindingUpdated(hostLView, bindingIndex, isCollectionEmpty)) {
@@ -17584,11 +17508,25 @@ function \u0275\u0275elementStart(index, name, attrsIndex, localRefsIndex) {
   const tView = lView[TVIEW];
   const adjustedIndex = index + HEADER_OFFSET;
   const tNode = tView.firstCreatePass ? directiveHostFirstCreatePass(adjustedIndex, lView, 2, name, findDirectiveDefMatches, getBindingsEnabled(), attrsIndex, localRefsIndex) : tView.data[adjustedIndex];
+  if (isComponentHost(tNode)) {
+    const tracingService = lView[ENVIRONMENT].tracingService;
+    if (tracingService && tracingService.componentCreate) {
+      const def = tView.data[tNode.directiveStart + tNode.componentOffset];
+      return tracingService.componentCreate(getComponentName(def), () => {
+        initializeElement(index, name, lView, tNode, localRefsIndex);
+        return \u0275\u0275elementStart;
+      });
+    }
+  }
+  initializeElement(index, name, lView, tNode, localRefsIndex);
+  return \u0275\u0275elementStart;
+}
+function initializeElement(index, name, lView, tNode, localRefsIndex) {
   elementLikeStartShared(tNode, lView, index, name, _locateOrCreateElementNode);
   if (isDirectiveHost(tNode)) {
-    const tView2 = lView[TVIEW];
-    createDirectivesInstances(tView2, lView, tNode);
-    executeContentQueries(tView2, tNode, lView);
+    const tView = lView[TVIEW];
+    createDirectivesInstances(tView, lView, tNode);
+    executeContentQueries(tView, tNode, lView);
   }
   if (localRefsIndex != null) {
     saveResolvedLocalsInData(lView, tNode);
@@ -17596,7 +17534,6 @@ function \u0275\u0275elementStart(index, name, attrsIndex, localRefsIndex) {
   if (ngDevMode && lView[TVIEW].firstCreatePass) {
     validateElementIsKnown(lView, tNode);
   }
-  return \u0275\u0275elementStart;
 }
 function \u0275\u0275elementEnd() {
   const tView = getTView();
@@ -17754,7 +17691,7 @@ function plural(val) {
   return 5;
 }
 var localeEn = ["en", [["a", "p"], ["AM", "PM"]], [["AM", "PM"]], [["S", "M", "T", "W", "T", "F", "S"], ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]], u, [["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"], ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]], u, [["B", "A"], ["BC", "AD"], ["Before Christ", "Anno Domini"]], 0, [6, 0], ["M/d/yy", "MMM d, y", "MMMM d, y", "EEEE, MMMM d, y"], ["h:mm\u202Fa", "h:mm:ss\u202Fa", "h:mm:ss\u202Fa z", "h:mm:ss\u202Fa zzzz"], ["{1}, {0}", u, u, u], [".", ",", ";", "%", "+", "-", "E", "\xD7", "\u2030", "\u221E", "NaN", ":"], ["#,##0.###", "#,##0%", "\xA4#,##0.00", "#E0"], "USD", "$", "US Dollar", {}, "ltr", plural];
-var LOCALE_DATA = {};
+var LOCALE_DATA = /* @__PURE__ */ Object.create(null);
 function findLocaleData(locale) {
   const normalizedLocale = normalizeLocale(locale);
   let match2 = getLocaleData(normalizedLocale);
@@ -17848,15 +17785,18 @@ function setMaskBit(hasChange) {
   changeMaskCounter++;
 }
 function applyI18n(tView, lView, index) {
-  if (changeMaskCounter > 0) {
-    ngDevMode && assertDefined(tView, `tView should be defined`);
-    const tI18n = tView.data[index];
-    const updateOpCodes = Array.isArray(tI18n) ? tI18n : tI18n.update;
-    const bindingsStartIndex = getBindingIndex() - changeMaskCounter - 1;
-    applyUpdateOpCodes(tView, lView, updateOpCodes, bindingsStartIndex, changeMask);
+  try {
+    if (changeMaskCounter > 0) {
+      ngDevMode && assertDefined(tView, `tView should be defined`);
+      const tI18n = tView.data[index];
+      const updateOpCodes = Array.isArray(tI18n) ? tI18n : tI18n.update;
+      const bindingsStartIndex = getBindingIndex() - changeMaskCounter - 1;
+      applyUpdateOpCodes(tView, lView, updateOpCodes, bindingsStartIndex, changeMask);
+    }
+  } finally {
+    changeMask = 0;
+    changeMaskCounter = 0;
   }
-  changeMask = 0;
-  changeMaskCounter = 0;
 }
 function createNodeWithoutHydration(lView, textOrName, nodeType) {
   const renderer = lView[RENDERER];
@@ -18002,7 +17942,13 @@ function applyUpdateOpCodes(tView, lView, updateOpCodes, bindingsStartIndex, cha
                 if (typeof tNodeOrTagName === "string") {
                   setElementAttribute(lView[RENDERER], lView[nodeIndex], null, tNodeOrTagName, propName, value, sanitizeFn);
                 } else {
-                  setPropertyAndInputs(tNodeOrTagName, lView, propName, value, lView[RENDERER], sanitizeFn);
+                  const prevSelectedIndex = getSelectedIndex();
+                  setSelectedIndex(nodeIndex);
+                  try {
+                    setPropertyAndInputs(tNodeOrTagName, lView, propName, value, lView[RENDERER], sanitizeFn);
+                  } finally {
+                    setSelectedIndex(prevSelectedIndex);
+                  }
                 }
                 break;
               case 0:
@@ -18386,7 +18332,8 @@ function i18nAttributesFirstPass(tView, index, values) {
         if (ICU_REGEXP.test(message)) {
           throw new Error(`ICU expressions are not supported in attributes. Message: "${message}".`);
         }
-        generateBindingUpdateOpCodes(updateOpCodes, message, previousElementIndex, attrName, countBindings(updateOpCodes), null);
+        const tagName = previousElement.namespace ? `:${previousElement.namespace}:${previousElement.value}` : previousElement.value;
+        generateBindingUpdateOpCodes(updateOpCodes, message, previousElementIndex, attrName, countBindings(updateOpCodes), i18nResolveSanitizer(attrName, tagName));
       }
     }
     tView.data[index] = updateOpCodes;
@@ -18616,18 +18563,29 @@ function walkIcuTree(ast, tView, tIcu, lView, sharedUpdateOpCodes, create, remov
             const attr = elAttrs.item(i);
             const lowerAttrName = attr.name.toLowerCase();
             const hasBinding2 = !!attr.value.match(BINDING_REGEXP);
+            const elementNS = element.namespaceURI;
+            const tagNameWithNamespace = elementNS === "http://www.w3.org/2000/svg" ? `:svg:${tagName}` : elementNS === "http://www.w3.org/1998/Math/MathML" ? `:math:${tagName}` : tagName;
             if (hasBinding2) {
               if (VALID_ATTRS.hasOwnProperty(lowerAttrName)) {
-                if (URI_ATTRS[lowerAttrName]) {
-                  generateBindingUpdateOpCodes(update, attr.value, newIndex, attr.name, 0, _sanitizeUrl);
-                } else {
-                  generateBindingUpdateOpCodes(update, attr.value, newIndex, attr.name, 0, null);
-                }
+                generateBindingUpdateOpCodes(update, attr.value, newIndex, attr.name, 0, i18nResolveSanitizer(lowerAttrName, tagNameWithNamespace));
               } else {
                 ngDevMode && console.warn(`WARNING: ignoring unsafe attribute value ${lowerAttrName} on element ${tagName} (see ${XSS_SECURITY_URL})`);
               }
+            } else if (VALID_ATTRS[lowerAttrName]) {
+              let val = attr.value;
+              const sanitizer = i18nResolveSanitizer(lowerAttrName, tagNameWithNamespace);
+              if (sanitizer) {
+                if (typeof ngDevMode !== "undefined" && ngDevMode) {
+                  console.warn(`WARNING: ignoring unsafe attribute ${lowerAttrName} on element ${tagName} (see ${XSS_SECURITY_URL})`);
+                }
+                addCreateAttribute(create, newIndex, attr.name, "unsafe:blocked");
+              } else {
+                addCreateAttribute(create, newIndex, attr.name, val);
+              }
             } else {
-              addCreateAttribute(create, newIndex, attr);
+              if (typeof ngDevMode !== "undefined" && ngDevMode) {
+                console.warn(`WARNING: ignoring unknown attribute name ${lowerAttrName} on element ${tagName} (see ${XSS_SECURITY_URL})`);
+              }
             }
           }
           const elementNode = {
@@ -18691,8 +18649,49 @@ function addCreateNodeAndAppend(create, marker, text, appendToParentIdx, createA
   }
   create.push(text, createAtIdx, icuCreateOpCode(0, appendToParentIdx, createAtIdx));
 }
-function addCreateAttribute(create, newIndex, attr) {
-  create.push(newIndex << 1 | 1, attr.name, attr.value);
+function addCreateAttribute(create, newIndex, attrName, attrValue) {
+  create.push(newIndex << 1 | 1, attrName, attrValue);
+}
+function splitNsName(elementName, fatal = true) {
+  if (elementName[0] != ":") {
+    return [null, elementName];
+  }
+  const colonIndex = elementName.indexOf(":", 1);
+  if (colonIndex === -1) {
+    if (fatal) {
+      throw new Error(`Unsupported format "${elementName}" expecting ":namespace:name"`);
+    } else {
+      return [null, elementName];
+    }
+  }
+  return [elementName.slice(1, colonIndex), elementName.slice(colonIndex + 1)];
+}
+function normalizeTagName(tagName) {
+  const tagNameLower = tagName.toLowerCase();
+  const [ns, name] = splitNsName(tagNameLower, false);
+  return ns === SVG_NAMESPACE || ns === MATH_ML_NAMESPACE ? `:${ns}:${name}` : name;
+}
+function i18nResolveSanitizer(attrName, tagName) {
+  const lowerAttrName = attrName.toLowerCase();
+  const lowerTagName = tagName ? normalizeTagName(tagName) : "*";
+  const schema2 = SECURITY_SCHEMA();
+  const schemaContext = schema2[`${lowerTagName}|${lowerAttrName}`] || schema2[`*|${lowerAttrName}`] || SecurityContext.NONE;
+  switch (schemaContext) {
+    case SecurityContext.HTML:
+      return \u0275\u0275sanitizeHtml;
+    case SecurityContext.STYLE:
+      return \u0275\u0275sanitizeStyle;
+    case SecurityContext.SCRIPT:
+      return \u0275\u0275sanitizeScript;
+    case SecurityContext.URL:
+      return _sanitizeUrl;
+    case SecurityContext.RESOURCE_URL:
+      return \u0275\u0275sanitizeResourceUrl;
+    case SecurityContext.ATTRIBUTE_NO_BINDING:
+      return \u0275\u0275validateAttribute;
+    default:
+      return null;
+  }
 }
 var ROOT_TEMPLATE_ID = 0;
 var PP_MULTI_VALUE_PLACEHOLDERS_REGEXP = /\[(�.+?�?)\]/;
@@ -18999,7 +18998,7 @@ function getTStylingRangePrevDuplicate(tStylingRange) {
 function setTStylingRangePrev(tStylingRange, previous) {
   ngDevMode && assertNumber(tStylingRange, "expected number");
   ngDevMode && assertNumberInRange(previous, 0, 32767);
-  return tStylingRange & ~4294836224 | previous << 17;
+  return tStylingRange & 131071 | previous << 17;
 }
 function setTStylingRangePrevDuplicate(tStylingRange) {
   ngDevMode && assertNumber(tStylingRange, "expected number");
@@ -19012,7 +19011,7 @@ function getTStylingRangeNext(tStylingRange) {
 function setTStylingRangeNext(tStylingRange, next) {
   ngDevMode && assertNumber(tStylingRange, "expected number");
   ngDevMode && assertNumberInRange(next, 0, 32767);
-  return tStylingRange & ~131068 | next << 2;
+  return tStylingRange & -131069 | next << 2;
 }
 function getTStylingRangeNextDuplicate(tStylingRange) {
   ngDevMode && assertNumber(tStylingRange, "expected number");
@@ -19766,14 +19765,14 @@ function \u0275\u0275attachSourceLocations(templatePath, locations) {
   const tView = getTView();
   const lView = getLView();
   const renderer = lView[RENDERER];
-  const attributeName2 = "data-ng-source-location";
+  const attributeName = "data-ng-source-location";
   for (const [index, offset, line, column] of locations) {
     const tNode = getTNode(tView, index + HEADER_OFFSET);
     ngDevMode && assertTNodeType(tNode, 2);
     const node = getNativeByIndex(index + HEADER_OFFSET, lView);
-    if (!node.hasAttribute(attributeName2)) {
+    if (!node.hasAttribute(attributeName)) {
       const attributeValue = `${templatePath}@o:${offset},l:${line},c:${column}`;
-      renderer.setAttribute(node, attributeName2, attributeValue);
+      renderer.setAttribute(node, attributeName, attributeValue);
     }
   }
 }
@@ -19806,6 +19805,11 @@ function \u0275\u0275interpolate8(prefix, v0, i0, v1, i1, v2, i2, v3, i3, v4, i4
 }
 function \u0275\u0275interpolateV(values) {
   return interpolationV(getLView(), values);
+}
+function \u0275\u0275arrowFunction(slotOffset, factory, context2) {
+  const bindingIndex = getBindingRoot() + slotOffset;
+  const lView = getLView();
+  return lView[bindingIndex] === NO_CHANGE ? updateBinding(lView, bindingIndex, factory(context2, lView)) : getBinding(lView, bindingIndex);
 }
 function providersResolver(def, providers, isViewProviders) {
   const tView = getTView();
@@ -20299,6 +20303,7 @@ function recreateLView(importMeta, id, newDef, oldDef, lView) {
     const newLView = createLView(parentLView, newTView, instance, getInitialLViewFlagsFromDef(newDef), host, tNode, null, null, null, null, null);
     replaceLViewInTree(parentLView, lView, newLView, tNode.index);
     destroyLView(lView[TVIEW], lView);
+    cleanupLView(lView);
     const rendererFactory = lView[ENVIRONMENT].rendererFactory;
     clearRendererCache(rendererFactory, oldDef);
     newLView[RENDERER] = rendererFactory.createRenderer(host, newDef);
@@ -20352,7 +20357,7 @@ function resetProjectionState(tNode) {
     for (const current of tNode.projection) {
       if (isTNodeShape(current)) {
         current.projectionNext = null;
-        current.flags &= ~2;
+        current.flags &= -3;
       }
     }
     tNode.projection = null;
@@ -20380,6 +20385,7 @@ var angularCoreEnv = /* @__PURE__ */ (() => ({
   "\u0275\u0275resetView": \u0275\u0275resetView,
   "\u0275\u0275HostDirectivesFeature": \u0275\u0275HostDirectivesFeature,
   "\u0275\u0275NgOnChangesFeature": \u0275\u0275NgOnChangesFeature,
+  "\u0275\u0275ControlFeature": \u0275\u0275ControlFeature,
   "\u0275\u0275ProvidersFeature": \u0275\u0275ProvidersFeature,
   "\u0275\u0275InheritDefinitionFeature": \u0275\u0275InheritDefinitionFeature,
   "\u0275\u0275ExternalStylesFeature": \u0275\u0275ExternalStylesFeature,
@@ -20505,6 +20511,7 @@ var angularCoreEnv = /* @__PURE__ */ (() => ({
   "\u0275setClassDebugInfo": \u0275setClassDebugInfo,
   "\u0275\u0275declareLet": \u0275\u0275declareLet,
   "\u0275\u0275storeLet": \u0275\u0275storeLet,
+  "\u0275\u0275arrowFunction": \u0275\u0275arrowFunction,
   "\u0275\u0275readContextLet": \u0275\u0275readContextLet,
   "\u0275\u0275attachSourceLocations": \u0275\u0275attachSourceLocations,
   "\u0275\u0275interpolate": \u0275\u0275interpolate,
@@ -20694,12 +20701,12 @@ function verifySemanticsOfNgModuleDef(moduleType, allowDuplicateDeclarationsInRo
     verifySemanticsOfNgModuleImport(modOrStandaloneCmpt, moduleType);
     verifySemanticsOfNgModuleDef(modOrStandaloneCmpt, false, moduleType);
   });
-  const exports = maybeUnwrapFn(ngModuleDef.exports);
+  const exports$1 = maybeUnwrapFn(ngModuleDef.exports);
   declarations.forEach(verifyDeclarationsHaveDefinitions);
   declarations.forEach(verifyDirectivesHaveSelector);
   declarations.forEach((declarationType) => verifyNotStandalone(declarationType, moduleType));
   const combinedDeclarations = [...declarations.map(resolveForwardRef), ...flatten(imports.map(computeCombinedExports)).map(resolveForwardRef)];
-  exports.forEach(verifyExportsAreDeclaredOrReExported);
+  exports$1.forEach(verifyExportsAreDeclaredOrReExported);
   declarations.forEach((decl) => verifyDeclarationIsUnique(decl, allowDuplicateDeclarationsInRoot));
   const ngModule = getAnnotation(moduleType, "NgModule");
   if (ngModule) {
@@ -20896,11 +20903,11 @@ function expandModuleWithProviders(value) {
   return value;
 }
 var compilationDepth = 0;
-function compileComponent(type, metadata) {
+function compileComponent(type, metadata2) {
   (typeof ngDevMode === "undefined" || ngDevMode) && initNgDevMode();
   let ngComponentDef = null;
-  maybeQueueResolutionOfComponentResources(type, metadata);
-  addDirectiveFactoryDef(type, metadata);
+  maybeQueueResolutionOfComponentResources(type, metadata2);
+  addDirectiveFactoryDef(type, metadata2);
   Object.defineProperty(type, NG_COMP_DEF, {
     get: () => {
       if (ngComponentDef === null) {
@@ -20909,22 +20916,22 @@ function compileComponent(type, metadata) {
           kind: "component",
           type
         });
-        if (componentNeedsResolution(metadata)) {
+        if (componentNeedsResolution(metadata2)) {
           const error = [`Component '${type.name}' is not resolved:`];
-          if (metadata.templateUrl) {
-            error.push(` - templateUrl: ${metadata.templateUrl}`);
+          if (metadata2.templateUrl) {
+            error.push(` - templateUrl: ${metadata2.templateUrl}`);
           }
-          if (metadata.styleUrls && metadata.styleUrls.length) {
-            error.push(` - styleUrls: ${JSON.stringify(metadata.styleUrls)}`);
+          if (metadata2.styleUrls && metadata2.styleUrls.length) {
+            error.push(` - styleUrls: ${JSON.stringify(metadata2.styleUrls)}`);
           }
-          if (metadata.styleUrl) {
-            error.push(` - styleUrl: ${metadata.styleUrl}`);
+          if (metadata2.styleUrl) {
+            error.push(` - styleUrl: ${metadata2.styleUrl}`);
           }
           error.push(`Did you run and wait for 'resolveComponentResources()'?`);
           throw new Error(error.join("\n"));
         }
         const options = getJitOptions();
-        let preserveWhitespaces = metadata.preserveWhitespaces;
+        let preserveWhitespaces = metadata2.preserveWhitespaces;
         if (preserveWhitespaces === void 0) {
           if (options !== null && options.preserveWhitespaces !== void 0) {
             preserveWhitespaces = options.preserveWhitespaces;
@@ -20932,7 +20939,7 @@ function compileComponent(type, metadata) {
             preserveWhitespaces = false;
           }
         }
-        let encapsulation = metadata.encapsulation;
+        let encapsulation = metadata2.encapsulation;
         if (encapsulation === void 0) {
           if (options !== null && options.defaultEncapsulation !== void 0) {
             encapsulation = options.defaultEncapsulation;
@@ -20940,19 +20947,19 @@ function compileComponent(type, metadata) {
             encapsulation = ViewEncapsulation.Emulated;
           }
         }
-        const templateUrl = metadata.templateUrl || `ng:///${type.name}/template.html`;
-        const baseMeta = directiveMetadata(type, metadata);
+        const templateUrl = metadata2.templateUrl || `ng:///${type.name}/template.html`;
+        const baseMeta = directiveMetadata(type, metadata2);
         const meta = __spreadProps(__spreadValues({}, baseMeta), {
           typeSourceSpan: compiler.createParseSourceSpan("Component", type.name, templateUrl),
-          template: metadata.template || "",
+          template: metadata2.template || "",
           preserveWhitespaces,
-          styles: typeof metadata.styles === "string" ? [metadata.styles] : metadata.styles || EMPTY_ARRAY,
-          animations: metadata.animations,
+          styles: typeof metadata2.styles === "string" ? [metadata2.styles] : metadata2.styles || EMPTY_ARRAY,
+          animations: metadata2.animations,
           declarations: [],
-          changeDetection: metadata.changeDetection,
+          changeDetection: metadata2.changeDetection,
           encapsulation,
-          viewProviders: metadata.viewProviders || null,
-          hasDirectiveDependencies: !baseMeta.isStandalone || metadata.imports != null && metadata.imports.length > 0
+          viewProviders: metadata2.viewProviders || null,
+          hasDirectiveDependencies: !baseMeta.isStandalone || metadata2.imports != null && metadata2.imports.length > 0
         });
         compilationDepth++;
         try {
@@ -20961,7 +20968,7 @@ function compileComponent(type, metadata) {
           }
           ngComponentDef = compiler.compileComponent(angularCoreEnv, templateUrl, meta);
           if (meta.isStandalone) {
-            const imports = flatten(metadata.imports || EMPTY_ARRAY);
+            const imports = flatten(metadata2.imports || EMPTY_ARRAY);
             const {
               directiveDefs,
               pipeDefs
@@ -20980,9 +20987,9 @@ function compileComponent(type, metadata) {
           const scopes = transitiveScopesFor(type.ngSelectorScope);
           patchComponentDefWithScope(ngComponentDef, scopes);
         }
-        if (metadata.schemas) {
+        if (metadata2.schemas) {
           if (meta.isStandalone) {
-            ngComponentDef.schemas = metadata.schemas;
+            ngComponentDef.schemas = metadata2.schemas;
           } else {
             throw new Error(`The 'schemas' was specified for the ${stringifyForError(type)} but is only valid on a component that is standalone.`);
           }
@@ -21050,7 +21057,7 @@ function compileDirective(type, directive) {
     configurable: !!ngDevMode
   });
 }
-function getDirectiveMetadata(type, metadata) {
+function getDirectiveMetadata(type, metadata2) {
   const name = type && type.name;
   const sourceMapUrl = `ng:///${name}/\u0275dir.js`;
   const compiler = getCompilerFacade({
@@ -21058,7 +21065,7 @@ function getDirectiveMetadata(type, metadata) {
     kind: "directive",
     type
   });
-  const facade = directiveMetadata(type, metadata);
+  const facade = directiveMetadata(type, metadata2);
   facade.typeSourceSpan = compiler.createParseSourceSpan("Directive", name, sourceMapUrl);
   if (facade.usesInheritance) {
     addDirectiveDefToUndecoratedParents(type);
@@ -21068,12 +21075,12 @@ function getDirectiveMetadata(type, metadata) {
     sourceMapUrl
   };
 }
-function addDirectiveFactoryDef(type, metadata) {
+function addDirectiveFactoryDef(type, metadata2) {
   let ngFactoryDef = null;
   Object.defineProperty(type, NG_FACTORY_DEF, {
     get: () => {
       if (ngFactoryDef === null) {
-        const meta = getDirectiveMetadata(type, metadata);
+        const meta = getDirectiveMetadata(type, metadata2);
         const compiler = getCompilerFacade({
           usage: 0,
           kind: "directive",
@@ -21095,29 +21102,30 @@ function addDirectiveFactoryDef(type, metadata) {
 function extendsDirectlyFromObject(type) {
   return Object.getPrototypeOf(type.prototype) === Object.prototype;
 }
-function directiveMetadata(type, metadata) {
+function directiveMetadata(type, metadata2) {
   const reflect = getReflect();
   const propMetadata = reflect.ownPropMetadata(type);
   return {
     name: type.name,
     type,
-    selector: metadata.selector !== void 0 ? metadata.selector : null,
-    host: metadata.host || EMPTY_OBJ,
+    selector: metadata2.selector !== void 0 ? metadata2.selector : null,
+    host: metadata2.host || EMPTY_OBJ,
     propMetadata,
-    inputs: metadata.inputs || EMPTY_ARRAY,
-    outputs: metadata.outputs || EMPTY_ARRAY,
+    inputs: metadata2.inputs || EMPTY_ARRAY,
+    outputs: metadata2.outputs || EMPTY_ARRAY,
     queries: extractQueriesMetadata(type, propMetadata, isContentQuery),
     lifecycle: {
       usesOnChanges: reflect.hasLifecycleHook(type, "ngOnChanges")
     },
+    controlCreate: null,
     typeSourceSpan: null,
     usesInheritance: !extendsDirectlyFromObject(type),
-    exportAs: extractExportAs(metadata.exportAs),
-    providers: metadata.providers || null,
+    exportAs: extractExportAs(metadata2.exportAs),
+    providers: metadata2.providers || null,
     viewQueries: extractQueriesMetadata(type, propMetadata, isViewQuery),
-    isStandalone: metadata.standalone === void 0 ? true : !!metadata.standalone,
-    isSignal: !!metadata.signals,
-    hostDirectives: metadata.hostDirectives?.map((directive) => typeof directive === "function" ? {
+    isStandalone: metadata2.standalone === void 0 ? true : !!metadata2.standalone,
+    isSignal: !!metadata2.signals,
+    hostDirectives: metadata2.hostDirectives?.map((directive) => typeof directive === "function" ? {
       directive
     } : directive) || null
   };
@@ -21148,7 +21156,8 @@ function convertToR3QueryMetadata(propertyName, ann) {
   };
 }
 function extractQueriesMetadata(type, propMetadata, isQueryAnn) {
-  const queriesMeta = [];
+  const signalQueriesMeta = [];
+  const decoratorQueriesMeta = [];
   for (const field in propMetadata) {
     if (propMetadata.hasOwnProperty(field)) {
       const annotations = propMetadata[field];
@@ -21160,12 +21169,17 @@ function extractQueriesMetadata(type, propMetadata, isQueryAnn) {
           if (annotations.some(isInputAnnotation)) {
             throw new Error(`Cannot combine @Input decorators with query decorators`);
           }
-          queriesMeta.push(convertToR3QueryMetadata(field, ann));
+          const queryMeta = convertToR3QueryMetadata(field, ann);
+          if (queryMeta.isSignal) {
+            signalQueriesMeta.push(queryMeta);
+          } else {
+            decoratorQueriesMeta.push(queryMeta);
+          }
         }
       });
     }
   }
-  return queriesMeta;
+  return [...signalQueriesMeta, ...decoratorQueriesMeta];
 }
 function extractExportAs(exportAs) {
   return exportAs === void 0 ? null : splitByComma(exportAs);
@@ -21209,15 +21223,15 @@ function compilePipe(type, meta) {
   Object.defineProperty(type, NG_FACTORY_DEF, {
     get: () => {
       if (ngFactoryDef === null) {
-        const metadata = getPipeMetadata(type, meta);
+        const metadata2 = getPipeMetadata(type, meta);
         const compiler = getCompilerFacade({
           usage: 0,
           kind: "pipe",
-          type: metadata.type
+          type: metadata2.type
         });
-        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${metadata.name}/\u0275fac.js`, {
-          name: metadata.name,
-          type: metadata.type,
+        ngFactoryDef = compiler.compileFactory(angularCoreEnv, `ng:///${metadata2.name}/\u0275fac.js`, {
+          name: metadata2.name,
+          type: metadata2.type,
           typeArgumentCount: 0,
           deps: reflectDependencies(type),
           target: compiler.FactoryTarget.Pipe
@@ -21230,13 +21244,13 @@ function compilePipe(type, meta) {
   Object.defineProperty(type, NG_PIPE_DEF, {
     get: () => {
       if (ngPipeDef === null) {
-        const metadata = getPipeMetadata(type, meta);
+        const metadata2 = getPipeMetadata(type, meta);
         const compiler = getCompilerFacade({
           usage: 0,
           kind: "pipe",
-          type: metadata.type
+          type: metadata2.type
         });
-        ngPipeDef = compiler.compilePipe(angularCoreEnv, `ng:///${metadata.name}/\u0275pipe.js`, metadata);
+        ngPipeDef = compiler.compilePipe(angularCoreEnv, `ng:///${metadata2.name}/\u0275pipe.js`, metadata2);
       }
       return ngPipeDef;
     },
@@ -21254,7 +21268,7 @@ function getPipeMetadata(type, meta) {
 }
 var Directive = makeDecorator("Directive", (dir = {}) => dir, void 0, void 0, (type, meta) => compileDirective(type, meta));
 var Component = makeDecorator("Component", (c = {}) => __spreadValues({
-  changeDetection: ChangeDetectionStrategy.Default
+  changeDetection: ChangeDetectionStrategy.Eager
 }, c), Directive, void 0, (type, meta) => compileComponent(type, meta));
 var Pipe = makeDecorator("Pipe", (p) => __spreadValues({
   pure: true
@@ -21575,6 +21589,11 @@ var MissingTranslationStrategy;
 })(MissingTranslationStrategy || (MissingTranslationStrategy = {}));
 
 // node_modules/@angular/core/fesm2022/_resource-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var OutputEmitterRef = class {
   destroyed = false;
   listeners = null;
@@ -21624,11 +21643,15 @@ var OutputEmitterRef = class {
     }
   }
 };
+function untracked2(nonReactiveReadsFn) {
+  return untracked(nonReactiveReadsFn);
+}
 function computed(computation, options) {
   const getter = createComputed(computation, options?.equal);
-  if (ngDevMode) {
-    getter.toString = () => `[Computed: ${getter()}]`;
-    getter[SIGNAL].debugName = options?.debugName;
+  if (typeof ngDevMode !== "undefined" && ngDevMode) {
+    const debugName = options?.debugName;
+    getter[SIGNAL].debugName = debugName;
+    getter.toString = () => `[Computed${debugName ? " (" + debugName + ")" : ""}: ${getter()}]`;
   }
   return getter;
 }
@@ -21643,9 +21666,9 @@ function linkedSignal(optionsOrComputation, options) {
   }
 }
 function upgradeLinkedSignalGetter(getter, debugName) {
-  if (ngDevMode) {
-    getter.toString = () => `[LinkedSignal: ${getter()}]`;
+  if (typeof ngDevMode !== "undefined" && ngDevMode) {
     getter[SIGNAL].debugName = debugName;
+    getter.toString = () => `[LinkedSignal${debugName ? " (" + debugName + ")" : ""}: ${getter()}]`;
   }
   const node = getter[SIGNAL];
   const upgradedGetter = getter;
@@ -21682,6 +21705,23 @@ var BaseWritableResource = class {
     }
     return this.value() !== void 0;
   });
+  _snapshot;
+  get snapshot() {
+    return this._snapshot ??= computed(() => {
+      const status = this.status();
+      if (status === "error") {
+        return {
+          status: "error",
+          error: this.error()
+        };
+      } else {
+        return {
+          status,
+          value: this.value()
+        };
+      }
+    });
+  }
   hasValue() {
     return this.isValueDefined();
   }
@@ -21703,7 +21743,7 @@ var ResourceImpl = class extends BaseWritableResource {
   unregisterOnDestroy;
   status;
   error;
-  constructor(request, loaderFn, defaultValue, equal, debugName, injector) {
+  constructor(request, loaderFn, defaultValue, equal, debugName, injector, getInitialStream) {
     super(computed(() => {
       const streamValue = this.state().stream?.();
       if (!streamValue) {
@@ -21732,15 +21772,18 @@ var ResourceImpl = class extends BaseWritableResource {
     this.state = linkedSignal(__spreadValues({
       source: this.extRequest,
       computation: (extRequest, previous) => {
-        const status = extRequest.request === void 0 ? "idle" : "loading";
         if (!previous) {
+          const initialStream = getInitialStream?.(extRequest.request);
+          getInitialStream = void 0;
+          const status = extRequest.request === void 0 ? "idle" : initialStream ? "resolved" : "loading";
           return {
             extRequest,
             status,
             previousStatus: "idle",
-            stream: void 0
+            stream: initialStream
           };
         } else {
+          const status = extRequest.request === void 0 ? "idle" : "loading";
           return {
             extRequest,
             status,
@@ -21835,7 +21878,6 @@ var ResourceImpl = class extends BaseWritableResource {
       const stream = await untracked2(() => {
         return this.loaderFn({
           params: extRequest.request,
-          request: extRequest.request,
           abortSignal,
           previous: {
             status: previousStatus
@@ -21940,6 +21982,11 @@ var ResourceWrappedError = class extends Error {
 };
 
 // node_modules/@angular/core/fesm2022/core.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var REQUIRED_UNSET_VALUE = /* @__PURE__ */ Symbol("InputSignalNode#UNSET");
 var INPUT_SIGNAL_NODE = /* @__PURE__ */ (() => {
   return __spreadProps(__spreadValues({}, SIGNAL_NODE), {
@@ -22001,8 +22048,8 @@ var Framework;
 })(Framework || (Framework = {}));
 var HostAttributeToken = class {
   attributeName;
-  constructor(attributeName2) {
-    this.attributeName = attributeName2;
+  constructor(attributeName) {
+    this.attributeName = attributeName;
   }
   __NG_ELEMENT_ID__ = () => \u0275\u0275injectAttribute(this.attributeName);
   toString() {
@@ -22668,8 +22715,6 @@ function createViewRef(tNode, lView, isPipe2) {
   return null;
 }
 var DefaultIterableDifferFactory = class {
-  constructor() {
-  }
   supports(obj) {
     return isListLikeIterable(obj);
   }
@@ -23124,8 +23169,6 @@ function getPreviousIndex(item, addRemoveOffset, moveOffsets) {
   return previousIndex + addRemoveOffset + moveOffset;
 }
 var DefaultKeyValueDifferFactory = class {
-  constructor() {
-  }
   supports(obj) {
     return obj instanceof Map || isJsObject(obj);
   }
@@ -23143,7 +23186,6 @@ var DefaultKeyValueDiffer = class {
   _additionsHead = null;
   _additionsTail = null;
   _removalsHead = null;
-  _removalsTail = null;
   get isDirty() {
     return this._additionsHead !== null || this._changesHead !== null || this._removalsHead !== null;
   }
@@ -23184,8 +23226,6 @@ var DefaultKeyValueDiffer = class {
       throw new RuntimeError(900, ngDevMode && `Error trying to diff '${stringify(map2)}'. Only maps and objects are allowed`);
     }
     return this.check(map2) ? this : null;
-  }
-  onDestroy() {
   }
   check(map2) {
     this._reset();
@@ -23680,6 +23720,11 @@ var REQUEST_CONTEXT = new InjectionToken(typeof ngDevMode === "undefined" || ngD
 });
 
 // node_modules/@angular/common/fesm2022/_platform_location-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var _DOM = null;
 function getDOM() {
   return _DOM;
@@ -23796,6 +23841,11 @@ var BrowserPlatformLocation = class _BrowserPlatformLocation extends PlatformLoc
 })();
 
 // node_modules/@angular/common/fesm2022/_location-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 function joinWithSlash(start, end) {
   if (!start) return end;
   if (!end) return start;
@@ -23909,6 +23959,67 @@ var PathLocationStrategy = class _PathLocationStrategy extends LocationStrategy 
     }]
   }], null);
 })();
+var NoTrailingSlashPathLocationStrategy = class _NoTrailingSlashPathLocationStrategy extends PathLocationStrategy {
+  prepareExternalUrl(internal) {
+    const path = extractUrlPath(internal);
+    if (path.endsWith("/") && path.length > 1) {
+      internal = path.slice(0, -1) + internal.slice(path.length);
+    }
+    return super.prepareExternalUrl(internal);
+  }
+  static \u0275fac = /* @__PURE__ */ (() => {
+    let \u0275NoTrailingSlashPathLocationStrategy_BaseFactory;
+    return function NoTrailingSlashPathLocationStrategy_Factory(__ngFactoryType__) {
+      return (\u0275NoTrailingSlashPathLocationStrategy_BaseFactory || (\u0275NoTrailingSlashPathLocationStrategy_BaseFactory = \u0275\u0275getInheritedFactory(_NoTrailingSlashPathLocationStrategy)))(__ngFactoryType__ || _NoTrailingSlashPathLocationStrategy);
+    };
+  })();
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({
+    token: _NoTrailingSlashPathLocationStrategy,
+    factory: _NoTrailingSlashPathLocationStrategy.\u0275fac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(NoTrailingSlashPathLocationStrategy, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], null, null);
+})();
+var TrailingSlashPathLocationStrategy = class _TrailingSlashPathLocationStrategy extends PathLocationStrategy {
+  prepareExternalUrl(internal) {
+    const path = extractUrlPath(internal);
+    if (!path.endsWith("/")) {
+      internal = path + "/" + internal.slice(path.length);
+    }
+    return super.prepareExternalUrl(internal);
+  }
+  static \u0275fac = /* @__PURE__ */ (() => {
+    let \u0275TrailingSlashPathLocationStrategy_BaseFactory;
+    return function TrailingSlashPathLocationStrategy_Factory(__ngFactoryType__) {
+      return (\u0275TrailingSlashPathLocationStrategy_BaseFactory || (\u0275TrailingSlashPathLocationStrategy_BaseFactory = \u0275\u0275getInheritedFactory(_TrailingSlashPathLocationStrategy)))(__ngFactoryType__ || _TrailingSlashPathLocationStrategy);
+    };
+  })();
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({
+    token: _TrailingSlashPathLocationStrategy,
+    factory: _TrailingSlashPathLocationStrategy.\u0275fac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(TrailingSlashPathLocationStrategy, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], null, null);
+})();
+function extractUrlPath(url) {
+  const questionMarkOrHashIndex = url.search(/[?#]/);
+  const pathEnd = questionMarkOrHashIndex > -1 ? questionMarkOrHashIndex : url.length;
+  return url.slice(0, pathEnd);
+}
 var Location = class _Location {
   _subject = new Subject();
   _basePath;
@@ -24028,7 +24139,7 @@ function _stripBasePath(basePath, url) {
   return url;
 }
 function _stripIndexHtml(url) {
-  return url.replace(/\/index.html$/, "");
+  return url.replace(/\/index\.html$/, "");
 }
 function _stripOrigin(baseHref) {
   const isAbsoluteUrl2 = new RegExp("^(https?:)?//").test(baseHref);
@@ -24040,6 +24151,11 @@ function _stripOrigin(baseHref) {
 }
 
 // node_modules/@angular/common/fesm2022/_common_module-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var HashLocationStrategy = class _HashLocationStrategy extends LocationStrategy {
   _platformLocation;
   _baseHref = "";
@@ -24436,8 +24552,10 @@ function getNumberOfCurrencyDigits(code) {
 var ISO8601_DATE_REGEX = /^(\d{4,})-?(\d\d)-?(\d\d)(?:T(\d\d)(?::?(\d\d)(?::?(\d\d)(?:\.(\d+))?)?)?(Z|([+-])(\d\d):?(\d\d))?)?$/;
 var NAMED_FORMATS = {};
 var DATE_FORMATS_SPLIT = /((?:[^BEGHLMOSWYZabcdhmswyz']+)|(?:'(?:[^']|'')*')|(?:G{1,5}|y{1,4}|Y{1,4}|M{1,5}|L{1,5}|w{1,2}|W{1}|d{1,2}|E{1,6}|c{1,6}|a{1,5}|b{1,5}|B{1,5}|h{1,2}|H{1,2}|m{1,2}|s{1,2}|S{1,3}|z{1,4}|Z{1,5}|O{1,4}))([\s\S]*)/;
+var MAX_DATE_FORMAT_LENGTH = 256;
 function formatDate(value, format, locale, timezone) {
   let date = toDate(value);
+  assertValidDateFormatLength(format);
   const namedFormat = getNamedFormat(locale, format);
   format = namedFormat || format;
   let parts = [];
@@ -24470,6 +24588,11 @@ function formatDate(value, format, locale, timezone) {
     text += dateFormatter ? dateFormatter(date, locale, dateTimezoneOffset) : value2 === "''" ? "'" : value2.replace(/(^'|'$)/g, "").replace(/''/g, "'");
   });
   return text;
+}
+function assertValidDateFormatLength(format) {
+  if (format.length > MAX_DATE_FORMAT_LENGTH) {
+    throw new RuntimeError(2300, ngDevMode && `Date format is too long. Exceeded maximum length of ${MAX_DATE_FORMAT_LENGTH} characters.`);
+  }
 }
 function assertValidDateFormat(parts) {
   if (parts.some((part) => /^Y+$/.test(part)) && !parts.some((part) => /^w+$/.test(part))) {
@@ -25031,6 +25154,10 @@ function formatNumberToLocaleString(value, pattern, locale, groupSymbol, decimal
         maxFraction = parseIntAutoRadix(maxFractionPart);
       } else if (minFractionPart != null && minFraction > maxFraction) {
         maxFraction = minFraction;
+      }
+      const MAX_ALLOWED_DIGITS = 100;
+      if (minInt > MAX_ALLOWED_DIGITS || minFraction > MAX_ALLOWED_DIGITS || maxFraction > MAX_ALLOWED_DIGITS) {
+        throw new RuntimeError(2306, ngDevMode && `${digitsInfo} is not a valid digit info. Exceeded maximum limits of ${MAX_ALLOWED_DIGITS} digits.`);
       }
     }
     roundNumber(parsedNumber, minFraction, maxFraction);
@@ -26148,6 +26275,7 @@ var NgTemplateOutlet = class _NgTemplateOutlet {
   ngTemplateOutletContext = null;
   ngTemplateOutlet = null;
   ngTemplateOutletInjector = null;
+  injector = inject2(Injector);
   constructor(_viewContainerRef) {
     this._viewContainerRef = _viewContainerRef;
   }
@@ -26163,9 +26291,15 @@ var NgTemplateOutlet = class _NgTemplateOutlet {
       }
       const viewContext = this._createContextForwardProxy();
       this._viewRef = viewContainerRef.createEmbeddedView(this.ngTemplateOutlet, viewContext, {
-        injector: this.ngTemplateOutletInjector ?? void 0
+        injector: this._getInjector()
       });
     }
+  }
+  _getInjector() {
+    if (this.ngTemplateOutletInjector === "outlet") {
+      return this.injector;
+    }
+    return this.ngTemplateOutletInjector ?? void 0;
   }
   _shouldRecreateView(changes) {
     return !!changes["ngTemplateOutlet"] || !!changes["ngTemplateOutletInjector"];
@@ -26223,6 +26357,11 @@ var NgTemplateOutlet = class _NgTemplateOutlet {
 var COMMON_DIRECTIVES = [NgClass, NgComponentOutlet, NgForOf, NgIf, NgTemplateOutlet, NgStyle, NgSwitch, NgSwitchCase, NgSwitchDefault, NgPlural, NgPluralCase];
 function invalidPipeArgumentError(type, value) {
   return new RuntimeError(2100, ngDevMode && `InvalidPipeArgument: '${value}' for pipe '${stringify(type)}'`);
+}
+function warnIfSignal(pipeName, value) {
+  if (isSignal2(value)) {
+    console.warn(`The ${pipeName} does not unwrap signals. Received a signal with value:`, value());
+  }
 }
 var SubscribableStrategy = class {
   createSubscription(async, updateLatestValue, onError) {
@@ -26337,9 +26476,7 @@ var AsyncPipe = class _AsyncPipe {
 var LowerCasePipe = class _LowerCasePipe {
   transform(value) {
     if (value == null) return null;
-    if (typeof value !== "string") {
-      throw invalidPipeArgumentError(_LowerCasePipe, value);
-    }
+    assertPipeArgument(_LowerCasePipe, value);
     return value.toLowerCase();
   }
   static \u0275fac = function LowerCasePipe_Factory(__ngFactoryType__) {
@@ -26363,9 +26500,7 @@ var unicodeWordMatch = /(?:[0-9A-Za-z\xAA\xB5\xBA\xC0-\xD6\xD8-\xF6\xF8-\u02C1\u
 var TitleCasePipe = class _TitleCasePipe {
   transform(value) {
     if (value == null) return null;
-    if (typeof value !== "string") {
-      throw invalidPipeArgumentError(_TitleCasePipe, value);
-    }
+    assertPipeArgument(_TitleCasePipe, value);
     return value.replace(unicodeWordMatch, (txt) => txt[0].toUpperCase() + txt.slice(1).toLowerCase());
   }
   static \u0275fac = function TitleCasePipe_Factory(__ngFactoryType__) {
@@ -26388,9 +26523,7 @@ var TitleCasePipe = class _TitleCasePipe {
 var UpperCasePipe = class _UpperCasePipe {
   transform(value) {
     if (value == null) return null;
-    if (typeof value !== "string") {
-      throw invalidPipeArgumentError(_UpperCasePipe, value);
-    }
+    assertPipeArgument(_UpperCasePipe, value);
     return value.toUpperCase();
   }
   static \u0275fac = function UpperCasePipe_Factory(__ngFactoryType__) {
@@ -26410,6 +26543,11 @@ var UpperCasePipe = class _UpperCasePipe {
     }]
   }], null, null);
 })();
+function assertPipeArgument(pipe2, value) {
+  if (typeof value !== "string") {
+    throw invalidPipeArgumentError(pipe2, value);
+  }
+}
 var DEFAULT_DATE_FORMAT = "mediumDate";
 var DATE_PIPE_DEFAULT_TIMEZONE = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "DATE_PIPE_DEFAULT_TIMEZONE" : "");
 var DATE_PIPE_DEFAULT_OPTIONS = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "DATE_PIPE_DEFAULT_OPTIONS" : "");
@@ -26537,6 +26675,7 @@ var I18nSelectPipe = class _I18nSelectPipe {
 })();
 var JsonPipe = class _JsonPipe {
   transform(value) {
+    ngDevMode && warnIfSignal("JsonPipe", value);
     return JSON.stringify(value, null, 2);
   }
   static \u0275fac = function JsonPipe_Factory(__ngFactoryType__) {
@@ -26572,6 +26711,7 @@ var KeyValuePipe = class _KeyValuePipe {
   keyValues = [];
   compareFn = defaultComparator;
   transform(input2, compareFn = defaultComparator) {
+    ngDevMode && warnIfSignal("KeyValuePipe", input2);
     if (!input2 || !(input2 instanceof Map) && typeof input2 !== "object") {
       return null;
     }
@@ -26829,6 +26969,11 @@ var CommonModule = class _CommonModule {
 })();
 
 // node_modules/@angular/common/fesm2022/_platform_navigation-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var PRECOMMIT_HANDLER_SUPPORTED = new InjectionToken("", {
   factory: () => {
     return typeof window !== "undefined" && typeof window.NavigationPrecommitController !== "undefined";
@@ -26855,6 +27000,11 @@ var PlatformNavigation = class _PlatformNavigation {
 })();
 
 // node_modules/@angular/common/fesm2022/_xhr-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 function parseCookieValue(cookieStr, name) {
   name = encodeURIComponent(name);
   for (const cookie of cookieStr.split(";")) {
@@ -26870,6 +27020,11 @@ var XhrFactory = class {
 };
 
 // node_modules/@angular/common/fesm2022/common.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var NavigationAdapterForLocation = class _NavigationAdapterForLocation extends Location {
   navigation = inject2(PlatformNavigation);
   destroyRef = inject2(DestroyRef);
@@ -26972,7 +27127,9 @@ var BrowserViewportScroller = class {
     const elSelected = findAnchorFromDocument(this.document, target);
     if (elSelected) {
       this.scrollToElement(elSelected, options);
-      elSelected.focus();
+      elSelected.focus({
+        preventScroll: true
+      });
     }
   }
   setHistoryScrollRestoration(scrollRestoration) {
@@ -27085,6 +27242,9 @@ function createCloudflareUrl(path, config2) {
   if (config2.width) {
     params += `,width=${config2.width}`;
   }
+  if (config2.height) {
+    params += `,height=${config2.height}`;
+  }
   if (config2.isPlaceholder) {
     params += `,quality=${PLACEHOLDER_QUALITY}`;
   }
@@ -27108,6 +27268,9 @@ function createCloudinaryUrl(path, config2) {
   let params = `f_auto,${quality}`;
   if (config2.width) {
     params += `,w_${config2.width}`;
+  }
+  if (config2.height) {
+    params += `,h_${config2.height}`;
   }
   if (config2.loaderParams?.["rounded"]) {
     params += `,r_max`;
@@ -27136,6 +27299,9 @@ function createImagekitUrl(path, config2) {
   if (width) {
     params.push(`w-${width}`);
   }
+  if (config2.height) {
+    params.push(`h-${config2.height}`);
+  }
   if (config2.isPlaceholder) {
     params.push(`q-${PLACEHOLDER_QUALITY}`);
   }
@@ -27161,6 +27327,9 @@ function createImgixUrl(path, config2) {
   params.push("auto=format");
   if (config2.width) {
     params.push(`w=${config2.width}`);
+  }
+  if (config2.height) {
+    params.push(`h=${config2.height}`);
   }
   if (config2.isPlaceholder) {
     params.push(`q=${PLACEHOLDER_QUALITY}`);
@@ -27224,28 +27393,61 @@ var LCPImageObserver = class _LCPImageObserver {
     });
     return observer;
   }
-  registerImage(rewrittenSrc, originalNgSrc, isPriority) {
+  registerImage(rewrittenSrc, isPriority) {
     if (!this.observer) return;
-    const newObservedImageState = {
-      priority: isPriority,
-      modified: false,
-      alreadyWarnedModified: false,
-      alreadyWarnedPriority: false
-    };
-    this.images.set(getUrl(rewrittenSrc, this.window).href, newObservedImageState);
+    const url = getUrl(rewrittenSrc, this.window).href;
+    const existingState = this.images.get(url);
+    if (existingState) {
+      existingState.priority = existingState.priority || isPriority;
+      existingState.count++;
+    } else {
+      const newObservedImageState = {
+        priority: isPriority,
+        modified: false,
+        alreadyWarnedModified: false,
+        alreadyWarnedPriority: false,
+        count: 1
+      };
+      this.images.set(url, newObservedImageState);
+    }
   }
   unregisterImage(rewrittenSrc) {
     if (!this.observer) return;
-    this.images.delete(getUrl(rewrittenSrc, this.window).href);
+    const url = getUrl(rewrittenSrc, this.window).href;
+    const existingState = this.images.get(url);
+    if (existingState) {
+      existingState.count--;
+      if (existingState.count <= 0) {
+        this.images.delete(url);
+      }
+    }
   }
   updateImage(originalSrc, newSrc) {
     if (!this.observer) return;
     const originalUrl = getUrl(originalSrc, this.window).href;
-    const img = this.images.get(originalUrl);
-    if (img) {
-      img.modified = true;
-      this.images.set(getUrl(newSrc, this.window).href, img);
+    const newUrl = getUrl(newSrc, this.window).href;
+    if (originalUrl === newUrl) return;
+    const originalState = this.images.get(originalUrl);
+    if (!originalState) return;
+    originalState.count--;
+    if (originalState.count <= 0) {
       this.images.delete(originalUrl);
+    }
+    const newState = this.images.get(newUrl);
+    if (newState) {
+      newState.priority = newState.priority || originalState.priority;
+      newState.modified = true;
+      newState.alreadyWarnedPriority = newState.alreadyWarnedPriority || originalState.alreadyWarnedPriority;
+      newState.alreadyWarnedModified = newState.alreadyWarnedModified || originalState.alreadyWarnedModified;
+      newState.count++;
+    } else {
+      this.images.set(newUrl, {
+        priority: originalState.priority,
+        modified: true,
+        alreadyWarnedModified: originalState.alreadyWarnedModified,
+        alreadyWarnedPriority: originalState.alreadyWarnedPriority,
+        count: 1
+      });
     }
   }
   ngOnDestroy() {
@@ -27447,6 +27649,9 @@ var NgOptimizedImage = class _NgOptimizedImage {
         }
       });
     }
+    this.destroyRef.onDestroy(() => {
+      this.renderer.removeAttribute(this.imgElement, "loading");
+    });
   }
   ngOnInit() {
     performanceMarkFeature("NgOptimizedImage");
@@ -27483,7 +27688,7 @@ var NgOptimizedImage = class _NgOptimizedImage {
       assertNoNgSrcsetWithoutLoader(this, this.imageLoader);
       assertNoLoaderParamsWithoutLoader(this, this.imageLoader);
       ngZone.runOutsideAngular(() => {
-        this.lcpObserver.registerImage(this.getRewrittenSrc(), this.ngSrc, this.priority);
+        this.lcpObserver.registerImage(this.getRewrittenSrc(), this.priority);
       });
       if (this.priority) {
         const checker = this.injector.get(PreconnectLinkChecker);
@@ -27548,10 +27753,20 @@ var NgOptimizedImage = class _NgOptimizedImage {
       assertPlaceholderDimensions(this, this.imgElement);
     }
   }
+  getAspectRatio() {
+    if (this.width && this.height && this.height !== 0) {
+      return this.width / this.height;
+    }
+    return null;
+  }
   callImageLoader(configWithoutCustomParams) {
     let augmentedConfig = configWithoutCustomParams;
     if (this.loaderParams) {
       augmentedConfig.loaderParams = this.loaderParams;
+    }
+    const ratio = this.getAspectRatio();
+    if (ratio !== null && augmentedConfig.width) {
+      augmentedConfig.height = Math.round(augmentedConfig.width / ratio);
     }
     return this.imageLoader(augmentedConfig);
   }
@@ -27648,13 +27863,13 @@ var NgOptimizedImage = class _NgOptimizedImage {
       placeholderResolution
     } = this.config;
     if (placeholderInput === true) {
-      return `url(${this.callImageLoader({
+      return `url("${escapeCssUrl(this.callImageLoader({
         src: this.ngSrc,
         width: placeholderResolution,
         isPlaceholder: true
-      })})`;
+      }))}")`;
     } else if (typeof placeholderInput === "string") {
-      return `url(${placeholderInput})`;
+      return `url("${escapeCssUrl(placeholderInput)}")`;
     }
     return null;
   }
@@ -28087,6 +28302,9 @@ function unwrapSafeUrl(value) {
   }
   return unwrapSafeValue(value);
 }
+function escapeCssUrl(input2) {
+  return input2.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
 function booleanOrUrlAttribute(value) {
   if (typeof value === "string" && value !== "true" && value !== "false" && value !== "") {
     return value;
@@ -28095,6 +28313,11 @@ function booleanOrUrlAttribute(value) {
 }
 
 // node_modules/@angular/platform-browser/fesm2022/_dom_renderer-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var EventManagerPlugin = class {
   _doc;
   constructor(_doc) {
@@ -28780,6 +29003,11 @@ var EmulatedEncapsulationDomRenderer2 = class extends NoneEncapsulationDomRender
 };
 
 // node_modules/@angular/platform-browser/fesm2022/_browser-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var BrowserDomAdapter = class _BrowserDomAdapter extends DomAdapter {
   supportsDOMEvents = true;
   static makeCurrent() {
@@ -29136,6 +29364,11 @@ var BrowserModule = class _BrowserModule {
 })();
 
 // node_modules/@angular/common/fesm2022/_module-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var HttpHeaders = class _HttpHeaders {
   headers;
   normalizedNames = /* @__PURE__ */ new Map();
@@ -29612,7 +29845,7 @@ var HttpRequest = class _HttpRequest {
       if (options.integrity) {
         this.integrity = options.integrity;
       }
-      if (options.referrer) {
+      if (options.referrer !== void 0) {
         this.referrer = options.referrer;
       }
       if (options.referrerPolicy) {
@@ -29685,7 +29918,7 @@ var HttpRequest = class _HttpRequest {
     const mode = update.mode || this.mode;
     const redirect = update.redirect || this.redirect;
     const credentials = update.credentials || this.credentials;
-    const referrer = update.referrer || this.referrer;
+    const referrer = update.referrer ?? this.referrer;
     const integrity = update.integrity || this.integrity;
     const referrerPolicy = update.referrerPolicy || this.referrerPolicy;
     const transferCache = update.transferCache ?? this.transferCache;
@@ -30669,6 +30902,7 @@ var JSONP_ERR_NO_CALLBACK = "JSONP injected script did not invoke callback.";
 var JSONP_ERR_WRONG_METHOD = "JSONP requests must use JSONP request method.";
 var JSONP_ERR_WRONG_RESPONSE_TYPE = "JSONP requests must use Json response type.";
 var JSONP_ERR_HEADERS_NOT_SUPPORTED = "JSONP requests do not support headers.";
+var JSONP_ERR_UNSAFE_URL = "JSONP requests only support absolute URLs with HTTP(S) protocols.";
 var JsonpCallbackContext = class {
 };
 function jsonpCallbackContext() {
@@ -30681,6 +30915,9 @@ var JsonpClientBackend = class _JsonpClientBackend {
   callbackMap;
   document;
   resolvedPromise = Promise.resolve();
+  nonce = inject2(CSP_NONCE, {
+    optional: true
+  });
   constructor(callbackMap, document2) {
     this.callbackMap = callbackMap;
     this.document = document2;
@@ -30697,11 +30934,17 @@ var JsonpClientBackend = class _JsonpClientBackend {
     if (req.headers.keys().length > 0) {
       throw new RuntimeError(2812, ngDevMode && JSONP_ERR_HEADERS_NOT_SUPPORTED);
     }
+    if (!this.isAllowedJsonpUrl(req.urlWithParams)) {
+      throw new RuntimeError(2826, ngDevMode && JSONP_ERR_UNSAFE_URL);
+    }
     return new Observable((observer) => {
       const callback = this.nextCallback();
       const url = req.urlWithParams.replace(/=JSONP_CALLBACK(&|$)/, `=${callback}$1`);
       const node = this.document.createElement("script");
       node.src = url;
+      if (this.nonce) {
+        node.setAttribute("nonce", this.nonce);
+      }
       let body = null;
       let finished = false;
       this.callbackMap[callback] = (data) => {
@@ -30762,6 +31005,9 @@ var JsonpClientBackend = class _JsonpClientBackend {
   removeListeners(script) {
     foreignDocument ??= this.document.implementation.createHTMLDocument();
     foreignDocument.adoptNode(script);
+  }
+  isAllowedJsonpUrl(url) {
+    return /^https?:\/\//i.test(url);
   }
   static \u0275fac = function JsonpClientBackend_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _JsonpClientBackend)(\u0275\u0275inject(JsonpCallbackContext), \u0275\u0275inject(DOCUMENT));
@@ -31117,6 +31363,227 @@ var HttpClientJsonpModule = class _HttpClientJsonpModule {
 })();
 
 // node_modules/@angular/common/fesm2022/http.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
+var HTTP_TRANSFER_CACHE_ORIGIN_MAP = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_TRANSFER_CACHE_ORIGIN_MAP" : "");
+var BODY = "b";
+var HEADERS = "h";
+var STATUS = "s";
+var STATUS_TEXT = "st";
+var REQ_URL = "u";
+var RESPONSE_TYPE = "rt";
+var CACHE_OPTIONS = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_TRANSFER_STATE_CACHE_OPTIONS" : "");
+var ALLOWED_METHODS = ["GET", "HEAD"];
+function canUseOrCacheRequest(req, options) {
+  const _a = options, {
+    isCacheActive
+  } = _a, globalOptions = __objRest(_a, [
+    "isCacheActive"
+  ]);
+  const {
+    transferCache: requestOptions,
+    method: requestMethod
+  } = req;
+  if (!isCacheActive || requestOptions === false || hasOutgoingCredentials(req) || requestMethod === "POST" && !globalOptions.includePostRequests && !requestOptions || requestMethod !== "POST" && !ALLOWED_METHODS.includes(requestMethod) || !globalOptions.includeRequestsWithAuthHeaders && hasAuthHeaders(req) || hasUncacheableCacheControl(req.headers) || isNonCacheableRequest(req.cache) || globalOptions.filter?.(req) === false) {
+    return false;
+  }
+  return true;
+}
+function getHeadersToInclude(options, requestOptions) {
+  return typeof requestOptions === "object" && requestOptions.includeHeaders ? requestOptions.includeHeaders : options.includeHeaders;
+}
+function retrieveStateFromCache(req, options, transferState, originMap, storeKey, skipUseCacheChecks = false) {
+  if (!skipUseCacheChecks && !canUseOrCacheRequest(req, options)) {
+    return null;
+  }
+  if (originMap) {
+    throw new RuntimeError(2803, ngDevMode && "Angular detected that the `HTTP_TRANSFER_CACHE_ORIGIN_MAP` token is configured and present in the client side code. Please ensure that this token is only provided in the server code of the application.");
+  }
+  if (!storeKey) {
+    const requestUrl = false ? mapRequestOriginUrl(req.url, originMap) : req.url;
+    storeKey = makeCacheKey(req, requestUrl);
+  }
+  const response = transferState.get(storeKey, null);
+  if (!response) {
+    return null;
+  }
+  const {
+    [BODY]: undecodedBody,
+    [RESPONSE_TYPE]: responseType,
+    [HEADERS]: httpHeaders,
+    [STATUS]: status,
+    [STATUS_TEXT]: statusText,
+    [REQ_URL]: url
+  } = response;
+  let body = undecodedBody;
+  switch (responseType) {
+    case "arraybuffer":
+      body = fromBase64(undecodedBody);
+      break;
+    case "blob":
+      body = new Blob([fromBase64(undecodedBody)]);
+      break;
+  }
+  let headers = new HttpHeaders(httpHeaders);
+  if (typeof ngDevMode === "undefined" || ngDevMode) {
+    const {
+      transferCache: requestOptions
+    } = req;
+    const headersToInclude = getHeadersToInclude(options, requestOptions);
+    headers = appendMissingHeadersDetection(req.url, headers, headersToInclude ?? []);
+  }
+  return new HttpResponse({
+    body,
+    headers,
+    status,
+    statusText,
+    url
+  });
+}
+function hasAuthHeaders(req) {
+  const headers = req.headers;
+  return headers.has("authorization") || headers.has("proxy-authorization") || headers.has("cookie");
+}
+function hasOutgoingCredentials(req) {
+  const {
+    withCredentials,
+    credentials
+  } = req;
+  return withCredentials || credentials === "include" || credentials === "same-origin";
+}
+var UNCACHEABLE_CACHE_CONTROL_DIRECTIVES = /* @__PURE__ */ new Set(["no-store", "private", "no-cache"]);
+function hasUncacheableCacheControl(headers) {
+  const cacheControl = headers.get("cache-control");
+  if (!cacheControl) {
+    return false;
+  }
+  return cacheControl.split(",").some((directive) => {
+    const directiveName = directive.split("=", 1)[0].trim().toLowerCase();
+    return UNCACHEABLE_CACHE_CONTROL_DIRECTIVES.has(directiveName);
+  });
+}
+function isNonCacheableRequest(cache) {
+  return cache === "no-cache" || cache === "no-store";
+}
+function sortAndConcatParams(params) {
+  return [...params.keys()].sort().map((k) => `${k}=${params.getAll(k)}`).join("&");
+}
+function makeCacheKey(request, mappedRequestUrl) {
+  const {
+    params,
+    method,
+    responseType
+  } = request;
+  const encodedParams = sortAndConcatParams(params);
+  let serializedBody = request.serializeBody();
+  if (serializedBody instanceof URLSearchParams) {
+    serializedBody = sortAndConcatParams(serializedBody);
+  } else if (typeof serializedBody !== "string") {
+    serializedBody = "";
+  }
+  const key = [method, responseType, mappedRequestUrl, serializedBody, encodedParams].join("|");
+  const hash = generateHash(key);
+  return makeStateKey(hash);
+}
+function fromBase64(base64) {
+  const binary = atob(base64);
+  const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
+  return bytes.buffer;
+}
+function appendMissingHeadersDetection(url, headers, headersToInclude) {
+  const warningProduced = /* @__PURE__ */ new Set();
+  return new Proxy(headers, {
+    get(target, prop) {
+      const value = Reflect.get(target, prop);
+      const methods = /* @__PURE__ */ new Set(["get", "has", "getAll"]);
+      if (typeof value !== "function" || !methods.has(prop)) {
+        return value;
+      }
+      return (headerName) => {
+        const key = (prop + ":" + headerName).toLowerCase();
+        if (!headersToInclude.includes(headerName) && !warningProduced.has(key)) {
+          warningProduced.add(key);
+          const truncatedUrl = truncateMiddle(url);
+          console.warn(formatRuntimeError(-2802, `Angular detected that the \`${headerName}\` header is accessed, but the value of the header was not transferred from the server to the client by the HttpTransferCache. To include the value of the \`${headerName}\` header for the \`${truncatedUrl}\` request, use the \`includeHeaders\` list. The \`includeHeaders\` can be defined either on a request level by adding the \`transferCache\` parameter, or on an application level by adding the \`httpCacheTransfer.includeHeaders\` argument to the \`provideClientHydration()\` call. `));
+        }
+        return value.apply(target, [headerName]);
+      };
+    }
+  });
+}
+var SHA256_ROUND_CONSTANTS = /* @__PURE__ */ new Uint32Array([1116352408, 1899447441, 3049323471, 3921009573, 961987163, 1508970993, 2453635748, 2870763221, 3624381080, 310598401, 607225278, 1426881987, 1925078388, 2162078206, 2614888103, 3248222580, 3835390401, 4022224774, 264347078, 604807628, 770255983, 1249150122, 1555081692, 1996064986, 2554220882, 2821834349, 2952996808, 3210313671, 3336571891, 3584528711, 113926993, 338241895, 666307205, 773529912, 1294757372, 1396182291, 1695183700, 1986661051, 2177026350, 2456956037, 2730485921, 2820302411, 3259730800, 3345764771, 3516065817, 3600352804, 4094571909, 275423344, 430227734, 506948616, 659060556, 883997877, 958139571, 1322822218, 1537002063, 1747873779, 1955562222, 2024104815, 2227730452, 2361852424, 2428436474, 2756734187, 3204031479, 3329325298]);
+var textEncoder;
+function generateHash(value) {
+  textEncoder ??= new TextEncoder();
+  const inputBytes = textEncoder.encode(value);
+  let hashState0 = 1779033703;
+  let hashState1 = 3144134277;
+  let hashState2 = 1013904242;
+  let hashState3 = 2773480762;
+  let hashState4 = 1359893119;
+  let hashState5 = 2600822924;
+  let hashState6 = 528734635;
+  let hashState7 = 1541459225;
+  const messageLengthInBits = inputBytes.length * 8;
+  const paddedLengthInBytes = (inputBytes.length + 8 >> 6) + 1 << 6;
+  const paddedBytes = new Uint8Array(paddedLengthInBytes);
+  paddedBytes.set(inputBytes);
+  paddedBytes[inputBytes.length] = 128;
+  const paddedBytesView = new DataView(paddedBytes.buffer);
+  const lowBits = messageLengthInBits >>> 0;
+  const highBits = messageLengthInBits / 4294967296 >>> 0;
+  paddedBytesView.setUint32(paddedLengthInBytes - 8, highBits, false);
+  paddedBytesView.setUint32(paddedLengthInBytes - 4, lowBits, false);
+  const messageSchedule = new Uint32Array(64);
+  for (let chunkOffset = 0; chunkOffset < paddedLengthInBytes; chunkOffset += 64) {
+    for (let i = 0; i < 16; i++) {
+      messageSchedule[i] = paddedBytesView.getUint32(chunkOffset + i * 4, false);
+    }
+    for (let i = 16; i < 64; i++) {
+      const prevWord15 = messageSchedule[i - 15];
+      const sigma0 = ((prevWord15 >>> 7 | prevWord15 << 25) ^ (prevWord15 >>> 18 | prevWord15 << 14) ^ prevWord15 >>> 3) >>> 0;
+      const prevWord2 = messageSchedule[i - 2];
+      const sigma1 = ((prevWord2 >>> 17 | prevWord2 << 15) ^ (prevWord2 >>> 19 | prevWord2 << 13) ^ prevWord2 >>> 10) >>> 0;
+      messageSchedule[i] = messageSchedule[i - 16] + sigma0 + messageSchedule[i - 7] + sigma1 >>> 0;
+    }
+    let workingStateA = hashState0;
+    let workingStateB = hashState1;
+    let workingStateC = hashState2;
+    let workingStateD = hashState3;
+    let workingStateE = hashState4;
+    let workingStateF = hashState5;
+    let workingStateG = hashState6;
+    let workingStateH = hashState7;
+    for (let i = 0; i < 64; i++) {
+      const capitalSigma1 = ((workingStateE >>> 6 | workingStateE << 26) ^ (workingStateE >>> 11 | workingStateE << 21) ^ (workingStateE >>> 25 | workingStateE << 7)) >>> 0;
+      const chFunction = (workingStateE & workingStateF ^ ~workingStateE & workingStateG) >>> 0;
+      const temp1 = workingStateH + capitalSigma1 + chFunction + SHA256_ROUND_CONSTANTS[i] + messageSchedule[i] >>> 0;
+      const capitalSigma0 = ((workingStateA >>> 2 | workingStateA << 30) ^ (workingStateA >>> 13 | workingStateA << 19) ^ (workingStateA >>> 22 | workingStateA << 10)) >>> 0;
+      const majFunction = (workingStateA & workingStateB ^ workingStateA & workingStateC ^ workingStateB & workingStateC) >>> 0;
+      const temp2 = capitalSigma0 + majFunction >>> 0;
+      workingStateH = workingStateG;
+      workingStateG = workingStateF;
+      workingStateF = workingStateE;
+      workingStateE = workingStateD + temp1 >>> 0;
+      workingStateD = workingStateC;
+      workingStateC = workingStateB;
+      workingStateB = workingStateA;
+      workingStateA = temp1 + temp2 >>> 0;
+    }
+    hashState0 = hashState0 + workingStateA >>> 0;
+    hashState1 = hashState1 + workingStateB >>> 0;
+    hashState2 = hashState2 + workingStateC >>> 0;
+    hashState3 = hashState3 + workingStateD >>> 0;
+    hashState4 = hashState4 + workingStateE >>> 0;
+    hashState5 = hashState5 + workingStateF >>> 0;
+    hashState6 = hashState6 + workingStateG >>> 0;
+    hashState7 = hashState7 + workingStateH >>> 0;
+  }
+  return [hashState0, hashState1, hashState2, hashState3, hashState4, hashState5, hashState6, hashState7].map((x) => x.toString(16).padStart(8, "0")).join("");
+}
 var httpResource = (() => {
   const jsonFn = makeHttpResourceFn("json");
   jsonFn.arrayBuffer = makeHttpResourceFn("arraybuffer");
@@ -31130,7 +31597,35 @@ function makeHttpResourceFn(responseType) {
       assertInInjectionContext(httpResource2);
     }
     const injector = options?.injector ?? inject2(Injector);
-    return new HttpResourceImpl(injector, () => normalizeRequest(request, responseType), options?.defaultValue, options?.debugName, options?.parse, options?.equal);
+    const cacheOptions = injector.get(CACHE_OPTIONS, null, {
+      optional: true
+    });
+    const transferState = injector.get(TransferState, null, {
+      optional: true
+    });
+    const originMap = injector.get(HTTP_TRANSFER_CACHE_ORIGIN_MAP, null, {
+      optional: true
+    });
+    const getInitialStream = (req) => {
+      if (cacheOptions && transferState && req) {
+        const cachedResponse = retrieveStateFromCache(req, cacheOptions, transferState, originMap);
+        if (cachedResponse) {
+          try {
+            const body = cachedResponse.body;
+            const parsed = options?.parse ? options.parse(body) : body;
+            return signal({
+              value: parsed
+            });
+          } catch (e) {
+            if (typeof ngDevMode === "undefined" || ngDevMode) {
+              console.warn(`Angular detected an error while parsing the cached response for the httpResource at \`${req.url}\`. The resource will fall back to its default value and try again asynchronously.`, e);
+            }
+          }
+        }
+      }
+      return void 0;
+    };
+    return new HttpResourceImpl(injector, () => normalizeRequest(request, responseType), options?.defaultValue, options?.debugName, options?.parse, options?.equal, getInitialStream);
   };
 }
 function normalizeRequest(request, responseType) {
@@ -31191,7 +31686,7 @@ var HttpResourceImpl = class extends ResourceImpl {
   }] : []);
   progress = this._progress.asReadonly();
   statusCode = this._statusCode.asReadonly();
-  constructor(injector, request, defaultValue, debugName, parse, equal) {
+  constructor(injector, request, defaultValue, debugName, parse, equal, getInitialStream) {
     super(request, ({
       params: request2,
       abortSignal
@@ -31252,7 +31747,7 @@ var HttpResourceImpl = class extends ResourceImpl {
         }
       });
       return promise;
-    }, defaultValue, equal, debugName, injector);
+    }, defaultValue, equal, debugName, injector, getInitialStream);
     this.client = injector.get(HttpClient);
   }
   set(value) {
@@ -31262,10 +31757,13 @@ var HttpResourceImpl = class extends ResourceImpl {
     this._statusCode.set(void 0);
   }
 };
-var HTTP_TRANSFER_CACHE_ORIGIN_MAP = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_TRANSFER_CACHE_ORIGIN_MAP" : "");
-var CACHE_OPTIONS = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "HTTP_TRANSFER_STATE_CACHE_OPTIONS" : "");
 
 // node_modules/@angular/platform-browser/fesm2022/platform-browser.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var Meta = class _Meta {
   _doc;
   _dom;
@@ -31288,12 +31786,13 @@ var Meta = class _Meta {
   }
   getTag(attrSelector) {
     if (!attrSelector) return null;
-    return this._doc.querySelector(`meta[${attrSelector}]`) || null;
+    const meta = this._doc.querySelector(`meta[${attrSelector}]`);
+    return meta?.nodeName.toLowerCase() === "meta" ? meta : null;
   }
   getTags(attrSelector) {
     if (!attrSelector) return [];
     const list = this._doc.querySelectorAll(`meta[${attrSelector}]`);
-    return list ? [].slice.call(list) : [];
+    return list ? [].slice.call(list).filter((elem) => elem.nodeName.toLowerCase() === "meta") : [];
   }
   updateTag(tag, selector) {
     if (!tag) return null;
@@ -31330,7 +31829,10 @@ var Meta = class _Meta {
   }
   _parseSelector(tag) {
     const attr = tag.name ? "name" : "property";
-    return `${attr}="${tag[attr]}"`;
+    return `${attr}=${this._escapeSelectorValue(String(tag[attr]))}`;
+  }
+  _escapeSelectorValue(value) {
+    return `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
   }
   _containsAttributes(tag, elem) {
     return Object.keys(tag).every((key) => elem.getAttribute(this._getMetaKeyMap(key)) === tag[key]);
@@ -31934,6 +32436,21 @@ var lists = [
         content: "Allow few mask in one expression",
         id: 10,
         scrollTo: "allow-few-mask"
+      },
+      {
+        content: "IP address",
+        id: 11,
+        scrollTo: "ip-address"
+      },
+      {
+        content: "CPF/CNPJ",
+        id: 12,
+        scrollTo: "cpf-cnpj"
+      },
+      {
+        content: "CPF/CNPJ alphanumeric",
+        id: 13,
+        scrollTo: "cpf-cnpj-alpha"
       }
     ]
   },
@@ -32258,6 +32775,27 @@ var ComDocs = [
     code: `<input type='text' mask="00||SS" >`,
     id: 10,
     anchor: "allow-few-mask"
+  },
+  {
+    header: "IP address",
+    text: "",
+    code: `<input mask="IP" />`,
+    id: 11,
+    anchor: "ip-address"
+  },
+  {
+    header: "CPF/CNPJ",
+    text: "",
+    code: `<input mask="CPF_CNPJ" />`,
+    id: 12,
+    anchor: "cpf-cnpj"
+  },
+  {
+    header: "CPF/CNPJ alphanumeric",
+    text: "",
+    code: `<input mask="CPF_CNPJ_ALPHA" />`,
+    id: 13,
+    anchor: "cpf-cnpj-alpha"
   }
 ];
 var ComExamples = [
@@ -32342,6 +32880,21 @@ var ComExamples = [
     _placeholder: "Allow few mask in one expression",
     _mask: "00||SS",
     control: { initialValue: "", model: "" }
+  },
+  {
+    _placeholder: "IP address",
+    _mask: "IP",
+    control: { initialValue: "", model: "" }
+  },
+  {
+    _placeholder: "CPF/CNPJ",
+    _mask: "CPF_CNPJ",
+    control: { initialValue: "", model: "" }
+  },
+  {
+    _placeholder: "CPF/CNPJ alphanumeric",
+    _mask: "CPF_CNPJ_ALPHA",
+    control: { initialValue: "", model: "" }
   }
 ];
 
@@ -32415,6 +32968,11 @@ var OthExamples = [
 ];
 
 // node_modules/@angular/forms/fesm2022/forms.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var BaseControlValueAccessor = class _BaseControlValueAccessor {
   _renderer;
   _elementRef;
@@ -32917,7 +33475,7 @@ var AbstractControlDirective = class {
     this._onDestroyCallbacks = [];
   }
   reset(value = void 0) {
-    if (this.control) this.control.reset(value);
+    this.control?.reset(value);
   }
   hasError(errorCode, path) {
     return this.control ? this.control.hasError(errorCode, path) : false;
@@ -33106,7 +33664,7 @@ var ngModelWithFormGroupExample = `
       <input [(ngModel)]="showMoreControls" [ngModelOptions]="{standalone: true}">
   </div>
 `;
-var VERSION3 = /* @__PURE__ */ new Version("21.1.2");
+var VERSION3 = /* @__PURE__ */ new Version("21.2.17");
 function controlParentException(nameOrIndex) {
   return new RuntimeError(1050, `formControlName must be used with a parent formGroup or formArray directive. You'll want to add a formGroup/formArray
       directive and pass it an existing FormGroup/FormArray instance (you can create one in your class).
@@ -33220,7 +33778,7 @@ function missingControlValueError(isFormGroup, key) {
 var VALID = "VALID";
 var INVALID = "INVALID";
 var PENDING = "PENDING";
-var DISABLED2 = "DISABLED";
+var DISABLED = "DISABLED";
 var ControlEvent = class {
 };
 var ValueChangeEvent = class extends ControlEvent {
@@ -33306,7 +33864,7 @@ function assertControlPresent(parent, isGroup, key) {
 function assertAllValuesPresent(control, isGroup, value) {
   control._forEachChild((_, key) => {
     if (value[key] === void 0) {
-      throw new RuntimeError(1002, typeof ngDevMode === "undefined" || ngDevMode ? missingControlValueError(isGroup, key) : "");
+      throw new RuntimeError(-1002, typeof ngDevMode === "undefined" || ngDevMode ? missingControlValueError(isGroup, key) : "");
     }
   });
 }
@@ -33362,13 +33920,13 @@ var AbstractControl = class {
     return this.status === INVALID;
   }
   get pending() {
-    return this.status == PENDING;
+    return this.status === PENDING;
   }
   get disabled() {
-    return this.status === DISABLED2;
+    return this.status === DISABLED;
   }
   get enabled() {
-    return this.status !== DISABLED2;
+    return this.status !== DISABLED;
   }
   errors;
   get pristine() {
@@ -33442,8 +34000,8 @@ var AbstractControl = class {
     const changed = this.touched === false;
     this.touched = true;
     const sourceControl = opts.sourceControl ?? this;
-    if (this._parent && !opts.onlySelf) {
-      this._parent.markAsTouched(__spreadProps(__spreadValues({}, opts), {
+    if (!opts.onlySelf) {
+      this._parent?.markAsTouched(__spreadProps(__spreadValues({}, opts), {
         sourceControl
       }));
     }
@@ -33479,8 +34037,8 @@ var AbstractControl = class {
         sourceControl
       });
     });
-    if (this._parent && !opts.onlySelf) {
-      this._parent._updateTouched(opts, sourceControl);
+    if (!opts.onlySelf) {
+      this._parent?._updateTouched(opts, sourceControl);
     }
     if (changed && opts.emitEvent !== false) {
       this._events.next(new TouchedChangeEvent(false, sourceControl));
@@ -33490,8 +34048,8 @@ var AbstractControl = class {
     const changed = this.pristine === true;
     this.pristine = false;
     const sourceControl = opts.sourceControl ?? this;
-    if (this._parent && !opts.onlySelf) {
-      this._parent.markAsDirty(__spreadProps(__spreadValues({}, opts), {
+    if (!opts.onlySelf) {
+      this._parent?.markAsDirty(__spreadProps(__spreadValues({}, opts), {
         sourceControl
       }));
     }
@@ -33510,8 +34068,8 @@ var AbstractControl = class {
         emitEvent: opts.emitEvent
       });
     });
-    if (this._parent && !opts.onlySelf) {
-      this._parent._updatePristine(opts, sourceControl);
+    if (!opts.onlySelf) {
+      this._parent?._updatePristine(opts, sourceControl);
     }
     if (changed && opts.emitEvent !== false) {
       this._events.next(new PristineChangeEvent(true, sourceControl));
@@ -33524,15 +34082,15 @@ var AbstractControl = class {
       this._events.next(new StatusChangeEvent(this.status, sourceControl));
       this.statusChanges.emit(this.status);
     }
-    if (this._parent && !opts.onlySelf) {
-      this._parent.markAsPending(__spreadProps(__spreadValues({}, opts), {
+    if (!opts.onlySelf) {
+      this._parent?.markAsPending(__spreadProps(__spreadValues({}, opts), {
         sourceControl
       }));
     }
   }
   disable(opts = {}) {
     const skipPristineCheck = this._parentMarkedDirty(opts.onlySelf);
-    this.status = DISABLED2;
+    this.status = DISABLED;
     this.errors = null;
     this._forEachChild((control) => {
       control.disable(__spreadProps(__spreadValues({}, opts), {
@@ -33570,12 +34128,12 @@ var AbstractControl = class {
     this._onDisabledChange.forEach((changeFn) => changeFn(false));
   }
   _updateAncestors(opts, sourceControl) {
-    if (this._parent && !opts.onlySelf) {
-      this._parent.updateValueAndValidity(opts);
+    if (!opts.onlySelf) {
+      this._parent?.updateValueAndValidity(opts);
       if (!opts.skipPristineCheck) {
-        this._parent._updatePristine({}, sourceControl);
+        this._parent?._updatePristine({}, sourceControl);
       }
-      this._parent._updateTouched({}, sourceControl);
+      this._parent?._updateTouched({}, sourceControl);
     }
   }
   setParent(parent) {
@@ -33602,8 +34160,8 @@ var AbstractControl = class {
       this.valueChanges.emit(this.value);
       this.statusChanges.emit(this.status);
     }
-    if (this._parent && !opts.onlySelf) {
-      this._parent.updateValueAndValidity(__spreadProps(__spreadValues({}, opts), {
+    if (!opts.onlySelf) {
+      this._parent?.updateValueAndValidity(__spreadProps(__spreadValues({}, opts), {
         sourceControl
       }));
     }
@@ -33618,7 +34176,7 @@ var AbstractControl = class {
     });
   }
   _setInitialStatus() {
-    this.status = this._allControlsDisabled() ? DISABLED2 : VALID;
+    this.status = this._allControlsDisabled() ? DISABLED : VALID;
   }
   _runValidator() {
     return this.validator ? this.validator(this) : null;
@@ -33662,7 +34220,7 @@ var AbstractControl = class {
   }
   getError(errorCode, path) {
     const control = path ? this.get(path) : this;
-    return control && control.errors ? control.errors[errorCode] : null;
+    return control?.errors ? control.errors[errorCode] : null;
   }
   hasError(errorCode, path) {
     return !!this.getError(errorCode, path);
@@ -33691,7 +34249,7 @@ var AbstractControl = class {
     this.statusChanges = new EventEmitter();
   }
   _calculateStatus() {
-    if (this._allControlsDisabled()) return DISABLED2;
+    if (this._allControlsDisabled()) return DISABLED;
     if (this.errors) return INVALID;
     if (this._hasOwnPendingAsyncValidator || this._anyControlsHaveStatus(PENDING)) return PENDING;
     if (this._anyControlsHaveStatus(INVALID)) return INVALID;
@@ -33710,8 +34268,8 @@ var AbstractControl = class {
     const newPristine = !this._anyControlsDirty();
     const changed = this.pristine !== newPristine;
     this.pristine = newPristine;
-    if (this._parent && !opts.onlySelf) {
-      this._parent._updatePristine(opts, changedControl);
+    if (!opts.onlySelf) {
+      this._parent?._updatePristine(opts, changedControl);
     }
     if (changed) {
       this._events.next(new PristineChangeEvent(this.pristine, changedControl));
@@ -33720,8 +34278,8 @@ var AbstractControl = class {
   _updateTouched(opts = {}, changedControl) {
     this.touched = this._anyControlsTouched();
     this._events.next(new TouchedChangeEvent(this.touched, changedControl));
-    if (this._parent && !opts.onlySelf) {
-      this._parent._updateTouched(opts, changedControl);
+    if (!opts.onlySelf) {
+      this._parent?._updateTouched(opts, changedControl);
     }
   }
   _onDisabledChange = [];
@@ -33734,8 +34292,7 @@ var AbstractControl = class {
     }
   }
   _parentMarkedDirty(onlySelf) {
-    const parentDirty = this._parent && this._parent.dirty;
-    return !onlySelf && !!parentDirty && !this._parent._anyControlsDirty();
+    return !onlySelf && !!this._parent?.dirty && !this._parent._anyControlsDirty();
   }
   _find(name) {
     return null;
@@ -33938,10 +34495,8 @@ function cleanUpControl(control, dir, validateControlPresenceOnChange = true) {
       _noControlError(dir);
     }
   };
-  if (dir.valueAccessor) {
-    dir.valueAccessor.registerOnChange(noop5);
-    dir.valueAccessor.registerOnTouched(noop5);
-  }
+  dir?.valueAccessor?.registerOnChange(noop5);
+  dir?.valueAccessor?.registerOnTouched(noop5);
   cleanUpValidators(control, dir);
   if (control) {
     dir._invokeOnDestroyCallbacks();
@@ -34017,17 +34572,17 @@ function setUpViewChangePipeline(control, dir) {
     control._pendingValue = newValue;
     control._pendingChange = true;
     control._pendingDirty = true;
-    if (control.updateOn === "change") updateControl2(control, dir);
+    if (control.updateOn === "change") updateControl(control, dir);
   });
 }
 function setUpBlurPipeline(control, dir) {
   dir.valueAccessor.registerOnTouched(() => {
     control._pendingTouched = true;
-    if (control.updateOn === "blur" && control._pendingChange) updateControl2(control, dir);
+    if (control.updateOn === "blur" && control._pendingChange) updateControl(control, dir);
     if (control.updateOn !== "submit") control.markAsTouched();
   });
 }
-function updateControl2(control, dir) {
+function updateControl(control, dir) {
   if (control._pendingDirty) control.markAsDirty();
   control.setValue(control._pendingValue, {
     emitModelToViewChange: false
@@ -34186,9 +34741,7 @@ var NgForm = class _NgForm extends ControlContainer {
   removeControl(dir) {
     resolvedPromise$1.then(() => {
       const container = this._findContainer(dir.path);
-      if (container) {
-        container.removeControl(dir.name);
-      }
+      container?.removeControl(dir.name);
       this._directives.delete(dir);
     });
   }
@@ -34206,9 +34759,7 @@ var NgForm = class _NgForm extends ControlContainer {
   removeFormGroup(dir) {
     resolvedPromise$1.then(() => {
       const container = this._findContainer(dir.path);
-      if (container) {
-        container.removeControl(dir.name);
-      }
+      container?.removeControl?.(dir.name);
     });
   }
   getFormGroup(dir) {
@@ -34432,9 +34983,7 @@ var AbstractFormGroupDirective = class _AbstractFormGroupDirective extends Contr
     this.formDirective.addFormGroup(this);
   }
   ngOnDestroy() {
-    if (this.formDirective) {
-      this.formDirective.removeFormGroup(this);
-    }
+    this.formDirective?.removeFormGroup(this);
   }
   get control() {
     return this.formDirective.getFormGroup(this);
@@ -34635,7 +35184,7 @@ var NgModel = class _NgModel extends NgControl {
     }
   }
   ngOnDestroy() {
-    this.formDirective && this.formDirective.removeControl(this);
+    this.formDirective?.removeControl(this);
   }
   get path() {
     return this._getPath(this.name);
@@ -35384,24 +35933,20 @@ var AbstractFormDirective = class _AbstractFormDirective extends ControlContaine
     });
   }
   _cleanUpFormContainer(dir) {
-    if (this.form) {
-      const ctrl = this.form.get(dir.path);
-      if (ctrl) {
-        const isControlUpdated = cleanUpFormContainer(ctrl, dir);
-        if (isControlUpdated) {
-          ctrl.updateValueAndValidity({
-            emitEvent: false
-          });
-        }
+    const ctrl = this.form?.get(dir.path);
+    if (ctrl) {
+      const isControlUpdated = cleanUpFormContainer(ctrl, dir);
+      if (isControlUpdated) {
+        ctrl.updateValueAndValidity({
+          emitEvent: false
+        });
       }
     }
   }
   _updateRegistrations() {
     this.form._registerOnCollectionChange(this._onCollectionChange);
-    if (this._oldForm) {
-      this._oldForm._registerOnCollectionChange(() => {
-      });
-    }
+    this._oldForm?._registerOnCollectionChange(() => {
+    });
   }
   _updateValidators() {
     setUpValidators(this.form, this);
@@ -35877,9 +36422,7 @@ var FormControlName = class _FormControlName extends NgControl {
     }
   }
   ngOnDestroy() {
-    if (this.formDirective) {
-      this.formDirective.removeControl(this);
-    }
+    this.formDirective?.removeControl(this);
   }
   viewToModelUpdate(newValue) {
     this.viewModel = newValue;
@@ -36192,16 +36735,14 @@ var NgSelectOption = class _NgSelectOption {
   }
   set value(value) {
     this._setElementValue(value);
-    if (this._select) this._select._writeValueAfterRender();
+    this._select?._writeValueAfterRender();
   }
   _setElementValue(value) {
     this._renderer.setProperty(this._element.nativeElement, "value", value);
   }
   ngOnDestroy() {
-    if (this._select) {
-      this._select._optionMap.delete(this.id);
-      this._select._writeValueAfterRender();
-    }
+    this._select?._optionMap.delete(this.id);
+    this._select?._writeValueAfterRender();
   }
   static \u0275fac = function NgSelectOption_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _NgSelectOption)(\u0275\u0275directiveInject(ElementRef), \u0275\u0275directiveInject(Renderer2), \u0275\u0275directiveInject(SelectControlValueAccessor, 9));
@@ -36275,11 +36816,11 @@ var SelectMultipleControlValueAccessor = class _SelectMultipleControlValueAccess
     let optionSelectedStateSetter;
     if (Array.isArray(value)) {
       const ids = value.map((v) => this._getOptionId(v));
-      optionSelectedStateSetter = (opt, o) => {
-        opt._setSelected(ids.indexOf(o.toString()) > -1);
+      optionSelectedStateSetter = (opt, id) => {
+        opt._setSelected(ids.indexOf(id) > -1);
       };
     } else {
-      optionSelectedStateSetter = (opt, o) => {
+      optionSelectedStateSetter = (opt) => {
         opt._setSelected(false);
       };
     }
@@ -36466,9 +37007,7 @@ var AbstractValidatorDirective = class _AbstractValidatorDirective {
       const input2 = this.normalizeInput(changes[this.inputName].currentValue);
       this._enabled = this.enabled(input2);
       this._validator = this._enabled ? this.createValidator(input2) : nullValidator;
-      if (this._onChange) {
-        this._onChange();
-      }
+      this._onChange?.();
     }
   }
   validate(control) {
@@ -37092,7 +37631,12 @@ var ReactiveFormsModule = class _ReactiveFormsModule {
   }], null, null);
 })();
 
-// node_modules/@angular/forms/fesm2022/_structure-chunk.mjs
+// node_modules/@angular/forms/fesm2022/_validation_errors-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var boundPathDepth = 0;
 function getBoundPathDepth() {
   return boundPathDepth;
@@ -37640,11 +38184,11 @@ var MetadataKey = class {
 function createMetadataKey(reducer) {
   return new MetadataKey(reducer ?? MetadataReducer.override());
 }
-var REQUIRED2 = createMetadataKey(MetadataReducer.or());
-var MIN2 = createMetadataKey(MetadataReducer.max());
-var MAX2 = createMetadataKey(MetadataReducer.min());
-var MIN_LENGTH2 = createMetadataKey(MetadataReducer.max());
-var MAX_LENGTH2 = createMetadataKey(MetadataReducer.min());
+var REQUIRED = createMetadataKey(MetadataReducer.or());
+var MIN = createMetadataKey(MetadataReducer.max());
+var MAX = createMetadataKey(MetadataReducer.min());
+var MIN_LENGTH = createMetadataKey(MetadataReducer.max());
+var MAX_LENGTH = createMetadataKey(MetadataReducer.min());
 var PATTERN = createMetadataKey(MetadataReducer.list());
 function calculateValidationSelfStatus(state) {
   if (state.errors().length > 0) {
@@ -37684,7 +38228,7 @@ var FieldValidationState = class {
   }, ...ngDevMode ? [{
     debugName: "syncValid"
   }] : []);
-  syncTreeErrors = computed(() => this.rawSyncTreeErrors().filter((err) => err.fieldTree === this.node.fieldProxy), ...ngDevMode ? [{
+  syncTreeErrors = computed(() => this.rawSyncTreeErrors().filter((err) => err.fieldTree === this.node.fieldTree), ...ngDevMode ? [{
     debugName: "syncTreeErrors"
   }] : []);
   rawAsyncErrors = computed(() => {
@@ -37699,14 +38243,23 @@ var FieldValidationState = class {
     if (this.shouldSkipValidation()) {
       return [];
     }
-    return this.rawAsyncErrors().filter((err) => err === "pending" || err.fieldTree === this.node.fieldProxy);
+    return this.rawAsyncErrors().filter((err) => err === "pending" || err.fieldTree === this.node.fieldTree);
   }, ...ngDevMode ? [{
     debugName: "asyncErrors"
   }] : []);
-  errors = computed(() => [...this.syncErrors(), ...this.asyncErrors().filter((err) => err !== "pending")], ...ngDevMode ? [{
+  parseErrors = computed(() => this.node.formFieldBindings().flatMap((field) => field.parseErrors()), ...ngDevMode ? [{
+    debugName: "parseErrors"
+  }] : []);
+  errors = computed(() => [...this.parseErrors(), ...this.syncErrors(), ...this.asyncErrors().filter((err) => err !== "pending")], ...ngDevMode ? [{
     debugName: "errors"
   }] : []);
-  errorSummary = computed(() => this.node.structure.reduceChildren(this.errors(), (child, result) => [...result, ...child.errorSummary()]), ...ngDevMode ? [{
+  errorSummary = computed(() => {
+    const errors = this.node.structure.reduceChildren(this.errors(), (child, result) => [...result, ...child.errorSummary()]);
+    if (true) {
+      untracked2(() => errors.sort(compareErrorPosition));
+    }
+    return errors;
+  }, ...ngDevMode ? [{
     debugName: "errorSummary"
   }] : []);
   pending = computed(() => this.node.structure.reduceChildren(this.asyncErrors().includes("pending"), (child, value) => value || child.validationState.asyncErrors().includes("pending")), ...ngDevMode ? [{
@@ -37747,6 +38300,30 @@ function normalizeErrors(error) {
   }
   return [error];
 }
+function addDefaultField(errors, fieldTree) {
+  if (isArray3(errors)) {
+    for (const error of errors) {
+      error.fieldTree ??= fieldTree;
+    }
+  } else if (errors) {
+    errors.fieldTree ??= fieldTree;
+  }
+  return errors;
+}
+function getFirstBoundElement(error) {
+  if (error.formField) return error.formField.element;
+  return error.fieldTree().formFieldBindings().reduce((el, binding) => {
+    if (!el || !binding.element) return el ?? binding.element;
+    return el.compareDocumentPosition(binding.element) & Node.DOCUMENT_POSITION_PRECEDING ? binding.element : el;
+  }, void 0);
+}
+function compareErrorPosition(a, b) {
+  const aEl = getFirstBoundElement(a);
+  const bEl = getFirstBoundElement(b);
+  if (aEl === bEl) return 0;
+  if (aEl === void 0 || bEl === void 0) return aEl === void 0 ? 1 : -1;
+  return aEl.compareDocumentPosition(bEl) & Node.DOCUMENT_POSITION_PRECEDING ? 1 : -1;
+}
 var DEBOUNCER = createMetadataKey();
 var FieldNodeContext = class {
   node;
@@ -37773,7 +38350,7 @@ var FieldNodeContext = class {
             throw new RuntimeError(1901, ngDevMode && `Cannot resolve path .${targetPathNode.keys.join(".")} relative to field ${["<root>", ...this.node.structure.pathKeys()].join(".")}.`);
           }
         }
-        return field.fieldProxy;
+        return field.fieldTree;
       }, ...ngDevMode ? [{
         debugName: "resolver"
       }] : []);
@@ -37849,7 +38426,7 @@ var FIELD_PROXY_HANDLER = {
     const tgt = getTgt();
     const child = tgt.structure.getChild(p);
     if (child !== void 0) {
-      return child.fieldProxy;
+      return child.fieldTree;
     }
     const value = untracked2(tgt.value);
     if (isArray3(value)) {
@@ -37859,7 +38436,7 @@ var FIELD_PROXY_HANDLER = {
       if (p === Symbol.iterator) {
         return () => {
           tgt.value();
-          return Array.prototype[Symbol.iterator].apply(tgt.fieldProxy);
+          return Array.prototype[Symbol.iterator].apply(tgt.fieldTree);
         };
       }
     }
@@ -37968,7 +38545,7 @@ var FieldNodeStructure = class {
       const key = initialKeyInParent;
       return computed(() => {
         if (this.parent.structure.getChild(key) !== this.node) {
-          throw new RuntimeError(1902, ngDevMode && `Orphan field, looking for property '${key}' of ${getDebugName(this.parent)}`);
+          throw new RuntimeError(-1902, ngDevMode && `Orphan field, looking for property '${key}' of ${getDebugName(this.parent)}`);
         }
         return key;
       });
@@ -38185,6 +38762,7 @@ var FieldNode = class {
   nodeState;
   submitState;
   fieldAdapter;
+  controlValue;
   _context = void 0;
   get context() {
     return this._context ??= new FieldNodeContext(this);
@@ -38199,9 +38777,10 @@ var FieldNode = class {
     this.nodeState = this.fieldAdapter.createNodeState(this, options);
     this.metadataState = new FieldMetadataState(this);
     this.submitState = new FieldSubmitState(this);
+    this.controlValue = this.controlValueSignal();
   }
-  focusBoundControl() {
-    this.getBindingForFocus()?.focus();
+  focusBoundControl(options) {
+    this.getBindingForFocus()?.focus(options);
   }
   getBindingForFocus() {
     const own = this.formFieldBindings().filter((b) => b.focus !== void 0).reduce(firstInDom, void 0);
@@ -38217,23 +38796,23 @@ var FieldNode = class {
       return void 0;
     }
   }));
+  get fieldTree() {
+    return this.fieldProxy;
+  }
   get logicNode() {
     return this.structure.logic;
   }
   get value() {
     return this.structure.value;
   }
-  _controlValue = linkedSignal(() => this.value(), ...ngDevMode ? [{
-    debugName: "_controlValue"
-  }] : []);
-  get controlValue() {
-    return this._controlValue.asReadonly();
-  }
   get keyInParent() {
     return this.structure.keyInParent;
   }
   get errors() {
     return this.validationState.errors;
+  }
+  get parseErrors() {
+    return this.validationState.parseErrors;
   }
   get errorSummary() {
     return this.validationState.errorSummary;
@@ -38275,22 +38854,22 @@ var FieldNode = class {
     return this.nodeState.name;
   }
   get max() {
-    return this.metadata(MAX2);
+    return this.metadata(MAX);
   }
   get maxLength() {
-    return this.metadata(MAX_LENGTH2);
+    return this.metadata(MAX_LENGTH);
   }
   get min() {
-    return this.metadata(MIN2);
+    return this.metadata(MIN);
   }
   get minLength() {
-    return this.metadata(MIN_LENGTH2);
+    return this.metadata(MIN_LENGTH);
   }
   get pattern() {
     return this.metadata(PATTERN) ?? EMPTY2;
   }
   get required() {
-    return this.metadata(REQUIRED2) ?? FALSE;
+    return this.metadata(REQUIRED) ?? FALSE;
   }
   metadata(key) {
     return this.metadataState.get(key);
@@ -38307,6 +38886,12 @@ var FieldNode = class {
   markAsDirty() {
     this.nodeState.markAsDirty();
   }
+  markAsPristine() {
+    this.nodeState.markAsPristine();
+  }
+  markAsUntouched() {
+    this.nodeState.markAsUntouched();
+  }
   reset(value) {
     untracked2(() => this._reset(value));
   }
@@ -38320,12 +38905,25 @@ var FieldNode = class {
       child._reset();
     }
   }
-  setControlValue(newValue) {
-    untracked2(() => {
-      this._controlValue.set(newValue);
+  controlValueSignal() {
+    const controlValue = linkedSignal(this.value, ...ngDevMode ? [{
+      debugName: "controlValue"
+    }] : []);
+    const {
+      set,
+      update
+    } = controlValue;
+    controlValue.set = (newValue) => {
+      set(newValue);
       this.markAsDirty();
       this.debounceSync();
-    });
+    };
+    controlValue.update = (updateFn) => {
+      update(updateFn);
+      this.markAsDirty();
+      this.debounceSync();
+    };
+    return controlValue;
   }
   sync() {
     this.value.set(this.controlValue());
@@ -38338,8 +38936,10 @@ var FieldNode = class {
     }
   }
   async debounceSync() {
-    this.pendingSync()?.abort();
-    const debouncer = this.nodeState.debouncer();
+    const debouncer = untracked2(() => {
+      this.pendingSync()?.abort();
+      return this.nodeState.debouncer();
+    });
     if (debouncer) {
       const controller = new AbortController();
       const promise = debouncer(controller.signal);
@@ -38494,9 +39094,11 @@ var BasicFieldAdapter = class {
 var FormFieldManager = class {
   injector;
   rootName;
-  constructor(injector, rootName) {
+  submitOptions;
+  constructor(injector, rootName, submitOptions) {
     this.injector = injector;
     this.rootName = rootName ?? `${this.injector.get(APP_ID)}.form${nextFormId++}`;
+    this.submitOptions = submitOptions;
   }
   structures = /* @__PURE__ */ new Set();
   createFieldManagementEffect(root) {
@@ -38542,15 +39144,160 @@ function form(...args) {
   const [model2, schema2, options] = normalizeFormArgs(args);
   const injector = options?.injector ?? inject2(Injector);
   const pathNode = runInInjectionContext(injector, () => SchemaImpl.rootCompile(schema2));
-  const fieldManager = new FormFieldManager(injector, options?.name);
+  const fieldManager = new FormFieldManager(injector, options?.name, options?.submission);
   const adapter = options?.adapter ?? new BasicFieldAdapter();
   const fieldRoot = FieldNode.newRoot(fieldManager, model2, pathNode, adapter);
   fieldManager.createFieldManagementEffect(fieldRoot.structure);
-  return fieldRoot.fieldProxy;
+  return fieldRoot.fieldTree;
+}
+async function submit(form2, options) {
+  const node = untracked2(form2);
+  if (untracked2(node.submitState.submitting)) {
+    return false;
+  }
+  const field = options === void 0 ? node.structure.root.fieldProxy : form2;
+  const detail = {
+    root: node.structure.root.fieldProxy,
+    submitted: form2
+  };
+  options = typeof options === "function" ? {
+    action: options
+  } : options ?? node.structure.fieldManager.submitOptions;
+  const action = options?.action;
+  if (!action) {
+    throw new RuntimeError(1915, (typeof ngDevMode === "undefined" || ngDevMode) && "Cannot submit form with no submit action. Specify the action when creating the form, or as an additional argument to `submit()`.");
+  }
+  const onInvalid = options?.onInvalid;
+  const ignoreValidators = options?.ignoreValidators ?? "pending";
+  let shouldRunAction = true;
+  untracked2(() => {
+    markAllAsTouched(node);
+    if (ignoreValidators === "none") {
+      shouldRunAction = node.valid();
+    } else if (ignoreValidators === "pending") {
+      shouldRunAction = !node.invalid();
+    }
+  });
+  try {
+    if (shouldRunAction) {
+      node.submitState.selfSubmitting.set(true);
+      const errors = await untracked2(() => action?.(field, detail));
+      errors && setSubmissionErrors(node, errors);
+      return !errors || isArray3(errors) && errors.length === 0;
+    } else {
+      untracked2(() => onInvalid?.(field, detail));
+    }
+    return false;
+  } finally {
+    node.submitState.selfSubmitting.set(false);
+  }
+}
+function markAllAsTouched(node) {
+  if (node.validationState.shouldSkipValidation()) {
+    return;
+  }
+  node.markAsTouched();
+  for (const child of node.structure.children()) {
+    markAllAsTouched(child);
+  }
+}
+function setSubmissionErrors(submittedField, errors) {
+  if (!isArray3(errors)) {
+    errors = [errors];
+  }
+  const errorsByField = /* @__PURE__ */ new Map();
+  for (const error of errors) {
+    const errorWithField = addDefaultField(error, submittedField.fieldTree);
+    const field = errorWithField.fieldTree();
+    let fieldErrors = errorsByField.get(field);
+    if (!fieldErrors) {
+      fieldErrors = [];
+      errorsByField.set(field, fieldErrors);
+    }
+    fieldErrors.push(errorWithField);
+  }
+  for (const [field, fieldErrors] of errorsByField) {
+    field.submitState.submissionErrors.set(fieldErrors);
+  }
+}
+var CompatValidationError = class {
+  kind = "compat";
+  control;
+  fieldTree;
+  context;
+  message;
+  constructor({
+    context: context2,
+    kind,
+    control
+  }) {
+    this.context = context2;
+    this.kind = kind;
+    this.control = control;
+  }
+};
+function signalErrorsToValidationErrors(errors) {
+  if (errors.length === 0) {
+    return null;
+  }
+  const errObj = {};
+  for (const error of errors) {
+    errObj[error.kind] = error instanceof CompatValidationError ? error.context : error;
+  }
+  return errObj;
 }
 
 // node_modules/@angular/forms/fesm2022/signals.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var SIGNAL_FORMS_CONFIG = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "SIGNAL_FORMS_CONFIG" : "");
+function normalizeErrors2(error) {
+  if (error === void 0) {
+    return [];
+  }
+  if (Array.isArray(error)) {
+    return error;
+  }
+  return [error];
+}
+var BaseNgValidationError = class {
+  __brand = void 0;
+  kind = "";
+  fieldTree;
+  message;
+  constructor(options) {
+    if (options) {
+      Object.assign(this, options);
+    }
+  }
+};
+var NativeInputParseError = class extends BaseNgValidationError {
+  kind = "parse";
+};
+var FORM_FIELD_PARSE_ERRORS = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "FORM_FIELD_PARSE_ERRORS" : "");
+function createParser(getValue, setValue, parse) {
+  const errors = linkedSignal(__spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "errors"
+  } : {}), {
+    source: getValue,
+    computation: () => []
+  }));
+  const setRawValue = (rawValue) => {
+    const result = parse(rawValue);
+    errors.set(normalizeErrors2(result.error));
+    if (result.value !== void 0) {
+      setValue(result.value);
+    }
+    errors.set(normalizeErrors2(result.error));
+  };
+  return {
+    errors: errors.asReadonly(),
+    setRawValue
+  };
+}
 var InteropNgControl = class {
   field;
   constructor(field) {
@@ -38576,15 +39323,7 @@ var InteropNgControl = class {
     return !this.field().disabled();
   }
   get errors() {
-    const errors = this.field().errors();
-    if (errors.length === 0) {
-      return null;
-    }
-    const errObj = {};
-    for (const error of errors) {
-      errObj[error.kind] = error;
-    }
-    return errObj;
+    return signalErrorsToValidationErrors(this.field().errors());
   }
   get pristine() {
     return !this.field().dirty();
@@ -38623,44 +39362,375 @@ var InteropNgControl = class {
   updateValueAndValidity() {
   }
 };
-var FORM_FIELD = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "FORM_FIELD" : "");
-var controlInstructions = {
-  create: \u0275\u0275controlCreate,
-  update: \u0275controlUpdate
+var FIELD_STATE_KEY_TO_CONTROL_BINDING = {
+  disabled: "disabled",
+  disabledReasons: "disabledReasons",
+  dirty: "dirty",
+  errors: "errors",
+  hidden: "hidden",
+  invalid: "invalid",
+  max: "max",
+  maxLength: "maxLength",
+  min: "min",
+  minLength: "minLength",
+  name: "name",
+  pattern: "pattern",
+  pending: "pending",
+  readonly: "readonly",
+  required: "required",
+  touched: "touched"
 };
+var CONTROL_BINDING_TO_FIELD_STATE_KEY = /* @__PURE__ */ (() => {
+  const map2 = {};
+  for (const key of Object.keys(FIELD_STATE_KEY_TO_CONTROL_BINDING)) {
+    map2[FIELD_STATE_KEY_TO_CONTROL_BINDING[key]] = key;
+  }
+  return map2;
+})();
+function readFieldStateBindingValue(fieldState, key) {
+  const property = CONTROL_BINDING_TO_FIELD_STATE_KEY[key];
+  return fieldState[property]?.();
+}
+var CONTROL_BINDING_NAMES = /* @__PURE__ */ (() => Object.values(FIELD_STATE_KEY_TO_CONTROL_BINDING))();
+function createBindings() {
+  return {};
+}
+function bindingUpdated5(bindings, key, value) {
+  if (bindings[key] !== value) {
+    bindings[key] = value;
+    return true;
+  }
+  return false;
+}
+function isNativeFormElement(element) {
+  return element.tagName === "INPUT" || element.tagName === "SELECT" || element.tagName === "TEXTAREA";
+}
+function isNumericFormElement(element) {
+  if (element.tagName !== "INPUT") {
+    return false;
+  }
+  const type = element.type;
+  return type === "date" || type === "datetime-local" || type === "month" || type === "number" || type === "range" || type === "time" || type === "week";
+}
+function isTextualFormElement(element) {
+  return element.tagName === "INPUT" || element.tagName === "TEXTAREA";
+}
+function getNativeControlValue(element, currentValue) {
+  let modelValue;
+  if (element.validity.badInput) {
+    return {
+      error: new NativeInputParseError()
+    };
+  }
+  switch (element.type) {
+    case "checkbox":
+      return {
+        value: element.checked
+      };
+    case "number":
+    case "range":
+    case "datetime-local":
+      modelValue = untracked2(currentValue);
+      if (typeof modelValue === "number" || modelValue === null) {
+        return {
+          value: element.value === "" ? null : element.valueAsNumber
+        };
+      }
+      break;
+    case "date":
+    case "month":
+    case "time":
+    case "week":
+      modelValue = untracked2(currentValue);
+      if (modelValue === null || modelValue instanceof Date) {
+        return {
+          value: element.valueAsDate
+        };
+      } else if (typeof modelValue === "number") {
+        return {
+          value: element.valueAsNumber
+        };
+      }
+      break;
+  }
+  return {
+    value: element.value
+  };
+}
+function setNativeControlValue(element, value) {
+  switch (element.type) {
+    case "checkbox":
+      element.checked = value;
+      return;
+    case "radio":
+      element.checked = value === element.value;
+      return;
+    case "number":
+    case "range":
+    case "datetime-local":
+      if (typeof value === "number") {
+        setNativeNumberControlValue(element, value);
+        return;
+      } else if (value === null) {
+        element.value = "";
+        return;
+      }
+      break;
+    case "date":
+    case "month":
+    case "time":
+    case "week":
+      if (value === null || value instanceof Date) {
+        element.valueAsDate = value;
+        return;
+      } else if (typeof value === "number") {
+        setNativeNumberControlValue(element, value);
+        return;
+      }
+  }
+  element.value = value;
+}
+function setNativeNumberControlValue(element, value) {
+  if (isNaN(value)) {
+    element.value = "";
+  } else {
+    element.valueAsNumber = value;
+  }
+}
+function setNativeDomProperty(renderer, element, name, value) {
+  switch (name) {
+    case "name":
+      renderer.setAttribute(element, name, value);
+      break;
+    case "disabled":
+    case "readonly":
+    case "required":
+      if (value) {
+        renderer.setAttribute(element, name, "");
+      } else {
+        renderer.removeAttribute(element, name);
+      }
+      break;
+    case "max":
+    case "min":
+    case "minLength":
+    case "maxLength":
+      if (value !== void 0) {
+        renderer.setAttribute(element, name, value.toString());
+      } else {
+        renderer.removeAttribute(element, name);
+      }
+      break;
+  }
+}
+function customControlCreate(host, parent) {
+  host.listenToCustomControlModel((value) => parent.state().controlValue.set(value));
+  host.listenToCustomControlOutput("touchedChange", () => parent.state().markAsTouched());
+  parent.registerAsBinding(host.customControl);
+  const bindings = createBindings();
+  return () => {
+    const state = parent.state();
+    const controlValue = state.controlValue();
+    if (bindingUpdated5(bindings, "controlValue", controlValue)) {
+      host.setCustomControlModelInput(controlValue);
+    }
+    for (const name of CONTROL_BINDING_NAMES) {
+      let value;
+      if (name === "errors") {
+        value = parent.errors();
+      } else {
+        value = readFieldStateBindingValue(state, name);
+      }
+      if (bindingUpdated5(bindings, name, value)) {
+        host.setInputOnDirectives(name, value);
+        if (parent.elementAcceptsNativeProperty(name) && !host.customControlHasInput(name)) {
+          setNativeDomProperty(parent.renderer, parent.nativeFormElement, name, value);
+        }
+      }
+    }
+  };
+}
+function cvaControlCreate(host, parent) {
+  parent.controlValueAccessor.registerOnChange((value) => parent.state().controlValue.set(value));
+  parent.controlValueAccessor.registerOnTouched(() => parent.state().markAsTouched());
+  parent.registerAsBinding();
+  const bindings = createBindings();
+  return () => {
+    const fieldState = parent.state();
+    const value = fieldState.value();
+    if (bindingUpdated5(bindings, "controlValue", value)) {
+      untracked2(() => parent.controlValueAccessor.writeValue(value));
+    }
+    for (const name of CONTROL_BINDING_NAMES) {
+      const value2 = readFieldStateBindingValue(fieldState, name);
+      if (bindingUpdated5(bindings, name, value2)) {
+        const propertyWasSet = host.setInputOnDirectives(name, value2);
+        if (name === "disabled" && parent.controlValueAccessor.setDisabledState) {
+          untracked2(() => parent.controlValueAccessor.setDisabledState(value2));
+        } else if (!propertyWasSet && parent.elementAcceptsNativeProperty(name)) {
+          setNativeDomProperty(parent.renderer, parent.nativeFormElement, name, value2);
+        }
+      }
+    }
+  };
+}
+function observeSelectMutations(select, onMutation, destroyRef) {
+  if (typeof MutationObserver !== "function") {
+    return;
+  }
+  const observer = new MutationObserver((mutations) => {
+    if (mutations.some((m) => isRelevantSelectMutation(m))) {
+      onMutation();
+    }
+  });
+  observer.observe(select, {
+    attributes: true,
+    attributeFilter: ["value"],
+    characterData: true,
+    childList: true,
+    subtree: true
+  });
+  destroyRef.onDestroy(() => observer.disconnect());
+}
+function isRelevantSelectMutation(mutation) {
+  if (mutation.type === "childList" || mutation.type === "characterData") {
+    if (mutation.target instanceof Comment) {
+      return false;
+    }
+    for (const node of mutation.addedNodes) {
+      if (!(node instanceof Comment)) {
+        return true;
+      }
+    }
+    for (const node of mutation.removedNodes) {
+      if (!(node instanceof Comment)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  if (mutation.type === "attributes" && mutation.target instanceof HTMLOptionElement) {
+    return true;
+  }
+  return false;
+}
+function nativeControlCreate(host, parent, parseErrorsSource) {
+  let updateMode = false;
+  const input2 = parent.nativeFormElement;
+  const parser = createParser(() => parent.state().value(), (rawValue) => parent.state().controlValue.set(rawValue), () => getNativeControlValue(input2, parent.state().value));
+  parseErrorsSource.set(parser.errors);
+  host.listenToDom("input", () => parser.setRawValue(void 0));
+  host.listenToDom("blur", () => parent.state().markAsTouched());
+  parent.registerAsBinding();
+  if (input2.tagName === "SELECT") {
+    observeSelectMutations(input2, () => {
+      if (!updateMode) {
+        return;
+      }
+      input2.value = parent.state().controlValue();
+    }, parent.destroyRef);
+  }
+  const bindings = createBindings();
+  return () => {
+    const state = parent.state();
+    const controlValue = state.controlValue();
+    if (bindingUpdated5(bindings, "controlValue", controlValue)) {
+      setNativeControlValue(input2, controlValue);
+    }
+    for (const name of CONTROL_BINDING_NAMES) {
+      const value = readFieldStateBindingValue(state, name);
+      if (bindingUpdated5(bindings, name, value)) {
+        host.setInputOnDirectives(name, value);
+        if (parent.elementAcceptsNativeProperty(name)) {
+          setNativeDomProperty(parent.renderer, input2, name, value);
+        }
+      }
+    }
+    updateMode = true;
+  };
+}
+var \u0275NgFieldDirective = /* @__PURE__ */ Symbol();
+var FORM_FIELD = new InjectionToken(typeof ngDevMode !== "undefined" && ngDevMode ? "FORM_FIELD" : "");
 var FormField = class _FormField {
-  element = inject2(ElementRef).nativeElement;
-  injector = inject2(Injector);
-  formField = input.required(...ngDevMode ? [{
-    debugName: "formField"
-  }] : []);
-  state = computed(() => this.formField()(), ...ngDevMode ? [{
+  field = input.required(__spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "field"
+  } : {}), {
+    alias: "formField"
+  }));
+  renderer = inject2(Renderer2);
+  destroyRef = inject2(DestroyRef);
+  state = computed(() => this.field()(), ...ngDevMode ? [{
     debugName: "state"
   }] : []);
-  bindingOptions = signal(void 0, ...ngDevMode ? [{
-    debugName: "bindingOptions"
-  }] : []);
-  [\u0275CONTROL] = controlInstructions;
-  config = inject2(SIGNAL_FORMS_CONFIG, {
-    optional: true
-  });
-  classes = Object.entries(this.config?.classes ?? {}).map(([className, computation]) => [className, computed(() => computation(this))]);
+  injector = inject2(Injector);
+  element = inject2(ElementRef).nativeElement;
+  elementIsNativeFormElement = isNativeFormElement(this.element);
+  elementAcceptsNumericValues = isNumericFormElement(this.element);
+  elementAcceptsTextualValues = isTextualFormElement(this.element);
+  nativeFormElement = this.elementIsNativeFormElement ? this.element : void 0;
+  focuser = (options) => this.element.focus(options);
   controlValueAccessors = inject2(NG_VALUE_ACCESSOR, {
     optional: true,
     self: true
   });
-  interopNgControl;
-  get \u0275interopControl() {
+  config = inject2(SIGNAL_FORMS_CONFIG, {
+    optional: true
+  });
+  parseErrorsSource = signal(void 0, ...ngDevMode ? [{
+    debugName: "parseErrorsSource"
+  }] : []);
+  _interopNgControl;
+  get interopNgControl() {
+    return this._interopNgControl ??= new InteropNgControl(this.state);
+  }
+  parseErrors = computed(() => this.parseErrorsSource()?.().map((err) => __spreadProps(__spreadValues({}, err), {
+    fieldTree: untracked2(this.state).fieldTree,
+    formField: this
+  })) ?? [], ...ngDevMode ? [{
+    debugName: "parseErrors"
+  }] : []);
+  errors = computed(() => this.state().errors().filter((err) => !err.formField || err.formField === this), ...ngDevMode ? [{
+    debugName: "errors"
+  }] : []);
+  isFieldBinding = false;
+  get controlValueAccessor() {
     return this.controlValueAccessors?.[0] ?? this.interopNgControl?.valueAccessor ?? void 0;
   }
-  getOrCreateNgControl() {
-    return this.interopNgControl ??= new InteropNgControl(this.state);
+  installClassBindingEffect() {
+    const classes = Object.entries(this.config?.classes ?? {}).map(([className, computation]) => [className, computed(() => computation(this))]);
+    if (classes.length === 0) {
+      return;
+    }
+    const bindings = createBindings();
+    afterRenderEffect({
+      write: () => {
+        for (const [className, computation] of classes) {
+          const active = computation();
+          if (bindingUpdated5(bindings, className, active)) {
+            if (active) {
+              this.renderer.addClass(this.element, className);
+            } else {
+              this.renderer.removeClass(this.element, className);
+            }
+          }
+        }
+      }
+    }, {
+      injector: this.injector
+    });
+  }
+  focus(options) {
+    this.focuser(options);
   }
   registerAsBinding(bindingOptions) {
-    if (untracked2(this.bindingOptions)) {
-      throw new RuntimeError(1913, ngDevMode && "FormField already registered as a binding");
+    if (this.isFieldBinding) {
+      throw new RuntimeError(1913, typeof ngDevMode !== "undefined" && ngDevMode && "FormField already registered as a binding");
     }
-    this.bindingOptions.set(bindingOptions);
+    this.isFieldBinding = true;
+    this.installClassBindingEffect();
+    if (bindingOptions?.focus) {
+      this.focuser = (focusOptions) => bindingOptions.focus(focusOptions);
+    }
     effect((onCleanup) => {
       const fieldNode = this.state();
       fieldNode.nodeState.formFieldBindings.update((controls) => [...controls, this]);
@@ -38670,13 +39740,52 @@ var FormField = class _FormField {
     }, {
       injector: this.injector
     });
+    if (typeof ngDevMode !== "undefined" && ngDevMode) {
+      effect(() => {
+        const fieldNode = this.state();
+        if (fieldNode.hidden()) {
+          const path = fieldNode.structure.pathKeys().join(".") || "<root>";
+          console.warn(formatRuntimeError(1916, `Field '${path}' is hidden but is being rendered. Hidden fields should be removed from the DOM using @if.`));
+        }
+      }, {
+        injector: this.injector
+      });
+    }
   }
-  focus() {
-    const bindingOptions = untracked2(this.bindingOptions);
-    if (bindingOptions?.focus) {
-      bindingOptions.focus();
+  [\u0275NgFieldDirective];
+  \u0275ngControlCreate(host) {
+    if (host.hasPassThrough) {
+      return;
+    }
+    if (this.controlValueAccessor) {
+      this.\u0275ngControlUpdate = cvaControlCreate(host, this);
+    } else if (host.customControl) {
+      this.\u0275ngControlUpdate = customControlCreate(host, this);
+    } else if (this.elementIsNativeFormElement) {
+      this.\u0275ngControlUpdate = nativeControlCreate(host, this, this.parseErrorsSource);
     } else {
-      this.element.focus();
+      throw new RuntimeError(1914, typeof ngDevMode !== "undefined" && ngDevMode && `${host.descriptor} is an invalid [formField] directive host. The host must be a native form control (such as <input>', '<select>', or '<textarea>') or a custom form control with a 'value' or 'checked' model.`);
+    }
+  }
+  \u0275ngControlUpdate;
+  elementAcceptsNativeProperty(key) {
+    if (!this.elementIsNativeFormElement) {
+      return false;
+    }
+    switch (key) {
+      case "min":
+      case "max":
+        return this.elementAcceptsNumericValues;
+      case "minLength":
+      case "maxLength":
+        return this.elementAcceptsTextualValues;
+      case "disabled":
+      case "required":
+      case "readonly":
+      case "name":
+        return true;
+      default:
+        return false;
     }
   }
   static \u0275fac = function FormField_Factory(__ngFactoryType__) {
@@ -38686,15 +39795,19 @@ var FormField = class _FormField {
     type: _FormField,
     selectors: [["", "formField", ""]],
     inputs: {
-      formField: [1, "formField"]
+      field: [1, "formField", "field"]
     },
+    exportAs: ["formField"],
     features: [\u0275\u0275ProvidersFeature([{
       provide: FORM_FIELD,
       useExisting: _FormField
     }, {
       provide: NgControl,
-      useFactory: () => inject2(_FormField).getOrCreateNgControl()
-    }])]
+      useFactory: () => inject2(_FormField).interopNgControl
+    }, {
+      provide: FORM_FIELD_PARSE_ERRORS,
+      useFactory: () => inject2(_FormField).parseErrorsSource
+    }]), \u0275\u0275ControlFeature("formField")]
   });
 };
 (() => {
@@ -38702,20 +39815,74 @@ var FormField = class _FormField {
     type: Directive,
     args: [{
       selector: "[formField]",
+      exportAs: "formField",
       providers: [{
         provide: FORM_FIELD,
         useExisting: FormField
       }, {
         provide: NgControl,
-        useFactory: () => inject2(FormField).getOrCreateNgControl()
+        useFactory: () => inject2(FormField).interopNgControl
+      }, {
+        provide: FORM_FIELD_PARSE_ERRORS,
+        useFactory: () => inject2(FormField).parseErrorsSource
       }]
     }]
   }], null, {
-    formField: [{
+    field: [{
       type: Input,
       args: [{
         isSignal: true,
         alias: "formField",
+        required: true
+      }]
+    }]
+  });
+})();
+var FormRoot = class _FormRoot {
+  fieldTree = input.required(__spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "fieldTree"
+  } : {}), {
+    alias: "formRoot"
+  }));
+  onSubmit(event) {
+    event.preventDefault();
+    submit(this.fieldTree());
+  }
+  static \u0275fac = function FormRoot_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _FormRoot)();
+  };
+  static \u0275dir = /* @__PURE__ */ \u0275\u0275defineDirective({
+    type: _FormRoot,
+    selectors: [["form", "formRoot", ""]],
+    hostAttrs: ["novalidate", ""],
+    hostBindings: function FormRoot_HostBindings(rf, ctx) {
+      if (rf & 1) {
+        \u0275\u0275listener("submit", function FormRoot_submit_HostBindingHandler($event) {
+          return ctx.onSubmit($event);
+        });
+      }
+    },
+    inputs: {
+      fieldTree: [1, "formRoot", "fieldTree"]
+    }
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(FormRoot, [{
+    type: Directive,
+    args: [{
+      selector: "form[formRoot]",
+      host: {
+        "novalidate": "",
+        "(submit)": "onSubmit($event)"
+      }
+    }]
+  }], null, {
+    fieldTree: [{
+      type: Input,
+      args: [{
+        isSignal: true,
+        alias: "formRoot",
         required: true
       }]
     }]
@@ -38729,6 +39896,7 @@ var MaskExpression;
   MaskExpression2["PERCENT"] = "percent";
   MaskExpression2["IP"] = "IP";
   MaskExpression2["CPF_CNPJ"] = "CPF_CNPJ";
+  MaskExpression2["CPF_CNPJ_ALPHA"] = "CPF_CNPJ_ALPHA";
   MaskExpression2["MONTH"] = "M";
   MaskExpression2["MONTHS"] = "M0";
   MaskExpression2["MINUTE"] = "m";
@@ -38890,6 +40058,11 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
   showKeepCharacterExp = "";
   shownMaskExpression = this._config.shownMaskExpression;
   deletedSpecialCharacter = false;
+  /**
+   * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
+   * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
+   */
+  writingValue = false;
   ipError;
   cpfCnpjError;
   applyMask(inputValue, maskExpression, position = 0, justPasted = false, backspaced = false, cb = () => {
@@ -38906,9 +40079,8 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
     let processedValue = inputValue;
     let processedPosition = position;
     const startsWithPrefix = processedValue.slice(0, this.prefix.length) === this.prefix;
-    const pastedFullWithPrefix = justPasted && processedValue.length === this.prefix.length + maskExpression.length;
-    const looksLikeFullPrefixPaste = processedValue === this.prefix + processedValue.slice(this.prefix.length);
-    if (startsWithPrefix && (pastedFullWithPrefix || looksLikeFullPrefixPaste)) {
+    const prefixAlreadyRemovedByCaller = justPasted && this.showMaskTyped && this.placeHolderCharacter.length === 1 && !this.leadZeroDateTime && processedValue !== this.prefix;
+    if (startsWithPrefix && !prefixAlreadyRemovedByCaller) {
       processedValue = processedValue.slice(this.prefix.length);
     }
     if (!!this.suffix && processedValue.length > 0) {
@@ -38932,10 +40104,14 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
         arr.push(processedValue[i] ?? MaskExpression.EMPTY_STRING);
       }
     }
-    if (maskExpression === MaskExpression.CPF_CNPJ) {
+    const isCpfCnpjAlpha = maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+    if (maskExpression === MaskExpression.CPF_CNPJ || isCpfCnpjAlpha) {
       this.cpfCnpjError = arr.length !== 11 && arr.length !== 14;
-      if (arr.length > 11) {
-        maskExpression = "00.000.000/0000-00";
+      const valueHasAnyLetter = /[a-zA-Z]/.test(processedValue);
+      if (valueHasAnyLetter && isCpfCnpjAlpha) {
+        maskExpression = "AA.AAA.AAA/AAAA-00";
+      } else if (arr.length > 11) {
+        maskExpression = isCpfCnpjAlpha ? "AA.AAA.AAA/AAAA-00" : "00.000.000/0000-00";
       } else {
         maskExpression = "000.000.000-00";
       }
@@ -38975,13 +40151,25 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
           decimalMarker = this.decimalMarker.find((dm) => dm !== this.thousandSeparator);
         }
       }
+      if (justPasted && Array.isArray(this.decimalMarker)) {
+        const markerPositions = [];
+        for (let i = 0; i < processedValue.length; i++) {
+          const char = processedValue[i];
+          if (char !== this.thousandSeparator && this.decimalMarker.includes(char)) {
+            markerPositions.push(i);
+          }
+        }
+        if (markerPositions.length > 1) {
+          const lastMarkerPosition = markerPositions[markerPositions.length - 1];
+          processedValue = processedValue.split(MaskExpression.EMPTY_STRING).filter((_, index) => index === lastMarkerPosition || !markerPositions.includes(index)).join(MaskExpression.EMPTY_STRING);
+        }
+      }
       if (backspaced) {
         const { decimalMarkerIndex, nonZeroIndex } = this._findFirstNonZeroAndDecimalIndex(processedValue, decimalMarker);
         const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
-        const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
         const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
         const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
-        if (zeroIndexDecimalMarker && !nonZeroIndex || zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex || zeroIndexNumberZero && !decimalMarkerIndex && !nonZeroIndex) {
+        if (zeroIndexDecimalMarker && !nonZeroIndex || zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex) {
           processedValue = MaskExpression.NUMBER_ZERO;
         }
         if (decimalMarkerIndex && nonZeroIndex && zeroIndexMinus && processedPosition === 1) {
@@ -38989,7 +40177,7 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
             processedValue = MaskExpression.MINUS + processedValue.slice(nonZeroIndex);
           }
         }
-        if (!decimalMarkerIndex && nonZeroIndex && processedValue.length > nonZeroIndex) {
+        if (decimalMarkerIndex === null && nonZeroIndex && processedValue.length > nonZeroIndex) {
           processedValue = zeroIndexMinus ? MaskExpression.MINUS + processedValue.slice(nonZeroIndex) : processedValue.slice(nonZeroIndex);
         }
         if (decimalMarkerIndex && nonZeroIndex && processedPosition === 0) {
@@ -39001,7 +40189,7 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
           }
         }
       }
-      if (precision === 0) {
+      if (precision === 0 && !backspaced) {
         processedValue = this.allowNegativeNumbers ? processedValue.length > 2 && processedValue[0] === MaskExpression.MINUS && processedValue[1] === MaskExpression.NUMBER_ZERO && processedValue[2] !== this.thousandSeparator && processedValue[2] !== MaskExpression.COMMA && processedValue[2] !== MaskExpression.DOT ? "-" + processedValue.slice(2, processedValue.length) : processedValue[0] === MaskExpression.NUMBER_ZERO && processedValue.length > 1 && processedValue[1] !== this.thousandSeparator && processedValue[1] !== MaskExpression.COMMA && processedValue[1] !== MaskExpression.DOT ? processedValue.slice(1, processedValue.length) : processedValue : processedValue.length > 1 && processedValue[0] === MaskExpression.NUMBER_ZERO && processedValue[1] !== this.thousandSeparator && processedValue[1] !== MaskExpression.COMMA && processedValue[1] !== MaskExpression.DOT ? processedValue.slice(1, processedValue.length) : processedValue;
       } else {
         if (processedValue[0] === decimalMarker && processedValue.length > 1 && !backspaced) {
@@ -39119,10 +40307,14 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
           const inputValueSliceMinusOnePlusOne = processedValue.slice(cursor - 1, cursor + 1);
           const inputValueSliceCursorPlusTwo = processedValue.slice(cursor, cursor + 2);
           const inputValueSliceMinusTwoCursor = processedValue.slice(cursor - 2, cursor);
+          const tokenAbutsDigitField = maskExpression[cursor - 1] === MaskExpression.NUMBER_ZERO;
           if (maskExpression[cursor] === MaskExpression.DAY) {
             const maskStartWithMonth = maskExpression.slice(0, 2) === MaskExpression.MONTHS;
             const startWithMonthInput = maskExpression.slice(0, 2) === MaskExpression.MONTHS && this.specialCharacters.includes(inputValueCursorMinusTwo);
-            if (Number(inputSymbol) > 3 && this.leadZeroDateTime || !maskStartWithMonth && (Number(inputValueSliceCursorPlusTwo) > daysCount || Number(inputValueSliceMinusOnePlusOne) > daysCount || this.specialCharacters.includes(inputValueCursorPlusOne)) || (startWithMonthInput ? Number(inputValueSliceMinusOnePlusOne) > daysCount || !this.specialCharacters.includes(inputValueCursor) && this.specialCharacters.includes(inputValueCursorPlusTwo) || this.specialCharacters.includes(inputValueCursor) : Number(inputValueSliceCursorPlusTwo) > daysCount || this.specialCharacters.includes(inputValueCursorPlusOne) && !backspaced)) {
+            const dayWindowStart = justPasted || this.writingValue ? i : cursor;
+            const dayWindowSlice = processedValue.slice(dayWindowStart, dayWindowStart + 2);
+            const dayWindowNext = processedValue[dayWindowStart + 1];
+            if (Number(inputSymbol) > 3 && this.leadZeroDateTime || !maskStartWithMonth && (Number(inputValueSliceCursorPlusTwo) > daysCount || !tokenAbutsDigitField && Number(inputValueSliceMinusOnePlusOne) > daysCount || this.specialCharacters.includes(inputValueCursorPlusOne)) || (startWithMonthInput ? Number(inputValueSliceMinusOnePlusOne) > daysCount || !this.specialCharacters.includes(inputValueCursor) && this.specialCharacters.includes(inputValueCursorPlusTwo) || this.specialCharacters.includes(inputValueCursor) : Number(dayWindowSlice) > daysCount || this.specialCharacters.includes(dayWindowNext) && !backspaced)) {
               processedPosition = !this.leadZeroDateTime ? processedPosition + 1 : processedPosition;
               cursor += 1;
               this._shiftStep(cursor);
@@ -39138,10 +40330,10 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
             const withoutDays = cursor === 0 && (Number(inputSymbol) > 2 || Number(inputValueSliceCursorPlusTwo) > monthsCount || this.specialCharacters.includes(inputValueCursorPlusOne) && !backspaced);
             const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
             const day1monthInput = inputValueSliceMinusThreeMinusOne.includes(specialChart) && maskExpression.includes("d0") && (this.specialCharacters.includes(inputValueCursorMinusTwo) && Number(inputValueSliceMinusOnePlusOne) > monthsCount && !this.specialCharacters.includes(inputValueCursor) || this.specialCharacters.includes(inputValueCursor));
-            const day2monthInput = Number(inputValueSliceMinusThreeMinusOne) <= daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && this.specialCharacters.includes(inputValueCursorMinusOne) && (Number(inputValueSliceCursorPlusTwo) > monthsCount || this.specialCharacters.includes(inputValueCursorPlusOne));
+            const day2monthInput = !tokenAbutsDigitField && Number(inputValueSliceMinusThreeMinusOne) <= daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && this.specialCharacters.includes(inputValueCursorMinusOne) && (Number(inputValueSliceCursorPlusTwo) > monthsCount || this.specialCharacters.includes(inputValueCursorPlusOne));
             const day2monthInputDot = Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5 || this.specialCharacters.includes(inputValueCursorPlusOne) && cursor === 5;
-            const day1monthPaste = Number(inputValueSliceMinusThreeMinusOne) > daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && !this.specialCharacters.includes(inputValueSliceMinusTwoCursor) && Number(inputValueSliceMinusTwoCursor) > monthsCount && maskExpression.includes("d0");
-            const day2monthPaste = Number(inputValueSliceMinusThreeMinusOne) <= daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && !this.specialCharacters.includes(inputValueCursorMinusOne) && Number(inputValueSliceMinusOnePlusOne) > monthsCount;
+            const day1monthPaste = !tokenAbutsDigitField && Number(inputValueSliceMinusThreeMinusOne) > daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && !this.specialCharacters.includes(inputValueSliceMinusTwoCursor) && Number(inputValueSliceMinusTwoCursor) > monthsCount && maskExpression.includes("d0");
+            const day2monthPaste = !tokenAbutsDigitField && Number(inputValueSliceMinusThreeMinusOne) <= daysCount && !this.specialCharacters.includes(inputValueSliceMinusThreeMinusOne) && !this.specialCharacters.includes(inputValueCursorMinusOne) && Number(inputValueSliceMinusOnePlusOne) > monthsCount;
             if (Number(inputSymbol) > 1 && this.leadZeroDateTime || withoutDays || day1monthInput || day2monthPaste || day1monthPaste || day2monthInput || day2monthInputDot && !this.leadZeroDateTime) {
               processedPosition = !this.leadZeroDateTime ? processedPosition + 1 : processedPosition;
               cursor += 1;
@@ -39177,10 +40369,15 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
           }
           cursor++;
           i--;
-        } else if (this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR && this._findSpecialChar(this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING) && this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] && multi) {
+        } else if (this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR && // A typed char that exactly matches the mask's literal char at cursor+2
+        // (e.g. the '@' in 'A*@A*.A*') always terminates the 'A*' run, regardless
+        // of whether that literal is registered in `specialCharacters` — an
+        // explicitly empty `specialCharacters` list must not make mask literals
+        // unmatchable (#1512).
+        (this._findSpecialChar(this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING) ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] : inputSymbol === this.maskExpression[cursor + 2]) && multi) {
           cursor += 3;
           result += inputSymbol;
-        } else if (this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION && this._findSpecialChar(this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING) && this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] && multi) {
+        } else if (this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION && (this._findSpecialChar(this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING) ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] : inputSymbol === this.maskExpression[cursor + 2]) && multi) {
           cursor += 3;
           result += inputSymbol;
         } else if (this.showMaskTyped && this.specialCharacters.indexOf(inputSymbol) < 0 && inputSymbol !== this.placeHolderCharacter && this.placeHolderCharacter.length === 1) {
@@ -39213,8 +40410,14 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
       res = this.instantPrefix ? `${this.prefix}${result}` : `${result}`;
     }
     const isSpecialCharacterMaskFirstSymbol = processedValue.length === 1 && this.specialCharacters.includes(maskExpression[0]) && processedValue !== maskExpression[0];
-    if (!this._checkSymbolMask(processedValue, maskExpression[1]) && isSpecialCharacterMaskFirstSymbol) {
-      return "";
+    if (isSpecialCharacterMaskFirstSymbol) {
+      let firstPatternIndex = 1;
+      while (firstPatternIndex < maskExpression.length && this.specialCharacters.includes(maskExpression[firstPatternIndex])) {
+        firstPatternIndex++;
+      }
+      if (!this._checkSymbolMask(processedValue, maskExpression[firstPatternIndex] ?? MaskExpression.EMPTY_STRING)) {
+        return "";
+      }
     }
     if (result.includes(MaskExpression.MINUS) && this.prefix && this.allowNegativeNumbers) {
       if (backspaced && result === MaskExpression.MINUS) {
@@ -39284,8 +40487,14 @@ var NgxMaskApplierService = class _NgxMaskApplierService {
   checkAndRemoveSuffix = (inputValue) => {
     for (let i = this.suffix?.length - 1; i >= 0; i--) {
       const substr = this.suffix.substring(i, this.suffix?.length);
-      if (inputValue.includes(substr) && i !== this.suffix?.length - 1 && (i - 1 < 0 || !inputValue.includes(this.suffix.substring(i - 1, this.suffix?.length)))) {
-        return inputValue.replace(substr, MaskExpression.EMPTY_STRING);
+      if (inputValue.endsWith(substr) && i !== this.suffix?.length - 1 && // A partial suffix tail (i > 0) that makes up the WHOLE value is a
+      // leftover of the displayed suffix only when the previous rendered
+      // value ended with the suffix AND the edit shrank the value to (or
+      // below) the old value-part length, i.e. it was a deletion of the
+      // suffix head. Otherwise it is fresh user input that merely collides
+      // with the suffix text and must be kept (#1495).
+      (i === 0 || inputValue.length > substr.length || this.actualValue.endsWith(this.suffix) && inputValue.length <= this.actualValue.length - this.suffix.length) && (i - 1 < 0 || !inputValue.endsWith(this.suffix.substring(i - 1, this.suffix?.length)))) {
+        return inputValue.slice(0, inputValue.length - substr.length);
       }
     }
     return inputValue;
@@ -39399,12 +40608,23 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
   maskExpressionArray = [];
   previousValue = "";
   currentValue = "";
-  /**
-   * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
-   * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
-   */
-  writingValue = false;
+  // `writingValue` is declared on NgxMaskApplierService: applyMask needs it to
+  // distinguish the writeValue flow from keystroke flows (#1611).
   isInitialized = false;
+  /**
+   * Set by the directive's keepCharacterPositions handling for the current edit:
+   * true — the directive fully resolved the resulting display value into actualValue,
+   * so applyMask must short-circuit and render actualValue as-is;
+   * false — the edit must flow through regular masking (no short-circuit);
+   * null — the directive was not involved in this applyMask call (legacy behavior).
+   * Consumed and reset by applyMask. This lets keepCharacterPositions work without
+   * showMaskTyped (#1545, #1543).
+   */
+  keepCharacterPositionsHandled = null;
+  _isFocused = signal(false, ...ngDevMode ? [{ debugName: "_isFocused" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   _emitValue = false;
   _start;
   _end;
@@ -39427,14 +40647,26 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
    */
   applyMask(inputValue, maskExpression, position = 0, justPasted = false, backspaced = false, cb = () => {
   }) {
+    const kcpHandled = this.keepCharacterPositionsHandled;
+    this.keepCharacterPositionsHandled = null;
     if (!maskExpression) {
       return inputValue !== this.actualValue ? this.actualValue : inputValue;
+    }
+    if (maskExpression.startsWith(MaskExpression.SEPARATOR) && inputValue && /\d[eE][+-]?\d/.test(inputValue)) {
+      const expandedNumber = Number(this._replaceDecimalMarkerToDot(inputValue));
+      if (!Number.isNaN(expandedNumber)) {
+        inputValue = this._toPlainDecimalString(expandedNumber);
+        if (this.decimalMarker === MaskExpression.COMMA || Array.isArray(this.decimalMarker) && this.thousandSeparator === MaskExpression.DOT) {
+          inputValue = inputValue.replace(MaskExpression.DOT, MaskExpression.COMMA);
+        }
+      }
     }
     this.maskIsShown = this.showMaskTyped ? this.showMaskInInput() : MaskExpression.EMPTY_STRING;
     if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
       this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
     }
-    if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
+    const isCpfCnpjMask = this.maskExpression === MaskExpression.CPF_CNPJ || this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+    if (isCpfCnpjMask && this.showMaskTyped) {
       this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
     }
     if (!inputValue && this.showMaskTyped) {
@@ -39445,7 +40677,7 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     let newInputValue = "";
     let newPosition = position;
     if ((this.hiddenInput || inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0) && !this.writingValue) {
-      let actualResult = inputValue && inputValue.length === 1 ? inputValue.split(MaskExpression.EMPTY_STRING) : this.actualValue.split(MaskExpression.EMPTY_STRING);
+      let actualResult = inputValue && inputValue.length === 1 && !backspaced ? inputValue.split(MaskExpression.EMPTY_STRING) : this.actualValue.split(MaskExpression.EMPTY_STRING);
       if (backspaced) {
         actualResult = actualResult.slice(0, position).concat(actualResult.slice(position + 1));
       }
@@ -39514,12 +40746,18 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     } else {
       newInputValue = Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
     }
-    if (this.showMaskTyped && this.keepCharacterPositions && this.actualValue && !justPasted && !this.writingValue) {
+    if ((kcpHandled ?? this.showMaskTyped) && this.keepCharacterPositions && this.actualValue && !justPasted && !this.writingValue) {
       const value = this.dropSpecialCharacters ? this.removeMask(this.actualValue) : this.actualValue;
       this.formControlResult(value);
       return this.actualValue ? this.actualValue : `${this.prefix}${this.maskIsShown}${this.suffix}`;
     }
     const result = super.applyMask(newInputValue, maskExpression, newPosition, justPasted, backspaced, cb);
+    if ((this.writingValue || !this.maskChanged && inputValue === this.currentValue) && inputValue && !result && this.removeMask(inputValue)) {
+      this.actualValue = inputValue;
+      this.previousValue = this.currentValue;
+      this.currentValue = inputValue;
+      return inputValue;
+    }
     this.actualValue = this.getActualValue(result);
     if (this.thousandSeparator === MaskExpression.DOT && this.decimalMarker === MaskExpression.DOT) {
       this.decimalMarker = MaskExpression.COMMA;
@@ -39550,11 +40788,11 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     }
     const resLen = result.length;
     const prefNmask = `${this.prefix}${this.maskIsShown}${this.suffix}`;
-    if (this.maskExpression.includes(MaskExpression.HOURS)) {
+    if (this.maskExpression === MaskExpression.IP || this.maskExpression === MaskExpression.CPF_CNPJ || this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA) {
+      return `${result}${prefNmask}`;
+    } else if (this.maskExpression.includes(MaskExpression.HOURS)) {
       const countSkipedSymbol = this._numberSkipedSymbols(result);
       return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
-    } else if (this.maskExpression === MaskExpression.IP || this.maskExpression === MaskExpression.CPF_CNPJ) {
-      return `${result}${prefNmask}`;
     }
     return `${result}${prefNmask.slice(resLen)}`;
   }
@@ -39625,10 +40863,30 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     if (!value && value !== 0 || this.maskExpression.startsWith(MaskExpression.SEPARATOR) && (this.leadZero || !this.dropSpecialCharacters) || this.maskExpression.startsWith(MaskExpression.SEPARATOR) && this.separatorLimit.length > 14 && String(value).length > 14) {
       return String(value);
     }
-    return Number(value).toLocaleString("fullwide", {
-      useGrouping: false,
-      maximumFractionDigits: 20
-    }).replace(`/${MaskExpression.MINUS}/`, MaskExpression.MINUS);
+    return this._toPlainDecimalString(Number(value));
+  }
+  /**
+   * Locale-independent replacement for toLocaleString('fullwide', { useGrouping: false,
+   * maximumFractionDigits: 20 }) (#1573): expands exponential notation ('7e-7', '1e+21')
+   * to plain decimal form using '.' as decimal marker, regardless of the runtime locale.
+   */
+  _toPlainDecimalString(value) {
+    const stringValue = String(value);
+    const match2 = /^(-?)(\d+)(?:\.(\d+))?[eE]([+-]?\d+)$/.exec(stringValue);
+    if (!match2) {
+      return stringValue;
+    }
+    const [, sign, integerPart, fractionPart = "", exponentPart] = match2;
+    const exponent = Number(exponentPart);
+    const digits = `${integerPart}${fractionPart}`;
+    const pointIndex = integerPart.length + exponent;
+    if (pointIndex <= 0) {
+      return `${sign}0.${"0".repeat(-pointIndex)}${digits}`;
+    }
+    if (pointIndex >= digits.length) {
+      return `${sign}${digits}${"0".repeat(pointIndex - digits.length)}`;
+    }
+    return `${sign}${digits.slice(0, pointIndex)}.${digits.slice(pointIndex)}`;
   }
   showMaskInInput(inputVal) {
     if (this.showMaskTyped && !!this.shownMaskExpression) {
@@ -39642,7 +40900,7 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
         if (this.maskExpression === MaskExpression.IP) {
           return this._checkForIp(inputVal);
         }
-        if (this.maskExpression === MaskExpression.CPF_CNPJ) {
+        if (this.maskExpression === MaskExpression.CPF_CNPJ || this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA) {
           return this._checkForCpfCnpj(inputVal);
         }
       }
@@ -39712,27 +40970,36 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     if (inputVal === MaskExpression.HASH) {
       return cpf;
     }
-    const arr = [];
-    for (let i = 0; i < inputVal.length; i++) {
-      const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
-      if (!value) {
-        continue;
+    const isCpfCnpjAlpha = this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+    const hasAnyLetter = /[a-zA-Z]/.test(inputVal);
+    const arr = this._countCpfCnpjTypedChars(inputVal, isCpfCnpjAlpha);
+    if (isCpfCnpjAlpha && hasAnyLetter) {
+      if (arr.length <= 2) {
+        return cnpj.slice(arr.length, cnpj.length);
       }
-      if (value.match("\\d")) {
-        arr.push(value);
+      if (arr.length > 2 && arr.length <= 5) {
+        return cnpj.slice(arr.length + 1, cnpj.length);
       }
-    }
-    if (arr.length <= 3) {
-      return cpf.slice(arr.length, cpf.length);
-    }
-    if (arr.length > 3 && arr.length <= 6) {
-      return cpf.slice(arr.length + 1, cpf.length);
-    }
-    if (arr.length > 6 && arr.length <= 9) {
-      return cpf.slice(arr.length + 2, cpf.length);
-    }
-    if (arr.length > 9 && arr.length < 11) {
-      return cpf.slice(arr.length + 3, cpf.length);
+      if (arr.length > 5 && arr.length <= 8) {
+        return cnpj.slice(arr.length + 2, cnpj.length);
+      }
+      if (arr.length > 8 && arr.length <= 12) {
+        return cnpj.slice(arr.length + 3, cnpj.length);
+      }
+      return cnpj.slice(arr.length + 4, cnpj.length);
+    } else {
+      if (arr.length <= 3) {
+        return cpf.slice(arr.length, cpf.length);
+      }
+      if (arr.length > 3 && arr.length <= 6) {
+        return cpf.slice(arr.length + 1, cpf.length);
+      }
+      if (arr.length > 6 && arr.length <= 9) {
+        return cpf.slice(arr.length + 2, cpf.length);
+      }
+      if (arr.length > 9 && arr.length < 11) {
+        return cpf.slice(arr.length + 3, cpf.length);
+      }
     }
     if (arr.length === 11) {
       return "";
@@ -39747,6 +41014,21 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
       return cnpj.slice(arr.length + 4, cnpj.length);
     }
     return "";
+  }
+  /** Collects the characters counted as "typed" for CPF/CNPJ progress tracking: digits only
+   *  for the numeric mask, alphanumerics for CPF_CNPJ_ALPHA. */
+  _countCpfCnpjTypedChars(inputVal, isCpfCnpjAlpha) {
+    const arr = [];
+    for (let i = 0; i < inputVal.length; i++) {
+      const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
+      if (!value) {
+        continue;
+      }
+      if (isCpfCnpjAlpha ? value.match("[a-zA-Z0-9]") : value.match("\\d")) {
+        arr.push(value);
+      }
+    }
+    return arr;
   }
   /**
    * Recursively determine the current active element by navigating the Shadow DOM until the Active Element is found.
@@ -39772,6 +41054,9 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
     this.maskChanged = false;
     if (!this.isInitialized && this._emitValue) {
       return;
+    }
+    if (this.showMaskTyped && this.placeHolderCharacter.length === 1 && this.specialCharacters.indexOf(this.placeHolderCharacter) === -1) {
+      inputValue = inputValue.split(this.placeHolderCharacter).join(MaskExpression.EMPTY_STRING);
     }
     if (Array.isArray(this.dropSpecialCharacters)) {
       this.onChange(outputTransformFn(this._toNumber(this._checkSymbols(this._removeMask(this._removeSuffix(this._removePrefix(inputValue)), this.dropSpecialCharacters)))));
@@ -39882,13 +41167,48 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
   _checkPrecision(separatorExpression, separatorValue) {
     const separatorPrecision = this.getPrecision(separatorExpression);
     let value = separatorValue;
-    if (separatorExpression.indexOf("2") > 0 || this.leadZero && Number(separatorPrecision) > 0 && Number.isFinite(separatorPrecision)) {
+    if (separatorExpression.indexOf("2") > 0 && !this._isFocused() || this.leadZero && !this._isFocused() && Number(separatorPrecision) > 0 && Number.isFinite(separatorPrecision)) {
       if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
         value = value.replace(",", ".");
       }
-      return this.leadZero ? Number(value).toFixed(Number(separatorPrecision)) : Number(value).toFixed(2);
+      const precision = this.leadZero ? Number(separatorPrecision) : 2;
+      if (this._exceedsDoublePrecision(value)) {
+        return this._stringToFixed(value, precision);
+      }
+      return Number(value).toFixed(precision);
     }
     return this.numberToString(value);
+  }
+  /**
+   * True when the plain decimal string carries more significant digits than an IEEE-754
+   * double can represent exactly (15 is the guaranteed round-trip digit count), meaning a
+   * Number() round-trip would corrupt it (#1567).
+   */
+  _exceedsDoublePrecision(value) {
+    if (!/^-?\d+(\.\d+)?$/.test(value)) {
+      return false;
+    }
+    const significantDigits = value.replace(/\D/g, "").replace(/^0+/, "");
+    return significantDigits.length > 15;
+  }
+  /**
+   * Exact string-based equivalent of Number.prototype.toFixed (round half away from zero)
+   * for plain decimal strings beyond double precision (#1567).
+   */
+  _stringToFixed(value, precision) {
+    const isNegative = value.startsWith(MaskExpression.MINUS);
+    const absValue = isNegative ? value.slice(1) : value;
+    const [integerPart = "0", fractionPart = ""] = absValue.split(MaskExpression.DOT);
+    const paddedFraction = fractionPart.padEnd(precision + 1, "0");
+    const keptFraction = paddedFraction.slice(0, precision);
+    const shouldRoundUp = (paddedFraction.charCodeAt(precision) || 0) >= 53;
+    let scaled = BigInt(integerPart + keptFraction);
+    if (shouldRoundUp) {
+      scaled += 1n;
+    }
+    const digits = scaled.toString().padStart(precision + 1, "0");
+    const sign = isNegative && scaled > 0n ? MaskExpression.MINUS : "";
+    return precision > 0 ? `${sign}${digits.slice(0, -precision)}.${digits.slice(-precision)}` : `${sign}${digits}`;
   }
   _repeatPatternSymbols(maskExp) {
     return maskExp.match(/{[0-9]+}/) && maskExp.split(MaskExpression.EMPTY_STRING).reduce((accum, currVal, index) => {
@@ -39907,8 +41227,20 @@ var NgxMaskService = class _NgxMaskService extends NgxMaskApplierService {
       }
     }, "") || maskExp;
   }
+  /**
+   * Decimal marker of the value being normalized in writeValue/pipe flows.
+   *
+   * #1573: this used to return the RUNTIME default locale's decimal marker
+   * ((1.1).toLocaleString().substring(1, 2)), which made mask behavior depend on the
+   * OS/browser regional format: under a comma-decimal locale (e.g. Edge + Austrian
+   * regional settings) a preformatted value like '10,000' (thousandSeparator ',')
+   * had its ',' replaced by the configured '.' decimalMarker, corrupting the value
+   * 1000x. JS number stringification (String(n)) always uses '.', and string values
+   * are expected to use the configured markers — the runtime locale is never the
+   * right source, so this is always '.'.
+   */
   currentLocaleDecimalMarker() {
-    return 1.1.toLocaleString().substring(1, 2);
+    return MaskExpression.DOT;
   }
   static \u0275fac = /* @__PURE__ */ (() => {
     let \u0275NgxMaskService_BaseFactory;
@@ -39951,55 +41283,227 @@ function provideNgxMask(configValue) {
 // projects/ngx-mask-lib/src/lib/ngx-mask.directive.ts
 var NgxMaskDirective = class _NgxMaskDirective {
   // ===== Mask Configuration Inputs =====
-  mask = input("", ...ngDevMode ? [{ debugName: "mask" }] : []);
-  specialCharacters = input([], ...ngDevMode ? [{ debugName: "specialCharacters" }] : []);
-  patterns = input({}, ...ngDevMode ? [{ debugName: "patterns" }] : []);
-  prefix = input("", ...ngDevMode ? [{ debugName: "prefix" }] : []);
-  suffix = input("", ...ngDevMode ? [{ debugName: "suffix" }] : []);
-  thousandSeparator = input(" ", ...ngDevMode ? [{ debugName: "thousandSeparator" }] : []);
-  decimalMarker = input(".", ...ngDevMode ? [{ debugName: "decimalMarker" }] : []);
-  dropSpecialCharacters = input(null, ...ngDevMode ? [{ debugName: "dropSpecialCharacters" }] : []);
-  hiddenInput = input(null, ...ngDevMode ? [{ debugName: "hiddenInput" }] : []);
-  showMaskTyped = input(null, ...ngDevMode ? [{ debugName: "showMaskTyped" }] : []);
-  placeHolderCharacter = input(null, ...ngDevMode ? [{ debugName: "placeHolderCharacter" }] : []);
-  shownMaskExpression = input(null, ...ngDevMode ? [{ debugName: "shownMaskExpression" }] : []);
-  clearIfNotMatch = input(null, ...ngDevMode ? [{ debugName: "clearIfNotMatch" }] : []);
-  validation = input(null, ...ngDevMode ? [{ debugName: "validation" }] : []);
-  separatorLimit = input("", ...ngDevMode ? [{ debugName: "separatorLimit" }] : []);
-  allowNegativeNumbers = input(null, ...ngDevMode ? [{ debugName: "allowNegativeNumbers" }] : []);
-  leadZeroDateTime = input(null, ...ngDevMode ? [{ debugName: "leadZeroDateTime" }] : []);
-  leadZero = input(null, ...ngDevMode ? [{ debugName: "leadZero" }] : []);
-  triggerOnMaskChange = input(null, ...ngDevMode ? [{ debugName: "triggerOnMaskChange" }] : []);
-  apm = input(null, ...ngDevMode ? [{ debugName: "apm" }] : []);
-  inputTransformFn = input(null, ...ngDevMode ? [{ debugName: "inputTransformFn" }] : []);
-  outputTransformFn = input(null, ...ngDevMode ? [{ debugName: "outputTransformFn" }] : []);
-  keepCharacterPositions = input(null, ...ngDevMode ? [{ debugName: "keepCharacterPositions" }] : []);
-  instantPrefix = input(null, ...ngDevMode ? [{ debugName: "instantPrefix" }] : []);
-  value = model("", ...ngDevMode ? [{ debugName: "value" }] : []);
-  errors = input([], ...ngDevMode ? [{ debugName: "errors" }] : []);
-  disabled = input(false, ...ngDevMode ? [{ debugName: "disabled" }] : []);
-  touched = model(false, ...ngDevMode ? [{ debugName: "touched" }] : []);
-  dirty = input(false, ...ngDevMode ? [{ debugName: "dirty" }] : []);
-  invalid = input(false, ...ngDevMode ? [{ debugName: "invalid" }] : []);
-  pending = input(false, ...ngDevMode ? [{ debugName: "pending" }] : []);
-  readonly = input(false, ...ngDevMode ? [{ debugName: "readonly" }] : []);
-  required = input(false, ...ngDevMode ? [{ debugName: "required" }] : []);
-  name = input("", ...ngDevMode ? [{ debugName: "name" }] : []);
+  mask = input("", ...ngDevMode ? [{ debugName: "mask" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  specialCharacters = input([], ...ngDevMode ? [{ debugName: "specialCharacters" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  patterns = input({}, ...ngDevMode ? [{ debugName: "patterns" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  prefix = input("", ...ngDevMode ? [{ debugName: "prefix" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  suffix = input("", ...ngDevMode ? [{ debugName: "suffix" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  thousandSeparator = input(" ", ...ngDevMode ? [{ debugName: "thousandSeparator" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  decimalMarker = input(".", ...ngDevMode ? [{ debugName: "decimalMarker" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  dropSpecialCharacters = input(null, ...ngDevMode ? [{ debugName: "dropSpecialCharacters" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  hiddenInput = input(null, ...ngDevMode ? [{ debugName: "hiddenInput" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  showMaskTyped = input(null, ...ngDevMode ? [{ debugName: "showMaskTyped" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  placeHolderCharacter = input(null, ...ngDevMode ? [{ debugName: "placeHolderCharacter" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  shownMaskExpression = input(null, ...ngDevMode ? [{ debugName: "shownMaskExpression" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  clearIfNotMatch = input(null, ...ngDevMode ? [{ debugName: "clearIfNotMatch" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  validation = input(null, ...ngDevMode ? [{ debugName: "validation" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  separatorLimit = input("", ...ngDevMode ? [{ debugName: "separatorLimit" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  allowNegativeNumbers = input(null, ...ngDevMode ? [{ debugName: "allowNegativeNumbers" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  leadZeroDateTime = input(null, ...ngDevMode ? [{ debugName: "leadZeroDateTime" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  leadZero = input(null, ...ngDevMode ? [{ debugName: "leadZero" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  triggerOnMaskChange = input(null, ...ngDevMode ? [{ debugName: "triggerOnMaskChange" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  apm = input(null, ...ngDevMode ? [{ debugName: "apm" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  inputTransformFn = input(null, ...ngDevMode ? [{ debugName: "inputTransformFn" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  outputTransformFn = input(null, ...ngDevMode ? [{ debugName: "outputTransformFn" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  keepCharacterPositions = input(null, ...ngDevMode ? [{ debugName: "keepCharacterPositions" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  instantPrefix = input(null, ...ngDevMode ? [{ debugName: "instantPrefix" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  value = model("", ...ngDevMode ? [{ debugName: "value" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  disabled = input(false, __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "disabled" } : (
+    /* istanbul ignore next */
+    {}
+  )), { transform: booleanAttribute }));
+  touched = model(false, ...ngDevMode ? [{ debugName: "touched" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   maskFilled = output();
-  _maskValue = signal("", ...ngDevMode ? [{ debugName: "_maskValue" }] : []);
-  _inputValue = signal("", ...ngDevMode ? [{ debugName: "_inputValue" }] : []);
-  _position = signal(null, ...ngDevMode ? [{ debugName: "_position" }] : []);
-  _code = signal("", ...ngDevMode ? [{ debugName: "_code" }] : []);
-  _maskExpressionArray = signal([], ...ngDevMode ? [{ debugName: "_maskExpressionArray" }] : []);
-  _justPasted = signal(false, ...ngDevMode ? [{ debugName: "_justPasted" }] : []);
-  _isFocused = signal(false, ...ngDevMode ? [{ debugName: "_isFocused" }] : []);
+  _maskValue = signal("", ...ngDevMode ? [{ debugName: "_maskValue" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _inputValue = signal("", ...ngDevMode ? [{ debugName: "_inputValue" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _position = signal(null, ...ngDevMode ? [{ debugName: "_position" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _code = signal("", ...ngDevMode ? [{ debugName: "_code" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _maskExpressionArray = signal([], ...ngDevMode ? [{ debugName: "_maskExpressionArray" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _justPasted = signal(false, ...ngDevMode ? [{ debugName: "_justPasted" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  _isFocused = signal(false, ...ngDevMode ? [{ debugName: "_isFocused" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   /** For IME composition event */
-  _isComposing = signal(false, ...ngDevMode ? [{ debugName: "_isComposing" }] : []);
-  /** Track if we're using Signal Forms mode */
-  _isSignalFormsMode = signal(false, ...ngDevMode ? [{ debugName: "_isSignalFormsMode" }] : []);
+  _isComposing = signal(false, ...ngDevMode ? [{ debugName: "_isComposing" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  /**
+   * True once Angular has driven this directive through the `ControlValueAccessor` contract
+   * (`registerOnChange`). NOTE: Signal Forms' `FormField` ALSO takes this path — it prefers a
+   * host-provided `NG_VALUE_ACCESSOR` over the custom-control `value` model binding (see
+   * `FormField.ɵngControlCreate`), so it calls `registerOnChange`/`writeValue` too and this
+   * flag is `true` in both modes. That is fine: with the flag set, the `value`-model effect
+   * below is a no-op and all rendering goes through `writeValue()`. The `value` model is only
+   * driven directly (flag stays `false`) when the directive is used standalone with a
+   * `[(value)]` binding and no forms integration.
+   */
+  _isCvaMode = signal(false, ...ngDevMode ? [{ debugName: "_isCvaMode" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  /** Guards against the value effect echoing back a value we just propagated ourselves. */
+  _skipNextValueEffect = signal(false, ...ngDevMode ? [{ debugName: "_skipNextValueEffect" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  /**
+   * The exact stringified value last pushed through `onChange` (view → model). Signal Forms'
+   * `FormField` echoes every model update back through `writeValue()` — including updates that
+   * originated from the view. Re-masking that unmasked echo is at best a redundant re-render
+   * and at worst destructive for masks whose unmasked form is ambiguous (e.g. IP:
+   * '192168178' cannot reconstruct the typed dots of '192.168.1.78'). `writeValue()` consumes
+   * this marker to skip exactly that echo. `null` = no pending propagation.
+   */
+  _lastPropagatedValue = null;
+  /**
+   * True once the first `ngOnChanges` pass has applied the mask configuration to the service.
+   * Signal Forms' `FormField` syncs its field value through the template `ɵɵcontrol` update
+   * instruction, which runs BEFORE the sibling directives' first `ngOnChanges` on the same
+   * element — so the very first `writeValue()` would otherwise see an unconfigured service
+   * (empty `maskExpression`, default `leadZero`/`thousandSeparator`/...) and render the raw
+   * value. Until this flag is set, `writeValue()` stashes the incoming value and `ngOnChanges`
+   * replays it once the configuration is in place.
+   */
+  _configApplied = false;
+  _pendingInitialValue;
+  _hasPendingInitialValue = false;
+  /**
+   * True once the `disabled` input has ever delivered `true`. The disabled effect's very
+   * first run fires with the input's default `false` even when nothing binds `[disabled]`.
+   * Because effects run after Angular Forms' `setUpControl` (which calls
+   * `setDisabledState(true)` for initially-disabled controls) and both DOM writes are
+   * queueMicrotask-deferred in FIFO order, forwarding that default `false` would land last
+   * and re-enable an initially-disabled control (#1607, #1614). An initial `false` write is
+   * never needed — inputs are enabled by default — so `false` is only forwarded after the
+   * input has explicitly driven the state to `true` at least once.
+   */
+  _disabledEverSet = false;
+  /** Ensures the multi-character placeHolderCharacter warning (#1347) is emitted only once. */
+  _warnedAboutMultiCharPlaceholder = false;
   _maskService = inject2(NgxMaskService, { self: true });
   document = inject2(DOCUMENT);
   _config = inject2(NGX_MASK_CONFIG);
+  /**
+   * Under zoneless change detection, writing to the underlying FormControl programmatically
+   * (e.g. `setValue`/`patchValue` from outside a signal/effect context, or from a callback
+   * zone.js used to auto-flush like `requestAnimationFrame`/`queueMicrotask`) does not itself
+   * trigger a CD run. Bindings that read `form.pristine`/`form.dirty`/`form.value` on the host
+   * template need an explicit `markForCheck()` once the directive finishes reacting to a
+   * programmatic value write, otherwise the view stays stale until something else schedules CD.
+   */
+  _changeDetectorRef = inject2(ChangeDetectorRef);
+  _elementRef = inject2(ElementRef);
+  _renderer = inject2(Renderer2);
+  // Injector is used to lazily resolve NgControl. NgControl cannot be injected directly:
+  // this directive is registered as the control's NG_VALUE_ACCESSOR, so a direct
+  // inject(NgControl) would form a circular dependency. Resolving it lazily on first use
+  // (after the control graph is wired) sidesteps the cycle.
+  _injector = inject2(Injector);
+  _ngControl;
+  _resolveNgControl() {
+    if (typeof this._ngControl === "undefined") {
+      this._ngControl = this._injector.get(NgControl, null);
+    }
+    return this._ngControl;
+  }
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   onChange = (_) => {
   };
@@ -40007,25 +41511,34 @@ var NgxMaskDirective = class _NgxMaskDirective {
   onTouch = () => {
   };
   constructor() {
+    this._maskService.onChange = this.onChange = (value) => {
+      this._propagateToValueModel(value);
+    };
     effect(() => {
       const signalValue = this.value();
-      if (this._isSignalFormsMode() && signalValue !== untracked2(() => this._inputValue())) {
-        untracked2(() => {
+      untracked2(() => {
+        if (this._isCvaMode()) {
+          return;
+        }
+        if (this._skipNextValueEffect()) {
+          this._skipNextValueEffect.set(false);
+          return;
+        }
+        if (String(signalValue) !== String(this._inputValue())) {
           this.writeValue(signalValue);
-        });
-      }
+        }
+      });
     });
     effect(() => {
       const isDisabled = this.disabled();
       untracked2(() => {
+        if (!isDisabled && !this._disabledEverSet) {
+          return;
+        }
+        this._disabledEverSet = true;
         this.setDisabledState(isDisabled);
       });
     });
-  }
-  ngOnInit() {
-    if (this.value() !== "") {
-      this._isSignalFormsMode.set(true);
-    }
   }
   ngOnChanges(changes) {
     const { mask, specialCharacters, patterns, prefix, suffix, thousandSeparator, decimalMarker, dropSpecialCharacters, hiddenInput, showMaskTyped, placeHolderCharacter, shownMaskExpression, clearIfNotMatch, validation, separatorLimit, allowNegativeNumbers, leadZeroDateTime, leadZero, triggerOnMaskChange, apm, inputTransformFn, outputTransformFn, keepCharacterPositions, instantPrefix } = changes;
@@ -40045,10 +41558,8 @@ var NgxMaskDirective = class _NgxMaskDirective {
       }
     }
     if (specialCharacters) {
-      if (!specialCharacters.currentValue || !Array.isArray(specialCharacters.currentValue)) {
-        return;
-      } else {
-        this._maskService.specialCharacters = specialCharacters.currentValue || [];
+      if (Array.isArray(specialCharacters.currentValue)) {
+        this._maskService.specialCharacters = specialCharacters.currentValue;
       }
     }
     if (allowNegativeNumbers) {
@@ -40111,6 +41622,10 @@ var NgxMaskDirective = class _NgxMaskDirective {
     }
     if (placeHolderCharacter) {
       this._maskService.placeHolderCharacter = placeHolderCharacter.currentValue;
+      if (typeof placeHolderCharacter.currentValue === "string" && placeHolderCharacter.currentValue.length > 1 && !this._warnedAboutMultiCharPlaceholder) {
+        this._warnedAboutMultiCharPlaceholder = true;
+        console.warn("Ngx-mask: placeHolderCharacter should be a single character; behavior with multi-character values is undefined (e.g. keepCharacterPositions will not work). Current value:", placeHolderCharacter.currentValue);
+      }
     }
     if (shownMaskExpression) {
       this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
@@ -40143,6 +41658,15 @@ var NgxMaskDirective = class _NgxMaskDirective {
       this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
     }
     this._applyMask();
+    if (!this._configApplied) {
+      this._configApplied = true;
+      if (this._hasPendingInitialValue) {
+        this._hasPendingInitialValue = false;
+        const pendingValue = this._pendingInitialValue;
+        this._pendingInitialValue = null;
+        void this.writeValue(pendingValue);
+      }
+    }
   }
   validate({ value }) {
     const processedValue = typeof value === "number" ? String(value) : value;
@@ -40193,8 +41717,15 @@ var NgxMaskDirective = class _NgxMaskDirective {
           } else if (maskValue.indexOf(key) !== -1) {
             counterOfOpt++;
           }
-          if (maskValue.indexOf(key) !== -1 && processedValue.length >= maskValue.indexOf(key)) {
-            return null;
+          const firstOptionalIndex = maskValue.indexOf(key);
+          if (firstOptionalIndex !== -1 && processedValue.length >= firstOptionalIndex) {
+            const hasMandatoryAfterOptional = maskValue.slice(firstOptionalIndex).split(MaskExpression.EMPTY_STRING).some((symbol) => !!this._maskService.patterns[symbol] && !this._maskService.patterns[symbol]?.optional);
+            if (!hasMandatoryAfterOptional) {
+              return null;
+            }
+            if (!this.prefix() && !this.suffix() && this._isPlainTokenMask(maskValue)) {
+              return this._matchesMaskWithOptionalSkip(processedValue, maskValue) ? null : this._createValidationError(processedValue);
+            }
           }
           if (counterOfOpt === maskValue.length) {
             return null;
@@ -40209,6 +41740,9 @@ var NgxMaskDirective = class _NgxMaskDirective {
         const length = this._maskService.dropSpecialCharacters ? maskValue.length - this._maskService.checkDropSpecialCharAmount(maskValue) - counterOfOpt : this.prefix() ? maskValue.length + this.prefix().length - counterOfOpt : maskValue.length - counterOfOpt;
         if (array.length === 1) {
           if (processedValue.length < length) {
+            if (this._isCompleteAlternativeBoundary(processedValue)) {
+              return null;
+            }
             return this._createValidationError(processedValue);
           }
         }
@@ -40239,6 +41773,7 @@ var NgxMaskDirective = class _NgxMaskDirective {
   }
   onFocus() {
     this._isFocused.set(true);
+    this._maskService._isFocused.set(true);
   }
   onModelChange(value) {
     if ((value === MaskExpression.EMPTY_STRING || value === null || typeof value === "undefined") && this._maskService.actualValue) {
@@ -40247,43 +41782,64 @@ var NgxMaskDirective = class _NgxMaskDirective {
   }
   onInput(e) {
     this._maskService.isInitialized = true;
-    if (this._isComposing()) {
+    const inputType = e.inputType;
+    if (inputType === "deleteContentBackward") {
+      this._code.set(MaskExpression.BACKSPACE);
+    } else if (inputType === "deleteContentForward") {
+      this._code.set(MaskExpression.DELETE);
+    } else if (inputType && (this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE)) {
+      this._code.set(inputType);
+    }
+    if (this._isComposing() && this._maskAcceptsLetterInput()) {
       return;
     }
     const el = e.target;
     const transformedValue = this._maskService.inputTransformFn ? this._maskService.inputTransformFn(el.value) : el.value;
     if (el.type !== "number") {
       if (typeof transformedValue === "string" || typeof transformedValue === "number") {
-        el.value = transformedValue.toString();
+        const transformedString = transformedValue.toString();
+        if (el.value !== transformedString) {
+          el.value = transformedString;
+        }
         this._inputValue.set(el.value);
         this._setMask();
         if (!this._maskValue()) {
           this.onChange(el.value);
           return;
         }
+        const pastedValueWithoutPrefix = this._justPasted() && !!this._maskService.prefix && !el.value.startsWith(this._maskService.prefix);
         let position = el.selectionStart === 1 ? el.selectionStart + this._maskService.prefix.length : el.selectionStart;
-        if (this.showMaskTyped() && this.keepCharacterPositions() && this._maskService.placeHolderCharacter.length === 1) {
+        if (this.keepCharacterPositions() && this._maskService.placeHolderCharacter.length === 1 && !this._justPasted()) {
           const suffix = this.suffix();
           const prefix = this.prefix();
           const inputSymbol = el.value.slice(position - 1, position);
           const prefixLength = prefix.length;
-          const checkSymbols = this._maskService._checkSymbolMask(inputSymbol, this._maskService.maskExpression[position - 1 - prefixLength] ?? MaskExpression.EMPTY_STRING);
-          const checkSpecialCharacter = this._maskService._checkSymbolMask(inputSymbol, this._maskService.maskExpression[position + 1 - prefixLength] ?? MaskExpression.EMPTY_STRING);
-          const selectRangeBackspace = this._maskService.selStart === this._maskService.selEnd;
-          const selStart = Number(this._maskService.selStart) - prefixLength;
-          const selEnd = Number(this._maskService.selEnd) - prefixLength;
+          const showMaskTyped = this.showMaskTyped();
+          const maskExpression = this._maskService.maskExpression;
+          const maskSkeleton = this._maskService.maskIsShown.length ? this._maskService.maskIsShown : maskExpression.replace(/\w/g, this._maskService.placeHolderCharacter);
+          const hasSelection = this._maskService.selStart !== this._maskService.selEnd;
+          const selStartAbs = Number(this._maskService.selStart);
+          const selEndAbs = Number(this._maskService.selEnd);
+          const selStart = selStartAbs - prefixLength;
+          const selEnd = selEndAbs - prefixLength;
           const backspaceOrDelete = this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE;
+          let kcpHandled = true;
           if (backspaceOrDelete) {
-            if (!selectRangeBackspace) {
-              if (this._maskService.selStart === prefixLength) {
-                this._maskService.actualValue = `${prefix}${this._maskService.maskIsShown.slice(0, selEnd)}${this._inputValue().split(prefix).join("")}`;
-              } else if (this._maskService.selStart === this._maskService.maskIsShown.length + prefixLength) {
-                this._maskService.actualValue = `${this._inputValue()}${this._maskService.maskIsShown.slice(selStart, selEnd)}`;
+            if (hasSelection) {
+              const preEditLength = el.value.length + (selEndAbs - selStartAbs);
+              if (!showMaskTyped && selStartAbs <= prefixLength && selEndAbs >= preEditLength) {
+                kcpHandled = false;
+              } else if (this._maskService.selStart === prefixLength) {
+                this._maskService.actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${this._inputValue().split(prefix).join("")}`;
+              } else if (this._maskService.selStart === maskSkeleton.length + prefixLength) {
+                this._maskService.actualValue = `${this._inputValue()}${maskSkeleton.slice(selStart, selEnd)}`;
               } else {
-                this._maskService.actualValue = `${prefix}${this._inputValue().split(prefix).join("").slice(0, selStart)}${this._maskService.maskIsShown.slice(selStart, selEnd)}${this._maskService.actualValue.slice(selEnd + prefixLength, this._maskService.maskIsShown.length + prefixLength)}${suffix}`;
+                this._maskService.actualValue = `${prefix}${this._inputValue().split(prefix).join("").slice(0, selStart)}${maskSkeleton.slice(selStart, selEnd)}${this._maskService.actualValue.slice(selEnd + prefixLength, maskSkeleton.length + prefixLength)}${suffix}`;
               }
-            } else if (!this._maskService.specialCharacters.includes(this._maskService.maskExpression.slice(position - prefixLength, position + 1 - prefixLength)) && selectRangeBackspace) {
-              if (selStart === 1 && prefix) {
+            } else if (!this._maskService.specialCharacters.includes(maskExpression.slice(position - prefixLength, position + 1 - prefixLength))) {
+              if (!showMaskTyped && position >= el.value.length) {
+                kcpHandled = false;
+              } else if (selStart === 1 && prefix) {
                 this._maskService.actualValue = `${prefix}${this._maskService.placeHolderCharacter}${el.value.split(prefix).join("").split(suffix).join("")}${suffix}`;
                 position = position - 1;
               } else {
@@ -40293,23 +41849,54 @@ var NgxMaskDirective = class _NgxMaskDirective {
               }
             }
             position = this._code() === MaskExpression.DELETE ? position + 1 : position;
-          }
-          if (!backspaceOrDelete) {
-            if (!checkSymbols && !checkSpecialCharacter && selectRangeBackspace) {
-              position = Number(el.selectionStart) - 1;
-            } else if (this._maskService.specialCharacters.includes(el.value.slice(position, position + 1)) && checkSpecialCharacter && !this._maskService.specialCharacters.includes(el.value.slice(position + 1, position + 2))) {
-              this._maskService.actualValue = `${el.value.slice(0, position - 1)}${el.value.slice(position, position + 1)}${inputSymbol}${el.value.slice(position + 2)}`;
-              position = position + 1;
-            } else if (checkSymbols) {
-              if (el.value.length === 1 && position === 1) {
-                this._maskService.actualValue = `${prefix}${inputSymbol}${this._maskService.maskIsShown.slice(1, this._maskService.maskIsShown.length)}${suffix}`;
-              } else {
-                this._maskService.actualValue = `${el.value.slice(0, position - 1)}${inputSymbol}${el.value.slice(position + 1).split(suffix).join("")}${suffix}`;
+          } else if (hasSelection) {
+            const preEditLength = el.value.length - 1 + (selEndAbs - selStartAbs);
+            if (!showMaskTyped && selStartAbs <= prefixLength && selEndAbs >= preEditLength) {
+              kcpHandled = false;
+            } else {
+              let maskIdx = Math.max(selStart, 0);
+              while (maskIdx < maskExpression.length && this._maskService.specialCharacters.includes(maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)) {
+                maskIdx += 1;
               }
-            } else if (prefix && el.value.length === 1 && position - prefixLength === 1 && this._maskService._checkSymbolMask(el.value, this._maskService.maskExpression[position - 1 - prefixLength] ?? MaskExpression.EMPTY_STRING)) {
-              this._maskService.actualValue = `${prefix}${el.value}${this._maskService.maskIsShown.slice(1, this._maskService.maskIsShown.length)}${suffix}`;
+              const blanked = `${el.value.slice(0, selStartAbs)}${maskSkeleton.slice(Math.max(selStart, 0), selEnd)}${el.value.slice(selStartAbs + 1)}`;
+              const targetAbs = maskIdx + prefixLength;
+              if (targetAbs < blanked.length - suffix.length && this._maskService._checkSymbolMask(inputSymbol, maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)) {
+                this._maskService.actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
+                position = targetAbs + 1;
+              } else {
+                this._maskService.actualValue = blanked;
+                position = selStartAbs;
+              }
+            }
+          } else {
+            const oldDisplay = `${el.value.slice(0, position - 1)}${el.value.slice(position)}`;
+            const oldDisplayNoSuffix = suffix ? oldDisplay.split(suffix).join("") : oldDisplay;
+            let maskIdx = position - 1 - prefixLength;
+            if (maskIdx < 0) {
+              position = position - 1;
+            } else {
+              while (maskIdx < maskExpression.length && this._maskService.specialCharacters.includes(maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)) {
+                maskIdx += 1;
+              }
+              const targetAbs = maskIdx + prefixLength;
+              if (targetAbs >= oldDisplayNoSuffix.length) {
+                if (oldDisplayNoSuffix.length <= prefixLength || !showMaskTyped) {
+                  kcpHandled = false;
+                } else {
+                  position = position - 1;
+                }
+              } else if (this._maskService._checkSymbolMask(inputSymbol, maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)) {
+                this._maskService.actualValue = `${oldDisplayNoSuffix.slice(0, targetAbs)}${inputSymbol}${oldDisplayNoSuffix.slice(targetAbs + 1)}${suffix}`;
+                position = targetAbs + 1;
+              } else {
+                position = position - 1;
+              }
             }
           }
+          this._maskService.keepCharacterPositionsHandled = kcpHandled;
+        }
+        if (!this._maskService.hiddenInput && !this._maskService.showMaskTyped && !this.keepCharacterPositions() && this._maskService.selStart !== this._maskService.selEnd && el.value.includes(MaskExpression.SYMBOL_STAR)) {
+          this._maskService.actualValue = MaskExpression.EMPTY_STRING;
         }
         let caretShift = 0;
         let backspaceShift = false;
@@ -40359,8 +41946,15 @@ var NgxMaskDirective = class _NgxMaskDirective {
         }
         this._position.set(this._position() === 1 && this._inputValue().length === 1 ? null : this._position());
         let positionToApply = this._position() ? this._inputValue().length + position + caretShift : position + (this._code() === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
+        if (pastedValueWithoutPrefix && this._maskValue().startsWith(MaskExpression.SEPARATOR)) {
+          positionToApply += this._maskService.prefix.length;
+        }
         if (positionToApply > this._getActualInputLength()) {
-          positionToApply = el.value === this._maskService.decimalMarker && el.value.length === 1 ? this._getActualInputLength() + 1 : this._getActualInputLength();
+          const decimalMarker = this._maskService.decimalMarker;
+          const prefix = this._maskService.prefix;
+          const valueWithoutPrefix = el.value.startsWith(prefix) ? el.value.slice(prefix.length) : el.value;
+          const isBareDecimalMarker = valueWithoutPrefix.length === 1 && (Array.isArray(decimalMarker) ? decimalMarker.includes(valueWithoutPrefix) : valueWithoutPrefix === decimalMarker);
+          positionToApply = isBareDecimalMarker ? this._getActualInputLength() + 1 : this._getActualInputLength();
         }
         if (positionToApply < 0) {
           positionToApply = 0;
@@ -40378,6 +41972,28 @@ var NgxMaskDirective = class _NgxMaskDirective {
       this._maskService.applyValueChanges(el.value.length, this._justPasted(), this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE);
     }
   }
+  /**
+   * Whether any pattern slot of the current mask expression can accept a letter.
+   * IME composition is only meaningful for such masks; for purely numeric masks
+   * (digit patterns, separator, date/time, IP, CPF_CNPJ) waiting for compositionend
+   * only delays the model sync — and Samsung Keyboard may never fire it until blur
+   * (#1293). Unknown/letterless probe failures fall back to `false` (process live).
+   */
+  _maskAcceptsLetterInput() {
+    const patterns = this._maskService.patterns;
+    const maskExpression = this._maskService.maskExpression;
+    for (const symbol of maskExpression) {
+      const pattern = patterns[symbol]?.pattern;
+      if (!pattern) {
+        continue;
+      }
+      const probe = new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, ""));
+      if (probe.test("a") || probe.test("A")) {
+        return true;
+      }
+    }
+    return false;
+  }
   // IME starts
   onCompositionStart() {
     this._isComposing.set(true);
@@ -40385,6 +42001,9 @@ var NgxMaskDirective = class _NgxMaskDirective {
   // IME completes
   onCompositionEnd(e) {
     this._isComposing.set(false);
+    if (!this._maskAcceptsLetterInput()) {
+      return;
+    }
     this._justPasted.set(true);
     this.onInput(e);
   }
@@ -40399,13 +42018,15 @@ var NgxMaskDirective = class _NgxMaskDirective {
         if (precision > 0) {
           el.value = suffix ? el.value.split(suffix).join("") : el.value;
           const decimalPart = el.value.split(decimalMarker)[1];
-          el.value = el.value.includes(decimalMarker) ? el.value + MaskExpression.NUMBER_ZERO.repeat(precision - decimalPart.length) + suffix : el.value + decimalMarker + MaskExpression.NUMBER_ZERO.repeat(precision) + suffix;
+          el.value = el.value.includes(decimalMarker) ? el.value + MaskExpression.NUMBER_ZERO.repeat(precision - (decimalPart?.length || 0)) + suffix : el.value + decimalMarker + MaskExpression.NUMBER_ZERO.repeat(precision) + suffix;
           this._maskService.actualValue = el.value;
+          this.onChange(this._maskService.actualValue);
         }
       }
       this._maskService.clearIfNotMatchFn();
     }
     this._isFocused.set(false);
+    this._maskService._isFocused.set(false);
     this.onTouch();
   }
   onClick(e) {
@@ -40449,7 +42070,12 @@ var NgxMaskDirective = class _NgxMaskDirective {
     if (this._isComposing()) {
       if (e.key === "Enter") {
         this.onCompositionEnd(event);
+        return;
       }
+      const composingEl = e.target;
+      this._inputValue.set(composingEl.value);
+      this._maskService.selStart = composingEl.selectionStart;
+      this._maskService.selEnd = composingEl.selectionEnd;
       return;
     }
     this._code.set(e.code ? e.code : e.key);
@@ -40467,7 +42093,7 @@ var NgxMaskDirective = class _NgxMaskDirective {
         }
         if (e.key === MaskExpression.BACKSPACE && el.selectionStart !== 0) {
           const prefixLength = this.prefix().length;
-          const specialCharacters = this.specialCharacters().length ? this.specialCharacters() : this._config.specialCharacters;
+          const specialCharacters = this._maskService.specialCharacters;
           if (prefixLength > 1 && el.selectionStart <= prefixLength) {
             el.setSelectionRange(prefixLength, el.selectionEnd);
           } else {
@@ -40484,8 +42110,12 @@ var NgxMaskDirective = class _NgxMaskDirective {
         }
         const cursorStart = el.selectionStart;
         if (e.key === MaskExpression.BACKSPACE && !el.readOnly && cursorStart === 0 && el.selectionEnd === el.value.length && el.value.length !== 0) {
-          this._position.set(this._maskService.prefix ? this._maskService.prefix.length : 0);
-          this._maskService.applyMask(this._maskService.prefix, this._maskService.maskExpression, this._position());
+          e.preventDefault();
+          const displayValue = this._maskService.applyMask(MaskExpression.EMPTY_STRING, this._maskService.maskExpression, 0, false, true);
+          el.value = displayValue;
+          this._inputValue.set(displayValue);
+          const caret = Math.min(this._maskService.prefix.length, displayValue.length);
+          el.setSelectionRange(caret, caret);
         }
       }
       if (!!this.suffix() && this.suffix().length > 1 && this._inputValue().length - this.suffix().length < el.selectionStart) {
@@ -40498,8 +42128,44 @@ var NgxMaskDirective = class _NgxMaskDirective {
       this._maskService.selEnd = el.selectionEnd;
     }
   }
+  /**
+   * Restores the control's pristine/untouched state after a writeValue-driven emission.
+   *
+   * writeValue is a one-way model->view sync. When the mask normalizes the written value
+   * (e.g. leadZero '10.2' -> '10.20'), the directive must still emit the corrected value so
+   * the model adopts it — but that emission runs through Angular's view-change pipeline, which
+   * calls markAsDirty()/markAsTouched(). A programmatic setValue/patchValue must leave the
+   * control pristine, so we undo that side effect here when the control was pristine before
+   * the write. `onlySelf: true` keeps parent group state untouched.
+   */
+  _restoreControlStateAfterWrite(wasPristine, wasUntouched) {
+    const ngControl = this._resolveNgControl();
+    const control = ngControl?.control;
+    if (!control) {
+      return;
+    }
+    if (wasPristine && ngControl.dirty && typeof control.markAsPristine === "function") {
+      control.markAsPristine({ onlySelf: true });
+    }
+    if (wasUntouched && ngControl.touched && typeof control.markAsUntouched === "function") {
+      control.markAsUntouched({ onlySelf: true });
+    }
+  }
   /** It writes the value in the input */
   async writeValue(controlValue) {
+    if (!this._configApplied && this.mask()) {
+      this._pendingInitialValue = controlValue;
+      this._hasPendingInitialValue = true;
+      return;
+    }
+    const lastPropagated = this._lastPropagatedValue;
+    this._lastPropagatedValue = null;
+    if (lastPropagated !== null && lastPropagated !== "" && (typeof controlValue === "string" || typeof controlValue === "number") && String(controlValue) === lastPropagated) {
+      return;
+    }
+    const ngControl = this._resolveNgControl();
+    const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+    const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
     let value = controlValue;
     const inputTransformFn = this._maskService.inputTransformFn;
     if (typeof value === "object" && value !== null && "value" in value) {
@@ -40539,6 +42205,8 @@ var NgxMaskDirective = class _NgxMaskDirective {
             if (isFirstWrite) {
               this._maskService.isInitialized = true;
             }
+            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+            this._changeDetectorRef.markForCheck();
           });
         }
         this._maskService.isNumberValue = true;
@@ -40550,40 +42218,75 @@ var NgxMaskDirective = class _NgxMaskDirective {
       this._setMask();
       if (inputValue && this._maskService.maskExpression || this._maskService.maskExpression && (this._maskService.prefix || this._maskService.showMaskTyped)) {
         this._maskService.writingValue = true;
-        this._maskService.formElementProperty = [
-          "value",
-          this._maskService.applyMask(inputValue, this._maskService.maskExpression)
-        ];
+        const displayValue = this._maskedOrVerbatim(inputValue);
+        this._maskService.formElementProperty = ["value", displayValue];
+        this._writeElementValueSync(displayValue);
         this._maskService.writingValue = false;
         this._maskService.isInitialized = true;
       } else {
         this._maskService.formElementProperty = ["value", inputValue];
+        this._writeElementValueSync(inputValue);
         this._maskService.isInitialized = true;
       }
-      this._inputValue.set(inputValue);
+      this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+      this._changeDetectorRef.markForCheck();
     } else {
       console.warn("Ngx-mask writeValue work with string | number, your current value:", typeof value);
     }
   }
+  /**
+   * Mirrors a writeValue-driven render into the DOM synchronously, in the same
+   * change-detection pass (#1305). The service's `formElementProperty` setter defers all
+   * writes via queueMicrotask (to keep FIFO ordering with config-driven re-renders and
+   * dodge ExpressionChanged issues), but consumers that read `nativeElement.value` DURING
+   * the CD pass — Angular Material's floating label (`MatInput.empty`), CDK autofill —
+   * never see a value that only lands in a later microtask. The deferred write still runs
+   * afterwards and re-applies the same final value, so ordering guarantees are preserved.
+   *
+   * Skipped while a mask reconfiguration is pending (`mask()` input changed but
+   * `ngOnChanges` has not applied it yet — e.g. `mask.set(...)` + `setValue(...)` before
+   * the next CD pass): the value just computed used the STALE mask config, and rendering
+   * it synchronously would expose an intermediate state that the deferred pipeline is
+   * about to supersede. Multi-masks (`||`) resolve `_maskValue` to one alternative and
+   * therefore also fall back to the deferred-only path.
+   */
+  _writeElementValueSync(value) {
+    if ((this.mask() ?? MaskExpression.EMPTY_STRING) !== this._maskValue()) {
+      return;
+    }
+    this._renderer.setProperty(this._elementRef.nativeElement, "value", value);
+  }
   registerOnChange(fn) {
+    this._isCvaMode.set(true);
     const originalFn = fn;
     this._maskService.onChange = this.onChange = (value) => {
       originalFn(value);
-      if (this._isSignalFormsMode()) {
-        const stringValue = value === null || typeof value === "undefined" ? "" : String(value);
-        if (this.value() !== stringValue) {
-          this.value.set(stringValue);
-        }
-      }
+      this._propagateToValueModel(value);
     };
   }
   registerOnTouched(fn) {
     this.onTouch = () => {
       fn();
-      if (this._isSignalFormsMode() && !this.touched()) {
+      if (!this.touched()) {
         this.touched.set(true);
       }
     };
+  }
+  /**
+   * Pushes the current unmasked value into the `value` model input. In Signal Forms mode this
+   * fires the `valueChange` output that Angular listens to; in CVA mode it is a harmless write
+   * to a model nobody reads. We flag `_skipNextValueEffect` so the resulting model change does
+   * not bounce back through the value effect and overwrite the raw `_inputValue`.
+   */
+  _propagateToValueModel(value) {
+    const stringValue = value === null || typeof value === "undefined" ? "" : String(value);
+    this._lastPropagatedValue = stringValue;
+    untracked2(() => {
+      if (String(this.value()) !== stringValue) {
+        this._skipNextValueEffect.set(true);
+        this.value.set(stringValue);
+      }
+    });
   }
   /**
    * Focus the input element.
@@ -40615,8 +42318,29 @@ var NgxMaskDirective = class _NgxMaskDirective {
     this._maskService.maskExpression = this._maskService._repeatPatternSymbols(this._maskValue() || "");
     this._maskService.formElementProperty = [
       "value",
-      this._maskService.applyMask(this._inputValue(), this._maskService.maskExpression)
+      this._maskedOrVerbatim(this._inputValue())
     ];
+  }
+  /**
+   * Renders `inputValue` through the mask, falling back to the raw value verbatim when the
+   * mask cannot process ANY of it (#1615, e.g. a sentinel like 'ONGOING' written into a
+   * digits-only control). Values that PARTIALLY match keep regular masking.
+   *
+   * Shared by writeValue() and _applyMask() (called from every ngOnChanges pass, including
+   * ones triggered by an UNRELATED input like `disabled`) so the verbatim verdict for a
+   * value written once via writeValue() is not lost on a later re-render that replays the
+   * same raw `inputValue` outside of writeValue — which would otherwise re-run regular
+   * masking, produce an empty result, and emit it through onChange, clobbering the model.
+   *
+   * Excludes an actual mask RECONFIGURATION (`maskChanged`): when the mask itself just
+   * changed, a value that no longer matches must clear through the regular path (see
+   * trigger-on-mask-change.spec.ts) — verbatim passthrough only covers re-renders of the
+   * SAME mask.
+   */
+  _maskedOrVerbatim(inputValue) {
+    const wasMaskChanged = this._maskService.maskChanged;
+    const maskedResult = this._maskService.applyMask(inputValue, this._maskService.maskExpression);
+    return !maskedResult && inputValue && !wasMaskChanged && this._maskService.removeMask(inputValue) ? inputValue : maskedResult;
   }
   _validateTime(value) {
     const rowMaskLen = this._maskValue().split(MaskExpression.EMPTY_STRING).filter((s) => s !== ":").length;
@@ -40630,6 +42354,83 @@ var NgxMaskDirective = class _NgxMaskDirective {
   }
   _getActualInputLength() {
     return this._maskService.actualValue.length || this._maskService.actualValue.length + this._maskService.prefix.length;
+  }
+  /**
+   * For `||` multi-masks only (#1583): a value shorter than the currently selected
+   * alternative is still valid when it is a pattern-valid prefix of that alternative
+   * ending exactly at a special-character boundary (e.g. `0` for `0,N`) and it meets
+   * the length requirement of at least one alternative (e.g. `1`). Values stopping
+   * mid-pattern-block (e.g. `112A` for `000SS`) remain invalid.
+   */
+  _isCompleteAlternativeBoundary(processedValue) {
+    const alternatives = this._maskExpressionArray();
+    if (!alternatives.length) {
+      return false;
+    }
+    const maskValue = this._maskValue();
+    const cleanValue = this._maskService.removeMask(processedValue);
+    const cleanMask = this._maskService.removeMask(maskValue);
+    const isPatternPrefix = cleanValue.split(MaskExpression.EMPTY_STRING).every((character, index) => this._maskService._checkSymbolMask(character, cleanMask.charAt(index)));
+    if (!isPatternPrefix) {
+      return false;
+    }
+    let patternCount = 0;
+    let boundaryCharacter = MaskExpression.EMPTY_STRING;
+    for (const maskCharacter of maskValue) {
+      if (patternCount === cleanValue.length) {
+        boundaryCharacter = maskCharacter;
+        break;
+      }
+      if (!this._maskService.specialCharacters.includes(maskCharacter)) {
+        patternCount++;
+      }
+    }
+    if (!boundaryCharacter || !this._maskService.specialCharacters.includes(boundaryCharacter)) {
+      return false;
+    }
+    return alternatives.some((alternative) => {
+      const requiredLength = this._maskService.dropSpecialCharacters ? alternative.length - this._maskService.checkDropSpecialCharAmount(alternative) : this.prefix() ? alternative.length + this.prefix().length : alternative.length;
+      return processedValue.length >= requiredLength;
+    });
+  }
+  /**
+   * True when every character of the mask expression is either a pattern token or a
+   * special character — i.e. the mask has no quantifiers (`*`, `?`), curly-bracket
+   * repetitions or other constructs the position-aware matcher does not model.
+   */
+  _isPlainTokenMask(mask) {
+    return mask.split(MaskExpression.EMPTY_STRING).every((symbol) => !!this._maskService.patterns[symbol] || this._maskService.specialCharacters.includes(symbol));
+  }
+  /**
+   * Backtracking match of a value against a mask mixing optional and mandatory pattern
+   * tokens (#1515, e.g. `999SSS`). Optional tokens may be left unfilled; special
+   * characters may be absent from the value (dropSpecialCharacters). The value is valid
+   * when it is fully consumed and every remaining mask token is optional or special.
+   */
+  _matchesMaskWithOptionalSkip(value, mask) {
+    const patterns = this._maskService.patterns;
+    const match2 = (maskIndex, valueIndex) => {
+      if (valueIndex === value.length) {
+        return mask.slice(maskIndex).split(MaskExpression.EMPTY_STRING).every((symbol) => !patterns[symbol] || !!patterns[symbol]?.optional);
+      }
+      if (maskIndex === mask.length) {
+        return false;
+      }
+      const maskSymbol = mask[maskIndex];
+      const valueSymbol = value[valueIndex];
+      const pattern = patterns[maskSymbol];
+      if (pattern) {
+        if (pattern.pattern.test(valueSymbol) && match2(maskIndex + 1, valueIndex + 1)) {
+          return true;
+        }
+        return !!pattern.optional && match2(maskIndex + 1, valueIndex);
+      }
+      if (valueSymbol === maskSymbol && match2(maskIndex + 1, valueIndex + 1)) {
+        return true;
+      }
+      return match2(maskIndex + 1, valueIndex);
+    };
+    return match2(0, 0);
   }
   _createValidationError(actualValue) {
     return {
@@ -40706,7 +42507,7 @@ var NgxMaskDirective = class _NgxMaskDirective {
         return ctx.onKeyDown($event);
       });
     }
-  }, inputs: { mask: [1, "mask"], specialCharacters: [1, "specialCharacters"], patterns: [1, "patterns"], prefix: [1, "prefix"], suffix: [1, "suffix"], thousandSeparator: [1, "thousandSeparator"], decimalMarker: [1, "decimalMarker"], dropSpecialCharacters: [1, "dropSpecialCharacters"], hiddenInput: [1, "hiddenInput"], showMaskTyped: [1, "showMaskTyped"], placeHolderCharacter: [1, "placeHolderCharacter"], shownMaskExpression: [1, "shownMaskExpression"], clearIfNotMatch: [1, "clearIfNotMatch"], validation: [1, "validation"], separatorLimit: [1, "separatorLimit"], allowNegativeNumbers: [1, "allowNegativeNumbers"], leadZeroDateTime: [1, "leadZeroDateTime"], leadZero: [1, "leadZero"], triggerOnMaskChange: [1, "triggerOnMaskChange"], apm: [1, "apm"], inputTransformFn: [1, "inputTransformFn"], outputTransformFn: [1, "outputTransformFn"], keepCharacterPositions: [1, "keepCharacterPositions"], instantPrefix: [1, "instantPrefix"], value: [1, "value"], errors: [1, "errors"], disabled: [1, "disabled"], touched: [1, "touched"], dirty: [1, "dirty"], invalid: [1, "invalid"], pending: [1, "pending"], readonly: [1, "readonly"], required: [1, "required"], name: [1, "name"] }, outputs: { value: "valueChange", touched: "touchedChange", maskFilled: "maskFilled" }, exportAs: ["mask", "ngxMask"], features: [\u0275\u0275ProvidersFeature([
+  }, inputs: { mask: [1, "mask"], specialCharacters: [1, "specialCharacters"], patterns: [1, "patterns"], prefix: [1, "prefix"], suffix: [1, "suffix"], thousandSeparator: [1, "thousandSeparator"], decimalMarker: [1, "decimalMarker"], dropSpecialCharacters: [1, "dropSpecialCharacters"], hiddenInput: [1, "hiddenInput"], showMaskTyped: [1, "showMaskTyped"], placeHolderCharacter: [1, "placeHolderCharacter"], shownMaskExpression: [1, "shownMaskExpression"], clearIfNotMatch: [1, "clearIfNotMatch"], validation: [1, "validation"], separatorLimit: [1, "separatorLimit"], allowNegativeNumbers: [1, "allowNegativeNumbers"], leadZeroDateTime: [1, "leadZeroDateTime"], leadZero: [1, "leadZero"], triggerOnMaskChange: [1, "triggerOnMaskChange"], apm: [1, "apm"], inputTransformFn: [1, "inputTransformFn"], outputTransformFn: [1, "outputTransformFn"], keepCharacterPositions: [1, "keepCharacterPositions"], instantPrefix: [1, "instantPrefix"], value: [1, "value"], disabled: [1, "disabled"], touched: [1, "touched"] }, outputs: { value: "valueChange", touched: "touchedChange", maskFilled: "maskFilled" }, exportAs: ["mask", "ngxMask"], features: [\u0275\u0275ProvidersFeature([
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: _NgxMaskDirective,
@@ -40741,7 +42542,7 @@ var NgxMaskDirective = class _NgxMaskDirective {
       ],
       exportAs: "mask,ngxMask"
     }]
-  }], () => [], { mask: [{ type: Input, args: [{ isSignal: true, alias: "mask", required: false }] }], specialCharacters: [{ type: Input, args: [{ isSignal: true, alias: "specialCharacters", required: false }] }], patterns: [{ type: Input, args: [{ isSignal: true, alias: "patterns", required: false }] }], prefix: [{ type: Input, args: [{ isSignal: true, alias: "prefix", required: false }] }], suffix: [{ type: Input, args: [{ isSignal: true, alias: "suffix", required: false }] }], thousandSeparator: [{ type: Input, args: [{ isSignal: true, alias: "thousandSeparator", required: false }] }], decimalMarker: [{ type: Input, args: [{ isSignal: true, alias: "decimalMarker", required: false }] }], dropSpecialCharacters: [{ type: Input, args: [{ isSignal: true, alias: "dropSpecialCharacters", required: false }] }], hiddenInput: [{ type: Input, args: [{ isSignal: true, alias: "hiddenInput", required: false }] }], showMaskTyped: [{ type: Input, args: [{ isSignal: true, alias: "showMaskTyped", required: false }] }], placeHolderCharacter: [{ type: Input, args: [{ isSignal: true, alias: "placeHolderCharacter", required: false }] }], shownMaskExpression: [{ type: Input, args: [{ isSignal: true, alias: "shownMaskExpression", required: false }] }], clearIfNotMatch: [{ type: Input, args: [{ isSignal: true, alias: "clearIfNotMatch", required: false }] }], validation: [{ type: Input, args: [{ isSignal: true, alias: "validation", required: false }] }], separatorLimit: [{ type: Input, args: [{ isSignal: true, alias: "separatorLimit", required: false }] }], allowNegativeNumbers: [{ type: Input, args: [{ isSignal: true, alias: "allowNegativeNumbers", required: false }] }], leadZeroDateTime: [{ type: Input, args: [{ isSignal: true, alias: "leadZeroDateTime", required: false }] }], leadZero: [{ type: Input, args: [{ isSignal: true, alias: "leadZero", required: false }] }], triggerOnMaskChange: [{ type: Input, args: [{ isSignal: true, alias: "triggerOnMaskChange", required: false }] }], apm: [{ type: Input, args: [{ isSignal: true, alias: "apm", required: false }] }], inputTransformFn: [{ type: Input, args: [{ isSignal: true, alias: "inputTransformFn", required: false }] }], outputTransformFn: [{ type: Input, args: [{ isSignal: true, alias: "outputTransformFn", required: false }] }], keepCharacterPositions: [{ type: Input, args: [{ isSignal: true, alias: "keepCharacterPositions", required: false }] }], instantPrefix: [{ type: Input, args: [{ isSignal: true, alias: "instantPrefix", required: false }] }], value: [{ type: Input, args: [{ isSignal: true, alias: "value", required: false }] }, { type: Output, args: ["valueChange"] }], errors: [{ type: Input, args: [{ isSignal: true, alias: "errors", required: false }] }], disabled: [{ type: Input, args: [{ isSignal: true, alias: "disabled", required: false }] }], touched: [{ type: Input, args: [{ isSignal: true, alias: "touched", required: false }] }, { type: Output, args: ["touchedChange"] }], dirty: [{ type: Input, args: [{ isSignal: true, alias: "dirty", required: false }] }], invalid: [{ type: Input, args: [{ isSignal: true, alias: "invalid", required: false }] }], pending: [{ type: Input, args: [{ isSignal: true, alias: "pending", required: false }] }], readonly: [{ type: Input, args: [{ isSignal: true, alias: "readonly", required: false }] }], required: [{ type: Input, args: [{ isSignal: true, alias: "required", required: false }] }], name: [{ type: Input, args: [{ isSignal: true, alias: "name", required: false }] }], maskFilled: [{ type: Output, args: ["maskFilled"] }], onPaste: [{
+  }], () => [], { mask: [{ type: Input, args: [{ isSignal: true, alias: "mask", required: false }] }], specialCharacters: [{ type: Input, args: [{ isSignal: true, alias: "specialCharacters", required: false }] }], patterns: [{ type: Input, args: [{ isSignal: true, alias: "patterns", required: false }] }], prefix: [{ type: Input, args: [{ isSignal: true, alias: "prefix", required: false }] }], suffix: [{ type: Input, args: [{ isSignal: true, alias: "suffix", required: false }] }], thousandSeparator: [{ type: Input, args: [{ isSignal: true, alias: "thousandSeparator", required: false }] }], decimalMarker: [{ type: Input, args: [{ isSignal: true, alias: "decimalMarker", required: false }] }], dropSpecialCharacters: [{ type: Input, args: [{ isSignal: true, alias: "dropSpecialCharacters", required: false }] }], hiddenInput: [{ type: Input, args: [{ isSignal: true, alias: "hiddenInput", required: false }] }], showMaskTyped: [{ type: Input, args: [{ isSignal: true, alias: "showMaskTyped", required: false }] }], placeHolderCharacter: [{ type: Input, args: [{ isSignal: true, alias: "placeHolderCharacter", required: false }] }], shownMaskExpression: [{ type: Input, args: [{ isSignal: true, alias: "shownMaskExpression", required: false }] }], clearIfNotMatch: [{ type: Input, args: [{ isSignal: true, alias: "clearIfNotMatch", required: false }] }], validation: [{ type: Input, args: [{ isSignal: true, alias: "validation", required: false }] }], separatorLimit: [{ type: Input, args: [{ isSignal: true, alias: "separatorLimit", required: false }] }], allowNegativeNumbers: [{ type: Input, args: [{ isSignal: true, alias: "allowNegativeNumbers", required: false }] }], leadZeroDateTime: [{ type: Input, args: [{ isSignal: true, alias: "leadZeroDateTime", required: false }] }], leadZero: [{ type: Input, args: [{ isSignal: true, alias: "leadZero", required: false }] }], triggerOnMaskChange: [{ type: Input, args: [{ isSignal: true, alias: "triggerOnMaskChange", required: false }] }], apm: [{ type: Input, args: [{ isSignal: true, alias: "apm", required: false }] }], inputTransformFn: [{ type: Input, args: [{ isSignal: true, alias: "inputTransformFn", required: false }] }], outputTransformFn: [{ type: Input, args: [{ isSignal: true, alias: "outputTransformFn", required: false }] }], keepCharacterPositions: [{ type: Input, args: [{ isSignal: true, alias: "keepCharacterPositions", required: false }] }], instantPrefix: [{ type: Input, args: [{ isSignal: true, alias: "instantPrefix", required: false }] }], value: [{ type: Input, args: [{ isSignal: true, alias: "value", required: false }] }, { type: Output, args: ["valueChange"] }], disabled: [{ type: Input, args: [{ isSignal: true, alias: "disabled", required: false }] }], touched: [{ type: Input, args: [{ isSignal: true, alias: "touched", required: false }] }, { type: Output, args: ["touchedChange"] }], maskFilled: [{ type: Output, args: ["maskFilled"] }], onPaste: [{
     type: HostListener,
     args: ["paste"]
   }], onFocus: [{
@@ -41405,9 +43206,18 @@ var IsEmptyPipe = class _IsEmptyPipe {
 var _c0 = ["title", "", "color", "", "value", ""];
 var _c1 = (a0) => [a0];
 var CardContentComponent = class _CardContentComponent {
-  color = input.required(...ngDevMode ? [{ debugName: "color" }] : []);
-  title = input.required(...ngDevMode ? [{ debugName: "title" }] : []);
-  value = input.required(...ngDevMode ? [{ debugName: "value" }] : []);
+  color = input.required(...ngDevMode ? [{ debugName: "color" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  title = input.required(...ngDevMode ? [{ debugName: "title" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  value = input.required(...ngDevMode ? [{ debugName: "value" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   static \u0275fac = function CardContentComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _CardContentComponent)();
   };
@@ -41431,12 +43241,12 @@ var CardContentComponent = class _CardContentComponent {
       \u0275\u0275advance();
       \u0275\u0275textInterpolate(ctx.value());
     }
-  }, styles: ["\n\n[_nghost-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  color: #ffffff;\n}\n[_nghost-%COMP%]   .green-view[_ngcontent-%COMP%] {\n  color: #1ab77e;\n  background-color: rgba(26, 183, 126, 0.1);\n}\n[_nghost-%COMP%]   .yellow-view[_ngcontent-%COMP%] {\n  color: #ffd64d;\n  background-color: rgba(255, 214, 77, 0.2);\n}\n/*# sourceMappingURL=card-content.component-TIYLKAFP.css.map */"] });
+  }, styles: ["\n[_nghost-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  margin-top: 20px;\n  color: #ffffff;\n}\n[_nghost-%COMP%]   .green-view[_ngcontent-%COMP%] {\n  color: #1ab77e;\n  background-color: rgba(26, 183, 126, 0.1);\n}\n[_nghost-%COMP%]   .yellow-view[_ngcontent-%COMP%] {\n  color: #ffd64d;\n  background-color: rgba(255, 214, 77, 0.2);\n}\n/*# sourceMappingURL=card-content.component-TIYLKAFP.css.map */"], changeDetection: 0 });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(CardContentComponent, [{
     type: Component,
-    args: [{ selector: "jsdaddy-open-source-card-content[title][color][value]", standalone: true, template: `<span class="mb-5px text-white text-title tracking-[.25em] empty:hidden">{{ title() }}</span>
+    args: [{ selector: "jsdaddy-open-source-card-content[title][color][value]", changeDetection: ChangeDetectionStrategy.OnPush, template: `<span class="mb-5px text-white text-title tracking-[.25em] empty:hidden">{{ title() }}</span>
 <span
     class="text-span yellow px-5px gap-2.5 w-fit h-[21px] rounded-5px"
     [class]="[color()]"
@@ -41451,6 +43261,11 @@ var CardContentComponent = class _CardContentComponent {
 })();
 
 // node_modules/@angular/router/fesm2022/_router-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var PRIMARY_OUTLET = "primary";
 var RouteTitleKey = /* @__PURE__ */ Symbol("RouteTitle");
 var ParamsAsMap = class {
@@ -41608,9 +43423,21 @@ var paramCompareMap = {
   "subset": containsParams,
   "ignored": () => true
 };
+var exactMatchOptions = {
+  paths: "exact",
+  fragment: "ignored",
+  matrixParams: "ignored",
+  queryParams: "exact"
+};
+var subsetMatchOptions = {
+  paths: "subset",
+  fragment: "ignored",
+  matrixParams: "ignored",
+  queryParams: "subset"
+};
 function isActive(url, router, matchOptions) {
   const urlTree = url instanceof UrlTree ? url : router.parseUrl(url);
-  return computed(() => containsTree(router.lastSuccessfulNavigation()?.finalUrl ?? new UrlTree(), urlTree, matchOptions));
+  return computed(() => containsTree(router.lastSuccessfulNavigation()?.finalUrl ?? new UrlTree(), urlTree, __spreadValues(__spreadValues({}, subsetMatchOptions), matchOptions)));
 }
 function containsTree(container, containee, options) {
   return pathCompareMap[options.paths](container.root, containee.root, options.matrixParams) && paramCompareMap[options.queryParams](container.queryParams, containee.queryParams) && !(options.fragment === "exact" && container.fragment !== containee.fragment);
@@ -41865,7 +43692,8 @@ var UrlParser = class {
     this.remaining = url;
   }
   parseRootSegment() {
-    this.consumeOptional("/");
+    while (this.consumeOptional("/")) {
+    }
     if (this.remaining === "" || this.peekStartsWith("?") || this.peekStartsWith("#")) {
       return new UrlSegmentGroup([], {});
     }
@@ -41883,7 +43711,10 @@ var UrlParser = class {
   parseFragment() {
     return this.consumeOptional("#") ? decodeURIComponent(this.remaining) : null;
   }
-  parseChildren() {
+  parseChildren(depth = 0) {
+    if (depth > 50) {
+      throw new RuntimeError(4010, (typeof ngDevMode === "undefined" || ngDevMode) && "URL is too deep");
+    }
     if (this.remaining === "") {
       return {};
     }
@@ -41899,11 +43730,11 @@ var UrlParser = class {
     let children = {};
     if (this.peekStartsWith("/(")) {
       this.capture("/");
-      children = this.parseParens(true);
+      children = this.parseParens(true, depth);
     }
     let res = {};
     if (this.peekStartsWith("(")) {
-      res = this.parseParens(false);
+      res = this.parseParens(false, depth);
     }
     if (segments.length > 0 || Object.keys(children).length > 0) {
       res[PRIMARY_OUTLET] = new UrlSegmentGroup(segments, children);
@@ -41968,7 +43799,7 @@ var UrlParser = class {
       params[decodedKey] = decodedVal;
     }
   }
-  parseParens(allowPrimary) {
+  parseParens(allowPrimary, depth) {
     const segments = {};
     this.capture("(");
     while (!this.consumeOptional(")") && this.remaining.length > 0) {
@@ -41985,7 +43816,7 @@ var UrlParser = class {
       } else if (allowPrimary) {
         outletName = PRIMARY_OUTLET;
       }
-      const children = this.parseChildren();
+      const children = this.parseChildren(depth + 1);
       segments[outletName ?? PRIMARY_OUTLET] = Object.keys(children).length === 1 && children[PRIMARY_OUTLET] ? children[PRIMARY_OUTLET] : new UrlSegmentGroup([], children);
       this.consumeOptional("//");
     }
@@ -42603,6 +44434,8 @@ var Scroll = class {
 };
 var BeforeActivateRoutes = class {
 };
+var BeforeRoutesRecognized = class {
+};
 var RedirectRequest = class {
   url;
   navigationBehaviorOptions;
@@ -42612,7 +44445,7 @@ var RedirectRequest = class {
   }
 };
 function isPublicRouterEvent(e) {
-  return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest);
+  return !(e instanceof BeforeActivateRoutes) && !(e instanceof RedirectRequest) && !(e instanceof BeforeRoutesRecognized);
 }
 function stringifyEvent(routerEvent) {
   switch (routerEvent.type) {
@@ -43302,7 +45135,8 @@ var \u0275EmptyOutletComponent = class _\u0275EmptyOutletComponent {
     args: [{
       template: `<router-outlet />`,
       imports: [RouterOutlet],
-      exportAs: "emptyRouterOutlet"
+      exportAs: "emptyRouterOutlet",
+      changeDetection: ChangeDetectionStrategy.Eager
     }]
   }], null, null);
 })();
@@ -43827,12 +45661,12 @@ function redirectIfUrlTree(urlSerializer) {
     throw redirectingNavigationError(urlSerializer, result);
   }), map((result) => result === true));
 }
-function runCanMatchGuards(injector, route, segments, urlSerializer, abortSignal) {
+function runCanMatchGuards(injector, route, segments, urlSerializer, currentSnapshot, abortSignal) {
   const canMatch = route.canMatch;
   if (!canMatch || canMatch.length === 0) return of(true);
   const canMatchObservables = canMatch.map((injectionToken) => {
     const guard = getTokenOrFunctionIdentity(injectionToken, injector);
-    const guardVal = isCanMatch(guard) ? guard.canMatch(route, segments) : runInInjectionContext(injector, () => guard(route, segments));
+    const guardVal = isCanMatch(guard) ? guard.canMatch(route, segments, currentSnapshot) : runInInjectionContext(injector, () => guard(route, segments, currentSnapshot));
     return wrapIntoObservable(guardVal).pipe(takeUntilAbort(abortSignal));
   });
   return of(canMatchObservables).pipe(prioritizedGuardValue(), redirectIfUrlTree(urlSerializer));
@@ -43941,30 +45775,7 @@ function getRedirectResult(redirectTo, currentSnapshot, injector) {
     return Promise.resolve(redirectTo);
   }
   const redirectToFn = redirectTo;
-  const {
-    queryParams,
-    fragment,
-    routeConfig,
-    url,
-    outlet,
-    params,
-    data,
-    title,
-    paramMap,
-    queryParamMap
-  } = currentSnapshot;
-  return firstValueFrom2(wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn({
-    params,
-    data,
-    queryParams,
-    fragment,
-    routeConfig,
-    url,
-    outlet,
-    title,
-    paramMap,
-    queryParamMap
-  }))));
+  return firstValueFrom2(wrapIntoObservable(runInInjectionContext(injector, () => redirectToFn(currentSnapshot))));
 }
 function getOrCreateRouteInjectorIfNeeded(route, currentInjector) {
   if (route.providers && !route._injector) {
@@ -44080,13 +45891,28 @@ var noMatch = {
   parameters: {},
   positionalParamSegments: {}
 };
-function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer, abortSignal) {
+function createPreMatchRouteSnapshot(snapshot) {
+  return {
+    routeConfig: snapshot.routeConfig,
+    url: snapshot.url,
+    params: snapshot.params,
+    queryParams: snapshot.queryParams,
+    fragment: snapshot.fragment,
+    data: snapshot.data,
+    outlet: snapshot.outlet,
+    title: snapshot.title,
+    paramMap: snapshot.paramMap,
+    queryParamMap: snapshot.queryParamMap
+  };
+}
+function matchWithChecks(segmentGroup, route, segments, injector, urlSerializer, createSnapshot, abortSignal) {
   const result = match(segmentGroup, route, segments);
   if (!result.matched) {
     return of(result);
   }
+  const currentSnapshot = createPreMatchRouteSnapshot(createSnapshot(result));
   injector = getOrCreateRouteInjectorIfNeeded(route, injector);
-  return runCanMatchGuards(injector, route, segments, urlSerializer, abortSignal).pipe(map((v) => v === true ? result : __spreadValues({}, noMatch)));
+  return runCanMatchGuards(injector, route, segments, urlSerializer, currentSnapshot, abortSignal).pipe(map((v) => v === true ? result : __spreadValues({}, noMatch)));
 }
 function match(segmentGroup, route, segments) {
   if (route.path === "") {
@@ -44117,8 +45943,8 @@ function match(segmentGroup, route, segments) {
     positionalParamSegments: res.posParams ?? {}
   };
 }
-function split(segmentGroup, consumedSegments, slicedSegments, config2) {
-  if (slicedSegments.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config2)) {
+function split(segmentGroup, consumedSegments, slicedSegments, config2, outlet) {
+  if (slicedSegments.length > 0 && containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, config2, outlet)) {
     const s2 = new UrlSegmentGroup(consumedSegments, createChildrenForEmptyPaths(config2, new UrlSegmentGroup(slicedSegments, segmentGroup.children)));
     return {
       segmentGroup: s2,
@@ -44159,8 +45985,15 @@ function createChildrenForEmptyPaths(routes, primarySegment) {
   }
   return res;
 }
-function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes) {
-  return routes.some((r) => emptyPathMatch(segmentGroup, slicedSegments, r) && getOutlet(r) !== PRIMARY_OUTLET);
+function containsEmptyPathMatchesWithNamedOutlets(segmentGroup, slicedSegments, routes, outlet) {
+  return routes.some((r) => {
+    const matchesEmpty = emptyPathMatch(segmentGroup, slicedSegments, r);
+    if (!matchesEmpty) return false;
+    const isNamedOutlet = getOutlet(r) !== PRIMARY_OUTLET;
+    if (!isNamedOutlet) return false;
+    const isSelfEvaluating = outlet !== void 0 && getOutlet(r) === outlet;
+    return !isSelfEvaluating;
+  });
 }
 function containsEmptyPathMatches(segmentGroup, slicedSegments, routes) {
   return routes.some((r) => emptyPathMatch(segmentGroup, slicedSegments, r));
@@ -44318,22 +46151,27 @@ This is currently a dev mode only error but will become a call stack size exceed
         this.allowRedirects = false;
       }
     }
-    const currentSnapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze(__spreadValues({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
-    const inherited = getInherited(currentSnapshot, parentRoute, this.paramsInheritanceStrategy);
-    currentSnapshot.params = Object.freeze(inherited.params);
-    currentSnapshot.data = Object.freeze(inherited.data);
+    const currentSnapshot = this.createSnapshot(injector, route, segments, parameters, parentRoute);
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
-    const newTree = await this.applyRedirects.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments, currentSnapshot, injector);
+    const newTree = await this.applyRedirects.applyRedirectCommands(consumedSegments, route.redirectTo, positionalParamSegments, createPreMatchRouteSnapshot(currentSnapshot), injector);
     const newSegments = await this.applyRedirects.lineralizeSegments(route, newTree);
     return this.processSegment(injector, routes, segmentGroup, newSegments.concat(remainingSegments), outlet, false, parentRoute);
+  }
+  createSnapshot(injector, route, segments, parameters, parentRoute) {
+    const snapshot = new ActivatedRouteSnapshot(segments, parameters, Object.freeze(__spreadValues({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
+    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
+    snapshot.params = Object.freeze(inherited.params);
+    snapshot.data = Object.freeze(inherited.data);
+    return snapshot;
   }
   async matchSegmentAgainstRoute(injector, rawSegment, route, segments, outlet, parentRoute) {
     if (this.abortSignal.aborted) {
       throw new Error(this.abortSignal.reason);
     }
-    const result = await firstValueFrom2(matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, this.abortSignal));
+    const createSnapshot = (result2) => this.createSnapshot(injector, route, result2.consumedSegments, result2.parameters, parentRoute);
+    const result = await firstValueFrom2(matchWithChecks(rawSegment, route, segments, injector, this.urlSerializer, createSnapshot, this.abortSignal));
     if (route.path === "**") {
       rawSegment.children = {};
     }
@@ -44350,14 +46188,11 @@ This is currently a dev mode only error but will become a call stack size exceed
       consumedSegments,
       remainingSegments
     } = result;
-    const snapshot = new ActivatedRouteSnapshot(consumedSegments, parameters, Object.freeze(__spreadValues({}, this.urlTree.queryParams)), this.urlTree.fragment, getData(route), getOutlet(route), route.component ?? route._loadedComponent ?? null, route, getResolve(route), injector);
-    const inherited = getInherited(snapshot, parentRoute, this.paramsInheritanceStrategy);
-    snapshot.params = Object.freeze(inherited.params);
-    snapshot.data = Object.freeze(inherited.data);
+    const snapshot = this.createSnapshot(injector, route, consumedSegments, parameters, parentRoute);
     const {
       segmentGroup,
       slicedSegments
-    } = split(rawSegment, consumedSegments, remainingSegments, childConfig);
+    } = split(rawSegment, consumedSegments, remainingSegments, childConfig, outlet);
     if (slicedSegments.length === 0 && segmentGroup.hasChildren()) {
       const children = await this.processChildren(childInjector, childConfig, segmentGroup, snapshot);
       return new TreeNode(snapshot, children);
@@ -44907,7 +46742,9 @@ var NavigationTransitions = class _NavigationTransitions {
           canDeactivateChecks: []
         },
         guardsResult: null,
-        id
+        id,
+        routesRecognizeHandler: {},
+        beforeActivateHandler: {}
       }));
     });
   }
@@ -44937,7 +46774,9 @@ var NavigationTransitions = class _NavigationTransitions {
           previousNavigation: !lastSuccessfulNavigation ? null : __spreadProps(__spreadValues({}, lastSuccessfulNavigation), {
             previousNavigation: null
           }),
-          abort: () => abortController.abort()
+          abort: () => abortController.abort(),
+          routesRecognizeHandler: t.routesRecognizeHandler,
+          beforeActivateHandler: t.beforeActivateHandler
         });
         const urlTransition = !router.navigated || this.isUpdatingInternalState() || this.isUpdatedBrowserUrl();
         const onSameUrlNavigation = t.extras.onSameUrlNavigation ?? router.onSameUrlNavigation;
@@ -44961,7 +46800,9 @@ var NavigationTransitions = class _NavigationTransitions {
               nav.finalUrl = t2.urlAfterRedirects;
               return nav;
             });
-            const routesRecognized = new RoutesRecognized(t2.id, this.urlSerializer.serialize(t2.extractedUrl), this.urlSerializer.serialize(t2.urlAfterRedirects), t2.targetSnapshot);
+            this.events.next(new BeforeRoutesRecognized());
+          }), switchMap((value) => from(overallTransitionState.routesRecognizeHandler.deferredHandle ?? of(void 0)).pipe(map(() => value))), tap(() => {
+            const routesRecognized = new RoutesRecognized(t.id, this.urlSerializer.serialize(t.extractedUrl), this.urlSerializer.serialize(t.urlAfterRedirects), t.targetSnapshot);
             this.events.next(routesRecognized);
           }));
         } else if (urlTransition && this.urlHandlingStrategy.shouldProcessUrl(t.currentRawUrl)) {
@@ -45061,7 +46902,7 @@ var NavigationTransitions = class _NavigationTransitions {
         } = overallTransitionState;
         const viewTransitionStarted = this.createViewTransition?.(this.environmentInjector, currentSnapshot.root, targetSnapshot.root);
         return viewTransitionStarted ? from(viewTransitionStarted).pipe(map(() => overallTransitionState)) : of(overallTransitionState);
-      }), take(1), map((t) => {
+      }), take(1), switchMap((t) => {
         const targetRouterState = createRouterState(router.routeReuseStrategy, t.targetSnapshot, t.currentRouterState);
         this.currentTransition = overallTransitionState = t = __spreadProps(__spreadValues({}, t), {
           targetRouterState
@@ -45071,9 +46912,9 @@ var NavigationTransitions = class _NavigationTransitions {
           return nav;
         });
         this.events.next(new BeforeActivateRoutes());
-        if (!shouldContinueNavigation()) {
-          return;
-        }
+        const deferred = overallTransitionState.beforeActivateHandler.deferredHandle;
+        return deferred ? from(deferred.then(() => t)) : of(t);
+      }), tap((t) => {
         new ActivateRoutes(router.routeReuseStrategy, overallTransitionState.targetRouterState, overallTransitionState.currentRouterState, (evt) => this.events.next(evt), this.inputBindingEnabled).activate(this.rootContexts);
         if (!shouldContinueNavigation()) {
           return;
@@ -45266,6 +47107,14 @@ var StateManager = class _StateManager {
     const path = url instanceof UrlTree ? this.urlSerializer.serialize(url) : url;
     return path;
   }
+  routerUrlState(navigation) {
+    if (navigation?.targetBrowserUrl === void 0 || navigation?.finalUrl === void 0) {
+      return {};
+    }
+    return {
+      \u0275routerUrl: this.urlSerializer.serialize(navigation.finalUrl)
+    };
+  }
   commitTransition({
     targetRouterState,
     finalUrl,
@@ -45331,7 +47180,9 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
     return this.location.subscribe((event) => {
       if (event["type"] === "popstate") {
         setTimeout(() => {
-          listener(event["url"], event.state, "popstate");
+          listener(event["url"], event.state, "popstate", {
+            replaceUrl: true
+          });
         });
       }
     });
@@ -45361,20 +47212,21 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
       this.currentPageId = this.browserPageId;
     }
   }
-  setBrowserUrl(path, {
-    extras,
-    id
-  }) {
+  setBrowserUrl(path, navigation) {
+    const {
+      extras,
+      id
+    } = navigation;
     const {
       replaceUrl,
       state
     } = extras;
     if (this.location.isCurrentPathEqualTo(path) || !!replaceUrl) {
       const currentBrowserPageId = this.browserPageId;
-      const newState = __spreadValues(__spreadValues({}, state), this.generateNgRouterState(id, currentBrowserPageId));
+      const newState = __spreadValues(__spreadValues({}, state), this.generateNgRouterState(id, currentBrowserPageId, navigation));
       this.location.replaceState(path, "", newState);
     } else {
-      const newState = __spreadValues(__spreadValues({}, state), this.generateNgRouterState(id, this.browserPageId + 1));
+      const newState = __spreadValues(__spreadValues({}, state), this.generateNgRouterState(id, this.browserPageId + 1, navigation));
       this.location.go(path, "", newState);
     }
   }
@@ -45405,16 +47257,16 @@ var HistoryStateManager = class _HistoryStateManager extends StateManager {
   resetUrlToCurrentUrlTree() {
     this.location.replaceState(this.urlSerializer.serialize(this.getRawUrlTree()), "", this.generateNgRouterState(this.lastSuccessfulId, this.currentPageId));
   }
-  generateNgRouterState(navigationId, routerPageId) {
+  generateNgRouterState(navigationId, routerPageId, navigation) {
     if (this.canceledNavigationResolution === "computed") {
-      return {
+      return __spreadValues({
         navigationId,
         \u0275routerPageId: routerPageId
-      };
+      }, this.routerUrlState(navigation));
     }
-    return {
+    return __spreadValues({
       navigationId
-    };
+    }, this.routerUrlState(navigation));
   }
   static \u0275fac = /* @__PURE__ */ (() => {
     let \u0275HistoryStateManager_BaseFactory;
@@ -45447,18 +47299,6 @@ function afterNextNavigation(router, action) {
     action();
   });
 }
-var exactMatchOptions = {
-  paths: "exact",
-  fragment: "ignored",
-  matrixParams: "ignored",
-  queryParams: "exact"
-};
-var subsetMatchOptions = {
-  paths: "subset",
-  fragment: "ignored",
-  matrixParams: "ignored",
-  queryParams: "subset"
-};
 var Router = class _Router {
   get currentUrlTree() {
     return this.stateManager.getCurrentUrlTree();
@@ -45554,28 +47394,34 @@ var Router = class _Router {
   initialNavigation() {
     this.setUpLocationChangeListener();
     if (!this.navigationTransitions.hasRequestedNavigation) {
-      this.navigateToSyncWithBrowser(this.location.path(true), IMPERATIVE_NAVIGATION, this.stateManager.restoredState());
+      this.navigateToSyncWithBrowser(this.location.path(true), IMPERATIVE_NAVIGATION, this.stateManager.restoredState(), {
+        replaceUrl: true
+      });
     }
   }
   setUpLocationChangeListener() {
-    this.nonRouterCurrentEntryChangeSubscription ??= this.stateManager.registerNonRouterCurrentEntryChangeListener((url, state, source) => {
-      this.navigateToSyncWithBrowser(url, source, state);
+    this.nonRouterCurrentEntryChangeSubscription ??= this.stateManager.registerNonRouterCurrentEntryChangeListener((url, state, source, extras) => {
+      this.navigateToSyncWithBrowser(url, source, state, extras);
     });
   }
-  navigateToSyncWithBrowser(url, source, state) {
-    const extras = {
-      replaceUrl: true
-    };
+  navigateToSyncWithBrowser(url, source, state, extras) {
     const restoredState = state?.navigationId ? state : null;
+    const routerUrl = state?.\u0275routerUrl ?? url;
+    if (state?.\u0275routerUrl) {
+      extras = __spreadProps(__spreadValues({}, extras), {
+        browserUrl: url
+      });
+    }
     if (state) {
       const stateCopy = __spreadValues({}, state);
       delete stateCopy.navigationId;
       delete stateCopy.\u0275routerPageId;
+      delete stateCopy.\u0275routerUrl;
       if (Object.keys(stateCopy).length !== 0) {
         extras.state = stateCopy;
       }
     }
-    const urlTree = this.parseUrl(url);
+    const urlTree = this.parseUrl(routerUrl);
     this.scheduleNavigation(urlTree, source, restoredState, extras).catch((e) => {
       if (this.disposed) {
         return;
@@ -45675,7 +47521,7 @@ var Router = class _Router {
     } else if (matchOptions === false) {
       options = __spreadValues({}, subsetMatchOptions);
     } else {
-      options = matchOptions;
+      options = __spreadValues(__spreadValues({}, subsetMatchOptions), matchOptions);
     }
     if (isUrlTree(url)) {
       return containsTree(this.currentUrlTree, url, options);
@@ -45725,9 +47571,7 @@ var Router = class _Router {
       currentSnapshot: this.routerState.snapshot,
       currentRouterState: this.routerState
     });
-    return promise.catch((e) => {
-      return Promise.reject(e);
-    });
+    return promise.catch(Promise.reject.bind(Promise));
   }
   static \u0275fac = function Router_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _Router)();
@@ -45756,6 +47600,59 @@ function validateCommands(commands) {
 }
 
 // node_modules/@angular/router/fesm2022/_router_module-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
+var ReactiveRouterState = class _ReactiveRouterState {
+  router = inject2(Router);
+  stateManager = inject2(StateManager);
+  fragment = signal("", ...ngDevMode ? [{
+    debugName: "fragment"
+  }] : []);
+  queryParams = signal({}, ...ngDevMode ? [{
+    debugName: "queryParams"
+  }] : []);
+  path = signal("", ...ngDevMode ? [{
+    debugName: "path"
+  }] : []);
+  serializer = inject2(UrlSerializer);
+  constructor() {
+    this.updateState();
+    this.router.events?.subscribe((e) => {
+      if (e instanceof NavigationEnd) {
+        this.updateState();
+      }
+    });
+  }
+  updateState() {
+    const {
+      fragment,
+      root,
+      queryParams
+    } = this.stateManager.getCurrentUrlTree();
+    this.fragment.set(fragment);
+    this.queryParams.set(queryParams);
+    this.path.set(this.serializer.serialize(new UrlTree(root)));
+  }
+  static \u0275fac = function ReactiveRouterState_Factory(__ngFactoryType__) {
+    return new (__ngFactoryType__ || _ReactiveRouterState)();
+  };
+  static \u0275prov = /* @__PURE__ */ \u0275\u0275defineInjectable({
+    token: _ReactiveRouterState,
+    factory: _ReactiveRouterState.\u0275fac,
+    providedIn: "root"
+  });
+};
+(() => {
+  (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ReactiveRouterState, [{
+    type: Injectable,
+    args: [{
+      providedIn: "root"
+    }]
+  }], () => [], null);
+})();
 var RouterLink = class _RouterLink {
   router;
   route;
@@ -45763,7 +47660,15 @@ var RouterLink = class _RouterLink {
   renderer;
   el;
   locationStrategy;
-  reactiveHref = signal(null, ...ngDevMode ? [{
+  hrefAttributeValue = inject2(new HostAttributeToken("href"), {
+    optional: true
+  });
+  reactiveHref = linkedSignal(() => {
+    if (!this.isAnchorElement) {
+      return this.hrefAttributeValue;
+    }
+    return this.computeHref(this._urlTree());
+  }, ...ngDevMode ? [{
     debugName: "reactiveHref"
   }] : []);
   get href() {
@@ -45772,20 +47677,109 @@ var RouterLink = class _RouterLink {
   set href(value) {
     this.reactiveHref.set(value);
   }
-  target;
-  queryParams;
-  fragment;
-  queryParamsHandling;
-  state;
-  info;
-  relativeTo;
+  set target(value) {
+    this._target.set(value);
+  }
+  get target() {
+    return untracked2(this._target);
+  }
+  _target = signal(void 0, ...ngDevMode ? [{
+    debugName: "_target"
+  }] : []);
+  set queryParams(value) {
+    this._queryParams.set(value);
+  }
+  get queryParams() {
+    return untracked2(this._queryParams);
+  }
+  _queryParams = signal(void 0, __spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "_queryParams"
+  } : {}), {
+    equal: () => false
+  }));
+  set fragment(value) {
+    this._fragment.set(value);
+  }
+  get fragment() {
+    return untracked2(this._fragment);
+  }
+  _fragment = signal(void 0, ...ngDevMode ? [{
+    debugName: "_fragment"
+  }] : []);
+  set queryParamsHandling(value) {
+    this._queryParamsHandling.set(value);
+  }
+  get queryParamsHandling() {
+    return untracked2(this._queryParamsHandling);
+  }
+  _queryParamsHandling = signal(void 0, ...ngDevMode ? [{
+    debugName: "_queryParamsHandling"
+  }] : []);
+  set state(value) {
+    this._state.set(value);
+  }
+  get state() {
+    return untracked2(this._state);
+  }
+  _state = signal(void 0, __spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "_state"
+  } : {}), {
+    equal: () => false
+  }));
+  set info(value) {
+    this._info.set(value);
+  }
+  get info() {
+    return untracked2(this._info);
+  }
+  _info = signal(void 0, __spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "_info"
+  } : {}), {
+    equal: () => false
+  }));
+  set relativeTo(value) {
+    this._relativeTo.set(value);
+  }
+  get relativeTo() {
+    return untracked2(this._relativeTo);
+  }
+  _relativeTo = signal(void 0, ...ngDevMode ? [{
+    debugName: "_relativeTo"
+  }] : []);
+  set preserveFragment(value) {
+    this._preserveFragment.set(value);
+  }
+  get preserveFragment() {
+    return untracked2(this._preserveFragment);
+  }
+  _preserveFragment = signal(false, ...ngDevMode ? [{
+    debugName: "_preserveFragment"
+  }] : []);
+  set skipLocationChange(value) {
+    this._skipLocationChange.set(value);
+  }
+  get skipLocationChange() {
+    return untracked2(this._skipLocationChange);
+  }
+  _skipLocationChange = signal(false, ...ngDevMode ? [{
+    debugName: "_skipLocationChange"
+  }] : []);
+  set replaceUrl(value) {
+    this._replaceUrl.set(value);
+  }
+  get replaceUrl() {
+    return untracked2(this._replaceUrl);
+  }
+  _replaceUrl = signal(false, ...ngDevMode ? [{
+    debugName: "_replaceUrl"
+  }] : []);
   isAnchorElement;
-  subscription;
   onChanges = new Subject();
   applicationErrorHandler = inject2(INTERNAL_APPLICATION_ERROR_HANDLER);
   options = inject2(ROUTER_CONFIGURATION, {
     optional: true
   });
+  reactiveRouterState = inject2(ReactiveRouterState);
   constructor(router, route, tabIndexAttribute, renderer, el, locationStrategy) {
     this.router = router;
     this.route = route;
@@ -45793,29 +47787,16 @@ var RouterLink = class _RouterLink {
     this.renderer = renderer;
     this.el = el;
     this.locationStrategy = locationStrategy;
-    this.reactiveHref.set(inject2(new HostAttributeToken("href"), {
-      optional: true
-    }));
     const tagName = el.nativeElement.tagName?.toLowerCase();
     this.isAnchorElement = tagName === "a" || tagName === "area" || !!(typeof customElements === "object" && customElements.get(tagName)?.observedAttributes?.includes?.("href"));
-    if (this.isAnchorElement) {
-      this.setTabIndexIfNotOnNativeEl("0");
-      this.subscribeToNavigationEventsIfNecessary();
+    if (typeof ngDevMode !== "undefined" && ngDevMode) {
+      effect(() => {
+        if (isUrlTree(this.routerLinkInput()) && (this._fragment() !== void 0 || this._queryParams() || this._queryParamsHandling() || this._preserveFragment() || this._relativeTo())) {
+          throw new RuntimeError(4017, "Cannot configure queryParams or fragment when using a UrlTree as the routerLink input value.");
+        }
+      });
     }
   }
-  subscribeToNavigationEventsIfNecessary() {
-    if (this.subscription !== void 0) {
-      return;
-    }
-    this.subscription = this.router.events.subscribe((s) => {
-      if (s instanceof NavigationEnd) {
-        this.updateHref();
-      }
-    });
-  }
-  preserveFragment = false;
-  skipLocationChange = false;
-  replaceUrl = false;
   setTabIndexIfNotOnNativeEl(newTabIndex) {
     if (this.tabIndexAttribute != null || this.isAnchorElement) {
       return;
@@ -45823,30 +47804,26 @@ var RouterLink = class _RouterLink {
     this.applyAttributeValue("tabindex", newTabIndex);
   }
   ngOnChanges(changes) {
-    if (ngDevMode && isUrlTree(this.routerLinkInput) && (this.fragment !== void 0 || this.queryParams || this.queryParamsHandling || this.preserveFragment || this.relativeTo)) {
-      throw new RuntimeError(4017, "Cannot configure queryParams or fragment when using a UrlTree as the routerLink input value.");
-    }
-    if (this.isAnchorElement) {
-      this.updateHref();
-    }
     this.onChanges.next(this);
   }
-  routerLinkInput = null;
+  routerLinkInput = signal(null, ...ngDevMode ? [{
+    debugName: "routerLinkInput"
+  }] : []);
   set routerLink(commandsOrUrlTree) {
     if (commandsOrUrlTree == null) {
-      this.routerLinkInput = null;
+      this.routerLinkInput.set(null);
       this.setTabIndexIfNotOnNativeEl(null);
     } else {
       if (isUrlTree(commandsOrUrlTree)) {
-        this.routerLinkInput = commandsOrUrlTree;
+        this.routerLinkInput.set(commandsOrUrlTree);
       } else {
-        this.routerLinkInput = Array.isArray(commandsOrUrlTree) ? commandsOrUrlTree : [commandsOrUrlTree];
+        this.routerLinkInput.set(Array.isArray(commandsOrUrlTree) ? commandsOrUrlTree : [commandsOrUrlTree]);
       }
       this.setTabIndexIfNotOnNativeEl("0");
     }
   }
   onClick(button, ctrlKey, shiftKey, altKey, metaKey) {
-    const urlTree = this.urlTree;
+    const urlTree = this._urlTree();
     if (urlTree === null) {
       return true;
     }
@@ -45870,11 +47847,6 @@ var RouterLink = class _RouterLink {
     return !this.isAnchorElement;
   }
   ngOnDestroy() {
-    this.subscription?.unsubscribe();
-  }
-  updateHref() {
-    const urlTree = this.urlTree;
-    this.reactiveHref.set(urlTree !== null && this.locationStrategy ? this.locationStrategy?.prepareExternalUrl(this.router.serializeUrl(urlTree)) ?? "" : null);
   }
   applyAttributeValue(attrName, attrValue) {
     const renderer = this.renderer;
@@ -45885,19 +47857,38 @@ var RouterLink = class _RouterLink {
       renderer.removeAttribute(nativeElement, attrName);
     }
   }
-  get urlTree() {
-    if (this.routerLinkInput === null) {
-      return null;
-    } else if (isUrlTree(this.routerLinkInput)) {
-      return this.routerLinkInput;
+  _urlTree = computed(() => {
+    this.reactiveRouterState.path();
+    if (this._preserveFragment()) {
+      this.reactiveRouterState.fragment();
     }
-    return this.router.createUrlTree(this.routerLinkInput, {
-      relativeTo: this.relativeTo !== void 0 ? this.relativeTo : this.route,
-      queryParams: this.queryParams,
-      fragment: this.fragment,
-      queryParamsHandling: this.queryParamsHandling,
-      preserveFragment: this.preserveFragment
+    const shouldTrackParams = (handling) => handling === "preserve" || handling === "merge";
+    if (shouldTrackParams(this._queryParamsHandling()) || shouldTrackParams(this.options?.defaultQueryParamsHandling)) {
+      this.reactiveRouterState.queryParams();
+    }
+    const routerLinkInput = this.routerLinkInput();
+    if (routerLinkInput === null || !this.router.createUrlTree) {
+      return null;
+    } else if (isUrlTree(routerLinkInput)) {
+      return routerLinkInput;
+    }
+    return this.router.createUrlTree(routerLinkInput, {
+      relativeTo: this._relativeTo() !== void 0 ? this._relativeTo() : this.route,
+      queryParams: this._queryParams(),
+      fragment: this._fragment(),
+      queryParamsHandling: this._queryParamsHandling(),
+      preserveFragment: this._preserveFragment()
     });
+  }, __spreadProps(__spreadValues({}, ngDevMode ? {
+    debugName: "_urlTree"
+  } : {}), {
+    equal: (a, b) => this.computeHref(a) === this.computeHref(b)
+  }));
+  get urlTree() {
+    return untracked2(this._urlTree);
+  }
+  computeHref(urlTree) {
+    return urlTree !== null && this.locationStrategy ? this.locationStrategy?.prepareExternalUrl(this.router.serializeUrl(urlTree)) ?? "" : null;
   }
   static \u0275fac = function RouterLink_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _RouterLink)(\u0275\u0275directiveInject(Router), \u0275\u0275directiveInject(ActivatedRoute), \u0275\u0275injectAttribute("tabindex"), \u0275\u0275directiveInject(Renderer2), \u0275\u0275directiveInject(ElementRef), \u0275\u0275directiveInject(LocationStrategy));
@@ -45913,7 +47904,7 @@ var RouterLink = class _RouterLink {
         });
       }
       if (rf & 2) {
-        \u0275\u0275attribute("href", ctx.reactiveHref(), \u0275\u0275sanitizeUrlOrResourceUrl)("target", ctx.target);
+        \u0275\u0275attribute("href", ctx.reactiveHref(), \u0275\u0275sanitizeUrlOrResourceUrl)("target", ctx._target());
       }
     },
     inputs: {
@@ -45938,7 +47929,8 @@ var RouterLink = class _RouterLink {
     args: [{
       selector: "[routerLink]",
       host: {
-        "[attr.href]": "reactiveHref()"
+        "[attr.href]": "reactiveHref()",
+        "[attr.target]": "_target()"
       }
     }]
   }], () => [{
@@ -45959,9 +47951,6 @@ var RouterLink = class _RouterLink {
     type: LocationStrategy
   }], {
     target: [{
-      type: HostBinding,
-      args: ["attr.target"]
-    }, {
       type: Input
     }],
     queryParams: [{
@@ -46165,7 +48154,8 @@ var RouterLinkActive = class _RouterLinkActive {
   });
 })();
 function isActiveMatchOptions(options) {
-  return !!options.paths;
+  const o = options;
+  return !!(o.paths || o.matrixParams || o.queryParams || o.fragment);
 }
 var PreloadingStrategy = class {
 };
@@ -46315,6 +48305,9 @@ var RouterScroller = class _RouterScroller {
   lastSource = IMPERATIVE_NAVIGATION;
   restoredId = 0;
   store = {};
+  isHydrating = inject2(IS_HYDRATION_DOM_REUSE_ENABLED, {
+    optional: true
+  }) ?? false;
   urlSerializer = inject2(UrlSerializer);
   zone = inject2(NgZone);
   viewportScroller = inject2(ViewportScroller);
@@ -46323,6 +48316,11 @@ var RouterScroller = class _RouterScroller {
     this.options = options;
     this.options.scrollPositionRestoration ||= "disabled";
     this.options.anchorScrolling ||= "disabled";
+    if (this.isHydrating) {
+      inject2(ApplicationRef).whenStable().then(() => {
+        this.isHydrating = false;
+      });
+    }
   }
   init() {
     if (this.options.scrollPositionRestoration !== "disabled") {
@@ -46369,6 +48367,7 @@ var RouterScroller = class _RouterScroller {
     });
   }
   scheduleScrollEvent(routerEvent, anchor) {
+    if (this.isHydrating) return;
     const scroll = untracked2(this.transitions.currentNavigation)?.extras.scroll;
     this.zone.runOutsideAngular(async () => {
       await new Promise((resolve) => {
@@ -46445,7 +48444,9 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
       path,
       state
     }) => {
-      listener(path, state, "popstate");
+      listener(path, state, "popstate", !this.precommitHandlerSupported ? {
+        replaceUrl: true
+      } : {});
     });
     return this.nonRouterEntryChangeListener;
   }
@@ -46455,19 +48456,42 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
     });
     if (e instanceof NavigationStart) {
       this.updateStateMemento();
+      if (this.precommitHandlerSupported) {
+        this.maybeCreateNavigationForTransition(transition);
+      }
     } else if (e instanceof NavigationSkipped) {
       this.finishNavigation();
       this.commitTransition(transition);
-    } else if (e instanceof RoutesRecognized) {
-      if (this.urlUpdateStrategy === "eager" && !transition.extras.skipLocationChange) {
-        this.createNavigationForTransition(transition);
-      }
+    } else if (e instanceof BeforeRoutesRecognized) {
+      transition.routesRecognizeHandler.deferredHandle = new Promise(async (resolve) => {
+        if (this.urlUpdateStrategy === "eager") {
+          try {
+            this.maybeCreateNavigationForTransition(transition);
+            await this.currentNavigation.commitUrl?.();
+          } catch {
+            return;
+          }
+        }
+        resolve();
+      });
     } else if (e instanceof BeforeActivateRoutes) {
-      this.commitTransition(transition);
-      if (this.urlUpdateStrategy === "deferred" && !transition.extras.skipLocationChange) {
-        this.createNavigationForTransition(transition);
-      }
+      transition.beforeActivateHandler.deferredHandle = new Promise(async (resolve) => {
+        if (this.urlUpdateStrategy === "deferred") {
+          try {
+            this.maybeCreateNavigationForTransition(transition);
+            await this.currentNavigation.commitUrl?.();
+          } catch {
+            return;
+          }
+        }
+        this.commitTransition(transition);
+        resolve();
+      });
     } else if (e instanceof NavigationCancel || e instanceof NavigationError) {
+      const redirectingBeforeUrlCommit = e instanceof NavigationCancel && e.code === NavigationCancellationCode.Redirect && !!this.currentNavigation.commitUrl;
+      if (redirectingBeforeUrlCommit) {
+        return;
+      }
       void this.cancel(transition, e);
     } else if (e instanceof NavigationEnd) {
       const {
@@ -46484,11 +48508,12 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
       });
     }
   }
-  createNavigationForTransition(transition) {
+  maybeCreateNavigationForTransition(transition) {
     const {
-      navigationEvent
+      navigationEvent,
+      commitUrl
     } = this.currentNavigation;
-    if (navigationEvent && navigationEvent.navigationType === "traverse" && this.eventAndRouterDestinationsMatch(navigationEvent, transition)) {
+    if (commitUrl || navigationEvent && navigationEvent.navigationType === "traverse" && this.eventAndRouterDestinationsMatch(navigationEvent, transition)) {
       return;
     }
     this.currentNavigation.removeAbortListener?.();
@@ -46497,9 +48522,7 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
   }
   navigate(internalPath, transition) {
     const path = transition.extras.skipLocationChange ? this.navigation.currentEntry.url : this.location.prepareExternalUrl(internalPath);
-    const state = __spreadProps(__spreadValues({}, transition.extras.state), {
-      navigationId: transition.id
-    });
+    const state = __spreadValues(__spreadValues({}, transition.extras.state), this.generateNgRouterState(transition));
     const info = {
       \u0275routerInfo: {
         intercept: true
@@ -46516,6 +48539,7 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
     }));
   }
   finishNavigation() {
+    this.currentNavigation.commitUrl?.();
     this.currentNavigation?.resolveHandler?.();
     this.currentNavigation = {};
   }
@@ -46596,17 +48620,54 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
       resolve: resolveHandler,
       reject: rejectHandler
     } = promiseWithResolvers();
+    const {
+      promise: precommitHandlerPromise,
+      resolve: resolvePrecommitHandler,
+      reject: rejectPrecommitHandler
+    } = promiseWithResolvers();
+    this.currentNavigation.rejectNavigateEvent = () => {
+      event.signal.removeEventListener("abort", abortHandler);
+      rejectPrecommitHandler();
+      rejectHandler();
+    };
     this.currentNavigation.resolveHandler = () => {
       this.currentNavigation.removeAbortListener?.();
       resolveHandler();
     };
-    this.currentNavigation.rejectNavigateEvent = () => {
-      this.currentNavigation.removeAbortListener?.();
-      rejectHandler();
-    };
     handlerPromise.catch(() => {
     });
+    precommitHandlerPromise.catch(() => {
+    });
     interceptOptions.handler = () => handlerPromise;
+    if (this.deferredCommitSupported(event)) {
+      const redirect = new Promise((resolve) => {
+        interceptOptions.precommitHandler = (controller) => {
+          if (this.navigation.transition?.navigationType === "traverse") {
+            resolve(() => {
+            });
+          } else {
+            resolve(controller.redirect.bind(controller));
+          }
+          return precommitHandlerPromise;
+        };
+      });
+      this.currentNavigation.commitUrl = async () => {
+        this.currentNavigation.commitUrl = void 0;
+        const transition = this.currentNavigation.routerTransition;
+        if (transition && !transition.extras.skipLocationChange) {
+          const internalPath = this.createBrowserPath(transition);
+          const history = this.location.isCurrentPathEqualTo(internalPath) || !!transition.extras.replaceUrl ? "replace" : "push";
+          const state = __spreadValues(__spreadValues({}, transition.extras.state), this.generateNgRouterState(transition));
+          const pathOrUrl = this.location.prepareExternalUrl(internalPath);
+          (await redirect)(pathOrUrl, {
+            state,
+            history
+          });
+        }
+        resolvePrecommitHandler();
+        return await this.navigation.transition?.committed;
+      };
+    }
     event.intercept(interceptOptions);
     if (!isTriggeredByRouterTransition) {
       this.handleNavigateEventTriggeredOutsideRouterAPIs(event);
@@ -46626,6 +48687,14 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
     const routerDestination = this.location.prepareExternalUrl(internalPath);
     return new URL(routerDestination, eventDestination.origin).href === eventDestination.href;
   }
+  generateNgRouterState(transition) {
+    return __spreadProps(__spreadValues({}, this.routerUrlState(transition)), {
+      navigationId: transition.id
+    });
+  }
+  deferredCommitSupported(event) {
+    return this.precommitHandlerSupported && event.cancelable;
+  }
   static \u0275fac = function NavigationStateManager_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _NavigationStateManager)();
   };
@@ -46644,9 +48713,9 @@ var NavigationStateManager = class _NavigationStateManager extends StateManager 
   }], () => [], null);
 })();
 function handleResultRejections(result) {
-  result.finished.catch(() => {
+  result.finished?.catch(() => {
   });
-  result.committed.catch(() => {
+  result.committed?.catch(() => {
   });
   return result;
 }
@@ -46924,6 +48993,13 @@ function provideRouterInitializer() {
   }];
 }
 
+// node_modules/@angular/router/fesm2022/router.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
+
 // src/libraries/open-source/scroll/scroll.service.ts
 var ScrollService = class _ScrollService {
   router = inject2(Router);
@@ -46931,23 +49007,39 @@ var ScrollService = class _ScrollService {
   minusTopMobileHeight = 150;
   document = inject2(DOCUMENT);
   platformId = inject2(PLATFORM_ID);
-  activeCard = signal(1, ...ngDevMode ? [{ debugName: "activeCard" }] : []);
-  cards = signal([], ...ngDevMode ? [{ debugName: "cards" }] : []);
+  activeCard = signal(1, ...ngDevMode ? [{ debugName: "activeCard" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  cards = signal([], ...ngDevMode ? [{ debugName: "cards" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   scrollHandler = null;
   debounceTimer = null;
+  scrollListenerInitialized = false;
+  constructor() {
+    afterNextRender(() => {
+      this.initScrollListener();
+    });
+  }
+  initScrollListener() {
+    if (this.scrollListenerInitialized) {
+      return;
+    }
+    this.scrollListenerInitialized = true;
+    this.scrollHandler = () => {
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+      this.debounceTimer = setTimeout(() => {
+        this.handleScroll();
+      }, 100);
+    };
+    document.addEventListener("scroll", this.scrollHandler);
+  }
   onScroll(cards) {
     this.cards.set(cards);
-    afterNextRender(() => {
-      this.scrollHandler = () => {
-        if (this.debounceTimer) {
-          clearTimeout(this.debounceTimer);
-        }
-        this.debounceTimer = setTimeout(() => {
-          this.handleScroll();
-        }, 100);
-      };
-      document.addEventListener("scroll", this.scrollHandler);
-    });
   }
   handleScroll() {
     const scrollIdCard = this.cards().find((e) => this.isInViewport(e.nativeElement))?.nativeElement.id;
@@ -46980,7 +49072,7 @@ var ScrollService = class _ScrollService {
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ScrollService, [{
     type: Injectable
-  }], null, null);
+  }], () => [], null);
 })();
 
 // src/libraries/open-source/accordion/accordion.service.ts
@@ -47191,18 +49283,18 @@ function OptionsComponent_ng_template_5_Template(rf, ctx) {
     \u0275\u0275advance(7);
     \u0275\u0275property("placeholder", placeholder_r11 || "")("placeHolderCharacter", ex_r10._placholderCharacter || "_")("prefix", ex_r10._prefix || "")("suffix", ex_r10._suffix || "")("dropSpecialCharacters", ex_r10._dropSpecialCharacters ?? true)("mask", ex_r10._mask || "")("thousandSeparator", ex_r10._thousandSeparator || " ")("allowNegativeNumbers", ex_r10._allowNegativeNumbers || null)("specialCharacters", ex_r10._specialCharacters || ctx_r2.specialCharacters)("shownMaskExpression", ex_r10._shownMaskExpression)("formControl", ex_r10.control.formControl)("apm", ex_r10._apm || false)("decimalMarker", ex_r10._decimalMarker || ".")("leadZero", ex_r10._leadZero || false)("keepCharacterPositions", ex_r10._keepCharacterPositions || false)("validation", ex_r10._validation || false)("showMaskTyped", ex_r10._showMaskTyped || false)("clearIfNotMatch", ex_r10._clearIfNotMatch)("hiddenInput", ex_r10._hiddenInput || null)("outputTransformFn", ex_r10._outputTransformFn || ctx_r2.outputTransformFn)("inputTransformFn", ex_r10._inputTransformFn || ctx_r2.inputTransformFn);
     \u0275\u0275advance(2);
-    \u0275\u0275property("value", \u0275\u0275pipeBind1(10, 68, ex_r10.control.formControl.value));
+    \u0275\u0275property("value", \u0275\u0275pipeBind1(10, 67, ex_r10.control.formControl.value));
     \u0275\u0275advance(10);
     \u0275\u0275property("placeholder", placeholder_r11 || "")("placeHolderCharacter", ex_r10._placholderCharacter || "_")("prefix", ex_r10._prefix || "")("suffix", ex_r10._suffix || "")("dropSpecialCharacters", ex_r10._dropSpecialCharacters ?? true)("mask", ex_r10._mask || "")("thousandSeparator", ex_r10._thousandSeparator || " ")("allowNegativeNumbers", ex_r10._allowNegativeNumbers || null)("specialCharacters", ex_r10._specialCharacters || ctx_r2.specialCharacters)("shownMaskExpression", ex_r10._shownMaskExpression);
     \u0275\u0275twoWayProperty("ngModel", ex_r10.control.model);
     \u0275\u0275property("apm", ex_r10._apm || false)("decimalMarker", ex_r10._decimalMarker || ".")("leadZero", ex_r10._leadZero || false)("keepCharacterPositions", ex_r10._keepCharacterPositions || false)("validation", ex_r10._validation || false)("showMaskTyped", ex_r10._showMaskTyped || false)("clearIfNotMatch", ex_r10._clearIfNotMatch)("hiddenInput", ex_r10._hiddenInput || null)("outputTransformFn", ex_r10._outputTransformFn || ctx_r2.outputTransformFn)("inputTransformFn", ex_r10._inputTransformFn || ctx_r2.inputTransformFn);
     \u0275\u0275advance(2);
-    \u0275\u0275property("value", \u0275\u0275pipeBind1(22, 70, ex_r10.control.model()));
+    \u0275\u0275property("value", \u0275\u0275pipeBind1(22, 69, ex_r10.control.model()));
     \u0275\u0275advance(10);
-    \u0275\u0275property("placeholder", placeholder_r11 || "")("placeHolderCharacter", ex_r10._placholderCharacter || "_")("prefix", ex_r10._prefix || "")("suffix", ex_r10._suffix || "")("dropSpecialCharacters", ex_r10._dropSpecialCharacters ?? true)("mask", ex_r10._mask || "")("thousandSeparator", ex_r10._thousandSeparator || " ")("allowNegativeNumbers", ex_r10._allowNegativeNumbers || null)("specialCharacters", ex_r10._specialCharacters || ctx_r2.specialCharacters)("shownMaskExpression", ex_r10._shownMaskExpression)("apm", ex_r10._apm || false)("decimalMarker", ex_r10._decimalMarker || ".")("leadZero", ex_r10._leadZero || false)("keepCharacterPositions", ex_r10._keepCharacterPositions || false)("validation", ex_r10._validation || false)("showMaskTyped", ex_r10._showMaskTyped || false)("clearIfNotMatch", ex_r10._clearIfNotMatch)("hiddenInput", ex_r10._hiddenInput || null)("outputTransformFn", ex_r10._outputTransformFn || ctx_r2.outputTransformFn)("inputTransformFn", ex_r10._inputTransformFn || ctx_r2.inputTransformFn);
-    \u0275\u0275control(ex_r10.control.signalForm.value, "formField");
+    \u0275\u0275property("placeholder", placeholder_r11 || "")("placeHolderCharacter", ex_r10._placholderCharacter || "_")("prefix", ex_r10._prefix || "")("suffix", ex_r10._suffix || "")("dropSpecialCharacters", ex_r10._dropSpecialCharacters ?? true)("mask", ex_r10._mask || "")("thousandSeparator", ex_r10._thousandSeparator || " ")("allowNegativeNumbers", ex_r10._allowNegativeNumbers || null)("specialCharacters", ex_r10._specialCharacters || ctx_r2.specialCharacters)("shownMaskExpression", ex_r10._shownMaskExpression)("formField", ex_r10.control.signalForm.value)("apm", ex_r10._apm || false)("decimalMarker", ex_r10._decimalMarker || ".")("leadZero", ex_r10._leadZero || false)("keepCharacterPositions", ex_r10._keepCharacterPositions || false)("validation", ex_r10._validation || false)("showMaskTyped", ex_r10._showMaskTyped || false)("clearIfNotMatch", ex_r10._clearIfNotMatch)("hiddenInput", ex_r10._hiddenInput || null)("outputTransformFn", ex_r10._outputTransformFn || ctx_r2.outputTransformFn)("inputTransformFn", ex_r10._inputTransformFn || ctx_r2.inputTransformFn);
+    \u0275\u0275control();
     \u0275\u0275advance(2);
-    \u0275\u0275property("value", \u0275\u0275pipeBind1(34, 72, ex_r10.control.signalForm.value().value()));
+    \u0275\u0275property("value", \u0275\u0275pipeBind1(34, 71, ex_r10.control.signalForm.value().value()));
     \u0275\u0275advance(4);
     \u0275\u0275property("value", ex_r10._mask);
   }
@@ -47225,10 +49317,22 @@ function OptionsComponent_ng_template_8_Template(rf, ctx) {
   }
 }
 var OptionsComponent = class _OptionsComponent {
-  cardDocs = input(...ngDevMode ? [void 0, { debugName: "cardDocs" }] : []);
-  cardExamplesConfig = input([], __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "cardExamplesConfig" } : {}), { alias: "cardExamples" }));
-  cardExamples = signal([], ...ngDevMode ? [{ debugName: "cardExamples" }] : []);
-  cards = viewChildren("cards", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "cards" } : {}), { read: ElementRef }));
+  cardDocs = input(...ngDevMode ? [void 0, { debugName: "cardDocs" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  cardExamplesConfig = input([], __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "cardExamplesConfig" } : (
+    /* istanbul ignore next */
+    {}
+  )), { alias: "cardExamples" }));
+  cardExamples = signal([], ...ngDevMode ? [{ debugName: "cardExamples" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  cards = viewChildren("cards", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "cards" } : (
+    /* istanbul ignore next */
+    {}
+  )), { read: ElementRef }));
   phone = "123456789";
   openSourceOptionsPath = OpenSourcePath.OPTIONS;
   specialCharacters = initialConfig.specialCharacters;
@@ -47252,8 +49356,14 @@ var OptionsComponent = class _OptionsComponent {
           }
           const initialValue = config2.control.initialValue;
           const formControl = new FormControl(initialValue);
-          const modelSignal = signal(initialValue, ...ngDevMode ? [{ debugName: "modelSignal" }] : []);
-          const signalFormModel = signal({ value: initialValue }, ...ngDevMode ? [{ debugName: "signalFormModel" }] : []);
+          const modelSignal = signal(initialValue, ...ngDevMode ? [{ debugName: "modelSignal" }] : (
+            /* istanbul ignore next */
+            []
+          ));
+          const signalFormModel = signal({ value: initialValue }, ...ngDevMode ? [{ debugName: "signalFormModel" }] : (
+            /* istanbul ignore next */
+            []
+          ));
           const signalForm = runInInjectionContext(this.injector, () => form(signalFormModel));
           return __spreadProps(__spreadValues({}, config2), {
             control: {
@@ -47286,7 +49396,7 @@ var OptionsComponent = class _OptionsComponent {
       \u0275\u0275repeaterCreate(0, OptionsComponent_For_1_Template, 39, 19, null, null, \u0275\u0275repeaterTrackByIndex);
       \u0275\u0275template(2, OptionsComponent_ng_template_2_Template, 6, 5, "ng-template", null, 0, \u0275\u0275templateRefExtractor);
       \u0275\u0275text(4, "\n\n");
-      \u0275\u0275template(5, OptionsComponent_ng_template_5_Template, 39, 74, "ng-template", null, 1, \u0275\u0275templateRefExtractor);
+      \u0275\u0275template(5, OptionsComponent_ng_template_5_Template, 39, 73, "ng-template", null, 1, \u0275\u0275templateRefExtractor);
       \u0275\u0275text(7, "\n\n");
       \u0275\u0275template(8, OptionsComponent_ng_template_8_Template, 8, 4, "ng-template", null, 2, \u0275\u0275templateRefExtractor);
       \u0275\u0275text(10, "\n");
@@ -47311,12 +49421,12 @@ var OptionsComponent = class _OptionsComponent {
     NgxMaskPipe,
     AssetPipe,
     IsEmptyPipe
-  ], styles: ["\n\n[_nghost-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  background: var(--full-white);\n  border-top: 1px solid var(--black);\n  padding: 20px 22px;\n}\n/*# sourceMappingURL=options.component-3F2GCUTH.css.map */"] });
+  ], styles: ["\n[_nghost-%COMP%] {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  background: var(--full-white);\n  border-top: 1px solid var(--black);\n  padding: 20px 22px;\n}\n/*# sourceMappingURL=options.component-3F2GCUTH.css.map */"], changeDetection: 0 });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(OptionsComponent, [{
     type: Component,
-    args: [{ selector: "jsdaddy-open-source-options", standalone: true, providers: [ScrollService, AccordionService], imports: [
+    args: [{ selector: "jsdaddy-open-source-options", changeDetection: ChangeDetectionStrategy.OnPush, providers: [ScrollService, AccordionService], imports: [
       NgTemplateOutlet,
       FormsModule,
       ReactiveFormsModule,
@@ -47490,7 +49600,7 @@ var OptionsComponent = class _OptionsComponent {
   }), { isSignal: true })] }] });
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OptionsComponent, { className: "OptionsComponent", filePath: "src/app/options/options.component.ts", lineNumber: 51 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(OptionsComponent, { className: "OptionsComponent", filePath: "src/app/options/options.component.ts", lineNumber: 52 });
 })();
 
 // src/libraries/link/link.path.ts
@@ -47553,7 +49663,7 @@ var VisitBtnComponent = class _VisitBtnComponent {
       \u0275\u0275advance(8);
       \u0275\u0275property("ngSrc", \u0275\u0275pipeBind2(9, 5, "button-chevron", ctx.openSourceVisitBtnPath));
     }
-  }, dependencies: [NgOptimizedImage, AssetPipe, AnchorLabelPipe], styles: ["\n\n[_nghost-%COMP%] {\n  display: block;\n}\n/*# sourceMappingURL=visit-btn.component-WJ53GOHK.css.map */"] });
+  }, dependencies: [NgOptimizedImage, AssetPipe, AnchorLabelPipe], styles: ["\n[_nghost-%COMP%] {\n  display: block;\n}\n/*# sourceMappingURL=visit-btn.component-WJ53GOHK.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(VisitBtnComponent, [{
@@ -47625,14 +49735,14 @@ function HeaderComponent_ng_template_46_For_2_Template(rf, ctx) {
     \u0275\u0275text(4, "\n    ");
   }
   if (rf & 2) {
-    const item_r2 = ctx.$implicit;
-    const ctx_r2 = \u0275\u0275nextContext(2);
+    const item_r1 = ctx.$implicit;
+    const ctx_r1 = \u0275\u0275nextContext(2);
     \u0275\u0275advance();
-    \u0275\u0275classMap(ctx_r2.activeLink() === item_r2.link ? "text-yellow bg-dark mob:bg-yellow/[.05]" : "mob:text-full-white mob:hover:bg-yellow/[.05] hover:bg-black/[.05]");
-    \u0275\u0275property("href", item_r2.link, \u0275\u0275sanitizeUrl);
+    \u0275\u0275classMap(ctx_r1.activeLink() === item_r1.link ? "text-yellow bg-dark mob:bg-yellow/[.05]" : "mob:text-full-white mob:hover:bg-yellow/[.05] hover:bg-black/[.05]");
+    \u0275\u0275property("href", item_r1.link, \u0275\u0275sanitizeUrl);
     \u0275\u0275attribute("aria-label", \u0275\u0275pipeBind1(2, 5, "Github-pages"));
     \u0275\u0275advance(2);
-    \u0275\u0275textInterpolate1("\n            ", item_r2.title, "\n        ");
+    \u0275\u0275textInterpolate1("\n            ", item_r1.title, "\n        ");
   }
 }
 function HeaderComponent_ng_template_46_Template(rf, ctx) {
@@ -47641,14 +49751,20 @@ function HeaderComponent_ng_template_46_Template(rf, ctx) {
     \u0275\u0275repeaterCreate(1, HeaderComponent_ng_template_46_For_2_Template, 5, 7, null, null, _forTrack0);
   }
   if (rf & 2) {
-    const ctx_r2 = \u0275\u0275nextContext();
+    const ctx_r1 = \u0275\u0275nextContext();
     \u0275\u0275advance();
-    \u0275\u0275repeater(ctx_r2.headerItems);
+    \u0275\u0275repeater(ctx_r1.headerItems);
   }
 }
 var HeaderComponent = class _HeaderComponent {
-  activeLink = input(...ngDevMode ? [void 0, { debugName: "activeLink" }] : []);
-  showNav = signal(false, ...ngDevMode ? [{ debugName: "showNav" }] : []);
+  activeLink = input(...ngDevMode ? [void 0, { debugName: "activeLink" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  showNav = signal(false, ...ngDevMode ? [{ debugName: "showNav" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   headerItems = [
     {
       title: "Ngx-Mask",
@@ -47675,7 +49791,6 @@ var HeaderComponent = class _HeaderComponent {
   };
   static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _HeaderComponent, selectors: [["jsdaddy-open-source-header"]], inputs: { activeLink: [1, "activeLink"] }, features: [\u0275\u0275ProvidersFeature([BodyStylesService])], decls: 49, vars: 28, consts: [["openSourceButtons", ""], [1, "fixed", "top-0", "right-0", "left-0", "flex", "items-center", "px-30px", "py-15px", "bg-full-white", "h-[68px]", "z-10"], ["target", "_self", 1, "desk:pl-2.5", "desk:w-[310px]", 3, "href"], ["width", "34", "height", "29", "alt", "Logo JsDaddy", 1, "logo", 3, "ngSrc"], ["aria-hidden", "true", 1, "desk:hidden", "tab:hidden", "ml-auto", "cursor-pointer", 3, "click"], ["width", "48", "height", "48", "alt", "Burger", 3, "ngSrc"], [1, "flex", "items-center", "gap-5px", "mob:hidden", "tab:ml-30px"], [4, "ngTemplateOutlet"], [1, "fixed", "top-0", "right-0", "left-0", "flex", "flex-col", "bg-black", "h-full", "z-10"], [1, "flex", "items-center", "justify-between", "h-[68px]", "pl-30px", "py-15px", "border-b", "border-b-full-white/[.05]"], ["aria-hidden", "true", "width", "34", "height", "29", "alt", "Logo JsDaddy", 3, "ngSrc"], ["aria-hidden", "true", "width", "68", "height", "67", "alt", "Close", 1, "cursor-pointer", 3, "click", "ngSrc"], [1, "fixed", "block", "overflow-auto", "z-10", "top-[68px]", "left-0", "right-0", "w-full", "py-15px", "px-5", "bg-black"], [1, "text-full-white", "text-h5", "uppercase", "tracking-[.25em]"], [1, "flex", "flex-col", "mt-10", "gap-2.5"], [1, "mt-auto", "py-15px", "px-5", "w-full"], ["target", "_self", 1, "flex", "items-center", "px-6", "py-5px", "rounded-10px", "cursor-pointer", 3, "href"]], template: function HeaderComponent_Template(rf, ctx) {
     if (rf & 1) {
-      const _r1 = \u0275\u0275getCurrentView();
       \u0275\u0275elementStart(0, "div", 1);
       \u0275\u0275text(1, "\n    ");
       \u0275\u0275elementStart(2, "a", 2);
@@ -47688,8 +49803,7 @@ var HeaderComponent = class _HeaderComponent {
       \u0275\u0275text(8, "\n    ");
       \u0275\u0275elementStart(9, "div", 4);
       \u0275\u0275listener("click", function HeaderComponent_Template_div_click_9_listener() {
-        \u0275\u0275restoreView(_r1);
-        return \u0275\u0275resetView(ctx.toggleNavBlock());
+        return ctx.toggleNavBlock();
       });
       \u0275\u0275text(10, "\n        ");
       \u0275\u0275element(11, "img", 5);
@@ -47715,8 +49829,7 @@ var HeaderComponent = class _HeaderComponent {
       \u0275\u0275elementStart(28, "img", 11);
       \u0275\u0275pipe(29, "asset");
       \u0275\u0275listener("click", function HeaderComponent_Template_img_click_28_listener() {
-        \u0275\u0275restoreView(_r1);
-        return \u0275\u0275resetView(ctx.toggleNavBlock());
+        return ctx.toggleNavBlock();
       });
       \u0275\u0275elementEnd();
       \u0275\u0275text(30, "\n    ");
@@ -47744,7 +49857,7 @@ var HeaderComponent = class _HeaderComponent {
       \u0275\u0275text(48, "\n");
     }
     if (rf & 2) {
-      const openSourceButtons_r4 = \u0275\u0275reference(47);
+      const openSourceButtons_r3 = \u0275\u0275reference(47);
       \u0275\u0275classProp("hidden", ctx.showNav());
       \u0275\u0275advance(2);
       \u0275\u0275property("href", ctx.jsDaddyWebsite, \u0275\u0275sanitizeUrl);
@@ -47754,7 +49867,7 @@ var HeaderComponent = class _HeaderComponent {
       \u0275\u0275advance(6);
       \u0275\u0275property("ngSrc", \u0275\u0275pipeBind2(12, 19, "burger", ctx.openSourceHeaderPath));
       \u0275\u0275advance(6);
-      \u0275\u0275property("ngTemplateOutlet", openSourceButtons_r4);
+      \u0275\u0275property("ngTemplateOutlet", openSourceButtons_r3);
       \u0275\u0275advance(4);
       \u0275\u0275classProp("hidden", !ctx.showNav());
       \u0275\u0275advance(4);
@@ -47764,7 +49877,7 @@ var HeaderComponent = class _HeaderComponent {
       \u0275\u0275advance(4);
       \u0275\u0275classProp("hidden", !ctx.showNav());
       \u0275\u0275advance(7);
-      \u0275\u0275property("ngTemplateOutlet", openSourceButtons_r4);
+      \u0275\u0275property("ngTemplateOutlet", openSourceButtons_r3);
     }
   }, dependencies: [VisitBtnComponent, NgOptimizedImage, NgTemplateOutlet, AssetPipe, AnchorLabelPipe], encapsulation: 2 });
 };
@@ -47854,10 +49967,22 @@ var HeaderComponent = class _HeaderComponent {
 // src/libraries/chip/chip.component.ts
 var _c03 = ["chip", ""];
 var ChipComponent = class _ChipComponent {
-  chip = input.required(...ngDevMode ? [{ debugName: "chip" }] : []);
-  chipBgColor = input("rgba(0,0,0,0.05)", ...ngDevMode ? [{ debugName: "chipBgColor" }] : []);
-  isActive = input(false, ...ngDevMode ? [{ debugName: "isActive" }] : []);
-  pointer = input(false, ...ngDevMode ? [{ debugName: "pointer" }] : []);
+  chip = input.required(...ngDevMode ? [{ debugName: "chip" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  chipBgColor = input("rgba(0,0,0,0.05)", ...ngDevMode ? [{ debugName: "chipBgColor" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  isActive = input(false, ...ngDevMode ? [{ debugName: "isActive" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  pointer = input(false, ...ngDevMode ? [{ debugName: "pointer" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   static \u0275fac = function ChipComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _ChipComponent)();
   };
@@ -47874,7 +49999,7 @@ var ChipComponent = class _ChipComponent {
       \u0275\u0275advance();
       \u0275\u0275textInterpolate1("\n    ", ctx.chip(), "\n");
     }
-  }, styles: ["\n\ndiv[_ngcontent-%COMP%] {\n  width: max-content;\n  padding: 5px 15px;\n  border-radius: 25px;\n}\ndiv.is-active[_ngcontent-%COMP%] {\n  background: #ffd64d !important;\n}\n/*# sourceMappingURL=chip.component-3AG4QOF6.css.map */"] });
+  }, styles: ["\ndiv[_ngcontent-%COMP%] {\n  width: max-content;\n  padding: 5px 15px;\n  border-radius: 25px;\n}\ndiv.is-active[_ngcontent-%COMP%] {\n  background: #ffd64d !important;\n}\n/*# sourceMappingURL=chip.component-3AG4QOF6.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(ChipComponent, [{
@@ -47895,7 +50020,10 @@ var ChipComponent = class _ChipComponent {
 // src/libraries/github/github-stars.service.ts
 var GithubStarsService = class _GithubStarsService {
   platformId = inject2(PLATFORM_ID);
-  reposResource = resource(__spreadProps(__spreadValues({}, ngDevMode ? { debugName: "reposResource" } : {}), { loader: async () => {
+  reposResource = resource(__spreadProps(__spreadValues({}, ngDevMode ? { debugName: "reposResource" } : (
+    /* istanbul ignore next */
+    {}
+  )), { loader: async () => {
     if (isPlatformServer(this.platformId)) {
       return [];
     }
@@ -47912,7 +50040,10 @@ var GithubStarsService = class _GithubStarsService {
   allStars = computed(() => {
     const repos = this.reposResource.value() ?? [];
     return repos.reduce((acc, { stargazers_count }) => acc + stargazers_count, 0);
-  }, ...ngDevMode ? [{ debugName: "allStars" }] : []);
+  }, ...ngDevMode ? [{ debugName: "allStars" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   static \u0275fac = function GithubStarsService_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _GithubStarsService)();
   };
@@ -47927,7 +50058,10 @@ var GithubStarsService = class _GithubStarsService {
 // src/libraries/github-buttons/github-buttons.component.ts
 var _c04 = ["title", ""];
 var GithubButtonsComponent = class _GithubButtonsComponent {
-  title = input.required(...ngDevMode ? [{ debugName: "title" }] : []);
+  title = input.required(...ngDevMode ? [{ debugName: "title" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   jsdaddyGithub = "https://github.com/JsDaddy/";
   countOfStarsOnGithub = inject2(GithubStarsService).allStars;
   static \u0275fac = function GithubButtonsComponent_Factory(__ngFactoryType__) {
@@ -47967,7 +50101,7 @@ var GithubButtonsComponent = class _GithubButtonsComponent {
       \u0275\u0275advance(4);
       \u0275\u0275textInterpolate(ctx.countOfStarsOnGithub() || 0);
     }
-  }, dependencies: [NgOptimizedImage, AssetPipe, AnchorLabelPipe], styles: ['\n\n.github-info[_ngcontent-%COMP%] {\n  display: flex;\n  margin: 0 44px 0 20px;\n}\n.github-info[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  padding: 3px 10px;\n  background-color: #191919;\n  border: 1px solid #191919;\n  border-radius: 4px;\n  font-size: 12px;\n  color: #fff;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%] {\n  margin-right: 7px;\n  position: relative;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%]:after {\n  content: "";\n  width: 8px;\n  height: 8px;\n  background-color: #191919;\n  transform: rotate(45deg) translateY(-50%);\n  position: absolute;\n  top: 50%;\n  right: -1px;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%]   img[_ngcontent-%COMP%] {\n  margin-right: 10px;\n}\n@media only screen and (max-width: 699px) {\n  .github-info[_ngcontent-%COMP%] {\n    margin-right: 30px;\n  }\n}\n/*# sourceMappingURL=github-buttons.component-7TVZT7F2.css.map */'] });
+  }, dependencies: [NgOptimizedImage, AssetPipe, AnchorLabelPipe], styles: ['\n.github-info[_ngcontent-%COMP%] {\n  display: flex;\n  margin: 0 44px 0 20px;\n}\n.github-info[_ngcontent-%COMP%]   div[_ngcontent-%COMP%] {\n  display: flex;\n  align-items: center;\n  padding: 3px 10px;\n  background-color: #191919;\n  border: 1px solid #191919;\n  border-radius: 4px;\n  font-size: 12px;\n  color: #fff;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%] {\n  margin-right: 7px;\n  position: relative;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%]:after {\n  content: "";\n  width: 8px;\n  height: 8px;\n  background-color: #191919;\n  transform: rotate(45deg) translateY(-50%);\n  position: absolute;\n  top: 50%;\n  right: -1px;\n}\n.github-info[_ngcontent-%COMP%]   div.all-stars[_ngcontent-%COMP%]   img[_ngcontent-%COMP%] {\n  margin-right: 10px;\n}\n@media only screen and (max-width: 699px) {\n  .github-info[_ngcontent-%COMP%] {\n    margin-right: 30px;\n  }\n}\n/*# sourceMappingURL=github-buttons.component-7TVZT7F2.css.map */'] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(GithubButtonsComponent, [{
@@ -48000,9 +50134,18 @@ function SubHeaderComponent_For_19_Template(rf, ctx) {
   }
 }
 var SubHeaderComponent = class _SubHeaderComponent {
-  title = input(...ngDevMode ? [void 0, { debugName: "title" }] : []);
-  subtitle = input(...ngDevMode ? [void 0, { debugName: "subtitle" }] : []);
-  chips = input(...ngDevMode ? [void 0, { debugName: "chips" }] : []);
+  title = input(...ngDevMode ? [void 0, { debugName: "title" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  subtitle = input(...ngDevMode ? [void 0, { debugName: "subtitle" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  chips = input(...ngDevMode ? [void 0, { debugName: "chips" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   static \u0275fac = function SubHeaderComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _SubHeaderComponent)();
   };
@@ -48148,12 +50291,27 @@ function AccordionComponent_For_19_Template(rf, ctx) {
   }
 }
 var AccordionComponent = class _AccordionComponent {
-  lists = input(...ngDevMode ? [void 0, { debugName: "lists" }] : []);
+  lists = input(...ngDevMode ? [void 0, { debugName: "lists" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   switchCardIndex = output();
-  accordion = viewChildren("accordion", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "accordion" } : {}), { read: ElementRef }));
-  accordionBlockElement = viewChild("accordionBlock", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "accordionBlockElement" } : {}), { read: ElementRef }));
-  showAccordion = signal(false, ...ngDevMode ? [{ debugName: "showAccordion" }] : []);
-  itemInAccordion = signal(1, ...ngDevMode ? [{ debugName: "itemInAccordion" }] : []);
+  accordion = viewChildren("accordion", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "accordion" } : (
+    /* istanbul ignore next */
+    {}
+  )), { read: ElementRef }));
+  accordionBlockElement = viewChild("accordionBlock", __spreadProps(__spreadValues({}, ngDevMode ? { debugName: "accordionBlockElement" } : (
+    /* istanbul ignore next */
+    {}
+  )), { read: ElementRef }));
+  showAccordion = signal(false, ...ngDevMode ? [{ debugName: "showAccordion" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  itemInAccordion = signal(1, ...ngDevMode ? [{ debugName: "itemInAccordion" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   openSourceAccordionPath = OpenSourcePath.ACCORDION;
   bodyStylesService = inject2(BodyStylesService);
   activatedRoute = inject2(ActivatedRoute);
@@ -48289,7 +50447,7 @@ var AccordionComponent = class _AccordionComponent {
       \u0275\u0275advance(5);
       \u0275\u0275repeater(ctx.lists());
     }
-  }, dependencies: [VisitBtnComponent, NgOptimizedImage, AssetPipe], styles: ["\n\n.active[_ngcontent-%COMP%]   .chevron-default[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .default-svg[_ngcontent-%COMP%] {\n  display: none !important;\n}\n.active[_ngcontent-%COMP%]   .chevron-active[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .active-svg[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .panel[_ngcontent-%COMP%] {\n  display: block !important;\n}\n.active[_ngcontent-%COMP%]   .accordion-title[_ngcontent-%COMP%] {\n  color: #ffd64d !important;\n}\n.non-active[_ngcontent-%COMP%]   .accordion-title[_ngcontent-%COMP%] {\n  color: #ffffff;\n}\n.non-active[_ngcontent-%COMP%]   .panel[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .chevron-active[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .active-svg[_ngcontent-%COMP%] {\n  display: none;\n}\n.non-active[_ngcontent-%COMP%]   .chevron-default[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .default-svg[_ngcontent-%COMP%] {\n  display: block;\n}\n.non-active[_ngcontent-%COMP%]:hover   .chevron-default[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]:hover   .default-svg[_ngcontent-%COMP%] {\n  display: none;\n}\n.non-active[_ngcontent-%COMP%]:hover   .chevron-active[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]:hover   .active-svg[_ngcontent-%COMP%] {\n  display: block;\n}\n/*# sourceMappingURL=accordion.component-ENWKSCUI.css.map */"] });
+  }, dependencies: [VisitBtnComponent, NgOptimizedImage, AssetPipe], styles: ["\n.active[_ngcontent-%COMP%]   .chevron-default[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .default-svg[_ngcontent-%COMP%] {\n  display: none !important;\n}\n.active[_ngcontent-%COMP%]   .chevron-active[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .active-svg[_ngcontent-%COMP%], \n.active[_ngcontent-%COMP%]   .panel[_ngcontent-%COMP%] {\n  display: block !important;\n}\n.active[_ngcontent-%COMP%]   .accordion-title[_ngcontent-%COMP%] {\n  color: #ffd64d !important;\n}\n.non-active[_ngcontent-%COMP%]   .accordion-title[_ngcontent-%COMP%] {\n  color: #ffffff;\n}\n.non-active[_ngcontent-%COMP%]   .panel[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .chevron-active[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .active-svg[_ngcontent-%COMP%] {\n  display: none;\n}\n.non-active[_ngcontent-%COMP%]   .chevron-default[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]   .default-svg[_ngcontent-%COMP%] {\n  display: block;\n}\n.non-active[_ngcontent-%COMP%]:hover   .chevron-default[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]:hover   .default-svg[_ngcontent-%COMP%] {\n  display: none;\n}\n.non-active[_ngcontent-%COMP%]:hover   .chevron-active[_ngcontent-%COMP%], \n.non-active[_ngcontent-%COMP%]:hover   .active-svg[_ngcontent-%COMP%] {\n  display: block;\n}\n/*# sourceMappingURL=accordion.component-ENWKSCUI.css.map */"] });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AccordionComponent, [{
@@ -48601,47 +50759,43 @@ var FormatAndParserExamples = [
 ];
 
 // src/app/app.component.ts
+var CARD_CONTENT = {
+  1: { docs: ComDocs, examples: ComExamples },
+  2: { docs: OptDocs, examples: OptExamples },
+  3: { docs: SepDocs, examples: SepExamples },
+  4: { docs: OthDocs, examples: OthExamples },
+  5: { docs: ParserAndFormatterDocs, examples: FormatAndParserExamples }
+};
+var DEFAULT_CARD_CONTENT = { docs: ComDocs, examples: ComExamples };
 var AppComponent = class _AppComponent {
-  docs = signal(ComDocs, ...ngDevMode ? [{ debugName: "docs" }] : []);
-  examples = signal(ComExamples, ...ngDevMode ? [{ debugName: "examples" }] : []);
+  selectedCardId = signal(1, ...ngDevMode ? [{ debugName: "selectedCardId" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  selectedCardContent = computed(() => CARD_CONTENT[this.selectedCardId()] ?? DEFAULT_CARD_CONTENT, ...ngDevMode ? [{ debugName: "selectedCardContent" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  docs = computed(() => this.selectedCardContent().docs, ...ngDevMode ? [{ debugName: "docs" }] : (
+    /* istanbul ignore next */
+    []
+  ));
+  examples = computed(() => this.selectedCardContent().examples, ...ngDevMode ? [{ debugName: "examples" }] : (
+    /* istanbul ignore next */
+    []
+  ));
   lists = lists;
   githubMaskLink = LinkPath.NGX_MASK;
   title = "Ngx-Mask";
   subtitle = "Angular plugin to make masks on form fields and html elements";
   chips = ["Angular", "TypeScript", "Web", "Input", "Pipe", "Show-Masks"];
-  selectedCardId = signal(1, ...ngDevMode ? [{ debugName: "selectedCardId" }] : []);
   switchCard(cardId) {
-    if (this.selectedCardId() === cardId) {
-      return;
-    }
     this.selectedCardId.set(cardId);
-    switch (cardId) {
-      case 2:
-        this.docs.set(OptDocs);
-        this.examples.set(OptExamples);
-        break;
-      case 3:
-        this.docs.set(SepDocs);
-        this.examples.set(SepExamples);
-        break;
-      case 4:
-        this.docs.set(OthDocs);
-        this.examples.set(OthExamples);
-        break;
-      case 5:
-        this.docs.set(ParserAndFormatterDocs);
-        this.examples.set(FormatAndParserExamples);
-        break;
-      default:
-        this.docs.set(ComDocs);
-        this.examples.set(ComExamples);
-        break;
-    }
   }
   static \u0275fac = function AppComponent_Factory(__ngFactoryType__) {
     return new (__ngFactoryType__ || _AppComponent)();
   };
-  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "1.21.1" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
+  static \u0275cmp = /* @__PURE__ */ \u0275\u0275defineComponent({ type: _AppComponent, selectors: [["jsdaddy-open-source-root"]], features: [\u0275\u0275ProvidersFeature([{ provide: VersionToken, useValue: "2.0.0" }])], decls: 22, vars: 7, consts: [[1, "flex", "flex-col"], [3, "activeLink"], [1, "flex", "overflow-auto", "mt-[64px]"], [1, "drawer-container", "flex", "flex-col"], [3, "switchCardIndex", "lists"], [1, "flex", "flex-col", "w-full", "p-0", "mt-[55px]", "desk:mt-0", "desk:pl-[310px]"], [3, "title", "subtitle", "chips"], [3, "cardDocs", "cardExamples"]], template: function AppComponent_Template(rf, ctx) {
     if (rf & 1) {
       \u0275\u0275elementStart(0, "div", 0);
       \u0275\u0275text(1, "\n    ");
@@ -48690,25 +50844,30 @@ var AppComponent = class _AppComponent {
     SubHeaderComponent,
     AccordionComponent,
     FooterComponent
-  ], styles: ["\n\n[_nghost-%COMP%] {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */"] });
+  ], styles: ["\n[_nghost-%COMP%] {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */"], changeDetection: 0 });
 };
 (() => {
   (typeof ngDevMode === "undefined" || ngDevMode) && setClassMetadata(AppComponent, [{
     type: Component,
-    args: [{ selector: "jsdaddy-open-source-root", standalone: true, imports: [
+    args: [{ selector: "jsdaddy-open-source-root", changeDetection: ChangeDetectionStrategy.OnPush, imports: [
       OptionsComponent,
       HeaderComponent,
       SubHeaderComponent,
       AccordionComponent,
       FooterComponent
-    ], providers: [{ provide: VersionToken, useValue: "1.21.1" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */\n"] }]
+    ], providers: [{ provide: VersionToken, useValue: "2.0.0" }], template: '<div class="flex flex-col">\n    <jsdaddy-open-source-header [activeLink]="githubMaskLink" />\n    <section class="flex overflow-auto mt-[64px]">\n        <div class="drawer-container flex flex-col">\n            <jsdaddy-open-source-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />\n        </div>\n        <div class="flex flex-col w-full p-0 mt-[55px] desk:mt-0 desk:pl-[310px]">\n            <jsdaddy-open-source-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />\n            <jsdaddy-open-source-options [cardDocs]="docs()" [cardExamples]="examples()" />\n            <jsdaddy-open-source-footer />\n        </div>\n    </section>\n</div>\n', styles: ["/* src/app/app.component.scss */\n:host {\n  display: block;\n  height: 100%;\n}\n/*# sourceMappingURL=app.component-EV35ITUA.css.map */\n"] }]
   }], null, null);
 })();
 (() => {
-  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent", filePath: "src/app/app.component.ts", lineNumber: 41 });
+  (typeof ngDevMode === "undefined" || ngDevMode) && \u0275setClassDebugInfo(AppComponent, { className: "AppComponent", filePath: "src/app/app.component.ts", lineNumber: 56 });
 })();
 
 // node_modules/@angular/animations/fesm2022/_private_export-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var AnimationMetadataType;
 (function(AnimationMetadataType2) {
   AnimationMetadataType2[AnimationMetadataType2["State"] = 0] = "State";
@@ -48961,6 +51120,11 @@ var AnimationGroupPlayer = class {
 var \u0275PRE_STYLE = "!";
 
 // node_modules/@angular/animations/fesm2022/_util-chunk.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var LINE_START = "\n - ";
 function invalidTimingValue(exp) {
   return new RuntimeError(3e3, ngDevMode && `The provided timing value "${exp}" is invalid.`);
@@ -49417,6 +51581,11 @@ function computeStyle(element, prop) {
 }
 
 // node_modules/@angular/animations/fesm2022/browser.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var NoopAnimationDriver = class _NoopAnimationDriver {
   validateStyleProperty(prop) {
     return validateStyleProperty(prop);
@@ -49558,8 +51727,8 @@ function makeLambdaFromStates(lhs, rhs) {
 }
 var SELF_TOKEN = ":self";
 var SELF_TOKEN_REGEX = /* @__PURE__ */ new RegExp(`s*${SELF_TOKEN}s*,?`, "g");
-function buildAnimationAst(driver, metadata, errors, warnings) {
-  return new AnimationAstBuilderVisitor(driver).build(metadata, errors, warnings);
+function buildAnimationAst(driver, metadata2, errors, warnings) {
+  return new AnimationAstBuilderVisitor(driver).build(metadata2, errors, warnings);
 }
 var ROOT_SELECTOR = "";
 var AnimationAstBuilderVisitor = class {
@@ -49567,10 +51736,10 @@ var AnimationAstBuilderVisitor = class {
   constructor(_driver) {
     this._driver = _driver;
   }
-  build(metadata, errors, warnings) {
+  build(metadata2, errors, warnings) {
     const context2 = new AnimationAstBuilderContext(errors);
     this._resetContextStyleTimingState(context2);
-    const ast = visitDslNode(this, normalizeAnimationEntry(metadata), context2);
+    const ast = visitDslNode(this, normalizeAnimationEntry(metadata2), context2);
     if (typeof ngDevMode === "undefined" || ngDevMode) {
       if (context2.unsupportedCSSPropertiesFound.size) {
         pushUnrecognizedPropertiesWarning(warnings, [...context2.unsupportedCSSPropertiesFound.keys()]);
@@ -49584,15 +51753,15 @@ var AnimationAstBuilderVisitor = class {
     context2.collectedStyles.set(ROOT_SELECTOR, /* @__PURE__ */ new Map());
     context2.currentTime = 0;
   }
-  visitTrigger(metadata, context2) {
+  visitTrigger(metadata2, context2) {
     let queryCount = context2.queryCount = 0;
     let depCount = context2.depCount = 0;
     const states = [];
     const transitions = [];
-    if (metadata.name.charAt(0) == "@") {
+    if (metadata2.name.charAt(0) == "@") {
       context2.errors.push(invalidTrigger());
     }
-    metadata.definitions.forEach((def) => {
+    metadata2.definitions.forEach((def) => {
       this._resetContextStyleTimingState(context2);
       if (def.type == AnimationMetadataType.State) {
         const stateDef = def;
@@ -49613,7 +51782,7 @@ var AnimationAstBuilderVisitor = class {
     });
     return {
       type: AnimationMetadataType.Trigger,
-      name: metadata.name,
+      name: metadata2.name,
       states,
       transitions,
       queryCount,
@@ -49621,9 +51790,9 @@ var AnimationAstBuilderVisitor = class {
       options: null
     };
   }
-  visitState(metadata, context2) {
-    const styleAst = this.visitStyle(metadata.styles, context2);
-    const astParams = metadata.options && metadata.options.params || null;
+  visitState(metadata2, context2) {
+    const styleAst = this.visitStyle(metadata2.styles, context2);
+    const astParams = metadata2.options && metadata2.options.params || null;
     if (styleAst.containsDynamicStyles) {
       const missingSubs = /* @__PURE__ */ new Set();
       const params = astParams || {};
@@ -49639,43 +51808,43 @@ var AnimationAstBuilderVisitor = class {
         }
       });
       if (missingSubs.size) {
-        context2.errors.push(invalidState(metadata.name, [...missingSubs.values()]));
+        context2.errors.push(invalidState(metadata2.name, [...missingSubs.values()]));
       }
     }
     return {
       type: AnimationMetadataType.State,
-      name: metadata.name,
+      name: metadata2.name,
       style: styleAst,
       options: astParams ? {
         params: astParams
       } : null
     };
   }
-  visitTransition(metadata, context2) {
+  visitTransition(metadata2, context2) {
     context2.queryCount = 0;
     context2.depCount = 0;
-    const animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context2);
-    const matchers = parseTransitionExpr(metadata.expr, context2.errors);
+    const animation = visitDslNode(this, normalizeAnimationEntry(metadata2.animation), context2);
+    const matchers = parseTransitionExpr(metadata2.expr, context2.errors);
     return {
       type: AnimationMetadataType.Transition,
       matchers,
       animation,
       queryCount: context2.queryCount,
       depCount: context2.depCount,
-      options: normalizeAnimationOptions(metadata.options)
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitSequence(metadata, context2) {
+  visitSequence(metadata2, context2) {
     return {
       type: AnimationMetadataType.Sequence,
-      steps: metadata.steps.map((s) => visitDslNode(this, s, context2)),
-      options: normalizeAnimationOptions(metadata.options)
+      steps: metadata2.steps.map((s) => visitDslNode(this, s, context2)),
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitGroup(metadata, context2) {
+  visitGroup(metadata2, context2) {
     const currentTime = context2.currentTime;
     let furthestTime = 0;
-    const steps = metadata.steps.map((step) => {
+    const steps = metadata2.steps.map((step) => {
       context2.currentTime = currentTime;
       const innerAst = visitDslNode(this, step, context2);
       furthestTime = Math.max(furthestTime, context2.currentTime);
@@ -49685,18 +51854,18 @@ var AnimationAstBuilderVisitor = class {
     return {
       type: AnimationMetadataType.Group,
       steps,
-      options: normalizeAnimationOptions(metadata.options)
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitAnimate(metadata, context2) {
-    const timingAst = constructTimingAst(metadata.timings, context2.errors);
+  visitAnimate(metadata2, context2) {
+    const timingAst = constructTimingAst(metadata2.timings, context2.errors);
     context2.currentAnimateTimings = timingAst;
     let styleAst;
-    let styleMetadata = metadata.styles ? metadata.styles : style({});
+    let styleMetadata = metadata2.styles ? metadata2.styles : style({});
     if (styleMetadata.type == AnimationMetadataType.Keyframes) {
       styleAst = this.visitKeyframes(styleMetadata, context2);
     } else {
-      let styleMetadata2 = metadata.styles;
+      let styleMetadata2 = metadata2.styles;
       let isEmpty = false;
       if (!styleMetadata2) {
         isEmpty = true;
@@ -49719,14 +51888,14 @@ var AnimationAstBuilderVisitor = class {
       options: null
     };
   }
-  visitStyle(metadata, context2) {
-    const ast = this._makeStyleAst(metadata, context2);
+  visitStyle(metadata2, context2) {
+    const ast = this._makeStyleAst(metadata2, context2);
     this._validateStyleAst(ast, context2);
     return ast;
   }
-  _makeStyleAst(metadata, context2) {
+  _makeStyleAst(metadata2, context2) {
     const styles = [];
-    const metadataStyles = Array.isArray(metadata.styles) ? metadata.styles : [metadata.styles];
+    const metadataStyles = Array.isArray(metadata2.styles) ? metadata2.styles : [metadata2.styles];
     for (let styleTuple of metadataStyles) {
       if (typeof styleTuple === "string") {
         if (styleTuple === AUTO_STYLE) {
@@ -49760,7 +51929,7 @@ var AnimationAstBuilderVisitor = class {
       type: AnimationMetadataType.Style,
       styles,
       easing: collectedEasing,
-      offset: metadata.offset,
+      offset: metadata2.offset,
       containsDynamicStyles,
       options: null
     };
@@ -49804,7 +51973,7 @@ var AnimationAstBuilderVisitor = class {
       });
     });
   }
-  visitKeyframes(metadata, context2) {
+  visitKeyframes(metadata2, context2) {
     const ast = {
       type: AnimationMetadataType.Keyframes,
       styles: [],
@@ -49820,7 +51989,7 @@ var AnimationAstBuilderVisitor = class {
     let offsetsOutOfOrder = false;
     let keyframesOutOfRange = false;
     let previousOffset = 0;
-    const keyframes = metadata.steps.map((styles) => {
+    const keyframes = metadata2.steps.map((styles) => {
       const style2 = this._makeStyleAst(styles, context2);
       let offsetVal = style2.offset != null ? style2.offset : consumeOffset(style2.styles);
       let offset = 0;
@@ -49840,7 +52009,7 @@ var AnimationAstBuilderVisitor = class {
     if (offsetsOutOfOrder) {
       context2.errors.push(keyframeOffsetsOutOfOrder());
     }
-    const length = metadata.steps.length;
+    const length = metadata2.steps.length;
     let generatedOffset = 0;
     if (totalKeyframesWithOffsets > 0 && totalKeyframesWithOffsets < length) {
       context2.errors.push(keyframesMissingOffsets());
@@ -49862,36 +52031,36 @@ var AnimationAstBuilderVisitor = class {
     });
     return ast;
   }
-  visitReference(metadata, context2) {
+  visitReference(metadata2, context2) {
     return {
       type: AnimationMetadataType.Reference,
-      animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context2),
-      options: normalizeAnimationOptions(metadata.options)
+      animation: visitDslNode(this, normalizeAnimationEntry(metadata2.animation), context2),
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitAnimateChild(metadata, context2) {
+  visitAnimateChild(metadata2, context2) {
     context2.depCount++;
     return {
       type: AnimationMetadataType.AnimateChild,
-      options: normalizeAnimationOptions(metadata.options)
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitAnimateRef(metadata, context2) {
+  visitAnimateRef(metadata2, context2) {
     return {
       type: AnimationMetadataType.AnimateRef,
-      animation: this.visitReference(metadata.animation, context2),
-      options: normalizeAnimationOptions(metadata.options)
+      animation: this.visitReference(metadata2.animation, context2),
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitQuery(metadata, context2) {
+  visitQuery(metadata2, context2) {
     const parentSelector = context2.currentQuerySelector;
-    const options = metadata.options || {};
+    const options = metadata2.options || {};
     context2.queryCount++;
-    context2.currentQuery = metadata;
-    const [selector, includeSelf] = normalizeSelector(metadata.selector);
+    context2.currentQuery = metadata2;
+    const [selector, includeSelf] = normalizeSelector(metadata2.selector);
     context2.currentQuerySelector = parentSelector.length ? parentSelector + " " + selector : selector;
     getOrSetDefaultValue(context2.collectedStyles, context2.currentQuerySelector, /* @__PURE__ */ new Map());
-    const animation = visitDslNode(this, normalizeAnimationEntry(metadata.animation), context2);
+    const animation = visitDslNode(this, normalizeAnimationEntry(metadata2.animation), context2);
     context2.currentQuery = null;
     context2.currentQuerySelector = parentSelector;
     return {
@@ -49901,22 +52070,22 @@ var AnimationAstBuilderVisitor = class {
       optional: !!options.optional,
       includeSelf,
       animation,
-      originalSelector: metadata.selector,
-      options: normalizeAnimationOptions(metadata.options)
+      originalSelector: metadata2.selector,
+      options: normalizeAnimationOptions(metadata2.options)
     };
   }
-  visitStagger(metadata, context2) {
+  visitStagger(metadata2, context2) {
     if (!context2.currentQuery) {
       context2.errors.push(invalidStagger());
     }
-    const timings = metadata.timings === "full" ? {
+    const timings = metadata2.timings === "full" ? {
       duration: 0,
       delay: 0,
       easing: "full"
-    } : resolveTiming(metadata.timings, context2.errors, true);
+    } : resolveTiming(metadata2.timings, context2.errors, true);
     return {
       type: AnimationMetadataType.Stagger,
-      animation: visitDslNode(this, normalizeAnimationEntry(metadata.animation), context2),
+      animation: visitDslNode(this, normalizeAnimationEntry(metadata2.animation), context2),
       timings,
       options: null
     };
@@ -50895,10 +53064,10 @@ var TimelineAnimationEngine = class {
     this._driver = _driver;
     this._normalizer = _normalizer;
   }
-  register(id, metadata) {
+  register(id, metadata2) {
     const errors = [];
     const warnings = [];
-    const ast = buildAnimationAst(this._driver, metadata, errors, warnings);
+    const ast = buildAnimationAst(this._driver, metadata2, errors, warnings);
     if (errors.length) {
       throw registerFailed(errors);
     } else {
@@ -52316,13 +54485,13 @@ var AnimationEngine = class {
     this._timelineEngine = new TimelineAnimationEngine(doc.body, _driver, _normalizer);
     this._transitionEngine.onRemovalComplete = (element, context2) => this.onRemovalComplete(element, context2);
   }
-  registerTrigger(componentId, namespaceId, hostElement, name, metadata) {
+  registerTrigger(componentId, namespaceId, hostElement, name, metadata2) {
     const cacheKey = componentId + "-" + name;
     let trigger = this._triggerCache[cacheKey];
     if (!trigger) {
       const errors = [];
       const warnings = [];
-      const ast = buildAnimationAst(this._driver, metadata, errors, warnings);
+      const ast = buildAnimationAst(this._driver, metadata2, errors, warnings);
       if (errors.length) {
         throw triggerBuildFailed(name, errors);
       }
@@ -52944,6 +55113,11 @@ var AnimationRendererFactory = class {
 };
 
 // node_modules/@angular/platform-browser/fesm2022/animations.mjs
+/**
+ * @license Angular v21.2.17
+ * (c) 2010-2026 Google LLC. https://angular.dev/
+ * License: MIT
+ */
 var InjectableAnimationEngine = class _InjectableAnimationEngine extends AnimationEngine {
   constructor(doc, driver, normalizer) {
     super(doc, driver, normalizer);
@@ -53111,48 +55285,10 @@ bootstrapApplication(AppComponent, {
     {
       provide: HIGHLIGHT_OPTIONS,
       useValue: {
-        fullLibraryLoader: () => import("./es-GDAQ4JSS.js")
+        fullLibraryLoader: () => import("./es-BM7XBZSQ.js")
       }
     }
   ]
   // eslint-disable-next-line no-console
 }).catch((err) => console.error(err));
-/*! Bundled license information:
-
-@angular/core/fesm2022/_effect-chunk.mjs:
-@angular/core/fesm2022/_not_found-chunk.mjs:
-@angular/core/fesm2022/_linked_signal-chunk.mjs:
-@angular/core/fesm2022/primitives-signals.mjs:
-@angular/core/fesm2022/primitives-di.mjs:
-@angular/core/fesm2022/_untracked-chunk.mjs:
-@angular/core/fesm2022/_debug_node-chunk.mjs:
-@angular/core/fesm2022/_resource-chunk.mjs:
-@angular/core/fesm2022/core.mjs:
-@angular/common/fesm2022/_platform_location-chunk.mjs:
-@angular/common/fesm2022/_location-chunk.mjs:
-@angular/common/fesm2022/_common_module-chunk.mjs:
-@angular/common/fesm2022/_platform_navigation-chunk.mjs:
-@angular/common/fesm2022/_xhr-chunk.mjs:
-@angular/common/fesm2022/common.mjs:
-@angular/platform-browser/fesm2022/_dom_renderer-chunk.mjs:
-@angular/platform-browser/fesm2022/_browser-chunk.mjs:
-@angular/common/fesm2022/_module-chunk.mjs:
-@angular/common/fesm2022/http.mjs:
-@angular/platform-browser/fesm2022/platform-browser.mjs:
-@angular/forms/fesm2022/forms.mjs:
-@angular/forms/fesm2022/_structure-chunk.mjs:
-@angular/forms/fesm2022/signals.mjs:
-@angular/router/fesm2022/_router-chunk.mjs:
-@angular/router/fesm2022/_router_module-chunk.mjs:
-@angular/router/fesm2022/router.mjs:
-@angular/animations/fesm2022/_private_export-chunk.mjs:
-@angular/animations/fesm2022/_util-chunk.mjs:
-@angular/animations/fesm2022/browser.mjs:
-@angular/platform-browser/fesm2022/animations.mjs:
-  (**
-   * @license Angular v21.1.2
-   * (c) 2010-2026 Google LLC. https://angular.dev/
-   * License: MIT
-   *)
-*/
-//# sourceMappingURL=main-W3FMEWOC.js.map
+//# sourceMappingURL=main-RPDSJMQL.js.map
