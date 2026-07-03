@@ -1,3 +1,20 @@
+# 22.0.0(2026-07-03)
+
+### Feature
+
+- Angular 22 support ([#1617](https://github.com/JsDaddy/ngx-mask/issues/1617)) — built and tested against Angular 22.0.5
+- All dependencies updated to their latest versions (exact pins)
+
+### Fix
+
+- Fix ([#1250](https://github.com/JsDaddy/ngx-mask/issues/1250)) — typing a second decimal marker is rejected as a no-op instead of mangling the value (`123,456,789.20` stays intact)
+- Fix ([#1590](https://github.com/JsDaddy/ngx-mask/issues/1590)) — `showMaskTyped` skeleton render no longer echoes `''` into the model during programmatic writes, fixing lost initial values in nested custom form controls
+- Pin ([#1593](https://github.com/JsDaddy/ngx-mask/issues/1593)) — integer-part deletion keeping the decimal part and caret is now covered by dedicated regression tests (behavior fixed in 21.1.0)
+
+### Breaking
+
+- Requires Angular 22 (`peerDependencies: ^22.0.0`) and Node.js ≥ 22.22.3 / ≥ 24.15.0 / ≥ 26
+
 # 21.1.0(2026-07-02)
 
 ### Feature
