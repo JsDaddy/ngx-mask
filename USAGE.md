@@ -314,15 +314,17 @@ You can choose clear the input if the input value **not match** the mask, defaul
 
 Opt-in "banking" typing mode for separator masks with a fixed precision (`separator.N`, N > 0). When enabled, typed digits fill the value from the decimal end, ATM/calculator style: typing `5` shows `0.05`, then `7` shows `0.57`, then `3` shows `5.73`. Backspace shifts digits back to the right (`5.73` → `0.57`). Pasted values and values written from the model keep the regular separator formatting. Works together with `thousandSeparator`, `prefix`/`suffix`, `allowNegativeNumbers` and `separatorLimit`. Default value is `false`.
 
-This is a **config-only** option — enable it via `provideNgxMask`:
+#### Usage
+
+```html
+<input type="text" mask="separator.2" [typeFromDecimals]="true" thousandSeparator="," />
+<!-- typing 1 2 3 4 5 6 renders: 0.01 → 0.12 → 1.23 → 12.34 → 123.45 → 1,234.56 -->
+```
+
+It can also be enabled application-wide via the provider config (the directive input wins when both are set):
 
 ```typescript
 provideNgxMask({ typeFromDecimals: true });
-```
-
-```html
-<input type="text" mask="separator.2" thousandSeparator="," />
-<!-- typing 1 2 3 4 5 6 renders: 0.01 → 0.12 → 1.23 → 12.34 → 123.45 → 1,234.56 -->
 ```
 
 The displayed value always carries the full precision while typing — that is inherent to the mode.

@@ -124,6 +124,11 @@ export const lists: ListItem[] = [
                 id: 7,
                 scrollTo: 'keep000',
             },
+            {
+                content: 'defaultValueOnBlur',
+                id: 8,
+                scrollTo: 'default-value-blur',
+            },
         ],
     },
     {
@@ -188,6 +193,11 @@ export const lists: ListItem[] = [
                 content: 'Zero separator',
                 id: 5,
                 scrollTo: 'sep0',
+            },
+            {
+                content: 'Banking mode',
+                id: 6,
+                scrollTo: 'banking',
             },
         ],
     },

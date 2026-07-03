@@ -31,6 +31,7 @@ type MaskTestConfig = {
         thousandSeparator?: string;
         specialCharacters?: string[];
         shownMaskExpression?: string;
+        typeFromDecimals?: boolean;
     };
 };
 
@@ -57,6 +58,8 @@ type MaskTestConfig = {
             [thousandSeparator]="thousandSeparator()"
             [specialCharacters]="specialCharacters()"
             [shownMaskExpression]="shownMaskExpression()"
+            [typeFromDecimals]="typeFromDecimals()"
+            [defaultValueOnBlur]="defaultValueOnBlur()"
             [formControl]="formControl" />
     `,
 })
@@ -78,6 +81,8 @@ class TestReactiveComponent {
     public thousandSeparator = signal<string>(' ');
     public specialCharacters = signal<string[]>(initialConfig.specialCharacters as string[]);
     public shownMaskExpression = signal<string | null>(null);
+    public typeFromDecimals = signal<boolean>(false);
+    public defaultValueOnBlur = signal<string | null>(null);
 }
 
 @Component({
@@ -103,6 +108,8 @@ class TestReactiveComponent {
             [thousandSeparator]="thousandSeparator()"
             [specialCharacters]="specialCharacters()"
             [shownMaskExpression]="shownMaskExpression()"
+            [typeFromDecimals]="typeFromDecimals()"
+            [defaultValueOnBlur]="defaultValueOnBlur()"
             [(ngModel)]="model" />
     `,
 })
@@ -124,6 +131,8 @@ class TestTemplateComponent {
     public thousandSeparator = signal<string>(' ');
     public specialCharacters = signal<string[]>(initialConfig.specialCharacters as string[]);
     public shownMaskExpression = signal<string | null>(null);
+    public typeFromDecimals = signal<boolean>(false);
+    public defaultValueOnBlur = signal<string | null>(null);
 }
 
 @Component({
@@ -149,6 +158,8 @@ class TestTemplateComponent {
             [thousandSeparator]="thousandSeparator()"
             [specialCharacters]="specialCharacters()"
             [shownMaskExpression]="shownMaskExpression()"
+            [typeFromDecimals]="typeFromDecimals()"
+            [defaultValueOnBlur]="defaultValueOnBlur()"
             [formField]="signalForm.value" />
     `,
 })
@@ -173,6 +184,8 @@ class TestSignalComponent {
     public thousandSeparator = signal<string>(' ');
     public specialCharacters = signal<string[]>(initialConfig.specialCharacters as string[]);
     public shownMaskExpression = signal<string | null>(null);
+    public typeFromDecimals = signal<boolean>(false);
+    public defaultValueOnBlur = signal<string | null>(null);
 }
 
 function typeValue(
@@ -335,6 +348,9 @@ function applyOptions<
     }
     if (testCase.options?.shownMaskExpression) {
         component.shownMaskExpression.set(testCase.options.shownMaskExpression);
+    }
+    if (testCase.options?.typeFromDecimals) {
+        component.typeFromDecimals.set(testCase.options.typeFromDecimals);
     }
 }
 
@@ -583,6 +599,14 @@ describe('Demo App - Separators', () => {
             expectedDisplay: '1 234 567',
             expectedFormValue: '1234567',
         },
+        {
+            name: 'Banking mode (typeFromDecimals)',
+            mask: 'separator.2',
+            testInput: '123456',
+            expectedDisplay: '1,234.56',
+            expectedFormValue: '1234.56',
+            options: { typeFromDecimals: true, thousandSeparator: ',' },
+        },
     ];
 
     describe('Reactive Forms', () => {
@@ -648,6 +672,56 @@ describe('Demo App - Separators', () => {
 
             expect(inputElement.value).equal('12.00');
             expect(component.signalFormModel().value).equal('12.00');
+        });
+    });
+});
+
+// Mirrors the demo's defaultValueOnBlur card: an empty separator.2 input receives
+// the masked default '0' on blur, in all three form modes.
+describe('Demo App - defaultValueOnBlur', () => {
+    (['reactive', 'template', 'signal'] as const).forEach((mode) => {
+        describe(`${mode} forms`, () => {
+            it('should write the masked default into an empty input on blur', () => {
+                const fixture = createFixture(mode);
+                const component = fixture.componentInstance;
+                component.mask.set('separator.2');
+                component.defaultValueOnBlur.set('0');
+                fixture.detectChanges();
+
+                const { inputId } = FORM_MODE_CONFIG[mode];
+                const inputElement = fixture.nativeElement.querySelector(
+                    `#${inputId}`
+                ) as HTMLInputElement;
+
+                inputElement.focus();
+                fixture.detectChanges();
+                expect(inputElement.value).equal('');
+
+                inputElement.dispatchEvent(new Event('blur'));
+                fixture.detectChanges();
+
+                expect(inputElement.value).equal('0');
+            });
+
+            it('should keep a typed value untouched on blur', () => {
+                const fixture = createFixture(mode);
+                const component = fixture.componentInstance;
+                component.mask.set('separator.2');
+                component.defaultValueOnBlur.set('0');
+                fixture.detectChanges();
+
+                const { inputId } = FORM_MODE_CONFIG[mode];
+                const result = typeValue('12.34', fixture, inputId);
+                expect(result).equal('12.34');
+
+                const inputElement = fixture.nativeElement.querySelector(
+                    `#${inputId}`
+                ) as HTMLInputElement;
+                inputElement.dispatchEvent(new Event('blur'));
+                fixture.detectChanges();
+
+                expect(inputElement.value).equal('12.34');
+            });
         });
     });
 });
