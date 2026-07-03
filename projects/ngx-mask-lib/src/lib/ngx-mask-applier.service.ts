@@ -628,6 +628,13 @@ export class NgxMaskApplierService {
                     );
                     const inputValueSliceCursorPlusTwo = processedValue.slice(cursor, cursor + 2);
                     const inputValueSliceMinusTwoCursor = processedValue.slice(cursor - 2, cursor);
+                    // Issue #1523: when the date token directly abuts a plain digit
+                    // token (year-first masks without separators like 00M0d0 or
+                    // 0000M0d0), the backward-looking windows below read the previous
+                    // field's digits (year) as day/month digits and skip valid input.
+                    // Disable only those backward heuristics in that layout.
+                    const tokenAbutsDigitField =
+                        maskExpression[cursor - 1] === MaskExpression.NUMBER_ZERO;
                     if (maskExpression[cursor] === MaskExpression.DAY) {
                         const maskStartWithMonth =
                             maskExpression.slice(0, 2) === MaskExpression.MONTHS;
@@ -651,7 +658,8 @@ export class NgxMaskApplierService {
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             (!maskStartWithMonth &&
                                 (Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                    Number(inputValueSliceMinusOnePlusOne) > daysCount ||
+                                    (!tokenAbutsDigitField &&
+                                        Number(inputValueSliceMinusOnePlusOne) > daysCount) ||
                                     this.specialCharacters.includes(inputValueCursorPlusOne))) ||
                             (startWithMonthInput
                                 ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
@@ -694,6 +702,7 @@ export class NgxMaskApplierService {
                                 this.specialCharacters.includes(inputValueCursor));
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -708,6 +717,7 @@ export class NgxMaskApplierService {
                                 cursor === 5);
                         // // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) > daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -719,6 +729,7 @@ export class NgxMaskApplierService {
                             maskExpression.includes('d0');
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -1012,12 +1023,22 @@ export class NgxMaskApplierService {
         for (let i = this.suffix?.length - 1; i >= 0; i--) {
             const substr = this.suffix.substring(i, this.suffix?.length);
             if (
-                inputValue.includes(substr) &&
+                inputValue.endsWith(substr) &&
                 i !== this.suffix?.length - 1 &&
+                // A partial suffix tail (i > 0) that makes up the WHOLE value is a
+                // leftover of the displayed suffix only when the previous rendered
+                // value ended with the suffix AND the edit shrank the value to (or
+                // below) the old value-part length, i.e. it was a deletion of the
+                // suffix head. Otherwise it is fresh user input that merely collides
+                // with the suffix text and must be kept (#1495).
+                (i === 0 ||
+                    inputValue.length > substr.length ||
+                    (this.actualValue.endsWith(this.suffix) &&
+                        inputValue.length <= this.actualValue.length - this.suffix.length)) &&
                 (i - 1 < 0 ||
-                    !inputValue.includes(this.suffix.substring(i - 1, this.suffix?.length)))
+                    !inputValue.endsWith(this.suffix.substring(i - 1, this.suffix?.length)))
             ) {
-                return inputValue.replace(substr, MaskExpression.EMPTY_STRING);
+                return inputValue.slice(0, inputValue.length - substr.length);
             }
         }
         return inputValue;

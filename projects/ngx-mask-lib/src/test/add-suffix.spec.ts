@@ -38,6 +38,13 @@ describe('Directive: Mask (Add suffix)', () => {
         equal('h', 'h.sh', fixture);
     });
 
+    it('should keep a value that collides with the suffix text (#1495)', () => {
+        component.mask.set('Hh');
+        component.suffix.set(':00');
+        component.dropSpecialCharacters.set(false);
+        equal('00', '00:00', fixture);
+    });
+
     it('should display suffix at the end with showMaskTyped mask 0 000', () => {
         component.mask.set('0 000');
         component.suffix.set('$');

@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, typeTest } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { afterEach, expect, vi } from 'vitest';
 
@@ -196,6 +196,40 @@ describe('Directive: Mask (Placeholder character)', () => {
             fixture.detectChanges();
 
             expect(warnSpy).not.toHaveBeenCalled();
+        });
+    });
+
+    describe('non-special placeHolderCharacter must never leak into the model (#1519)', () => {
+        it('should not include a partially-typed non-special placeholder character in the model', () => {
+            component.mask.set('(000) 000-0000');
+            component.showMaskTyped.set(true);
+            component.placeHolderCharacter.set('X');
+            fixture.detectChanges();
+
+            typeTest('234', fixture);
+
+            expect(component.form.value).toEqual('234');
+        });
+
+        it('should not include the placeholder character in the model when nothing was typed', () => {
+            component.mask.set('(000) 000-0000');
+            component.showMaskTyped.set(true);
+            component.placeHolderCharacter.set('X');
+            fixture.detectChanges();
+
+            typeTest('', fixture);
+
+            expect(component.form.value).toEqual('');
+        });
+
+        it('should still drop the default underscore placeholder from the model (no regression)', () => {
+            component.mask.set('(000) 000-0000');
+            component.showMaskTyped.set(true);
+            fixture.detectChanges();
+
+            typeTest('234', fixture);
+
+            expect(component.form.value).toEqual('234');
         });
     });
 });

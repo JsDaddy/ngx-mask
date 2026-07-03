@@ -285,4 +285,26 @@ describe('Directive: Mask', () => {
         expect(inputTarget.value).equal('(123) 456-7890');
         expect(component.form.value).equal('1234567890');
     });
+
+    // #1495: a suffix that contains a substring identical to the initial value (e.g. suffix
+    // ':00' with value '00') must not cause the value to be misdetected as a partially-typed
+    // suffix and stripped out — the display must show both the masked value AND the suffix.
+    it('should render both the value and the suffix when the value collides with the suffix text', async () => {
+        component.mask.set('Hh');
+        component.suffix.set(':00');
+        component.dropSpecialCharacters.set(false);
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+
+        component.form.setValue('00');
+        fixture.detectChanges();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+        expect(inputTarget.value).equal('00:00');
+        expect(component.form.value).equal('00');
+    });
 });

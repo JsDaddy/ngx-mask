@@ -727,6 +727,23 @@ export class NgxMaskService extends NgxMaskApplierService {
             return;
         }
 
+        // #1519: a non-special placeHolderCharacter (e.g. 'X') is never something the user
+        // typed — it's the showMaskTyped fill character for unfilled slots — so it must never
+        // reach the model, regardless of dropSpecialCharacters. The default '_' placeholder is
+        // already covered by specialCharacters/removeMask; a custom single-char placeholder
+        // that isn't a special character is not, since none of the branches below include it
+        // in their removal set.
+        if (
+            this.showMaskTyped &&
+            this.placeHolderCharacter.length === 1 &&
+            this.specialCharacters.indexOf(this.placeHolderCharacter) === -1
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = inputValue
+                .split(this.placeHolderCharacter)
+                .join(MaskExpression.EMPTY_STRING);
+        }
+
         if (Array.isArray(this.dropSpecialCharacters)) {
             this.onChange(
                 outputTransformFn(
