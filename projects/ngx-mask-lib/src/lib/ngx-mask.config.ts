@@ -24,6 +24,15 @@ export type NgxMaskConfig = {
     allowNegativeNumbers: boolean;
     leadZeroDateTime: boolean;
     leadZero: boolean;
+    /**
+     * Opt-in "banking" typing mode for separator masks with a fixed precision
+     * (`separator.N`, N > 0): typed digits fill the value from the decimal end,
+     * ATM/calculator style (5 -> 0.05 -> 0.57 -> 5.73); backspace shifts digits
+     * back to the right. Pasted and model-written values keep the regular
+     * separator formatting. Config-only option (provideNgxMask / pipe config) —
+     * it has no directive input.
+     */
+    typeFromDecimals: boolean;
     triggerOnMaskChange: boolean;
     keepCharacterPositions: boolean;
     inputTransformFn: InputTransformFn;
@@ -37,6 +46,14 @@ export type NgxMaskConfig = {
      * aliases are ignored with a one-time console warning.
      */
     maskAliases: Record<string, string>;
+    /**
+     * When set, this raw value is written through the regular mask pipeline on blur
+     * whenever the control's unmasked value is empty (covers '', a bare prefix/suffix and
+     * the showMaskTyped skeleton): the display shows the masked default and the model
+     * receives the usual output (dropSpecialCharacters/outputTransformFn applied). The
+     * write keeps the control's pristine state. `null` (default) keeps current behavior.
+     */
+    defaultValueOnBlur: string | null;
     patterns: Record<
         string,
         {
@@ -71,12 +88,14 @@ export const initialConfig: NgxMaskConfig = {
     leadZeroDateTime: false,
     apm: false,
     leadZero: false,
+    typeFromDecimals: false,
     keepCharacterPositions: false,
     triggerOnMaskChange: false,
     inputTransformFn: (value: unknown) => value as string | number,
     outputTransformFn: (value: string | number | undefined | null) => value,
     maskFilled: new EventEmitter<void>(),
     maskAliases: {},
+    defaultValueOnBlur: null,
     patterns: {
         '0': {
             pattern: new RegExp('\\d'),

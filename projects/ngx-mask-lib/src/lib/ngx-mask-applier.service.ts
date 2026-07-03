@@ -44,6 +44,8 @@ export class NgxMaskApplierService {
 
     public leadZero: NgxMaskConfig['leadZero'] = this._config.leadZero;
 
+    public typeFromDecimals: NgxMaskConfig['typeFromDecimals'] = this._config.typeFromDecimals;
+
     public apm: NgxMaskConfig['apm'] = this._config.apm;
 
     public inputTransformFn: NgxMaskConfig['inputTransformFn'] | null =
@@ -241,6 +243,43 @@ export class NgxMaskApplierService {
                         (dm) => dm !== this.thousandSeparator
                     ) as '.' | ',';
                 }
+            }
+
+            // Issues #733/#1414/#1315: opt-in "banking" typing mode — typed digits fill
+            // the value from the decimal end, ATM/calculator style (5 -> 0.05 -> 0.57
+            // -> 5.73); backspace shifts digits back to the right. Only keystroke and
+            // backspace flows are reinterpreted; paste and writeValue keep the regular
+            // separator formatting. The early return leaves every existing separator
+            // path byte-identical when the option is off.
+            if (
+                this.typeFromDecimals &&
+                Number.isFinite(precision) &&
+                precision > 0 &&
+                !justPasted &&
+                !this.writingValue
+            ) {
+                result = this._formatFromDecimals(
+                    processedValue,
+                    precision,
+                    decimalMarker as string
+                );
+                this._shift.clear();
+                const res =
+                    result.includes(MaskExpression.MINUS) &&
+                    this.prefix &&
+                    this.allowNegativeNumbers
+                        ? `${MaskExpression.MINUS}${this.prefix}${result
+                              .split(MaskExpression.MINUS)
+                              .join(MaskExpression.EMPTY_STRING)}${this.suffix}`
+                        : result.length
+                          ? `${this.prefix}${result}${this.suffix}`
+                          : this.instantPrefix
+                            ? this.prefix
+                            : MaskExpression.EMPTY_STRING;
+                // Pin the caret to the end of the value part: every keystroke reshapes
+                // the whole string, so the in-place caret position is meaningless here.
+                cb(res.length - this.suffix.length - processedPosition, true);
+                return res;
             }
 
             // Issue #1250: typing an additional decimal marker into a value that
@@ -1072,6 +1111,38 @@ export class NgxMaskApplierService {
         }
         return res + decimals.substring(0, precision + 1);
     };
+
+    /**
+     * Formats a value for the `typeFromDecimals` mode: every digit of the raw value is
+     * read as one integer that is then split `precision` digits from the right
+     * (ATM/calculator style). Non-digit characters are ignored, so plain typing,
+     * mid-string edits and backspace all reduce to "digits shifted through the
+     * decimal marker".
+     */
+    private _formatFromDecimals(value: string, precision: number, decimalMarker: string): string {
+        const negative = this.allowNegativeNumbers && value.startsWith(MaskExpression.MINUS);
+        let digits = value.replace(/\D+/g, MaskExpression.EMPTY_STRING).replace(/^0+/, '');
+        if (!digits) {
+            return negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING;
+        }
+        const separatorLimit: string = this.separatorLimit.replace(
+            /\s/g,
+            MaskExpression.EMPTY_STRING
+        );
+        if (separatorLimit && +separatorLimit) {
+            // Dropping the overflow from the right rejects the most recently typed
+            // digits once the integer part has reached the configured limit.
+            digits = digits.slice(0, separatorLimit.length + precision);
+        }
+        digits = digits.padStart(precision + 1, MaskExpression.NUMBER_ZERO);
+        let integerPart = digits.slice(0, digits.length - precision);
+        const decimalPart = digits.slice(digits.length - precision);
+        const rgx = /(\d+)(\d{3})/;
+        while (this.thousandSeparator && rgx.test(integerPart)) {
+            integerPart = integerPart.replace(rgx, '$1' + this.thousandSeparator + '$2');
+        }
+        return `${negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING}${integerPart}${decimalMarker}${decimalPart}`;
+    }
 
     private percentage = (str: string): boolean => {
         const sanitizedStr = str.replace(',', '.');
