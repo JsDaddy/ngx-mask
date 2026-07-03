@@ -1056,40 +1056,49 @@ describe('Directive: Mask', () => {
         expect(component.form.dirty).equal(false);
     });
 
-    it('should return empty string in formControl mask SSS-SSS-SSS', () => {
+    it('should return empty string in formControl mask SSS-SSS-SSS', async () => {
         component.mask.set('SSS-SSS-SSS');
         component.form.setValue('978-1-93624-386-0');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
+        // The masked render is finalized in a queued microtask (mask reconfiguration +
+        // setValue in the same tick); assert the settled state, which is what paints.
+        await fixture.whenStable();
 
         expect(inputTarget.value).equal('');
     });
 
-    it('should return empty string in formControl mask AAA-AAA-AAA', () => {
+    it('should keep matching characters in formControl mask AAA-AAA-AAA', async () => {
         component.mask.set('AAA-AAA-AAA');
         component.form.setValue('978-123-936');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
+        // The masked render is finalized in a queued microtask (mask reconfiguration +
+        // setValue in the same tick); assert the settled state, which is what paints.
+        await fixture.whenStable();
 
-        expect(inputTarget.value).equal('');
+        expect(inputTarget.value).equal('978-123-936');
     });
 
-    it('should return empty string in formControl mask (000) 000-000', () => {
+    it('should re-mask digits in formControl mask (000) 000-000', async () => {
         component.mask.set('(000) 000-000');
         component.form.setValue('978-123-936');
         const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
+        // The masked render is finalized in a queued microtask (mask reconfiguration +
+        // setValue in the same tick); assert the settled state, which is what paints.
+        await fixture.whenStable();
 
-        expect(inputTarget.value).equal('');
+        expect(inputTarget.value).equal('(978) 123-936');
     });
 
-    it('should return empty string in formControl mask (000) 000-000 with prefix +7', () => {
+    it('should re-mask digits in formControl mask (000) 000-000 with prefix +7', async () => {
         component.mask.set('(000) 000-000');
         component.prefix.set('+7 ');
         component.form.setValue('978-123-936');
@@ -1097,8 +1106,11 @@ describe('Directive: Mask', () => {
         const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
         vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
         fixture.detectChanges();
+        // The masked render is finalized in a queued microtask (mask reconfiguration +
+        // setValue in the same tick); assert the settled state, which is what paints.
+        await fixture.whenStable();
 
-        expect(inputTarget.value).equal('');
+        expect(inputTarget.value).equal('+7 (978) 123-936');
     });
 
     it('should show correct value d0.M0.', () => {

@@ -13,6 +13,8 @@ import {
     untracked,
     booleanAttribute,
     ChangeDetectorRef,
+    ElementRef,
+    Renderer2,
 } from '@angular/core';
 import type {
     ControlValueAccessor,
@@ -151,6 +153,8 @@ export class NgxMaskDirective
      * programmatic value write, otherwise the view stays stale until something else schedules CD.
      */
     private readonly _changeDetectorRef = inject(ChangeDetectorRef);
+    private readonly _elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
+    private readonly _renderer = inject(Renderer2);
 
     // Injector is used to lazily resolve NgControl. NgControl cannot be injected directly:
     // this directive is registered as the control's NG_VALUE_ACCESSOR, so a direct
@@ -595,7 +599,16 @@ export class NgxMaskDirective
 
         if (el.type !== 'number') {
             if (typeof transformedValue === 'string' || typeof transformedValue === 'number') {
-                el.value = transformedValue.toString();
+                const transformedString = transformedValue.toString();
+                // Only rewrite el.value when the transform actually changed it: any
+                // programmatic `.value =` assignment clears the browser's "last changed
+                // by a user edit" flag, which silently disables native constraint
+                // validation (minlength -> validity.tooShort) even when the mask is a
+                // no-op (#1379). With an empty mask the directive must stay a pure
+                // passthrough for the native input.
+                if (el.value !== transformedString) {
+                    el.value = transformedString;
+                }
 
                 this._inputValue.set(el.value);
                 this._setMask();
@@ -1380,15 +1393,15 @@ export class NgxMaskDirective
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
                 this._maskService.writingValue = true;
 
-                this._maskService.formElementProperty = [
-                    'value',
-                    this._maskedOrVerbatim(inputValue),
-                ];
+                const displayValue = this._maskedOrVerbatim(inputValue);
+                this._maskService.formElementProperty = ['value', displayValue];
+                this._writeElementValueSync(displayValue);
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
                 this._maskService.isInitialized = true;
             } else {
                 this._maskService.formElementProperty = ['value', inputValue];
+                this._writeElementValueSync(inputValue);
                 this._maskService.isInitialized = true;
             }
             // A writeValue-driven emission may have dirtied/touched the control via the
@@ -1405,6 +1418,29 @@ export class NgxMaskDirective
                 typeof value
             );
         }
+    }
+
+    /**
+     * Mirrors a writeValue-driven render into the DOM synchronously, in the same
+     * change-detection pass (#1305). The service's `formElementProperty` setter defers all
+     * writes via queueMicrotask (to keep FIFO ordering with config-driven re-renders and
+     * dodge ExpressionChanged issues), but consumers that read `nativeElement.value` DURING
+     * the CD pass — Angular Material's floating label (`MatInput.empty`), CDK autofill —
+     * never see a value that only lands in a later microtask. The deferred write still runs
+     * afterwards and re-applies the same final value, so ordering guarantees are preserved.
+     *
+     * Skipped while a mask reconfiguration is pending (`mask()` input changed but
+     * `ngOnChanges` has not applied it yet — e.g. `mask.set(...)` + `setValue(...)` before
+     * the next CD pass): the value just computed used the STALE mask config, and rendering
+     * it synchronously would expose an intermediate state that the deferred pipeline is
+     * about to supersede. Multi-masks (`||`) resolve `_maskValue` to one alternative and
+     * therefore also fall back to the deferred-only path.
+     */
+    private _writeElementValueSync(value: string): void {
+        if ((this.mask() ?? MaskExpression.EMPTY_STRING) !== this._maskValue()) {
+            return;
+        }
+        this._renderer.setProperty(this._elementRef.nativeElement, 'value', value);
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

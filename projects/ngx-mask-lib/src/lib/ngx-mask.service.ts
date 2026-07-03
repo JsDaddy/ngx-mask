@@ -90,10 +90,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             const expandedNumber = Number(this._replaceDecimalMarkerToDot(inputValue));
             if (!Number.isNaN(expandedNumber)) {
                 // eslint-disable-next-line no-param-reassign
-                inputValue = expandedNumber.toLocaleString('fullwide', {
-                    useGrouping: false,
-                    maximumFractionDigits: 20,
-                });
+                inputValue = this._toPlainDecimalString(expandedNumber);
                 if (
                     this.decimalMarker === MaskExpression.COMMA ||
                     (Array.isArray(this.decimalMarker) &&
@@ -505,12 +502,35 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return String(value);
         }
-        // NOTE: a historical `.replace('/-/', '-')` no-op (a literal string that looked like
-        // a regex) was removed here — 'fullwide' already yields a plain ASCII minus.
-        return Number(value).toLocaleString('fullwide', {
-            useGrouping: false,
-            maximumFractionDigits: 20,
-        });
+        // #1573: toLocaleString('fullwide', ...) is NOT locale-independent — 'fullwide' is
+        // not a real locale tag, so Intl silently falls back to the runtime DEFAULT locale
+        // (e.g. de-AT on Edge with Austrian regional format emits '0,5'). Expand exponential
+        // notation with pure string math instead; the decimal marker is always '.'.
+        return this._toPlainDecimalString(Number(value));
+    }
+
+    /**
+     * Locale-independent replacement for toLocaleString('fullwide', { useGrouping: false,
+     * maximumFractionDigits: 20 }) (#1573): expands exponential notation ('7e-7', '1e+21')
+     * to plain decimal form using '.' as decimal marker, regardless of the runtime locale.
+     */
+    private _toPlainDecimalString(value: number): string {
+        const stringValue = String(value);
+        const match = /^(-?)(\d+)(?:\.(\d+))?[eE]([+-]?\d+)$/.exec(stringValue);
+        if (!match) {
+            return stringValue;
+        }
+        const [, sign, integerPart, fractionPart = '', exponentPart] = match;
+        const exponent = Number(exponentPart);
+        const digits = `${integerPart}${fractionPart}`;
+        const pointIndex = (integerPart as string).length + exponent;
+        if (pointIndex <= 0) {
+            return `${sign}0.${'0'.repeat(-pointIndex)}${digits}`;
+        }
+        if (pointIndex >= digits.length) {
+            return `${sign}${digits}${'0'.repeat(pointIndex - digits.length)}`;
+        }
+        return `${sign}${digits.slice(0, pointIndex)}.${digits.slice(pointIndex)}`;
     }
 
     public showMaskInInput(inputVal?: string): string {
@@ -1026,7 +1046,19 @@ export class NgxMaskService extends NgxMaskApplierService {
         );
     }
 
+    /**
+     * Decimal marker of the value being normalized in writeValue/pipe flows.
+     *
+     * #1573: this used to return the RUNTIME default locale's decimal marker
+     * ((1.1).toLocaleString().substring(1, 2)), which made mask behavior depend on the
+     * OS/browser regional format: under a comma-decimal locale (e.g. Edge + Austrian
+     * regional settings) a preformatted value like '10,000' (thousandSeparator ',')
+     * had its ',' replaced by the configured '.' decimalMarker, corrupting the value
+     * 1000x. JS number stringification (String(n)) always uses '.', and string values
+     * are expected to use the configured markers — the runtime locale is never the
+     * right source, so this is always '.'.
+     */
     public currentLocaleDecimalMarker(): string {
-        return (1.1).toLocaleString().substring(1, 2);
+        return MaskExpression.DOT;
     }
 }
