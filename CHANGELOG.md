@@ -32,6 +32,9 @@
 - Fix ([#1523](https://github.com/JsDaddy/ngx-mask/issues/1523)) — date masks with digit tokens abutting `M0`/`d0` (`00M0d0`, `0000M0d0`) no longer misread year digits as day/month
 - Fix ([#1519](https://github.com/JsDaddy/ngx-mask/issues/1519)) — non-special `placeHolderCharacter` (e.g. `X`) no longer leaks into the unmasked model value
 - Fix ([#1495](https://github.com/JsDaddy/ngx-mask/issues/1495)) — initial values colliding with the suffix text (`'00'` with `suffix=":00"`) render instead of being stripped
+- Fix ([#1573](https://github.com/JsDaddy/ngx-mask/issues/1573)) — formatting no longer depends on the OS/browser locale (Edge with non-US regional settings altered values); configured markers are always authoritative
+- Fix ([#1379](https://github.com/JsDaddy/ngx-mask/issues/1379)) — an empty mask is a true passthrough: no programmatic value rewrites, native browser validation works
+- Fix ([#1305](https://github.com/JsDaddy/ngx-mask/issues/1305), [#1264](https://github.com/JsDaddy/ngx-mask/issues/1264)) — initial values render synchronously, so Material floating labels float on init
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
