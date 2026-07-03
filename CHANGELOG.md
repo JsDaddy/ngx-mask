@@ -4,12 +4,14 @@
 
 - Angular 22 support ([#1617](https://github.com/JsDaddy/ngx-mask/issues/1617)) — built and tested against Angular 22.0.5
 - All dependencies updated to their latest versions (exact pins)
+- Custom named mask aliases ([#1376](https://github.com/JsDaddy/ngx-mask/issues/1376), [#1091](https://github.com/JsDaddy/ngx-mask/issues/1091)) — `provideNgxMask({ maskAliases: { PHONE_BR: '(00) 00000-0000' } })`, works in directive and pipe, supports `||` multi-masks
 
 ### Fix
 
 - Fix ([#1250](https://github.com/JsDaddy/ngx-mask/issues/1250)) — typing a second decimal marker is rejected as a no-op instead of mangling the value (`123,456,789.20` stays intact)
 - Fix ([#1590](https://github.com/JsDaddy/ngx-mask/issues/1590)) — `showMaskTyped` skeleton render no longer echoes `''` into the model during programmatic writes, fixing lost initial values in nested custom form controls
 - Pin ([#1593](https://github.com/JsDaddy/ngx-mask/issues/1593)) — integer-part deletion keeping the decimal part and caret is now covered by dedicated regression tests (behavior fixed in 21.1.0)
+- Fix ([#1513](https://github.com/JsDaddy/ngx-mask/issues/1513)) — `leadZeroDateTime` no longer injects a spurious zero into months for year-first masks (`0000-M0-d0`: `19901221` → `1990-12-21`)
 
 ### Breaking
 
