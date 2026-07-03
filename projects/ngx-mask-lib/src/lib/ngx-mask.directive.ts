@@ -256,12 +256,11 @@ export class NgxMaskDirective
             }
             // User-defined aliases (config maskAliases) expand BEFORE any other processing,
             // including the `||` multi-mask split — an alias may expand to a multi-mask.
-            const resolvedMask = resolveMaskAlias(mask.currentValue, this._config.maskAliases);
-            if (resolvedMask && resolvedMask.split(MaskExpression.OR).length > 1) {
+            const resolvedMask = this._resolvedMaskInput();
+            const maskParts = resolvedMask.split(MaskExpression.OR);
+            if (maskParts.length > 1) {
                 this._maskExpressionArray.set(
-                    resolvedMask.split(MaskExpression.OR).sort((a: string, b: string) => {
-                        return a.length - b.length;
-                    })
+                    maskParts.sort((a: string, b: string) => a.length - b.length)
                 );
                 this._setMask();
             } else {

@@ -290,7 +290,8 @@ export class NgxMaskApplierService {
             // Paste keeps its own semantics (#1547 below: last marker wins), and
             // backspace/writeValue flows cannot introduce a new marker.
             if (!justPasted && !backspaced && !this.writingValue) {
-                const isDecimalMarkerChar = (char: string): boolean =>
+                const isDecimalMarkerChar = (char: string | undefined): boolean =>
+                    !!char &&
                     char !== this.thousandSeparator &&
                     (Array.isArray(this.decimalMarker)
                         ? this.decimalMarker.includes(
@@ -302,17 +303,20 @@ export class NgxMaskApplierService {
                 const typedMarkerIndex = processedPosition - prefixOffset - 1;
                 if (
                     typedMarkerIndex >= 0 &&
-                    isDecimalMarkerChar(
-                        processedValue[typedMarkerIndex] ?? MaskExpression.EMPTY_STRING
-                    ) &&
-                    processedValue
-                        .split(MaskExpression.EMPTY_STRING)
-                        .filter((char) => isDecimalMarkerChar(char)).length > 1
+                    isDecimalMarkerChar(processedValue[typedMarkerIndex])
                 ) {
-                    processedValue =
-                        processedValue.slice(0, typedMarkerIndex) +
-                        processedValue.slice(typedMarkerIndex + 1);
-                    stepBack = true;
+                    let markerCount = 0;
+                    for (const char of processedValue) {
+                        if (isDecimalMarkerChar(char)) {
+                            markerCount++;
+                        }
+                    }
+                    if (markerCount > 1) {
+                        processedValue =
+                            processedValue.slice(0, typedMarkerIndex) +
+                            processedValue.slice(typedMarkerIndex + 1);
+                        stepBack = true;
+                    }
                 }
             }
 
@@ -1098,11 +1102,7 @@ export class NgxMaskApplierService {
                 res = res.slice(0, separatorLimit.length);
             }
         }
-        const rgx = /(\d+)(\d{3})/;
-
-        while (thousandSeparatorChar && rgx.test(res)) {
-            res = res.replace(rgx, '$1' + thousandSeparatorChar + '$2');
-        }
+        res = this._applyThousandGrouping(res, thousandSeparatorChar);
 
         if (typeof precision === 'undefined') {
             return res + decimals;
@@ -1135,13 +1135,22 @@ export class NgxMaskApplierService {
             digits = digits.slice(0, separatorLimit.length + precision);
         }
         digits = digits.padStart(precision + 1, MaskExpression.NUMBER_ZERO);
-        let integerPart = digits.slice(0, digits.length - precision);
+        const integerPart = this._applyThousandGrouping(
+            digits.slice(0, digits.length - precision),
+            this.thousandSeparator
+        );
         const decimalPart = digits.slice(digits.length - precision);
-        const rgx = /(\d+)(\d{3})/;
-        while (this.thousandSeparator && rgx.test(integerPart)) {
-            integerPart = integerPart.replace(rgx, '$1' + this.thousandSeparator + '$2');
-        }
         return `${negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING}${integerPart}${decimalMarker}${decimalPart}`;
+    }
+
+    /** Inserts `separator` between every 3-digit group of an integer-digit string. */
+    private _applyThousandGrouping(digits: string, separator: string): string {
+        const rgx = /(\d+)(\d{3})/;
+        let grouped = digits;
+        while (separator && rgx.test(grouped)) {
+            grouped = grouped.replace(rgx, '$1' + separator + '$2');
+        }
+        return grouped;
     }
 
     private percentage = (str: string): boolean => {

@@ -147,14 +147,14 @@ export const initialConfig: NgxMaskConfig = {
  * aliases must not shadow them — substituting e.g. 'IP' early would break the built-in
  * exact-equality dispatch deep in the applier.
  */
-const RESERVED_MASK_TOKENS: readonly string[] = [
+const RESERVED_MASK_TOKENS: ReadonlySet<string> = new Set([
     MaskExpression.IP,
     MaskExpression.CPF_CNPJ,
     MaskExpression.CPF_CNPJ_ALPHA,
     MaskExpression.EMAIL_MASK,
     MaskExpression.SEPARATOR,
     MaskExpression.PERCENT,
-];
+]);
 
 /** Tracks alias keys already warned about, so the shadowing warning fires once per key. */
 const warnedShadowedAliases = new Set<string>();
@@ -176,7 +176,7 @@ export function resolveMaskAlias(
     if (typeof aliased !== 'string') {
         return expression;
     }
-    if (RESERVED_MASK_TOKENS.includes(expression)) {
+    if (RESERVED_MASK_TOKENS.has(expression)) {
         if (!warnedShadowedAliases.has(expression)) {
             warnedShadowedAliases.add(expression);
             // eslint-disable-next-line no-console
