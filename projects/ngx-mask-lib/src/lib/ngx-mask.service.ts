@@ -1,4 +1,4 @@
-import { ElementRef, inject, Injectable, Renderer2 } from '@angular/core';
+import { ElementRef, inject, Injectable, Renderer2, signal } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
@@ -16,12 +16,21 @@ export class NgxMaskService extends NgxMaskApplierService {
     public maskExpressionArray: string[] = [];
     public previousValue = '';
     public currentValue = '';
-    /**
-     * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
-     * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
-     */
-    public writingValue = false;
+    // `writingValue` is declared on NgxMaskApplierService: applyMask needs it to
+    // distinguish the writeValue flow from keystroke flows (#1611).
     public isInitialized = false;
+    /**
+     * Set by the directive's keepCharacterPositions handling for the current edit:
+     * true — the directive fully resolved the resulting display value into actualValue,
+     * so applyMask must short-circuit and render actualValue as-is;
+     * false — the edit must flow through regular masking (no short-circuit);
+     * null — the directive was not involved in this applyMask call (legacy behavior).
+     * Consumed and reset by applyMask. This lets keepCharacterPositions work without
+     * showMaskTyped (#1545, #1543).
+     */
+    public keepCharacterPositionsHandled: boolean | null = null;
+
+    public _isFocused = signal<boolean>(false);
 
     private _emitValue = false;
     private _start!: number;
@@ -57,9 +66,40 @@ export class NgxMaskService extends NgxMaskApplierService {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         cb: (...args: any[]) => any = () => {}
     ): string {
+        // Consume the directive's keepCharacterPositions verdict for this edit (see the
+        // keepCharacterPositionsHandled doc). Reset immediately so it never leaks into
+        // applyMask calls that do not originate from the directive's input handling.
+        const kcpHandled = this.keepCharacterPositionsHandled;
+        this.keepCharacterPositionsHandled = null;
+
         // If no mask expression, return the input value or the actual value
         if (!maskExpression) {
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
+        }
+
+        // #1492: a numeric FormControl value like 0.0000007 or 1e21 stringifies to
+        // exponential notation ('7e-7'); separator masking would strip the 'e'/'-' and
+        // render garbage ('77'). Expand scientific notation to plain decimal form before
+        // masking. Covers writeValue-driven flows and the pipe; a keystroke value can
+        // never match, since separator masking never lets a letter through.
+        if (
+            maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            inputValue &&
+            /\d[eE][+-]?\d/.test(inputValue)
+        ) {
+            const expandedNumber = Number(this._replaceDecimalMarkerToDot(inputValue));
+            if (!Number.isNaN(expandedNumber)) {
+                // eslint-disable-next-line no-param-reassign
+                inputValue = this._toPlainDecimalString(expandedNumber);
+                if (
+                    this.decimalMarker === MaskExpression.COMMA ||
+                    (Array.isArray(this.decimalMarker) &&
+                        this.thousandSeparator === MaskExpression.DOT)
+                ) {
+                    // eslint-disable-next-line no-param-reassign
+                    inputValue = inputValue.replace(MaskExpression.DOT, MaskExpression.COMMA);
+                }
+            }
         }
 
         // Show mask in input if required
@@ -71,7 +111,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (this.maskExpression === MaskExpression.IP && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
-        if (this.maskExpression === MaskExpression.CPF_CNPJ && this.showMaskTyped) {
+        const isCpfCnpjMask =
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        if (isCpfCnpjMask && this.showMaskTyped) {
             this.maskIsShown = this.showMaskInInput(inputValue || MaskExpression.HASH);
         }
 
@@ -94,8 +137,12 @@ export class NgxMaskService extends NgxMaskApplierService {
                 (inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0)) &&
             !this.writingValue
         ) {
+            // Seed from the raw input only when the user typed the FIRST character (the
+            // single char is the raw symbol, actualValue is empty/stale). On backspace a
+            // length-1 value is the remaining masked display (e.g. '*'), so the hidden
+            // characters must come from actualValue or the deletion destroys both (#1612).
             let actualResult: string[] =
-                inputValue && inputValue.length === 1
+                inputValue && inputValue.length === 1 && !backspaced
                     ? inputValue.split(MaskExpression.EMPTY_STRING)
                     : this.actualValue.split(MaskExpression.EMPTY_STRING);
 
@@ -213,9 +260,11 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Boolean(newInputValue) && newInputValue.length ? newInputValue : inputValue;
         }
 
-        // Handle showMaskTyped and keepCharacterPositions
+        // Handle keepCharacterPositions: when the directive resolved the display for this
+        // edit (kcpHandled === true), or legacily whenever showMaskTyped is on and the
+        // directive gave no explicit verdict, render actualValue as-is.
         if (
-            this.showMaskTyped &&
+            (kcpHandled ?? this.showMaskTyped) &&
             this.keepCharacterPositions &&
             this.actualValue &&
             !justPasted &&
@@ -239,6 +288,30 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
+
+        // #1615: a value the mask cannot process AT ALL (masking leaves nothing of it) is
+        // rendered verbatim instead of being destroyed, and must not reach formControlResult
+        // — the empty remnant would clobber the model that holds the sentinel (e.g.
+        // setValue('ONGOING') on a digits mask). Values that PARTIALLY match keep regular
+        // masking. Two cases reach this:
+        // 1. this.writingValue: the originating writeValue() call itself.
+        // 2. currentValue === inputValue (and the mask didn't just change): a LATER re-render
+        //    replaying the exact same already-verbatim value outside of writeValue (e.g.
+        //    ngOnChanges re-running applyMask via the directive's _applyMask() when an
+        //    UNRELATED input like `disabled` changes) — without this, that pass would fall
+        //    through to regular masking, emit the empty result via onChange, and clobber the
+        //    model even though the DOM would still show the sentinel correctly.
+        if (
+            (this.writingValue || (!this.maskChanged && inputValue === this.currentValue)) &&
+            inputValue &&
+            !result &&
+            this.removeMask(inputValue)
+        ) {
+            this.actualValue = inputValue;
+            this.previousValue = this.currentValue;
+            this.currentValue = inputValue;
+            return inputValue;
+        }
 
         this.actualValue = this.getActualValue(result);
 
@@ -296,14 +369,19 @@ export class NgxMaskService extends NgxMaskApplierService {
         const prefNmask = `${this.prefix}${this.maskIsShown}${this.suffix}`;
 
         // Handle specific mask expressions
-        if (this.maskExpression.includes(MaskExpression.HOURS)) {
-            const countSkipedSymbol = this._numberSkipedSymbols(result);
-            return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
-        } else if (
+        // NOTE: IP/CPF_CNPJ/CPF_CNPJ_ALPHA are checked via exact equality BEFORE the HOURS
+        // substring check below, because MaskExpression.HOURS is the single character 'H' and
+        // 'CPF_CNPJ_ALPHA' contains 'H' (from "ALPHA"), which previously caused CPF_CNPJ_ALPHA
+        // to be misrouted into the HOURS branch instead of its own branch.
+        if (
             this.maskExpression === MaskExpression.IP ||
-            this.maskExpression === MaskExpression.CPF_CNPJ
+            this.maskExpression === MaskExpression.CPF_CNPJ ||
+            this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
         ) {
             return `${result}${prefNmask}`;
+        } else if (this.maskExpression.includes(MaskExpression.HOURS)) {
+            const countSkipedSymbol = this._numberSkipedSymbols(result);
+            return `${result}${prefNmask.slice(resLen + countSkipedSymbol)}`;
         }
 
         return `${result}${prefNmask.slice(resLen)}`;
@@ -424,12 +502,35 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             return String(value);
         }
-        return Number(value)
-            .toLocaleString('fullwide', {
-                useGrouping: false,
-                maximumFractionDigits: 20,
-            })
-            .replace(`/${MaskExpression.MINUS}/`, MaskExpression.MINUS);
+        // #1573: toLocaleString('fullwide', ...) is NOT locale-independent — 'fullwide' is
+        // not a real locale tag, so Intl silently falls back to the runtime DEFAULT locale
+        // (e.g. de-AT on Edge with Austrian regional format emits '0,5'). Expand exponential
+        // notation with pure string math instead; the decimal marker is always '.'.
+        return this._toPlainDecimalString(Number(value));
+    }
+
+    /**
+     * Locale-independent replacement for toLocaleString('fullwide', { useGrouping: false,
+     * maximumFractionDigits: 20 }) (#1573): expands exponential notation ('7e-7', '1e+21')
+     * to plain decimal form using '.' as decimal marker, regardless of the runtime locale.
+     */
+    private _toPlainDecimalString(value: number): string {
+        const stringValue = String(value);
+        const match = /^(-?)(\d+)(?:\.(\d+))?[eE]([+-]?\d+)$/.exec(stringValue);
+        if (!match) {
+            return stringValue;
+        }
+        const [, sign, integerPart, fractionPart = '', exponentPart] = match;
+        const exponent = Number(exponentPart);
+        const digits = `${integerPart}${fractionPart}`;
+        const pointIndex = (integerPart as string).length + exponent;
+        if (pointIndex <= 0) {
+            return `${sign}0.${'0'.repeat(-pointIndex)}${digits}`;
+        }
+        if (pointIndex >= digits.length) {
+            return `${sign}${digits}${'0'.repeat(pointIndex - digits.length)}`;
+        }
+        return `${sign}${digits.slice(0, pointIndex)}.${digits.slice(pointIndex)}`;
     }
 
     public showMaskInInput(inputVal?: string): string {
@@ -444,7 +545,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                 if (this.maskExpression === MaskExpression.IP) {
                     return this._checkForIp(inputVal);
                 }
-                if (this.maskExpression === MaskExpression.CPF_CNPJ) {
+                if (
+                    this.maskExpression === MaskExpression.CPF_CNPJ ||
+                    this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA
+                ) {
                     return this._checkForCpfCnpj(inputVal);
                 }
             }
@@ -544,28 +648,41 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (inputVal === MaskExpression.HASH) {
             return cpf;
         }
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
-            if (!value) {
-                continue;
+
+        const isCpfCnpjAlpha = this.maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        const hasAnyLetter = /[a-zA-Z]/.test(inputVal);
+        const arr = this._countCpfCnpjTypedChars(inputVal, isCpfCnpjAlpha);
+        if (isCpfCnpjAlpha && hasAnyLetter) {
+            // CNPJ_ALPHA shape is "AA.AAA.AAA/AAAA-00": separators fall after the 2nd, 5th,
+            // 8th and 12th typed character, so the placeholder slice offset must account for
+            // however many separators `result` has already passed through, mirroring the
+            // numeric CPF/CNPJ bucketed offsets below.
+            if (arr.length <= 2) {
+                return cnpj.slice(arr.length, cnpj.length);
             }
-            if (value.match('\\d')) {
-                arr.push(value);
+            if (arr.length > 2 && arr.length <= 5) {
+                return cnpj.slice(arr.length + 1, cnpj.length);
             }
-        }
-        if (arr.length <= 3) {
-            return cpf.slice(arr.length, cpf.length);
-        }
-        if (arr.length > 3 && arr.length <= 6) {
-            return cpf.slice(arr.length + 1, cpf.length);
-        }
-        if (arr.length > 6 && arr.length <= 9) {
-            return cpf.slice(arr.length + 2, cpf.length);
-        }
-        if (arr.length > 9 && arr.length < 11) {
-            return cpf.slice(arr.length + 3, cpf.length);
+            if (arr.length > 5 && arr.length <= 8) {
+                return cnpj.slice(arr.length + 2, cnpj.length);
+            }
+            if (arr.length > 8 && arr.length <= 12) {
+                return cnpj.slice(arr.length + 3, cnpj.length);
+            }
+            return cnpj.slice(arr.length + 4, cnpj.length);
+        } else {
+            if (arr.length <= 3) {
+                return cpf.slice(arr.length, cpf.length);
+            }
+            if (arr.length > 3 && arr.length <= 6) {
+                return cpf.slice(arr.length + 1, cpf.length);
+            }
+            if (arr.length > 6 && arr.length <= 9) {
+                return cpf.slice(arr.length + 2, cpf.length);
+            }
+            if (arr.length > 9 && arr.length < 11) {
+                return cpf.slice(arr.length + 3, cpf.length);
+            }
         }
         if (arr.length === 11) {
             return '';
@@ -580,6 +697,23 @@ export class NgxMaskService extends NgxMaskApplierService {
             return cnpj.slice(arr.length + 4, cnpj.length);
         }
         return '';
+    }
+
+    /** Collects the characters counted as "typed" for CPF/CNPJ progress tracking: digits only
+     *  for the numeric mask, alphanumerics for CPF_CNPJ_ALPHA. */
+    private _countCpfCnpjTypedChars(inputVal: string, isCpfCnpjAlpha: boolean): string[] {
+        const arr: string[] = [];
+        // eslint-disable-next-line @typescript-eslint/prefer-for-of
+        for (let i = 0; i < inputVal.length; i++) {
+            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
+            if (!value) {
+                continue;
+            }
+            if (isCpfCnpjAlpha ? value.match('[a-zA-Z0-9]') : value.match('\\d')) {
+                arr.push(value);
+            }
+        }
+        return arr;
     }
 
     /**
@@ -611,6 +745,23 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         if (!this.isInitialized && this._emitValue) {
             return;
+        }
+
+        // #1519: a non-special placeHolderCharacter (e.g. 'X') is never something the user
+        // typed — it's the showMaskTyped fill character for unfilled slots — so it must never
+        // reach the model, regardless of dropSpecialCharacters. The default '_' placeholder is
+        // already covered by specialCharacters/removeMask; a custom single-char placeholder
+        // that isn't a special character is not, since none of the branches below include it
+        // in their removal set.
+        if (
+            this.showMaskTyped &&
+            this.placeHolderCharacter.length === 1 &&
+            this.specialCharacters.indexOf(this.placeHolderCharacter) === -1
+        ) {
+            // eslint-disable-next-line no-param-reassign
+            inputValue = inputValue
+                .split(this.placeHolderCharacter)
+                .join(MaskExpression.EMPTY_STRING);
         }
 
         if (Array.isArray(this.dropSpecialCharacters)) {
@@ -806,17 +957,61 @@ export class NgxMaskService extends NgxMaskApplierService {
         let value = separatorValue;
 
         if (
-            separatorExpression.indexOf('2') > 0 ||
-            (this.leadZero && Number(separatorPrecision) > 0 && Number.isFinite(separatorPrecision))
+            (separatorExpression.indexOf('2') > 0 && !this._isFocused()) ||
+            (this.leadZero &&
+                !this._isFocused() &&
+                Number(separatorPrecision) > 0 &&
+                Number.isFinite(separatorPrecision))
         ) {
             if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
                 value = value.replace(',', '.');
             }
-            return this.leadZero
-                ? Number(value).toFixed(Number(separatorPrecision))
-                : Number(value).toFixed(2);
+            const precision = this.leadZero ? Number(separatorPrecision) : 2;
+            // #1567: Number(value).toFixed() corrupts values with more significant digits
+            // than an IEEE-754 double can hold (e.g. '999999999999999.99' becomes
+            // '1000000000000000.00'). Round such values textually instead; safe-range
+            // values keep the original toFixed() semantics.
+            if (this._exceedsDoublePrecision(value)) {
+                return this._stringToFixed(value, precision);
+            }
+            return Number(value).toFixed(precision);
         }
         return this.numberToString(value);
+    }
+
+    /**
+     * True when the plain decimal string carries more significant digits than an IEEE-754
+     * double can represent exactly (15 is the guaranteed round-trip digit count), meaning a
+     * Number() round-trip would corrupt it (#1567).
+     */
+    private _exceedsDoublePrecision(value: string): boolean {
+        if (!/^-?\d+(\.\d+)?$/.test(value)) {
+            return false;
+        }
+        const significantDigits = value.replace(/\D/g, '').replace(/^0+/, '');
+        return significantDigits.length > 15;
+    }
+
+    /**
+     * Exact string-based equivalent of Number.prototype.toFixed (round half away from zero)
+     * for plain decimal strings beyond double precision (#1567).
+     */
+    private _stringToFixed(value: string, precision: number): string {
+        const isNegative = value.startsWith(MaskExpression.MINUS);
+        const absValue = isNegative ? value.slice(1) : value;
+        const [integerPart = '0', fractionPart = ''] = absValue.split(MaskExpression.DOT);
+        const paddedFraction = fractionPart.padEnd(precision + 1, '0');
+        const keptFraction = paddedFraction.slice(0, precision);
+        const shouldRoundUp = (paddedFraction.charCodeAt(precision) || 0) >= 53; // '5'
+        let scaled = BigInt(integerPart + keptFraction);
+        if (shouldRoundUp) {
+            scaled += 1n;
+        }
+        const digits = scaled.toString().padStart(precision + 1, '0');
+        const sign = isNegative && scaled > 0n ? MaskExpression.MINUS : '';
+        return precision > 0
+            ? `${sign}${digits.slice(0, -precision)}.${digits.slice(-precision)}`
+            : `${sign}${digits}`;
     }
 
     public _repeatPatternSymbols(maskExp: string): string {
@@ -851,7 +1046,19 @@ export class NgxMaskService extends NgxMaskApplierService {
         );
     }
 
+    /**
+     * Decimal marker of the value being normalized in writeValue/pipe flows.
+     *
+     * #1573: this used to return the RUNTIME default locale's decimal marker
+     * ((1.1).toLocaleString().substring(1, 2)), which made mask behavior depend on the
+     * OS/browser regional format: under a comma-decimal locale (e.g. Edge + Austrian
+     * regional settings) a preformatted value like '10,000' (thousandSeparator ',')
+     * had its ',' replaced by the configured '.' decimalMarker, corrupting the value
+     * 1000x. JS number stringification (String(n)) always uses '.', and string values
+     * are expected to use the configured markers — the runtime locale is never the
+     * right source, so this is always '.'.
+     */
     public currentLocaleDecimalMarker(): string {
-        return (1.1).toLocaleString().substring(1, 2);
+        return MaskExpression.DOT;
     }
 }

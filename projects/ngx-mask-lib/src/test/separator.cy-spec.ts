@@ -258,7 +258,10 @@ describe('Test Date Hh:m0', () => {
             .should('have.value', '0.1')
             .type('{leftArrow}')
             .type('{backspace}')
-            .should('have.value', '1');
+            // #1516: deleting digits around the decimal marker must not drop the
+            // marker itself — '.1' keeps the numeric value 0.1 (the old expectation
+            // '1' encoded a 10x value corruption).
+            .should('have.value', '.1');
     });
 
     it('should correct work after backspace separator.2 decimalMarker . thousandSeparator , allowNegative', () => {
@@ -462,7 +465,10 @@ describe('Test Date Hh:m0', () => {
             .should('have.value', '0.05')
             .type('{leftArrow}'.repeat(3))
             .type('{backspace}')
-            .should('have.value', '5');
+            // #1516: deleting the leading zero keeps the decimal part intact —
+            // '.05' preserves 0.05 (the old expectation '5' encoded a 100x
+            // value corruption).
+            .should('have.value', '.05');
     });
 
     it('should correct work after backspace separator.2 when after first digit 0', () => {

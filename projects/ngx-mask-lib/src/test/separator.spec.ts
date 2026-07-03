@@ -481,4 +481,11 @@ describe('Separator: Mask', () => {
 
         expect(inputTarget.selectionStart).equal(0);
     });
+
+    it('separator without explicit precision and leadZero true should not throw RangeError from toFixed', () => {
+        component.mask.set('separator');
+        component.leadZero.set(true);
+
+        expect(() => equal('123456.78', '123 456.78', fixture)).not.toThrow();
+    });
 });

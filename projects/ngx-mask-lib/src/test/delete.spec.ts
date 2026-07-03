@@ -314,4 +314,167 @@ describe('Directive: Mask (Delete)', () => {
 
         expect(inputElement.value).equal('4-4-4');
     });
+
+    it('should keep remaining zeros when deleting first digit of 500 (separator.2) (issue #1355)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // typed 500, cursor after 5, backspace deletes the 5 -> native value is '00'
+        inputTarget.value = '00';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('00');
+    });
+
+    it('should keep remaining zeros when deleting first digit of 100,000 (issue #1578)', () => {
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 100,000, cursor after 1, backspace deletes the 1 -> native value is '00,000'
+        inputTarget.value = '00,000';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('00,000');
+    });
+
+    it('should keep remaining zeros when deleting first digit of 1,000,000 (issue #1578)', () => {
+        component.mask.set('separator.0');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 1,000,000, cursor after 1, backspace deletes the 1 -> native value is ',000,000'
+        inputTarget.value = ',000,000';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('000,000');
+    });
+
+    it('should strip leading zero when a non-zero digit remains after deletion (505,000 -> 05,000)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 505,000, cursor after first 5, backspace -> native value is '05,000'
+        inputTarget.value = '05,000';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('5,000');
+    });
+
+    it('should keep single zero when deleting last remaining non-zero digit', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 0.5, cursor at end, backspace deletes the 5 -> native value is '0.'
+        inputTarget.value = '0.';
+        inputTarget.selectionStart = 2;
+        inputTarget.selectionEnd = 2;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('0.');
+    });
+
+    it('should keep decimal marker when deleting all leading integer digits (issue #1516)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        component.leadZero.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 12,34 — user selects '12' and deletes it -> native value is ',34'
+        inputTarget.value = ',34';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal(',34');
+    });
+
+    it('should keep dot decimal marker when deleting all leading integer digits (issue #1516)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        // displayed 12.34 — user selects '12' and deletes it -> native value is '.34'
+        inputTarget.value = '.34';
+        inputTarget.selectionStart = 0;
+        inputTarget.selectionEnd = 0;
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+
+        expect(inputTarget.value).equal('.34');
+    });
 });

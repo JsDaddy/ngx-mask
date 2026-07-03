@@ -75,6 +75,12 @@ export class NgxMaskApplierService {
 
     public deletedSpecialCharacter = false;
 
+    /**
+     * Whether we are currently in writeValue function, in this case when applying the mask we don't want to trigger onChange function,
+     * since writeValue should be a one way only process of writing the DOM value based on the Angular model value.
+     */
+    public writingValue = false;
+
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;
@@ -101,12 +107,18 @@ export class NgxMaskApplierService {
         let processedPosition = position;
 
         const startsWithPrefix = processedValue.slice(0, this.prefix.length) === this.prefix;
-        const pastedFullWithPrefix =
-            justPasted && processedValue.length === this.prefix.length + maskExpression.length;
-        const looksLikeFullPrefixPaste =
-            processedValue === this.prefix + processedValue.slice(this.prefix.length);
+        // On paste with showMaskTyped, NgxMaskService.applyMask has already removed the
+        // prefix via removeMask() before delegating here (unless the value consisted of
+        // the prefix alone, in which case the raw value falls through). Stripping again
+        // would eat leading characters that merely look like the prefix (#1551).
+        const prefixAlreadyRemovedByCaller =
+            justPasted &&
+            this.showMaskTyped &&
+            this.placeHolderCharacter.length === 1 &&
+            !this.leadZeroDateTime &&
+            processedValue !== this.prefix;
 
-        if (startsWithPrefix && (pastedFullWithPrefix || looksLikeFullPrefixPaste)) {
+        if (startsWithPrefix && !prefixAlreadyRemovedByCaller) {
             processedValue = processedValue.slice(this.prefix.length);
         }
         if (!!this.suffix && processedValue.length > 0) {
@@ -136,11 +148,16 @@ export class NgxMaskApplierService {
                 arr.push(processedValue[i] ?? MaskExpression.EMPTY_STRING);
             }
         }
-        if (maskExpression === MaskExpression.CPF_CNPJ) {
+        const isCpfCnpjAlpha = maskExpression === MaskExpression.CPF_CNPJ_ALPHA;
+        if (maskExpression === MaskExpression.CPF_CNPJ || isCpfCnpjAlpha) {
             this.cpfCnpjError = arr.length !== 11 && arr.length !== 14;
-            if (arr.length > 11) {
+            const valueHasAnyLetter = /[a-zA-Z]/.test(processedValue);
+            if (valueHasAnyLetter && isCpfCnpjAlpha) {
                 // eslint-disable-next-line no-param-reassign
-                maskExpression = '00.000.000/0000-00';
+                maskExpression = 'AA.AAA.AAA/AAAA-00';
+            } else if (arr.length > 11) {
+                // eslint-disable-next-line no-param-reassign
+                maskExpression = isCpfCnpjAlpha ? 'AA.AAA.AAA/AAAA-00' : '00.000.000/0000-00';
             } else {
                 // eslint-disable-next-line no-param-reassign
                 maskExpression = '000.000.000-00';
@@ -226,20 +243,51 @@ export class NgxMaskApplierService {
                 }
             }
 
+            // Issue #1547: a pasted value may contain grouping separators that are
+            // also configured decimal markers (default decimalMarker is ['.', ',']),
+            // e.g. '1,234.56'. Only the last marker character can actually be the
+            // decimal marker — treat the earlier ones as thousand separators and
+            // strip them, otherwise formatting cuts the value off at the first one.
+            if (justPasted && Array.isArray(this.decimalMarker)) {
+                const markerPositions: number[] = [];
+                for (let i = 0; i < processedValue.length; i++) {
+                    const char = processedValue[i] as string;
+                    if (
+                        char !== this.thousandSeparator &&
+                        this.decimalMarker.includes(
+                            char as MaskExpression.COMMA | MaskExpression.DOT
+                        )
+                    ) {
+                        markerPositions.push(i);
+                    }
+                }
+                if (markerPositions.length > 1) {
+                    const lastMarkerPosition = markerPositions[markerPositions.length - 1];
+                    processedValue = processedValue
+                        .split(MaskExpression.EMPTY_STRING)
+                        .filter(
+                            (_, index) =>
+                                index === lastMarkerPosition || !markerPositions.includes(index)
+                        )
+                        .join(MaskExpression.EMPTY_STRING);
+                }
+            }
+
             if (backspaced) {
                 const { decimalMarkerIndex, nonZeroIndex } = this._findFirstNonZeroAndDecimalIndex(
                     processedValue,
                     decimalMarker as '.' | ','
                 );
                 const zeroIndexMinus = processedValue[0] === MaskExpression.MINUS;
-                const zeroIndexNumberZero = processedValue[0] === MaskExpression.NUMBER_ZERO;
                 const zeroIndexDecimalMarker = processedValue[0] === decimalMarker;
                 const firstIndexDecimalMarker = processedValue[1] === decimalMarker;
 
+                // Issues #1355/#1578: an all-zero remainder (e.g. '00' from '500', '00,000'
+                // from '100,000') must keep its zeros, matching the ',000,000' case.
+                // Only collapse when nothing but a bare decimal marker (or '-.') remains.
                 if (
                     (zeroIndexDecimalMarker && !nonZeroIndex) ||
-                    (zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex) ||
-                    (zeroIndexNumberZero && !decimalMarkerIndex && !nonZeroIndex)
+                    (zeroIndexMinus && firstIndexDecimalMarker && !nonZeroIndex)
                 ) {
                     processedValue = MaskExpression.NUMBER_ZERO;
                 }
@@ -255,7 +303,14 @@ export class NgxMaskApplierService {
                     }
                 }
 
-                if (!decimalMarkerIndex && nonZeroIndex && processedValue.length > nonZeroIndex) {
+                // Issue #1516: decimalMarkerIndex is 0 when the remainder starts with
+                // the decimal marker (',34' after deleting the integer part) — a truthy
+                // check would treat it as "no decimal marker" and slice the marker off.
+                if (
+                    decimalMarkerIndex === null &&
+                    nonZeroIndex &&
+                    processedValue.length > nonZeroIndex
+                ) {
                     processedValue = zeroIndexMinus
                         ? MaskExpression.MINUS + processedValue.slice(nonZeroIndex)
                         : processedValue.slice(nonZeroIndex);
@@ -271,7 +326,10 @@ export class NgxMaskApplierService {
                 }
             }
 
-            if (precision === 0) {
+            // Leading-zero stripping is a typing-time rule ('05' -> '5'). When backspaced,
+            // leading zeros before a non-zero digit were already removed above, and an
+            // all-zero remainder must keep its zeros (issues #1355/#1578).
+            if (precision === 0 && !backspaced) {
                 processedValue = this.allowNegativeNumbers
                     ? processedValue.length > 2 &&
                       processedValue[0] === MaskExpression.MINUS &&
@@ -570,26 +628,46 @@ export class NgxMaskApplierService {
                     );
                     const inputValueSliceCursorPlusTwo = processedValue.slice(cursor, cursor + 2);
                     const inputValueSliceMinusTwoCursor = processedValue.slice(cursor - 2, cursor);
+                    // Issue #1523: when the date token directly abuts a plain digit
+                    // token (year-first masks without separators like 00M0d0 or
+                    // 0000M0d0), the backward-looking windows below read the previous
+                    // field's digits (year) as day/month digits and skip valid input.
+                    // Disable only those backward heuristics in that layout.
+                    const tokenAbutsDigitField =
+                        maskExpression[cursor - 1] === MaskExpression.NUMBER_ZERO;
                     if (maskExpression[cursor] === MaskExpression.DAY) {
                         const maskStartWithMonth =
                             maskExpression.slice(0, 2) === MaskExpression.MONTHS;
                         const startWithMonthInput: boolean =
                             maskExpression.slice(0, 2) === MaskExpression.MONTHS &&
                             this.specialCharacters.includes(inputValueCursorMinusTwo);
+                        // Issue #1611: `cursor` indexes the mask, `i` indexes the input.
+                        // On paste/writeValue of a bare digit string the cursor runs
+                        // ahead of the input by every emitted separator, so cursor-based
+                        // slices read year digits instead of the day — anchor the day
+                        // window on the input index in those flows. Keystroke flows keep
+                        // the historical cursor anchor (with showMaskTyped the value also
+                        // carries placeholder chars, where the input anchor misreads).
+                        const dayWindowStart = justPasted || this.writingValue ? i : cursor;
+                        const dayWindowSlice = processedValue.slice(
+                            dayWindowStart,
+                            dayWindowStart + 2
+                        );
+                        const dayWindowNext = processedValue[dayWindowStart + 1] as string;
                         if (
                             (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                             (!maskStartWithMonth &&
                                 (Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                    Number(inputValueSliceMinusOnePlusOne) > daysCount ||
+                                    (!tokenAbutsDigitField &&
+                                        Number(inputValueSliceMinusOnePlusOne) > daysCount) ||
                                     this.specialCharacters.includes(inputValueCursorPlusOne))) ||
                             (startWithMonthInput
                                 ? Number(inputValueSliceMinusOnePlusOne) > daysCount ||
                                   (!this.specialCharacters.includes(inputValueCursor) &&
                                       this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                                   this.specialCharacters.includes(inputValueCursor)
-                                : Number(inputValueSliceCursorPlusTwo) > daysCount ||
-                                  (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                                      !backspaced))
+                                : Number(dayWindowSlice) > daysCount ||
+                                  (this.specialCharacters.includes(dayWindowNext) && !backspaced))
                         ) {
                             processedPosition = !this.leadZeroDateTime
                                 ? processedPosition + 1
@@ -624,6 +702,7 @@ export class NgxMaskApplierService {
                                 this.specialCharacters.includes(inputValueCursor));
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -638,6 +717,7 @@ export class NgxMaskApplierService {
                                 cursor === 5);
                         // // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) > daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -649,6 +729,7 @@ export class NgxMaskApplierService {
                             maskExpression.includes('d0');
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
+                            !tokenAbutsDigitField &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -734,20 +815,27 @@ export class NgxMaskApplierService {
                     i--;
                 } else if (
                     this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_STAR &&
-                    this._findSpecialChar(
+                    // A typed char that exactly matches the mask's literal char at cursor+2
+                    // (e.g. the '@' in 'A*@A*.A*') always terminates the 'A*' run, regardless
+                    // of whether that literal is registered in `specialCharacters` — an
+                    // explicitly empty `specialCharacters` list must not make mask literals
+                    // unmatchable (#1512).
+                    (this._findSpecialChar(
                         this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
-                    ) &&
-                    this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
+                    )
+                        ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]
+                        : inputSymbol === this.maskExpression[cursor + 2]) &&
                     multi
                 ) {
                     cursor += 3;
                     result += inputSymbol;
                 } else if (
                     this.maskExpression[cursor + 1] === MaskExpression.SYMBOL_QUESTION &&
-                    this._findSpecialChar(
+                    (this._findSpecialChar(
                         this.maskExpression[cursor + 2] ?? MaskExpression.EMPTY_STRING
-                    ) &&
-                    this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2] &&
+                    )
+                        ? this._findSpecialChar(inputSymbol) === this.maskExpression[cursor + 2]
+                        : inputSymbol === this.maskExpression[cursor + 2]) &&
                     multi
                 ) {
                     cursor += 3;
@@ -810,11 +898,27 @@ export class NgxMaskApplierService {
             this.specialCharacters.includes(maskExpression[0] as string) &&
             processedValue !== maskExpression[0];
 
-        if (
-            !this._checkSymbolMask(processedValue, maskExpression[1] as string) &&
-            isSpecialCharacterMaskFirstSymbol
-        ) {
-            return '';
+        if (isSpecialCharacterMaskFirstSymbol) {
+            // The mask may start with several literal special characters in a row
+            // (e.g. '+(000) 000-0000'). A single typed character must be checked
+            // against the first PATTERN position of the mask, not literally against
+            // index 1 — otherwise a valid digit is rejected and the leading literals
+            // are never auto-filled (#1498).
+            let firstPatternIndex = 1;
+            while (
+                firstPatternIndex < maskExpression.length &&
+                this.specialCharacters.includes(maskExpression[firstPatternIndex] as string)
+            ) {
+                firstPatternIndex++;
+            }
+            if (
+                !this._checkSymbolMask(
+                    processedValue,
+                    maskExpression[firstPatternIndex] ?? MaskExpression.EMPTY_STRING
+                )
+            ) {
+                return '';
+            }
         }
 
         if (result.includes(MaskExpression.MINUS) && this.prefix && this.allowNegativeNumbers) {
@@ -919,12 +1023,22 @@ export class NgxMaskApplierService {
         for (let i = this.suffix?.length - 1; i >= 0; i--) {
             const substr = this.suffix.substring(i, this.suffix?.length);
             if (
-                inputValue.includes(substr) &&
+                inputValue.endsWith(substr) &&
                 i !== this.suffix?.length - 1 &&
+                // A partial suffix tail (i > 0) that makes up the WHOLE value is a
+                // leftover of the displayed suffix only when the previous rendered
+                // value ended with the suffix AND the edit shrank the value to (or
+                // below) the old value-part length, i.e. it was a deletion of the
+                // suffix head. Otherwise it is fresh user input that merely collides
+                // with the suffix text and must be kept (#1495).
+                (i === 0 ||
+                    inputValue.length > substr.length ||
+                    (this.actualValue.endsWith(this.suffix) &&
+                        inputValue.length <= this.actualValue.length - this.suffix.length)) &&
                 (i - 1 < 0 ||
-                    !inputValue.includes(this.suffix.substring(i - 1, this.suffix?.length)))
+                    !inputValue.endsWith(this.suffix.substring(i - 1, this.suffix?.length)))
             ) {
-                return inputValue.replace(substr, MaskExpression.EMPTY_STRING);
+                return inputValue.slice(0, inputValue.length - substr.length);
             }
         }
         return inputValue;

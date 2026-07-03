@@ -222,4 +222,29 @@ describe('Directive: Mask (Add prefix)', () => {
 
         equal('06062/41561', '06062/41561', fixture, false, Paste);
     });
+
+    it('should keep doubled prefix digits when pasting with showMaskTyped over full selection', () => {
+        // issue #1551: prefix 06, showMaskTyped, clipboard starts with doubled prefix
+        component.mask.set('00000000');
+        component.prefix.set('06');
+        component.showMaskTyped.set(true);
+
+        equal('0606512345', '0606512345', fixture, false, Paste);
+    });
+
+    it('should not lose prefix-looking digits when pasting with showMaskTyped', () => {
+        component.mask.set('000/00000');
+        component.prefix.set('06');
+        component.showMaskTyped.set(true);
+
+        equal('06065/12345', '06065/12345', fixture, false, Paste);
+    });
+
+    it('should not double prefix when pasting previously copied full value with showMaskTyped', () => {
+        component.mask.set('0000.00');
+        component.prefix.set('$');
+        component.showMaskTyped.set(true);
+
+        equal('$123', '$123_.__', fixture, false, Paste);
+    });
 });

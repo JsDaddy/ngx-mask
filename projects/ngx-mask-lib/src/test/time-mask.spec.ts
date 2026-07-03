@@ -245,6 +245,44 @@ describe('Directive: Mask (Time)', () => {
         equal('11111111', '1111-11-11', fixture);
     });
 
+    // Issue #1513: with leadZeroDateTime a bogus zero was inserted for months 10-12
+    // in year-first masks ('19321221' -> '1932-01-22') because the day1monthPaste
+    // heuristic reinterpreted the last two year digits as a day. The misfire hit
+    // years whose digits [2..3] exceed 31 and whose last digit prepended to the
+    // month digit exceeds 12 (1932, 1942, ..., 1999) — not the whole 1932-1999 range.
+    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
+    // gating on "day token precedes month in mask" fixes this case but broke
+    // 'M0-d0-0000' + showMaskTyped + leadZeroDateTime typing (delete.cy-spec.ts).
+    it.skip('Date 0000-M0-d0 lead zero should keep months 10-12 (issue #1513)', () => {
+        component.leadZeroDateTime.set(true);
+        component.mask.set('0000-M0-d0');
+        equal('19901221', '1990-12-21', fixture);
+        equal('19321221', '1932-12-21', fixture);
+        equal('19991001', '1999-10-01', fixture);
+        equal('19451111', '1945-11-11', fixture);
+        equal('19201221', '1920-12-21', fixture);
+        equal('20101221', '2010-12-21', fixture);
+    });
+
+    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
+    // see skip note above.
+    it.skip('Date 0000-M0-d0 lead zero boundary months (issue #1513)', () => {
+        component.leadZeroDateTime.set(true);
+        component.mask.set('0000-M0-d0');
+        equal('19900101', '1990-01-01', fixture);
+        equal('19320909', '1932-09-09', fixture);
+        equal('199091', '1990-09-1', fixture);
+    });
+
+    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
+    // see skip note above.
+    it.skip('Date 0000-M0-d0 lead zero paste months 10-12 (issue #1513)', () => {
+        component.leadZeroDateTime.set(true);
+        component.mask.set('0000-M0-d0');
+        equal('19321221', '1932-12-21', fixture, false, Paste);
+        equal('19901221', '1990-12-21', fixture, false, Paste);
+    });
+
     it('Date (M0/d0/0000', () => {
         component.mask.set('M0/d0/0000');
         equal('999999', '9/9/9999', fixture);

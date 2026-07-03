@@ -223,3 +223,39 @@ describe('Test Date Hh:m0', () => {
             .should('have.prop', 'selectionStart', 3);
     });
 });
+
+describe('Test caret with prefix + leadZero separator mask (#1572)', () => {
+    it('typing a bare decimal marker should keep the caret after the marker', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                prefix: signal('$'),
+                leadZero: signal(true),
+                decimalMarker: signal('.'),
+            },
+        });
+
+        // The bare marker is not a number: the model gets null and actualValue is
+        // reset, which used to clamp the caret BEFORE the decimal ('$|.').
+        cy.get('#masked')
+            .type('.')
+            .should('have.value', '$.')
+            .should('have.prop', 'selectionStart', 2);
+    });
+
+    it('typing digits then the decimal marker should keep the caret after the marker', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('separator.2'),
+                prefix: signal('$'),
+                leadZero: signal(true),
+                decimalMarker: signal('.'),
+            },
+        });
+
+        cy.get('#masked')
+            .type('3.')
+            .should('have.value', '$3.')
+            .should('have.prop', 'selectionStart', 3);
+    });
+});

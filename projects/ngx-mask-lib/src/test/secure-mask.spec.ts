@@ -13,6 +13,23 @@ describe('Directive: Mask (Secure)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
 
+    // Simulates a real browser backspace: keydown fires with the caret at its
+    // pre-deletion position, then the value is mutated and the input event fires.
+    function backspaceAt(caret: number, debugElement: DebugElement): void {
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        inputTarget.setSelectionRange(caret, caret);
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        inputTarget.value = inputTarget.value.slice(0, caret - 1) + inputTarget.value.slice(caret);
+        inputTarget.setSelectionRange(caret - 1, caret - 1);
+        debugElement.triggerEventHandler('input', { target: inputTarget });
+        fixture.detectChanges();
+    }
+
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
@@ -28,6 +45,77 @@ describe('Directive: Mask (Secure)', () => {
         component.hiddenInput.set(true);
         equal('1234', '***/*', fixture);
         expect(component.form.value).equal('1234');
+    });
+
+    it('backspace with custom patterns symbol should delete one character at length 2 (#1612)', () => {
+        component.mask.set('000-00-0000');
+        component.patterns.set({ '0': { pattern: /\d/, symbol: '*' } });
+        component.hiddenInput.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        typeTest('12', fixture);
+        expect(inputTarget.value).equal('**');
+
+        backspaceAt(2, debugElement);
+        expect(inputTarget.value).equal('*');
+        expect(component.form.value).equal('1');
+    });
+
+    it('backspace with custom patterns symbol should delete one character at each step (#1612)', () => {
+        component.mask.set('000-00-0000');
+        component.patterns.set({ '0': { pattern: /\d/, symbol: '*' } });
+        component.hiddenInput.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+        expect(inputTarget.value).equal('***');
+
+        backspaceAt(3, debugElement);
+        expect(inputTarget.value).equal('**');
+        expect(component.form.value).equal('12');
+
+        backspaceAt(2, debugElement);
+        expect(inputTarget.value).equal('*');
+        expect(component.form.value).equal('1');
+    });
+
+    it('backspace mid-value with custom patterns symbol should delete the hidden character at the caret (#1612)', () => {
+        component.mask.set('000-00-0000');
+        component.patterns.set({ '0': { pattern: /\d/, symbol: '*' } });
+        component.hiddenInput.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+        expect(inputTarget.value).equal('***');
+
+        backspaceAt(2, debugElement);
+        expect(inputTarget.value).equal('**');
+        expect(component.form.value).equal('13');
+    });
+
+    it('backspace with default secure mask should delete one character at length 2 (#1612)', () => {
+        component.mask.set('XXX/X0/0000');
+        component.hiddenInput.set(true);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        typeTest('12', fixture);
+        expect(inputTarget.value).equal('**');
+
+        backspaceAt(2, debugElement);
+        expect(inputTarget.value).equal('*');
+        expect(component.form.value).equal('1');
     });
 
     it('it checks secure input functionality ', () => {

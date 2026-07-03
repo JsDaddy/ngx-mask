@@ -59,6 +59,21 @@ export const lists: ListItem[] = [
                 id: 10,
                 scrollTo: 'allow-few-mask',
             },
+            {
+                content: 'IP address',
+                id: 11,
+                scrollTo: 'ip-address',
+            },
+            {
+                content: 'CPF/CNPJ',
+                id: 12,
+                scrollTo: 'cpf-cnpj',
+            },
+            {
+                content: 'CPF/CNPJ alphanumeric',
+                id: 13,
+                scrollTo: 'cpf-cnpj-alpha',
+            },
         ],
     },
     {
