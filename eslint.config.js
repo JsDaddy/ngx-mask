@@ -54,6 +54,12 @@ module.exports = tseslint.config(
         languageOptions: {
             parserOptions: {
                 project: ['./tsconfig.eslint.json'],
+                // Single-run inference (auto-enabled when CI=true) caches TS programs at
+                // module level. The angular-eslint builder lints both workspace projects in
+                // one process, so the second project reuses a stale program and crashes
+                // inside restrict-template-expressions (typeToString -> normalizeSlashes
+                // on undefined). Keep watch-program behavior in CI as well.
+                disallowAutomaticSingleRunInference: true,
             },
         },
         rules: {
