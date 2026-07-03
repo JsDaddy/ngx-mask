@@ -22,7 +22,11 @@ bootstrapApplication(AppComponent, {
         BaseHttpService,
         provideAnimations(),
         provideRouter([]),
-        provideNgxMask(),
+        provideNgxMask({
+            maskAliases: {
+                PHONE_BR: '(00) 00000-0000',
+            },
+        }),
         {
             provide: HIGHLIGHT_OPTIONS,
             useValue: {

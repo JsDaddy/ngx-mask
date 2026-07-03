@@ -74,6 +74,11 @@ export const lists: ListItem[] = [
                 id: 13,
                 scrollTo: 'cpf-cnpj-alpha',
             },
+            {
+                content: 'Custom mask alias',
+                id: 14,
+                scrollTo: 'mask-aliases',
+            },
         ],
     },
     {

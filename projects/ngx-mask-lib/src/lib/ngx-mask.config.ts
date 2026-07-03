@@ -29,6 +29,14 @@ export type NgxMaskConfig = {
     inputTransformFn: InputTransformFn;
     outputTransformFn: OutputTransformFn;
     maskFilled: EventEmitter<void>;
+    /**
+     * User-defined named mask aliases resolved at the DI-config level (static per injector).
+     * When the `mask` input (or pipe mask argument) exactly matches an alias key, the aliased
+     * expression is substituted before any other mask processing (including `||` multi-masks).
+     * Alias keys must not shadow built-in tokens (IP, CPF_CNPJ, CPF_CNPJ_ALPHA, ...) — such
+     * aliases are ignored with a one-time console warning.
+     */
+    maskAliases: Record<string, string>;
     patterns: Record<
         string,
         {
@@ -68,6 +76,7 @@ export const initialConfig: NgxMaskConfig = {
     inputTransformFn: (value: unknown) => value as string | number,
     outputTransformFn: (value: string | number | undefined | null) => value,
     maskFilled: new EventEmitter<void>(),
+    maskAliases: {},
     patterns: {
         '0': {
             pattern: new RegExp('\\d'),
@@ -112,6 +121,54 @@ export const initialConfig: NgxMaskConfig = {
         },
     },
 };
+
+/**
+ * Built-in mask tokens dispatched by exact equality (IP, CPF_CNPJ, CPF_CNPJ_ALPHA, email)
+ * or by a reserved prefix (separator, percent) inside the mask pipeline. User-defined
+ * aliases must not shadow them — substituting e.g. 'IP' early would break the built-in
+ * exact-equality dispatch deep in the applier.
+ */
+const RESERVED_MASK_TOKENS: readonly string[] = [
+    MaskExpression.IP,
+    MaskExpression.CPF_CNPJ,
+    MaskExpression.CPF_CNPJ_ALPHA,
+    MaskExpression.EMAIL_MASK,
+    MaskExpression.SEPARATOR,
+    MaskExpression.PERCENT,
+];
+
+/** Tracks alias keys already warned about, so the shadowing warning fires once per key. */
+const warnedShadowedAliases = new Set<string>();
+
+/**
+ * Resolves a user-defined mask alias to its mask expression. Returns the input expression
+ * unchanged when no alias matches or when the alias key shadows a built-in token (in which
+ * case a console warning is emitted once per key and the built-in wins).
+ */
+export function resolveMaskAlias(
+    maskExpression: string | null | undefined,
+    maskAliases: Record<string, string> | undefined
+): string {
+    const expression = maskExpression ?? MaskExpression.EMPTY_STRING;
+    if (!expression || !maskAliases) {
+        return expression;
+    }
+    const aliased = maskAliases[expression];
+    if (typeof aliased !== 'string') {
+        return expression;
+    }
+    if (RESERVED_MASK_TOKENS.includes(expression)) {
+        if (!warnedShadowedAliases.has(expression)) {
+            warnedShadowedAliases.add(expression);
+            // eslint-disable-next-line no-console
+            console.warn(
+                `ngx-mask: mask alias "${expression}" shadows a built-in mask token and is ignored. Rename the alias.`
+            );
+        }
+        return expression;
+    }
+    return aliased;
+}
 
 export const timeMasks: string[] = [
     MaskExpression.HOURS_MINUTES_SECONDS,

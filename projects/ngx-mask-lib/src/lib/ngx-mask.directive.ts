@@ -27,7 +27,7 @@ import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
-import { NGX_MASK_CONFIG, timeMasks, withoutValidation } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -251,16 +251,19 @@ export class NgxMaskDirective
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
             }
-            if (mask.currentValue && mask.currentValue.split(MaskExpression.OR).length > 1) {
+            // User-defined aliases (config maskAliases) expand BEFORE any other processing,
+            // including the `||` multi-mask split — an alias may expand to a multi-mask.
+            const resolvedMask = resolveMaskAlias(mask.currentValue, this._config.maskAliases);
+            if (resolvedMask && resolvedMask.split(MaskExpression.OR).length > 1) {
                 this._maskExpressionArray.set(
-                    mask.currentValue.split(MaskExpression.OR).sort((a: string, b: string) => {
+                    resolvedMask.split(MaskExpression.OR).sort((a: string, b: string) => {
                         return a.length - b.length;
                     })
                 );
                 this._setMask();
             } else {
                 this._maskExpressionArray.set([]);
-                this._maskValue.set(mask.currentValue || MaskExpression.EMPTY_STRING);
+                this._maskValue.set(resolvedMask);
                 this._maskService.maskExpression = this._maskValue();
             }
         }
@@ -1428,7 +1431,10 @@ export class NgxMaskDirective
                         .toString()
                         .replace(MaskExpression.DOT, MaskExpression.COMMA);
                 }
-                if (this.mask()?.startsWith(MaskExpression.SEPARATOR) && this.leadZero()) {
+                if (
+                    this._resolvedMaskInput().startsWith(MaskExpression.SEPARATOR) &&
+                    this.leadZero()
+                ) {
                     const isFirstWrite = !this._maskService.isInitialized;
                     requestAnimationFrame(() => {
                         // On initial load, temporarily set isInitialized to false
@@ -1520,10 +1526,15 @@ export class NgxMaskDirective
      * therefore also fall back to the deferred-only path.
      */
     private _writeElementValueSync(value: string): void {
-        if ((this.mask() ?? MaskExpression.EMPTY_STRING) !== this._maskValue()) {
+        if (this._resolvedMaskInput() !== this._maskValue()) {
             return;
         }
         this._renderer.setProperty(this._elementRef.nativeElement, 'value', value);
+    }
+
+    /** The `mask` input with a user-defined alias (config maskAliases) expanded, if any. */
+    private _resolvedMaskInput(): string {
+        return resolveMaskAlias(this.mask(), this._config.maskAliases);
     }
 
     public registerOnChange(fn: typeof this.onChange): void {

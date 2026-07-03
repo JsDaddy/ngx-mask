@@ -451,6 +451,27 @@ You can pass into mask pattern with `||`.
 <input mask="00||SS" />
 ```
 
+### Custom mask aliases
+
+#### Usage
+
+You can define your own named masks once in the config and reference them by name in the `mask` input or the `mask` pipe. Aliases are resolved before any other mask processing, so an alias may also expand to a `||` multi-mask expression.
+
+```typescript
+provideNgxMask({
+    maskAliases: {
+        PHONE_BR: '(00) 00000-0000',
+        MY_DOC: '000-AAA||0000-AAA',
+    },
+});
+```
+
+```html
+<input mask="PHONE_BR" /> <input mask="MY_DOC" />
+```
+
+Alias keys should be written in UPPER_SNAKE case. They must not shadow the built-in tokens (`IP`, `CPF_CNPJ`, `CPF_CNPJ_ALPHA`, ...) — such aliases are ignored with a one-time console warning and the built-in mask wins. The alias map is resolved at the DI-config level, so it is static per injector: changing it at runtime is not supported.
+
 ### Function maskFilled
 
 #### Usage

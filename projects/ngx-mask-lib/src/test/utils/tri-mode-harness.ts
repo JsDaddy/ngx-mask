@@ -11,7 +11,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, disabled as disabledLogic, form, schema } from '@angular/forms/signals';
-import type { NgxMaskConfig } from 'ngx-mask';
+import type { NgxMaskConfig, NgxMaskOptions } from 'ngx-mask';
 import { NGX_MASK_CONFIG, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 export const TRI_MODES = ['reactive', 'template', 'signal'] as const;
@@ -29,6 +29,8 @@ export type TriModeMaskConfig = {
     specialCharacters?: string[];
     patterns?: NgxMaskConfig['patterns'];
     showMaskTyped?: boolean;
+    /** Options forwarded to provideNgxMask() (DI-level config, e.g. maskAliases). */
+    providerOptions?: NgxMaskOptions;
 };
 
 export type TriModeHarness = {
@@ -306,7 +308,7 @@ export async function createTriModeFixture(
 ): Promise<TriModeHarness> {
     TestBed.configureTestingModule({
         imports: [NgxMaskDirective],
-        providers: [provideNgxMask()],
+        providers: [provideNgxMask(config.providerOptions)],
     });
 
     let harness: TriModeHarness;

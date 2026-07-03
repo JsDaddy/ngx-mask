@@ -3,6 +3,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { form, FormField } from '@angular/forms/signals';
+import type { NgxMaskOptions } from 'ngx-mask';
 import { NgxMaskDirective, provideNgxMask, initialConfig } from 'ngx-mask';
 import { expect, describe, it, beforeEach } from 'vitest';
 
@@ -229,13 +230,14 @@ const FORM_MODE_CONFIG = {
 } as const;
 
 function createFixture<T extends FormMode>(
-    mode: T
+    mode: T,
+    ngxMaskOptions?: NgxMaskOptions
 ): ComponentFixture<InstanceType<(typeof FORM_MODE_CONFIG)[T]['componentClass']>> {
     type Instance = InstanceType<(typeof FORM_MODE_CONFIG)[T]['componentClass']>;
     const { componentClass } = FORM_MODE_CONFIG[mode];
     TestBed.configureTestingModule({
         imports: [componentClass],
-        providers: [provideNgxMask()],
+        providers: [provideNgxMask(ngxMaskOptions)],
     });
     // Mode-to-class mapping is exhaustive over FORM_MODE_CONFIG, so this cast is safe.
     const fixture = TestBed.createComponent(
@@ -248,7 +250,8 @@ function createFixture<T extends FormMode>(
 function runMaskCasesForMode(
     mode: FormMode,
     testCases: MaskTestConfig[],
-    verifyFormValue = false
+    verifyFormValue = false,
+    ngxMaskOptions?: NgxMaskOptions
 ): void {
     let fixture: ComponentFixture<
         TestReactiveComponent | TestTemplateComponent | TestSignalComponent
@@ -257,7 +260,7 @@ function runMaskCasesForMode(
     const { inputId } = FORM_MODE_CONFIG[mode];
 
     beforeEach(() => {
-        fixture = createFixture(mode);
+        fixture = createFixture(mode, ngxMaskOptions);
         component = fixture.componentInstance;
     });
 
@@ -441,6 +444,34 @@ describe('Demo App - Common Cases', () => {
 
     describe('Signal Forms', () => {
         runMaskCasesForMode('signal', commonCasesTests);
+    });
+});
+
+// Mirrors the demo's provideNgxMask({ maskAliases: { PHONE_BR: ... } }) setup in src/main.ts.
+describe('Demo App - Custom mask alias', () => {
+    const aliasOptions: NgxMaskOptions = {
+        maskAliases: { PHONE_BR: '(00) 00000-0000' },
+    };
+    const aliasCases: MaskTestConfig[] = [
+        {
+            name: 'Custom mask alias (PHONE_BR)',
+            mask: 'PHONE_BR',
+            testInput: '11987654321',
+            expectedDisplay: '(11) 98765-4321',
+            expectedFormValue: '11987654321',
+        },
+    ];
+
+    describe('Reactive Forms', () => {
+        runMaskCasesForMode('reactive', aliasCases, true, aliasOptions);
+    });
+
+    describe('Template-driven Forms', () => {
+        runMaskCasesForMode('template', aliasCases, false, aliasOptions);
+    });
+
+    describe('Signal Forms', () => {
+        runMaskCasesForMode('signal', aliasCases, false, aliasOptions);
     });
 });
 
