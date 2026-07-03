@@ -4,7 +4,7 @@ import { ReactiveFormsModule, FormControl } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideEnvironmentNgxMask, NgxMaskDirective, NgxMaskService } from 'ngx-mask';
 import type { NgxMaskOptions, NgxMaskConfig } from 'ngx-mask';
-import { Component, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { expect } from 'vitest';
 
 function createComponentWithDefaultConfigAndSimpleInputs(
@@ -21,6 +21,7 @@ function createComponentWithDefaultConfigAndSimpleInputs(
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input [mask]="mask" [formControl]="form" />`,
 })
 export class TestMaskSimpleInputsComponent {
@@ -214,12 +215,17 @@ describe('provideNgxMask', () => {
                     pattern: new RegExp('[a-zA-Z]'),
                 },
             },
+            maskAliases: { PHONE_BR: '(00) 00000-0000' },
+            defaultValueOnBlur: '0',
+            typeFromDecimals: true,
         };
         createComponentWithDefaultConfigAndSimpleInputs(allConfigValues);
         const service = TestBed.inject(NgxMaskService);
 
         // Exclude the below config keys from the test which do not exist in the service or cannot be tested.
-        const excludeConfig = ['maskFilled'];
+        // maskAliases is resolved from the injected config by the directive/pipe, never copied to the service.
+        // defaultValueOnBlur is read from the injected config by the directive at blur time.
+        const excludeConfig = ['maskFilled', 'maskAliases', 'defaultValueOnBlur'];
 
         // Ensure that all provided config values are passed through to the service.
         for (const key of Object.keys(allConfigValues)) {

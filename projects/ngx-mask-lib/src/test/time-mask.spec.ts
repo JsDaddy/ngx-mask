@@ -250,10 +250,9 @@ describe('Directive: Mask (Time)', () => {
     // heuristic reinterpreted the last two year digits as a day. The misfire hit
     // years whose digits [2..3] exceed 31 and whose last digit prepended to the
     // month digit exceeds 12 (1932, 1942, ..., 1999) — not the whole 1932-1999 range.
-    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
-    // gating on "day token precedes month in mask" fixes this case but broke
-    // 'M0-d0-0000' + showMaskTyped + leadZeroDateTime typing (delete.cy-spec.ts).
-    it.skip('Date 0000-M0-d0 lead zero should keep months 10-12 (issue #1513)', () => {
+    // Fixed by disabling the day-based month heuristics when the field immediately
+    // preceding the MONTH token in the mask is a year (3+ plain digit tokens).
+    it('Date 0000-M0-d0 lead zero should keep months 10-12 (issue #1513)', () => {
         component.leadZeroDateTime.set(true);
         component.mask.set('0000-M0-d0');
         equal('19901221', '1990-12-21', fixture);
@@ -264,9 +263,7 @@ describe('Directive: Mask (Time)', () => {
         equal('20101221', '2010-12-21', fixture);
     });
 
-    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
-    // see skip note above.
-    it.skip('Date 0000-M0-d0 lead zero boundary months (issue #1513)', () => {
+    it('Date 0000-M0-d0 lead zero boundary months (issue #1513)', () => {
         component.leadZeroDateTime.set(true);
         component.mask.set('0000-M0-d0');
         equal('19900101', '1990-01-01', fixture);
@@ -274,9 +271,7 @@ describe('Directive: Mask (Time)', () => {
         equal('199091', '1990-09-1', fixture);
     });
 
-    // TODO(#1513): day1monthPaste heuristic needs a backspace-safe discriminator —
-    // see skip note above.
-    it.skip('Date 0000-M0-d0 lead zero paste months 10-12 (issue #1513)', () => {
+    it('Date 0000-M0-d0 lead zero paste months 10-12 (issue #1513)', () => {
         component.leadZeroDateTime.set(true);
         component.mask.set('0000-M0-d0');
         equal('19321221', '1932-12-21', fixture, false, Paste);

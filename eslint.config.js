@@ -54,6 +54,12 @@ module.exports = tseslint.config(
         languageOptions: {
             parserOptions: {
                 project: ['./tsconfig.eslint.json'],
+                // Single-run inference (auto-enabled when CI=true) caches TS programs at
+                // module level. The angular-eslint builder lints both workspace projects in
+                // one process, so the second project reuses a stale program and crashes
+                // inside restrict-template-expressions (typeToString -> normalizeSlashes
+                // on undefined). Keep watch-program behavior in CI as well.
+                disallowAutomaticSingleRunInference: true,
             },
         },
         rules: {
@@ -171,6 +177,15 @@ module.exports = tseslint.config(
             ...angular.configs.templateAccessibility,
         ],
         rules: {},
+    },
+    {
+        // ChangeDetectionStrategy.Eager is required on these test-only components for
+        // synchronous change detection under zoneless testing (added by the ng22 core migration);
+        // it necessarily opts out of the OnPush strategy the rule below otherwise enforces.
+        files: ['projects/ngx-mask-lib/src/test/**/*.ts'],
+        rules: {
+            '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+        },
     },
     {
         files: ['**/*.js'],

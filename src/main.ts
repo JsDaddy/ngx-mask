@@ -4,7 +4,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideNgxMask } from 'ngx-mask';
 import { provideRouter } from '@angular/router';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { BaseHttpService } from '@libraries/base-http/base-http.service';
 import { DOMAIN } from '@libraries/token/token';
 import { GithubStarsService } from '@libraries/github/github-stars.service';
@@ -14,7 +14,7 @@ bootstrapApplication(AppComponent, {
     providers: [
         provideZonelessChangeDetection(),
         GithubStarsService,
-        provideHttpClient(),
+        provideHttpClient(withXhr()),
         {
             provide: DOMAIN,
             useValue: [BaseHttpService],
@@ -22,7 +22,11 @@ bootstrapApplication(AppComponent, {
         BaseHttpService,
         provideAnimations(),
         provideRouter([]),
-        provideNgxMask(),
+        provideNgxMask({
+            maskAliases: {
+                PHONE_BR: '(00) 00000-0000',
+            },
+        }),
         {
             provide: HIGHLIGHT_OPTIONS,
             useValue: {

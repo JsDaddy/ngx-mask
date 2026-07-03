@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
@@ -8,6 +8,7 @@ import { NgxMaskDirective } from 'ngx-mask';
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -24,6 +25,7 @@ import { NgxMaskDirective } from 'ngx-mask';
             [showMaskTyped]="showMaskTyped()"
             [placeHolderCharacter]="placeHolderCharacter()"
             [separatorLimit]="separatorLimit()"
+            [typeFromDecimals]="typeFromDecimals()"
             [hiddenInput]="hiddenInput()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
             [leadZeroDateTime]="leadZeroDateTime()"
@@ -65,6 +67,9 @@ export class TestMaskComponent {
     );
     public validation = signal<NgxMaskConfig['validation']>(this._config.validation);
     public separatorLimit = signal<NgxMaskConfig['separatorLimit']>(this._config.separatorLimit);
+    public typeFromDecimals = signal<NgxMaskConfig['typeFromDecimals']>(
+        this._config.typeFromDecimals
+    );
     public allowNegativeNumbers = signal<NgxMaskConfig['allowNegativeNumbers']>(
         this._config.allowNegativeNumbers
     );

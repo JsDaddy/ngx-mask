@@ -44,6 +44,8 @@ export class NgxMaskApplierService {
 
     public leadZero: NgxMaskConfig['leadZero'] = this._config.leadZero;
 
+    public typeFromDecimals: NgxMaskConfig['typeFromDecimals'] = this._config.typeFromDecimals;
+
     public apm: NgxMaskConfig['apm'] = this._config.apm;
 
     public inputTransformFn: NgxMaskConfig['inputTransformFn'] | null =
@@ -240,6 +242,81 @@ export class NgxMaskApplierService {
                     decimalMarker = this.decimalMarker.find(
                         (dm) => dm !== this.thousandSeparator
                     ) as '.' | ',';
+                }
+            }
+
+            // Issues #733/#1414/#1315: opt-in "banking" typing mode — typed digits fill
+            // the value from the decimal end, ATM/calculator style (5 -> 0.05 -> 0.57
+            // -> 5.73); backspace shifts digits back to the right. Only keystroke and
+            // backspace flows are reinterpreted; paste and writeValue keep the regular
+            // separator formatting. The early return leaves every existing separator
+            // path byte-identical when the option is off.
+            if (
+                this.typeFromDecimals &&
+                Number.isFinite(precision) &&
+                precision > 0 &&
+                !justPasted &&
+                !this.writingValue
+            ) {
+                result = this._formatFromDecimals(
+                    processedValue,
+                    precision,
+                    decimalMarker as string
+                );
+                this._shift.clear();
+                const res =
+                    result.includes(MaskExpression.MINUS) &&
+                    this.prefix &&
+                    this.allowNegativeNumbers
+                        ? `${MaskExpression.MINUS}${this.prefix}${result
+                              .split(MaskExpression.MINUS)
+                              .join(MaskExpression.EMPTY_STRING)}${this.suffix}`
+                        : result.length
+                          ? `${this.prefix}${result}${this.suffix}`
+                          : this.instantPrefix
+                            ? this.prefix
+                            : MaskExpression.EMPTY_STRING;
+                // Pin the caret to the end of the value part: every keystroke reshapes
+                // the whole string, so the in-place caret position is meaningless here.
+                cb(res.length - this.suffix.length - processedPosition, true);
+                return res;
+            }
+
+            // Issue #1250: typing an additional decimal marker into a value that
+            // already contains one must be a no-op — otherwise everything after the
+            // new marker is re-parsed as a fresh decimal part and the value is
+            // mangled (15.000,53 + ',' typed after the '1' -> 1,5). Remove the newly
+            // typed marker (the char right before the caret) and step the caret back.
+            // Paste keeps its own semantics (#1547 below: last marker wins), and
+            // backspace/writeValue flows cannot introduce a new marker.
+            if (!justPasted && !backspaced && !this.writingValue) {
+                const isDecimalMarkerChar = (char: string | undefined): boolean =>
+                    !!char &&
+                    char !== this.thousandSeparator &&
+                    (Array.isArray(this.decimalMarker)
+                        ? this.decimalMarker.includes(
+                              char as MaskExpression.COMMA | MaskExpression.DOT
+                          )
+                        : char === this.decimalMarker);
+                const prefixOffset =
+                    startsWithPrefix && !prefixAlreadyRemovedByCaller ? this.prefix.length : 0;
+                const typedMarkerIndex = processedPosition - prefixOffset - 1;
+                if (
+                    typedMarkerIndex >= 0 &&
+                    isDecimalMarkerChar(processedValue[typedMarkerIndex])
+                ) {
+                    let markerCount = 0;
+                    for (const char of processedValue) {
+                        if (isDecimalMarkerChar(char)) {
+                            markerCount++;
+                        }
+                    }
+                    if (markerCount > 1) {
+                        processedValue =
+                            processedValue.slice(0, typedMarkerIndex) +
+                            processedValue.slice(typedMarkerIndex + 1);
+                        stepBack = true;
+                    }
                 }
             }
 
@@ -684,6 +761,43 @@ export class NgxMaskApplierService {
                     }
                     if (maskExpression[cursor] === MaskExpression.MONTH) {
                         const monthsCount = 12;
+                        // Issue #1513: the backward-looking day/month windows below
+                        // assume the digits before the MONTH token belong to a DAY
+                        // field. In year-first masks with separators (e.g. 0000-M0-d0)
+                        // they read YEAR digits through the separator and shove a
+                        // spurious leading zero into the month. tokenAbutsDigitField
+                        // (#1523) only covers separator-less layouts, so derive field
+                        // ownership from the mask itself: locate the field (maximal
+                        // run of non-special tokens) immediately preceding this MONTH
+                        // token — a plain digit run of 3+ characters is a year, not a
+                        // day, and the day-based heuristics must not fire.
+                        let precedingFieldEnd = cursor - 1;
+                        while (
+                            precedingFieldEnd >= 0 &&
+                            this.specialCharacters.includes(
+                                maskExpression[precedingFieldEnd] as string
+                            )
+                        ) {
+                            precedingFieldEnd--;
+                        }
+                        let precedingFieldStart = precedingFieldEnd;
+                        while (
+                            precedingFieldStart >= 0 &&
+                            !this.specialCharacters.includes(
+                                maskExpression[precedingFieldStart] as string
+                            )
+                        ) {
+                            precedingFieldStart--;
+                        }
+                        const precedingField = maskExpression.slice(
+                            precedingFieldStart + 1,
+                            precedingFieldEnd + 1
+                        );
+                        const yearFieldPrecedesMonth =
+                            precedingField.length > 2 &&
+                            precedingField
+                                .split(MaskExpression.EMPTY_STRING)
+                                .every((token) => token === MaskExpression.NUMBER_ZERO);
                         // mask without day
                         const withoutDays: boolean =
                             cursor === 0 &&
@@ -703,6 +817,7 @@ export class NgxMaskApplierService {
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -718,6 +833,7 @@ export class NgxMaskApplierService {
                         // // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) > daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -730,6 +846,7 @@ export class NgxMaskApplierService {
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -985,11 +1102,7 @@ export class NgxMaskApplierService {
                 res = res.slice(0, separatorLimit.length);
             }
         }
-        const rgx = /(\d+)(\d{3})/;
-
-        while (thousandSeparatorChar && rgx.test(res)) {
-            res = res.replace(rgx, '$1' + thousandSeparatorChar + '$2');
-        }
+        res = this._applyThousandGrouping(res, thousandSeparatorChar);
 
         if (typeof precision === 'undefined') {
             return res + decimals;
@@ -998,6 +1111,47 @@ export class NgxMaskApplierService {
         }
         return res + decimals.substring(0, precision + 1);
     };
+
+    /**
+     * Formats a value for the `typeFromDecimals` mode: every digit of the raw value is
+     * read as one integer that is then split `precision` digits from the right
+     * (ATM/calculator style). Non-digit characters are ignored, so plain typing,
+     * mid-string edits and backspace all reduce to "digits shifted through the
+     * decimal marker".
+     */
+    private _formatFromDecimals(value: string, precision: number, decimalMarker: string): string {
+        const negative = this.allowNegativeNumbers && value.startsWith(MaskExpression.MINUS);
+        let digits = value.replace(/\D+/g, MaskExpression.EMPTY_STRING).replace(/^0+/, '');
+        if (!digits) {
+            return negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING;
+        }
+        const separatorLimit: string = this.separatorLimit.replace(
+            /\s/g,
+            MaskExpression.EMPTY_STRING
+        );
+        if (separatorLimit && +separatorLimit) {
+            // Dropping the overflow from the right rejects the most recently typed
+            // digits once the integer part has reached the configured limit.
+            digits = digits.slice(0, separatorLimit.length + precision);
+        }
+        digits = digits.padStart(precision + 1, MaskExpression.NUMBER_ZERO);
+        const integerPart = this._applyThousandGrouping(
+            digits.slice(0, digits.length - precision),
+            this.thousandSeparator
+        );
+        const decimalPart = digits.slice(digits.length - precision);
+        return `${negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING}${integerPart}${decimalMarker}${decimalPart}`;
+    }
+
+    /** Inserts `separator` between every 3-digit group of an integer-digit string. */
+    private _applyThousandGrouping(digits: string, separator: string): string {
+        const rgx = /(\d+)(\d{3})/;
+        let grouped = digits;
+        while (separator && rgx.test(grouped)) {
+            grouped = grouped.replace(rgx, '$1' + separator + '$2');
+        }
+        return grouped;
+    }
 
     private percentage = (str: string): boolean => {
         const sanitizedStr = str.replace(',', '.');

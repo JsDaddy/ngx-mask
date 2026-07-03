@@ -74,6 +74,11 @@ export const lists: ListItem[] = [
                 id: 13,
                 scrollTo: 'cpf-cnpj-alpha',
             },
+            {
+                content: 'Custom mask alias',
+                id: 14,
+                scrollTo: 'mask-aliases',
+            },
         ],
     },
     {
@@ -118,6 +123,11 @@ export const lists: ListItem[] = [
                 content: 'Keep Character Position',
                 id: 7,
                 scrollTo: 'keep000',
+            },
+            {
+                content: 'defaultValueOnBlur',
+                id: 8,
+                scrollTo: 'default-value-blur',
             },
         ],
     },
@@ -183,6 +193,11 @@ export const lists: ListItem[] = [
                 content: 'Zero separator',
                 id: 5,
                 scrollTo: 'sep0',
+            },
+            {
+                content: 'Banking mode',
+                id: 6,
+                scrollTo: 'banking',
             },
         ],
     },

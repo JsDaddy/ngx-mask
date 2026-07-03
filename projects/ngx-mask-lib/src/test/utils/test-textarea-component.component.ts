@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
@@ -8,6 +8,7 @@ import { NgxMaskDirective } from 'ngx-mask';
     selector: 'jsdaddy-open-source-test-textarea',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <textarea
             id="masked"
