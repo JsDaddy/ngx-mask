@@ -1,5 +1,9 @@
 import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
+// `defaultValueOnBlur` is a v22 directive input not yet present in the shared
+// MaskOptions type (git submodule) — extend it locally until the submodule catches up.
+type OptMaskOptions = MaskOptions & { _defaultValueOnBlur: string };
+
 export const OptDocs: ComDoc[] = [
     {
         header: 'Prefix (string)',
@@ -78,9 +82,16 @@ export const OptDocs: ComDoc[] = [
         id: 7,
         anchor: 'keep000',
     },
+    {
+        header: 'defaultValueOnBlur (string)',
+        text: 'When the input is left empty, the given default is written through the mask on blur',
+        code: `<input type='text' mask="separator.2" defaultValueOnBlur="0" >`,
+        id: 8,
+        anchor: 'default-value-blur',
+    },
 ];
 
-export const OptExamples: TExampleConfig<MaskOptions>[] = [
+export const OptExamples: TExampleConfig<OptMaskOptions>[] = [
     {
         _placeholder: 'prefix',
         _prefix: '+7 ',
@@ -148,6 +159,12 @@ export const OptExamples: TExampleConfig<MaskOptions>[] = [
         _keepCharacterPositions: true,
         _prefix: '$',
         _mask: '0000.00',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'defaultValueOnBlur',
+        _defaultValueOnBlur: '0',
+        _mask: 'separator.2',
         control: { initialValue: '', model: '' },
     },
 ];

@@ -2,7 +2,7 @@ import type { PipeTransform } from '@angular/core';
 import { inject, Pipe } from '@angular/core';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
-import { NGX_MASK_CONFIG } from './ngx-mask.config';
+import { NGX_MASK_CONFIG, resolveMaskAlias } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
@@ -23,12 +23,18 @@ export class NgxMaskPipe implements PipeTransform {
     public transform(
         value: string | number,
         mask: string,
-        { patterns, ...config }: Partial<NgxMaskConfig> = {} as Partial<NgxMaskConfig>
+        { patterns, maskAliases, ...config }: Partial<NgxMaskConfig> = {} as Partial<NgxMaskConfig>
     ): string {
         let processedValue: string | number = value;
 
+        // User-defined aliases expand BEFORE any other mask processing (incl. `||` handling).
+        const resolvedMask = resolveMaskAlias(mask, {
+            ...this.defaultOptions.maskAliases,
+            ...maskAliases,
+        });
+
         const currentConfig = {
-            maskExpression: mask,
+            maskExpression: resolvedMask,
             ...this.defaultOptions,
             ...config,
             patterns: {
@@ -41,8 +47,8 @@ export class NgxMaskPipe implements PipeTransform {
             (this._maskService as any)[key] = val;
         });
 
-        if (mask.includes('||')) {
-            const maskParts = mask.split('||');
+        if (resolvedMask.includes('||')) {
+            const maskParts = resolvedMask.split('||');
             if (maskParts.length > 1) {
                 this._maskExpressionArray = maskParts.sort(
                     (a: string, b: string) => a.length - b.length
@@ -55,14 +61,14 @@ export class NgxMaskPipe implements PipeTransform {
             }
         }
 
-        if (mask.includes(MaskExpression.CURLY_BRACKETS_LEFT)) {
+        if (resolvedMask.includes(MaskExpression.CURLY_BRACKETS_LEFT)) {
             return this._maskService.applyMask(
                 `${processedValue}`,
-                this._maskService._repeatPatternSymbols(mask)
+                this._maskService._repeatPatternSymbols(resolvedMask)
             );
         }
 
-        if (mask.startsWith(MaskExpression.SEPARATOR)) {
+        if (resolvedMask.startsWith(MaskExpression.SEPARATOR)) {
             if (config.decimalMarker) {
                 this._maskService.decimalMarker = config.decimalMarker;
             }
@@ -91,7 +97,10 @@ export class NgxMaskPipe implements PipeTransform {
                 processedValue &&
                 this._maskService.dropSpecialCharacters !== false
             ) {
-                processedValue = this._maskService._checkPrecision(mask, processedValue as string);
+                processedValue = this._maskService._checkPrecision(
+                    resolvedMask,
+                    processedValue as string
+                );
             }
 
             if (this._maskService.decimalMarker === MaskExpression.COMMA) {
@@ -105,10 +114,10 @@ export class NgxMaskPipe implements PipeTransform {
         }
 
         if (processedValue === null || typeof processedValue === 'undefined') {
-            return this._maskService.applyMask('', mask);
+            return this._maskService.applyMask('', resolvedMask);
         }
 
-        return this._maskService.applyMask(`${processedValue}`, mask);
+        return this._maskService.applyMask(`${processedValue}`, resolvedMask);
     }
 
     private _setMask(value: string) {

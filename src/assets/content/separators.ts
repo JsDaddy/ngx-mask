@@ -1,5 +1,9 @@
 import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
 
+// `typeFromDecimals` is a v22 directive input not yet present in the shared
+// MaskOptions type (git submodule) — extend it locally until the submodule catches up.
+type SepMaskOptions = MaskOptions & { _typeFromDecimals: boolean };
+
 export const SepDocs: ComDoc[] = [
     {
         header: 'Thousand separator',
@@ -36,9 +40,16 @@ export const SepDocs: ComDoc[] = [
         id: 5,
         anchor: 'sep0',
     },
+    {
+        header: 'Banking mode',
+        text: 'ATM-style typing: digits fill the value from the decimal end (1 → 0.01, 12 → 0.12, 123 → 1.23)',
+        code: `<input type='text' mask="separator.2" [typeFromDecimals]="true" thousandSeparator="," />`,
+        id: 6,
+        anchor: 'banking',
+    },
 ];
 
-export const SepExamples: TExampleConfig<MaskOptions>[] = [
+export const SepExamples: TExampleConfig<SepMaskOptions>[] = [
     {
         _placeholder: 'Separator',
         _mask: 'separator',
@@ -66,6 +77,13 @@ export const SepExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'separator.0',
         _mask: 'separator.0',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'Banking mode',
+        _mask: 'separator.2',
+        _typeFromDecimals: true,
+        _thousandSeparator: ',',
         control: { initialValue: '', model: '' },
     },
 ];

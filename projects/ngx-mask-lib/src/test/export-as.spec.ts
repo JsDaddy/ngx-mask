@@ -2,7 +2,7 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
-import { Component, viewChild } from '@angular/core';
+import { Component, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { expect } from 'vitest';
 
@@ -10,6 +10,7 @@ import { expect } from 'vitest';
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input mask="" #refMask="mask" /> <input mask="" #refNgxMask="ngxMask" /> `,
 })
 export class TestMaskComponent {

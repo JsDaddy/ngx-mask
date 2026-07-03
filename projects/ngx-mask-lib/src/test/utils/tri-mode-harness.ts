@@ -5,12 +5,13 @@ import {
     inject,
     runInInjectionContext,
     signal,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormField, disabled as disabledLogic, form, schema } from '@angular/forms/signals';
-import type { NgxMaskConfig } from 'ngx-mask';
+import type { NgxMaskConfig, NgxMaskOptions } from 'ngx-mask';
 import { NGX_MASK_CONFIG, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 export const TRI_MODES = ['reactive', 'template', 'signal'] as const;
@@ -27,6 +28,9 @@ export type TriModeMaskConfig = {
     allowNegativeNumbers?: boolean;
     specialCharacters?: string[];
     patterns?: NgxMaskConfig['patterns'];
+    showMaskTyped?: boolean;
+    /** Options forwarded to provideNgxMask() (DI-level config, e.g. maskAliases). */
+    providerOptions?: NgxMaskOptions;
 };
 
 export type TriModeHarness = {
@@ -74,11 +78,15 @@ export class TriModeConfigBase {
     public readonly allowNegativeNumbers = signal<NgxMaskConfig['allowNegativeNumbers']>(
         this._config.allowNegativeNumbers
     );
+    public readonly showMaskTyped = signal<NgxMaskConfig['showMaskTyped']>(
+        this._config.showMaskTyped
+    );
 }
 
 @Component({
     selector: 'jsdaddy-tri-mode-reactive-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -91,6 +99,7 @@ export class TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [formControl]="form" />
     `,
 })
@@ -101,6 +110,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
 @Component({
     selector: 'jsdaddy-tri-mode-template-test',
     imports: [FormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -113,6 +123,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [disabled]="disabledField()"
             [(ngModel)]="value" />
     `,
@@ -127,6 +138,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
 @Component({
     selector: 'jsdaddy-tri-mode-signal-test',
     imports: [FormField, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -139,6 +151,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [formField]="signalForm.value" />
     `,
 })
@@ -182,6 +195,9 @@ function applyConfig(host: TriModeConfigBase, config: TriModeMaskConfig): void {
     }
     if (config.patterns) {
         host.patterns.set(config.patterns);
+    }
+    if (typeof config.showMaskTyped === 'boolean') {
+        host.showMaskTyped.set(config.showMaskTyped);
     }
 }
 
@@ -281,13 +297,18 @@ function buildHarness(
 export async function createTriModeFixture(
     mode: TriMode,
     config: TriModeMaskConfig,
-    initialValue?: string,
+    /**
+     * A `number` initial value is deliberately allowed (issue #1590: `model(65432)`): the
+     * directive accepts `string | number` at runtime, so the number is passed through the
+     * string-typed bindings via a cast to exercise that path.
+     */
+    initialValue?: string | number,
     /** Disables the control BEFORE the first change detection pass (initially-disabled control). */
     initialDisabled?: boolean
 ): Promise<TriModeHarness> {
     TestBed.configureTestingModule({
         imports: [NgxMaskDirective],
-        providers: [provideNgxMask()],
+        providers: [provideNgxMask(config.providerOptions)],
     });
 
     let harness: TriModeHarness;
@@ -297,8 +318,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeReactiveComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.form.setValue(initialValue);
+            if (typeof initialValue !== 'undefined') {
+                component.form.setValue(initialValue as unknown as string);
             }
             if (initialDisabled) {
                 component.form.disable();
@@ -323,8 +344,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeTemplateComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.value.set(initialValue);
+            if (typeof initialValue !== 'undefined') {
+                component.value.set(initialValue as unknown as string);
             }
             if (initialDisabled) {
                 component.disabledField.set(true);
@@ -348,8 +369,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeSignalComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.model.set({ value: initialValue });
+            if (typeof initialValue !== 'undefined') {
+                component.model.set({ value: initialValue as unknown as string });
             }
             if (initialDisabled) {
                 component.disabledField.set(true);

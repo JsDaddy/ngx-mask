@@ -1,10 +1,10 @@
 {
     "name": "ngx-mask",
-    "version": "21.1.0",
+    "version": "22.0.0",
     "description": "Awesome ngx mask",
     "license": "MIT",
     "engines": {
-        "node": ">=16.0.0"
+        "node": "^22.22.3 || ^24.15.0 || >=26.0.0"
     },
     "angular-cli": {},
     "keywords": [
@@ -55,37 +55,40 @@
         "url": "https://github.com/JsDaddy/ngx-mask.git"
     },
     "dependencies": {
-        "@angular/animations": "21.2.17",
-        "@angular/common": "21.2.17",
-        "@angular/compiler": "21.2.17",
-        "@angular/core": "21.2.17",
-        "@angular/forms": "21.2.17",
-        "@angular/platform-browser": "21.2.17",
-        "@angular/router": "21.2.17",
+        "@angular/animations": "22.0.5",
+        "@angular/common": "22.0.5",
+        "@angular/compiler": "22.0.5",
+        "@angular/core": "22.0.5",
+        "@angular/forms": "22.0.5",
+        "@angular/platform-browser": "22.0.5",
+        "@angular/router": "22.0.5",
+        "baseline-browser-mapping": "^2.10.41",
+        "browserslist": "^4.28.4",
+        "caniuse-lite": "^1.0.30001800",
         "highlight.js": "11.11.1",
         "ngx-highlightjs": "14.0.1"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "21.2.17",
-        "@angular-eslint/builder": "21.4.0",
-        "@angular/cli": "21.2.17",
-        "@angular/compiler-cli": "21.2.17",
-        "@angular/language-service": "21.2.17",
-        "@angular/platform-browser-dynamic": "21.2.17",
+        "@angular-devkit/build-angular": "22.0.5",
+        "@angular-eslint/builder": "22.0.0",
+        "@angular/cli": "22.0.5",
+        "@angular/compiler-cli": "22.0.5",
+        "@angular/language-service": "22.0.5",
+        "@angular/platform-browser-dynamic": "22.0.5",
         "@commitlint/cli": "21.2.0",
         "@commitlint/config-conventional": "21.2.0",
-        "@eslint/js": "9.39.2",
+        "@eslint/js": "9.39.4",
         "@tailwindcss/postcss": "4.3.2",
         "@types/jest": "30.0.0",
         "@types/node": "26.1.0",
-        "angular-eslint": "21.4.0",
+        "angular-eslint": "22.0.0",
         "cypress": "15.18.0",
-        "eslint": "9.39.2",
+        "eslint": "9.39.4",
         "eslint-plugin-json": "4.0.1",
-        "globals": "14.0.0",
-        "jsdom": "27.4.0",
+        "globals": "17.7.0",
+        "jsdom": "29.1.1",
         "lint-staged": "17.0.8",
-        "ng-packagr": "21.2.5",
+        "ng-packagr": "22.0.1",
         "postcss": "8.5.16",
         "postcss-scss": "4.0.9",
         "prettier": "3.9.4",
@@ -94,10 +97,10 @@
         "stylelint": "17.14.0",
         "stylelint-config-recommended-scss": "17.0.1",
         "stylelint-prettier": "5.0.3",
-        "stylelint-scss": "7.0.0",
+        "stylelint-scss": "7.2.0",
         "tailwindcss": "4.3.2",
         "type-coverage": "2.29.7",
-        "typescript": "5.9.3",
+        "typescript": "6.0.3",
         "typescript-eslint": "8.62.1",
         "vitest": "4.1.9"
     },
@@ -114,5 +117,9 @@
             "server/**/*.ts",
             "server.ts"
         ]
+    },
+    "overrides": {
+        "browserslist": "4.28.4",
+        "caniuse-lite": "1.0.30001800"
     }
 }

@@ -43,12 +43,18 @@ describe('Test Date Hh:m0', () => {
                 thousandSeparator: signal(','),
             },
         });
+        // Caret lands mid-integer (between '78' and '9,20'), right before the existing
+        // decimal marker. Typing another '.' here is a duplicate decimal marker: issue
+        // #1250 — it must be rejected as a no-op instead of being accepted as a new
+        // marker and mangling the value ('123,456,789.20' -> '12,345,678.9', silently
+        // dropping the '20' fraction digits). The previous expectation ('12,345,678.9')
+        // encoded that bug.
         cy.get('#masked')
             .type('123456789.20')
             .type('{leftArrow}'.repeat(4))
             .type('.')
-            .should('have.value', '12,345,678.9')
-            .should('have.prop', 'selectionStart', 11);
+            .should('have.value', '123,456,789.20')
+            .should('have.prop', 'selectionStart', 10);
     });
 
     it('Mask separator.2 check cursor with value 100.0', () => {
@@ -91,12 +97,15 @@ describe('Test Date Hh:m0', () => {
                 thousandSeparator: signal('.'),
             },
         });
+        // Same duplicate-decimal-marker case as above (issue #1250), mirrored with
+        // comma as decimalMarker / dot as thousandSeparator. The previous expectation
+        // ('12.345.678,9') encoded the pre-fix mangling bug.
         cy.get('#masked')
             .type('123456789,20')
             .type('{leftArrow}'.repeat(4))
             .type(',')
-            .should('have.value', '12.345.678,9')
-            .should('have.prop', 'selectionStart', 11);
+            .should('have.value', '123.456.789,20')
+            .should('have.prop', 'selectionStart', 10);
     });
 
     it('when decimalMarker doenst set should have right position cursor thousandSeparator = .', () => {
