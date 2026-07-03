@@ -5,6 +5,9 @@
 - Angular 22 support ([#1617](https://github.com/JsDaddy/ngx-mask/issues/1617)) — built and tested against Angular 22.0.5
 - All dependencies updated to their latest versions (exact pins)
 - Custom named mask aliases ([#1376](https://github.com/JsDaddy/ngx-mask/issues/1376), [#1091](https://github.com/JsDaddy/ngx-mask/issues/1091)) — `provideNgxMask({ maskAliases: { PHONE_BR: '(00) 00000-0000' } })`, works in directive and pipe, supports `||` multi-masks
+- Banking typing mode ([#733](https://github.com/JsDaddy/ngx-mask/issues/733), [#1414](https://github.com/JsDaddy/ngx-mask/issues/1414), [#1315](https://github.com/JsDaddy/ngx-mask/issues/1315)) — opt-in `typeFromDecimals` config: digits type from the decimal end, ATM style (`5` → `0.05` → `0.57` → `5.73`)
+- Default value on blur ([#1435](https://github.com/JsDaddy/ngx-mask/issues/1435)) — `defaultValueOnBlur` input/config: empty inputs receive a masked fallback on blur without marking the form dirty
+- Configuration docs overhaul ([#1529](https://github.com/JsDaddy/ngx-mask/issues/1529)) — explicit standalone vs environment vs NgModule setup guide in USAGE/README
 
 ### Fix
 
