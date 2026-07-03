@@ -408,6 +408,27 @@ describe('Demo App - Common Cases', () => {
             expectedDisplay: 'AB',
             expectedFormValue: 'AB',
         },
+        {
+            name: 'IP address mask (IP)',
+            mask: 'IP',
+            testInput: '192.168.1.78',
+            expectedDisplay: '192.168.1.78',
+            expectedFormValue: '192168178',
+        },
+        {
+            name: 'CPF/CNPJ mask (CPF_CNPJ)',
+            mask: 'CPF_CNPJ',
+            testInput: '12345678901234',
+            expectedDisplay: '12.345.678/9012-34',
+            expectedFormValue: '12345678901234',
+        },
+        {
+            name: 'CPF/CNPJ alphanumeric mask (CPF_CNPJ_ALPHA)',
+            mask: 'CPF_CNPJ_ALPHA',
+            testInput: 'ABCDEF01234567',
+            expectedDisplay: 'AB.CDE.F01/2345-67',
+            expectedFormValue: 'ABCDEF01234567',
+        },
     ];
 
     describe('Reactive Forms', () => {
