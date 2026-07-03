@@ -1,3 +1,49 @@
+# 21.1.0(2026-07-02)
+
+### Feature
+
+- Add `CPF_CNPJ_ALPHA` alphanumeric CNPJ mask (PR [#1592](https://github.com/JsDaddy/ngx-mask/pull/1592))
+- Signal Forms (`[formField]`) fully supported: initial values, disabled schema, dynamic masks, validation — verified equivalent to Reactive and Template-driven across all mask types
+
+### Fix
+
+- Fix ([#1601](https://github.com/JsDaddy/ngx-mask/issues/1601)) — relax `FormValueControl` surface; no more conflicts with native `required`/`readonly`
+- Fix ([#1560](https://github.com/JsDaddy/ngx-mask/issues/1560)) — `onChange` no longer fires during `writeValue`; programmatic `setValue`/`patchValue` keeps the form pristine
+- Fix ([#1532](https://github.com/JsDaddy/ngx-mask/issues/1532)) — `separator` mask without explicit precision no longer throws `toFixed()` RangeError
+- Fix ([#1607](https://github.com/JsDaddy/ngx-mask/issues/1607), [#1614](https://github.com/JsDaddy/ngx-mask/issues/1614)) — directive no longer overrides `FormControl` disabled state on init; initially-disabled controls stay disabled
+- Fix ([#1355](https://github.com/JsDaddy/ngx-mask/issues/1355), [#1578](https://github.com/JsDaddy/ngx-mask/issues/1578)) — deleting the leading digit of a separator value no longer collapses remaining zeros (`1,000,000` → `000,000`, consistent for all lengths)
+- Fix ([#1512](https://github.com/JsDaddy/ngx-mask/issues/1512)) — an explicitly bound empty `[specialCharacters]="[]"` is respected instead of silently falling back to defaults
+- Fix ([#1551](https://github.com/JsDaddy/ngx-mask/issues/1551)) — pasting a value starting with doubled prefix characters no longer strips a prefix occurrence (regression from 18.0.1)
+- Fix ([#1571](https://github.com/JsDaddy/ngx-mask/issues/1571)) — caret lands at the end after pasting into a separator mask with a prefix
+- Fix ([#1347](https://github.com/JsDaddy/ngx-mask/issues/1347)) — multi-character `placeHolderCharacter` now emits a one-time warning (single character required)
+- Fix ([#1527](https://github.com/JsDaddy/ngx-mask/issues/1527), [#1543](https://github.com/JsDaddy/ngx-mask/issues/1543), [#1544](https://github.com/JsDaddy/ngx-mask/issues/1544), [#1545](https://github.com/JsDaddy/ngx-mask/issues/1545), [#1489](https://github.com/JsDaddy/ngx-mask/issues/1489)) — `keepCharacterPositions` overhaul: works without `showMaskTyped`, mid-value deletion leaves placeholder gaps, selection replacement preserves layout, keystrokes are no longer eaten at special-character boundaries, plays well with `leadZeroDateTime`
+- Fix ([#1615](https://github.com/JsDaddy/ngx-mask/issues/1615)) — programmatically-set values the mask cannot process at all (e.g. sentinel strings) pass through verbatim instead of being mangled (regression from 18.0.4)
+- Fix ([#1547](https://github.com/JsDaddy/ngx-mask/issues/1547)) — pasting values containing both `.` and `,` with the default array `decimalMarker` no longer drops digits (last marker wins as decimal)
+- Fix ([#1516](https://github.com/JsDaddy/ngx-mask/issues/1516)) — deleting digits before the decimal marker keeps the decimal part (`0.05` → `.05`, no more silent value corruption)
+- Fix ([#1572](https://github.com/JsDaddy/ngx-mask/issues/1572)) — caret lands after the decimal marker when typing `.` with a prefix and `leadZero`
+- Fix ([#1611](https://github.com/JsDaddy/ngx-mask/issues/1611)) — pasted/pre-populated dates parse correctly in month-first masks (`M0/d0/0000`: `01071941` → `01/07/1941`)
+- Fix ([#1612](https://github.com/JsDaddy/ngx-mask/issues/1612)) — `hiddenInput` with a custom pattern symbol no longer deletes two characters on a single backspace
+- Fix ([#1498](https://github.com/JsDaddy/ngx-mask/issues/1498)) — masks with multiple leading literals (`+(000)...`) auto-fill them again on the first typed character (regression from v17)
+- Fix ([#1492](https://github.com/JsDaddy/ngx-mask/issues/1492)) — numeric `FormControl` values in exponential notation (`7e-7`, `1e21`) expand to plain decimals instead of rendering garbage
+- Fix ([#1567](https://github.com/JsDaddy/ngx-mask/issues/1567)) — values beyond IEEE-754 precision (>15 significant digits) no longer get corrupted by rounding (`999999999999999.99` stays exact)
+- Fix ([#1504](https://github.com/JsDaddy/ngx-mask/issues/1504)) — selection replacement works when the value contains a literal `*`
+- Fix ([#1350](https://github.com/JsDaddy/ngx-mask/issues/1350)) — select-all + Backspace clears the input in one press (deterministic clear, fixes Firefox)
+- Fix ([#1583](https://github.com/JsDaddy/ngx-mask/issues/1583)) — `||` alternation masks validate short values that complete a shorter alternative (`1||0,N`: single `0` is valid again)
+- Fix ([#1523](https://github.com/JsDaddy/ngx-mask/issues/1523)) — date masks with digit tokens abutting `M0`/`d0` (`00M0d0`, `0000M0d0`) no longer misread year digits as day/month
+- Fix ([#1519](https://github.com/JsDaddy/ngx-mask/issues/1519)) — non-special `placeHolderCharacter` (e.g. `X`) no longer leaks into the unmasked model value
+- Fix ([#1495](https://github.com/JsDaddy/ngx-mask/issues/1495)) — initial values colliding with the suffix text (`'00'` with `suffix=":00"`) render instead of being stripped
+- Fix ([#1573](https://github.com/JsDaddy/ngx-mask/issues/1573)) — formatting no longer depends on the OS/browser locale (Edge with non-US regional settings altered values); configured markers are always authoritative
+- Fix ([#1379](https://github.com/JsDaddy/ngx-mask/issues/1379)) — an empty mask is a true passthrough: no programmatic value rewrites, native browser validation works
+- Fix ([#1305](https://github.com/JsDaddy/ngx-mask/issues/1305), [#1264](https://github.com/JsDaddy/ngx-mask/issues/1264)) — initial values render synchronously, so Material floating labels float on init
+- Fix ([#1293](https://github.com/JsDaddy/ngx-mask/issues/1293), [#1497](https://github.com/JsDaddy/ngx-mask/issues/1497)) — Android/Samsung IME: numeric masks process composition input live (model no longer stale until blur), deletions are detected via `InputEvent.inputType` (backspace works without keydown info)
+- Fix ([#1515](https://github.com/JsDaddy/ngx-mask/issues/1515)) — leading-optional masks (`999SSS`) validate correctly: mandatory tokens are position-aware enforced instead of always passing
+- Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
+- Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
+
+### Breaking
+
+- `NgxMaskDirective` no longer exposes `errors`, `dirty`, `invalid`, `pending`, `readonly`, `required`, `name` inputs (Signal Forms surface reduced to `value`/`disabled`/`touched`)
+
 # 21.0.1(2026-01-29)
 
 ### fix

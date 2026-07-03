@@ -5,7 +5,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { expect } from 'vitest';
+import { expect, vi } from 'vitest';
+import { pasteTest } from './utils/test-functions.component';
 
 describe('Event: paste', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -63,5 +64,101 @@ describe('Event: paste', () => {
         expect(inputDebuggerElement.nativeElement.value).equal('1,234,567');
 
         expect(inputDebuggerElement.nativeElement.selectionStart).equal(9);
+    });
+
+    it('should place caret at the end after paste with prefix and separator mask (#1571)', () => {
+        component.mask.set('separator.2');
+        component.prefix.set('$');
+        fixture.detectChanges();
+
+        const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
+        const inputTarget: HTMLInputElement = inputDebuggerElement.nativeElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+
+        const pasteData = new DataTransfer();
+        pasteData.setData('text', '123.45');
+        inputDebuggerElement.triggerEventHandler('paste', pasteData);
+        inputTarget.value = pasteData.getData('text/plain');
+        inputTarget.setSelectionRange(inputTarget.value.length, inputTarget.value.length);
+        inputDebuggerElement.triggerEventHandler('input', { target: inputTarget });
+
+        fixture.detectChanges();
+
+        expect(inputTarget.value).equal('$123.45');
+        expect(inputTarget.selectionStart).equal(7);
+    });
+
+    it('should place caret at the end after paste with prefix and separator mask with thousand separator (#1571)', () => {
+        component.mask.set('separator.2');
+        component.prefix.set('$');
+        component.thousandSeparator.set(',');
+        fixture.detectChanges();
+
+        const inputDebuggerElement = fixture.debugElement.query(By.css('#mask'));
+        const inputTarget: HTMLInputElement = inputDebuggerElement.nativeElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+
+        const pasteData = new DataTransfer();
+        pasteData.setData('text', '1234.56');
+        inputDebuggerElement.triggerEventHandler('paste', pasteData);
+        inputTarget.value = pasteData.getData('text/plain');
+        inputTarget.setSelectionRange(inputTarget.value.length, inputTarget.value.length);
+        inputDebuggerElement.triggerEventHandler('input', { target: inputTarget });
+
+        fixture.detectChanges();
+
+        expect(inputTarget.value).equal('$1,234.56');
+        expect(inputTarget.selectionStart).equal(9);
+    });
+
+    it('should keep pasted digits after a comma with default separator config (#1547)', () => {
+        component.mask.set('separator');
+        fixture.detectChanges();
+
+        // default decimalMarker is ['.', ','] — the comma is a decimal marker here,
+        // digits after it must not be dropped
+        expect(pasteTest('4,4', fixture)).equal('4,4');
+    });
+
+    it('should strip pasted thousand separators when comma is the thousand separator (#1547)', () => {
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
+        fixture.detectChanges();
+
+        expect(pasteTest('4,4', fixture)).equal('44');
+    });
+
+    it('should keep all digits when pasted value has both grouping commas and a decimal dot (#1547)', () => {
+        component.mask.set('separator.2');
+        fixture.detectChanges();
+
+        // default decimalMarker is ['.', ','] — only the last marker char can be
+        // the decimal marker, the commas are grouping and must not cut the value
+        expect(pasteTest('1,234.56', fixture)).equal('1 234.56');
+        expect(pasteTest('1,234,567.89', fixture)).equal('1 234 567.89');
+    });
+
+    it('should keep all digits when pasted value has grouping dots and a decimal comma (#1547)', () => {
+        component.mask.set('separator.2');
+        fixture.detectChanges();
+
+        expect(pasteTest('1.234,56', fixture)).equal('1 234,56');
+    });
+
+    it('should re-mask pasted value containing thousand separators (#1547)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(',');
+        fixture.detectChanges();
+
+        expect(pasteTest('1,234.56', fixture)).equal('1,234.56');
+    });
+
+    it('should re-mask pasted value with decimalMarker="," and thousandSeparator="." (#1547)', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        fixture.detectChanges();
+
+        expect(pasteTest('1.234,56', fixture)).equal('1.234,56');
     });
 });

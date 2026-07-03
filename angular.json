@@ -115,14 +115,6 @@
                         "lintFilePatterns": ["**/*.js", "**/*.ts", "**/*.html", "**/*.json"]
                     }
                 },
-                "ct": {
-                    "builder": "@nrwl/cypress:cypress",
-                    "options": {
-                        "cypressConfig": "projects/ngx-mask-lib/cypress.json",
-                        "tsConfig": "projects/ngx-mask-lib/tsconfig.cypress.json",
-                        "testingType": "component"
-                    }
-                },
                 "test": {
                     "builder": "@angular/build:unit-test",
                     "options": {

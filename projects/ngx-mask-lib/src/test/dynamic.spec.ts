@@ -311,6 +311,23 @@ describe('Directive: Mask (Dynamic)', () => {
         equal('DDDDD', 'D.D.D.D.D.', fixture);
     });
 
+    it('should validate single 0 for mask 1||0,N with custom patterns (#1583)', () => {
+        component.mask.set('1||0,N');
+        component.dropSpecialCharacters.set(false);
+        component.decimalMarker.set(',');
+        component.patterns.set({
+            N: { pattern: new RegExp('[0-9]') },
+            '0': { pattern: new RegExp('0') },
+            '1': { pattern: new RegExp('1') },
+        });
+        equal('0', '0', fixture);
+        expect(component.form.valid).equal(true);
+        equal('0,5', '0,5', fixture);
+        expect(component.form.valid).equal(true);
+        equal('1', '1', fixture);
+        expect(component.form.valid).equal(true);
+    });
+
     it('should work with only L', () => {
         component.mask.set('L.||L.L.||L.L.L.||L.L.L.L.||L.L.L.L.L.');
         equal('d', 'd.', fixture);

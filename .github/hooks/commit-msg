@@ -2,5 +2,5 @@
 
 set -e
 
-commit_msg=$(cat .git/COMMIT_EDITMSG)
+commit_msg=$(cat "$(git rev-parse --git-dir)/COMMIT_EDITMSG")
 echo "$commit_msg" | bun commitlint

@@ -11,11 +11,16 @@ describe('Directive: Mask (Delete)', () => {
             },
         });
 
+        // Note: before the #1544/#1489 fix the digit typed at the adjacent ") " special
+        // characters was silently dropped, so this test used to expect '(012) 45_-_890'
+        // (the '3' was eaten and the 11th digit slid in). Now all ten digits are kept and
+        // the 11th one is rejected, so the same backspaces blank different slots.
         cy.get('#masked')
             .type('01234567890')
+            .should('have.value', '(012) 345-6789')
             .type('{leftArrow}'.repeat(3))
             .type('{backspace}'.repeat(3))
-            .should('have.value', '(012) 45_-_890');
+            .should('have.value', '(012) 34_-_789');
     });
 
     it('should replace character to _ mask: S0S S0S', () => {
@@ -236,5 +241,122 @@ describe('Directive: Mask (Delete)', () => {
             .type('{del}')
             .should('have.value', '1234 5678 9101 1121')
             .should('have.prop', 'selectionStart', 15);
+    });
+
+    // #1545 keepCharacterPositions must work without showMaskTyped
+    it('should keep position on middle deletion without showMaskTyped mask: M0/d0/0000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('M0/d0/0000'),
+                keepCharacterPositions: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('12142020')
+            .should('have.value', '12/14/2020')
+            .type('{leftArrow}'.repeat(5))
+            .type('{backspace}')
+            .should('have.value', '12/1_/2020')
+            .type('4')
+            .should('have.value', '12/14/2020');
+    });
+
+    // #1543 leadZeroDateTime + keepCharacterPositions: re-typing into the gap must not shift
+    it('should restore deleted month digit with leadZeroDateTime mask: M0-d0-0000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('M0-d0-0000'),
+                keepCharacterPositions: signal(true),
+                leadZeroDateTime: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('5052025')
+            .should('have.value', '05-05-2025')
+            .type('{leftArrow}'.repeat(8))
+            .type('{backspace}')
+            .should('have.value', '0_-05-2025')
+            .type('5')
+            .should('have.value', '05-05-2025');
+    });
+
+    // #1544 / #1489 (adjacent special characters): 4th digit must not be dropped
+    it('should not drop digit typed before adjacent special characters mask: (999) 999-9999', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('(999) 999-9999'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('1234')
+            .should('have.value', '(123) 4__-____')
+            .type('567890123')
+            .should('have.value', '(123) 456-7890')
+            .should('have.prop', 'selectionStart', 14);
+    });
+
+    // #1527 selection replacement must keep the mask layout
+    it('should keep layout when replacing a selected segment mask: 000-000-000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('000-000-000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('111222333')
+            .should('have.value', '111-222-333')
+            .then(($el) => {
+                ($el[0] as HTMLInputElement).setSelectionRange(4, 7);
+            })
+            .type('4')
+            .should('have.value', '111-4__-333')
+            .should('have.prop', 'selectionStart', 5);
+    });
+
+    // #1527 (comment) selection + DEL must blank the segment, not corrupt the layout
+    it('should blank selected segment on del mask: 000-000-000', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('000-000-000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('111222333')
+            .should('have.value', '111-222-333')
+            .then(($el) => {
+                ($el[0] as HTMLInputElement).setSelectionRange(4, 7);
+            })
+            .type('{del}')
+            .should('have.value', '111-___-333');
+    });
+
+    // #1489 (case 1): mask starting with a special character, ctrl+a then type
+    it('should keep first typed symbol after select-all when mask starts with special char', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('(000) 000-0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+
+        cy.get('#masked')
+            .type('1234567890')
+            .should('have.value', '(123) 456-7890')
+            .type('{selectall}')
+            .type('9')
+            .should('have.value', '(9__) ___-____')
+            .should('have.prop', 'selectionStart', 2);
     });
 });

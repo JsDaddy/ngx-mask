@@ -104,6 +104,27 @@ export const ComDocs: ComDoc[] = [
         id: 10,
         anchor: 'allow-few-mask',
     },
+    {
+        header: 'IP address',
+        text: '',
+        code: `<input mask="IP" />`,
+        id: 11,
+        anchor: 'ip-address',
+    },
+    {
+        header: 'CPF/CNPJ',
+        text: '',
+        code: `<input mask="CPF_CNPJ" />`,
+        id: 12,
+        anchor: 'cpf-cnpj',
+    },
+    {
+        header: 'CPF/CNPJ alphanumeric',
+        text: '',
+        code: `<input mask="CPF_CNPJ_ALPHA" />`,
+        id: 13,
+        anchor: 'cpf-cnpj-alpha',
+    },
 ];
 
 export const ComExamples: TExampleConfig<MaskOptions>[] = [
@@ -188,6 +209,21 @@ export const ComExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'Allow few mask in one expression',
         _mask: '00||SS',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'IP address',
+        _mask: 'IP',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'CPF/CNPJ',
+        _mask: 'CPF_CNPJ',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'CPF/CNPJ alphanumeric',
+        _mask: 'CPF_CNPJ_ALPHA',
         control: { initialValue: '', model: '' },
     },
 ];

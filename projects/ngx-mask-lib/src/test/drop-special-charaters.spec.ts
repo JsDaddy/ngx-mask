@@ -167,4 +167,12 @@ describe('Directive: Mask (Drop special characters)', () => {
         equal('1231231123112333', '(123) 123-1123 ext. 112333', fixture);
         expect(component.form.value).equal('1231231123112333');
     });
+
+    it('should keep chars matched by the mask literal when specialCharacters is explicitly bound to [] (#1512)', () => {
+        component.mask.set('A*@A*.A*');
+        component.dropSpecialCharacters.set(false);
+        component.specialCharacters.set([]);
+
+        equal('as@df.gh', 'as@df.gh', fixture);
+    });
 });
