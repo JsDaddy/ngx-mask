@@ -68,6 +68,7 @@ export class NgxMaskDirective
     public clearIfNotMatch = input<NgxMaskConfig['clearIfNotMatch'] | null>(null);
     public validation = input<NgxMaskConfig['validation'] | null>(null);
     public separatorLimit = input<NgxMaskConfig['separatorLimit'] | null>('');
+    public typeFromDecimals = input<NgxMaskConfig['typeFromDecimals'] | null>(null);
     public allowNegativeNumbers = input<NgxMaskConfig['allowNegativeNumbers'] | null>(null);
     public leadZeroDateTime = input<NgxMaskConfig['leadZeroDateTime'] | null>(null);
     public leadZero = input<NgxMaskConfig['leadZero'] | null>(null);
@@ -240,6 +241,7 @@ export class NgxMaskDirective
             clearIfNotMatch,
             validation,
             separatorLimit,
+            typeFromDecimals,
             allowNegativeNumbers,
             leadZeroDateTime,
             leadZero,
@@ -381,6 +383,9 @@ export class NgxMaskDirective
         }
         if (separatorLimit) {
             this._maskService.separatorLimit = separatorLimit.currentValue;
+        }
+        if (typeFromDecimals) {
+            this._maskService.typeFromDecimals = typeFromDecimals.currentValue;
         }
         if (leadZeroDateTime) {
             this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;

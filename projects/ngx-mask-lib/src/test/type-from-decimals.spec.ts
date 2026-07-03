@@ -230,6 +230,60 @@ describe('Directive: Mask (typeFromDecimals)', () => {
         });
     });
 
+    describe('directive input (no provider config)', () => {
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+                providers: [provideNgxMask()],
+            });
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('should activate the mode via the [typeFromDecimals] input alone', () => {
+            component.mask.set('separator.2');
+            component.typeFromDecimals.set(true);
+
+            expect(typeTest('5', fixture)).toBe('0.05');
+            expect(typeTest('573', fixture)).toBe('5.73');
+        });
+
+        it('should combine the input with thousandSeparator', () => {
+            component.mask.set('separator.2');
+            component.typeFromDecimals.set(true);
+            component.thousandSeparator.set(',');
+
+            expect(typeTest('123456', fixture)).toBe('1,234.56');
+        });
+
+        it('should keep regular typing when the input stays at the config default (false)', () => {
+            component.mask.set('separator.2');
+
+            expect(typeTest('1234.56', fixture)).toBe('1 234.56');
+        });
+    });
+
+    describe('directive input overrides provider config', () => {
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+                providers: [provideNgxMask({ typeFromDecimals: true })],
+            });
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('should disable the mode with [typeFromDecimals]="false" over config true', () => {
+            component.mask.set('separator.2');
+            component.typeFromDecimals.set(false);
+
+            expect(typeTest('1234.56', fixture)).toBe('1 234.56');
+            expect(typeTest('5', fixture)).toBe('5');
+        });
+    });
+
     describe('option disabled (default)', () => {
         beforeEach(() => {
             TestBed.configureTestingModule({

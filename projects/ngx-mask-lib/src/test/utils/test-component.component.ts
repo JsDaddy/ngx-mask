@@ -25,6 +25,7 @@ import { NgxMaskDirective } from 'ngx-mask';
             [showMaskTyped]="showMaskTyped()"
             [placeHolderCharacter]="placeHolderCharacter()"
             [separatorLimit]="separatorLimit()"
+            [typeFromDecimals]="typeFromDecimals()"
             [hiddenInput]="hiddenInput()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
             [leadZeroDateTime]="leadZeroDateTime()"
@@ -66,6 +67,9 @@ export class TestMaskComponent {
     );
     public validation = signal<NgxMaskConfig['validation']>(this._config.validation);
     public separatorLimit = signal<NgxMaskConfig['separatorLimit']>(this._config.separatorLimit);
+    public typeFromDecimals = signal<NgxMaskConfig['typeFromDecimals']>(
+        this._config.typeFromDecimals
+    );
     public allowNegativeNumbers = signal<NgxMaskConfig['allowNegativeNumbers']>(
         this._config.allowNegativeNumbers
     );
