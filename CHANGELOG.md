@@ -35,6 +35,8 @@
 - Fix ([#1573](https://github.com/JsDaddy/ngx-mask/issues/1573)) — formatting no longer depends on the OS/browser locale (Edge with non-US regional settings altered values); configured markers are always authoritative
 - Fix ([#1379](https://github.com/JsDaddy/ngx-mask/issues/1379)) — an empty mask is a true passthrough: no programmatic value rewrites, native browser validation works
 - Fix ([#1305](https://github.com/JsDaddy/ngx-mask/issues/1305), [#1264](https://github.com/JsDaddy/ngx-mask/issues/1264)) — initial values render synchronously, so Material floating labels float on init
+- Fix ([#1293](https://github.com/JsDaddy/ngx-mask/issues/1293), [#1497](https://github.com/JsDaddy/ngx-mask/issues/1497)) — Android/Samsung IME: numeric masks process composition input live (model no longer stale until blur), deletions are detected via `InputEvent.inputType` (backspace works without keydown info)
+- Fix ([#1515](https://github.com/JsDaddy/ngx-mask/issues/1515)) — leading-optional masks (`999SSS`) validate correctly: mandatory tokens are position-aware enforced instead of always passing
 - Fix signal forms initial value rendering unmasked for literal-inserting masks (date/time/separator)
 - Fix signal forms `FormField` echo corrupting masks with ambiguous unmasked form (IP)
 
