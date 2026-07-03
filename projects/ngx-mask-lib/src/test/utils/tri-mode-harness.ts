@@ -28,6 +28,7 @@ export type TriModeMaskConfig = {
     allowNegativeNumbers?: boolean;
     specialCharacters?: string[];
     patterns?: NgxMaskConfig['patterns'];
+    showMaskTyped?: boolean;
 };
 
 export type TriModeHarness = {
@@ -75,6 +76,9 @@ export class TriModeConfigBase {
     public readonly allowNegativeNumbers = signal<NgxMaskConfig['allowNegativeNumbers']>(
         this._config.allowNegativeNumbers
     );
+    public readonly showMaskTyped = signal<NgxMaskConfig['showMaskTyped']>(
+        this._config.showMaskTyped
+    );
 }
 
 @Component({
@@ -93,6 +97,7 @@ export class TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [formControl]="form" />
     `,
 })
@@ -116,6 +121,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [disabled]="disabledField()"
             [(ngModel)]="value" />
     `,
@@ -143,6 +149,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
             [thousandSeparator]="thousandSeparator()"
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
+            [showMaskTyped]="showMaskTyped()"
             [formField]="signalForm.value" />
     `,
 })
@@ -186,6 +193,9 @@ function applyConfig(host: TriModeConfigBase, config: TriModeMaskConfig): void {
     }
     if (config.patterns) {
         host.patterns.set(config.patterns);
+    }
+    if (typeof config.showMaskTyped === 'boolean') {
+        host.showMaskTyped.set(config.showMaskTyped);
     }
 }
 
@@ -285,7 +295,12 @@ function buildHarness(
 export async function createTriModeFixture(
     mode: TriMode,
     config: TriModeMaskConfig,
-    initialValue?: string,
+    /**
+     * A `number` initial value is deliberately allowed (issue #1590: `model(65432)`): the
+     * directive accepts `string | number` at runtime, so the number is passed through the
+     * string-typed bindings via a cast to exercise that path.
+     */
+    initialValue?: string | number,
     /** Disables the control BEFORE the first change detection pass (initially-disabled control). */
     initialDisabled?: boolean
 ): Promise<TriModeHarness> {
@@ -301,8 +316,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeReactiveComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.form.setValue(initialValue);
+            if (typeof initialValue !== 'undefined') {
+                component.form.setValue(initialValue as unknown as string);
             }
             if (initialDisabled) {
                 component.form.disable();
@@ -327,8 +342,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeTemplateComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.value.set(initialValue);
+            if (typeof initialValue !== 'undefined') {
+                component.value.set(initialValue as unknown as string);
             }
             if (initialDisabled) {
                 component.disabledField.set(true);
@@ -352,8 +367,8 @@ export async function createTriModeFixture(
             const fixture = TestBed.createComponent(TriModeSignalComponent);
             const component = fixture.componentInstance;
             applyConfig(component, config);
-            if (typeof initialValue === 'string') {
-                component.model.set({ value: initialValue });
+            if (typeof initialValue !== 'undefined') {
+                component.model.set({ value: initialValue as unknown as string });
             }
             if (initialDisabled) {
                 component.disabledField.set(true);

@@ -243,6 +243,40 @@ export class NgxMaskApplierService {
                 }
             }
 
+            // Issue #1250: typing an additional decimal marker into a value that
+            // already contains one must be a no-op — otherwise everything after the
+            // new marker is re-parsed as a fresh decimal part and the value is
+            // mangled (15.000,53 + ',' typed after the '1' -> 1,5). Remove the newly
+            // typed marker (the char right before the caret) and step the caret back.
+            // Paste keeps its own semantics (#1547 below: last marker wins), and
+            // backspace/writeValue flows cannot introduce a new marker.
+            if (!justPasted && !backspaced && !this.writingValue) {
+                const isDecimalMarkerChar = (char: string): boolean =>
+                    char !== this.thousandSeparator &&
+                    (Array.isArray(this.decimalMarker)
+                        ? this.decimalMarker.includes(
+                              char as MaskExpression.COMMA | MaskExpression.DOT
+                          )
+                        : char === this.decimalMarker);
+                const prefixOffset =
+                    startsWithPrefix && !prefixAlreadyRemovedByCaller ? this.prefix.length : 0;
+                const typedMarkerIndex = processedPosition - prefixOffset - 1;
+                if (
+                    typedMarkerIndex >= 0 &&
+                    isDecimalMarkerChar(
+                        processedValue[typedMarkerIndex] ?? MaskExpression.EMPTY_STRING
+                    ) &&
+                    processedValue
+                        .split(MaskExpression.EMPTY_STRING)
+                        .filter((char) => isDecimalMarkerChar(char)).length > 1
+                ) {
+                    processedValue =
+                        processedValue.slice(0, typedMarkerIndex) +
+                        processedValue.slice(typedMarkerIndex + 1);
+                    stepBack = true;
+                }
+            }
+
             // Issue #1547: a pasted value may contain grouping separators that are
             // also configured decimal markers (default decimalMarker is ['.', ',']),
             // e.g. '1,234.56'. Only the last marker character can actually be the

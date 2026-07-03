@@ -120,7 +120,14 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         // Handle empty input value with mask typed
         if (!inputValue && this.showMaskTyped) {
-            this.formControlResult(this.prefix);
+            // #1590: only a USER-driven clear may propagate back to the model. When this
+            // skeleton render originates from writeValue() (writingValue), emitting '' here
+            // would be a view->model write inside a model->view sync — with nested CVA
+            // wrappers the real initial value arrives in a LATER microtask than the initial
+            // null write, and this echo overwrote it before it ever reached the view.
+            if (!this.writingValue) {
+                this.formControlResult(this.prefix);
+            }
             return `${this.prefix}${this.maskIsShown}${this.suffix}`;
         }
 
