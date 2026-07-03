@@ -77,6 +77,9 @@ export class NgxMaskDirective
     public outputTransformFn = input<NgxMaskConfig['outputTransformFn'] | null>(null);
     public keepCharacterPositions = input<NgxMaskConfig['keepCharacterPositions'] | null>(null);
     public instantPrefix = input<NgxMaskConfig['instantPrefix'] | null>(null);
+    // Read directly at blur time (signal is always current) and falls back to the DI
+    // config, so no ngOnChanges mirroring into the service is needed (#1435).
+    public defaultValueOnBlur = input<NgxMaskConfig['defaultValueOnBlur']>(null);
 
     public value = model<string>('');
     public disabled = input(false, { transform: booleanAttribute });
@@ -1077,6 +1080,7 @@ export class NgxMaskDirective
     public onBlur(e: Event): void {
         if (this._maskValue()) {
             const el: HTMLInputElement = (e as FocusEvent).target as HTMLInputElement;
+            const pristineBeforeDefault = this._applyDefaultValueOnBlur(el);
             if (
                 this._maskService.leadZero &&
                 el.value.length > 0 &&
@@ -1111,10 +1115,44 @@ export class NgxMaskDirective
                 }
             }
             this._maskService.clearIfNotMatchFn();
+            if (pristineBeforeDefault !== null) {
+                // The default-value emission (and a possible leadZero padding pass above)
+                // ran through the view-change pipeline, which dirties the control. A
+                // blur-time programmatic write must not change dirtiness, so restore the
+                // pre-write pristine state. Touched is NOT restored — blur legitimately
+                // touches the control (onTouch below).
+                this._restoreControlStateAfterWrite(pristineBeforeDefault, false);
+                this._changeDetectorRef.markForCheck();
+            }
         }
         this._isFocused.set(false);
         this._maskService._isFocused.set(false);
         this.onTouch();
+    }
+
+    /**
+     * Issue #1435 (defaultValueOnBlur): when configured — via the directive input or the
+     * DI config — and the control's unmasked value is empty on blur (covers '', a bare
+     * prefix/suffix and the showMaskTyped skeleton), writes the default through the
+     * regular mask pipeline: applyMask renders the masked display and emits the usual
+     * model output (dropSpecialCharacters/outputTransformFn applied) via formControlResult.
+     * Returns the control's pre-write pristine state for the caller to restore once the
+     * whole blur pass is done, or `null` when no default was applied.
+     */
+    private _applyDefaultValueOnBlur(el: HTMLInputElement): boolean | null {
+        const defaultValue = this.defaultValueOnBlur() ?? this._config.defaultValueOnBlur;
+        if (!defaultValue || this._maskService.removeMask(el.value)) {
+            return null;
+        }
+        const ngControl = this._resolveNgControl();
+        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const displayValue = this._maskService.applyMask(
+            defaultValue,
+            this._maskService.maskExpression
+        );
+        el.value = displayValue;
+        this._inputValue.set(displayValue);
+        return wasPristine;
     }
 
     @HostListener('click', ['$event'])

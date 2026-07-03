@@ -216,13 +216,16 @@ describe('provideNgxMask', () => {
                 },
             },
             maskAliases: { PHONE_BR: '(00) 00000-0000' },
+            defaultValueOnBlur: '0',
+            typeFromDecimals: true,
         };
         createComponentWithDefaultConfigAndSimpleInputs(allConfigValues);
         const service = TestBed.inject(NgxMaskService);
 
         // Exclude the below config keys from the test which do not exist in the service or cannot be tested.
         // maskAliases is resolved from the injected config by the directive/pipe, never copied to the service.
-        const excludeConfig = ['maskFilled', 'maskAliases'];
+        // defaultValueOnBlur is read from the injected config by the directive at blur time.
+        const excludeConfig = ['maskFilled', 'maskAliases', 'defaultValueOnBlur'];
 
         // Ensure that all provided config values are passed through to the service.
         for (const key of Object.keys(allConfigValues)) {
