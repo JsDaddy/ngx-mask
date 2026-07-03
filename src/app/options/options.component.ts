@@ -1,4 +1,5 @@
 import {
+    ChangeDetectionStrategy,
     Component,
     effect,
     ElementRef,
@@ -32,7 +33,7 @@ import type {
     selector: 'jsdaddy-open-source-options',
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss'],
-    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [ScrollService, AccordionService],
     imports: [
         NgTemplateOutlet,
@@ -49,28 +50,31 @@ import type {
     ],
 })
 export class OptionsComponent {
-    public cardDocs = input<ComDoc[]>();
-    public cardExamplesConfig = input<(TExampleConfig<MaskOptions> | { _pipe: string })[]>([], {
-        alias: 'cardExamples',
-    });
+    public readonly cardDocs = input<ComDoc[]>();
+    public readonly cardExamplesConfig = input<(TExampleConfig<MaskOptions> | { _pipe: string })[]>(
+        [],
+        {
+            alias: 'cardExamples',
+        }
+    );
 
-    public cardExamples = signal<(TExample<MaskOptions> | { _pipe: string })[]>([]);
+    protected readonly cardExamples = signal<(TExample<MaskOptions> | { _pipe: string })[]>([]);
 
-    public cards = viewChildren<string, ElementRef<HTMLElement>>('cards', {
+    protected readonly cards = viewChildren<string, ElementRef<HTMLElement>>('cards', {
         read: ElementRef,
     });
 
-    public readonly phone = '123456789';
-    public readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
-    public readonly specialCharacters = initialConfig.specialCharacters;
-    public readonly outputTransformFn = initialConfig.outputTransformFn;
-    public readonly inputTransformFn = initialConfig.inputTransformFn;
+    protected readonly phone = '123456789';
+    protected readonly openSourceOptionsPath = OpenSourcePath.OPTIONS;
+    protected readonly specialCharacters = initialConfig.specialCharacters;
+    protected readonly outputTransformFn = initialConfig.outputTransformFn;
+    protected readonly inputTransformFn = initialConfig.inputTransformFn;
 
     private readonly scrollService = inject(ScrollService);
     private readonly accordionService = inject(AccordionService);
     private readonly injector = inject(Injector);
 
-    public readonly activeCardId = this.scrollService.activeCard;
+    protected readonly activeCardId = this.scrollService.activeCard;
 
     public constructor() {
         effect(() => {

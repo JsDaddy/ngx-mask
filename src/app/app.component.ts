@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 import { OptDocs, OptExamples } from 'src/assets/content/optional';
 import { lists } from 'src/assets/content/lists';
 import { SepDocs, SepExamples } from 'src/assets/content/separators';
@@ -24,11 +24,26 @@ import { VersionToken } from '@libraries/version/version.token';
 
 declare const VERSION: string;
 
+type CardContent = {
+    docs: ComDoc[];
+    examples: (TExampleConfig<MaskOptions> | { _pipe: string })[];
+};
+
+const CARD_CONTENT: Readonly<Record<number, CardContent>> = {
+    1: { docs: ComDocs, examples: ComExamples },
+    2: { docs: OptDocs, examples: OptExamples },
+    3: { docs: SepDocs, examples: SepExamples },
+    4: { docs: OthDocs, examples: OthExamples },
+    5: { docs: ParserAndFormatterDocs, examples: FormatAndParserExamples },
+};
+
+const DEFAULT_CARD_CONTENT: CardContent = { docs: ComDocs, examples: ComExamples };
+
 @Component({
     selector: 'jsdaddy-open-source-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: true,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         OptionsComponent,
         HeaderComponent,
@@ -39,44 +54,24 @@ declare const VERSION: string;
     providers: [{ provide: VersionToken, useValue: VERSION }],
 })
 export class AppComponent {
-    public docs = signal<ComDoc[]>(ComDocs);
-    public examples = signal<(TExampleConfig<MaskOptions> | { _pipe: string })[]>(ComExamples);
-
-    public readonly lists: ListItem[] = lists;
-    public readonly githubMaskLink = LinkPath.NGX_MASK;
-    public readonly title = 'Ngx-Mask';
-    public readonly subtitle = 'Angular plugin to make masks on form fields and html elements';
-    public readonly chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
-
     private readonly selectedCardId = signal<number>(1);
 
-    public switchCard(cardId: number): void {
-        if (this.selectedCardId() === cardId) {
-            return;
-        }
-        this.selectedCardId.set(cardId);
+    private readonly selectedCardContent = computed<CardContent>(
+        () => CARD_CONTENT[this.selectedCardId()] ?? DEFAULT_CARD_CONTENT
+    );
 
-        switch (cardId) {
-            case 2:
-                this.docs.set(OptDocs);
-                this.examples.set(OptExamples);
-                break;
-            case 3:
-                this.docs.set(SepDocs);
-                this.examples.set(SepExamples);
-                break;
-            case 4:
-                this.docs.set(OthDocs);
-                this.examples.set(OthExamples);
-                break;
-            case 5:
-                this.docs.set(ParserAndFormatterDocs);
-                this.examples.set(FormatAndParserExamples);
-                break;
-            default:
-                this.docs.set(ComDocs);
-                this.examples.set(ComExamples);
-                break;
-        }
+    protected readonly docs = computed<ComDoc[]>(() => this.selectedCardContent().docs);
+    protected readonly examples = computed<(TExampleConfig<MaskOptions> | { _pipe: string })[]>(
+        () => this.selectedCardContent().examples
+    );
+
+    protected readonly lists: ListItem[] = lists;
+    protected readonly githubMaskLink = LinkPath.NGX_MASK;
+    protected readonly title = 'Ngx-Mask';
+    protected readonly subtitle = 'Angular plugin to make masks on form fields and html elements';
+    protected readonly chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
+
+    protected switchCard(cardId: number): void {
+        this.selectedCardId.set(cardId);
     }
 }
