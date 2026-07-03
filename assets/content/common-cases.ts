@@ -125,6 +125,15 @@ export const ComDocs: ComDoc[] = [
         id: 13,
         anchor: 'cpf-cnpj-alpha',
     },
+    {
+        header: 'Custom mask alias',
+        text: 'Define named aliases once in the config and reference them by name.',
+        code: `provideNgxMask({ maskAliases: { PHONE_BR: '(00) 00000-0000' } })
+
+<input mask="PHONE_BR" />`,
+        id: 14,
+        anchor: 'mask-aliases',
+    },
 ];
 
 export const ComExamples: TExampleConfig<MaskOptions>[] = [
@@ -224,6 +233,11 @@ export const ComExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'CPF/CNPJ alphanumeric',
         _mask: 'CPF_CNPJ_ALPHA',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'Custom mask alias (PHONE_BR)',
+        _mask: 'PHONE_BR',
         control: { initialValue: '', model: '' },
     },
 ];

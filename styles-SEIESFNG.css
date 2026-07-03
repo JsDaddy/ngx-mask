@@ -361,6 +361,9 @@ code.hljs {
   .relative {
     position: relative;
   }
+  .static {
+    position: static;
+  }
   .top-0 {
     top: 0;
   }
@@ -1079,4 +1082,4 @@ code.hljs {
 }
 
 /* angular:styles/global:styles */
-/*# sourceMappingURL=styles-UG6GZ7ND.css.map */
+/*# sourceMappingURL=styles-SEIESFNG.css.map */
