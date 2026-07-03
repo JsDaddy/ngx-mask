@@ -178,7 +178,14 @@ NGX-MASK follows Angular's official support policy, supporting Active and LTS ve
 
 ## Quick Start
 
-### For Angular 15+ (Standalone)
+`ngx-mask` ships as a standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) — there is no `NgxMaskModule` in current versions. Configuration is registered through one of two provider functions:
+
+- **`provideEnvironmentNgxMask(config?)`** — application-wide config. Use it once in `bootstrapApplication` / `app.config.ts` (or a root `NgModule`'s `providers`).
+- **`provideNgxMask(config?)`** — injector-level config. Use it in a component's or feature's `providers` to configure/override the options for that subtree only.
+
+Directive inputs (e.g. `[thousandSeparator]`) always override any provider config. See [USAGE.md](USAGE.md#configuration) for the full decision guide, examples, and common pitfalls.
+
+### Standalone Applications
 
 #### Application-wide Setup with Default Config
 
@@ -212,35 +219,36 @@ bootstrapApplication(AppComponent, { providers: [provideEnvironmentNgxMask(maskC
 export class MyFeatureComponent {}
 ```
 
-### For Angular < 15 (NgModule)
+### NgModule-based Applications
 
-#### Application-wide Setup with Default Config
+Module-based apps import the standalone directive/pipe into `imports` and register the provider function:
 
 ```typescript
-import { NgxMaskModule } from 'ngx-mask';
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
 
-@NgModule({ imports: [NgxMaskModule.forRoot()] })
+@NgModule({
+    imports: [NgxMaskDirective, NgxMaskPipe],
+    exports: [NgxMaskDirective, NgxMaskPipe],
+    providers: [provideEnvironmentNgxMask()],
+})
 export class AppModule {}
 ```
 
-#### With Custom Configuration
+#### Migrating from ngx-mask ≤ 14 (`NgxMaskModule`)
+
+`NgxMaskModule.forRoot()` / `forChild()` only exist in ngx-mask 14.x and older (Angular < 15):
 
 ```typescript
-import { NgxMaskModule, NgxMaskConfig } from 'ngx-mask';
-
-const maskConfig: Partial<NgxMaskConfig> = { validation: false };
-
+// Before (ngx-mask <= 14)
 @NgModule({ imports: [NgxMaskModule.forRoot(maskConfig)] })
 export class AppModule {}
-```
 
-#### Feature-level Configuration
-
-```typescript
-import { NgxMaskModule } from 'ngx-mask';
-
-@NgModule({ imports: [NgxMaskModule.forChild()] })
-export class FeatureModule {}
+// After (current ngx-mask)
+@NgModule({
+    imports: [NgxMaskDirective],
+    providers: [provideEnvironmentNgxMask(maskConfig)],
+})
+export class AppModule {}
 ```
 
 ## Related Projects

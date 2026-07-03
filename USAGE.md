@@ -32,6 +32,96 @@ You could path any valid config options, for example thousandSeparator and suffi
 | UUUU           | ASDF           |
 | LLLL           | asdf           |
 
+## Configuration
+
+`ngx-mask` ships as a standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`). There is **no `NgxMaskModule`** in current versions — `NgxMaskModule.forRoot()` only exists in ngx-mask 14.x and older. Whatever your app structure, you always import the directive/pipe directly and register the configuration through a provider function.
+
+**Which provider function should I use?**
+
+- `provideEnvironmentNgxMask(config?)` — application-wide configuration. Use it once in `bootstrapApplication` / `app.config.ts` (or in a root `NgModule`'s `providers`). It returns `EnvironmentProviders`, so Angular prevents you from accidentally registering it at the component level.
+- `provideNgxMask(config?)` — injector-level configuration. Use it in a component's (or route's/feature `NgModule`'s) `providers` to configure or override the mask options for that subtree only.
+
+Both accept the same `NgxMaskOptions` object (or a factory function returning one). The options you pass are merged over the **library defaults** — so if a component provides `provideNgxMask()`, the resulting config **replaces** the environment config for that subtree (options set only at the environment level are not inherited). Individual directive inputs (e.g. `[thousandSeparator]`) always win over any provider config.
+
+### Standalone applications (`bootstrapApplication` / `app.config.ts`)
+
+```typescript
+// app.config.ts
+import { provideEnvironmentNgxMask } from 'ngx-mask';
+
+export const appConfig: ApplicationConfig = {
+    providers: [provideEnvironmentNgxMask({ validation: false })],
+};
+```
+
+```typescript
+// any component that uses the mask
+import { NgxMaskDirective } from 'ngx-mask';
+
+@Component({
+    imports: [NgxMaskDirective],
+    template: `<input mask="0000" />`,
+})
+export class MyComponent {}
+```
+
+### Per-component override
+
+```typescript
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+
+@Component({
+    imports: [NgxMaskDirective],
+    providers: [provideNgxMask({ thousandSeparator: ',' })],
+    template: `<input mask="separator.2" />`,
+})
+export class PriceInputComponent {}
+```
+
+### NgModule-based applications
+
+Module-based apps are still supported — import the standalone directive/pipe into the `imports` of your `NgModule` and register the provider function:
+
+```typescript
+import { NgxMaskDirective, NgxMaskPipe, provideEnvironmentNgxMask } from 'ngx-mask';
+
+@NgModule({
+    imports: [NgxMaskDirective, NgxMaskPipe],
+    exports: [NgxMaskDirective, NgxMaskPipe],
+    providers: [provideEnvironmentNgxMask()],
+})
+export class AppModule {}
+```
+
+Migrating from ngx-mask ≤ 14:
+
+```typescript
+// Before (ngx-mask <= 14)
+@NgModule({ imports: [NgxMaskModule.forRoot(maskConfig)] })
+export class AppModule {}
+
+// After (current ngx-mask)
+@NgModule({
+    imports: [NgxMaskDirective],
+    providers: [provideEnvironmentNgxMask(maskConfig)],
+})
+export class AppModule {}
+```
+
+### Pipe configuration
+
+The `mask` pipe reads the same provider config; per-usage overrides are passed as the pipe's second argument:
+
+```html
+<span>{{ value | mask: 'separator' : { thousandSeparator: ',', suffix: ' sm' } }}</span>
+```
+
+### Common pitfalls
+
+- **`NullInjectorError: No provider for InjectionToken ngx-mask config`** — the directive/pipe is used without any provider in scope. Add `provideEnvironmentNgxMask()` to your bootstrap providers (or `provideNgxMask()` to the component).
+- **`NgxMaskModule` not found** — you are reading instructions for ngx-mask ≤ 14. Use the standalone imports + provider functions shown above.
+- **Config seems ignored** — a closer `provideNgxMask()` in a parent component replaces the environment config for that subtree, and directive inputs override both.
+
 ## Mask Options
 
 You can define your custom options for all directives (as object in the mask module) or for each (as attributes for directive). If you override this parameter, you have to provide all the special characters (default one are not included).
@@ -219,6 +309,63 @@ If the `showMaskTyped` parameter is enabled, this setting customizes the charact
 ### clearIfNotMatch (boolean)
 
 You can choose clear the input if the input value **not match** the mask, default value is `false`.
+
+### typeFromDecimals (boolean)
+
+Opt-in "banking" typing mode for separator masks with a fixed precision (`separator.N`, N > 0). When enabled, typed digits fill the value from the decimal end, ATM/calculator style: typing `5` shows `0.05`, then `7` shows `0.57`, then `3` shows `5.73`. Backspace shifts digits back to the right (`5.73` → `0.57`). Pasted values and values written from the model keep the regular separator formatting. Works together with `thousandSeparator`, `prefix`/`suffix`, `allowNegativeNumbers` and `separatorLimit`. Default value is `false`.
+
+This is a **config-only** option — enable it via `provideNgxMask`:
+
+```typescript
+provideNgxMask({ typeFromDecimals: true });
+```
+
+```html
+<input type="text" mask="separator.2" thousandSeparator="," />
+<!-- typing 1 2 3 4 5 6 renders: 0.01 → 0.12 → 1.23 → 12.34 → 123.45 → 1,234.56 -->
+```
+
+The displayed value always carries the full precision while typing — that is inherent to the mode.
+
+### defaultValueOnBlur (string)
+
+When set, the given raw value is written through the regular mask pipeline on blur whenever the control's unmasked value is empty (an empty input, a bare prefix/suffix, or the untouched `showMaskTyped` skeleton). The display shows the masked default, the model receives the usual output (`dropSpecialCharacters` / `outputTransformFn` applied), and the write does not mark the form dirty. Default value is `null` (current behavior — empty inputs stay empty).
+
+#### Usage
+
+```html
+<input type="text" mask="separator.2" defaultValueOnBlur="0" />
+```
+
+```text
+User clears the input and blurs
+Displayed value: 0
+Model value: 0
+```
+
+With `showMaskTyped` the default fills the leading mask slots and the placeholder skeleton covers the rest:
+
+```html
+<input type="text" mask="0000" [showMaskTyped]="true" defaultValueOnBlur="9" />
+```
+
+```text
+User blurs the empty input
+Displayed value: 9___
+Model value: 9
+```
+
+It can also be set application-wide via the provider config: `provideNgxMask({ defaultValueOnBlur: '0' })`.
+
+If you need conditional or computed defaults instead of a fixed value, combine `inputTransformFn` / `outputTransformFn` programmatically:
+
+```typescript
+// Model side: never emit an empty value
+public outputTransformFn = (value: string | number | undefined | null) => (value === '' || value == null ? 0 : value);
+
+// View side: render empty incoming model values as '0'
+public inputTransformFn = (value: unknown) => (value === '' || value == null ? '0' : (value as string | number));
+```
 
 ### Pipe with mask expression and custom Pattern ([string, pattern])
 
