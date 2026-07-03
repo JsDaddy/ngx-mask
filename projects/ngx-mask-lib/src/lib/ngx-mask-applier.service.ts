@@ -718,6 +718,43 @@ export class NgxMaskApplierService {
                     }
                     if (maskExpression[cursor] === MaskExpression.MONTH) {
                         const monthsCount = 12;
+                        // Issue #1513: the backward-looking day/month windows below
+                        // assume the digits before the MONTH token belong to a DAY
+                        // field. In year-first masks with separators (e.g. 0000-M0-d0)
+                        // they read YEAR digits through the separator and shove a
+                        // spurious leading zero into the month. tokenAbutsDigitField
+                        // (#1523) only covers separator-less layouts, so derive field
+                        // ownership from the mask itself: locate the field (maximal
+                        // run of non-special tokens) immediately preceding this MONTH
+                        // token — a plain digit run of 3+ characters is a year, not a
+                        // day, and the day-based heuristics must not fire.
+                        let precedingFieldEnd = cursor - 1;
+                        while (
+                            precedingFieldEnd >= 0 &&
+                            this.specialCharacters.includes(
+                                maskExpression[precedingFieldEnd] as string
+                            )
+                        ) {
+                            precedingFieldEnd--;
+                        }
+                        let precedingFieldStart = precedingFieldEnd;
+                        while (
+                            precedingFieldStart >= 0 &&
+                            !this.specialCharacters.includes(
+                                maskExpression[precedingFieldStart] as string
+                            )
+                        ) {
+                            precedingFieldStart--;
+                        }
+                        const precedingField = maskExpression.slice(
+                            precedingFieldStart + 1,
+                            precedingFieldEnd + 1
+                        );
+                        const yearFieldPrecedesMonth =
+                            precedingField.length > 2 &&
+                            precedingField
+                                .split(MaskExpression.EMPTY_STRING)
+                                .every((token) => token === MaskExpression.NUMBER_ZERO);
                         // mask without day
                         const withoutDays: boolean =
                             cursor === 0 &&
@@ -737,6 +774,7 @@ export class NgxMaskApplierService {
                         //  month<12 && day<10 for input
                         const day2monthInput: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -752,6 +790,7 @@ export class NgxMaskApplierService {
                         // // day<10 && month<12 for paste whole data
                         const day1monthPaste: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) > daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
@@ -764,6 +803,7 @@ export class NgxMaskApplierService {
                         // 10<day<31 && month<12 for paste whole data
                         const day2monthPaste: boolean =
                             !tokenAbutsDigitField &&
+                            !yearFieldPrecedesMonth &&
                             Number(inputValueSliceMinusThreeMinusOne) <= daysCount &&
                             !this.specialCharacters.includes(
                                 inputValueSliceMinusThreeMinusOne as string
