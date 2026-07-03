@@ -473,11 +473,34 @@ export class NgxMaskDirective
                     } else if (maskValue.indexOf(key) !== -1) {
                         counterOfOpt++;
                     }
-                    if (
-                        maskValue.indexOf(key) !== -1 &&
-                        processedValue.length >= maskValue.indexOf(key)
-                    ) {
-                        return null;
+                    const firstOptionalIndex = maskValue.indexOf(key);
+                    if (firstOptionalIndex !== -1 && processedValue.length >= firstOptionalIndex) {
+                        // #1515: the early "everything before the first optional token is
+                        // filled" return is only sound for trailing-optional layouts. When a
+                        // mandatory token follows the first optional one (e.g. `999SSS`,
+                        // indexOf === 0) it used to mark EVERY value as valid.
+                        const hasMandatoryAfterOptional = maskValue
+                            .slice(firstOptionalIndex)
+                            .split(MaskExpression.EMPTY_STRING)
+                            .some(
+                                (symbol: string) =>
+                                    !!this._maskService.patterns[symbol] &&
+                                    !this._maskService.patterns[symbol]?.optional
+                            );
+                        if (!hasMandatoryAfterOptional) {
+                            return null;
+                        }
+                        if (!this.prefix() && !this.suffix() && this._isPlainTokenMask(maskValue)) {
+                            // Position-aware check: match the value against the mask allowing
+                            // optional tokens to be skipped; every mandatory token must be
+                            // consumed (catches `12a` for `999SSS`, which a pure length
+                            // check cannot).
+                            return this._matchesMaskWithOptionalSkip(processedValue, maskValue)
+                                ? null
+                                : this._createValidationError(processedValue);
+                        }
+                        // Non-plain masks (prefix/suffix, exotic symbols) fall through to the
+                        // legacy length check below (`maskValue.length - counterOfOpt`).
                     }
                     if (counterOfOpt === maskValue.length) {
                         return null;
@@ -587,8 +610,30 @@ export class NgxMaskDirective
     @HostListener('input', ['$event'])
     public onInput(e: Event): void {
         this._maskService.isInitialized = true;
-        // If IME is composing text, we wait for the composed text.
-        if (this._isComposing()) {
+        // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
+        // backspace is undetectable from keydown alone and all _code()-based deletion
+        // branches misfire (cursor jumps, "stuck" backspace — #1497). The input event's
+        // inputType is the reliable source: derive the deletion code from it.
+        const inputType: string | undefined = (e as InputEvent).inputType;
+        if (inputType === 'deleteContentBackward') {
+            this._code.set(MaskExpression.BACKSPACE);
+        } else if (inputType === 'deleteContentForward') {
+            this._code.set(MaskExpression.DELETE);
+        } else if (
+            inputType &&
+            (this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE)
+        ) {
+            // A non-delete edit that produced no meaningful keydown (IME insertion,
+            // context-menu paste): clear the stale deletion code so the edit is not
+            // processed as a backspace.
+            this._code.set(inputType);
+        }
+        // If IME is composing text, we wait for the composed text — but only when the mask
+        // can actually accept letters. Purely numeric masks gain nothing from composition,
+        // and some Android IMEs (Samsung Keyboard) deliver every keystroke as
+        // insertCompositionText without firing compositionend until blur, which would leave
+        // the FormControl stale for the whole edit (#1293).
+        if (this._isComposing() && this._maskAcceptsLetterInput()) {
             return;
         }
         const el: HTMLInputElement = (e as InputEvent).target as HTMLInputElement;
@@ -981,6 +1026,30 @@ export class NgxMaskDirective
         }
     }
 
+    /**
+     * Whether any pattern slot of the current mask expression can accept a letter.
+     * IME composition is only meaningful for such masks; for purely numeric masks
+     * (digit patterns, separator, date/time, IP, CPF_CNPJ) waiting for compositionend
+     * only delays the model sync — and Samsung Keyboard may never fire it until blur
+     * (#1293). Unknown/letterless probe failures fall back to `false` (process live).
+     */
+    private _maskAcceptsLetterInput(): boolean {
+        const patterns = this._maskService.patterns;
+        const maskExpression = this._maskService.maskExpression;
+        for (const symbol of maskExpression) {
+            const pattern = patterns[symbol]?.pattern;
+            if (!pattern) {
+                continue;
+            }
+            // Re-create without sticky/global flags: test() on those is stateful.
+            const probe = new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, ''));
+            if (probe.test('a') || probe.test('A')) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // IME starts
     @HostListener('compositionstart')
     public onCompositionStart(): void {
@@ -991,6 +1060,12 @@ export class NgxMaskDirective
     @HostListener('compositionend', ['$event'])
     public onCompositionEnd(e: Event): void {
         this._isComposing.set(false);
+        if (!this._maskAcceptsLetterInput()) {
+            // For letterless masks every edit was already processed live in onInput
+            // (#1293); reprocessing the same value through the paste path would
+            // double-apply the mask.
+            return;
+        }
         this._justPasted.set(true);
         this.onInput(e);
     }
@@ -1122,7 +1197,15 @@ export class NgxMaskDirective
             // User finalize their choice from IME composition, so trigger onInput() for the composed text.
             if (e.key === 'Enter') {
                 this.onCompositionEnd(event);
+                return;
             }
+            // Android IMEs can keep a single composition open across many keystrokes
+            // (#1293): still capture the pre-edit value and selection that onInput
+            // relies on when it processes edits during composition.
+            const composingEl = e.target as HTMLInputElement;
+            this._inputValue.set(composingEl.value);
+            this._maskService.selStart = composingEl.selectionStart;
+            this._maskService.selEnd = composingEl.selectionEnd;
             return;
         }
 
@@ -1632,6 +1715,58 @@ export class NgxMaskDirective
                   : alternative.length;
             return processedValue.length >= requiredLength;
         });
+    }
+
+    /**
+     * True when every character of the mask expression is either a pattern token or a
+     * special character — i.e. the mask has no quantifiers (`*`, `?`), curly-bracket
+     * repetitions or other constructs the position-aware matcher does not model.
+     */
+    private _isPlainTokenMask(mask: string): boolean {
+        return mask
+            .split(MaskExpression.EMPTY_STRING)
+            .every(
+                (symbol: string) =>
+                    !!this._maskService.patterns[symbol] ||
+                    this._maskService.specialCharacters.includes(symbol)
+            );
+    }
+
+    /**
+     * Backtracking match of a value against a mask mixing optional and mandatory pattern
+     * tokens (#1515, e.g. `999SSS`). Optional tokens may be left unfilled; special
+     * characters may be absent from the value (dropSpecialCharacters). The value is valid
+     * when it is fully consumed and every remaining mask token is optional or special.
+     */
+    private _matchesMaskWithOptionalSkip(value: string, mask: string): boolean {
+        const patterns = this._maskService.patterns;
+        const match = (maskIndex: number, valueIndex: number): boolean => {
+            if (valueIndex === value.length) {
+                return mask
+                    .slice(maskIndex)
+                    .split(MaskExpression.EMPTY_STRING)
+                    .every((symbol: string) => !patterns[symbol] || !!patterns[symbol]?.optional);
+            }
+            if (maskIndex === mask.length) {
+                return false;
+            }
+            const maskSymbol = mask[maskIndex] as string;
+            const valueSymbol = value[valueIndex] as string;
+            const pattern = patterns[maskSymbol];
+            if (pattern) {
+                if (pattern.pattern.test(valueSymbol) && match(maskIndex + 1, valueIndex + 1)) {
+                    return true;
+                }
+                return !!pattern.optional && match(maskIndex + 1, valueIndex);
+            }
+            // Special character: consume it when present in the value, otherwise treat it
+            // as dropped (dropSpecialCharacters).
+            if (valueSymbol === maskSymbol && match(maskIndex + 1, valueIndex + 1)) {
+                return true;
+            }
+            return match(maskIndex + 1, valueIndex);
+        };
+        return match(0, 0);
     }
 
     private _createValidationError(actualValue: string): ValidationErrors {
