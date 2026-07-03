@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { expect } from 'vitest';
 @Component({
     selector: 'jsdaddy-open-source-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="separator.2" thousandSeparator="," [formControl]="control" />`,
 })
 class InitialSeparatorValueComponent {
@@ -27,6 +28,7 @@ class InitialSeparatorValueComponent {
 @Component({
     selector: 'jsdaddy-open-source-digit-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formControl]="control" />`,
 })
 class InitialDigitValueComponent {

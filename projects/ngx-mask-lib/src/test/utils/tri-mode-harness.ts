@@ -5,6 +5,7 @@ import {
     inject,
     runInInjectionContext,
     signal,
+    ChangeDetectionStrategy,
 } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
@@ -79,6 +80,7 @@ export class TriModeConfigBase {
 @Component({
     selector: 'jsdaddy-tri-mode-reactive-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -101,6 +103,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
 @Component({
     selector: 'jsdaddy-tri-mode-template-test',
     imports: [FormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"
@@ -127,6 +130,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
 @Component({
     selector: 'jsdaddy-tri-mode-signal-test',
     imports: [FormField, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             id="mask"

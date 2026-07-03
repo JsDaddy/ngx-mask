@@ -1,4 +1,11 @@
-import { Component, Injector, inject, runInInjectionContext, signal } from '@angular/core';
+import {
+    Component,
+    Injector,
+    inject,
+    runInInjectionContext,
+    signal,
+    ChangeDetectionStrategy,
+} from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -10,6 +17,7 @@ import { typeTest } from './utils/test-functions.component';
 @Component({
     selector: 'jsdaddy-open-source-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formControl]="form" />`,
 })
 class TestMaskComponent {
@@ -19,6 +27,7 @@ class TestMaskComponent {
 @Component({
     selector: 'jsdaddy-phone-test',
     imports: [FormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form #phoneForm="ngForm">
             <input
@@ -40,6 +49,7 @@ class TestPhoneMaskComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskComponent {
@@ -51,6 +61,7 @@ class TestSignalMaskComponent {
 @Component({
     selector: 'jsdaddy-initially-disabled-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formControl]="form" />`,
 })
 class TestInitiallyDisabledMaskComponent {
@@ -67,6 +78,7 @@ const disabledSchema = schema<{ value: string }>((path) => {
 @Component({
     selector: 'jsdaddy-signal-mask-disabled-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskDisabledComponent {
@@ -80,6 +92,7 @@ class TestSignalMaskDisabledComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-dynamic-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input [mask]="mask()" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskDynamicComponent {
@@ -92,6 +105,7 @@ class TestSignalMaskDynamicComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-drop-special-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input
         mask="000-000"
         [dropSpecialCharacters]="false"
@@ -106,6 +120,7 @@ class TestSignalMaskDropSpecialComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-separator-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input
         mask="separator.2"
         [leadZero]="true"
@@ -127,6 +142,7 @@ const requiredPatternSchema = schema<{ value: string }>((path) => {
 @Component({
     selector: 'jsdaddy-signal-mask-validation-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [validation]="true" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskValidationComponent {
@@ -140,6 +156,7 @@ class TestSignalMaskValidationComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-or-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="(00) 00000000||+00 (00) 00000000" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskOrComponent {
@@ -151,6 +168,7 @@ class TestSignalMaskOrComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-date-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="d0/M0/0000" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskDateComponent {
@@ -162,6 +180,7 @@ class TestSignalMaskDateComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-time-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="Hh:m0:s0" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskTimeComponent {
@@ -173,6 +192,7 @@ class TestSignalMaskTimeComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-percent-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="percent" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskPercentComponent {
@@ -184,6 +204,7 @@ class TestSignalMaskPercentComponent {
 @Component({
     selector: 'jsdaddy-signal-mask-prefix-suffix-test',
     imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" prefix="$ " suffix=" USD" [formField]="signalForm.value" />`,
 })
 class TestSignalMaskPrefixSuffixComponent {

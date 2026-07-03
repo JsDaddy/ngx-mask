@@ -1,5 +1,5 @@
 import type { Mock } from 'vitest';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { vi, expect } from 'vitest';
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
 })
 class TestMaskComponent {

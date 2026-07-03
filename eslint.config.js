@@ -173,6 +173,15 @@ module.exports = tseslint.config(
         rules: {},
     },
     {
+        // ChangeDetectionStrategy.Eager is required on these test-only components for
+        // synchronous change detection under zoneless testing (added by the ng22 core migration);
+        // it necessarily opts out of the OnPush strategy the rule below otherwise enforces.
+        files: ['projects/ngx-mask-lib/src/test/**/*.ts'],
+        rules: {
+            '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+        },
+    },
+    {
         files: ['**/*.js'],
         extends: [eslint.configs.recommended],
         languageOptions: {

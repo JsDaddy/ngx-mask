@@ -33,7 +33,10 @@
             <ng-container
                 *ngTemplateOutlet="
                     exampleTmpl;
-                    context: { $implicit: cardExamples()?.[i], placeholder: tile.header }
+                    context: {
+                        $implicit: $safeNavigationMigration(cardExamples()?.[i]),
+                        placeholder: tile.header,
+                    }
                 " />
         </div>
     </div>

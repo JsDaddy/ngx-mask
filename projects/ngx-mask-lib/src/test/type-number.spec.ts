@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
@@ -9,6 +9,7 @@ import { equal } from './utils/test-functions.component';
     selector: 'jsdaddy-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input id="maska" type="number" [mask]="mask()" [formControl]="form" /> `,
 })
 export class TestTypeNumber {
