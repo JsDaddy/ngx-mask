@@ -619,6 +619,8 @@ provideNgxMask({
 
 Alias keys should be written in UPPER_SNAKE case. They must not shadow the built-in tokens (`IP`, `CPF_CNPJ`, `CPF_CNPJ_ALPHA`, ...) — such aliases are ignored with a one-time console warning and the built-in mask wins. The alias map is resolved at the DI-config level, so it is static per injector: changing it at runtime is not supported.
 
+Security note: alias values are mask expressions evaluated by the library, at the same trust level as the `mask` attribute itself. Define them statically in your application code and never feed untrusted user input into `maskAliases` values.
+
 ### Function maskFilled
 
 #### Usage

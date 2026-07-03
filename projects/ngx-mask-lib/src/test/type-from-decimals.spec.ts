@@ -175,6 +175,59 @@ describe('Directive: Mask (typeFromDecimals)', () => {
             typeTest('573', fixture);
             expect(component.form.value).toBe('5.73');
         });
+
+        it('should stay inert for separator.0 (zero precision — regular typing behavior)', () => {
+            component.mask.set('separator.0');
+            component.thousandSeparator.set(',');
+
+            expect(typeTest('1234', fixture)).toBe('1,234');
+            expect(typeTest('5', fixture)).toBe('5');
+        });
+
+        it('should stay inert for a bare separator mask (no precision — regular typing behavior)', () => {
+            component.mask.set('separator');
+
+            expect(typeTest('1234', fixture)).toBe('1 234');
+            expect(typeTest('1234.5', fixture)).toBe('1 234.5');
+        });
+
+        it('should not double-pad on blur with leadZero (display already carries full precision)', () => {
+            component.mask.set('separator.2');
+            component.leadZero.set(true);
+            const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+            const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+
+            expect(typeTest('573', fixture)).toBe('5.73');
+
+            debugElement.triggerEventHandler('blur', { target: inputTarget });
+            fixture.detectChanges();
+
+            expect(inputTarget.value).toBe('5.73');
+            expect(component.form.value).toBe('5.73');
+        });
+
+        it('should give the model the displayed value with dropSpecialCharacters: false', () => {
+            component.mask.set('separator.2');
+            component.thousandSeparator.set(',');
+            component.dropSpecialCharacters.set(false);
+
+            expect(typeTest('123456', fixture)).toBe('1,234.56');
+            expect(component.form.value).toBe('1,234.56');
+        });
+
+        it('should ignore typed letters and extra decimal markers (digits only)', () => {
+            component.mask.set('separator.2');
+
+            expect(typeTest('a5b7c', fixture)).toBe('0.57');
+            expect(typeTest('5..7', fixture)).toBe('0.57');
+        });
+
+        it('should survive a garbage paste without crashing (regular paste semantics)', () => {
+            component.mask.set('separator.2');
+
+            equal('abc', '', fixture, false, Paste);
+            equal('1.2.3', '12.3', fixture, false, Paste);
+        });
     });
 
     describe('option disabled (default)', () => {

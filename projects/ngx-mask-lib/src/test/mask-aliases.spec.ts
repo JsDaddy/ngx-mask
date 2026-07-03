@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { expect, vi } from 'vitest';
 
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal } from './utils/test-functions.component';
+import { equal, typeTest } from './utils/test-functions.component';
 import { createTriModeFixture, TRI_MODES } from './utils/tri-mode-harness';
 import { provideNgxMask, NgxMaskDirective, NgxMaskPipe, initialConfig } from 'ngx-mask';
 
@@ -66,6 +66,36 @@ describe('Directive: Mask (maskAliases — user-defined named masks)', () => {
         configureWith({ PHONE_BR: '(00) 00000-0000' });
         component.mask.set('00-00');
         equal('1234', '12-34', fixture);
+    });
+
+    it('should behave exactly like typing the nonsense mask directly when an alias maps to an invalid expression', () => {
+        // Robustness pin: the alias layer only substitutes the expression — a nonsense
+        // alias value goes through the very same code path as a nonsense `mask` input,
+        // no special crash or divergent behavior.
+        configureWith({ WAT: 'WW-WW' });
+        component.mask.set('WAT');
+        const aliasResult = typeTest('12ab', fixture);
+
+        component.mask.set('WW-WW');
+        fixture.detectChanges();
+        const directResult = typeTest('12ab', fixture);
+
+        expect(aliasResult).toBe(directResult);
+    });
+
+    it('should resolve an alias whose || expansion contains one invalid alternative', () => {
+        configureWith({ M: '00-00||WWW' });
+        component.mask.set('M');
+        // The valid alternative keeps working exactly as if it were the only mask.
+        equal('1234', '12-34', fixture);
+    });
+
+    it('should treat an empty-string alias value as no mask (raw passthrough)', () => {
+        // Pinned: '' is a valid string, so the alias resolves — and an empty mask
+        // expression disables masking entirely, same as mask="".
+        configureWith({ EMPTY: '' });
+        component.mask.set('EMPTY');
+        expect(typeTest('12ab!', fixture)).toBe('12ab!');
     });
 });
 

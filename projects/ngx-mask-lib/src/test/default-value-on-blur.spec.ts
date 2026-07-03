@@ -104,6 +104,55 @@ describe.each(TRI_MODES)('defaultValueOnBlur — %s mode', (mode) => {
     });
 });
 
+describe('defaultValueOnBlur — interplay pins (reactive mode)', () => {
+    it('should let clearIfNotMatch clear a default that does not fill the mask', async () => {
+        // Pinned interplay: the default is written first, then clearIfNotMatchFn runs on
+        // the same blur pass. A default shorter than the mask fails the length match and
+        // is cleared again — clearIfNotMatch wins. Weird-but-harmless: the net effect is
+        // "no default"; misconfiguration (short default + clearIfNotMatch) fails closed.
+        const harness = await createTriModeFixture('reactive', {
+            mask: '0000',
+            providerOptions: { defaultValueOnBlur: '7', clearIfNotMatch: true },
+        });
+        await harness.blur();
+        expect(harness.getInput().value).toBe('');
+        expect(harness.getBoundValue()).toBe('');
+    });
+
+    it('should keep a default that fully fills the mask despite clearIfNotMatch', async () => {
+        const harness = await createTriModeFixture('reactive', {
+            mask: '0000',
+            providerOptions: { defaultValueOnBlur: '1234', clearIfNotMatch: true },
+        });
+        await harness.blur();
+        expect(harness.getInput().value).toBe('1234');
+        expect(harness.getBoundValue()).toBe('1234');
+    });
+
+    it('should not apply the default when the user leaves a partial value', async () => {
+        const harness = await createTriModeFixture('reactive', {
+            mask: '0000',
+            providerOptions: { defaultValueOnBlur: '7777' },
+        });
+        await harness.typeValue('12');
+        await harness.blur();
+        expect(harness.getInput().value).toBe('12');
+        expect(harness.getBoundValue()).toBe('12');
+    });
+
+    it('should not crash when the default does not fit the mask (letters on separator)', async () => {
+        // Pinned: 'abc' has no digit the separator mask can consume — applyMask renders
+        // nothing, so blur leaves the input and model empty. No crash, no loop.
+        const harness = await createTriModeFixture('reactive', {
+            mask: 'separator.2',
+            providerOptions: { defaultValueOnBlur: 'abc' },
+        });
+        await harness.blur();
+        expect(harness.getInput().value).toBe('');
+        expect(harness.getBoundValue()).toBe('');
+    });
+});
+
 @Component({
     selector: 'jsdaddy-default-value-input-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
