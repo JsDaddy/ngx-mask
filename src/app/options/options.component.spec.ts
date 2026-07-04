@@ -36,7 +36,7 @@ type MaskTestConfig = {
 };
 
 @Component({
-    selector: 'jsdaddy-test-reactive',
+    selector: 'ngxd-test-reactive',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     template: `
@@ -86,7 +86,7 @@ class TestReactiveComponent {
 }
 
 @Component({
-    selector: 'jsdaddy-test-template',
+    selector: 'ngxd-test-template',
     standalone: true,
     imports: [FormsModule, NgxMaskDirective],
     template: `
@@ -136,7 +136,7 @@ class TestTemplateComponent {
 }
 
 @Component({
-    selector: 'jsdaddy-test-signal',
+    selector: 'ngxd-test-signal',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective, FormField],
     template: `

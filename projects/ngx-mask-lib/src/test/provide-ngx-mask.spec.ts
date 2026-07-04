@@ -18,7 +18,7 @@ function createComponentWithDefaultConfigAndSimpleInputs(
 }
 
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,

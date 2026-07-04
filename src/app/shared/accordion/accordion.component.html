@@ -1,0 +1,93 @@
+<div
+    aria-hidden="true"
+    class="flex justify-between items-center bg-ink cursor-pointer desk:hidden h-[55px] w-full fixed top-[68px] px-5"
+    (click)="showAccordionBlock(); $event.stopPropagation()">
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        [class]="showAccordion() ? 'rotate-180' : ''">
+        <rect
+            x="18"
+            width="18"
+            height="18"
+            rx="9"
+            transform="rotate(90 18 0)"
+            [attr.fill]="showAccordion() ? '#2563EB' : 'white'" />
+        <path
+            d="M13.5 7.27875L12.4425 6.22125L9 9.65625L5.5575 6.22125L4.5 7.27875L9 11.7788L13.5 7.27875Z"
+            fill="currentColor" />
+    </svg>
+    <span
+        class="tracking-[.25em] uppercase"
+        [class]="showAccordion() ? 'text-accent' : 'text-full-white'"
+        >Navigation</span
+    >
+</div>
+
+<div
+    class="flex flex-col fixed z-20 h-full overflow-auto bg-ink pt-[22px] w-[310px] top-[68px] tab:w-[375px] tab:top-[122px] mob:w-full p-5"
+    [class]="showAccordion() ? 'tab:block mob:block' : 'tab:hidden mob:hidden'"
+    #accordionBlock>
+    <div class="bg-ink flex flex-col gap-5 relative h-full">
+        @for (list of lists(); track list.id; let i = $index) {
+            <div
+                class="non-active w-full bg-ink text-white cursor-pointer border-t border-b border-accent rounded-10px p-2.5"
+                #accordion>
+                <div
+                    class="flex items-center justify-between bg-ink text-white"
+                    aria-hidden="true"
+                    (click)="toggle(i); switchAccordion(list.id); $event.stopPropagation()">
+                    <div class="flex items-center bg-light-grey-accordion gap-15px">
+                        <img
+                            width="32"
+                            height="32"
+                            [ngSrc]="list.defaultSvg | asset: openSourceAccordionPath"
+                            class="default-svg"
+                            alt="Accordion white" />
+                        <img
+                            width="32"
+                            height="32"
+                            [ngSrc]="list.activeSvg | asset: openSourceAccordionPath"
+                            class="active-svg"
+                            alt="Accordion yellow" />
+                        <span class="accordion-title text-full-white">
+                            {{ list.header }}
+                        </span>
+                    </div>
+
+                    <img
+                        width="12"
+                        height="12"
+                        [ngSrc]="list.whiteChevron | asset: openSourceAccordionPath"
+                        class="chevron-default"
+                        alt="Chevron white" />
+                    <img
+                        width="12"
+                        height="12"
+                        [ngSrc]="list.yellowChevron | asset: openSourceAccordionPath"
+                        class="chevron-active"
+                        alt="Chevron yellow" />
+                </div>
+                <div class="panel flex-col text-full-white text-text bg-ink pl-[45px]">
+                    @for (item of list.text; track item.id) {
+                        <p
+                            aria-hidden="true"
+                            class="text-text cursor-pointer px-2 py-2"
+                            [class]="
+                                itemInAccordion() === item.id ? 'text-accent' : 'text-full-white'
+                            "
+                            (click)="handleClick(item.id, item.scrollTo)">
+                            {{ item.content }}
+                        </p>
+                    }
+                </div>
+            </div>
+        }
+        <div class="fixed bottom-5 w-[270px] mob:hidden tab:hidden">
+            <ngxd-visit-btn />
+        </div>
+    </div>
+</div>

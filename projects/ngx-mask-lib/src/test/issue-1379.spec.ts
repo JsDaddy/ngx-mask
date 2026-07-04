@@ -12,7 +12,7 @@ import { expect } from 'vitest';
 // flag that minlength/maxlength validation depends on. With an empty mask the directive
 // must be a no-op passthrough: no programmatic value rewriting, no validator errors.
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     imports: [NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="" minlength="5" />`,
@@ -20,7 +20,7 @@ import { expect } from 'vitest';
 class EmptyMaskNativeComponent {}
 
 @Component({
-    selector: 'jsdaddy-open-source-form-test',
+    selector: 'ngxd-open-source-form-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="" [formControl]="control" />`,

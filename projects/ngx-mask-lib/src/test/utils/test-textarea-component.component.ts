@@ -5,7 +5,7 @@ import { NGX_MASK_CONFIG } from 'ngx-mask';
 import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
-    selector: 'jsdaddy-open-source-test-textarea',
+    selector: 'ngxd-open-source-test-textarea',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,

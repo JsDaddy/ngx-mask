@@ -84,7 +84,7 @@ export class TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-reactive-test',
+    selector: 'ngxd-tri-mode-reactive-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -108,7 +108,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-template-test',
+    selector: 'ngxd-tri-mode-template-test',
     imports: [FormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -136,7 +136,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-signal-test',
+    selector: 'ngxd-tri-mode-signal-test',
     imports: [FormField, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `

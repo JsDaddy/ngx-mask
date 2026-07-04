@@ -6,7 +6,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { equal } from './utils/test-functions.component';
 
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,

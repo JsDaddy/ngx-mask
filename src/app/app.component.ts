@@ -5,22 +5,22 @@ import { SepDocs, SepExamples } from 'src/assets/content/separators';
 import { ComDocs, ComExamples } from 'src/assets/content/common-cases';
 import { OthDocs, OthExamples } from 'src/assets/content/other';
 import { OptionsComponent } from './options/options.component';
-import { HeaderComponent } from '@open-source/header/header.component';
+import { HeaderComponent } from '@shared/header/header.component';
 import type {
     ComDoc,
     ListItem,
     MaskOptions,
     TExampleConfig,
-} from '@open-source/accordion/content.types';
-import { SubHeaderComponent } from '@open-source/sub-header/sub-header.component';
-import { AccordionComponent } from '@open-source/accordion/accordion.component';
-import { FooterComponent } from '@open-source/footer/footer.component';
-import { LinkPath } from '@libraries/link/link.path';
+} from '@shared/accordion/content.types';
+import { SubHeaderComponent } from '@shared/sub-header/sub-header.component';
+import { AccordionComponent } from '@shared/accordion/accordion.component';
+import { FooterComponent } from '@shared/footer/footer.component';
+import { LinkPath } from '@shared/link/link.path';
 import {
     FormatAndParserExamples,
     ParserAndFormatterDocs,
 } from '../assets/content/parser-and-formatter';
-import { VersionToken } from '@libraries/version/version.token';
+import { VersionToken } from '@shared/version/version.token';
 
 declare const VERSION: string;
 
@@ -40,7 +40,7 @@ const CARD_CONTENT: Readonly<Record<number, CardContent>> = {
 const DEFAULT_CARD_CONTENT: CardContent = { docs: ComDocs, examples: ComExamples };
 
 @Component({
-    selector: 'jsdaddy-open-source-root',
+    selector: 'ngxd-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

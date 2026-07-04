@@ -7,7 +7,7 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { NGX_MASK_CONFIG } from 'ngx-mask';
 
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],

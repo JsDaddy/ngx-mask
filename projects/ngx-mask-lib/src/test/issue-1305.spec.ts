@@ -16,7 +16,7 @@ import { expect } from 'vitest';
 // reading the native value inside the same CD pass (Angular Material, CDK autofill,
 // autosize) observe it.
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="separator.2" thousandSeparator="," [formControl]="control" />`,
@@ -26,7 +26,7 @@ class InitialSeparatorValueComponent {
 }
 
 @Component({
-    selector: 'jsdaddy-open-source-digit-test',
+    selector: 'ngxd-open-source-digit-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input mask="0000" [formControl]="control" />`,
