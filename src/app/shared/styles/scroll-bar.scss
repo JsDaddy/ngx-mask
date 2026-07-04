@@ -1,0 +1,20 @@
+::-webkit-scrollbar {
+    width: 6px;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(134, 134, 134, 0.45),
+        rgba(134, 134, 134, 0.09)
+    );
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(0deg, #2563eb 0.28%, rgba(37, 99, 235, 0) 100%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    border: 1px solid transparent;
+}

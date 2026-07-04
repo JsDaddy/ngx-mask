@@ -1,4 +1,4 @@
-import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@shared/accordion/content.types';
 
 export const ParserAndFormatterDocs: ComDoc[] = [
     {

@@ -1,0 +1,333 @@
+@use './media-breakpoints' as *;
+@use '../fonts/fonts' as *;
+
+*:focus,
+*:active {
+    -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+    --accentHover: #1d4ed8;
+    --ink: #1a1d21;
+    --accent: #2563eb;
+    --muted: #64748b;
+    --white: #f9fafb;
+    --full-white: #fff;
+    --primary: #0f172a;
+    --red: #e35353;
+    --accentGradient: linear-gradient(269.31deg, var(--primary) 19.29%, var(--accent) 71.73%);
+    --ligth-grey: rgba(255, 255, 255, 0.05);
+}
+
+.border-accordion-tb-def {
+    border-width: 2px 0;
+    border-style: solid;
+    border-color: var(--ligth-grey);
+    border-radius: 10px;
+}
+
+.bg-light-grey-accordion {
+    background-color: var(--ligth-grey);
+}
+
+button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    height: 100%;
+}
+p {
+    margin: 0;
+    padding: 0;
+}
+a {
+    text-decoration: none;
+}
+ul,
+ol {
+    margin: 0;
+    padding: 0;
+
+    li {
+        list-style: none;
+    }
+}
+
+/* Typograhpy */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+h1,
+.h1-text {
+    font-size: 56px;
+    line-height: 56px;
+    font-weight: 600;
+    color: var(--ink);
+}
+h2,
+.h2-text {
+    font-size: 40px;
+    line-height: 40px;
+    font-weight: 500;
+    color: var(--ink);
+}
+h3,
+.h3-text {
+    font-size: 25px;
+    line-height: 27px;
+    font-weight: 500;
+    color: var(--ink);
+}
+h4,
+.h4-text {
+    font-size: 22px;
+    line-height: 27px;
+    font-weight: 500;
+    color: var(--ink);
+}
+h5,
+.text {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 400;
+    color: var(--ink);
+    font-family: 'Varela', sans-serif;
+}
+
+.title {
+    font-size: 10px;
+    line-height: 14px;
+    font-weight: 400;
+    color: var(--ink);
+    font-family: 'Varela', sans-serif;
+}
+.span {
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 400;
+    color: var(--ink);
+    font-family: 'Varela', sans-serif;
+}
+.links {
+    font-size: 14px;
+    line-height: 27px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: 0.05em;
+}
+
+.ls-25 {
+    letter-spacing: 0.25em;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+/* End Typograhpy */
+
+/* Colors */
+
+.bg-accent {
+    background-color: var(--accent);
+}
+.bg-ink {
+    background-color: var(--ink);
+}
+.bg-white-opacity {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(23px);
+}
+.bg-muted {
+    background-color: var(--muted);
+}
+.bg-white {
+    background-color: var(--white);
+}
+.bg-full-white {
+    background-color: var(--full-white);
+}
+.bg-accent-gradient {
+    background: var(--accentGradient);
+}
+
+.accent-gradient {
+    background: var(--accentGradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+}
+.accent {
+    color: var(--accent);
+}
+.ink {
+    color: var(--ink);
+}
+.muted {
+    color: var(--muted);
+}
+.white {
+    color: var(--white);
+}
+.full-white {
+    color: var(--full-white);
+}
+
+/* End Colors */
+
+/* Cursor */
+.c {
+    &-pointer {
+        cursor: pointer;
+    }
+}
+/* End Cursor */
+
+/* Fonts Sizes */
+
+.f-s {
+    &-38 {
+        font-size: 38px;
+    }
+    &-14 {
+        font-size: 14px;
+    }
+}
+
+/* End Fonts Sizes */
+
+/* Common */
+.h {
+    &-100vh {
+        height: 100dvh;
+    }
+}
+/* End Common */
+
+/* Positioning */
+.inline-flex {
+    display: inline-flex;
+}
+.row {
+    display: flex;
+}
+.column {
+    display: flex;
+    flex-direction: column;
+}
+.jc-sb {
+    justify-content: space-between;
+}
+.jc-c {
+    justify-content: center;
+}
+.jc-fe {
+    justify-content: flex-end;
+}
+.ai-c {
+    align-items: center;
+}
+.pos-rel {
+    position: relative;
+}
+.ai-end {
+    align-items: flex-end;
+}
+.ai-start {
+    align-items: flex-start;
+}
+
+.ais-end {
+    align-self: flex-end;
+}
+.ais-start {
+    align-self: flex-start;
+}
+.ais-c {
+    align-self: center;
+}
+
+.z-10 {
+    z-index: 10;
+}
+
+/* End Positioning */
+
+.remove-right-wrapper-padding {
+    margin-right: -$desktopHorizontalPadding;
+}
+.remove-left-wrapper-padding {
+    margin-left: -$desktopHorizontalPadding;
+}
+@media (min-width: $desktopWidth) {
+    .hide-desktop {
+        display: none !important;
+    }
+    .remove-right-desktop-wrapper-padding {
+        margin-right: -$desktopHorizontalPadding;
+    }
+    .remove-left-desktop-wrapper-padding {
+        margin-left: -$desktopHorizontalPadding;
+    }
+}
+@media screen and (min-width: $mobileWidth) and (max-width: $desktopWidth) {
+    .remove-tablet-wrapper-padding {
+        width: 100vw !important;
+        transform: translate(-50%);
+        margin-left: 50%;
+    }
+    .remove-right-tablet-wrapper-padding {
+        margin-right: -$tabletHorizontalPadding;
+    }
+    .remove-left-tablet-wrapper-padding {
+        margin-left: -$tabletHorizontalPadding;
+    }
+    .hide-tablet {
+        display: none !important;
+    }
+}
+
+@media (max-width: $mobileWidth) {
+    .remove-mobile-wrapper-padding {
+        width: 100vw !important;
+        transform: translate(-50%);
+        margin-left: 50%;
+    }
+    .remove-right-mobile-wrapper-padding {
+        margin-right: -$mobileHorizontalPadding;
+    }
+    .remove-left-mobile-wrapper-padding {
+        margin-left: -$mobileHorizontalPadding;
+    }
+    .hide-mobile {
+        display: none !important;
+    }
+}
+
+body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
