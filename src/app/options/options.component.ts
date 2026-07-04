@@ -16,21 +16,21 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { form, FormField } from '@angular/forms/signals';
 import { initialConfig, NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
 import { HighlightModule } from 'ngx-highlightjs';
-import { AssetPipe } from '@libraries/asset/asset.pipe';
-import { IsEmptyPipe } from '@open-source/is-empty/is-empty.pipe';
+import { AssetPipe } from '@shared/asset/asset.pipe';
+import { IsEmptyPipe } from '@shared/is-empty/is-empty.pipe';
 import { CardContentComponent } from '../shared/card-content/card-content.component';
-import { ScrollService } from '@open-source/scroll/scroll.service';
-import { AccordionService } from '@open-source/accordion/accordion.service';
-import { OpenSourcePath } from '@open-source/path/open-source.path';
+import { ScrollService } from '@shared/scroll/scroll.service';
+import { AccordionService } from '@shared/accordion/accordion.service';
+import { OpenSourcePath } from '@shared/path/open-source.path';
 import type {
     ComDoc,
     MaskOptions,
     TExample,
     TExampleConfig,
-} from '@open-source/accordion/content.types';
+} from '@shared/accordion/content.types';
 
 @Component({
-    selector: 'jsdaddy-open-source-options',
+    selector: 'ngxd-options',
     templateUrl: './options.component.html',
     styleUrls: ['./options.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
