@@ -15,6 +15,13 @@
     ],
     "license": "MIT",
     "author": "ngx-mask",
+    "files": [
+        "LICENSE",
+        "README.md",
+        "fesm2022/ngx-mask.mjs",
+        "types",
+        "package.json"
+    ],
     "contributors": [
         "ngx-mask"
     ],
