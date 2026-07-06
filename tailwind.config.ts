@@ -14,17 +14,30 @@ const tailwindConfig: Config = {
             },
             colors: {
                 ink: {
-                    DEFAULT: '#1A1D21',
+                    DEFAULT: '#24272C',
                 },
                 accent: {
-                    DEFAULT: '#2563EB',
+                    DEFAULT: '#0072F5',
                 },
                 primary: {
                     DEFAULT: '#0F172A',
                 },
                 muted: {
-                    DEFAULT: '#64748B',
+                    DEFAULT: '#666666',
                 },
+                green: {
+                    DEFAULT: '#10B981',
+                },
+                amber: {
+                    DEFAULT: '#F59E0B',
+                },
+                red: {
+                    DEFAULT: '#EF4444',
+                },
+                'text-primary': '#F4F4F8',
+                'text-secondary': '#C4C4D8',
+                'text-dim': '#7878A0',
+                subtle: '#333345',
                 'full-white': '#FFFFFF',
                 white: {
                     DEFAULT: '#F9FAFB',

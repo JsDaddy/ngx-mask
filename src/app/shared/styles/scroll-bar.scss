@@ -12,9 +12,6 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(0deg, #2563eb 0.28%, rgba(37, 99, 235, 0) 100%);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    background-color: var(--accent);
     border: 1px solid transparent;
 }

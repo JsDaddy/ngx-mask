@@ -7,15 +7,20 @@
 }
 
 :root {
-    --accentHover: #1d4ed8;
-    --ink: #1a1d21;
-    --accent: #2563eb;
-    --muted: #64748b;
+    --accentHover: #0064d6;
+    --ink: #24272c;
+    --accent: #0072f5;
+    --muted: #666666;
+    --green: #10b981;
+    --amber: #f59e0b;
+    --red: #ef4444;
+    --text-primary: #f4f4f8;
+    --text-secondary: #c4c4d8;
+    --text-dim: #7878a0;
+    --subtle: #333345;
     --white: #f9fafb;
     --full-white: #fff;
     --primary: #0f172a;
-    --red: #e35353;
-    --accentGradient: linear-gradient(269.31deg, var(--primary) 19.29%, var(--accent) 71.73%);
     --ligth-grey: rgba(255, 255, 255, 0.05);
 }
 
@@ -169,16 +174,6 @@ h5,
 }
 .bg-full-white {
     background-color: var(--full-white);
-}
-.bg-accent-gradient {
-    background: var(--accentGradient);
-}
-
-.accent-gradient {
-    background: var(--accentGradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
 }
 .accent {
     color: var(--accent);

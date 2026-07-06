@@ -53,7 +53,7 @@
 <ng-template #inputTemplate let-ex let-placeholder="placeholder">
     <!-- Reactive Forms (FormControl) -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Reactive Forms</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary">Reactive Forms</span>
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
@@ -87,7 +87,9 @@
 
     <!-- Template-driven (ngModel) -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Template-driven</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary"
+            >Template-driven</span
+        >
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
@@ -121,7 +123,7 @@
 
     <!-- Signal Forms -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Signal Forms</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary">Signal Forms</span>
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
