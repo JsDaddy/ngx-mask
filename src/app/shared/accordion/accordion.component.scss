@@ -1,0 +1,41 @@
+.active {
+    .chevron-default,
+    .default-svg {
+        display: none !important;
+    }
+    .chevron-active,
+    .active-svg,
+    .panel {
+        display: block !important;
+    }
+
+    .accordion-title {
+        color: #0072f5 !important;
+    }
+}
+
+.non-active {
+    .accordion-title {
+        color: #ffffff;
+    }
+    .panel,
+    .chevron-active,
+    .active-svg {
+        display: none;
+    }
+    .chevron-default,
+    .default-svg {
+        display: block;
+    }
+
+    &:hover {
+        .chevron-default,
+        .default-svg {
+            display: none;
+        }
+        .chevron-active,
+        .active-svg {
+            display: block;
+        }
+    }
+}

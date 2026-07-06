@@ -7,7 +7,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { expect } from 'vitest';
 
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,

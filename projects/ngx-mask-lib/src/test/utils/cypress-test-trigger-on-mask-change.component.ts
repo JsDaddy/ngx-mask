@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
-    selector: 'jsdaddy-open-source-test',
+    selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     styles: [

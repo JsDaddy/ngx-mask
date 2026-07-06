@@ -19,7 +19,7 @@ import { TRI_MODES, createTriModeFixture } from './utils/tri-mode-harness';
 
 /** Reporter's input-zip component: custom CVA wrapping the masked input via [(ngModel)]. */
 @Component({
-    selector: 'jsdaddy-input-zip',
+    selector: 'ngxd-input-zip',
     template: `<input
         type="text"
         mask="00000"
@@ -54,8 +54,8 @@ class InputZipComponent implements ControlValueAccessor {
 }
 
 @Component({
-    selector: 'jsdaddy-wrapper-host',
-    template: `<jsdaddy-input-zip [(ngModel)]="value" />`,
+    selector: 'ngxd-wrapper-host',
+    template: `<ngxd-input-zip [(ngModel)]="value" />`,
     imports: [InputZipComponent, FormsModule],
 })
 class WrapperHostComponent {

@@ -1,0 +1,17 @@
+<div class="flex flex-col text-full-white pl-30px py-5 pr-5 mob:pt-35px mob:px-5 mob:pb-5">
+    <div
+        class="git-text title flex justify-between text-title text-ink mob:flex-col-reverse mob:justify-normal mob:gap-30px">
+        <h3 class="text-h3 pb-2.5">{{ title() }}</h3>
+        <div class="flex mob:relative mob:-left-5">
+            <ngxd-github-buttons title="GitHub Stars" />
+        </div>
+    </div>
+    <span class="pb-2.5 text-span text-ink">
+        {{ subtitle() }}
+    </span>
+    <div class="flex flex-wrap gap-2.5 text-muted">
+        @for (chip of chips(); track chip) {
+            <ngxd-chip chipBgColor="rgba(255, 113, 10, 0.05)" [chip]="chip" />
+        }
+    </div>
+</div>

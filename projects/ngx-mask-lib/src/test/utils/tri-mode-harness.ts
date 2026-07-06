@@ -10,7 +10,7 @@ import {
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FormField, disabled as disabledLogic, form, schema } from '@angular/forms/signals';
+import { FormField, disabled, form, schema } from '@angular/forms/signals';
 import type { NgxMaskConfig, NgxMaskOptions } from 'ngx-mask';
 import { NGX_MASK_CONFIG, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
@@ -84,7 +84,7 @@ export class TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-reactive-test',
+    selector: 'ngxd-tri-mode-reactive-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -108,7 +108,7 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-template-test',
+    selector: 'ngxd-tri-mode-template-test',
     imports: [FormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -136,7 +136,7 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
 }
 
 @Component({
-    selector: 'jsdaddy-tri-mode-signal-test',
+    selector: 'ngxd-tri-mode-signal-test',
     imports: [FormField, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -164,7 +164,7 @@ export class TriModeSignalComponent extends TriModeConfigBase {
         form(
             this.model,
             schema<{ value: string }>((path) => {
-                disabledLogic(path.value, () => this.disabledField());
+                disabled(path.value, { when: () => this.disabledField() });
             })
         )
     );

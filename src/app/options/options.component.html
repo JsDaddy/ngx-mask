@@ -1,12 +1,12 @@
 @for (tile of cardDocs(); track $index; let i = $index) {
     <div
-        class="flex flex-col p-2.5 gap-2.5 bg-dark/[.02] rounded-15px"
+        class="flex flex-col p-2.5 gap-2.5 bg-ink/[.02] rounded-15px"
         [class]="
-            activeCardId() === tile.id ? 'border border-solid border-yellow bg-yellow/[.05]' : ''
+            activeCardId() === tile.id ? 'border border-solid border-accent bg-accent/[.05]' : ''
         "
         [id]="tile.id"
         #cards>
-        <div class="ml-4 flex items-center text-title text-dark uppercase tracking-[.25em]">
+        <div class="ml-4 flex items-center text-title text-ink uppercase tracking-[.25em]">
             {{ tile.header }}
         </div>
 
@@ -18,11 +18,9 @@
                         height="20"
                         [ngSrc]="'hand-box' | asset: openSourceOptionsPath"
                         alt="Hand with box" />
-                    <span class="text-span text-dark/[.25]">Usage</span>
+                    <span class="text-span text-ink/[.25]">Usage</span>
                 </div>
-                <span class="uppercase tracking-[.25em] text-span text-dark/[.45]"
-                    >Source code</span
-                >
+                <span class="uppercase tracking-[.25em] text-span text-ink/[.45]">Source code</span>
                 <div class="block mt-2.5">
                     <pre class="flex text-span">
                         <code [highlight]="tile.code" language="html" class="bg-white w-full h-fit pl-15px rounded-10px border-none overflow-hidden whitespace-pre-line"></code>
@@ -43,7 +41,7 @@
 }
 
 <ng-template #exampleTmpl let-ex let-placeholder="placeholder">
-    <div class="flex-[45%] rounded-10px p-15px bg-black">
+    <div class="flex-[45%] rounded-10px p-15px bg-ink">
         <ng-container
             *ngTemplateOutlet="
                 !ex._pipe ? inputTemplate : pipeTemplate;
@@ -55,7 +53,7 @@
 <ng-template #inputTemplate let-ex let-placeholder="placeholder">
     <!-- Reactive Forms (FormControl) -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Reactive Forms</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary">Reactive Forms</span>
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
@@ -80,16 +78,18 @@
             [hiddenInput]="ex._hiddenInput || null"
             [outputTransformFn]="ex._outputTransformFn || outputTransformFn"
             [inputTransformFn]="ex._inputTransformFn || inputTransformFn"
-            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-black border-b-2px border-b-white rounded-10px focus:border-b-yellow hover:border-b-yellow hover:bg-full-white/25 focus:bg-full-white/25" />
-        <jsdaddy-open-source-card-content
+            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-ink border-b-2px border-b-white rounded-10px focus:border-b-accent hover:border-b-accent hover:bg-full-white/25 focus:bg-full-white/25" />
+        <ngxd-card-content
             [value]="ex.control.formControl.value | isEmpty"
             title="FormControl:"
-            color="yellow-view" />
+            color="accent-view" />
     </div>
 
     <!-- Template-driven (ngModel) -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Template-driven</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary"
+            >Template-driven</span
+        >
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
@@ -114,16 +114,16 @@
             [hiddenInput]="ex._hiddenInput || null"
             [outputTransformFn]="ex._outputTransformFn || outputTransformFn"
             [inputTransformFn]="ex._inputTransformFn || inputTransformFn"
-            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-black border-b-2px border-b-white rounded-10px focus:border-b-yellow hover:border-b-yellow hover:bg-full-white/25 focus:bg-full-white/25" />
-        <jsdaddy-open-source-card-content
+            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-ink border-b-2px border-b-white rounded-10px focus:border-b-accent hover:border-b-accent hover:bg-full-white/25 focus:bg-full-white/25" />
+        <ngxd-card-content
             [value]="ex.control.model() | isEmpty"
             title="NgModel:"
-            color="yellow-view" />
+            color="accent-view" />
     </div>
 
     <!-- Signal Forms -->
     <div class="flex flex-col gap-1 mb-2">
-        <span class="uppercase tracking-[.10em] text-span text-white">Signal Forms</span>
+        <span class="uppercase tracking-[.10em] text-span text-text-secondary">Signal Forms</span>
         <input
             [placeholder]="placeholder || ''"
             [placeHolderCharacter]="ex._placholderCharacter || '_'"
@@ -148,18 +148,18 @@
             [hiddenInput]="ex._hiddenInput || null"
             [outputTransformFn]="ex._outputTransformFn || outputTransformFn"
             [inputTransformFn]="ex._inputTransformFn || inputTransformFn"
-            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-black border-b-2px border-b-white rounded-10px focus:border-b-yellow hover:border-b-yellow hover:bg-full-white/25 focus:bg-full-white/25" />
-        <jsdaddy-open-source-card-content
+            class="w-full h-[51px] placeholder:text-white/25 text-full-white py-3 px-5 outline-none bg-ink border-b-2px border-b-white rounded-10px focus:border-b-accent hover:border-b-accent hover:bg-full-white/25 focus:bg-full-white/25" />
+        <ngxd-card-content
             [value]="ex.control.signalForm.value().value() | isEmpty"
             title="Signal Form:"
-            color="yellow-view" />
+            color="accent-view" />
     </div>
 
-    <jsdaddy-open-source-card-content [value]="ex._mask" title="Mask:" color="green-view" />
+    <ngxd-card-content [value]="ex._mask" title="Mask:" color="primary-view" />
 </ng-template>
 
 <ng-template #pipeTemplate>
-    <jsdaddy-open-source-card-content [value]="phone | mask: '(000) 000-0000'" title="" color="" />
-    <jsdaddy-open-source-card-content value="(000) 000-0000" title="Mask:" color="green-view" />
-    <jsdaddy-open-source-card-content value="123456789" title="Value:" color="green-view" />
+    <ngxd-card-content [value]="phone | mask: '(000) 000-0000'" title="" color="" />
+    <ngxd-card-content value="(000) 000-0000" title="Mask:" color="primary-view" />
+    <ngxd-card-content value="123456789" title="Value:" color="primary-view" />
 </ng-template>

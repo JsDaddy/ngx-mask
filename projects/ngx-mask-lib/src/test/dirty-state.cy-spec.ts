@@ -5,7 +5,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 // Test component with initial value - simple mask
 @Component({
-    selector: 'jsdaddy-test-initial-value',
+    selector: 'ngxd-test-initial-value',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -23,7 +23,7 @@ class TestInitialValueComponent {
 
 // Test component with initial value and separator
 @Component({
-    selector: 'jsdaddy-test-separator-initial',
+    selector: 'ngxd-test-separator-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -47,7 +47,7 @@ class TestSeparatorInitialComponent {
 
 // Test component with phone mask initial value
 @Component({
-    selector: 'jsdaddy-test-phone-initial',
+    selector: 'ngxd-test-phone-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -64,7 +64,7 @@ class TestPhoneInitialComponent {
 
 // Test component with date mask initial value
 @Component({
-    selector: 'jsdaddy-test-date-initial',
+    selector: 'ngxd-test-date-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -81,7 +81,7 @@ class TestDateInitialComponent {
 
 // Test component with time mask initial value
 @Component({
-    selector: 'jsdaddy-test-time-initial',
+    selector: 'ngxd-test-time-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -98,7 +98,7 @@ class TestTimeInitialComponent {
 
 // Test component with IP address mask initial value
 @Component({
-    selector: 'jsdaddy-test-ip-initial',
+    selector: 'ngxd-test-ip-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -115,7 +115,7 @@ class TestIpInitialComponent {
 
 // Test component with percent mask initial value
 @Component({
-    selector: 'jsdaddy-test-percent-initial',
+    selector: 'ngxd-test-percent-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -132,7 +132,7 @@ class TestPercentInitialComponent {
 
 // Test component with CPF mask initial value
 @Component({
-    selector: 'jsdaddy-test-cpf-initial',
+    selector: 'ngxd-test-cpf-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -149,7 +149,7 @@ class TestCpfInitialComponent {
 
 // Test component with optional digits mask initial value
 @Component({
-    selector: 'jsdaddy-test-optional-initial',
+    selector: 'ngxd-test-optional-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -166,7 +166,7 @@ class TestOptionalInitialComponent {
 
 // Test component with letters mask initial value
 @Component({
-    selector: 'jsdaddy-test-letters-initial',
+    selector: 'ngxd-test-letters-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -183,7 +183,7 @@ class TestLettersInitialComponent {
 
 // Test component with alphanumeric mask initial value
 @Component({
-    selector: 'jsdaddy-test-alphanumeric-initial',
+    selector: 'ngxd-test-alphanumeric-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -200,7 +200,7 @@ class TestAlphanumericInitialComponent {
 
 // Test component with prefix initial value
 @Component({
-    selector: 'jsdaddy-test-prefix-initial',
+    selector: 'ngxd-test-prefix-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -218,7 +218,7 @@ class TestPrefixInitialComponent {
 
 // Test component with suffix initial value
 @Component({
-    selector: 'jsdaddy-test-suffix-initial',
+    selector: 'ngxd-test-suffix-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -236,7 +236,7 @@ class TestSuffixInitialComponent {
 
 // Test component with showMaskTyped initial value
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-initial',
+    selector: 'ngxd-test-show-mask-typed-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -254,7 +254,7 @@ class TestShowMaskTypedInitialComponent {
 
 // Test component with dropSpecialCharacters false initial value
 @Component({
-    selector: 'jsdaddy-test-keep-special-initial',
+    selector: 'ngxd-test-keep-special-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -276,7 +276,7 @@ class TestKeepSpecialInitialComponent {
 
 // Test component with credit card mask initial value
 @Component({
-    selector: 'jsdaddy-test-credit-card-initial',
+    selector: 'ngxd-test-credit-card-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -293,7 +293,7 @@ class TestCreditCardInitialComponent {
 
 // Test component with SSN mask initial value
 @Component({
-    selector: 'jsdaddy-test-ssn-initial',
+    selector: 'ngxd-test-ssn-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -310,7 +310,7 @@ class TestSsnInitialComponent {
 
 // Test component with ZIP code mask initial value
 @Component({
-    selector: 'jsdaddy-test-zip-initial',
+    selector: 'ngxd-test-zip-initial',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
