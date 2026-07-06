@@ -38,10 +38,13 @@ jobs:
               env:
                   RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
               run: |
+                  if [ -z "$RELEASE_VERSION" ]; then
+                      RELEASE_VERSION=$(node -p "require('./projects/ngx-mask-lib/package.json').version")
+                  fi
                   echo '********'
                   echo "RELEASE_VERSION: $RELEASE_VERSION"
                   echo '********'
-                  bash .github/workflows/scripts/replace_template.sh $RELEASE_VERSION
+                  bash .github/workflows/scripts/replace_template.sh "$RELEASE_VERSION"
                   bun run build
 
             - name: Deploy demo
