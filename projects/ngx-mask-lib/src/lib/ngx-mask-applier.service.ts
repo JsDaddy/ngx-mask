@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import type { NgxMaskConfig } from './ngx-mask.config';
+import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
@@ -424,7 +424,9 @@ export class NgxMaskApplierService {
         let processedDecimalMarker = decimalMarker;
 
         if (precision < Infinity) {
-            // TODO need think about decimalMarker
+            // With an array decimalMarker (default ['.', ',']), pick the first configured
+            // marker that isn't also the thousandSeparator — mirrors the same fallback
+            // resolution used in separator.handler.ts (no marker typed yet in this value).
             if (Array.isArray(processedDecimalMarker)) {
                 const marker = processedDecimalMarker.find((dm) => dm !== this.thousandSeparator);
 
@@ -462,16 +464,16 @@ export class NgxMaskApplierService {
     };
 
     protected _stripToDecimal(str: string): string {
+        const isDecimalMarkerChar = (char: string): char is DecimalMarkerChar =>
+            char === MaskExpression.DOT || char === MaskExpression.COMMA;
+
         return str
             .split(MaskExpression.EMPTY_STRING)
             .filter((i: string, idx: number) => {
                 const isDecimalMarker =
                     typeof this.decimalMarker === 'string'
                         ? i === this.decimalMarker
-                        : // TODO (inepipenko) use utility type
-                          this.decimalMarker.includes(
-                              i as MaskExpression.COMMA | MaskExpression.DOT
-                          );
+                        : isDecimalMarkerChar(i) && this.decimalMarker.includes(i);
                 return (
                     i.match('^-?\\d') ||
                     i === this.thousandSeparator ||

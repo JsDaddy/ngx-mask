@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import type { DebugElement } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { TestMaskComponent } from './utils/test-component.component';
-import { equal, Paste } from './utils/test-functions.component';
+import { equal, Paste, typeTest } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { expect, vi } from 'vitest';
 
@@ -487,5 +487,57 @@ describe('Separator: Mask', () => {
         component.leadZero.set(true);
 
         expect(() => equal('123456.78', '123 456.78', fixture)).not.toThrow();
+    });
+
+    // Regression coverage for the unified invalidChars regex in separator.handler.ts:
+    // the pre-refactor code used different allowed-character regexes per config
+    // (plain separator: no COMMA; dot thousand-sep: no SPACE, COMMA OK; comma
+    // thousand-sep: no SPACE, COMMA OK). The unified regex removes exactly the
+    // active thousandSeparator + decimalMarker(s) from the invalid-char set, so
+    // each config already accepts its own separator/marker chars and rejects the
+    // others — verified below for all three configurations.
+    it('plain separator (default decimalMarker array) accepts COMMA as a decimal marker', () => {
+        component.mask.set('separator');
+        expect(typeTest('1,000', fixture)).equal('1,000');
+    });
+
+    it('plain separator accepts its own thousandSeparator (space)', () => {
+        component.mask.set('separator');
+        expect(typeTest('1 000', fixture)).equal('1 000');
+    });
+
+    it('dot thousand-sep (decimalMarker ,) regroups on SPACE using the configured separator', () => {
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        expect(typeTest('1 000', fixture)).equal('1.000');
+    });
+
+    it('dot thousand-sep accepts COMMA as its decimal marker', () => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        expect(typeTest('1000,50', fixture)).equal('1.000,50');
+    });
+
+    it('dot thousand-sep accepts its own thousandSeparator (dot)', () => {
+        component.mask.set('separator');
+        component.thousandSeparator.set('.');
+        component.decimalMarker.set(',');
+        expect(typeTest('1.000', fixture)).equal('1.000');
+    });
+
+    it('comma thousand-sep (decimalMarker .) regroups on SPACE using the configured separator', () => {
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
+        expect(typeTest('1 000', fixture)).equal('1,000');
+    });
+
+    it('comma thousand-sep accepts its own thousandSeparator (comma)', () => {
+        component.mask.set('separator');
+        component.thousandSeparator.set(',');
+        component.decimalMarker.set('.');
+        expect(typeTest('1,000', fixture)).equal('1,000');
     });
 });

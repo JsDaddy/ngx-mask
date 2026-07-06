@@ -257,9 +257,12 @@ export const separatorHandler: MaskHandlerFn = function (state, params) {
         }
     }
 
-    // TODO: we had different rexexps here for the different cases... but tests dont seam to bother - check this
-    //  separator: no COMMA, dot-sep: no SPACE, COMMA OK, comma-sep: no SPACE, COMMA OK
-
+    // Historical note: pre-refactor code used different allowed-character regexes
+    // per config (plain separator: no COMMA; dot thousand-sep: no SPACE, COMMA OK;
+    // comma thousand-sep: no SPACE, COMMA OK). The unified regex below removes
+    // exactly the active thousandSeparator + decimalMarker(s) from the invalid set,
+    // so each config already accepts its own chars and rejects the others —
+    // verified by the "unified invalidChars regex" cases in separator.spec.ts.
     const thousandSeparatorCharEscaped: string = this._charToRegExpExpression(
         this.thousandSeparator
     );

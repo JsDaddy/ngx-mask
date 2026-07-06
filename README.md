@@ -34,7 +34,7 @@ A powerful Angular directive for input masking with customizable patterns
   </a>
 </p>
 
-`ngx-mask` gives Angular forms real-time input masking without hand-rolling regex-based `Validators.pattern` hacks or reaching for a generic, framework-agnostic library like `text-mask`/`imask` that needs its own Angular adapter. It ships as a standalone directive and pipe (`NgxMaskDirective` / `NgxMaskPipe`) with first-class `ControlValueAccessor` and Reactive Forms integration, built-in patterns for numbers, dates, and custom masks with prefixes/suffixes and multiple alternatives, and no runtime dependencies beyond Angular itself — install it, provide it once, and apply a mask with a single input binding.
+`ngx-mask` is the input-masking library built for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover all three form models — **Reactive Forms, template-driven, and the new Signal Forms** — through a first-class `ControlValueAccessor`, and run cleanly in **zoneless** and SSR applications. You get production-ready masks out of the box: dates and times with validity checking, numbers with thousand separators and decimal precision, IP, CPF/CNPJ, secure/hidden input, plus fully custom patterns with prefixes, suffixes and multi-mask expressions. No runtime dependencies beyond Angular, ~15 KB gzipped — provide it once, bind `mask`, done.
 
 ## Table of Contents
 
@@ -45,7 +45,6 @@ A powerful Angular directive for input masking with customizable patterns
 - [Quick Start](#quick-start)
     - [Standalone Applications](#standalone-applications)
     - [NgModule-based Applications](#ngmodule-based-applications)
-- [Related Projects](#related-projects)
 - [Contributing](#contributing)
 
 ## Features
@@ -251,11 +250,6 @@ export class AppModule {}
 })
 export class AppModule {}
 ```
-
-## Related Projects
-
-- [ngx-copypaste](https://github.com/JsDaddy/ngx-copypaste)
-- [ngx-loader-indicator](https://github.com/JsDaddy/ngx-loader-indicator)
 
 ## Contributing
 

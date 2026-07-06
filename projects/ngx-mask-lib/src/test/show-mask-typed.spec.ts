@@ -118,18 +118,18 @@ describe('Directive: Mask', () => {
         equal('1234567890 cv. 134', 'card. (123) 456-7890 cv. 134', fixture);
     });
 
-    // TODO(inepipenko) for issue #880
-    it.skip('should work right with security input', () => {
+    it('should work right with security input', () => {
         component.mask.set('000-0X-XXXX');
         component.showMaskTyped.set(true);
+        component.hiddenInput.set(true);
         equal('', '___-__-____', fixture);
         equal('123', '123-__-____', fixture);
         equal('12345', '123-4*-____', fixture);
         equal('123456', '123-4*-*___', fixture);
         equal('1234567', '123-4*-**__', fixture);
         equal('12345678', '123-4*-***_', fixture);
-        equal('12345679', '123-4*-****', fixture);
-        equal('123456791', '123-4*-****', fixture);
+        equal('123456790', '123-4*-****', fixture);
+        equal('1234567901', '123-4*-****', fixture);
     });
 
     it('showMaskTyped && placeholder XXXXX-YYYY', () => {
