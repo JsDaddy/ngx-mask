@@ -1,6 +1,5 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideNgxMask } from 'ngx-mask';
 import { provideRouter } from '@angular/router';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
@@ -13,7 +12,6 @@ bootstrapApplication(AppComponent, {
         provideZonelessChangeDetection(),
         GithubStarsService,
         provideHttpClient(withXhr()),
-        provideAnimations(),
         provideRouter([]),
         provideNgxMask({
             maskAliases: {
@@ -23,7 +21,10 @@ bootstrapApplication(AppComponent, {
         {
             provide: HIGHLIGHT_OPTIONS,
             useValue: {
-                fullLibraryLoader: () => import('highlight.js'),
+                coreLibraryLoader: () => import('highlight.js/lib/core'),
+                languages: {
+                    xml: () => import('highlight.js/lib/languages/xml'),
+                },
             },
         },
     ],
