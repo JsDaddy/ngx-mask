@@ -11,6 +11,7 @@
             [ngSrc]="(showAccordion() ? 'close' : 'burger') | asset: openSourceHeaderPath"
             alt="" />
     </button>
+    <span class="text-h5 text-full-white truncate flex-1 min-w-0 px-2.5">{{ title() }}</span>
     <div class="flex items-center gap-15px">
         <a
             [href]="githubProfileLink"
@@ -37,7 +38,7 @@
 </div>
 
 <div
-    class="flex flex-col fixed z-20 h-[calc(100%-55px)] overflow-auto bg-ink pt-[22px] w-[310px] top-[55px] tab:w-[375px] tab:top-[54px] desk:w-[375px] desk:top-[55px] mob:w-full p-5"
+    class="flex flex-col fixed z-20 h-[calc(100%-55px)] overflow-auto bg-ink pt-[22px] w-[300px] top-[55px] tab:w-[300px] tab:top-[54px] desk:w-[300px] desk:top-[55px] mob:w-full p-5"
     [class]="
         showAccordion() ? 'tab:block mob:block desk:block' : 'tab:hidden mob:hidden desk:hidden'
     "

@@ -1,6 +1,6 @@
 @for (tile of cardDocs(); track $index; let i = $index) {
     <div
-        class="flex flex-col p-2.5 gap-2.5 bg-ink/[.02] rounded-15px"
+        class="flex flex-col p-2.5 gap-2.5 bg-ink/[.06] rounded-15px"
         [class]="
             activeCardId() === tile.id ? 'border border-solid border-accent bg-accent/[.05]' : ''
         "
@@ -11,7 +11,8 @@
         </div>
 
         <div class="flex gap-30px mob:flex-col mob:gap-15px scroll-mt-[185px]" [id]="tile.anchor">
-            <div class="flex-[55%] rounded-10px bg-full-white p-15px">
+            <div
+                class="flex-[55%] rounded-10px bg-full-white border border-ink/[.08] shadow-sm p-15px">
                 <div class="flex items-start gap-2.5 mb-5">
                     <img
                         width="20"
@@ -20,10 +21,21 @@
                         alt="Hand with box" />
                     <span class="text-span text-ink/[.25]">Usage</span>
                 </div>
+                @let codeParts = splitCode(tile.code);
+                @if (codeParts.setup) {
+                    <span class="uppercase tracking-[.25em] text-span text-ink/[.45]"
+                        >Provider config</span
+                    >
+                    <div class="block mt-2.5 mb-15px">
+                        <pre class="flex text-span">
+                            <code [highlight]="codeParts.setup" language="typescript" class="bg-ink/[.04] border border-ink/[.08] w-full h-fit pl-15px rounded-10px overflow-hidden whitespace-pre-line"></code>
+                        </pre>
+                    </div>
+                }
                 <span class="uppercase tracking-[.25em] text-span text-ink/[.45]">Source code</span>
                 <div class="block mt-2.5">
                     <pre class="flex text-span">
-                        <code [highlight]="tile.code" language="html" class="bg-white w-full h-fit pl-15px rounded-10px border-none overflow-hidden whitespace-pre-line"></code>
+                        <code [highlight]="codeParts.template" language="html" class="bg-ink/[.04] border border-ink/[.08] w-full h-fit pl-15px rounded-10px overflow-hidden whitespace-pre-line"></code>
                         <img height="18" width="13" [ngSrc]="'input-vector' | asset : openSourceOptionsPath" class="relative right-5 self-center" alt="Input vector" />
                     </pre>
                 </div>

@@ -29,6 +29,7 @@ import { AnchorLabelPipe } from '@shared/anchor/anchor-label.pipe';
 })
 export class AccordionComponent implements AfterViewInit, OnDestroy {
     public lists = input<ListItem[]>();
+    public title = input<string>();
 
     public switchCardIndex = output<number>();
 

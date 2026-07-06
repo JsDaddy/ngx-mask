@@ -1,17 +1,37 @@
-<div class="flex flex-col text-full-white pl-30px py-5 pr-5 mob:pt-35px mob:px-5 mob:pb-5">
-    <div
-        class="git-text title flex justify-between text-title text-ink mob:flex-col-reverse mob:justify-normal mob:gap-30px">
-        <h3 class="text-h3 pb-2.5">{{ title() }}</h3>
-        <div class="flex mob:relative mob:-left-5">
-            <ngxd-github-buttons title="GitHub Stars" />
-        </div>
-    </div>
+<div class="flex flex-col text-full-white pl-30px py-3 pr-5 mob:pt-5 mob:px-5 mob:pb-3">
     <span class="pb-2.5 text-span text-ink">
         {{ subtitle() }}
     </span>
-    <div class="flex flex-wrap gap-2.5 text-muted">
-        @for (chip of chips(); track chip) {
-            <ngxd-chip chipBgColor="rgba(255, 113, 10, 0.05)" [chip]="chip" />
-        }
+    <div class="flex flex-wrap items-center gap-2">
+        <a
+            href="https://github.com/NepipenkoIgor/ngx-mask/actions/workflows/quality-check.yml"
+            target="_blank"
+            rel="noopener noreferrer">
+            <img
+                src="https://github.com/NepipenkoIgor/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop"
+                alt="Build status"
+                height="20" />
+        </a>
+        <a href="https://www.npmjs.com/package/ngx-mask" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/v/ngx-mask.svg" alt="npm version" height="20" />
+        </a>
+        <a href="https://npmjs.org/ngx-mask" target="_blank" rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/dt/ngx-mask.svg" alt="npm downloads" height="20" />
+        </a>
+        <a
+            href="https://bundlephobia.com/package/ngx-mask"
+            target="_blank"
+            rel="noopener noreferrer">
+            <img
+                src="https://img.shields.io/bundlephobia/minzip/ngx-mask.svg"
+                alt="Bundle size"
+                height="20" />
+        </a>
+        <a
+            href="https://github.com/NepipenkoIgor/ngx-mask/blob/develop/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer">
+            <img src="https://img.shields.io/npm/l/ngx-mask.svg" alt="License" height="20" />
+        </a>
     </div>
 </div>

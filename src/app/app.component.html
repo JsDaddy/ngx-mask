@@ -1,10 +1,13 @@
 <div class="flex flex-col">
     <section class="flex overflow-auto">
         <div class="drawer-container flex flex-col">
-            <ngxd-accordion [lists]="lists" (switchCardIndex)="switchCard($event)" />
+            <ngxd-accordion
+                [lists]="lists"
+                [title]="title"
+                (switchCardIndex)="switchCard($event)" />
         </div>
         <div class="flex flex-col w-full p-0 mt-[55px]">
-            <ngxd-sub-header [title]="title" [subtitle]="subtitle" [chips]="chips" />
+            <ngxd-sub-header [subtitle]="subtitle" />
             <ngxd-options [cardDocs]="docs()" [cardExamples]="examples()" />
             <ngxd-footer />
         </div>
