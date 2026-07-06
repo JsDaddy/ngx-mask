@@ -154,7 +154,7 @@ describe('defaultValueOnBlur — interplay pins (reactive mode)', () => {
 });
 
 @Component({
-    selector: 'jsdaddy-default-value-input-test',
+    selector: 'ngxd-default-value-input-test',
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input id="mask" mask="0000" [defaultValueOnBlur]="'9'" [formControl]="form" />`,

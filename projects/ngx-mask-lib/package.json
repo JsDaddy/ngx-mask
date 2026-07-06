@@ -1,7 +1,7 @@
 {
     "name": "ngx-mask",
-    "version": "22.0.0",
-    "description": "awesome ngx mask",
+    "version": "22.0.1",
+    "description": "Input masking for modern Angular — Reactive, template-driven and Signal Forms, zoneless and SSR ready. Dates, numbers, separators, custom patterns.",
     "keywords": [
         "ng2-mask",
         "ngx-mask",
@@ -11,21 +11,27 @@
         "angular",
         "angular2",
         "angular2-mask",
-        "ng2mask",
-        "jsdaddy"
+        "ng2mask"
     ],
     "license": "MIT",
     "author": "ngx-mask",
+    "files": [
+        "LICENSE",
+        "README.md",
+        "fesm2022/ngx-mask.mjs",
+        "types",
+        "package.json"
+    ],
     "contributors": [
         "ngx-mask"
     ],
-    "homepage": "https://github.com/JsDaddy/ngx-mask",
+    "homepage": "https://github.com/NepipenkoIgor/ngx-mask",
     "repository": {
         "type": "git",
-        "url": "git@github.com:JsDaddy/ngx-mask.git"
+        "url": "git@github.com:NepipenkoIgor/ngx-mask.git"
     },
     "bugs": {
-        "url": "https://github.com/JsDaddy/ngx-mask/issues"
+        "url": "https://github.com/NepipenkoIgor/ngx-mask/issues"
     },
     "peerDependencies": {
         "@angular/common": "^22.0.0",

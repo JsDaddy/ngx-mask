@@ -11,8 +11,7 @@
         "strict": true,
         "target": "ES2022",
         "paths": {
-            "@libraries/*": ["./src/libraries/*"],
-            "@open-source/*": ["./src/libraries/open-source/*"],
+            "@shared/*": ["./src/app/shared/*"],
             "ngx-mask": ["./projects/ngx-mask-lib/src"],
             "ngx-mask/*": ["./projects/ngx-mask-lib/src"],
             "src/*": ["./src/*"]

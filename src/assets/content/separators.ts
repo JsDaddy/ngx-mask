@@ -1,4 +1,4 @@
-import type { ComDoc, MaskOptions, TExampleConfig } from '@open-source/accordion/content.types';
+import type { ComDoc, MaskOptions, TExampleConfig } from '@shared/accordion/content.types';
 
 // `typeFromDecimals` is a v22 directive input not yet present in the shared
 // MaskOptions type (git submodule) — extend it locally until the submodule catches up.

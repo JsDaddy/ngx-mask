@@ -66,7 +66,7 @@ module.exports = tseslint.config(
             '@angular-eslint/component-selector': [
                 'error',
                 {
-                    prefix: 'jsdaddy',
+                    prefix: 'ngxd',
                     style: 'kebab-case',
                     type: 'element',
                 },
@@ -74,7 +74,7 @@ module.exports = tseslint.config(
             '@angular-eslint/directive-selector': [
                 'error',
                 {
-                    prefix: ['mask', 'jsdaddy'],
+                    prefix: ['mask', 'ngxd'],
                     style: 'camelCase',
                     type: 'attribute',
                 },

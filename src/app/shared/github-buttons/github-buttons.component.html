@@ -1,0 +1,7 @@
+<a class="github-info pointer" target="_blank" [href]="githubProfileLink">
+    <div class="all-stars span">
+        <img width="16" height="16" [ngSrc]="'github' | asset: 'shared'" alt="Github" />
+        <span [attr.aria-label]="'Github' | anchorLabel"> {{ title() }} </span>
+    </div>
+    <div class="stars-count span">{{ countOfStarsOnGithub() || 0 }}</div>
+</a>

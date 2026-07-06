@@ -2,7 +2,7 @@
 
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/JsDaddy/ngx-mask/blob/develop/CONTRIBUTING.md#commit
+- [ ] The commit message follows our guidelines: https://github.com/NepipenkoIgor/ngx-mask/blob/develop/CONTRIBUTING.md#commit
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
 

@@ -1,4 +1,4 @@
-import type { ListItem } from '@open-source/accordion/content.types';
+import type { ListItem } from '@shared/accordion/content.types';
 
 export const lists: ListItem[] = [
     {

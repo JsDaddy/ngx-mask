@@ -1,22 +1,12 @@
-<h1 align="center">NGX-MASK</h1>
+<h1 align="center">ngx-mask</h1>
 
 <p align="center">
 A powerful Angular directive for input masking with customizable patterns
 </p>
 
 <p align="center">
-  Created with ❤️ by
-</p>
-
-<p align="center">
-  <a href="https://jsdaddy.io">
-    <img src="http://jsdaddy.io/assets/images/shared/logo.svg" alt="JSDaddy" width="75">
-  </a>
-</p>
-
-<p align="center">
-  <a href="https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml">
-    <img src="https://github.com/JsDaddy/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop" alt="CI">
+  <a href="https://github.com/NepipenkoIgor/ngx-mask/actions/workflows/quality-check.yml">
+    <img src="https://github.com/NepipenkoIgor/ngx-mask/actions/workflows/quality-check.yml/badge.svg?branch=develop" alt="CI">
   </a>
   <a href="https://www.npmjs.com/package/ngx-mask">
     <img src="https://img.shields.io/npm/v/ngx-mask.svg" alt="npm version">
@@ -27,13 +17,24 @@ A powerful Angular directive for input masking with customizable patterns
   <a href="https://www.npmjs.com/package/ngx-mask">
     <img src="https://img.shields.io/npm/dm/ngx-mask.svg" alt="npm monthly downloads">
   </a>
-  <a href="https://github.com/JSDaddy/ngx-mask">
-    <img src="https://img.shields.io/github/contributors/JSDaddy/ngx-mask.svg?style=flat" alt="GitHub contributors">
+  <a href="https://bundlephobia.com/package/ngx-mask">
+    <img src="https://img.shields.io/bundlephobia/minzip/ngx-mask.svg" alt="Bundle size">
   </a>
-  <a href="https://github.com/JSDaddy/ngx-mask">
-    <img src="https://img.shields.io/github/stars/JSDaddy/ngx-mask.svg?label=GitHub%20Stars&style=flat" alt="GitHub Stars">
+  <a href="https://www.npmjs.com/package/ngx-mask">
+    <img src="https://img.shields.io/npm/types/ngx-mask.svg" alt="TypeScript support">
+  </a>
+  <a href="https://github.com/NepipenkoIgor/ngx-mask/blob/develop/LICENSE">
+    <img src="https://img.shields.io/npm/l/ngx-mask.svg" alt="License">
+  </a>
+  <a href="https://github.com/NepipenkoIgor/ngx-mask">
+    <img src="https://img.shields.io/github/contributors/NepipenkoIgor/ngx-mask.svg?style=flat" alt="GitHub contributors">
+  </a>
+  <a href="https://github.com/NepipenkoIgor/ngx-mask">
+    <img src="https://img.shields.io/github/stars/NepipenkoIgor/ngx-mask.svg?label=GitHub%20Stars&style=flat" alt="GitHub Stars">
   </a>
 </p>
+
+`ngx-mask` is the input-masking library built for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover all three form models — **Reactive Forms, template-driven, and the new Signal Forms** — through a first-class `ControlValueAccessor`, and run cleanly in **zoneless** and SSR applications. You get production-ready masks out of the box: dates and times with validity checking, numbers with thousand separators and decimal precision, IP, CPF/CNPJ, secure/hidden input, plus fully custom patterns with prefixes, suffixes and multi-mask expressions. No runtime dependencies beyond Angular, ~15 KB gzipped — provide it once, bind `mask`, done.
 
 ## Table of Contents
 
@@ -42,9 +43,8 @@ A powerful Angular directive for input masking with customizable patterns
 - [Installation](#installation)
 - [Version Compatibility](#version-compatibility)
 - [Quick Start](#quick-start)
-    - [For Angular 15+ (Standalone)](#for-angular-15-standalone)
-    - [For Angular Modules](#for-angular-modules)
-- [Related Projects](#related-projects)
+    - [Standalone Applications](#standalone-applications)
+    - [NgModule-based Applications](#ngmodule-based-applications)
 - [Contributing](#contributing)
 
 ## Features
@@ -138,7 +138,7 @@ NGX-MASK is a feature-rich input mask directive for Angular applications that pr
 
 ## Demo
 
-Check out our [live documentation and examples](https://jsdaddy.github.io/ngx-mask/)
+Check out our [live documentation and examples](https://nepipenkoigor.github.io/ngx-mask/)
 
 ## Installation
 
@@ -251,13 +251,10 @@ export class AppModule {}
 export class AppModule {}
 ```
 
-## Related Projects
-
-Check out other projects by JSDaddy:
-
-- [ngx-copypaste](https://github.com/JsDaddy/ngx-copypaste)
-- [ngx-loader-indicator](https://github.com/JsDaddy/ngx-loader-indicator)
-
 ## Contributing
 
 We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) to learn about our development process and how you can propose bugfixes and improvements.
+
+---
+
+<p align="center">Maintained by <a href="https://software.novines.eu">Igor Nepipenko</a></p>

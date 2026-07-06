@@ -1,13 +1,10 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideNgxMask } from 'ngx-mask';
 import { provideRouter } from '@angular/router';
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { provideHttpClient, withXhr } from '@angular/common/http';
-import { BaseHttpService } from '@libraries/base-http/base-http.service';
-import { DOMAIN } from '@libraries/token/token';
-import { GithubStarsService } from '@libraries/github/github-stars.service';
+import { GithubStarsService } from '@shared/github/github-stars.service';
 import { provideZonelessChangeDetection } from '@angular/core';
 
 bootstrapApplication(AppComponent, {
@@ -15,12 +12,6 @@ bootstrapApplication(AppComponent, {
         provideZonelessChangeDetection(),
         GithubStarsService,
         provideHttpClient(withXhr()),
-        {
-            provide: DOMAIN,
-            useValue: [BaseHttpService],
-        },
-        BaseHttpService,
-        provideAnimations(),
         provideRouter([]),
         provideNgxMask({
             maskAliases: {
@@ -30,7 +21,11 @@ bootstrapApplication(AppComponent, {
         {
             provide: HIGHLIGHT_OPTIONS,
             useValue: {
-                fullLibraryLoader: () => import('highlight.js'),
+                coreLibraryLoader: () => import('highlight.js/lib/core'),
+                languages: {
+                    xml: () => import('highlight.js/lib/languages/xml'),
+                    typescript: () => import('highlight.js/lib/languages/typescript'),
+                },
             },
         },
     ],

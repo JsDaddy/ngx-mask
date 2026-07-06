@@ -1,0 +1,8 @@
+div {
+    width: max-content;
+    padding: 5px 15px;
+    border-radius: 25px;
+    &.is-active {
+        background: #0072f5 !important;
+    }
+}

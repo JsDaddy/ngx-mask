@@ -13,21 +13,34 @@ const tailwindConfig: Config = {
                 sans: ['Varela', 'system-ui', 'sans-serif'],
             },
             colors: {
-                dark: {
-                    DEFAULT: '#191919',
+                ink: {
+                    DEFAULT: '#24272C',
                 },
-                yellow: {
-                    DEFAULT: '#FFD64D',
+                accent: {
+                    DEFAULT: '#0072F5',
+                },
+                primary: {
+                    DEFAULT: '#0F172A',
+                },
+                muted: {
+                    DEFAULT: '#666666',
                 },
                 green: {
-                    DEFAULT: '#1AB77E',
+                    DEFAULT: '#10B981',
                 },
-                orange: {
-                    DEFAULT: '#FF710A',
+                amber: {
+                    DEFAULT: '#F59E0B',
                 },
+                red: {
+                    DEFAULT: '#EF4444',
+                },
+                'text-primary': '#F4F4F8',
+                'text-secondary': '#C4C4D8',
+                'text-dim': '#7878A0',
+                subtle: '#333345',
                 'full-white': '#FFFFFF',
                 white: {
-                    DEFAULT: '#F8F8F8',
+                    DEFAULT: '#F9FAFB',
                 },
             },
             spacing: {

@@ -18,17 +18,12 @@
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
-                        "assets": ["src/assets", "src/favicon.ico"],
+                        "assets": ["src/assets", "src/favicon.svg"],
                         "styles": [
                             "node_modules/highlight.js/styles/github.css",
                             "src/styles.scss"
                         ],
-                        "scripts": [],
-                        "extractLicenses": false,
-                        "sourceMap": true,
-                        "optimization": false,
-                        "namedChunks": true,
-                        "polyfills": ["zone.js"]
+                        "scripts": []
                     },
                     "configurations": {
                         "production": {
@@ -38,8 +33,8 @@
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "3mb",
-                                    "maximumError": "3mb"
+                                    "maximumWarning": "600kb",
+                                    "maximumError": "1mb"
                                 },
                                 {
                                     "type": "anyComponentStyle",
@@ -47,7 +42,11 @@
                                     "maximumError": "15kb"
                                 }
                             ],
-                            "outputHashing": "all"
+                            "outputHashing": "all",
+                            "optimization": true,
+                            "sourceMap": false,
+                            "extractLicenses": true,
+                            "namedChunks": false
                         },
                         "development": {
                             "define": {
@@ -55,7 +54,8 @@
                             },
                             "optimization": false,
                             "extractLicenses": false,
-                            "sourceMap": true
+                            "sourceMap": true,
+                            "namedChunks": true
                         }
                     },
                     "defaultConfiguration": "production"

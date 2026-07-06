@@ -38,10 +38,13 @@ jobs:
               env:
                   RELEASE_VERSION: ${{ steps.semantic-release.outputs.new-release-version }}
               run: |
+                  if [ -z "$RELEASE_VERSION" ]; then
+                      RELEASE_VERSION=$(node -p "require('./projects/ngx-mask-lib/package.json').version")
+                  fi
                   echo '********'
                   echo "RELEASE_VERSION: $RELEASE_VERSION"
                   echo '********'
-                  bash .github/workflows/scripts/replace_template.sh $RELEASE_VERSION
+                  bash .github/workflows/scripts/replace_template.sh "$RELEASE_VERSION"
                   bun run build
 
             - name: Deploy demo
@@ -52,57 +55,3 @@ jobs:
 
         outputs:
             version: ${{ steps.semantic-release.outputs.new-release-version }}
-
-    slack_notification:
-        needs:
-            - build
-        runs-on: ubuntu-latest
-        steps:
-            - name: Post to a Slack channel
-              id: slack
-              uses: slackapi/slack-github-action@v2.0.0
-              with:
-                  method: chat.postMessage
-                  token: ${{ secrets.SLACK_BOT_TOKEN }}
-                  payload: |
-                      {
-                        "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}",
-                        "channel": "deployments",
-                        "blocks": [
-                          {
-                            "type": "section",
-                            "text": {
-                              "type": "mrkdwn",
-                              "text": "GitHub Action build result: ${{ job.status == 'success' && ':white_check_mark:' || ':x:' }}"
-                            }
-                          },
-                          {
-                            "type": "section",
-                            "text": {
-                              "type": "mrkdwn",
-                              "text": "Project: `${{ github.event.repository.name }}`"
-                            }
-                          },
-                          {
-                            "type": "section",
-                            "text": {
-                              "type": "mrkdwn",
-                              "text": "Version: `${{ needs.build.outputs.version || 'TBA' }}`"
-                            }
-                          },
-                          {
-                            "type": "section",
-                            "text": {
-                              "type": "mrkdwn",
-                              "text": "Commit/PR URL: ${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
-                            }
-                          },
-                          {
-                            "type": "section",
-                            "text": {
-                              "type": "mrkdwn",
-                              "text": "Website URL: ${{ secrets.WEBSITE_URL || 'TBA' }}"
-                            }
-                          }
-                        ]
-                      }

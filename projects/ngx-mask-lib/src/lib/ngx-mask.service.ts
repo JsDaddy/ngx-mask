@@ -74,6 +74,27 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         // If no mask expression, return the input value or the actual value
         if (!maskExpression) {
+            // A RECONFIGURATION to an empty mask (mask was non-empty, now swapped to '') must
+            // revert the display/model to the raw unmasked value, not the stale masked
+            // `actualValue` from the mask that no longer applies (#1616: mask signal set to ''
+            // on a populated control left the masked display/FormControl unchanged forever,
+            // since this early return short-circuited before the `maskChanged`/emit logic
+            // below ever ran). Only strip when a mask genuinely changed — a directive with no
+            // mask ever configured must keep returning verbatim `actualValue`/`inputValue`.
+            if (this.maskChanged) {
+                const rawValue = this.removeMask(inputValue);
+                this.previousValue = this.currentValue;
+                this.currentValue = rawValue;
+                this.actualValue = rawValue;
+                this._emitValue = this.previousValue !== this.currentValue;
+                if (this._emitValue && this.triggerOnMaskChange) {
+                    this.formControlResult(rawValue);
+                }
+                if (!this.triggerOnMaskChange) {
+                    this.maskChanged = false;
+                }
+                return rawValue;
+            }
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
         }
 
@@ -951,9 +972,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         return false;
     }
-    // TODO should think about helpers or separting decimal precision to own property
-    private _retrieveSeparatorPrecision(maskExpretion: string): number | null {
-        const matcher: RegExpMatchArray | null = maskExpretion.match(
+    private _retrieveSeparatorPrecision(maskExpression: string): number | null {
+        const matcher: RegExpMatchArray | null = maskExpression.match(
             new RegExp(`^separator\\.([^d]*)`)
         );
         return matcher ? Number(matcher[1]) : null;

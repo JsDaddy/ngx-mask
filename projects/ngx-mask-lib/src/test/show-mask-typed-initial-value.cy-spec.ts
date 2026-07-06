@@ -5,7 +5,7 @@ import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 // Test component with showMaskTyped and initial FormControl value
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-formcontrol',
+    selector: 'ngxd-test-show-mask-typed-formcontrol',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -23,7 +23,7 @@ class TestShowMaskTypedFormControlComponent {
 
 // Test component with showMaskTyped and initial ngModel value
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-ngmodel',
+    selector: 'ngxd-test-show-mask-typed-ngmodel',
     standalone: true,
     imports: [NgxMaskDirective, FormsModule],
     providers: [provideNgxMask()],
@@ -40,7 +40,7 @@ class TestShowMaskTypedNgModelComponent {
 
 // Test component with showMaskTyped and initial model() signal value
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-model-signal',
+    selector: 'ngxd-test-show-mask-typed-model-signal',
     standalone: true,
     imports: [NgxMaskDirective, FormsModule],
     providers: [provideNgxMask()],
@@ -57,7 +57,7 @@ class TestShowMaskTypedModelSignalComponent {
 
 // Test component with showMaskTyped from application-level config
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-app-config',
+    selector: 'ngxd-test-show-mask-typed-app-config',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask({ showMaskTyped: true })],
@@ -74,7 +74,7 @@ class TestShowMaskTypedAppConfigComponent {
 
 // Test component with showMaskTyped from application-level config with ngModel
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-app-config-ngmodel',
+    selector: 'ngxd-test-show-mask-typed-app-config-ngmodel',
     standalone: true,
     imports: [NgxMaskDirective, FormsModule],
     providers: [provideNgxMask({ showMaskTyped: true })],
@@ -90,7 +90,7 @@ class TestShowMaskTypedAppConfigNgModelComponent {
 
 // Test component with showMaskTyped and simple mask (0000)
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-simple',
+    selector: 'ngxd-test-show-mask-typed-simple',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -108,7 +108,7 @@ class TestShowMaskTypedSimpleComponent {
 
 // Test component with showMaskTyped and number value (as string to avoid conversion issues)
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-number',
+    selector: 'ngxd-test-show-mask-typed-number',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -125,7 +125,7 @@ class TestShowMaskTypedNumberComponent {
 
 // Test component with showMaskTyped and date mask
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-date',
+    selector: 'ngxd-test-show-mask-typed-date',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -142,7 +142,7 @@ class TestShowMaskTypedDateComponent {
 
 // Test component with showMaskTyped and credit card mask
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-credit-card',
+    selector: 'ngxd-test-show-mask-typed-credit-card',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -159,7 +159,7 @@ class TestShowMaskTypedCreditCardComponent {
 
 // Test component with showMaskTyped and separator mask
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-separator',
+    selector: 'ngxd-test-show-mask-typed-separator',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -182,7 +182,7 @@ class TestShowMaskTypedSeparatorComponent {
 
 // Test component with showMaskTyped and prefix
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-prefix',
+    selector: 'ngxd-test-show-mask-typed-prefix',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -205,7 +205,7 @@ class TestShowMaskTypedPrefixComponent {
 
 // Test component that simulates programmatic setValue after init with showMaskTyped
 @Component({
-    selector: 'jsdaddy-test-show-mask-typed-set-value',
+    selector: 'ngxd-test-show-mask-typed-set-value',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -223,7 +223,7 @@ class TestShowMaskTypedSetValueComponent {
 
 // Test component simulating custom input with NG_VALUE_ACCESSOR wrapper
 @Component({
-    selector: 'jsdaddy-test-custom-input-wrapper',
+    selector: 'ngxd-test-custom-input-wrapper',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask({ showMaskTyped: true })],
@@ -240,7 +240,7 @@ class TestCustomInputWrapperComponent {
 
 // Test component with async initial value (simulating data from API)
 @Component({
-    selector: 'jsdaddy-test-async-initial-value',
+    selector: 'ngxd-test-async-initial-value',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -264,7 +264,7 @@ class TestAsyncInitialValueComponent {
 
 // Test component with patchValue instead of setValue
 @Component({
-    selector: 'jsdaddy-test-patch-value',
+    selector: 'ngxd-test-patch-value',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -282,7 +282,7 @@ class TestPatchValueComponent {
 
 // Test component with simple value binding (value = '65432')
 @Component({
-    selector: 'jsdaddy-test-simple-value-binding',
+    selector: 'ngxd-test-simple-value-binding',
     standalone: true,
     imports: [NgxMaskDirective, FormsModule],
     providers: [provideNgxMask()],
@@ -299,7 +299,7 @@ class TestSimpleValueBindingComponent {
 
 // Test component with IP mask and showMaskTyped
 @Component({
-    selector: 'jsdaddy-test-ip-mask',
+    selector: 'ngxd-test-ip-mask',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],
@@ -317,7 +317,7 @@ class TestIpMaskComponent {
 
 // Test component with CPF/CNPJ mask and showMaskTyped
 @Component({
-    selector: 'jsdaddy-test-cpf-cnpj-mask',
+    selector: 'ngxd-test-cpf-cnpj-mask',
     standalone: true,
     imports: [NgxMaskDirective, ReactiveFormsModule],
     providers: [provideNgxMask()],

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
-    selector: 'jsdaddy-open-source-card-content[title][color][value]',
+    selector: 'ngxd-card-content[title][color][value]',
     templateUrl: './card-content.component.html',
     styleUrls: ['./card-content.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -53,9 +53,6 @@ test-reports/
 
 .angular
 
-# Snyk
-.dccache
-
 .output.txt
 
 # stray local test-run output
