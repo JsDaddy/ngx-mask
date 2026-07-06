@@ -10,6 +10,8 @@ import { VersionToken } from '@shared/version/version.token';
 export class FooterComponent {
     public readonly copyrightText = `© Ngx-Mask, 2017-${new Date().getFullYear()}, All Rights Reserved`;
 
+    public readonly authorSiteLink = 'https://software.novines.eu';
+
     private readonly versionValue = inject(VersionToken, { optional: true });
 
     public readonly version = `v${this.versionValue ?? '*.*.*'}`;

@@ -1,4 +1,12 @@
 <div
-    class="flex justify-center items-end desk:h-[calc(100dvh-600px)] tab:h-[calc(100dvh - 65vh)] mob:h-[150px]">
-    <span class="pb-10 text-ink/[.45]"> {{ copyrightText }} {{ version }} </span>
+    class="flex flex-col justify-center items-center desk:h-[calc(100dvh-600px)] tab:h-[calc(100dvh - 65vh)] mob:h-[150px]">
+    <span class="pb-2 text-ink/[.45]"> {{ copyrightText }} {{ version }} </span>
+    <a
+        [href]="authorSiteLink"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="pb-10 text-accent hover:underline"
+    >
+        Built by Igor Nepipenko
+    </a>
 </div>

@@ -260,3 +260,7 @@ export class AppModule {}
 ## Contributing
 
 We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) to learn about our development process and how you can propose bugfixes and improvements.
+
+---
+
+<p align="center">Maintained by <a href="https://software.novines.eu">Igor Nepipenko</a></p>
