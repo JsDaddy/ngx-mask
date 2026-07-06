@@ -536,26 +536,25 @@ describe('Demo App - Options', () => {
         },
     ];
 
-    // Note: keepCharacterPositions tests require Cypress (E2E) testing
+    // keepCharacterPositions relies on real browser keydown/selection sequencing
+    // (backspace/leftArrow caret math against the showMaskTyped skeleton) that this file's
+    // synthetic typeValue()/pasteValue() harness cannot reproduce faithfully in ANY form
+    // mode (reactive, template-driven, or signal) - confirmed by reproducing identical
+    // corruption in Reactive mode with a hand-rolled native-event probe, so this is not a
+    // signal-forms-specific bug. Full E2E coverage (19 cases, incl. delete/backspace/select
+    // scenarios) already exists in Cypress:
     // See: projects/ngx-mask-lib/src/test/keep-character-position.cy-spec.ts
 
     describe('Reactive Forms', () => {
         runMaskCasesForMode('reactive', optionsTests, true);
     });
 
-    // Note: Template-driven Forms also have issues with keepCharacterPositions - only testing base options
     describe('Template-driven Forms', () => {
         runMaskCasesForMode('template', optionsTests);
     });
 
-    // Note: Signal Forms have issues with keepCharacterPositions - only testing base options
     describe('Signal Forms', () => {
         runMaskCasesForMode('signal', optionsTests);
-
-        // TODO: keepCharacterPositions tests fail with Signal Forms - potential bug to investigate
-        // keepCharacterPositionsTests.forEach((testCase) => {
-        //     it(`should apply ${testCase.name}`, () => {...});
-        // });
     });
 });
 
