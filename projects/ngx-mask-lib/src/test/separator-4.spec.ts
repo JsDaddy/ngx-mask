@@ -107,8 +107,9 @@ describe('Separator: Mask', () => {
         equal('01', '0,1', fixture);
         equal('0s', '0', fixture);
         equal('0@', '0', fixture);
-        // TODO(inepipenko): strange thet return 0.
-        // equal('0.', '0', fixture);
+        // decimalMarker is ',' here, so '.' is neither the configured marker nor
+        // the thousandSeparator (' ') and is stripped by _stripToDecimal, same as '0@'.
+        equal('0.', '0', fixture);
         component.decimalMarker.set('.');
         equal('0', '0', fixture);
         equal('0.', '0.', fixture);
