@@ -60,7 +60,6 @@ export class AppComponent {
     protected readonly lists: ListItem[] = lists;
     protected readonly title = 'Ngx-Mask';
     protected readonly subtitle = 'Angular plugin to make masks on form fields and html elements';
-    protected readonly chips = ['Angular', 'TypeScript', 'Web', 'Input', 'Pipe', 'Show-Masks'];
 
     protected switchCard(cardId: number): void {
         this.selectedCardId.set(cardId);
