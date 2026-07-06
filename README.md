@@ -45,7 +45,6 @@ A powerful Angular directive for input masking with customizable patterns
 - [Quick Start](#quick-start)
     - [Standalone Applications](#standalone-applications)
     - [NgModule-based Applications](#ngmodule-based-applications)
-- [Related Projects](#related-projects)
 - [Contributing](#contributing)
 
 ## Features
@@ -251,11 +250,6 @@ export class AppModule {}
 })
 export class AppModule {}
 ```
-
-## Related Projects
-
-- [ngx-copypaste](https://github.com/JsDaddy/ngx-copypaste)
-- [ngx-loader-indicator](https://github.com/JsDaddy/ngx-loader-indicator)
 
 ## Contributing
 
