@@ -76,6 +76,14 @@ export class OptionsComponent {
 
     protected readonly activeCardId = this.scrollService.activeCard;
 
+    protected splitCode(code: string): { setup: string | null; template: string } {
+        const [first, ...rest] = code.split(/\n\s*\n/);
+        if (rest.length && typeof first === 'string' && !first.trimStart().startsWith('<')) {
+            return { setup: first, template: rest.join('\n\n') };
+        }
+        return { setup: null, template: code };
+    }
+
     public constructor() {
         effect(() => {
             const configs = this.cardExamplesConfig();
