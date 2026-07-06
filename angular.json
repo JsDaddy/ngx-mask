@@ -18,7 +18,7 @@
                         "index": "src/index.html",
                         "browser": "src/main.ts",
                         "tsConfig": "tsconfig.app.json",
-                        "assets": ["src/assets", "src/favicon.ico"],
+                        "assets": ["src/assets", "src/favicon.svg"],
                         "styles": [
                             "node_modules/highlight.js/styles/github.css",
                             "src/styles.scss"
