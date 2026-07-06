@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/libraries/open-source/visit-btn/visit-btn.component.scss", "src/libraries/open-source/visit-btn/visit-btn.component.scss"],
-  "sourcesContent": [":host {\n    display: block;\n}\n", ":host {\n  display: block;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL2hvbWUvcnVubmVyL3dvcmsvbmd4LW1hc2svbmd4LW1hc2svc3JjL2xpYnJhcmllcy9vcGVuLXNvdXJjZS92aXNpdC1idG4vdmlzaXQtYnRuLmNvbXBvbmVudC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0kiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gICAgZGlzcGxheTogYmxvY2s7XG59XG4iXX0= */"],
-  "mappings": ";AAAA;AACI,WAAA;ACCJ;",
-  "names": []
-}

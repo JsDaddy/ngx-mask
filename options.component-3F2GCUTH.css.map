@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/options/options.component.scss", "src/app/options/options.component.scss"],
-  "sourcesContent": [":host {\n    display: flex;\n    flex-direction: column;\n    gap: 16px;\n    background: var(--full-white);\n    border-top: 1px solid var(--black);\n    padding: 20px 22px;\n}\n", ":host {\n  display: flex;\n  flex-direction: column;\n  gap: 16px;\n  background: var(--full-white);\n  border-top: 1px solid var(--black);\n  padding: 20px 22px;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL2hvbWUvcnVubmVyL3dvcmsvbmd4LW1hc2svbmd4LW1hc2svc3JjL2FwcC9vcHRpb25zL29wdGlvbnMuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSTtFQUNBO0VBQ0E7RUFDQTtFQUNBO0VBQ0EiLCJzb3VyY2VzQ29udGVudCI6WyI6aG9zdCB7XG4gICAgZGlzcGxheTogZmxleDtcbiAgICBmbGV4LWRpcmVjdGlvbjogY29sdW1uO1xuICAgIGdhcDogMTZweDtcbiAgICBiYWNrZ3JvdW5kOiB2YXIoLS1mdWxsLXdoaXRlKTtcbiAgICBib3JkZXItdG9wOiAxcHggc29saWQgdmFyKC0tYmxhY2spO1xuICAgIHBhZGRpbmc6IDIwcHggMjJweDtcbn1cbiJdfQ== */"],
-  "mappings": ";AAAA;AACI,WAAA;AACA,kBAAA;AACA,OAAA;AACA,cAAA,IAAA;AACA,cAAA,IAAA,MAAA,IAAA;AACA,WAAA,KAAA;ACCJ;",
-  "names": []
-}

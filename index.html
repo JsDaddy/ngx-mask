@@ -1,17 +1,42 @@
 <!doctype html>
-<html lang="en">
-    <head><meta http-equiv="Content-Security-Policy" content="script-src 'strict-dynamic' 'sha256-VXrCqrZ5c0w0BaA0HTggD0xAvwyiHSWB5bAUGLm4wRI=' https: 'unsafe-inline';object-src 'none';base-uri 'self';">
-        <meta charset="utf-8"/>
-        <title>Ngx Mask | JSDaddy</title>
-        <base href="/ngx-mask/"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <meta name="description" content="Angular Plugin to make masks on form fields and html elements"/>
-        <link rel="icon" type="image/x-icon" href="favicon.ico"/>
-    <link rel="stylesheet" href="styles-SEIESFNG.css"></head>
+<html lang="en" data-beasties-container="">
+    <head><meta http-equiv="Content-Security-Policy" content="script-src 'strict-dynamic' 'sha256-ErSGQ5RkfdaGFyDT7yi/vnakQoxNloHzsJR8SRc4ISE=' 'sha256-xTO8ykNt/okFKCruFwkOcOwrj5TnEDWMMEwgrO+bXiw=' https: 'unsafe-inline';object-src 'none';base-uri 'self';">
+        <meta charset="utf-8">
+        <title>Ngx Mask</title>
+        <base href="/ngx-mask/">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="description" content="Angular Plugin to make masks on form fields and html elements">
+        <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style>@layer properties;@layer theme,base,components,utilities;@layer theme{:root{--font-mono:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;--spacing:.25rem;--default-mono-font-family:var(--font-mono)}}@layer base{*,:after,:before{box-sizing:border-box;margin:0;padding:0;border:0 solid}html{line-height:1.5;-webkit-text-size-adjust:100%;tab-size:4;font-family:Varela,system-ui,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}}@layer utilities{}@property --tw-rotate-x{syntax:"*";inherits:false;}@property --tw-rotate-y{syntax:"*";inherits:false;}@property --tw-rotate-z{syntax:"*";inherits:false;}@property --tw-skew-x{syntax:"*";inherits:false;}@property --tw-skew-y{syntax:"*";inherits:false;}@property --tw-border-style{syntax:"*";inherits:false;initial-value:solid;}@property --tw-tracking{syntax:"*";inherits:false;}@property --tw-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000;}@property --tw-shadow-color{syntax:"*";inherits:false;}@property --tw-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%;}@property --tw-inset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000;}@property --tw-inset-shadow-color{syntax:"*";inherits:false;}@property --tw-inset-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%;}@property --tw-ring-color{syntax:"*";inherits:false;}@property --tw-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000;}@property --tw-inset-ring-color{syntax:"*";inherits:false;}@property --tw-inset-ring-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000;}@property --tw-ring-inset{syntax:"*";inherits:false;}@property --tw-ring-offset-width{syntax:"<length>";inherits:false;initial-value:0px;}@property --tw-ring-offset-color{syntax:"*";inherits:false;initial-value:#fff;}@property --tw-ring-offset-shadow{syntax:"*";inherits:false;initial-value:0 0 #0000;}@property --tw-outline-style{syntax:"*";inherits:false;initial-value:solid;}@property --tw-blur{syntax:"*";inherits:false;}@property --tw-brightness{syntax:"*";inherits:false;}@property --tw-contrast{syntax:"*";inherits:false;}@property --tw-grayscale{syntax:"*";inherits:false;}@property --tw-hue-rotate{syntax:"*";inherits:false;}@property --tw-invert{syntax:"*";inherits:false;}@property --tw-opacity{syntax:"*";inherits:false;}@property --tw-saturate{syntax:"*";inherits:false;}@property --tw-sepia{syntax:"*";inherits:false;}@property --tw-drop-shadow{syntax:"*";inherits:false;}@property --tw-drop-shadow-color{syntax:"*";inherits:false;}@property --tw-drop-shadow-alpha{syntax:"<percentage>";inherits:false;initial-value:100%;}@property --tw-drop-shadow-size{syntax:"*";inherits:false;}@property --tw-backdrop-blur{syntax:"*";inherits:false;}@property --tw-backdrop-brightness{syntax:"*";inherits:false;}@property --tw-backdrop-contrast{syntax:"*";inherits:false;}@property --tw-backdrop-grayscale{syntax:"*";inherits:false;}@property --tw-backdrop-hue-rotate{syntax:"*";inherits:false;}@property --tw-backdrop-invert{syntax:"*";inherits:false;}@property --tw-backdrop-opacity{syntax:"*";inherits:false;}@property --tw-backdrop-saturate{syntax:"*";inherits:false;}@property --tw-backdrop-sepia{syntax:"*";inherits:false;}@layer properties{@supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))){*,:before,:after{--tw-rotate-x:initial;--tw-rotate-y:initial;--tw-rotate-z:initial;--tw-skew-x:initial;--tw-skew-y:initial;--tw-border-style:solid;--tw-tracking:initial;--tw-shadow:0 0 #0000;--tw-shadow-color:initial;--tw-shadow-alpha:100%;--tw-inset-shadow:0 0 #0000;--tw-inset-shadow-color:initial;--tw-inset-shadow-alpha:100%;--tw-ring-color:initial;--tw-ring-shadow:0 0 #0000;--tw-inset-ring-color:initial;--tw-inset-ring-shadow:0 0 #0000;--tw-ring-inset:initial;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-offset-shadow:0 0 #0000;--tw-outline-style:solid;--tw-blur:initial;--tw-brightness:initial;--tw-contrast:initial;--tw-grayscale:initial;--tw-hue-rotate:initial;--tw-invert:initial;--tw-opacity:initial;--tw-saturate:initial;--tw-sepia:initial;--tw-drop-shadow:initial;--tw-drop-shadow-color:initial;--tw-drop-shadow-alpha:100%;--tw-drop-shadow-size:initial;--tw-backdrop-blur:initial;--tw-backdrop-brightness:initial;--tw-backdrop-contrast:initial;--tw-backdrop-grayscale:initial;--tw-backdrop-hue-rotate:initial;--tw-backdrop-invert:initial;--tw-backdrop-opacity:initial;--tw-backdrop-saturate:initial;--tw-backdrop-sepia:initial}}}</style><script>
+(() => {
+  const CSP_MEDIA_ATTR = 'ngCspMedia';
+  const documentElement = document.documentElement;
+
+  // Listener for load events on link tags.
+  const listener = (e) => {
+    const target = e.target;
+    if (
+      !target ||
+      target.tagName !== 'LINK' ||
+      !target.hasAttribute(CSP_MEDIA_ATTR)
+    ) {
+      return;
+    }
+
+    target.media = target.getAttribute(CSP_MEDIA_ATTR);
+    target.removeAttribute(CSP_MEDIA_ATTR);
+
+    if (!document.head.querySelector(`link[${CSP_MEDIA_ATTR}]`)) {
+      documentElement.removeEventListener('load', listener);
+    }
+  };
+
+  documentElement.addEventListener('load', listener, true);
+})();</script><link rel="stylesheet" href="styles-5YZUWGNX.css" media="print" ngcspmedia="all"><noscript><link rel="stylesheet" href="styles-5YZUWGNX.css"></noscript></head>
     <body>
-        <jsdaddy-open-source-root></jsdaddy-open-source-root>
-    <link rel="modulepreload" href="chunk-FDMHZOCR.js"><script>
-  var scripts = [['main-CFW7JFAG.js', 'module', false, false]];
+        <ngxd-root></ngxd-root>
+    <link rel="modulepreload" href="chunk-IFGU66OU.js"><script>
+  var scripts = [['main-2IYN4APZ.js', 'module', false, false]];
   scripts.forEach(function(scriptUrl) {
     var s = document.createElement('script');
     s.src = scriptUrl[0];
