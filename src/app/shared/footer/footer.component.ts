@@ -8,7 +8,7 @@ import { VersionToken } from '@shared/version/version.token';
     standalone: true,
 })
 export class FooterComponent {
-    public readonly copyrightText = `© Ngx-Mask, 2018-${new Date().getFullYear()}, All Rights Reserved`;
+    public readonly copyrightText = `© Ngx-Mask, 2017-${new Date().getFullYear()}, All Rights Reserved`;
 
     private readonly versionValue = inject(VersionToken, { optional: true });
 
