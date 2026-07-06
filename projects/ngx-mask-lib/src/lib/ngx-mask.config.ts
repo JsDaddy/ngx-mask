@@ -5,11 +5,14 @@ export type InputTransformFn = (value: unknown) => string | number;
 
 export type OutputTransformFn = (value: string | number | undefined | null) => unknown;
 
+/** Single decimal marker character accepted when `decimalMarker` is given as an array. */
+export type DecimalMarkerChar = '.' | ',';
+
 export type NgxMaskConfig = {
     suffix: string;
     prefix: string;
     thousandSeparator: string;
-    decimalMarker: '.' | ',' | ['.', ','];
+    decimalMarker: DecimalMarkerChar | [DecimalMarkerChar, DecimalMarkerChar];
     clearIfNotMatch: boolean;
     showMaskTyped: boolean;
     placeHolderCharacter: string;

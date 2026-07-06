@@ -972,9 +972,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
         return false;
     }
-    // TODO should think about helpers or separting decimal precision to own property
-    private _retrieveSeparatorPrecision(maskExpretion: string): number | null {
-        const matcher: RegExpMatchArray | null = maskExpretion.match(
+    private _retrieveSeparatorPrecision(maskExpression: string): number | null {
+        const matcher: RegExpMatchArray | null = maskExpression.match(
             new RegExp(`^separator\\.([^d]*)`)
         );
         return matcher ? Number(matcher[1]) : null;
