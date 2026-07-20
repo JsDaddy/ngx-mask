@@ -763,7 +763,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      * model value too. Therefore, we don't trigger onChange in this scenario.
      * @param inputValue the current form input value
      */
-    private formControlResult(inputValue: string): void {
+    public formControlResult(inputValue: string): void {
         const outputTransformFn = this.outputTransformFn
             ? this.outputTransformFn
             : (v: unknown) => v;

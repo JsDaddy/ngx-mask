@@ -214,4 +214,27 @@ describe('Directive: Mask', () => {
         component.form.setValue(new Date().toString());
         expect(component.form.value).equal(date.toString());
     });
+
+    it('#1634: leadZero blur reformat should go through outputTransformFn, not raw string', () => {
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        component.decimalMarker.set('.');
+        component.inputTransformFn.set((value: unknown): string => String(value));
+        component.outputTransformFn.set((value: string | number | undefined | null): number =>
+            Number(String(value).replace(',', '.'))
+        );
+
+        equal('9', '9', fixture);
+        expect(component.form.value).equal(9);
+
+        const input = fixture.nativeElement.querySelector('input');
+        input.dispatchEvent(new Event('blur'));
+        fixture.detectChanges();
+
+        // leadZero pads the display to "9.00" on blur; the emitted model value must still be
+        // the numeric type produced by outputTransformFn, not the raw masked string "9.00".
+        expect(input.value).equal('9.00');
+        expect(component.form.value).equal(9);
+        expect(typeof component.form.value).equal('number');
+    });
 });

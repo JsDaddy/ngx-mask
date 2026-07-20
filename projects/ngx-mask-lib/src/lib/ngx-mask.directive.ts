@@ -1115,7 +1115,11 @@ export class NgxMaskDirective
                           MaskExpression.NUMBER_ZERO.repeat(precision) +
                           suffix;
                     this._maskService.actualValue = el.value;
-                    this.onChange(this._maskService.actualValue);
+                    // #1634: propagate through the regular formControlResult pipeline (not a
+                    // raw onChange) so outputTransformFn runs on this blur-time reformat, same
+                    // as every typing-time emission. A raw onChange here sent the masked display
+                    // string straight to the model, bypassing outputTransformFn entirely.
+                    this._maskService.formControlResult(this._maskService.actualValue);
                 }
             }
             this._maskService.clearIfNotMatchFn();
@@ -1648,8 +1652,23 @@ export class NgxMaskDirective
         );
     }
 
-    /** It disables the input element */
+    /**
+     * It disables the input element.
+     *
+     * Mirrors `_writeElementValueSync` (#1305): the service's `formElementProperty` setter
+     * defers ALL DOM writes via `queueMicrotask` to dodge ExpressionChangedAfterItHasBeenChecked
+     * and keep FIFO ordering with config-driven re-renders. For `disabled` specifically, that
+     * deferral leaves `nativeElement.disabled` stale for at least one microtask after Angular
+     * Forms' `setUpControl` calls this method synchronously during init — long enough for a
+     * consumer reading the DOM property in the same synchronous phase (or another deferred write
+     * racing in FIFO order) to observe the wrong value, e.g. an initially-disabled FormControl
+     * whose native input briefly (or, depending on interleaving, persistently) reports
+     * `disabled === false` (#1633). Writing synchronously here closes that gap; the deferred
+     * write below still runs afterwards and re-applies the same final value, preserving the
+     * existing ordering guarantees other call sites rely on.
+     */
     public setDisabledState(isDisabled: boolean): void {
+        this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 

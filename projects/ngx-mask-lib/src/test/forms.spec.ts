@@ -286,6 +286,31 @@ describe('Directive: Forms', () => {
         const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
         expect(inputElement.disabled).equal(true);
     });
+
+    // #1633: setDisabledState's own DOM write used to go only through the deferred
+    // (queueMicrotask) formElementProperty setter, so nativeElement.disabled stayed stale for at
+    // least one microtask after Angular Forms called setDisabledState(true) synchronously during
+    // init — long enough for the deferred write to lose a FIFO race against another queued write
+    // and leave the native input's disabled property out of sync with FormControl.disabled even
+    // after the app settles. Assert the SYNCHRONOUS state right after detectChanges(), with no
+    // microtask flush at all.
+    it('should synchronously reflect an initially-disabled FormControl on the native input, with no microtask flush (#1633)', () => {
+        const testBed = TestBed.createComponent(TestInitiallyDisabledMaskComponent);
+        testBed.detectChanges();
+
+        const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
+        expect(inputElement.disabled).equal(true);
+        expect(testBed.componentInstance.form.disabled).equal(true);
+    });
+
+    it('should not disable the native input synchronously when the FormControl is not disabled (#1633)', () => {
+        const testBed = TestBed.createComponent(TestMaskComponent);
+        testBed.detectChanges();
+
+        const inputElement: HTMLInputElement = testBed.nativeElement.querySelector('input');
+        expect(inputElement.disabled).equal(false);
+        expect(testBed.componentInstance.form.disabled).equal(false);
+    });
 });
 
 describe('Directive: Signal Forms', () => {
