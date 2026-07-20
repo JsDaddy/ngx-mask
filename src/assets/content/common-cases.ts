@@ -134,6 +134,13 @@ export const ComDocs: ComDoc[] = [
         id: 14,
         anchor: 'mask-aliases',
     },
+    {
+        header: 'Smart cursor with leadZeroDateTime',
+        text: 'When a typed digit overflows the current date/time segment, leadZeroDateTime auto-inserts a leading zero and moves the cursor past the separator instead of leaving it stuck.',
+        code: `<input mask="M0/00" [leadZeroDateTime]="true" [showMaskTyped]="true" />`,
+        id: 15,
+        anchor: 'lead-zero-date-time',
+    },
 ];
 
 export const ComExamples: TExampleConfig<MaskOptions>[] = [
@@ -238,6 +245,13 @@ export const ComExamples: TExampleConfig<MaskOptions>[] = [
     {
         _placeholder: 'Custom mask alias (PHONE_BR)',
         _mask: 'PHONE_BR',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'Smart cursor with leadZeroDateTime',
+        _mask: 'M0/00',
+        _leadZeroDateTime: true,
+        _showMaskTyped: true,
         control: { initialValue: '', model: '' },
     },
 ];

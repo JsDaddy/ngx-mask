@@ -558,6 +558,12 @@ You can hide symbols in input field and get the actual value in `formcontrol`.
 <input placeholder="Secure input" [hiddenInput]="true" mask="XXX/X0/0000" />
 ```
 
+Day (`d`) and month (`M`) tokens can also be concealed, e.g. to hide the day and month of a date while keeping the year visible:
+
+```html
+<input placeholder="Secure date input" [hiddenInput]="true" mask="d0/M0/0000" />
+```
+
 ### IP valid mask
 
 #### Usage

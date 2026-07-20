@@ -79,6 +79,7 @@ export type MaskOptions = {
     _allowNegativeNumbers: boolean;
     _hiddenInput: boolean;
     _leadZero: boolean;
+    _leadZeroDateTime: boolean;
     _specialCharacters: string | string[];
     _apm: boolean;
     _decimalMarker: string | string[];

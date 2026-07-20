@@ -39,6 +39,13 @@ export const OthDocs: ComDoc[] = [
         id: 5,
         anchor: 'percentDecimalMarker',
     },
+    {
+        header: 'Secure date input',
+        text: 'You can also hide the day and month digits of a date while keeping the year visible',
+        code: ` <input [hiddenInput]="true" mask="d0/M0/0000">`,
+        id: 6,
+        anchor: 'secure-date',
+    },
 ];
 
 export const OthExamples: (TExampleConfig<MaskOptions> | { _pipe: string })[] = [
@@ -67,6 +74,12 @@ export const OthExamples: (TExampleConfig<MaskOptions> | { _pipe: string })[] = 
         _placeholder: '12 hour format',
         _mask: 'percent.2',
         _decimalMarker: ',',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: 'Secure date input',
+        _hiddenInput: true,
+        _mask: 'd0/M0/0000',
         control: { initialValue: '', model: '' },
     },
 ];
