@@ -125,12 +125,14 @@ export const initialConfig: NgxMaskConfig = {
         },
         d: {
             pattern: new RegExp('\\d'),
+            symbol: '*',
         },
         m: {
             pattern: new RegExp('\\d'),
         },
         M: {
             pattern: new RegExp('\\d'),
+            symbol: '*',
         },
         H: {
             pattern: new RegExp('\\d'),

@@ -194,6 +194,34 @@ describe('Test Date Hh:m0', () => {
             .should('have.prop', 'selectionStart', 7);
     });
 
+    it('Mask M0/00 should set cursor on right position (#1488 issue repro)', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('M0/00'),
+                leadZeroDateTime: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+        cy.get('#masked')
+            .type('3')
+            .should('have.value', '03/__')
+            .should('have.prop', 'selectionStart', 3);
+    });
+
+    it('Mask Hh:m0 should set cursor on right position with showMaskTyped (#1488)', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('Hh:m0'),
+                leadZeroDateTime: signal(true),
+                showMaskTyped: signal(true),
+            },
+        });
+        cy.get('#masked')
+            .type('77')
+            .should('have.value', '07:07')
+            .should('have.prop', 'selectionStart', 5);
+    });
+
     it('Mask should work with showMaskTyped 000/00000 with prefix', () => {
         cy.mount(CypressTestMaskComponent, {
             componentProperties: {
