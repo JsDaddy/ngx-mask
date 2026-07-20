@@ -37,7 +37,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     private _end!: number;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    public onChange = (_: any) => {};
+    public onChange = (_: unknown) => {};
 
     public readonly _elementRef = inject(ElementRef, { optional: true });
 
@@ -64,7 +64,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         justPasted = false,
         backspaced = false,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        cb: (...args: any[]) => any = () => {}
+        cb: (actualShift: number, backspaceShift: boolean) => void = () => {}
     ): string {
         // Consume the directive's keepCharacterPositions verdict for this edit (see the
         // keepCharacterPositionsHandled doc). Reset immediately so it never leaks into
@@ -214,11 +214,6 @@ export class NgxMaskService extends NgxMaskApplierService {
                 } else {
                     actualResult = [];
                 }
-            }
-
-            // Remove mask if showMaskTyped is true and hiddenInput is false
-            if (this.showMaskTyped && !this.hiddenInput) {
-                newInputValue = this.removeMask(inputValue);
             }
 
             // Handle actual value length
@@ -432,7 +427,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         justPasted: boolean,
         backspaced: boolean,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        cb: (...args: any[]) => any = () => {}
+        cb: (actualShift: number, backspaceShift: boolean) => void = () => {}
     ): void {
         const formElement = this._elementRef?.nativeElement;
         if (!formElement) {
@@ -763,7 +758,7 @@ export class NgxMaskService extends NgxMaskApplierService {
      * model value too. Therefore, we don't trigger onChange in this scenario.
      * @param inputValue the current form input value
      */
-    private formControlResult(inputValue: string): void {
+    public formControlResult(inputValue: string): void {
         const outputTransformFn = this.outputTransformFn
             ? this.outputTransformFn
             : (v: unknown) => v;

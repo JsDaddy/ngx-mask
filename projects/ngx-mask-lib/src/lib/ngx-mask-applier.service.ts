@@ -96,14 +96,14 @@ export class NgxMaskApplierService {
         justPasted = false,
         backspaced = false,
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        cb: (...args: any[]) => any = () => {}
+        cb: (actualShift: number, backspaceShift: boolean) => void = () => {}
     ): string {
         if (!maskExpression || typeof inputValue !== 'string') {
             return MaskExpression.EMPTY_STRING;
         }
         let cursor = 0;
         let result = '';
-        let multi = false;
+        const multi = false;
         let backspaceShift = false;
         let shift = 1;
         let stepBack = false;
@@ -178,7 +178,6 @@ export class NgxMaskApplierService {
         processedPosition = resolved.processedPosition;
         cursor = resolved.cursor;
         result = resolved.result;
-        multi = resolved.multi;
         backspaceShift = resolved.backspaceShift;
         shift = resolved.shift;
         stepBack = resolved.stepBack;
@@ -292,8 +291,8 @@ export class NgxMaskApplierService {
         decimalChars: string | string[],
         precision: number
     ) => {
-        let x: string[] = [];
-        let decimalChar = '';
+        let x: string[];
+        let decimalChar: string;
 
         if (Array.isArray(decimalChars)) {
             const regExp = new RegExp(
