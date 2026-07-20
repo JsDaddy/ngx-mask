@@ -24,7 +24,7 @@ export type MaskHandlerParams = {
     readonly position: number;
     readonly justPasted: boolean;
     readonly backspaced: boolean;
-    readonly cb: (...args: any[]) => any;
+    readonly cb: (actualShift: number, backspaceShift: boolean) => void;
     readonly inputArray: string[];
     /** digit-only array (CPF_CNPJ length check). */
     readonly arr: string[];

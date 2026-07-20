@@ -37,18 +37,20 @@ import { TRI_MODES, createTriModeFixture } from './utils/tri-mode-harness';
 class InputZipComponent implements ControlValueAccessor {
     public value = model<string | number>();
 
-    public onChange: any;
-    public onTouched: any;
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public onChange: (value: unknown) => void = () => {};
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    public onTouched: () => void = () => {};
 
     public writeValue(obj: string): void {
         this.value.set(obj);
     }
 
-    public registerOnChange(fn: any): void {
+    public registerOnChange(fn: (value: unknown) => void): void {
         this.onChange = fn;
     }
 
-    public registerOnTouched(fn: any): void {
+    public registerOnTouched(fn: () => void): void {
         this.onTouched = fn;
     }
 }

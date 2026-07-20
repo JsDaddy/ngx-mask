@@ -44,7 +44,7 @@ export class NgxMaskPipe implements PipeTransform {
         };
 
         Object.entries(currentConfig).forEach(([key, val]) => {
-            (this._maskService as any)[key] = val;
+            (this._maskService as unknown as Record<string, unknown>)[key] = val;
         });
 
         if (resolvedMask.includes('||')) {

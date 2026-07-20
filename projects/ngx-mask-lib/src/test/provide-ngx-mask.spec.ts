@@ -230,7 +230,9 @@ describe('provideNgxMask', () => {
         // Ensure that all provided config values are passed through to the service.
         for (const key of Object.keys(allConfigValues)) {
             if (!excludeConfig.includes(key)) {
-                expect((service as any)[key]).equal((allConfigValues as any)[key]);
+                expect((service as unknown as Record<string, unknown>)[key]).equal(
+                    (allConfigValues as unknown as Record<string, unknown>)[key]
+                );
             }
         }
     });

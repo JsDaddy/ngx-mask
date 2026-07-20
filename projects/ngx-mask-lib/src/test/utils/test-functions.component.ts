@@ -1,8 +1,9 @@
+import type { ComponentFixture } from '@angular/core/testing';
 import { expect } from 'vitest';
 export const Paste = 'Paste';
 export const Type = 'Type';
 
-export function pasteTest(inputValue: string, fixture: any): string {
+export function pasteTest(inputValue: string, fixture: ComponentFixture<unknown>): string {
     fixture.detectChanges();
 
     fixture.nativeElement.querySelector('input').value = inputValue;
@@ -14,7 +15,7 @@ export function pasteTest(inputValue: string, fixture: any): string {
     return fixture.nativeElement.querySelector('input').value;
 }
 
-export function typeTest(inputValue: string, fixture: any): string {
+export function typeTest(inputValue: string, fixture: ComponentFixture<unknown>): string {
     fixture.detectChanges();
     const inputArray = inputValue.split('');
     const inputElement = fixture.nativeElement.querySelector('input');
@@ -47,7 +48,7 @@ export function typeTest(inputValue: string, fixture: any): string {
 }
 
 // Functions for textarea
-export function pasteTestTextarea(inputValue: string, fixture: any): string {
+export function pasteTestTextarea(inputValue: string, fixture: ComponentFixture<unknown>): string {
     fixture.detectChanges();
 
     fixture.nativeElement.querySelector('textarea').value = inputValue;
@@ -59,7 +60,7 @@ export function pasteTestTextarea(inputValue: string, fixture: any): string {
     return fixture.nativeElement.querySelector('textarea').value;
 }
 
-export function typeTestTextarea(inputValue: string, fixture: any): string {
+export function typeTestTextarea(inputValue: string, fixture: ComponentFixture<unknown>): string {
     fixture.detectChanges();
     const inputArray = inputValue.split('');
     const textareaElement = fixture.nativeElement.querySelector('textarea');
@@ -90,7 +91,7 @@ export function typeTestTextarea(inputValue: string, fixture: any): string {
 export function equal(
     value: string,
     expectedValue: string,
-    fixture: any,
+    fixture: ComponentFixture<unknown>,
     async = false,
     testType: typeof Paste | typeof Type = Type
 ): void | Promise<void> {
@@ -113,7 +114,7 @@ export function equal(
 export function equalTextarea(
     value: string,
     expectedValue: string,
-    fixture: any,
+    fixture: ComponentFixture<unknown>,
     async = false,
     testType: typeof Paste | typeof Type = Type
 ): void | Promise<void> {

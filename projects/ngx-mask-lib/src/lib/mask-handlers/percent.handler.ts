@@ -37,7 +37,7 @@ export const percentHandler: MaskHandlerFn = function (state, params) {
             processedValue.length
         )}`;
     }
-    let value = '';
+    let value: string;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.allowNegativeNumbers && processedValue.slice(cursor, cursor + 1) === MaskExpression.MINUS
         ? (value = `${MaskExpression.MINUS}${processedValue.slice(cursor + 1, cursor + processedValue.length)}`)

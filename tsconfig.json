@@ -32,7 +32,10 @@
         "skipLibCheck": true,
         "noImplicitAny": true,
         "useDefineForClassFields": true,
-        "isolatedModules": true
+        "isolatedModules": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "verbatimModuleSyntax": true
     },
     "angularCompilerOptions": {
         "strictStandalone": true,

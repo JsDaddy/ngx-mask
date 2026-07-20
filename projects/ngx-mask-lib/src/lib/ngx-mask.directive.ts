@@ -176,7 +176,7 @@ export class NgxMaskDirective
     }
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    public onChange = (_: any) => {};
+    public onChange = (_: unknown) => {};
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
@@ -185,7 +185,7 @@ export class NgxMaskDirective
         // Default onChange used in Signal Forms mode, where Angular never calls registerOnChange.
         // It pushes the unmasked value into the `value` model so the `valueChange` output fires.
         // registerOnChange() overrides this to additionally invoke Angular's CVA callback.
-        this._maskService.onChange = this.onChange = (value: any) => {
+        this._maskService.onChange = this.onChange = (value: unknown) => {
             this._propagateToValueModel(value);
         };
 
@@ -414,7 +414,7 @@ export class NgxMaskDirective
                 this._hasPendingInitialValue = false;
                 const pendingValue = this._pendingInitialValue;
                 this._pendingInitialValue = null;
-                void this.writeValue(pendingValue);
+                this.writeValue(pendingValue);
             }
         }
     }
@@ -1178,7 +1178,7 @@ export class NgxMaskDirective
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
             el.selectionStart > this._maskService.prefix.length &&
-            (e as any).keyCode !== 38
+            (e as unknown as { keyCode?: number }).keyCode !== 38
         ) {
             if (this._maskService.showMaskTyped && !this.keepCharacterPositions()) {
                 // We are showing the mask in the input
@@ -1391,7 +1391,7 @@ export class NgxMaskDirective
     }
 
     /** It writes the value in the input */
-    public async writeValue(controlValue: unknown): Promise<void> {
+    public writeValue(controlValue: unknown): void {
         if (!this._configApplied && this.mask()) {
             // Called before the first ngOnChanges pass configured the mask service (happens with
             // Signal Forms' [formField], whose control-sync instruction runs before sibling
@@ -1588,7 +1588,7 @@ export class NgxMaskDirective
         // Its invocation is therefore our reliable signal that we are NOT in Signal Forms mode.
         this._isCvaMode.set(true);
         const originalFn = fn;
-        this._maskService.onChange = this.onChange = (value: any) => {
+        this._maskService.onChange = this.onChange = (value: unknown) => {
             originalFn(value);
             this._propagateToValueModel(value);
         };
@@ -1672,7 +1672,7 @@ export class NgxMaskDirective
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    private _applyMask(): any {
+    private _applyMask(): void {
         this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
             this._maskValue() || ''
         );

@@ -8,7 +8,7 @@ const tseslint = require('typescript-eslint');
 // Allows us to bring in the recommended rules for Angular projects from angular-eslint
 const angular = require('angular-eslint');
 
-const json = require('eslint-plugin-json');
+const json = require('@eslint/json').default;
 
 const ignores = [
     'dist/',
@@ -113,7 +113,7 @@ module.exports = tseslint.config(
             curly: ['error', 'all'],
             '@angular-eslint/no-input-rename': 'off',
             '@typescript-eslint/restrict-template-expressions': 'error',
-            '@typescript-eslint/no-explicit-any': 'off',
+            '@typescript-eslint/no-explicit-any': 'error',
             '@typescript-eslint/adjacent-overload-signatures': 'error',
             'no-console': ['warn'],
             '@typescript-eslint/explicit-member-accessibility': 'error',
@@ -159,7 +159,9 @@ module.exports = tseslint.config(
                 },
             ],
             'no-plusplus': ['off'],
-            '@typescript-eslint/unbound-method': 'off',
+            '@typescript-eslint/unbound-method': 'error',
+            '@typescript-eslint/no-floating-promises': 'error',
+            '@typescript-eslint/no-misused-promises': 'error',
             'import/no-cycle': 'off',
             'import/extensions': 'off',
             '@typescript-eslint/consistent-type-imports': 'error',
@@ -188,6 +190,21 @@ module.exports = tseslint.config(
         },
     },
     {
+        // Spec/cypress files call shared test helpers (typeTest/pasteTest/...) that wrap
+        // fixture.detectChanges()/whenStable() without awaiting on every call site — the
+        // suite relies on Angular's zoneless-test scheduler flushing between synchronous
+        // dispatchEvent calls, not on promise chaining per-keystroke. Retrofitting ~1900
+        // individual call sites across 30+ spec files with await/void is a mechanical
+        // rewrite disproportionate to a dependency/lint-strictness chore and carries real
+        // risk of altering test timing; tracked as follow-up, not attempted here.
+        files: ['**/*.spec.ts', '**/*.cy-spec.ts'],
+        rules: {
+            '@typescript-eslint/no-floating-promises': 'off',
+            '@typescript-eslint/no-misused-promises': 'off',
+            '@typescript-eslint/unbound-method': 'off',
+        },
+    },
+    {
         files: ['**/*.js'],
         extends: [eslint.configs.recommended],
         languageOptions: {
@@ -200,6 +217,8 @@ module.exports = tseslint.config(
     },
     {
         files: ['**/*.json'],
+        plugins: { json },
+        language: 'json/json',
         extends: [json.configs.recommended],
         rules: {},
     }
