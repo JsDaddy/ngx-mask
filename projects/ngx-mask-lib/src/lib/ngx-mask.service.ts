@@ -452,13 +452,26 @@ export class NgxMaskService extends NgxMaskApplierService {
         return inputValue
             .split(MaskExpression.EMPTY_STRING)
             .map((curr: string, index: number) => {
+                const maskChar = maskExpression[index] ?? MaskExpression.EMPTY_STRING;
+                const pattern = this.patterns?.[maskChar];
+                if (pattern?.symbol) {
+                    return pattern.symbol;
+                }
+                // #1574: a '0' immediately following a concealed DAY/MONTH token
+                // is that field's second digit (d0/M0) — conceal it too so the
+                // whole 2-digit field is hidden, not just its first character.
+                // Display-only: does not touch maskExpression/processedValue, so
+                // date validation/leadZero clamping in generic-pattern.handler.ts
+                // is unaffected.
+                const prevMaskChar = maskExpression[index - 1];
+                const prevPattern = prevMaskChar ? this.patterns?.[prevMaskChar] : null;
                 if (
-                    this.patterns &&
-                    this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING] &&
-                    this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING]?.symbol
+                    maskChar === MaskExpression.NUMBER_ZERO &&
+                    (prevMaskChar === MaskExpression.DAY ||
+                        prevMaskChar === MaskExpression.MONTH) &&
+                    prevPattern?.symbol
                 ) {
-                    return this.patterns[maskExpression[index] ?? MaskExpression.EMPTY_STRING]
-                        ?.symbol;
+                    return prevPattern.symbol;
                 }
                 return curr;
             })

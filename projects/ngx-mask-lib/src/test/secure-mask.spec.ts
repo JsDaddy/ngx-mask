@@ -314,6 +314,28 @@ describe('Directive: Mask (Secure)', () => {
         equal(inputTarget.value, '123-45-6', fixture, true);
     });
 
+    it('it checks secure input functionality for date mask d0/M0/0000 (partial conceal, #1574)', () => {
+        component.mask.set('d0/M0/0000');
+        component.hiddenInput.set(true);
+        equal('01052024', '**/**/2024', fixture);
+        expect(component.form.value).equal('01052024');
+    });
+
+    it('it checks secure input functionality for date mask d0/M0/XXXX (full conceal, #1574)', () => {
+        component.mask.set('d0/M0/XXXX');
+        component.hiddenInput.set(true);
+        equal('01052024', '**/**/****', fixture);
+        expect(component.form.value).equal('01052024');
+    });
+
+    it('conceals the leadZero-corrected day/month, not just the typed digit (#1574)', () => {
+        component.mask.set('d0/M0/0000');
+        component.hiddenInput.set(true);
+        component.leadZeroDateTime.set(true);
+        equal('332024', '**/**/2024', fixture);
+        expect(component.form.value).equal('03032024');
+    });
+
     it('change hiddenInput to false when mask is full', async () => {
         const debug: DebugElement = fixture.debugElement.query(By.css('input'));
         const inputTarget: HTMLInputElement = debug.nativeElement as HTMLInputElement;
