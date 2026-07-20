@@ -23,7 +23,8 @@ export const separatorHandler: MaskHandlerFn = function (state, params) {
         cb,
         inputValue,
     } = params;
-    let { processedValue, processedPosition, result, backspaceShift, shift, stepBack } = state;
+    let { processedValue, processedPosition, backspaceShift, shift, stepBack } = state;
+    let result: string;
 
     if (
         processedValue.match('[wа-яА-Я]') ||

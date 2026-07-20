@@ -477,4 +477,70 @@ describe('Directive: Mask (Delete)', () => {
 
         expect(inputTarget.value).equal('.34');
     });
+
+    // #1632: retyping into a slot just cleared by two backspaces must fill from the
+    // FIRST typed digit, not drop it.
+    it('should fill both digits of a backspace-cleared month slot with keepCharacterPositions (issue #1632)', () => {
+        component.mask.set('d0/M0/0000');
+        component.keepCharacterPositions.set(true);
+        component.showMaskTyped.set(true);
+        component.dropSpecialCharacters.set(false);
+        const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+        const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        fixture.detectChanges();
+
+        component.form.setValue('05/06/2025');
+        fixture.detectChanges();
+
+        // caret placed right after the month: 05/06|/2025
+        inputTarget.selectionStart = 5;
+        inputTarget.selectionEnd = 5;
+
+        // backspace #1: clears the second month digit -> 05/0_/2025, caret at 4
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        inputTarget.value = inputTarget.value.slice(0, 4) + inputTarget.value.slice(5);
+        inputTarget.selectionStart = inputTarget.selectionEnd = 4;
+        debugElement.triggerEventHandler('input', {
+            target: inputTarget,
+            inputType: 'deleteContentBackward',
+        });
+
+        // backspace #2: clears the first month digit -> 05/__/2025, caret at 3
+        debugElement.triggerEventHandler('keydown', {
+            code: 'Backspace',
+            key: 'Backspace',
+            keyCode: 8,
+            target: inputTarget,
+        });
+        inputTarget.value = inputTarget.value.slice(0, 3) + inputTarget.value.slice(4);
+        inputTarget.selectionStart = inputTarget.selectionEnd = 3;
+        debugElement.triggerEventHandler('input', {
+            target: inputTarget,
+            inputType: 'deleteContentBackward',
+        });
+
+        expect(inputTarget.value).equal('05/__/2025');
+
+        // type '1' then '2' into the cleared month slot
+        for (const char of ['1', '2']) {
+            const pos = inputTarget.selectionStart as number;
+            debugElement.triggerEventHandler('keydown', { key: char, target: inputTarget });
+            inputTarget.value =
+                inputTarget.value.slice(0, pos) + char + inputTarget.value.slice(pos);
+            inputTarget.selectionStart = inputTarget.selectionEnd = pos + 1;
+            debugElement.triggerEventHandler('input', {
+                target: inputTarget,
+                inputType: 'insertText',
+                data: char,
+            });
+        }
+
+        expect(inputTarget.value).equal('05/12/2025');
+    });
 });

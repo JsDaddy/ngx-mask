@@ -1,3 +1,11 @@
+# 22.0.2(2026-07-20)
+
+### Fix
+
+- Fix ([#1634](https://github.com/NepipenkoIgor/ngx-mask/issues/1634)) — `separator` masks with `outputTransformFn` no longer emit the raw formatted display string on blur; the blur-time `leadZero` reformat now routes through the same transform pipeline as every typing-time emission, so `FormControl` keeps receiving the transformed (e.g. numeric) value
+- Fix ([#1633](https://github.com/NepipenkoIgor/ngx-mask/issues/1633)) — `setDisabledState` now writes the native `disabled` DOM property synchronously; an initially-disabled `FormControl` no longer briefly (or persistently) leaves the native input enabled due to the deferred `queueMicrotask` write racing Angular Forms' synchronous init
+- Regression coverage ([#1632](https://github.com/NepipenkoIgor/ngx-mask/issues/1632)) — added unit and Cypress tests locking in that retyping into a `keepCharacterPositions` slot cleared by Backspace (e.g. date mask `d0/M0/0000`) fills from the first typed keystroke; already fixed by prior `keepCharacterPositions` corrections, no source change needed
+
 # 22.0.0(2026-07-03)
 
 ### Feature

@@ -341,6 +341,27 @@ describe('Directive: Mask (Delete)', () => {
             .should('have.value', '111-___-333');
     });
 
+    // #1632 retype into a backspace-cleared slot must fill from the first typed digit
+    it('should replace only month when editing month part with backspace', () => {
+        cy.mount(CypressTestMaskComponent, {
+            componentProperties: {
+                mask: signal('d0/M0/0000'),
+                keepCharacterPositions: signal(true),
+                showMaskTyped: signal(true),
+                dropSpecialCharacters: signal(false),
+            },
+        });
+
+        cy.get('#masked')
+            .type('05062025')
+            .should('have.value', '05/06/2025')
+            .then(($input) => {
+                ($input[0] as HTMLInputElement).setSelectionRange(5, 5); // 05/06|/2025
+            })
+            .type('{backspace}{backspace}12')
+            .should('have.value', '05/12/2025');
+    });
+
     // #1489 (case 1): mask starting with a special character, ctrl+a then type
     it('should keep first typed symbol after select-all when mask starts with special char', () => {
         cy.mount(CypressTestMaskComponent, {

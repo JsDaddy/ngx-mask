@@ -1,6 +1,6 @@
-declare let global: any;
+declare let global: typeof globalThis | undefined;
 
-const commonjsGlobal =
+const commonjsGlobal: Record<string, unknown> =
     typeof globalThis !== 'undefined'
         ? globalThis
         : typeof window !== 'undefined'
@@ -12,9 +12,9 @@ const commonjsGlobal =
               : {};
 
 (function () {
-    if (!commonjsGlobal.KeyboardEvent) {
+    if (!commonjsGlobal['KeyboardEvent']) {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
-        commonjsGlobal.KeyboardEvent = function (_eventType: any, _init: any) {};
+        commonjsGlobal['KeyboardEvent'] = function (_eventType: unknown, _init: unknown) {};
     }
 })();
 
