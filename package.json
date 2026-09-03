@@ -62,7 +62,7 @@
         "@angular/platform-browser": "22.0.7",
         "@angular/router": "22.0.7",
         "baseline-browser-mapping": "2.10.43",
-        "browserslist": "4.28.6",
+        "browserslist": "4.28.7",
         "caniuse-lite": "1.0.30001806",
         "highlight.js": "11.11.1",
         "ngx-highlightjs": "14.0.1"
@@ -118,7 +118,7 @@
         ]
     },
     "overrides": {
-        "browserslist": "4.28.6",
+        "browserslist": "4.28.7",
         "caniuse-lite": "1.0.30001806"
     }
 }
