@@ -1,6 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import type { NgxMaskConfig } from 'ngx-mask';
-import { NgxMaskDirective, provideNgxMask, NgxMaskPipe } from 'ngx-mask';
+import {
+    initialConfig,
+    NgxMaskDirective,
+    NgxMaskService,
+    provideNgxMask,
+    NgxMaskPipe,
+} from 'ngx-mask';
 import { expect } from 'vitest';
 
 describe('Pipe: Mask', () => {
@@ -423,5 +429,72 @@ describe('Pipe: Mask', () => {
     it('should expand an exponential-format number with separator mask (#1492)', () => {
         const value: string | number = maskPipe.transform(0.0000007, 'separator');
         expect(value).equal('0.0000007');
+    });
+
+    // #1669: the pipe wrote its per-call config into the injector-level NgxMaskService and
+    // merged custom patterns over the previous call's patterns, so they leaked into later
+    // transforms.
+    describe('config isolation (#1669)', () => {
+        const letterPatterns: NgxMaskConfig['patterns'] = { '0': { pattern: /[a-z]/ } };
+
+        it('should not keep custom patterns for later calls on the same pipe', () => {
+            expect(maskPipe.transform('ab', '00', { patterns: letterPatterns })).equal('ab');
+            expect(maskPipe.transform('12', '00')).equal('12');
+            expect(maskPipe.transform('ab', '00')).equal('');
+        });
+
+        it('should not reuse the previous value when only the patterns change', () => {
+            expect(maskPipe.transform('12', '00')).equal('12');
+            expect(maskPipe.transform('12', '00', { patterns: letterPatterns })).equal('');
+        });
+
+        it('should not share custom patterns between pipe instances', () => {
+            const plainPipe = TestBed.runInInjectionContext(() => new NgxMaskPipe());
+
+            expect(maskPipe.transform('ab', '00', { patterns: letterPatterns })).equal('ab');
+            expect(plainPipe.transform('12', '00')).equal('12');
+            expect(plainPipe.transform('ab', '00')).equal('');
+        });
+
+        it('should not modify the injector-level NgxMaskService', () => {
+            const service = TestBed.inject(NgxMaskService);
+
+            maskPipe.transform('ab', '00', { patterns: letterPatterns, prefix: '+' });
+            maskPipe.transform('1234', 'separator.2', { thousandSeparator: '.' });
+
+            expect(service.patterns).toBe(initialConfig.patterns);
+            expect(service.prefix).equal(initialConfig.prefix);
+            expect(service.thousandSeparator).equal(initialConfig.thousandSeparator);
+            expect(service.maskExpression).equal('');
+            expect(service.isNumberValue).equal(false);
+        });
+
+        describe('with a custom provideNgxMask() config', () => {
+            beforeEach(() => {
+                TestBed.resetTestingModule();
+                TestBed.configureTestingModule({
+                    providers: [
+                        provideNgxMask({
+                            thousandSeparator: '.',
+                            patterns: { ...initialConfig.patterns, X: { pattern: /[a-z]/ } },
+                        }),
+                    ],
+                }).runInInjectionContext(() => {
+                    maskPipe = new NgxMaskPipe();
+                });
+            });
+
+            it('should still apply the provided config', () => {
+                expect(maskPipe.transform('123123', 'separator.0')).equal('123.123');
+                expect(maskPipe.transform('ab12', 'XX-00')).equal('ab-12');
+            });
+
+            it('should fall back to the provided patterns after a call with custom patterns', () => {
+                const digitPatterns: NgxMaskConfig['patterns'] = { X: { pattern: /\d/ } };
+
+                expect(maskPipe.transform('12', 'XX', { patterns: digitPatterns })).equal('12');
+                expect(maskPipe.transform('ab12', 'XX-00')).equal('ab-12');
+            });
+        });
     });
 });

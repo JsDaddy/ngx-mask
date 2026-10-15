@@ -1,5 +1,5 @@
 import type { PipeTransform } from '@angular/core';
-import { inject, Pipe } from '@angular/core';
+import { EnvironmentInjector, inject, Injector, Pipe } from '@angular/core';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias } from './ngx-mask.config';
@@ -14,7 +14,9 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 export class NgxMaskPipe implements PipeTransform {
     private readonly defaultOptions = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
 
-    private readonly _maskService = inject(NgxMaskService);
+    private readonly _environmentInjector = inject(EnvironmentInjector);
+
+    private _maskService!: NgxMaskService;
 
     private _maskExpressionArray: string[] = [];
 
@@ -27,6 +29,17 @@ export class NgxMaskPipe implements PipeTransform {
     ): string {
         let processedValue: string | number = value;
 
+        // NgxMaskService is stateful (built for the directive, which keeps value history across
+        // keystrokes), so each transform gets a fresh instance: nothing from a previous call can
+        // leak into this one (#1669).
+        this._maskService = Injector.create({
+            providers: [
+                NgxMaskService,
+                { provide: NGX_MASK_CONFIG, useValue: this.defaultOptions },
+            ],
+            parent: this._environmentInjector,
+        }).get(NgxMaskService);
+
         // User-defined aliases expand BEFORE any other mask processing (incl. `||` handling).
         const resolvedMask = resolveMaskAlias(mask, {
             ...this.defaultOptions.maskAliases,
@@ -38,7 +51,7 @@ export class NgxMaskPipe implements PipeTransform {
             ...this.defaultOptions,
             ...config,
             patterns: {
-                ...this._maskService.patterns,
+                ...this.defaultOptions.patterns,
                 ...patterns,
             },
         };
@@ -109,8 +122,6 @@ export class NgxMaskPipe implements PipeTransform {
                     MaskExpression.COMMA
                 );
             }
-
-            this._maskService.isNumberValue = true;
         }
 
         if (processedValue === null || typeof processedValue === 'undefined') {
