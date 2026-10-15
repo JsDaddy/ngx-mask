@@ -9,6 +9,7 @@ Please format code and markup in your issue using [github markdown](https://help
 ## Contributing to Source Code (Pull Requests)
 
 - If your PR changes any behavior or fixes an issue, it should have an associated test.
+- Put a regression test in the existing spec file for the behaviour it covers, in a `describe('<behaviour> (#NNNN)')` block: nested in the file's describe when its setup fits, otherwise a top-level describe in that file. Do not add `issue-NNNN.spec.ts` files; create a new spec file only when none fits, named by topic.
 - New features should be general and as simple as possible.
 - Breaking changes should be avoided if possible.
 - All pull requests require review. No PR will be merged without a comment from a team member stating LGTM (Looks good to me).

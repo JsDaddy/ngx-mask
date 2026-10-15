@@ -6,13 +6,80 @@ import {
     signal,
     ChangeDetectionStrategy,
 } from '@angular/core';
+import type { Type } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { form, FormField, schema, disabled, required, pattern } from '@angular/forms/signals';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
-import { expect } from 'vitest';
+import { expect, expectTypeOf } from 'vitest';
 import { typeTest } from './utils/test-functions.component';
+
+@Component({
+    selector: 'ngxd-open-source-test',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="separator.2" thousandSeparator="," [formControl]="control" />`,
+})
+class InitialSeparatorValueComponent {
+    public control = new FormControl(1500);
+}
+
+@Component({
+    selector: 'ngxd-open-source-digit-test',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="0000" [formControl]="control" />`,
+})
+class InitialDigitValueComponent {
+    public control = new FormControl('3333');
+}
+
+@Component({
+    selector: 'ngxd-issue-1640-number-field',
+    imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input type="number" mask="0*" [formField]="signalForm.amount" />`,
+})
+class NumberFieldComponent {
+    private injector = inject(Injector);
+    public model = signal({ amount: 42 });
+    public signalForm = runInInjectionContext(this.injector, () => form(this.model));
+}
+
+@Component({
+    selector: 'ngxd-issue-1640-nullable-number-field',
+    imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input type="number" mask="0*" [formField]="signalForm.amount" />`,
+})
+class NullableNumberFieldComponent {
+    private injector = inject(Injector);
+    public model = signal<{ amount: number | null }>({ amount: null });
+    public signalForm = runInInjectionContext(this.injector, () => form(this.model));
+}
+
+@Component({
+    selector: 'ngxd-issue-1640-nullable-string-field',
+    imports: [NgxMaskDirective, FormField],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="0000" [formField]="signalForm.value" />`,
+})
+class NullableStringFieldComponent {
+    private injector = inject(Injector);
+    public model = signal<{ value: string | null }>({ value: null });
+    public signalForm = runInInjectionContext(this.injector, () => form(this.model));
+}
+
+@Component({
+    selector: 'ngxd-issue-1640-string-consumer',
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="0000" [(value)]="text" />`,
+})
+class StringConsumerComponent {
+    public text = signal<string>('');
+}
 
 @Component({
     selector: 'ngxd-open-source-test',
@@ -313,6 +380,70 @@ describe('Directive: Forms', () => {
     });
 });
 
+// Issue #1305 (dup #1264): Material's floating label does not float for initial values.
+// Root cause: the directive rendered writeValue() through the service's
+// `formElementProperty` setter, which defers the DOM write via queueMicrotask. MatInput
+// decides emptiness (`shouldLabelFloat`) by reading `nativeElement.value` DURING the
+// change-detection pass — a value that only lands in a later microtask is invisible to
+// it, so the label stays down until something else (focus/CD) re-checks.
+// The contract asserted here: after a writeValue-driven render, the native input value
+// must be populated SYNCHRONOUSLY — before any microtask flush — so that consumers
+// reading the native value inside the same CD pass (Angular Material, CDK autofill,
+// autosize) observe it.
+describe('Directive: Forms: initial value renders synchronously (#1305)', () => {
+    it('should render the initial separator value in the same CD pass (no microtask)', () => {
+        TestBed.configureTestingModule({
+            imports: [InitialSeparatorValueComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture: ComponentFixture<InitialSeparatorValueComponent> = TestBed.createComponent(
+            InitialSeparatorValueComponent
+        );
+        fixture.detectChanges();
+
+        // Deliberately NO await / whenStable here: Material reads the native value
+        // synchronously during this very CD pass.
+        const el: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        expect(el.value).toBe('1,500');
+    });
+
+    it('should render the initial digit value in the same CD pass (no microtask)', () => {
+        TestBed.configureTestingModule({
+            imports: [InitialDigitValueComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture: ComponentFixture<InitialDigitValueComponent> = TestBed.createComponent(
+            InitialDigitValueComponent
+        );
+        fixture.detectChanges();
+
+        const el: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        expect(el.value).toBe('3333');
+    });
+
+    it('should render a later programmatic setValue synchronously as well', async () => {
+        TestBed.configureTestingModule({
+            imports: [InitialSeparatorValueComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture: ComponentFixture<InitialSeparatorValueComponent> = TestBed.createComponent(
+            InitialSeparatorValueComponent
+        );
+        const component = fixture.componentInstance;
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        component.control.setValue(2500);
+        const el: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        expect(el.value).toBe('2,500');
+
+        // And the deferred write must not clobber it afterwards.
+        await fixture.whenStable();
+        fixture.detectChanges();
+        expect(el.value).toBe('2,500');
+    });
+});
+
 describe('Directive: Signal Forms', () => {
     it('should format the initial signal value with the mask on render', async () => {
         TestBed.configureTestingModule({
@@ -442,6 +573,101 @@ describe('Directive: Signal Forms', () => {
 
         expect(inputElement.value).equal('123-456');
         expect(component.signalForm.value().value()).equal('123-456');
+    });
+
+    // Issue #1640: binding `[formField]` to a NUMERIC signal-form field (`<input type="number">`,
+    // `signal({ amount: 0 })`) failed at compile time with
+    // `TS2322: Type 'number' is not assignable to type 'string'`, while the same setup works with
+    // Reactive Forms. Angular's template type-checker treats any co-located directive that owns a
+    // `value` model as the field's custom `FormValueControl` and checks the field's value type
+    // against that model's type — and the directive's model was pinned to `string`. Nullable
+    // fields (`number | null`, `string | null`) hit the same wall. At runtime nothing was wrong:
+    // `FormField` prefers the directive's `NG_VALUE_ACCESSOR`, so values flow through
+    // `writeValue()`, which has always accepted `string | number | null | undefined`.
+    //
+    // The model now accepts that same union. These hosts are the regression: on the old typing this
+    // file does not compile. The last host pins the other direction — the standalone `[(value)]`
+    // two-way binding on a `string` signal must keep compiling and working.
+    describe('non-string field types via [formField] (#1640)', () => {
+        async function createFixture<T>(component: Type<T>): Promise<ComponentFixture<T>> {
+            TestBed.configureTestingModule({
+                imports: [component],
+                providers: [provideNgxMask()],
+            });
+            const fixture = TestBed.createComponent(component);
+            fixture.detectChanges();
+            await Promise.resolve();
+            fixture.detectChanges();
+            return fixture;
+        }
+
+        function getInput(fixture: ComponentFixture<unknown>): HTMLInputElement {
+            return fixture.nativeElement.querySelector('input') as HTMLInputElement;
+        }
+
+        function typeInto(fixture: ComponentFixture<unknown>, value: string): string {
+            const input = getInput(fixture);
+            input.value = value;
+            input.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+            return input.value;
+        }
+
+        it('should accept the same value types as writeValue()', () => {
+            expectTypeOf<Parameters<NgxMaskDirective['value']['set']>[0]>().toEqualTypeOf<
+                string | number | null | undefined
+            >();
+        });
+
+        it('should render a numeric initial value on a type="number" input', async () => {
+            const fixture = await createFixture(NumberFieldComponent);
+
+            expect(getInput(fixture).value).toBe('42');
+        });
+
+        it('should push typed digits into a numeric field', async () => {
+            const fixture = await createFixture(NumberFieldComponent);
+
+            expect(typeInto(fixture, '123')).toBe('123');
+            expect(fixture.componentInstance.signalForm.amount().value()).toBe(123);
+        });
+
+        it('should render an empty input for a null numeric field', async () => {
+            const fixture = await createFixture(NullableNumberFieldComponent);
+
+            expect(getInput(fixture).value).toBe('');
+        });
+
+        it('should push typed digits into a nullable numeric field', async () => {
+            const fixture = await createFixture(NullableNumberFieldComponent);
+
+            expect(typeInto(fixture, '7')).toBe('7');
+            // Emitted as the unmasked string: the directive only switches to numeric emission
+            // after a numeric writeValue() (`isNumberValue`), and the initial write here was
+            // `null`. Same as a Reactive Forms `FormControl<number | null>`; `outputTransformFn`
+            // is the documented way to coerce.
+            expect(fixture.componentInstance.signalForm.amount().value()).toBe('7');
+        });
+
+        it('should render an empty input for a null string field', async () => {
+            const fixture = await createFixture(NullableStringFieldComponent);
+
+            expect(getInput(fixture).value).toBe('');
+        });
+
+        it('should push the masked value into a nullable string field', async () => {
+            const fixture = await createFixture(NullableStringFieldComponent);
+
+            expect(typeInto(fixture, '12345')).toBe('1234');
+            expect(fixture.componentInstance.signalForm.value().value()).toBe('1234');
+        });
+
+        it('should keep the standalone [(value)] two-way binding on a string signal working', async () => {
+            const fixture = await createFixture(StringConsumerComponent);
+
+            expect(typeInto(fixture, '12')).toBe('12');
+            expect(fixture.componentInstance.text()).toBe('12');
+        });
     });
 });
 
