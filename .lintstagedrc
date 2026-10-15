@@ -1,7 +1,8 @@
 {
     "*.{ts,js,json}": [
         "eslint --report-unused-disable-directives --max-warnings 0 --no-warn-ignored --fix",
-        "prettier . --write"
+        "prettier --write"
     ],
-    "*.scss": "stylelint --fix"
+    "*.{html,md}": "prettier --write",
+    "*.scss": ["stylelint --fix", "prettier --write"]
 }

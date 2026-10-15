@@ -38,7 +38,7 @@
         "test:app": "ng test ngx-mask",
         "test:lib": "ng test ngx-mask-lib",
         "type-coverage": "type-coverage",
-        "init:git:hooks": ".github/scripts/setup_hooks.sh"
+        "prepare": "simple-git-hooks"
     },
     "repository": {
         "type": "git",
@@ -79,6 +79,7 @@
         "postcss": "8.5.30",
         "postcss-scss": "4.0.9",
         "prettier": "3.9.10",
+        "simple-git-hooks": "2.14.0",
         "stylelint": "17.16.0",
         "stylelint-config-recommended-scss": "17.0.1",
         "stylelint-prettier": "5.0.3",
@@ -88,6 +89,10 @@
         "typescript": "6.0.3",
         "typescript-eslint": "8.71.2",
         "vitest": "5.0.5"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "bunx lint-staged",
+        "commit-msg": "bunx commitlint --edit $1"
     },
     "typeCoverage": {
         "atLeast": 91,

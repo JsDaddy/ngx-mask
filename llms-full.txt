@@ -1,8 +1,8 @@
 # ngx-mask
 
-> Input masking library for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover Reactive Forms, template-driven forms and Signal Forms through a `ControlValueAccessor`, and run in zoneless and SSR apps. No `NgxMaskModule` in current versions — configuration is registered via `provideEnvironmentNgxMask()` / `provideNgxMask()`. No runtime dependencies beyond Angular, ~15 KB gzipped.
+> Input masking library for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover Reactive Forms, template-driven forms and Signal Forms through a `ControlValueAccessor`, and run in zoneless and SSR apps. No `NgxMaskModule` in current versions — configuration is registered via `provideEnvironmentNgxMask()` / `provideNgxMask()`. No runtime dependencies beyond Angular, ~24 KB gzipped (fesm bundle).
 
-npm package: `ngx-mask`. Supports Angular 17+ (see version pins below for older Angular). Source: https://github.com/NepipenkoIgor/ngx-mask
+npm package: `ngx-mask`. Latest release requires Angular 22 (peer `^22.0.0`); older Angular majors need an earlier ngx-mask release (see version pins below). Source: https://github.com/NepipenkoIgor/ngx-mask
 
 ## Installation
 
@@ -443,12 +443,12 @@ Alias keys must be UPPER_SNAKE_CASE and must not shadow built-in tokens (`IP`, `
 
 ## Version compatibility
 
-- Angular 17+: latest ngx-mask, full feature set (this doc).
+- Angular 22: latest ngx-mask (peer `^22.0.0`), full feature set (this doc). Angular 17-21 map to earlier ngx-mask majors; check the npm version history.
 - Angular 16.x: `ngx-mask@16.4.2`
 - Angular 15.x: `ngx-mask@15.2.3`
 - Angular 14.x: `ngx-mask@14.3.3`
 - Angular 13.x / 12.x: `ngx-mask@13.2.2`
-- Only Angular 17+ builds receive new features and updates.
+- Only the latest ngx-mask receives new features and updates.
 
 ## Links
 

@@ -2,7 +2,9 @@
 const globals = require('globals');
 // Allows us to bring in the recommended core rules from eslint itself
 const eslint = require('@eslint/js');
-// Allows us to use the typed utility for our config, and to bring in the recommended rules for TypeScript projects from typescript-eslint
+// defineConfig: typed, flat-config composer from eslint core
+const { defineConfig } = require('eslint/config');
+// Recommended rules for TypeScript projects from typescript-eslint
 const tseslint = require('typescript-eslint');
 
 // Allows us to bring in the recommended rules for Angular projects from angular-eslint
@@ -28,7 +30,7 @@ const ignores = [
 ];
 
 // Export our config array, which is composed together thanks to the typed utility function from typescript-eslint
-module.exports = tseslint.config(
+module.exports = defineConfig(
     {
         ignores,
     },
