@@ -66,6 +66,10 @@ jobs:
               with:
                   config-file: release-please-config.json
                   manifest-file: .release-please-manifest.json
+                  # Tag and Release are created from the default branch state at run time, not from the triggering
+                  # sha, so only the run for the release commit may create them: that run's sha is the tagged sha,
+                  # which the publish job asserts. The Release PR itself is still opened/updated on every run.
+                  skip-github-release: ${{ !startsWith(github.event.head_commit.message, 'chore(release):') }}
 
     publish:
         needs: [build, release-please]
@@ -87,8 +91,10 @@ jobs:
               with:
                   node-version: 24
                   registry-url: https://registry.npmjs.org
-            - name: Use npm with trusted publishing support (>= 11.5.1)
-              run: npm install -g npm@^11.5.1
+            - name: npm supports trusted publishing (>= 11.5.1)
+              run: |
+                  v=$(npm -v)
+                  test "$(printf '%s\n' 11.5.1 "$v" | sort -V | head -n1)" = 11.5.1 || { echo "npm $v is older than 11.5.1"; exit 1; }
             - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   name: package
