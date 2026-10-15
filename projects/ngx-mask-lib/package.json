@@ -31,7 +31,7 @@
     "homepage": "https://github.com/NepipenkoIgor/ngx-mask",
     "repository": {
         "type": "git",
-        "url": "git@github.com:NepipenkoIgor/ngx-mask.git"
+        "url": "git+https://github.com/NepipenkoIgor/ngx-mask.git"
     },
     "bugs": {
         "url": "https://github.com/NepipenkoIgor/ngx-mask/issues"

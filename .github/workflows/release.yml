@@ -1,0 +1,107 @@
+name: release
+
+on:
+    push:
+        branches:
+            - develop
+
+# One release run at a time; never cancel a run that may be publishing.
+concurrency:
+    group: release
+    cancel-in-progress: false
+
+permissions:
+    contents: read
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read # no id-token, no write scopes: this job runs dependency code
+        outputs:
+            version: ${{ steps.pack.outputs.version }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+            - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+              with:
+                  bun-version: latest
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 22
+            - name: Install
+              run: bun install --frozen-lockfile
+            - name: Build library
+              run: bun run build:lib
+            - name: Test library
+              run: bun run test:lib
+            - name: Pack library
+              id: pack
+              working-directory: dist/ngx-mask-lib
+              run: |
+                  echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+                  npm pack
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: package
+                  path: dist/ngx-mask-lib/*.tgz
+                  if-no-files-found: error
+                  retention-days: 7
+
+    release-please:
+        needs: build
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+            issues: write
+        outputs:
+            released: ${{ steps.rp.outputs['projects/ngx-mask-lib--release_created'] }}
+            sha: ${{ steps.rp.outputs['projects/ngx-mask-lib--sha'] }}
+            version: ${{ steps.rp.outputs['projects/ngx-mask-lib--version'] }}
+        steps:
+            - id: rp
+              uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+              with:
+                  config-file: release-please-config.json
+                  manifest-file: .release-please-manifest.json
+
+    publish:
+        needs: [build, release-please]
+        if: needs.release-please.outputs.released == 'true'
+        runs-on: ubuntu-latest
+        permissions:
+            id-token: write # npm trusted publishing (OIDC) + provenance; nothing else, no checkout, no install
+        env:
+            VERSION: ${{ needs.release-please.outputs.version }}
+        steps:
+            - name: The built tip is the released commit
+              env:
+                  RELEASE_SHA: ${{ needs.release-please.outputs.sha }}
+                  BUILT_VERSION: ${{ needs.build.outputs.version }}
+              run: |
+                  test "$RELEASE_SHA" = "$GITHUB_SHA" || { echo "released $RELEASE_SHA but this run built $GITHUB_SHA"; exit 1; }
+                  test "$BUILT_VERSION" = "$VERSION" || { echo "built $BUILT_VERSION but released $VERSION"; exit 1; }
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: 24
+                  registry-url: https://registry.npmjs.org
+            - name: Use npm with trusted publishing support (>= 11.5.1)
+              run: npm install -g npm@^11.5.1
+            - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+              with:
+                  name: package
+                  path: package
+            - name: Already on npm?
+              id: npm
+              run: |
+                  code=$(curl -s -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/ngx-mask/${VERSION}")
+                  case "$code" in
+                      200) echo "published=true" >> "$GITHUB_OUTPUT" ;;
+                      404) echo "published=false" >> "$GITHUB_OUTPUT" ;;
+                      *) echo "registry answered $code"; exit 1 ;;
+                  esac
+            - name: Publish to npm
+              if: steps.npm.outputs.published != 'true'
+              run: npm publish "package/ngx-mask-${VERSION}.tgz"
