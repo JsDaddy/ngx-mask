@@ -140,7 +140,8 @@ export class NgxMaskDirective
      * originated from the view. Re-masking that unmasked echo is at best a redundant re-render
      * and at worst destructive for masks whose unmasked form is ambiguous (e.g. IP:
      * '192168178' cannot reconstruct the typed dots of '192.168.1.78'). `writeValue()` consumes
-     * this marker to skip exactly that echo. `null` = no pending propagation.
+     * this marker to skip exactly that echo; ngOnChanges reads it to recognise a `[value]`
+     * binding echo of it (#1671). `null` = no pending propagation.
      */
     private _lastPropagatedValue: string | null = null;
     /**
@@ -220,15 +221,10 @@ export class NgxMaskDirective
         effect(() => {
             const signalValue = this.value();
             untracked(() => {
-                if (this._isCvaMode()) {
-                    return;
-                }
-                if (this._skipNextValueEffect()) {
-                    this._skipNextValueEffect.set(false);
-                    return;
-                }
-                if (String(signalValue) !== String(this._inputValue())) {
+                if (this._valueEffectWillWrite(signalValue)) {
                     this.writeValue(signalValue);
+                } else {
+                    this._skipNextValueEffect.set(false);
                 }
             });
         });
@@ -432,7 +428,21 @@ export class NgxMaskDirective
         if (keepCharacterPositions) {
             this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
         }
-        this._applyMask();
+        // #1671: a standalone `[(value)]` change reaches ngOnChanges BEFORE the value effect
+        // writes it, so `_inputValue` still holds the PREVIOUS value here. Re-rendering it would
+        // run applyMask on stale input, and whatever that emits (the showMaskTyped skeleton's
+        // '', a hiddenInput / keepCharacterPositions reconstruction) flows back through onChange,
+        // overwrites the freshly bound model and makes the effect skip the real write. When the
+        // effect is about to render the new value via writeValue() anyway, only apply the mask
+        // configuration here. The effect only runs when the `value` SIGNAL changes: a parent
+        // re-binding the value we last propagated (an echo, possibly applied in a later task)
+        // changes the binding but not the signal, which already holds it — that pass renders.
+        const valueChange = changes['value'];
+        const valueEffectWillRender =
+            !!valueChange &&
+            String(valueChange.currentValue) !== this._lastPropagatedValue &&
+            this._valueEffectWillWrite(valueChange.currentValue);
+        this._applyMask(!valueEffectWillRender);
         if (!this._configApplied) {
             this._configApplied = true;
             if (this._hasPendingInitialValue) {
@@ -1808,6 +1818,21 @@ export class NgxMaskDirective
     }
 
     /**
+     * Whether the `value`-model effect will render `value` itself via writeValue(): only in
+     * standalone `[(value)]` / Signal Forms mode (Angular's writeValue owns rendering in CVA mode), not for
+     * the model echo of our own onChange propagation (`_skipNextValueEffect`), and only when it
+     * differs from what is already rendered. Shared with ngOnChanges (#1671), which must leave
+     * exactly that render to the effect.
+     */
+    private _valueEffectWillWrite(value: unknown): boolean {
+        return (
+            !this._isCvaMode() &&
+            !this._skipNextValueEffect() &&
+            String(value) !== String(this._inputValue())
+        );
+    }
+
+    /**
      * Focus the input element.
      * Required by FormValueControl interface for Signal Forms.
      */
@@ -1859,10 +1884,18 @@ export class NgxMaskDirective
         this._maskService.formElementProperty = ['disabled', isDisabled];
     }
 
-    private _applyMask(): void {
+    private _applyMask(renderInputValue: boolean): void {
         this._maskService.maskExpression = this._maskService._repeatPatternSymbols(
             this._maskValue() || ''
         );
+        if (!renderInputValue) {
+            // Consume the one-shot flags ngOnChanges set for THIS render, as applyMask would:
+            // writingValue (thousandSeparator change) and maskChanged (mask change). Nothing
+            // else clears them when the following writeValue() takes its no-applyMask branch.
+            this._maskService.writingValue = false;
+            this._maskService._clearMaskChangedUnlessTriggered();
+            return;
+        }
         this._maskService.formElementProperty = [
             'value',
             this._maskedOrVerbatim(this._inputValue()),
