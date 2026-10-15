@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.2.2](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.1...v22.2.2) (2026-10-15)
+
+
+### Fix
+
+* **pipe:** stop mask pipe from leaking config between calls ([#1670](https://github.com/NepipenkoIgor/ngx-mask/issues/1670)) ([221ac5d](https://github.com/NepipenkoIgor/ngx-mask/commit/221ac5dc3a773ddad19f55e5dffdb0c7d8679016))
+
 ## 22.2.1(2026-09-22)
 
 ### Chore
