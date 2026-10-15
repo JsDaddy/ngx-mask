@@ -1,5 +1,13 @@
 # Changelog
 
+## [22.2.3](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.2...v22.2.3) (2026-10-15)
+
+
+### Fix
+
+* **directive:** keep [(value)] bound value with showMaskTyped ([#1680](https://github.com/NepipenkoIgor/ngx-mask/issues/1680)) ([b6948e3](https://github.com/NepipenkoIgor/ngx-mask/commit/b6948e325319add7d82b30ab2cedecc589c4f031)), closes [#1671](https://github.com/NepipenkoIgor/ngx-mask/issues/1671)
+* **mask:** allow . _ - + in email mask local part ([#1679](https://github.com/NepipenkoIgor/ngx-mask/issues/1679)) ([b228f7b](https://github.com/NepipenkoIgor/ngx-mask/commit/b228f7b1e3a54f3d6dd8228a8306d9d8f5129e98)), closes [#1668](https://github.com/NepipenkoIgor/ngx-mask/issues/1668)
+
 ## [22.2.2](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.1...v22.2.2) (2026-10-15)
 
 
