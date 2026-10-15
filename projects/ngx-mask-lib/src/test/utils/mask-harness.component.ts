@@ -43,7 +43,7 @@ import { NGX_MASK_CONFIG } from 'ngx-mask';
         </div>
     `,
 })
-export class CypressTestMaskComponent implements OnInit, OnDestroy {
+export class MaskHarnessComponent implements OnInit, OnDestroy {
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     public mask = input('');
 
@@ -61,7 +61,7 @@ export class CypressTestMaskComponent implements OnInit, OnDestroy {
 
     public showMaskTyped = input<NgxMaskConfig['showMaskTyped']>(this._config.showMaskTyped);
 
-    public decimalMarker = input<NgxMaskConfig['decimalMarker'] | string>('.');
+    public decimalMarker = input<NgxMaskConfig['decimalMarker']>('.');
 
     public thousandSeparator = input<NgxMaskConfig['thousandSeparator']>(',');
 

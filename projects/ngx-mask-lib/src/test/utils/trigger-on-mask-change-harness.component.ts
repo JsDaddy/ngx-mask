@@ -1,12 +1,13 @@
 import type { OnDestroy, OnInit } from '@angular/core';
 import { Component, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskDirective } from 'ngx-mask';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
 @Component({
     selector: 'ngxd-open-source-test',
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
+    providers: [provideNgxMask()],
     styles: [
         'code { border: 1px solid #ddd; background-color: #eee; padding: 0 5px; border-radius: 3px; }',
     ],
@@ -33,7 +34,7 @@ import { NgxMaskDirective } from 'ngx-mask';
         </div>
     `,
 })
-export class CypressTestTriggerOnMaskChangeComponent implements OnInit, OnDestroy {
+export class TriggerOnMaskChangeHarnessComponent implements OnInit, OnDestroy {
     public mask = signal('');
 
     public form: FormControl = new FormControl('');

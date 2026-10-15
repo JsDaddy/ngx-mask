@@ -1,5 +1,6 @@
-import { CypressTestMaskComponent } from './utils/cypress-test-component.component';
-import { signal, Component, model } from '@angular/core';
+import { mount } from './utils/browser-harness';
+import { MaskHarnessComponent } from './utils/mask-harness.component';
+import { Component, model } from '@angular/core';
 import { FormControl, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
@@ -334,357 +335,342 @@ class TestCpfCnpjMaskComponent {
 
 describe('Directive: Mask (showMaskTyped with initial values)', () => {
     describe('showMaskTyped with FormControl initial value', () => {
-        it('should display initial value correctly with phone mask', () => {
-            cy.mount(TestShowMaskTypedFormControlComponent);
+        it('should display initial value correctly with phone mask', async () => {
+            const m = await mount(TestShowMaskTypedFormControlComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
 
-        it('should not mark form as dirty with initial value', () => {
-            cy.mount(TestShowMaskTypedFormControlComponent);
+        it('should not mark form as dirty with initial value', async () => {
+            const m = await mount(TestShowMaskTypedFormControlComponent);
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
 
-        it('should display initial value correctly with simple mask', () => {
-            cy.mount(TestShowMaskTypedSimpleComponent);
+        it('should display initial value correctly with simple mask', async () => {
+            const m = await mount(TestShowMaskTypedSimpleComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '1234');
-            cy.get('#value').should('have.text', '1234');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('1234');
+            await expect.poll(() => m.text('#value')).toBe('1234');
         });
 
-        it('should display initial value correctly with number value', () => {
-            cy.mount(TestShowMaskTypedNumberComponent);
+        it('should display initial value correctly with number value', async () => {
+            const m = await mount(TestShowMaskTypedNumberComponent);
 
-            cy.wait(100);
+            await m.settle();
             // Number values are converted to string and masked; 65432 with mask 00000
-            cy.get('#masked').should('have.value', '65432');
-            cy.get('#value').should('have.text', '65432');
+            await expect.poll(() => m.get('#masked').value).toBe('65432');
+            await expect.poll(() => m.text('#value')).toBe('65432');
         });
 
-        it('should display initial value correctly with date mask', () => {
-            cy.mount(TestShowMaskTypedDateComponent);
+        it('should display initial value correctly with date mask', async () => {
+            const m = await mount(TestShowMaskTypedDateComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '12/25/2023');
-            cy.get('#value').should('have.text', '12252023');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('12/25/2023');
+            await expect.poll(() => m.text('#value')).toBe('12252023');
         });
 
-        it('should display initial value correctly with credit card mask', () => {
-            cy.mount(TestShowMaskTypedCreditCardComponent);
+        it('should display initial value correctly with credit card mask', async () => {
+            const m = await mount(TestShowMaskTypedCreditCardComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '1234 5678 9012 3456');
-            cy.get('#value').should('have.text', '1234567890123456');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('1234 5678 9012 3456');
+            await expect.poll(() => m.text('#value')).toBe('1234567890123456');
         });
 
-        it('should display initial value correctly with separator mask', () => {
-            cy.mount(TestShowMaskTypedSeparatorComponent);
+        it('should display initial value correctly with separator mask', async () => {
+            const m = await mount(TestShowMaskTypedSeparatorComponent);
 
-            cy.wait(100);
+            await m.settle();
             // Separator mask with showMaskTyped shows the value with decimal places
-            cy.get('#masked').invoke('val').should('contain', '1,234.56');
+            await expect.poll(() => m.get('#masked').value).toContain('1,234.56');
         });
 
-        it('should display initial value correctly with prefix', () => {
-            cy.mount(TestShowMaskTypedPrefixComponent);
+        it('should display initial value correctly with prefix', async () => {
+            const m = await mount(TestShowMaskTypedPrefixComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '+1 1234');
-            cy.get('#value').should('have.text', '1234');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('+1 1234');
+            await expect.poll(() => m.text('#value')).toBe('1234');
         });
     });
 
     describe('showMaskTyped with ngModel initial value', () => {
-        it('should display initial value correctly with ngModel', () => {
-            cy.mount(TestShowMaskTypedNgModelComponent);
+        it('should display initial value correctly with ngModel', async () => {
+            const m = await mount(TestShowMaskTypedNgModelComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
     });
 
     describe('showMaskTyped with model() signal', () => {
-        it('should display initial value correctly with model signal', () => {
-            cy.mount(TestShowMaskTypedModelSignalComponent);
+        it('should display initial value correctly with model signal', async () => {
+            const m = await mount(TestShowMaskTypedModelSignalComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
     });
 
     describe('showMaskTyped from application-level config', () => {
-        it('should display initial value correctly with app-level showMaskTyped', () => {
-            cy.mount(TestShowMaskTypedAppConfigComponent);
+        it('should display initial value correctly with app-level showMaskTyped', async () => {
+            const m = await mount(TestShowMaskTypedAppConfigComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
 
-        it('should not mark form as dirty with app-level showMaskTyped', () => {
-            cy.mount(TestShowMaskTypedAppConfigComponent);
+        it('should not mark form as dirty with app-level showMaskTyped', async () => {
+            const m = await mount(TestShowMaskTypedAppConfigComponent);
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
 
-        it('should display initial value correctly with app-level config and ngModel', () => {
-            cy.mount(TestShowMaskTypedAppConfigNgModelComponent);
+        it('should display initial value correctly with app-level config and ngModel', async () => {
+            const m = await mount(TestShowMaskTypedAppConfigNgModelComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
     });
 
     describe('showMaskTyped with programmatic setValue', () => {
-        it('should display value correctly after programmatic setValue', () => {
-            cy.mount(TestShowMaskTypedSetValueComponent).then((wrapper) => {
-                wrapper.component.form.setValue('9876543210');
-            });
+        it('should display value correctly after programmatic setValue', async () => {
+            const m = await mount(TestShowMaskTypedSetValueComponent);
+            m.component.form.setValue('9876543210');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(987) 654-3210');
-            cy.get('#value').should('have.text', '9876543210');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(987) 654-3210');
+            await expect.poll(() => m.text('#value')).toBe('9876543210');
         });
 
-        it('should not mark form as dirty after programmatic setValue', () => {
-            cy.mount(TestShowMaskTypedSetValueComponent).then((wrapper) => {
-                wrapper.component.form.setValue('9876543210');
-            });
+        it('should not mark form as dirty after programmatic setValue', async () => {
+            const m = await mount(TestShowMaskTypedSetValueComponent);
+            m.component.form.setValue('9876543210');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
     });
 
-    describe('showMaskTyped with dynamic setValue using CypressTestMaskComponent', () => {
-        it('should display value correctly when setValue is called with showMaskTyped', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('(000) 000-0000'),
-                    showMaskTyped: signal(true),
-                },
-            }).then((wrapper) => {
-                wrapper.component.form.setValue('1234567890');
+    describe('showMaskTyped with dynamic setValue using MaskHarnessComponent', () => {
+        it('should display value correctly when setValue is called with showMaskTyped', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '(000) 000-0000',
+                showMaskTyped: true,
             });
+            m.component.form.setValue('1234567890');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#pre1').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#pre1')).toBe('1234567890');
         });
 
-        it('should not mark form as dirty when setValue with showMaskTyped', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('(000) 000-0000'),
-                    showMaskTyped: signal(true),
-                },
-            }).then((wrapper) => {
-                wrapper.component.form.setValue('1234567890');
+        it('should not mark form as dirty when setValue with showMaskTyped', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '(000) 000-0000',
+                showMaskTyped: true,
             });
+            m.component.form.setValue('1234567890');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
 
-        it('should display value correctly when setValue with simple mask and showMaskTyped', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('0000'),
-                    showMaskTyped: signal(true),
-                },
-            }).then((wrapper) => {
-                wrapper.component.form.setValue('6543');
-            });
+        it('should display value correctly when setValue with simple mask and showMaskTyped', async () => {
+            const m = await mount(MaskHarnessComponent, { mask: '0000', showMaskTyped: true });
+            m.component.form.setValue('6543');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '6543');
-            cy.get('#pre1').should('have.text', '6543');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('6543');
+            await expect.poll(() => m.text('#pre1')).toBe('6543');
         });
 
-        it('should display value correctly when setValue with date mask and showMaskTyped', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('00/00/0000'),
-                    showMaskTyped: signal(true),
-                },
-            }).then((wrapper) => {
-                wrapper.component.form.setValue('12252023');
+        it('should display value correctly when setValue with date mask and showMaskTyped', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '00/00/0000',
+                showMaskTyped: true,
             });
+            m.component.form.setValue('12252023');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '12/25/2023');
-            cy.get('#pre1').should('have.text', '12252023');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('12/25/2023');
+            await expect.poll(() => m.text('#pre1')).toBe('12252023');
         });
 
-        it('should display value correctly when setValue with credit card mask and showMaskTyped', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('0000 0000 0000 0000'),
-                    showMaskTyped: signal(true),
-                },
-            }).then((wrapper) => {
-                wrapper.component.form.setValue('1234567890123456');
+        it('should display value correctly when setValue with credit card mask and showMaskTyped', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '0000 0000 0000 0000',
+                showMaskTyped: true,
             });
+            m.component.form.setValue('1234567890123456');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '1234 5678 9012 3456');
-            cy.get('#pre1').should('have.text', '1234567890123456');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('1234 5678 9012 3456');
+            await expect.poll(() => m.text('#pre1')).toBe('1234567890123456');
         });
     });
 
     describe('showMaskTyped interaction with empty and filled values', () => {
-        it('should show mask placeholder when focused on empty field', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('(000) 000-0000'),
-                    showMaskTyped: signal(true),
-                },
+        it('should show mask placeholder when focused on empty field', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '(000) 000-0000',
+                showMaskTyped: true,
             });
 
-            cy.get('#masked').click();
-            cy.get('#masked').should('have.value', '(___) ___-____');
+            await m.click('#masked');
+            await expect.poll(() => m.get('#masked').value).toBe('(___) ___-____');
         });
 
-        it('should clear mask placeholder and show only value when blurred', () => {
-            cy.mount(CypressTestMaskComponent, {
-                componentProperties: {
-                    mask: signal('(000) 000-0000'),
-                    showMaskTyped: signal(true),
-                },
+        it('should clear mask placeholder and show only value when blurred', async () => {
+            const m = await mount(MaskHarnessComponent, {
+                mask: '(000) 000-0000',
+                showMaskTyped: true,
             });
 
-            cy.get('#masked').click().type('123').blur();
-            cy.get('#masked').should('have.value', '(123) ___-____');
+            await m.click('#masked');
+            await m.type('#masked', '123');
+            await m.blur('#masked');
+            await expect.poll(() => m.get('#masked').value).toBe('(123) ___-____');
         });
     });
 
     describe('showMaskTyped with custom input wrapper (simulating NG_VALUE_ACCESSOR)', () => {
-        it('should display initial value correctly with app-level config', () => {
-            cy.mount(TestCustomInputWrapperComponent);
+        it('should display initial value correctly with app-level config', async () => {
+            const m = await mount(TestCustomInputWrapperComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
 
-        it('should not mark form as dirty with initial value', () => {
-            cy.mount(TestCustomInputWrapperComponent);
+        it('should not mark form as dirty with initial value', async () => {
+            const m = await mount(TestCustomInputWrapperComponent);
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
     });
 
     describe('showMaskTyped with async initial value (API simulation)', () => {
-        it('should display value correctly after async setValue', () => {
-            cy.mount(TestAsyncInitialValueComponent);
+        it('should display value correctly after async setValue', async () => {
+            const m = await mount(TestAsyncInitialValueComponent);
 
-            cy.wait(200);
-            cy.get('#masked').should('have.value', '(987) 654-3210');
-            cy.get('#value').should('have.text', '9876543210');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(987) 654-3210');
+            await expect.poll(() => m.text('#value')).toBe('9876543210');
         });
     });
 
     describe('showMaskTyped with patchValue', () => {
-        it('should display value correctly after patchValue', () => {
-            cy.mount(TestPatchValueComponent).then((wrapper) => {
-                wrapper.component.form.patchValue('1234567890');
-            });
+        it('should display value correctly after patchValue', async () => {
+            const m = await mount(TestPatchValueComponent);
+            m.component.form.patchValue('1234567890');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '(123) 456-7890');
-            cy.get('#value').should('have.text', '1234567890');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
         });
 
-        it('should not mark form as dirty after patchValue', () => {
-            cy.mount(TestPatchValueComponent).then((wrapper) => {
-                wrapper.component.form.patchValue('1234567890');
-            });
+        it('should not mark form as dirty after patchValue', async () => {
+            const m = await mount(TestPatchValueComponent);
+            m.component.form.patchValue('1234567890');
+            await m.settle();
 
-            cy.wait(100);
-            cy.get('#pristine').should('have.text', 'true');
+            await m.settle();
+            await expect.poll(() => m.text('#pristine')).toBe('true');
         });
     });
 
     describe('showMaskTyped with simple value binding', () => {
-        it('should display value correctly with simple value = "65432"', () => {
-            cy.mount(TestSimpleValueBindingComponent);
+        it('should display value correctly with simple value = "65432"', async () => {
+            const m = await mount(TestSimpleValueBindingComponent);
 
-            cy.wait(100);
-            cy.get('#masked').should('have.value', '65432');
-            cy.get('#value').should('have.text', '65432');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toBe('65432');
+            await expect.poll(() => m.text('#value')).toBe('65432');
         });
     });
 
     describe('showMaskTyped with special masks', () => {
-        it('should display IP address correctly with showMaskTyped', () => {
-            cy.mount(TestIpMaskComponent);
+        it('should display IP address correctly with showMaskTyped', async () => {
+            const m = await mount(TestIpMaskComponent);
 
-            cy.wait(100);
+            await m.settle();
             // IP mask formats the input with dots
-            cy.get('#masked').invoke('val').should('contain', '192.168.001.001');
+            await expect.poll(() => m.get('#masked').value).toContain('192.168.001.001');
         });
 
-        it('should display CPF correctly with showMaskTyped', () => {
-            cy.mount(TestCpfCnpjMaskComponent);
+        it('should display CPF correctly with showMaskTyped', async () => {
+            const m = await mount(TestCpfCnpjMaskComponent);
 
-            cy.wait(100);
-            cy.get('#masked').invoke('val').should('contain', '123.456.789-01');
+            await m.settle();
+            await expect.poll(() => m.get('#masked').value).toContain('123.456.789-01');
         });
     });
 
     describe('showMaskTyped value should not be wiped', () => {
-        it('should preserve value when form is initialized with value', () => {
-            cy.mount(TestShowMaskTypedFormControlComponent);
+        it('should preserve value when form is initialized with value', async () => {
+            const m = await mount(TestShowMaskTypedFormControlComponent);
 
             // Check immediately
-            cy.get('#value').should('have.text', '1234567890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
             // Check after delay
-            cy.wait(200);
-            cy.get('#value').should('have.text', '1234567890');
-            cy.get('#masked').should('have.value', '(123) 456-7890');
+            await m.settle();
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
         });
 
-        it('should preserve value in ngModel when initialized with value', () => {
-            cy.mount(TestShowMaskTypedNgModelComponent);
+        it('should preserve value in ngModel when initialized with value', async () => {
+            const m = await mount(TestShowMaskTypedNgModelComponent);
 
             // Check immediately
-            cy.get('#value').should('have.text', '1234567890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
             // Check after delay
-            cy.wait(200);
-            cy.get('#value').should('have.text', '1234567890');
-            cy.get('#masked').should('have.value', '(123) 456-7890');
+            await m.settle();
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
         });
 
-        it('should preserve value in model() signal when initialized with value', () => {
-            cy.mount(TestShowMaskTypedModelSignalComponent);
+        it('should preserve value in model() signal when initialized with value', async () => {
+            const m = await mount(TestShowMaskTypedModelSignalComponent);
 
             // Check immediately
-            cy.get('#value').should('have.text', '1234567890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
             // Check after delay
-            cy.wait(200);
-            cy.get('#value').should('have.text', '1234567890');
-            cy.get('#masked').should('have.value', '(123) 456-7890');
+            await m.settle();
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
         });
 
-        it('should preserve value with app-level config when initialized with value', () => {
-            cy.mount(TestShowMaskTypedAppConfigComponent);
+        it('should preserve value with app-level config when initialized with value', async () => {
+            const m = await mount(TestShowMaskTypedAppConfigComponent);
 
             // Check immediately
-            cy.get('#value').should('have.text', '1234567890');
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
             // Check after delay
-            cy.wait(200);
-            cy.get('#value').should('have.text', '1234567890');
-            cy.get('#masked').should('have.value', '(123) 456-7890');
+            await m.settle();
+            await expect.poll(() => m.text('#value')).toBe('1234567890');
+            await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
         });
     });
 });

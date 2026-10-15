@@ -39,5 +39,6 @@ jobs:
                   restore-keys: bun-${{ runner.os }}-
             - name: Install
               run: bun install --frozen-lockfile
+            - uses: ./.github/actions/setup-playwright
             - name: Check quality
               run: bash .github/workflows/scripts/quality.sh

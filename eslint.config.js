@@ -24,7 +24,6 @@ const ignores = [
     '.angular/',
     'coverage/',
     'coverage-ts/',
-    'cypress/',
     'package-lock.json',
     '.cache',
 ];
@@ -192,14 +191,14 @@ module.exports = defineConfig(
         },
     },
     {
-        // Spec/cypress files call shared test helpers (typeTest/pasteTest/...) that wrap
+        // Spec/browser-spec files call shared test helpers (typeTest/pasteTest/...) that wrap
         // fixture.detectChanges()/whenStable() without awaiting on every call site — the
         // suite relies on Angular's zoneless-test scheduler flushing between synchronous
         // dispatchEvent calls, not on promise chaining per-keystroke. Retrofitting ~1900
         // individual call sites across 30+ spec files with await/void is a mechanical
         // rewrite disproportionate to a dependency/lint-strictness chore and carries real
         // risk of altering test timing; tracked as follow-up, not attempted here.
-        files: ['**/*.spec.ts', '**/*.cy-spec.ts'],
+        files: ['**/*.spec.ts', '**/*.browser-spec.ts'],
         rules: {
             '@typescript-eslint/no-floating-promises': 'off',
             '@typescript-eslint/no-misused-promises': 'off',

@@ -1,9 +1,0 @@
-{
-    "extends": "../../tsconfig.json",
-    "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "allowJs": true,
-        "types": ["cypress", "node"]
-    },
-    "include": ["src/test/test/*.cy-spec.ts", "cypress/support/**/*.ts", "**/*.cy-spec.ts"]
-}

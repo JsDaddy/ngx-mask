@@ -32,10 +32,13 @@ jobs:
                   node-version: 22
             - name: Install
               run: bun install --frozen-lockfile
+            - uses: ./.github/actions/setup-playwright
             - name: Build library
               run: bun run build:lib
             - name: Test library
               run: bun run test:lib
+            - name: Test library in a real browser
+              run: bun run test:browser
             - name: Pack library
               id: pack
               working-directory: dist/ngx-mask-lib

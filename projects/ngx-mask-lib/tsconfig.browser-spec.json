@@ -1,0 +1,16 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../out-tsc/browser-spec",
+        "types": ["vitest/globals", "node"]
+    },
+    "include": ["**/*.browser-spec.ts", "**/*.d.ts", "../../src/test-setup.ts"],
+    "angularCompilerOptions": {
+        "extendedDiagnostics": {
+            "checks": {
+                "nullishCoalescingNotNullable": "suppress",
+                "optionalChainNotNullable": "suppress"
+            }
+        }
+    }
+}

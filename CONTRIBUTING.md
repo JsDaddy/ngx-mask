@@ -42,3 +42,8 @@ Only changes under `projects/ngx-mask-lib/` can trigger a release; demo-only cha
 ## Testing your changes
 
 When you submit a PR, tests will be automatically run on the Continuous Integration environment. If any of your tests fail, review the logs and address the issues before requesting a review.
+
+Run the checks locally with `bun run ci` (lint, library build, tests, demo build), or just the tests with `bun run test:all`:
+
+- `bun run test:app` and `bun run test:lib` run the unit specs (`*.spec.ts`) in jsdom.
+- `bun run test:browser` runs the real-browser specs (`*.browser-spec.ts`: real keyboard, caret and focus behaviour) in headless Chromium through Vitest browser mode and Playwright. Install the browser once with `bunx playwright install chromium`.
