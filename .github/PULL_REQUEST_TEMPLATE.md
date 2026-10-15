@@ -2,7 +2,8 @@
 
 Please check if your PR fulfills the following requirements:
 
-- [ ] The commit message follows our guidelines: https://github.com/NepipenkoIgor/ngx-mask/blob/develop/CONTRIBUTING.md#commit
+- [ ] The PR title follows https://github.com/NepipenkoIgor/ngx-mask/blob/develop/CONTRIBUTING.md#pull-request-titles (conventional, scope required)
+- [ ] I did not change version numbers or CHANGELOG.md (the release bot does it)
 - [ ] Tests for the changes have been added (for bug fixes / features)
 - [ ] Docs have been added / updated (for bug fixes / features)
 
@@ -30,6 +31,8 @@ Issue Number: N/A
 ## What is the new behavior?
 
 ## Does this PR introduce a breaking change?
+
+<!-- A breaking change needs "!" in the title, e.g. feat(mask)!: ... -->
 
 - [ ] Yes
 - [ ] No
