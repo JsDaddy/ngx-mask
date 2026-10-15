@@ -40,8 +40,8 @@ jobs:
               id: pack
               working-directory: dist/ngx-mask-lib
               run: |
-                  echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
-                  npm pack
+                  echo "version=$(bun -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+                  bun pm pack # ngx-mask-<version>.tgz, same name and contents as npm pack
             - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
                   name: package
