@@ -19,18 +19,24 @@ Please format code and markup in your issue using [github markdown](https://help
 - Document public methods with jsdoc.
 - Be consistent with the code around you!
 
-## Commit Messages
+## Pull request titles
 
-Please write meaningful commit messages - they are used to generate the changelog, so the commit message should tell a user everything they need to know about a commit. Protractor follows AngularJS's [commit message format](https://docs.google.com/a/google.com/document/d/1QrDFcIiPjSLDn3EL15IJygNPiHORgU1_OOAqWjiDU5Y/edit#heading=h.z8a3t6ehl060).
+Releases are automatic. Do not edit version numbers or `CHANGELOG.md`: the release bot does it from your PR title.
 
-In summary, this style is
+The PR title becomes the commit message on `develop` and the changelog line. It must follow Conventional Commits and the scope is required:
 
     <type>(<scope>): <subject>
-    <BLANK LINE>
-    <body>
 
-Where `<type>` is one of [feat, fix, docs, refactor, test, chore, deps] and
-`<scope>` is a quick descriptor of the location of the change, such as cli, clientSideScripts, element.
+`<type>` is one of `feat`, `fix`, `perf`, `refactor`, `docs`, `test`, `build`, `ci`, `chore`, `style`, `revert`. `<scope>` is the area, e.g. `mask`, `pipe`, `forms`, `demo`, `readme`, `ci`. Use a lowercase subject, no trailing period. A bot checks the title on every PR.
+
+| Title                                                       | Effect on the next release                          |
+| ----------------------------------------------------------- | --------------------------------------------------- |
+| `feat(scope): ...`                                          | minor (22.x.0)                                      |
+| `fix(scope): ...`, `perf(scope): ...`, `revert(scope): ...` | patch (22.x.y)                                      |
+| `feat(scope)!: ...` or `fix(scope)!: ...`                   | major, describe the migration in the PR description |
+| `docs`, `test`, `refactor`, `build`, `ci`, `chore`, `style` | none                                                |
+
+Only changes under `projects/ngx-mask-lib/` can trigger a release; demo-only changes (`src/`) never do. A library fix or feature must therefore use `fix`/`feat`, not `chore`. Maintainers merge with "Squash and merge"; the PR title is used as is.
 
 ## Testing your changes
 

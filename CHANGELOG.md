@@ -1,4 +1,12 @@
-# 22.2.0(2026-09-21)
+# Changelog
+
+## 22.2.1(2026-09-22)
+
+### Chore
+
+- Added `llms.txt` and `llms-full.txt` (compact and full API reference for AI agents) to the npm package and the README ([#1657](https://github.com/NepipenkoIgor/ngx-mask/issues/1657)); no source or API change
+
+## 22.2.0(2026-09-21)
 
 ### Feature
 
@@ -21,7 +29,7 @@
 - Tailwind config renamed to `tailwind.config.mts` (removes the Node module-type warning)
 - Removed the unused deprecated `@angular/platform-browser-dynamic` dependency
 
-# 22.1.0(2026-07-20)
+## 22.1.0(2026-07-20)
 
 ### Feature
 
@@ -35,7 +43,7 @@
 
 - Dependencies upgraded, ESLint/TS strictness tightened, JSON linting migrated to eslint 10
 
-# 22.0.2(2026-07-20)
+## 22.0.2(2026-07-20)
 
 ### Feature
 
@@ -48,7 +56,7 @@
 - Fix ([#1633](https://github.com/NepipenkoIgor/ngx-mask/issues/1633)) — `setDisabledState` now writes the native `disabled` DOM property synchronously; an initially-disabled `FormControl` no longer briefly (or persistently) leaves the native input enabled due to the deferred `queueMicrotask` write racing Angular Forms' synchronous init
 - Regression coverage ([#1632](https://github.com/NepipenkoIgor/ngx-mask/issues/1632)) — added unit and Cypress tests locking in that retyping into a `keepCharacterPositions` slot cleared by Backspace (e.g. date mask `d0/M0/0000`) fills from the first typed keystroke; already fixed by prior `keepCharacterPositions` corrections, no source change needed
 
-# 22.0.0(2026-07-03)
+## 22.0.0(2026-07-03)
 
 ### Feature
 
@@ -70,7 +78,7 @@
 
 - Requires Angular 22 (`peerDependencies: ^22.0.0`) and Node.js ≥ 22.22.3 / ≥ 24.15.0 / ≥ 26
 
-# 21.1.0(2026-07-02)
+## 21.1.0(2026-07-02)
 
 ### Feature
 
@@ -116,46 +124,46 @@
 
 - `NgxMaskDirective` no longer exposes `errors`, `dirty`, `invalid`, `pending`, `readonly`, `required`, `name` inputs (Signal Forms surface reduced to `value`/`disabled`/`touched`)
 
-# 21.0.1(2026-01-29)
+## 21.0.1(2026-01-29)
 
 ### fix
 
 - Fix ([#1585](https://github.com/JsDaddy/ngx-mask/issues/1585))
 - Fix ([#1560](https://github.com/JsDaddy/ngx-mask/issues/1560))
 
-# 21.0.0(2026-01-28)
+## 21.0.0(2026-01-28)
 
 ### fix
 
 - Fix ([#1590](https://github.com/JsDaddy/ngx-mask/issues/1590))
 - Fix ([#1591](https://github.com/JsDaddy/ngx-mask/issues/1591))
 
-# 20.0.3(2025-08-01)
+## 20.0.3(2025-08-01)
 
 ### fix
 
 - Fix ([#1560](https://github.com/JsDaddy/ngx-mask/issues/1560))
 
-# 20.0.2(2025-07-31)
+## 20.0.2(2025-07-31)
 
 ### fix
 
 - Fix ([#1559](https://github.com/JsDaddy/ngx-mask/issues/1559))
 
-# 20.0.1(2025-07-31)
+## 20.0.1(2025-07-31)
 
 ### fix
 
 - Fix ([#1548](https://github.com/JsDaddy/ngx-mask/issues/1548))
 - Fix ([#1551](https://github.com/JsDaddy/ngx-mask/issues/1551))
 
-# 20.0.0(2025-07-22)
+## 20.0.0(2025-07-22)
 
 ### Feature
 
 - update ng 20.x
 
-# 19.0.7(2024-12-20)
+## 19.0.7(2024-12-20)
 
 ### Contributing
 
@@ -166,19 +174,19 @@
 - Fix ([#1487](https://github.com/JsDaddy/ngx-mask/issues/1487))
 - Fix ([#1525](https://github.com/JsDaddy/ngx-mask/issues/1525))
 
-# 19.0.6(2024-12-20)
+## 19.0.6(2024-12-20)
 
 ### Fix
 
 - Fix ([#1481](https://github.com/JsDaddy/ngx-mask/issues/1481))
 
-# 19.0.5(2024-12-20)
+## 19.0.5(2024-12-20)
 
 ### Fix
 
 - Fix ([#1411](https://github.com/JsDaddy/ngx-mask/issues/1411))
 
-# 19.0.4(2024-12-13)
+## 19.0.4(2024-12-13)
 
 ### Feature
 
@@ -189,7 +197,7 @@
 - Fix ([#1477](https://github.com/JsDaddy/ngx-mask/issues/1477))
 - Fix ([#1476](https://github.com/JsDaddy/ngx-mask/issues/1476))
 
-# 19.0.3(2024-12-05)
+## 19.0.3(2024-12-05)
 
 ### Contributing Fix
 
@@ -200,7 +208,7 @@
 - Fix ([#1472](https://github.com/JsDaddy/ngx-mask/pull/1472))
 - Fix ([#1415](https://github.com/JsDaddy/ngx-mask/pull/1415))
 
-# 19.0.2(2024-12-03)
+## 19.0.2(2024-12-03)
 
 ### Fix
 
@@ -209,7 +217,7 @@
 - Fix ([#1446](https://github.com/JsDaddy/ngx-mask/issues/1446))
 - Fix ([#1457](https://github.com/JsDaddy/ngx-mask/issues/1457))
 
-# 19.0.1(2024-11-29)
+## 19.0.1(2024-11-29)
 
 ### Feature
 
@@ -217,19 +225,19 @@
 - change @Output output in NgxMaskDirective
 - change variables to signals in NgxMaskDirective
 
-# 19.0.0(2024-11-22)
+## 19.0.0(2024-11-22)
 
 ### Feature
 
 - update ng 19.x
 
-# 18.0.4(2024-11-11)
+## 18.0.4(2024-11-11)
 
 ### Fix
 
 - Fix ([#1449](https://github.com/JsDaddy/ngx-mask/issues/1449))
 
-# 18.0.3(2024-11-05)
+## 18.0.3(2024-11-05)
 
 ### Fix
 
@@ -239,7 +247,7 @@
 - Fix ([#1440](https://github.com/JsDaddy/ngx-mask/issues/1440))
 - Fix ([#1409](https://github.com/JsDaddy/ngx-mask/issues/1409))
 
-# 18.0.2(2024-11-01)
+## 18.0.2(2024-11-01)
 
 ### Fix
 
@@ -250,7 +258,7 @@
 - Fix ([#1420](https://github.com/JsDaddy/ngx-mask/issues/1420))
 - Fix ([#1416](https://github.com/JsDaddy/ngx-mask/issues/1416))
 
-# 18.0.1(2024-10-29)
+## 18.0.1(2024-10-29)
 
 ### Breaking Changes
 
@@ -262,21 +270,21 @@
 
 - Fix ([#1410](https://github.com/JsDaddy/ngx-mask/issues/1410))
 
-# 17.1.8(2024-07-16)
+## 17.1.8(2024-07-16)
 
 ### Fix
 
 - Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
 - Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
 
-# 17.1.8(2024-07-16)
+## 17.1.8(2024-07-16)
 
 ### Fix
 
 - Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
 - Fix ([#1356](https://github.com/JsDaddy/ngx-mask/issues/1356))
 
-# 17.1.7(2024-07-18)
+## 17.1.7(2024-07-18)
 
 ### Fix
 
@@ -285,45 +293,45 @@
 - Fix ([#1357](https://github.com/JsDaddy/ngx-mask/issues/1357))
 - Fix ([#1364](https://github.com/JsDaddy/ngx-mask/issues/1364))
 
-# 17.1.6(2024-07-16)
+## 17.1.6(2024-07-16)
 
 ### Fix
 
 - Fix ([#1342](https://github.com/JsDaddy/ngx-mask/issues/1342))
 
-# 17.1.5(2024-07-16)
+## 17.1.5(2024-07-16)
 
 ### Fix
 
 - Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
 
-# 17.1.4(2024-07-16)
+## 17.1.4(2024-07-16)
 
 ### Fix
 
 - Fix ([#1389](https://github.com/JsDaddy/ngx-mask/issues/1389))
 
-# 17.1.3(2024-07-16)
+## 17.1.3(2024-07-16)
 
 ### Fix
 
 - Fix ([#1386](https://github.com/JsDaddy/ngx-mask/issues/1386))
 - Fix ([#1370](https://github.com/JsDaddy/ngx-mask/issues/1370))
 
-# 17.1.2(2024-07-15)
+## 17.1.2(2024-07-15)
 
 ### Fix
 
 - Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
 - Fix ([#1390](https://github.com/JsDaddy/ngx-mask/issues/1390))
 
-# 17.1.1(2024-07-05)
+## 17.1.1(2024-07-05)
 
 ### Fix
 
 - Fix ([#1383](https://github.com/JsDaddy/ngx-mask/issues/1383))
 
-# 17.1.0(2024-07-05)
+## 17.1.0(2024-07-05)
 
 ### Fix
 
@@ -331,7 +339,7 @@
 - Fix ([#1344](https://github.com/JsDaddy/ngx-mask/issues/1344))
 - Fix ([#1365](https://github.com/JsDaddy/ngx-mask/issues/1365))
 
-# 17.0.9(2024-07-02)
+## 17.0.9(2024-07-02)
 
 ### Fix
 
@@ -341,13 +349,13 @@
 - Fix ([#1378](https://github.com/JsDaddy/ngx-mask/issues/1378))
 - Fix ([#1377](https://github.com/JsDaddy/ngx-mask/issues/1377))
 
-# 17.0.8(2024-04-30)
+## 17.0.8(2024-04-30)
 
 ### Fix
 
 - Fix ([#1358](https://github.com/JsDaddy/ngx-mask/issues/1358))
 
-# 17.0.7(2024-03-28)
+## 17.0.7(2024-03-28)
 
 ### Fix
 
@@ -355,7 +363,7 @@
 - Fix ([#1307](https://github.com/JsDaddy/ngx-mask/issues/1307))
 - Fix ([#1306](https://github.com/JsDaddy/ngx-mask/issues/1306))
 
-# 17.0.6(2024-03-27)
+## 17.0.6(2024-03-27)
 
 ### Fix
 
@@ -363,7 +371,7 @@
 - Fix ([#1302](https://github.com/JsDaddy/ngx-mask/issues/1302))
 - Fix ([#1292](https://github.com/JsDaddy/ngx-mask/issues/1292))
 
-# 17.0.5(2024-03-25)
+## 17.0.5(2024-03-25)
 
 ### Fix
 
@@ -375,7 +383,7 @@
 - Fix ([#1308](https://github.com/JsDaddy/ngx-mask/issues/1308))
 - Fix ([#1299](https://github.com/JsDaddy/ngx-mask/issues/1299))
 
-# 17.0.4(2023-12-01)
+## 17.0.4(2023-12-01)
 
 ### Feat
 
@@ -384,19 +392,19 @@
 - update v14.3.3
 - update v13.2.2
 
-# 17.0.3(2023-11-30)
+## 17.0.3(2023-11-30)
 
 ### Feat
 
 - update dependencies
 
-# 17.0.2(2023-11-29)
+## 17.0.2(2023-11-29)
 
 ### Feat
 
 - update dependencies
 
-# 17.0.2(2023-11-29)
+## 17.0.2(2023-11-29)
 
 ### Fix
 
@@ -406,7 +414,7 @@
 - Fix ([#1240](https://github.com/JsDaddy/ngx-mask/issues/1240))
 - Fix ([#1274](https://github.com/JsDaddy/ngx-mask/issues/1274))
 
-# 17.0.1(2023-11-28)
+## 17.0.1(2023-11-28)
 
 ### Fix
 
@@ -417,7 +425,7 @@
 - Fix ([#1276](https://github.com/JsDaddy/ngx-mask/issues/1276))
 - Fix ([#1279](https://github.com/JsDaddy/ngx-mask/issues/1279))
 
-# 17.0.0(2023-11-08)
+## 17.0.0(2023-11-08)
 
 ### Feature
 
@@ -428,13 +436,13 @@
 
 - Upgrade version 16.4.2 with more fixes since version 17.x.x
 
-# 16.4.1(2023-11-08)
+## 16.4.1(2023-11-08)
 
 ### Fix
 
 - Fix ([#1251](https://github.com/JsDaddy/ngx-mask/issues/1251))
 
-# 16.4.0(2023-11-07)
+## 16.4.0(2023-11-07)
 
 ### Fix
 
@@ -444,7 +452,7 @@
 - Fix ([#1254](https://github.com/JsDaddy/ngx-mask/issues/1254))
 - Fix ([#1256](https://github.com/JsDaddy/ngx-mask/issues/1256))
 
-# 16.3.9(2023-10-02)
+## 16.3.9(2023-10-02)
 
 ### Fix
 
@@ -452,50 +460,50 @@
 - Fix ([#1246](https://github.com/JsDaddy/ngx-mask/issues/1246))
 - Fix ([#1247](https://github.com/JsDaddy/ngx-mask/issues/1247))
 
-# 16.3.8(2023-09-18)
+## 16.3.8(2023-09-18)
 
 ### Fix
 
 - Change README.md
 - Fix ([#1242](https://github.com/JsDaddy/ngx-mask/issues/1242))
 
-# 16.3.7(2023-09-18)
+## 16.3.7(2023-09-18)
 
 ### Fix
 
 - Fix ([#1238](https://github.com/JsDaddy/ngx-mask/issues/1238))
 
-# 16.3.6(2023-09-15)
+## 16.3.6(2023-09-15)
 
 ### Fix
 
 - Fix ([#1232](https://github.com/JsDaddy/ngx-mask/issues/1232))
 
-# 16.3.5(2023-09-14)
+## 16.3.5(2023-09-14)
 
 ### Fix
 
 - Fix ([#1225](https://github.com/JsDaddy/ngx-mask/issues/1225))
 
-# 16.3.4(2023-09-13)
+## 16.3.4(2023-09-13)
 
 ### Feat
 
 - update version
 
-# 16.3.3(2023-09-13)
+## 16.3.3(2023-09-13)
 
 ### Fix
 
 - Fix ([#1222](https://github.com/JsDaddy/ngx-mask/issues/1222))
 
-# 16.3.2(2023-09-13)
+## 16.3.2(2023-09-13)
 
 ### Fix
 
 - Fix ([#658](https://github.com/JsDaddy/ngx-mask/issues/658))
 
-# 16.3.1(2023-09-01)
+## 16.3.1(2023-09-01)
 
 ### Fix
 
@@ -504,7 +512,7 @@
 - Fix ([#644](https://github.com/JsDaddy/ngx-mask/issues/644))
 - Fix ([#788](https://github.com/JsDaddy/ngx-mask/issues/788))
 
-# 16.3.0(2023-08-28)
+## 16.3.0(2023-08-28)
 
 ### Fix
 
@@ -516,7 +524,7 @@
 - Fix ([#1206](https://github.com/JsDaddy/ngx-mask/issues/1206))
 - Fix ([#1211](https://github.com/JsDaddy/ngx-mask/issues/1211))
 
-# 16.2.9(2023-08-08)
+## 16.2.9(2023-08-08)
 
 ### Fix
 
@@ -525,14 +533,14 @@
 - Fix ([#841](https://github.com/JsDaddy/ngx-mask/issues/841))
 - Fix ([#1162](https://github.com/JsDaddy/ngx-mask/issues/1162))
 
-# 16.2.7(2023-08-08)
+## 16.2.7(2023-08-08)
 
 ### Fix
 
 - Fix ([#843](https://github.com/JsDaddy/ngx-mask/issues/843))
 - Fix ([#1200](https://github.com/JsDaddy/ngx-mask/issues/1200))
 
-# 16.2.6(2023-08-03)
+## 16.2.6(2023-08-03)
 
 ### Fix
 
@@ -542,7 +550,7 @@
 - Fix ([#1202](https://github.com/JsDaddy/ngx-mask/issues/1202))
 - Fix ([#1203](https://github.com/JsDaddy/ngx-mask/issues/1203))
 
-# 16.2.5(2023-07-24)
+## 16.2.5(2023-07-24)
 
 ### Fix
 
@@ -550,7 +558,7 @@
 - Fix ([#1193](https://github.com/JsDaddy/ngx-mask/issues/1193))
 - Fix ([#1199](https://github.com/JsDaddy/ngx-mask/issues/1199))
 
-# 16.2.4(2023-07-12)
+## 16.2.4(2023-07-12)
 
 ### Fix
 
@@ -558,7 +566,7 @@
 - Fix ([#1191](https://github.com/JsDaddy/ngx-mask/issues/1191))
 - Fix ([#941](https://github.com/JsDaddy/ngx-mask/issues/941))
 
-# 16.2.3(2023-07-05)
+## 16.2.3(2023-07-05)
 
 ### Fix
 
@@ -567,13 +575,13 @@
 - Fix ([#836](https://github.com/JsDaddy/ngx-mask/issues/836))
 - Fix ([#752](https://github.com/JsDaddy/ngx-mask/issues/752))
 
-# 16.2.2(2023-07-03)
+## 16.2.2(2023-07-03)
 
 ### Fix
 
 - Fix ([#1186](https://github.com/JsDaddy/ngx-mask/issues/1186))
 
-# 16.2.1(2023-06-30)
+## 16.2.1(2023-06-30)
 
 ### Fix
 
@@ -581,40 +589,40 @@
 - Fix ([#958](https://github.com/JsDaddy/ngx-mask/issues/958))
 - Fix ([#977](https://github.com/JsDaddy/ngx-mask/issues/977))
 
-# 16.2.0(2023-06-27)
+## 16.2.0(2023-06-27)
 
 ### Fix
 
 - Fix ([#724](https://github.com/JsDaddy/ngx-mask/issues/724))
 - Fix ([#731](https://github.com/JsDaddy/ngx-mask/issues/731))
 
-# 16.1.9(2023-06-21)
+## 16.1.9(2023-06-21)
 
 ### Fix
 
 - Fix ([#812](https://github.com/JsDaddy/ngx-mask/issues/812))
 - Fix ([#636](https://github.com/JsDaddy/ngx-mask/issues/636))
 
-# 16.1.8(2023-06-19)
+## 16.1.8(2023-06-19)
 
 ### Fix
 
 - Fix ([#1166](https://github.com/JsDaddy/ngx-mask/issues/1166))
 - Fix ([#865](https://github.com/JsDaddy/ngx-mask/issues/865))
 
-# 16.1.7(2023-06-14)
+## 16.1.7(2023-06-14)
 
 ### Fix
 
 - Fix ([#1171](https://github.com/JsDaddy/ngx-mask/issues/1171))
 
-# 16.1.6(2023-06-14)
+## 16.1.6(2023-06-14)
 
 ### Fix
 
 - Fix ([#797](https://github.com/JsDaddy/ngx-mask/issues/797))
 
-# 16.1.5(2023-06-13)
+## 16.1.5(2023-06-13)
 
 ### Fix
 
@@ -622,14 +630,14 @@
 - Fix ([#1169](https://github.com/JsDaddy/ngx-mask/issues/1169))
 - Fix ([#934](https://github.com/JsDaddy/ngx-mask/issues/934))
 
-# 16.1.4(2023-06-13)
+## 16.1.4(2023-06-13)
 
 ### Fix
 
 - Fix ([#929](https://github.com/JsDaddy/ngx-mask/issues/929))
 - Fix ([#944](https://github.com/JsDaddy/ngx-mask/issues/944))
 
-# 16.1.3(2023-06-08)
+## 16.1.3(2023-06-08)
 
 ### Fix
 
@@ -637,19 +645,19 @@
 - Fix ([#1042](https://github.com/JsDaddy/ngx-mask/issues/1042))
 - Fix ([#680](https://github.com/JsDaddy/ngx-mask/issues/680))
 
-# 16.1.2(2023-06-05)
+## 16.1.2(2023-06-05)
 
 ### Fix
 
 - Fix ([#772](https://github.com/JsDaddy/ngx-mask/issues/722))
 
-# 16.1.1(2023-06-05)
+## 16.1.1(2023-06-05)
 
 ### Fix
 
 - Fix ([#1071](https://github.com/JsDaddy/ngx-mask/issues/1071))
 
-# 16.1.0(2023-06-01)
+## 16.1.0(2023-06-01)
 
 ### Fix
 
@@ -657,7 +665,7 @@
 - Fix ([#881](https://github.com/JsDaddy/ngx-mask/issues/881))
 - Fix ([#1024](https://github.com/JsDaddy/ngx-mask/issues/1024))
 
-# 16.0.9(2023-05-24)
+## 16.0.9(2023-05-24)
 
 ### Fix
 
@@ -670,25 +678,25 @@
 - Fix ([#866](https://github.com/JsDaddy/ngx-mask/issues/866))
 - Fix ([#722](https://github.com/JsDaddy/ngx-mask/issues/722))
 
-# 16.0.8(2023-05-29)
+## 16.0.8(2023-05-29)
 
 ### Fix
 
 - Fix ([#1018](https://github.com/JsDaddy/ngx-mask/issues/1018))
 
-# 16.0.7(2023-05-26)
+## 16.0.7(2023-05-26)
 
 ### Fix
 
 - Fix ([#916](https://github.com/JsDaddy/ngx-mask/issues/916))
 
-# 16.0.6(2023-05-25)
+## 16.0.6(2023-05-25)
 
 ### Fix
 
 - Fix ([#880](https://github.com/JsDaddy/ngx-mask/issues/880))
 
-# 16.0.5(2023-05-24)
+## 16.0.5(2023-05-24)
 
 ### Fix
 
@@ -696,14 +704,14 @@
 - Fix ([#850](https://github.com/JsDaddy/ngx-mask/issues/850))
 - Fix ([#786](https://github.com/JsDaddy/ngx-mask/issues/786))
 
-# 16.0.4(2023-05-19)
+## 16.0.4(2023-05-19)
 
 ### Fix
 
 - Fix ([#911](https://github.com/JsDaddy/ngx-mask/issues/911))
 - Fix ([#854](https://github.com/JsDaddy/ngx-mask/issues/854))
 
-# 16.0.3(2023-05-18)
+## 16.0.3(2023-05-18)
 
 ### Fix
 
@@ -712,13 +720,13 @@
 - Fix ([#870](https://github.com/JsDaddy/ngx-mask/issues/870))
 - Fix ([#1019](https://github.com/JsDaddy/ngx-mask/issues/1019))
 
-# 16.0.2(2023-05-16)
+## 16.0.2(2023-05-16)
 
 ### Fix
 
 - Fix ([#1146](https://github.com/JsDaddy/ngx-mask/issues/1146))
 
-# 16.0.1(2023-05-16)
+## 16.0.1(2023-05-16)
 
 ### Fix
 
@@ -730,7 +738,7 @@
 - Fix ([#903](https://github.com/JsDaddy/ngx-mask/issues/903))
 - Fix ([#860](https://github.com/JsDaddy/ngx-mask/issues/860))
 
-# 16.0.0(2023-05-13)
+## 16.0.0(2023-05-13)
 
 ### Feature
 
@@ -746,7 +754,7 @@
 
 - Upgrade version 15.2.1 with more fixes since version 16.x.x
 
-# 15.1.5(2023-05-12)
+## 15.1.5(2023-05-12)
 
 ### Fix
 
@@ -754,7 +762,7 @@
 
 <a name=15.1.4></a>
 
-# 15.1.4(2023-05-09)
+## 15.1.4(2023-05-09)
 
 ### Fix
 
@@ -765,7 +773,7 @@
 
 <a name=15.1.3></a>
 
-# 15.1.3(2023-05-02)
+## 15.1.3(2023-05-02)
 
 ### Fix
 
@@ -773,7 +781,7 @@
 
 <a name="15.1.2"></a>
 
-# 15.1.2(2023-03-27)
+## 15.1.2(2023-03-27)
 
 ### Fix
 
@@ -782,7 +790,7 @@
 
 <a name="15.1.1"></a>
 
-# 15.1.1(2023-04-23)
+## 15.1.1(2023-04-23)
 
 ### Fix
 
@@ -790,7 +798,7 @@
 
 <a name="15.1.0"></a>
 
-# 15.1.0(2023-03-10)
+## 15.1.0(2023-03-10)
 
 ### Fix
 
@@ -798,7 +806,7 @@
 
 <a name="15.0.3"></a>
 
-# 15.0.3(2023-02-20)
+## 15.0.3(2023-02-20)
 
 ### Fix
 
@@ -806,7 +814,7 @@
 
 <a name="15.0.2"></a>
 
-# 15.0.2(2022-12-26)
+## 15.0.2(2022-12-26)
 
 ### Fix
 
@@ -814,7 +822,7 @@
 
 <a name="15.0.0"></a>
 
-# 15.0.1(2022-26-12)
+## 15.0.1(2022-26-12)
 
 ### Fix
 
@@ -822,7 +830,7 @@
 
 <a name="15.0.0"></a>
 
-# 15.0.0(2022-19-12)
+## 15.0.0(2022-19-12)
 
 ### Fix
 
@@ -843,7 +851,7 @@
 - Change MaskApplierService => NgxMaskApplierService
 - Change MaskDirective => NgxMaskMaskDirective
 
-# 14.2.4(2022-10-27)
+## 14.2.4(2022-10-27)
 
 ### Fix
 
@@ -852,7 +860,7 @@
 
 <a name="14.2.3"></a>
 
-# 14.2.3(2022-09-16)
+## 14.2.3(2022-09-16)
 
 ### Fix
 
@@ -860,7 +868,7 @@
 
 <a name="14.2.2"></a>
 
-# 14.2.2(2022-09-13)
+## 14.2.2(2022-09-13)
 
 ### Fix
 
@@ -870,7 +878,7 @@
 
 <a name="14.2.1"></a>
 
-# 14.2.1(2022-09-11)
+## 14.2.1(2022-09-11)
 
 ### Fix
 
@@ -878,7 +886,7 @@
 
 <a name="14.2.0"></a>
 
-# 14.2.0(2022-09-11)
+## 14.2.0(2022-09-11)
 
 ### Fix
 
@@ -887,7 +895,7 @@
 
 <a name="14.0.3"></a>
 
-# 14.0.3(2022-06-21)
+## 14.0.3(2022-06-21)
 
 ### Fix
 
@@ -896,17 +904,17 @@
 
 <a name="14.0.2"></a>
 
-# 14.0.2(2022-06-09)
+## 14.0.2(2022-06-09)
 
 - Fix ([#688](https://github.com/JsDaddy/ngx-mask/issues/688))
 
 <a name="14.0.1"></a>
 
-# 14.0.1(2022-06-06)
+## 14.0.1(2022-06-06)
 
 <a name="14.0.0"></a>
 
-# 14.0.0(2022-06-05)
+## 14.0.0(2022-06-05)
 
 ### Feature
 
@@ -928,7 +936,7 @@
 
 <a name="13.2.1"></a>
 
-# 13.1.15(2022-05-29)
+## 13.1.15(2022-05-29)
 
 ### Fix
 
@@ -936,7 +944,7 @@
 
 <a name="13.1.14"></a>
 
-# 13.1.14(2022-05-17)
+## 13.1.14(2022-05-17)
 
 ### Fix
 
@@ -944,7 +952,7 @@
 
 <a name="13.1.13"></a>
 
-# 13.1.13(2022-05-09)
+## 13.1.13(2022-05-09)
 
 ### Fix
 
@@ -952,7 +960,7 @@
 
 <a name="13.1.12"></a>
 
-# 13.1.12(2022-04-27)
+## 13.1.12(2022-04-27)
 
 ### Fix
 
@@ -961,7 +969,7 @@
 
 <a name="13.1.11"></a>
 
-# 13.1.11 (2022-04-25)
+## 13.1.11 (2022-04-25)
 
 ### Fix
 
@@ -969,7 +977,7 @@
 
 <a name="13.1.10"></a>
 
-# 13.1.10 (2022-04-18)
+## 13.1.10 (2022-04-18)
 
 ### Fix
 
@@ -977,7 +985,7 @@
 
 <a name="13.1.9"></a>
 
-# 13.1.9 (2022-04-13)
+## 13.1.9 (2022-04-13)
 
 ### Fix
 
@@ -985,7 +993,7 @@
 
 <a name="13.1.8"></a>
 
-# 13.1.8 (2022-04-08)
+## 13.1.8 (2022-04-08)
 
 ### Feature
 
@@ -994,7 +1002,7 @@
 
 <a name="13.1.6"></a>
 
-# 13.1.6 (2022-04-04)
+## 13.1.6 (2022-04-04)
 
 ### Fix
 
@@ -1003,7 +1011,7 @@
 
 <a name="13.1.5"></a>
 
-# 13.1.5 (2022-04-03)
+## 13.1.5 (2022-04-03)
 
 ### Fix
 
@@ -1011,7 +1019,7 @@
 
 <a name="13.1.4"></a>
 
-# 13.1.4 (2022-03-30)
+## 13.1.4 (2022-03-30)
 
 ### Feature
 
@@ -1020,7 +1028,7 @@
 
 <a name="13.1.3"></a>
 
-# 13.1.3 (2022-03-28)
+## 13.1.3 (2022-03-28)
 
 ### Features and fixes
 
@@ -1029,7 +1037,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.1.2"></a>
 
-# 13.1.2 (2022-01-20)
+## 13.1.2 (2022-01-20)
 
 ### Features
 
@@ -1037,7 +1045,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.1.1"></a>
 
-# 13.1.1 (2022-01-12)
+## 13.1.1 (2022-01-12)
 
 ### Fixes
 
@@ -1046,7 +1054,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.1.0"></a>
 
-# 13.1.0 (2021-12-30)
+## 13.1.0 (2021-12-30)
 
 ### Features
 
@@ -1059,7 +1067,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.0.1"></a>
 
-# 13.0.1 (2021-12-15)
+## 13.0.1 (2021-12-15)
 
 ### Test/CI fixes
 
@@ -1069,7 +1077,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="13.0.0"></a>
 
-# 13.0.0 (2021-11-28)
+## 13.0.0 (2021-11-28)
 
 ### Angular 13 release
 
@@ -1080,7 +1088,7 @@ Fixed ([#965](https://github.com/JsDaddy/ngx-mask/issues/965))
 
 <a name="12.0.0"></a>
 
-# 12.0.0 (2021-05-19)
+## 12.0.0 (2021-05-19)
 
 ### Bug Fixes
 
@@ -1091,7 +1099,7 @@ Fixed ([#893](https://github.com/JsDaddy/ngx-mask/issues/893))
 
 <a name="11.1.5"></a>
 
-# 11.1.5 (2020-03-19)
+## 11.1.5 (2020-03-19)
 
 ### Bug Fixes
 
@@ -1099,7 +1107,7 @@ Fixed ([#864](https://github.com/JsDaddy/ngx-mask/issues/864)) ([#863](https://g
 
 <a name="11.1.4"></a>
 
-# 11.1.4 (2020-11-26)
+## 11.1.4 (2020-11-26)
 
 ### Bug Fixes
 
@@ -1107,7 +1115,7 @@ Remove complet mask if part of it is deleted ([#831](https://github.com/JsDaddy/
 
 <a name="11.1.3"></a>
 
-# 11.1.3 (2020-11-25)
+## 11.1.3 (2020-11-25)
 
 ### Bug Fixes
 
@@ -1115,7 +1123,7 @@ Now backspace no leaves special characters ([#692](https://github.com/JsDaddy/ng
 
 <a name="11.1.2"></a>
 
-# 11.1.2 (2020-11-24)
+## 11.1.2 (2020-11-24)
 
 ### Bug Fixes
 
@@ -1123,7 +1131,7 @@ DropSpecialCharacters false also should return prefix ([#686](https://github.com
 
 <a name="11.1.1"></a>
 
-# 11.1.1 (2020-11-24)
+## 11.1.1 (2020-11-24)
 
 ### Bug Fixes
 
@@ -1131,7 +1139,7 @@ Number cast bug. Now if model value number mask should return type number ([#791
 
 <a name="11.1.0"></a>
 
-# 11.1.0 (2020-11-23)
+## 11.1.0 (2020-11-23)
 
 ### Bug Fixes
 
@@ -1139,7 +1147,7 @@ Copy paste event should work as expected ([#765](https://github.com/JsDaddy/ngx-
 
 <a name="11.0.1"></a>
 
-# 11.0.1 (2020-11-15)
+## 11.0.1 (2020-11-15)
 
 ### Bug Fixes
 
@@ -1147,32 +1155,32 @@ Difinition for form control with `{value, disable} should work ([#803](https://g
 
 <a name="11.0.0"></a>
 
-# [11.0.0 Update to Angular 11](2020-11-12)
+## [11.0.0 Update to Angular 11](2020-11-12)
 
 Update to Angular 11
 
 <a name="9.1.0"></a>
 
-# [9.1.0 Directive's selector change](2020-05-20)
+## [9.1.0 Directive's selector change](2020-05-20)
 
 Change directive selector to restrict to input and textarea tags
 
 <a name="9.0.2"></a>
 
-# [9.0.2 Bugfix](2020-04-20)
+## [9.0.2 Bugfix](2020-04-20)
 
 Fix for #721 - prevent entering dots when decimal marker is comma
 
 <a name="9.0.1"></a>
 
-# [9.0.1 Bugfix](2020-04-08)
+## [9.0.1 Bugfix](2020-04-08)
 
 Fix for #715 - mark fields as touched on blur on form fields with an empty mask
 Fix for #711 - stop fields being marked as dirty after a form reset
 
 <a name="9.0.0"></a>
 
-# [9.0.0 Update to Angular 9](2020-04-08)
+## [9.0.0 Update to Angular 9](2020-04-08)
 
 Feature: Library updated to Angular 9
 Feature: Can pass empty string for thousandSeparator if do not want any separation
@@ -1181,7 +1189,7 @@ Fix: stop cursor jumping around when mask is set as empty
 
 <a name="8.2.0"></a>
 
-# [8.2.0 bugfix and breaking change](2020-01-17)
+## [8.2.0 bugfix and breaking change](2020-01-17)
 
 Fix for #657 - showMaskTyped option now works correctly when set in the config
 Fix for #665 - validateTime mark field as invalid immediately if value is null
@@ -1191,14 +1199,14 @@ validation error named 'Mask error' then it will need changing to just 'mask'.
 
 <a name="8.1.7"></a>
 
-# [8.1.7 bugfix](2019-12-27)
+## [8.1.7 bugfix](2019-12-27)
 
 Fix for #369 - add thousandSeparator to separator pipe
 Fix for #381 - add support to negative number in separator mask
 
 <a name="8.1.6"></a>
 
-# [8.1.6 bugfix](2019-10-30)
+## [8.1.6 bugfix](2019-10-30)
 
 Fix for #560 - do not overwrite the mask available patterns when patterns attribute passed in value is a falsey value i.e null/undefined/false
 Fix for #620 - allow delete button to work when at beginning of input and no prefix exists
@@ -1206,291 +1214,291 @@ Fix for #621 - validation config value now works correctly
 
 <a name="8.1.5"></a>
 
-# [8.1.5 bugfix](2019-10-25)
+## [8.1.5 bugfix](2019-10-25)
 
 Fix for #614 - export everything from config
 
 <a name="8.1.4"></a>
 
-# [8.1.4 bugfix](2019-10-23)
+## [8.1.4 bugfix](2019-10-23)
 
 Fix for #580 - honour the special characters that user may have specified, and prevent runtime exception occuring
 Project folder structure converted over to follow Angular CLI way of libraries
 
 <a name="8.1.3"></a>
 
-# [8.1.3 bugfix](2019-10-23)
+## [8.1.3 bugfix](2019-10-23)
 
 Fix for #590 - Problem if prefix last char is not a number
 
 <a name="8.1.2"></a>
 
-# [8.1.2 placeholder customisation](2019-10-11)
+## [8.1.2 placeholder customisation](2019-10-11)
 
 Placeholder can now be customised
 
 <a name="8.1.1"></a>
 
-# [8.1.1 bugfix](2019-10-10)
+## [8.1.1 bugfix](2019-10-10)
 
 bugs fix
 
 <a name="8.1.0"></a>
 
-# [8.1.0 separator update](2019-11-09)
+## [8.1.0 separator update](2019-11-09)
 
 update separator
 
 <a name="8.0.9"></a>
 
-# [8.0.8 bugfix](2019-10-07)
+## [8.0.8 bugfix](2019-10-07)
 
 bugs fix [refs: #554, #580, #582]
 
 <a name="8.0.8"></a>
 
-# [8.0.7 bugfix](2019-10-04)
+## [8.0.7 bugfix](2019-10-04)
 
 bugs fix [refs: #579, #576, #561]
 
 <a name="8.0.7"></a>
 
-# [8.0.7 update date and time](2019-10-02)
+## [8.0.7 update date and time](2019-10-02)
 
 Update date and time masks [refs: #571, #567, #572, #564, #558, #573]
 
 <a name="8.0.4"></a>
 
-# [8.0.4 bugfix](2019-09-09)
+## [8.0.4 bugfix](2019-09-09)
 
 minor bug fixes
 
 <a name="8.0.3"></a>
 
-# [8.0.3 cursor](2019-09-04)
+## [8.0.3 cursor](2019-09-04)
 
 minor bug fixes
 
 <a name="7.9.9"></a>
 
-# [7.9.9 cursor](2019-05-8)
+## [7.9.9 cursor](2019-05-8)
 
 Issues fix
 
 <a name="7.9.2"></a>
 
-# [7.9.1 cursor](2019-04-15)
+## [7.9.1 cursor](2019-04-15)
 
 Bugs fix
 
 <a name="7.9.1"></a>
 
-# [7.9.1 cursor](2019-04-11)
+## [7.9.1 cursor](2019-04-11)
 
 Fix Backspace on empty input causes cursor to jump after entering a value
 
 <a name="7.8.6"></a>
 
-# [7.8.6 bugfix](2019-03-29)
+## [7.8.6 bugfix](2019-03-29)
 
 Bugfix
 
 <a name="7.8.5"></a>
 
-# [7.8.5 update of returned value type](2019-03-28)
+## [7.8.5 update of returned value type](2019-03-28)
 
 Fix returned value when input value type is number
 
 <a name="7.8.4"></a>
 
-# [7.8.4 decimal](2019-03-28)
+## [7.8.4 decimal](2019-03-28)
 
 Added decimal percent, fix suffix prevents decimals
 
 <a name="7.7.3"></a>
 
-# [7.7.3 polyfill](2019-03-28)
+## [7.7.3 polyfill](2019-03-28)
 
 Added polyfill for IE11
 
 <a name="7.7.2"></a>
 
-# [7.7.2 dot_separator](2019-03-27)
+## [7.7.2 dot_separator](2019-03-27)
 
 Fix decimals
 
 <a name="7.7.1"></a>
 
-# [7.7.1 coma_separator](2019-03-25)
+## [7.7.1 coma_separator](2019-03-25)
 
 Readme update
 
 <a name="7.7.0"></a>
 
-# [7.7.0 coma_separator](2019-03-21)
+## [7.7.0 coma_separator](2019-03-21)
 
 Secure input and bugs fix
 
 <a name="7.6.6"></a>
 
-# [7.6.6 coma_separator](2019-03-18)
+## [7.6.6 coma_separator](2019-03-18)
 
 Bugs fix
 
 <a name="7.6.4"></a>
 
-# [7.6.4 coma_separator] (2019-03-13)
+## [7.6.4 coma_separator] (2019-03-13)
 
 Bugs fix
 
 <a name="7.6.0"></a>
 
-# [7.6.0 coma_separator] (2019-03-11)
+## [7.6.0 coma_separator] (2019-03-11)
 
 Feature: added default validation
 
 <a name="7.5.0"></a>
 
-# [7.5.0 coma_separator] (2019-03-11)
+## [7.5.0 coma_separator] (2019-03-11)
 
 Bugs fix: fix minutes validation, '-' in separator, decimal part in separator and fix issues with FF/IE
 
 <a name="7.4.6"></a>
 
-# [7.4.6 coma_separator] (2019-02-15)
+## [7.4.6 coma_separator] (2019-02-15)
 
 Fix coma_separator behavior
 
 <a name="7.4.5"></a>
 
-# [7.4.5 dependencies] (2019-02-15)
+## [7.4.5 dependencies] (2019-02-15)
 
 Update dev and prod dependencies
 
 <a name="7.3.4"></a>
 
-# [7.3.4 decimals values separator] (2019-01-17)
+## [7.3.4 decimals values separator] (2019-01-17)
 
 Added coma_separator
 
 <a name="7.3.3"></a>
 
-# [7.3.3 decimals values separator] (2019-01-08)
+## [7.3.3 decimals values separator] (2019-01-08)
 
 Added decimals values for separator and dot_separator
 
 <a name="7.3.1"></a>
 
-# [7.3.1 update separator] (2018-12-19)
+## [7.3.1 update separator] (2018-12-19)
 
 Now separator can separate by dots
 
 <a name="7.3.0"></a>
 
-# [7.3.0 feature percent] (2018-12-14)
+## [7.3.0 feature percent] (2018-12-14)
 
 Added validation for percent
 
 <a name="7.2.0"></a>
 
-# [7.2.0 feature 24 hour forma] (2018-12-12)
+## [7.2.0 feature 24 hour forma] (2018-12-12)
 
 Added valid 24 hour format mask and update separator
 
 <a name="7.1.0"></a>
 
-# [7.1.0 feature thousand separator] (2018-12-11)
+## [7.1.0 feature thousand separator] (2018-12-11)
 
 Added new mask that separates number by thousands
 
 <a name="7.0.4"></a>
 
-# [7.0.4 fix multiple mask] (2018-12-11)
+## [7.0.4 fix multiple mask] (2018-12-11)
 
 Fix multiple mask when you use the same symbols bettwen \*
 
 <a name="7.0.3"></a>
 
-# [7.0.3 hotfix] (2018-12-10)
+## [7.0.3 hotfix] (2018-12-10)
 
 hotfix
 
 <a name="7.0.2"></a>
 
-# [7.0.2 update of sufix] (2018-12-10)
+## [7.0.2 update of sufix] (2018-12-10)
 
 sufix appears while you inputing data
 
 <a name="6.5.17"></a>
 
-# [6.5.17 fix of sufix](2018-10-09)
+## [6.5.17 fix of sufix](2018-10-09)
 
 you can use sufix along with '\*'
 
 <a name="6.5.16"></a>
 
-# [6.5.16 new specialCharacters 'quotes'](2018-10-09)
+## [6.5.16 new specialCharacters 'quotes'](2018-10-09)
 
 You can used new specialCharacters 'quotes'
 
 <a name="6.5.15"></a>
 
-# [6.5.15 support for repeat mask](2018-10-08)
+## [6.5.15 support for repeat mask](2018-10-08)
 
 You can pass into mask pattern with brackets
 
 <a name="6.4.14"></a>
 
-# [6.4.14 fixed '\*' pattern in maskExpression](2018-10-05)
+## [6.4.14 fixed '\*' pattern in maskExpression](2018-10-05)
 
 Fixed pattern '\*'
 
 <a name="6.4.13"></a>
 
-# [6.4.13 selection of input value and deletion of it is fixed](2018-10-05)
+## [6.4.13 selection of input value and deletion of it is fixed](2018-10-05)
 
 You can select and delete value.
 
 <a name="6.4.12"></a>
 
-# [6.4.12 pipe with mask expression and custom Pattern](2018-04-10)
+## [6.4.12 pipe with mask expression and custom Pattern](2018-04-10)
 
 You can pass array of expression and custom Pattern to pipe
 
 <a name="6.3.11"></a>
 
-# [6.3.11 fixed mask visable](2018-03-10)
+## [6.3.11 fixed mask visable](2018-03-10)
 
 Fixed when page is loaded the mask is visible
 
 <a name="6.3.10"></a>
 
-# [6.3.10 fixed writeValue](2018-03-10)
+## [6.3.10 fixed writeValue](2018-03-10)
 
 Fixed writeValue in directive
 
 <a name="6.2.8"></a>
 
-# [6.2.8 support for Mask Pipe/NgxMaskService](2018-01-10)
+## [6.2.8 support for Mask Pipe/NgxMaskService](2018-01-10)
 
 Added ability to use MaskPipe/NgxMaskService inside component
 
 <a name="6.2.5"></a>
 
-# [6.2.5 support for IE](2018-01-10)
+## [6.2.5 support for IE](2018-01-10)
 
 Added poliffyls for IE
 
 <a name="6.2.4"></a>
 
-# [6.2.4 support for mask](2018-10-09)
+## [6.2.4 support for mask](2018-10-09)
 
 Added support for using 'showMaskTyped' property to see mask while typing
 Resolved issues
 
 <a name="6.1.3"></a>
 
-# [6.1.3 update demo, added support, resolved issues](2018-10-09)
+## [6.1.3 update demo, added support, resolved issues](2018-10-09)
 
 Update of demo version
 Added support to pass in value of type number or string
@@ -1498,36 +1506,36 @@ Resolved issues
 
 <a name="6.1.1"></a>
 
-# [6.1.1 support for prefix](2018-23-07)
+## [6.1.1 support for prefix](2018-23-07)
 
 Add support for prefix
 
 <a name="2.9.5"></a>
 
-# [2.9.5 support for optional character in input '?'](2018-18-06)
+## [2.9.5 support for optional character in input '?'](2018-18-06)
 
 Add [ and ] as defoult symbols for mask
 
 <a name="2.9.4"></a>
 
-# [2.9.4 support for optional character in input '?'](2018-18-06)
+## [2.9.4 support for optional character in input '?'](2018-18-06)
 
 Fix shift for cursor and updated all dependencies
 
 <a name="2.9.3"></a>
 
-# [2.9.3 support for optional character in input '?'](2018-29-05)
+## [2.9.3 support for optional character in input '?'](2018-29-05)
 
 Add support for optional character in input '?'
 
 <a name="2.8.3"></a>
 
-# [2.8.3 support for multicharacter input '\*'](2018-29-05)
+## [2.8.3 support for multicharacter input '\*'](2018-29-05)
 
 Add support for multicharacter input '\*'
 
 <a name="2.7.3"></a>
 
-# [2.7.3 proprioception-reinforcement](2018-08-05)
+## [2.7.3 proprioception-reinforcement](2018-08-05)
 
 Updated all dependencies and remove usages of rxjs
