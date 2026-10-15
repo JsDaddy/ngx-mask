@@ -587,6 +587,7 @@ describe('Directive: Signal Forms', () => {
     //
     // The model now accepts that same union. These hosts are the regression: on the old typing this
     // file does not compile. The last host pins the other direction — the standalone `[(value)]`
+    // two-way binding on a `string` signal must keep compiling and working.
     describe('non-string field types via [formField] (#1640)', () => {
         async function createFixture<T>(component: Type<T>): Promise<ComponentFixture<T>> {
             TestBed.configureTestingModule({
