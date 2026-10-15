@@ -4,10 +4,16 @@ updates:
       directory: /
       schedule:
           interval: weekly
+      commit-message:
+          prefix: ci
+          include: scope
     - package-ecosystem: bun
       directory: /
       schedule:
           interval: weekly
+      commit-message:
+          prefix: chore
+          include: scope
       groups:
           minor-and-patch:
               update-types: [minor, patch]
