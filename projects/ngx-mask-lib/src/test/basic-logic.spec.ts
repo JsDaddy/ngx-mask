@@ -1,13 +1,32 @@
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import type { DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste, pasteTest } from './utils/test-functions.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { vi, expect } from 'vitest';
+
+@Component({
+    selector: 'ngxd-open-source-test',
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="" minlength="5" />`,
+})
+class EmptyMaskNativeComponent {}
+
+@Component({
+    selector: 'ngxd-open-source-form-test',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="" [formControl]="control" />`,
+})
+class EmptyMaskFormComponent {
+    public control = new FormControl('');
+}
 
 describe('Directive: Mask', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -1128,5 +1147,121 @@ describe('Directive: Mask', () => {
         component.form.reset();
         expect(component.form.dirty).equal(false);
         expect(component.form.pristine).equal(true);
+    });
+
+    // Issue #1515: masks with optional tokens BEFORE mandatory ones (e.g. 999SSS).
+    // Input handling works: the applier's optional-token branch skips unfilled
+    // optional positions when the typed char matches a later token, so letters
+    // can be typed directly into the S slots without filling the 9 slots first.
+    describe('optional tokens before mandatory ones, input (#1515)', () => {
+        it('999SSS accepts a letter as first input (optional digits skipped)', () => {
+            component.mask.set('999SSS');
+            equal('a', 'a', fixture);
+            equal('abc', 'abc', fixture);
+        });
+
+        it('999SSS accepts digits into optional slots then letters', () => {
+            component.mask.set('999SSS');
+            equal('12abc', '12abc', fixture);
+            equal('123abc', '123abc', fixture);
+        });
+
+        it('999SSS rejects a fourth digit (only 3 optional digit slots)', () => {
+            component.mask.set('999SSS');
+            equal('1234', '123', fixture);
+        });
+
+        it('SSS999 mandatory-first control still works', () => {
+            component.mask.set('SSS999');
+            equal('abc12', 'abc12', fixture);
+            equal('abc123', 'abc123', fixture);
+        });
+    });
+});
+
+// Issue #1379: native browser constraint validation (minlength -> validity.tooShort)
+// never fires on inputs carrying the mask directive, EVEN when the mask expression is
+// empty. Root cause: onInput unconditionally rewrote `el.value` programmatically on
+// every keystroke, which clears the browser's "value was last changed by a user edit"
+// flag that minlength/maxlength validation depends on. With an empty mask the directive
+// must be a no-op passthrough: no programmatic value rewriting, no validator errors.
+describe('Directive: Mask: empty mask keeps native validation working (#1379)', () => {
+    const flushMicrotasks = async (): Promise<void> => {
+        await Promise.resolve();
+        await Promise.resolve();
+    };
+
+    /**
+     * Replaces the instance `value` accessor with a counting wrapper so every
+     * programmatic `.value =` write (directive or test) is observable.
+     */
+    function interceptValueWrites(el: HTMLInputElement): () => number {
+        const descriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+        if (!descriptor || !descriptor.set || !descriptor.get) {
+            throw new Error('Cannot intercept HTMLInputElement.value');
+        }
+        let writes = 0;
+        Object.defineProperty(el, 'value', {
+            configurable: true,
+            get(): string {
+                return descriptor.get?.call(this);
+            },
+            set(newValue: string) {
+                writes++;
+                descriptor.set?.call(this, newValue);
+            },
+        });
+        return () => writes;
+    }
+
+    it('should not programmatically rewrite el.value on input when mask is empty', async () => {
+        TestBed.configureTestingModule({
+            imports: [EmptyMaskNativeComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture: ComponentFixture<EmptyMaskNativeComponent> =
+            TestBed.createComponent(EmptyMaskNativeComponent);
+        fixture.detectChanges();
+        // Let the initial (config-time) deferred DOM writes flush before observing.
+        await flushMicrotasks();
+        fixture.detectChanges();
+
+        const el: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        const getWrites = interceptValueWrites(el);
+
+        // Simulate a user edit: the test's own assignment is the only expected write.
+        el.value = 'ab';
+        expect(getWrites()).toBe(1);
+        el.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+        await flushMicrotasks();
+        fixture.detectChanges();
+        await flushMicrotasks();
+
+        // The directive must not have rewritten the value (a programmatic rewrite
+        // clears the browser's user-edit flag and disables minlength validation).
+        expect(getWrites()).toBe(1);
+        expect(el.value).toBe('ab');
+    });
+
+    it('should propagate value and report no mask validation errors with empty mask', async () => {
+        TestBed.configureTestingModule({
+            imports: [EmptyMaskFormComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture: ComponentFixture<EmptyMaskFormComponent> =
+            TestBed.createComponent(EmptyMaskFormComponent);
+        const component = fixture.componentInstance;
+        fixture.detectChanges();
+        await flushMicrotasks();
+
+        const el: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        el.value = 'ab';
+        el.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(component.control.value).toBe('ab');
+        expect(component.control.errors).toBeNull();
+        expect(el.value).toBe('ab');
     });
 });
