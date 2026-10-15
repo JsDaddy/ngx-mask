@@ -32,7 +32,7 @@ The PR title becomes the commit message on `develop` and the changelog line. It 
 | Title                                                       | Effect on the next release                          |
 | ----------------------------------------------------------- | --------------------------------------------------- |
 | `feat(scope): ...`                                          | minor (22.x.0)                                      |
-| `fix(scope): ...`, `perf(scope): ...`                       | patch (22.x.y)                                      |
+| `fix(scope): ...`, `perf(scope): ...`, `revert(scope): ...` | patch (22.x.y)                                      |
 | `feat(scope)!: ...` or `fix(scope)!: ...`                   | major, describe the migration in the PR description |
 | `docs`, `test`, `refactor`, `build`, `ci`, `chore`, `style` | none                                                |
 
