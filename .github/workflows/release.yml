@@ -113,4 +113,4 @@ jobs:
             - name: Publish to npm
               if: steps.state.outputs.publish == 'true'
               # npm, not bun, on purpose: trusted publishing (OIDC) + provenance need npm CLI >= 11.5.1; bun publish has no OIDC
-              run: npm publish "package/ngx-mask-${VERSION}.tgz"
+              run: npm publish "./package/ngx-mask-${VERSION}.tgz" # ./ prefix: without it npm treats "package/x.tgz" as a GitHub user/repo
