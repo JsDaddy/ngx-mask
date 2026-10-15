@@ -636,6 +636,24 @@ describe('Directive: Mask: showMaskTyped with plain [(value)] binding (#1671)', 
         expect(fixture.componentInstance.value()).toBe('0791234567');
     });
 
+    it('should emit the value again when it is cleared and retyped in one input event', async () => {
+        const { fixture, input } = await createHost(ValueBindingHostComponent);
+
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+
+        expect(input.value).toBe('___ ___ __ __');
+        expect(fixture.componentInstance.value()).toBe('');
+
+        input.value = '0791234567';
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+
+        expect(input.value).toBe('079 123 45 67');
+        expect(fixture.componentInstance.value()).toBe('0791234567');
+    });
+
     it('should still propagate user typing to the bound signal', async () => {
         const { fixture, input } = await createHost(ValueBindingHostComponent);
 
@@ -775,4 +793,43 @@ describe('Directive: Mask: showMaskTyped with plain [(value)] binding (#1671)', 
 
         expect(fixture.componentInstance.control.value).toBe('');
     });
+});
+
+// Retyping char-by-char always changes the value on the first keystroke; the regression
+// only shows when the whole previous value lands in ONE input event (autofill, undo, IME).
+describe('Directive: Mask: showMaskTyped clear then retype the same value', () => {
+    async function setInputValue(
+        fixture: ComponentFixture<unknown>,
+        input: HTMLInputElement,
+        value: string
+    ): Promise<void> {
+        input.value = value;
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+    }
+
+    for (const mode of TRI_MODES) {
+        for (const prefix of ['', '+7 ']) {
+            it(`${mode}: should emit the value again after clearing and retyping it (prefix '${prefix}')`, async () => {
+                const harness = await createTriModeFixture(mode as TriMode, {
+                    mask: '00000',
+                    prefix,
+                    showMaskTyped: true,
+                });
+                const input = harness.getInput();
+
+                await setInputValue(harness.fixture, input, `${prefix}12345`);
+                expect(input.value).toBe(`${prefix}12345`);
+                expect(harness.getBoundValue()).toBe('12345');
+
+                await setInputValue(harness.fixture, input, '');
+                expect(input.value).toBe(`${prefix}_____`);
+                expect(harness.getBoundValue()).toBe('');
+
+                await setInputValue(harness.fixture, input, `${prefix}12345`);
+                expect(input.value).toBe(`${prefix}12345`);
+                expect(harness.getBoundValue()).toBe('12345');
+            });
+        }
+    }
 });

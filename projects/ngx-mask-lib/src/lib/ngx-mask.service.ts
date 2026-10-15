@@ -147,6 +147,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             if (!this.writingValue) {
                 this.formControlResult(this.prefix);
             }
+            // The field is now empty: record it, or retyping the previous value in one
+            // input event (autofill, undo) would match the stale currentValue and never emit.
+            this.previousValue = this.currentValue;
+            this.currentValue = MaskExpression.EMPTY_STRING;
             return `${this.prefix}${this.maskIsShown}${this.suffix}`;
         }
 
