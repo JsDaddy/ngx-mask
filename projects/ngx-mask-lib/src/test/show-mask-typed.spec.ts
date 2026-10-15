@@ -1,8 +1,8 @@
-import { Component, forwardRef, model } from '@angular/core';
+import { Component, forwardRef, model, signal } from '@angular/core';
 import type { ControlValueAccessor } from '@angular/forms';
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste } from './utils/test-functions.component';
@@ -60,6 +60,129 @@ class InputZipComponent implements ControlValueAccessor {
 })
 class WrapperHostComponent {
     public readonly value = model<string | number>(65432);
+}
+
+/** #1671: plain `[(value)]` two-way binding, no ngModel / formControl / Signal Forms. */
+@Component({
+    selector: 'ngxd-value-binding-host',
+    template: `<input mask="000 000 00 00" [showMaskTyped]="true" [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class ValueBindingHostComponent {
+    public readonly value = signal('0791234567');
+}
+
+/** #1671 follow-up: a thousandSeparator change must not leave the service stuck in writingValue. */
+@Component({
+    selector: 'ngxd-separator-switch-host',
+    template: `<input
+        mask="separator"
+        [showMaskTyped]="true"
+        [thousandSeparator]="thousandSeparator()"
+        [formControl]="control" />`,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+})
+class SeparatorSwitchHostComponent {
+    public readonly thousandSeparator = signal(',');
+    public readonly control = new FormControl<string | null>('1234');
+}
+
+/** #1671 follow-up: a mask and a value changed in the same pass, without triggerOnMaskChange. */
+@Component({
+    selector: 'ngxd-plain-mask-switch-value-binding-host',
+    template: `<input [mask]="mask()" [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class PlainMaskSwitchValueBindingHostComponent {
+    public readonly mask = signal('000-000');
+    public readonly value = signal('123456');
+}
+
+/**
+ * #1671 follow-up: the parent applies `valueChange` in a later task and switches the mask in the
+ * same pass, so the `[value]` binding changes to the value the `value` model already holds.
+ */
+@Component({
+    selector: 'ngxd-deferred-echo-host',
+    template: `<input [mask]="mask()" [value]="value()" (valueChange)="onValueChange($event)" />`,
+    imports: [NgxMaskDirective],
+})
+class DeferredEchoHostComponent {
+    public readonly mask = signal('(000) 000');
+    public readonly value = signal('');
+
+    public onValueChange(value: string | number | null | undefined): void {
+        setTimeout(() => {
+            this.value.set(String(value ?? ''));
+            if (this.value().length >= 3) {
+                this.mask.set('(00) 00-00');
+            }
+        });
+    }
+}
+
+/** #1671 follow-up: a thousandSeparator and a value changed in the same pass under `[(value)]`. */
+@Component({
+    selector: 'ngxd-separator-value-binding-host',
+    template: `<input
+        mask="separator"
+        [thousandSeparator]="thousandSeparator()"
+        [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class SeparatorValueBindingHostComponent {
+    public readonly thousandSeparator = signal(',');
+    public readonly value = signal('1234');
+}
+
+/** #1671 follow-up: the model echo of user typing must not be treated as an external write. */
+@Component({
+    selector: 'ngxd-hidden-value-binding-host',
+    template: `<input mask="XXX/X0/0000" [hiddenInput]="true" [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class HiddenValueBindingHostComponent {
+    public readonly value = signal('');
+}
+
+/** #1671 follow-up: keepCharacterPositions + showMaskTyped under plain `[(value)]`. */
+@Component({
+    selector: 'ngxd-kcp-value-binding-host',
+    template: `<input
+        mask="00/00/0000"
+        [showMaskTyped]="true"
+        [keepCharacterPositions]="true"
+        [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class KeepPositionsValueBindingHostComponent {
+    public readonly value = signal('05062025');
+}
+
+/** #1671 follow-up: a mask and a value changed in the same change-detection pass. */
+@Component({
+    selector: 'ngxd-mask-switch-value-binding-host',
+    template: `<input
+        [mask]="mask()"
+        [showMaskTyped]="true"
+        [triggerOnMaskChange]="true"
+        [(value)]="value" />`,
+    imports: [NgxMaskDirective],
+})
+class MaskSwitchValueBindingHostComponent {
+    public readonly mask = signal('000-000');
+    public readonly value = signal('123456');
+}
+
+/** Runs change detection until the deferred (microtask / rAF) mask writes have settled. */
+async function flush(fixture: ComponentFixture<unknown>): Promise<void> {
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    await Promise.resolve();
+    fixture.detectChanges();
+    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    fixture.detectChanges();
 }
 
 describe('Directive: Mask', () => {
@@ -369,16 +492,6 @@ describe('Directive: Mask', () => {
 // skeleton render for that null write used to echo '' back into the model, clobbering the
 // in-flight value before it ever reached the view.
 describe('Directive: Mask: showMaskTyped with an initial value (#1590)', () => {
-    async function flush(fixture: ComponentFixture<unknown>): Promise<void> {
-        fixture.detectChanges();
-        await fixture.whenStable();
-        fixture.detectChanges();
-        await Promise.resolve();
-        fixture.detectChanges();
-        await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-        fixture.detectChanges();
-    }
-
     async function createWrapperFixture(
         initialValue: string | number
     ): Promise<ComponentFixture<WrapperHostComponent>> {
@@ -463,5 +576,203 @@ describe('Directive: Mask: showMaskTyped with an initial value (#1590)', () => {
             expect(displayAfterClear).toBe('_____');
             expect(harness.getBoundValue()).toBe('');
         });
+    });
+});
+
+describe('Directive: Mask: showMaskTyped with plain [(value)] binding (#1671)', () => {
+    async function createHost<T>(
+        host: new () => T
+    ): Promise<{ fixture: ComponentFixture<T>; input: HTMLInputElement }> {
+        TestBed.configureTestingModule({
+            imports: [host],
+            providers: [provideNgxMask()],
+        });
+        const fixture = TestBed.createComponent(host);
+        await flush(fixture);
+        return { fixture, input: fixture.nativeElement.querySelector('input') };
+    }
+
+    /** Edits as the focused element, the way the keydown / input handlers expect a user edit. */
+    function focus(input: HTMLInputElement): void {
+        vi.spyOn(document, 'activeElement', 'get').mockReturnValue(input);
+    }
+
+    /** Types `digits` one key at a time at the end of the input, settling after each key. */
+    async function typeDigits(
+        fixture: ComponentFixture<unknown>,
+        input: HTMLInputElement,
+        digits: string
+    ): Promise<void> {
+        focus(input);
+        for (const char of digits) {
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.dispatchEvent(new KeyboardEvent('keydown', { key: char, code: `Digit${char}` }));
+            input.value += char;
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.dispatchEvent(new Event('input'));
+            await flush(fixture);
+        }
+    }
+
+    it('should render the masked initial value and keep the bound signal intact', async () => {
+        const { fixture, input } = await createHost(ValueBindingHostComponent);
+
+        expect(input.value).toBe('079 123 45 67');
+        expect(fixture.componentInstance.value()).toBe('0791234567');
+    });
+
+    it('should render a later value.set() and keep the bound signal intact', async () => {
+        const { fixture, input } = await createHost(ValueBindingHostComponent);
+
+        fixture.componentInstance.value.set('');
+        await flush(fixture);
+
+        expect(input.value).toBe('___ ___ __ __');
+
+        fixture.componentInstance.value.set('0791234567');
+        await flush(fixture);
+
+        expect(input.value).toBe('079 123 45 67');
+        expect(fixture.componentInstance.value()).toBe('0791234567');
+    });
+
+    it('should still propagate user typing to the bound signal', async () => {
+        const { fixture, input } = await createHost(ValueBindingHostComponent);
+
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+
+        expect(input.value).toBe('___ ___ __ __');
+        expect(fixture.componentInstance.value()).toBe('');
+
+        input.value = '0791234568';
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+
+        expect(input.value).toBe('079 123 45 68');
+        expect(fixture.componentInstance.value()).toBe('0791234568');
+    });
+
+    it('should apply a mask and a value changed in the same pass', async () => {
+        const { fixture, input } = await createHost(MaskSwitchValueBindingHostComponent);
+
+        expect(input.value).toBe('123-456');
+
+        fixture.componentInstance.mask.set('00-00-00');
+        fixture.componentInstance.value.set('654321');
+        await flush(fixture);
+
+        expect(input.value).toBe('65-43-21');
+        expect(fixture.componentInstance.value()).toBe('654321');
+    });
+
+    it('should still propagate typing after a mask and a value changed in the same pass', async () => {
+        const { fixture, input } = await createHost(PlainMaskSwitchValueBindingHostComponent);
+        expect(input.value).toBe('123-456');
+
+        fixture.componentInstance.mask.set('00-00-00');
+        fixture.componentInstance.value.set('');
+        await flush(fixture);
+        expect(input.value).toBe('');
+
+        await typeDigits(fixture, input, '1');
+
+        expect(input.value).toBe('1');
+        expect(fixture.componentInstance.value()).toBe('1');
+    });
+
+    it('should apply a mask switched together with a deferred echo of the typed value', async () => {
+        const { fixture, input } = await createHost(DeferredEchoHostComponent);
+
+        await typeDigits(fixture, input, '123');
+        await new Promise<void>((resolve) => setTimeout(resolve));
+        await flush(fixture);
+
+        expect(fixture.componentInstance.mask()).toBe('(00) 00-00');
+        expect(input.value).toBe('(12) 3');
+        expect(fixture.componentInstance.value()).toBe('123');
+    });
+
+    it('hiddenInput + [(value)]: typing keeps accumulating into the model (echo is not an external write)', async () => {
+        const { fixture, input } = await createHost(HiddenValueBindingHostComponent);
+
+        await typeDigits(fixture, input, '123456');
+
+        expect(fixture.componentInstance.value()).toBe('123456');
+        expect(input.value).toBe('***/*5/6');
+    });
+
+    for (const [written, display] of [
+        ['', ''],
+        ['987654321', '***/*5/4321'],
+    ] as const) {
+        it(`hiddenInput + [(value)]: a parent write of ${JSON.stringify(written)} after typing replaces the typed value`, async () => {
+            const { fixture, input } = await createHost(HiddenValueBindingHostComponent);
+            await typeDigits(fixture, input, '1234');
+
+            fixture.componentInstance.value.set(written);
+            await flush(fixture);
+
+            expect(fixture.componentInstance.value()).toBe(written);
+            expect(input.value).toBe(display);
+        });
+    }
+
+    for (const [written, display] of [
+        ['', '__/__/____'],
+        ['01012000', '01/01/2000'],
+    ] as const) {
+        it(`keepCharacterPositions + [(value)]: a parent write of ${JSON.stringify(written)} after a mid-value backspace replaces the edited value`, async () => {
+            const { fixture, input } = await createHost(KeepPositionsValueBindingHostComponent);
+            expect(input.value).toBe('05/06/2025');
+
+            focus(input);
+            // Backspace the '6' of the month: keepCharacterPositions leaves a placeholder in place.
+            input.setSelectionRange(5, 5);
+            input.dispatchEvent(
+                new KeyboardEvent('keydown', { key: 'Backspace', code: 'Backspace', keyCode: 8 })
+            );
+            input.value = input.value.slice(0, 4) + input.value.slice(5);
+            input.setSelectionRange(4, 4);
+            input.dispatchEvent(new InputEvent('input', { inputType: 'deleteContentBackward' }));
+            await flush(fixture);
+            expect(input.value).toBe('05/0_/2025');
+
+            fixture.componentInstance.value.set(written);
+            await flush(fixture);
+
+            expect(fixture.componentInstance.value()).toBe(written);
+            expect(input.value).toBe(display);
+        });
+    }
+
+    it('should not leave writingValue stuck when a thousandSeparator and a value change in the same pass', async () => {
+        const { fixture, input } = await createHost(SeparatorValueBindingHostComponent);
+        const maskService = fixture.debugElement
+            .query(By.directive(NgxMaskDirective))
+            .injector.get(NgxMaskDirective)._maskService;
+        expect(input.value).toBe('1,234');
+
+        fixture.componentInstance.thousandSeparator.set('.');
+        fixture.componentInstance.value.set('');
+        await flush(fixture);
+
+        expect(input.value).toBe('');
+        expect(fixture.componentInstance.value()).toBe('');
+        expect(maskService.writingValue).toBe(false);
+    });
+
+    it('should not leave writingValue stuck after a thousandSeparator change (user clear still reaches the model)', async () => {
+        const { fixture, input } = await createHost(SeparatorSwitchHostComponent);
+
+        fixture.componentInstance.thousandSeparator.set('.');
+        await flush(fixture);
+
+        input.value = '';
+        input.dispatchEvent(new Event('input'));
+        await flush(fixture);
+
+        expect(fixture.componentInstance.control.value).toBe('');
     });
 });

@@ -90,9 +90,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 if (this._emitValue && this.triggerOnMaskChange) {
                     this.formControlResult(rawValue);
                 }
-                if (!this.triggerOnMaskChange) {
-                    this.maskChanged = false;
-                }
+                this._clearMaskChangedUnlessTriggered();
                 return rawValue;
             }
             return inputValue !== this.actualValue ? this.actualValue : inputValue;
@@ -376,9 +374,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             this.formControlResult(result);
         }
         // Reset maskChanged flag even if we didn't emit
-        if (this.maskChanged && !this.triggerOnMaskChange) {
-            this.maskChanged = false;
-        }
+        this._clearMaskChangedUnlessTriggered();
 
         // Handle hidden input and showMaskTyped
         if (!this.showMaskTyped || (this.showMaskTyped && this.hiddenInput)) {
@@ -629,6 +625,17 @@ export class NgxMaskService extends NgxMaskApplierService {
             .split(MaskExpression.EMPTY_STRING)
             .filter((item: string) => this._findDropSpecialChar(item));
         return chars.length;
+    }
+
+    /**
+     * Consumes a pending `maskChanged` once a render has handled the reconfiguration, unless
+     * `triggerOnMaskChange` still needs it to emit the re-masked value (formControlResult clears
+     * it then).
+     */
+    public _clearMaskChangedUnlessTriggered(): void {
+        if (!this.triggerOnMaskChange) {
+            this.maskChanged = false;
+        }
     }
 
     public removeMask(inputValue: string): string {
