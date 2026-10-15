@@ -267,6 +267,66 @@ describe('Directive: Mask (Validation)', () => {
         equal('validate@some.com', 'validate@some.com', fixture);
         expect(component.form.valid).equal(true);
     });
+
+    // Validation half of #1515. validate() used to short-circuit to `null` whenever
+    // `processedValue.length >= maskValue.indexOf(<optional key>)`; with leading
+    // optional tokens indexOf() is 0, so every value passed validation even when
+    // mandatory tokens were unfilled. Fixed: the early return is restricted to
+    // trailing-optional layouts, and leading-optional plain-token masks are matched
+    // position-aware (optional tokens skippable, mandatory tokens must be consumed).
+    describe('optional tokens before mandatory ones, validation (#1515)', () => {
+        it('SSS999 (trailing optional) validates correctly — control', () => {
+            component.mask.set('SSS999');
+            equal('ab', 'ab', fixture);
+            expect(component.form.valid).equal(false);
+
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+            component.mask.set('SSS999');
+            equal('abc', 'abc', fixture);
+            expect(component.form.valid).equal(true);
+        });
+
+        it('999SSS with complete mandatory letters is valid', () => {
+            component.mask.set('999SSS');
+            equal('abc', 'abc', fixture);
+            expect(component.form.valid).equal(true);
+        });
+
+        it('999SSS with unfilled mandatory letters is invalid', () => {
+            component.mask.set('999SSS');
+            equal('a', 'a', fixture);
+            expect(component.form.valid).equal(false);
+
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+            component.mask.set('999SSS');
+            equal('12a', '12a', fixture);
+            expect(component.form.valid).equal(false);
+        });
+
+        it('999SSS position-aware boundaries: 12ab invalid, 12abc valid, 123abc valid', () => {
+            component.mask.set('999SSS');
+            equal('12ab', '12ab', fixture);
+            expect(component.form.valid).equal(false);
+
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+            component.mask.set('999SSS');
+            equal('12abc', '12abc', fixture);
+            expect(component.form.valid).equal(true);
+
+            fixture = TestBed.createComponent(TestMaskComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+            component.mask.set('999SSS');
+            equal('123abc', '123abc', fixture);
+            expect(component.form.valid).equal(true);
+        });
+    });
 });
 
 describe('Issue #1645: multi mask with different lengths validates by length', () => {
