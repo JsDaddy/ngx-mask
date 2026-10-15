@@ -1,5 +1,12 @@
 # Changelog
 
+## [22.2.4](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.3...v22.2.4) (2026-10-15)
+
+
+### Fix
+
+* **mask:** emit the value retyped after clearing under showMaskTyped ([#1678](https://github.com/NepipenkoIgor/ngx-mask/issues/1678)) ([80d7344](https://github.com/NepipenkoIgor/ngx-mask/commit/80d73442b6c20b1370df7330178b4f39fbeced8b)), closes [#1677](https://github.com/NepipenkoIgor/ngx-mask/issues/1677)
+
 ## [22.2.3](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.2...v22.2.3) (2026-10-15)
 
 
