@@ -1,7 +1,7 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { equal } from './utils/test-functions.component';
+import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
 import { expect } from 'vitest';
@@ -266,6 +266,59 @@ describe('Directive: Mask (Validation)', () => {
 
         equal('validate@some.com', 'validate@some.com', fixture);
         expect(component.form.valid).equal(true);
+    });
+
+    // #1668: the built-in email mask must accept the characters real addresses carry
+    // ('.', '_', '-', '+' in the local part, '-' and extra labels in the domain), both
+    // typed and pasted, and the model value must hold the full address.
+    describe('email mask A*@A*.A*', () => {
+        const addresses = [
+            'otto.shmidt@example.com',
+            'otto_shmidt@example.com',
+            'otto-shmidt@example.com',
+            'o.t-t_tag@example.com',
+            'a+tag@x.com',
+            'a@my-site.com',
+            'a@mail.example.com',
+            'validate@some.e',
+        ];
+
+        for (const dropSpecialCharacters of [true, false]) {
+            for (const address of addresses) {
+                it(`keeps ${address} typed (dropSpecialCharacters=${dropSpecialCharacters})`, () => {
+                    component.mask.set('A*@A*.A*');
+                    component.dropSpecialCharacters.set(dropSpecialCharacters);
+                    component.form.addValidators(Validators.required);
+
+                    equal(address, address, fixture);
+                    expect(component.form.value).equal(address);
+                    expect(component.form.valid).equal(true);
+                });
+
+                it(`keeps ${address} pasted (dropSpecialCharacters=${dropSpecialCharacters})`, () => {
+                    component.mask.set('A*@A*.A*');
+                    component.dropSpecialCharacters.set(dropSpecialCharacters);
+                    component.form.addValidators(Validators.required);
+
+                    equal(address, address, fixture, false, Paste);
+                    expect(component.form.value).equal(address);
+                    expect(component.form.valid).equal(true);
+                });
+            }
+        }
+
+        it('still rejects a second @ and characters outside the email set', () => {
+            component.mask.set('A*@A*.A*');
+
+            equal('a@b@c.d', 'a@bc.d', fixture);
+            equal('a b#c@d.e', 'abc@d.e', fixture);
+
+            equal('.a@b.c', 'a@b.c', fixture);
+            expect(component.form.value).equal('a@b.c');
+
+            equal('a..b@c.d', 'a.b@c.d', fixture);
+            expect(component.form.value).equal('a.b@c.d');
+        });
     });
 
     // Validation half of #1515. validate() used to short-circuit to `null` whenever

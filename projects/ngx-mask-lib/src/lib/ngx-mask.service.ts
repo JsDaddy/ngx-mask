@@ -800,7 +800,11 @@ export class NgxMaskService extends NgxMaskApplierService {
                 .join(MaskExpression.EMPTY_STRING);
         }
 
-        if (Array.isArray(this.dropSpecialCharacters)) {
+        // #1668: an email address is meaningless without its '@' and '.', so the built-in
+        // email mask always reports the full address, whatever dropSpecialCharacters says.
+        const keepSpecialCharacters = this.maskExpression === MaskExpression.EMAIL_MASK;
+
+        if (Array.isArray(this.dropSpecialCharacters) && !keepSpecialCharacters) {
             this.onChange(
                 outputTransformFn(
                     this._toNumber(
@@ -814,8 +818,9 @@ export class NgxMaskService extends NgxMaskApplierService {
                 )
             );
         } else if (
-            this.dropSpecialCharacters ||
-            (!this.dropSpecialCharacters && this.prefix === inputValue)
+            !keepSpecialCharacters &&
+            (this.dropSpecialCharacters ||
+                (!this.dropSpecialCharacters && this.prefix === inputValue))
         ) {
             this.onChange(
                 outputTransformFn(

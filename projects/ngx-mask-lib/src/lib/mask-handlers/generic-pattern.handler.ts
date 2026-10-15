@@ -1,6 +1,26 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
 import type { MaskHandlerFn } from './mask-handler.types';
 
+/** Punctuation the built-in email mask accepts besides `[a-zA-Z0-9]` (#1668). */
+const EMAIL_AT = '@';
+const EMAIL_LOCAL_PUNCTUATION = '._+-';
+const EMAIL_DOMAIN_PUNCTUATION = '.-';
+
+/**
+ * Whether `inputSymbol` is allowed email punctuation after `result` (the text accepted so far).
+ * Punctuation cannot be the first character of the address, and '..' is blocked.
+ */
+function isEmailPunctuation(inputSymbol: string, result: string): boolean {
+    const allowed = result.includes(EMAIL_AT) ? EMAIL_DOMAIN_PUNCTUATION : EMAIL_LOCAL_PUNCTUATION;
+    const last = result.slice(-1);
+    return (
+        allowed.includes(inputSymbol) &&
+        last !== MaskExpression.EMPTY_STRING &&
+        last !== EMAIL_AT &&
+        !(inputSymbol === MaskExpression.DOT && last === MaskExpression.DOT)
+    );
+}
+
 /**
  * Generic character-by-character pattern loop (moved verbatim from applyMask,
  * original lines 581-968). This is the default/fallback handler — always runs when
@@ -362,6 +382,13 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
             multi
         ) {
             cursor += 3;
+            result += inputSymbol;
+        } else if (
+            maskExpression === MaskExpression.EMAIL_MASK &&
+            isEmailPunctuation(inputSymbol, result)
+        ) {
+            // #1668: 'A' only matches [a-zA-Z0-9], so the punctuation real addresses carry
+            // would be dropped. Keep it inside the current 'A*' run (cursor is unchanged).
             result += inputSymbol;
         } else if (
             this.showMaskTyped &&
