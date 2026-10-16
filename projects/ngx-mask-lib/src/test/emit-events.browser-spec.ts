@@ -1,5 +1,23 @@
 import { mount } from './utils/browser-harness';
 import { MaskHarnessComponent } from './utils/mask-harness.component';
+import { Component } from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
+
+@Component({
+    selector: 'ngxd-mask-filled-test',
+    standalone: true,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+    providers: [provideNgxMask()],
+    template: `
+        <input id="masked" mask="0000" [formControl]="form" (maskFilled)="filled = filled + 1" />
+        <pre id="filled">{{ filled }}</pre>
+    `,
+})
+class MaskFilledTestComponent {
+    public filled = 0;
+    public form = new FormControl('');
+}
 
 describe('Directive: Mask (emit-events)', () => {
     it('should emit event only when mask is correct', async () => {
@@ -150,5 +168,20 @@ describe('Directive: Mask (emit-events)', () => {
 
         await expect.poll(() => m.text('#pristine')).toBe('true');
         await expect.poll(() => m.text('#pre')).toBe('1');
+    });
+
+    it('should emit maskFilled once for the typed digit that completes the mask only', async () => {
+        const m = await mount(MaskFilledTestComponent);
+
+        await m.type('#masked', '123');
+        expect(m.text('#filled')).toBe('0');
+
+        await m.type('#masked', '4');
+        expect(m.text('#filled')).toBe('1');
+
+        m.component.form.setValue('5678');
+        m.component.form.updateValueAndValidity();
+        await m.settle();
+        expect(m.text('#filled')).toBe('1');
     });
 });

@@ -31,6 +31,8 @@ import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from 
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 
+const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
+
 // #1488: a date/time field located within `maskExpression` for the generalized
 // caret-shift-past-separator fix (see `_findDateTimeFieldAt`/`_isFieldOverflowing`).
 type DateTimeField = {
@@ -144,6 +146,11 @@ export class NgxMaskDirective
      * binding echo of it (#1671). `null` = no pending propagation.
      */
     private _lastPropagatedValue: string | null = null;
+    /**
+     * The value the edit currently handled by `onInput` pushed through `onChange`, `null` while it
+     * pushed nothing. Read right after the edit to decide `maskFilled`.
+     */
+    private _valuePropagatedByEdit: string | null = null;
     /**
      * True once the first `ngOnChanges` pass has applied the mask configuration to the service.
      * Signal Forms' `FormField` syncs its field value through the template `ɵɵcontrol` update
@@ -476,37 +483,49 @@ export class NgxMaskDirective
     }
 
     public validate({ value }: FormControl): ValidationErrors | null {
+        return this._validateValue(value).errors;
+    }
+
+    /**
+     * The validation verdict for `value`. `filled` is true when the value passed every check and
+     * reached the end of the rules: a non-empty value that satisfies the mask. `maskFilled` is
+     * derived from it after a user edit; the validator itself must stay side-effect free.
+     */
+    private _validateValue(value: FormControl['value']): {
+        errors: ValidationErrors | null;
+        filled: boolean;
+    } {
         const processedValue: string = typeof value === 'number' ? String(value) : value;
         const maskValue = this._maskValue();
 
         if (!this._maskService.validation || !maskValue) {
-            return null;
+            return notFilled(null);
         }
         if (this._maskService.ipError) {
-            return this._createValidationError(processedValue);
+            return notFilled(this._createValidationError(processedValue));
         }
         if (this._maskService.cpfCnpjError) {
-            return this._createValidationError(processedValue);
+            return notFilled(this._createValidationError(processedValue));
         }
         if (maskValue.startsWith(MaskExpression.SEPARATOR)) {
-            return null;
+            return notFilled(null);
         }
         if (withoutValidation.includes(maskValue)) {
-            return null;
+            return notFilled(null);
         }
         if (this._maskService.clearIfNotMatch) {
-            return null;
+            return notFilled(null);
         }
         if (timeMasks.includes(maskValue)) {
-            return this._validateTime(processedValue);
+            return notFilled(this._validateTime(processedValue));
         }
         if (maskValue === MaskExpression.EMAIL_MASK) {
             const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
             if (!emailPattern.test(processedValue) && processedValue) {
-                return this._createValidationError(processedValue);
+                return notFilled(this._createValidationError(processedValue));
             } else {
-                return null;
+                return notFilled(null);
             }
         }
         if (processedValue && processedValue.length >= 1) {
@@ -521,12 +540,14 @@ export class NgxMaskDirective
                     maskValue.indexOf(MaskExpression.CURLY_BRACKETS_RIGHT)
                 );
 
-                return lengthInsideCurlyBrackets === String(processedValue.length)
-                    ? null
-                    : this._createValidationError(processedValue);
+                return notFilled(
+                    lengthInsideCurlyBrackets === String(processedValue.length)
+                        ? null
+                        : this._createValidationError(processedValue)
+                );
             }
             if (maskValue.startsWith(MaskExpression.PERCENT)) {
-                return null;
+                return notFilled(null);
             }
             for (const key in this._maskService.patterns) {
                 if (this._maskService.patterns[key]?.optional) {
@@ -554,7 +575,7 @@ export class NgxMaskDirective
                                     !this._maskService.patterns[symbol]?.optional
                             );
                         if (!hasMandatoryAfterOptional) {
-                            return null;
+                            return notFilled(null);
                         }
                         if (
                             !this._maskService.prefix &&
@@ -565,15 +586,17 @@ export class NgxMaskDirective
                             // optional tokens to be skipped; every mandatory token must be
                             // consumed (catches `12a` for `999SSS`, which a pure length
                             // check cannot).
-                            return this._matchesMaskWithOptionalSkip(processedValue, maskValue)
-                                ? null
-                                : this._createValidationError(processedValue);
+                            return notFilled(
+                                this._matchesMaskWithOptionalSkip(processedValue, maskValue)
+                                    ? null
+                                    : this._createValidationError(processedValue)
+                            );
                         }
                         // Non-plain masks (prefix/suffix, exotic symbols) fall through to the
                         // legacy length check below (`maskValue.length - counterOfOpt`).
                     }
                     if (counterOfOpt === maskValue.length) {
-                        return null;
+                        return notFilled(null);
                     }
                 }
             }
@@ -583,7 +606,7 @@ export class NgxMaskDirective
                 (maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) > 1 &&
                     processedValue.length < maskValue.indexOf(MaskExpression.SYMBOL_QUESTION))
             ) {
-                return this._createValidationError(processedValue);
+                return notFilled(this._createValidationError(processedValue));
             }
             if (
                 maskValue.indexOf(MaskExpression.SYMBOL_STAR) === -1 ||
@@ -605,9 +628,9 @@ export class NgxMaskDirective
                         // special-character boundary of the selected alternative and satisfy
                         // the length requirement of another (shorter) alternative.
                         if (this._isCompleteAlternativeBoundary(processedValue)) {
-                            return null;
+                            return notFilled(null);
                         }
-                        return this._createValidationError(processedValue);
+                        return notFilled(this._createValidationError(processedValue));
                     }
                 }
                 if (array.length > 1) {
@@ -619,9 +642,11 @@ export class NgxMaskDirective
                         !this._maskService.dropSpecialCharacters
                     ) {
                         const special = processedValue.split(lastIndexArray[0] as string);
-                        return special[special.length - 1]?.length === lastIndexArray.length - 1
-                            ? null
-                            : this._createValidationError(processedValue);
+                        return notFilled(
+                            special[special.length - 1]?.length === lastIndexArray.length - 1
+                                ? null
+                                : this._createValidationError(processedValue)
+                        );
                     } else if (
                         ((lastIndexArray &&
                             !this._maskService.specialCharacters.includes(
@@ -631,9 +656,9 @@ export class NgxMaskDirective
                             this._maskService.dropSpecialCharacters) &&
                         processedValue.length >= length - 1
                     ) {
-                        return null;
+                        return notFilled(null);
                     } else {
-                        return this._createValidationError(processedValue);
+                        return notFilled(this._createValidationError(processedValue));
                     }
                 }
             }
@@ -641,14 +666,10 @@ export class NgxMaskDirective
                 maskValue.indexOf(MaskExpression.SYMBOL_STAR) === 1 ||
                 maskValue.indexOf(MaskExpression.SYMBOL_QUESTION) === 1
             ) {
-                return null;
+                return notFilled(null);
             }
         }
-        if (value) {
-            this.maskFilled.emit();
-            return null;
-        }
-        return null;
+        return { errors: null, filled: !!value };
     }
 
     @HostListener('paste')
@@ -679,6 +700,19 @@ export class NgxMaskDirective
 
     @HostListener('input', ['$event'])
     public onInput(e: Event): void {
+        this._valuePropagatedByEdit = null;
+        this._processInput(e);
+        // `maskFilled` reports a mask completed by the user, so it is decided here, once per
+        // edit, from the value this edit pushed to the model. It must not live in the validator:
+        // that also runs for every programmatic write and every revalidation.
+        const propagated = this._valuePropagatedByEdit;
+        this._valuePropagatedByEdit = null;
+        if (propagated !== null && this._validateValue(propagated).filled) {
+            this.maskFilled.emit();
+        }
+    }
+
+    private _processInput(e: Event): void {
         this._maskService.isInitialized = true;
         // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
         // backspace is undetectable from keydown alone and all _code()-based deletion
@@ -1838,6 +1872,7 @@ export class NgxMaskDirective
     private _propagateToValueModel(value: unknown): void {
         const stringValue = value === null || typeof value === 'undefined' ? '' : String(value);
         this._lastPropagatedValue = stringValue;
+        this._valuePropagatedByEdit = stringValue;
         untracked(() => {
             if (String(this.value()) !== stringValue) {
                 this._skipNextValueEffect.set(true);

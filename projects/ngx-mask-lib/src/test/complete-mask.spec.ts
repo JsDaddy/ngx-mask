@@ -11,10 +11,11 @@ import { vi, expect } from 'vitest';
     standalone: true,
     imports: [ReactiveFormsModule, NgxMaskDirective],
     changeDetection: ChangeDetectionStrategy.Eager,
-    template: ` <input (maskFilled)="maskFilled()" mask="0000" [formControl]="form" /> `,
+    template: ` <input (maskFilled)="maskFilled()" [mask]="mask()" [formControl]="form" /> `,
 })
 class TestMaskComponent {
     public form: FormControl = new FormControl('');
+    public mask = signal('0000');
 
     public isMaskFilled = signal<boolean>(false);
 
@@ -59,5 +60,64 @@ describe('Directive: Mask (Function maskFilled)', () => {
         fixture.detectChanges();
 
         expect(component.isMaskFilled()).equal(false);
+    });
+
+    it('emits once for the keystroke that completes the mask, not for later revalidation', () => {
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.value = '1234';
+        inputElement.dispatchEvent(new Event('input'));
+        component.form.updateValueAndValidity();
+        component.form.updateValueAndValidity();
+        fixture.detectChanges();
+
+        expect(maskFilledSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not emit when a complete value is written programmatically', () => {
+        component.form.setValue('1234');
+        fixture.detectChanges();
+        component.form.patchValue('5678');
+        component.form.updateValueAndValidity();
+        fixture.detectChanges();
+
+        expect(maskFilledSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits once for a complete pasted value', () => {
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.dispatchEvent(new Event('paste'));
+        inputElement.value = '1234';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(maskFilledSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not emit for an incomplete edit that follows a programmatic write', () => {
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        component.form.setValue('1234');
+
+        inputElement.value = '123';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(maskFilledSpy).not.toHaveBeenCalled();
+    });
+
+    it('emits once when an IME composition completes the mask', () => {
+        component.mask.set('AAAA');
+        fixture.detectChanges();
+        const inputElement: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+        inputElement.dispatchEvent(new Event('compositionstart'));
+        inputElement.value = 'abcd';
+        inputElement.dispatchEvent(new Event('input'));
+        expect(maskFilledSpy).not.toHaveBeenCalled();
+        inputElement.dispatchEvent(new Event('compositionend'));
+        fixture.detectChanges();
+
+        expect(maskFilledSpy).toHaveBeenCalledTimes(1);
     });
 });
