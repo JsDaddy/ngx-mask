@@ -1,6 +1,14 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    forwardRef,
+    input,
+    signal,
+    ViewChild,
+} from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import type { ControlValueAccessor } from '@angular/forms';
+import { FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { beforeEach, describe, expect, it } from 'vitest';
 
@@ -248,5 +256,212 @@ describe('Directive: parent state kept on a programmatic write', () => {
         expect(outer.controls.inner.pristine).toBe(true);
         expect(outer.dirty).toBe(true);
         expect(outer.touched).toBe(true);
+    });
+});
+
+/** A custom control that hands its whole ControlValueAccessor contract to the inner mask. */
+@Component({
+    selector: 'ngxd-forwarding-mask-input',
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => ForwardingMaskInputComponent),
+        },
+    ],
+    template: `<input [mask]="mask()" [leadZero]="leadZero()" />`,
+})
+class ForwardingMaskInputComponent implements ControlValueAccessor {
+    public readonly mask = input.required<string>();
+    public readonly leadZero = input(false);
+    @ViewChild(NgxMaskDirective, { static: true })
+    private readonly _maskDirective!: NgxMaskDirective;
+
+    public writeValue(value: unknown): void {
+        this._maskDirective.writeValue(value);
+    }
+
+    public registerOnChange(fn: (value: unknown) => void): void {
+        this._maskDirective.registerOnChange(fn);
+    }
+
+    public registerOnTouched(fn: () => void): void {
+        this._maskDirective.registerOnTouched(fn);
+    }
+}
+
+/** A custom control that implements the contract itself around a masked input with no form binding. */
+@Component({
+    selector: 'ngxd-plain-mask-input',
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => PlainMaskInputComponent),
+        },
+    ],
+    template: `<input #field mask="0000" [value]="value()" (input)="relay(field.value)" />`,
+})
+class PlainMaskInputComponent implements ControlValueAccessor {
+    public readonly value = signal<string | null>(null);
+    private _onChange?: (value: unknown) => void;
+
+    public writeValue(value: string | null): void {
+        this.value.set(value);
+    }
+
+    public registerOnChange(fn: (value: unknown) => void): void {
+        this._onChange = fn;
+    }
+
+    public relay(value: unknown): void {
+        this._onChange?.(value);
+    }
+
+    public registerOnTouched(): void {
+        // Not needed by these specs.
+    }
+}
+
+/** A custom control whose masked input is bound to a FormControl of its own. */
+@Component({
+    selector: 'ngxd-own-control-mask-input',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => OwnControlMaskInputComponent),
+        },
+    ],
+    template: `<input mask="0000" [formControl]="inner" (input)="relay(inner.value)" />`,
+})
+class OwnControlMaskInputComponent implements ControlValueAccessor {
+    public readonly inner = new FormControl<string | null>(null);
+    private _onChange?: (value: unknown) => void;
+
+    public writeValue(value: string | null): void {
+        this.inner.setValue(value);
+    }
+
+    public registerOnChange(fn: (value: unknown) => void): void {
+        this._onChange = fn;
+    }
+
+    public relay(value: unknown): void {
+        this._onChange?.(value);
+    }
+
+    public registerOnTouched(): void {
+        // Not needed by these specs.
+    }
+}
+
+@Component({
+    selector: 'ngxd-wrapped-mask-host',
+    imports: [
+        ReactiveFormsModule,
+        ForwardingMaskInputComponent,
+        PlainMaskInputComponent,
+        OwnControlMaskInputComponent,
+    ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `
+        <form [formGroup]="group">
+            <ngxd-forwarding-mask-input id="code" mask="0000" formControlName="code" />
+            <ngxd-plain-mask-input id="plain" formControlName="plain" />
+            <ngxd-own-control-mask-input id="own" formControlName="own" />
+        </form>
+        <ngxd-forwarding-mask-input
+            id="amount"
+            mask="separator.2"
+            [leadZero]="true"
+            [formControl]="amount" />
+    `,
+})
+class WrappedMaskHostComponent {
+    public readonly group = new FormGroup({
+        code: new FormControl<string | null>(null),
+        plain: new FormControl<string | null>(null),
+        own: new FormControl<string | null>(null),
+    });
+    public readonly amount = new FormControl<string | null>(null);
+}
+
+describe('Directive: control state of a custom control around the mask', () => {
+    const renderHost = (): ReturnType<typeof TestBed.createComponent<WrappedMaskHostComponent>> => {
+        const fixture = TestBed.createComponent(WrappedMaskHostComponent);
+        fixture.detectChanges();
+        return fixture;
+    };
+    const writeAndSettle = async (
+        fixture: ReturnType<typeof renderHost>,
+        write: () => void
+    ): Promise<void> => {
+        write();
+        fixture.detectChanges();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    };
+    const inputOf = (fixture: ReturnType<typeof renderHost>, id: string): HTMLInputElement =>
+        fixture.nativeElement.querySelector(`#${id} input`);
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({ providers: [provideNgxMask()] });
+    });
+
+    it('updates the control of a wrapper that forwards its accessor without dirtying it', async () => {
+        const fixture = renderHost();
+        const { group } = fixture.componentInstance;
+
+        await writeAndSettle(fixture, () => group.controls.code.setValue('12345'));
+
+        expect(inputOf(fixture, 'code').value).toBe('1234');
+        expect(group.controls.code.value).toBe('1234');
+        expect(group.controls.code.pristine).toBe(true);
+        expect(group.pristine).toBe(true);
+    });
+
+    it('normalises a leadZero write through a forwarding wrapper without dirtying it', async () => {
+        const fixture = renderHost();
+        const { amount } = fixture.componentInstance;
+
+        await writeAndSettle(fixture, () => amount.setValue('10.2'));
+
+        expect(inputOf(fixture, 'amount').value).toBe('10.20');
+        expect(amount.value).toBe('10.20');
+        expect(amount.pristine).toBe(true);
+    });
+
+    it('leaves the control of a wrapper whose plain inner input it does not feed alone', async () => {
+        const fixture = renderHost();
+        const { group } = fixture.componentInstance;
+
+        await writeAndSettle(fixture, () => group.controls.plain.setValue('12345'));
+
+        expect(inputOf(fixture, 'plain').value).toBe('1234');
+        expect(group.controls.plain.value).toBe('12345');
+        expect(group.controls.plain.pristine).toBe(true);
+    });
+
+    it('updates the inner control of a wrapper, not the wrapper control', async () => {
+        const fixture = renderHost();
+        const { group } = fixture.componentInstance;
+        const inner = fixture.debugElement.query(
+            (el) => el.componentInstance instanceof OwnControlMaskInputComponent
+        ).componentInstance.inner as FormControl<string | null>;
+
+        await writeAndSettle(fixture, () => group.controls.own.setValue('12345'));
+
+        expect(inputOf(fixture, 'own').value).toBe('1234');
+        expect(inner.value).toBe('1234');
+        expect(inner.pristine).toBe(true);
+        expect(group.controls.own.value).toBe('12345');
+        expect(group.controls.own.pristine).toBe(true);
     });
 });

@@ -244,8 +244,7 @@ export class NgxMaskDirective
     // Injector is used to lazily resolve NgControl. NgControl cannot be injected directly:
     // this directive is registered as the control's NG_VALUE_ACCESSOR, so a direct
     // inject(NgControl) would form a circular dependency. Resolving it lazily on first use
-    // (after the control graph is wired) sidesteps the cycle. Only the element's own NgControl
-    // counts: an ancestor's (a custom control wrapping this input) is not the control it feeds.
+    // (after the control graph is wired) sidesteps the cycle.
     private readonly _injector = inject(Injector);
     // Render hooks run outside the Angular zone; the deferred work below re-enters it so zone.js
     // apps still get change detection for the emissions it triggers.
@@ -253,9 +252,16 @@ export class NgxMaskDirective
 
     private _ngControl: NgControl | null | undefined;
 
+    /**
+     * The nearest NgControl: the element's own, else the one bound to an enclosing custom control.
+     * Only read from the `registerOnChange` callback, i.e. once a control was handed this
+     * directive's accessor contract — directly, or forwarded by a wrapper whose control is then
+     * the nearest one. A wrapper that implements the contract itself never registers with the
+     * mask, so the mask never writes to that wrapper's control.
+     */
     private _resolveNgControl(): NgControl | null {
         if (typeof this._ngControl === 'undefined') {
-            this._ngControl = this._injector.get(NgControl, null, { self: true });
+            this._ngControl = this._injector.get(NgControl, null);
         }
         return this._ngControl;
     }
