@@ -1189,16 +1189,11 @@ export class NgxMaskDirective
      * (#1293). Unknown/letterless probe failures fall back to `false` (process live).
      */
     private _maskAcceptsLetterInput(): boolean {
-        const patterns = this._maskService.patterns;
-        const maskExpression = this._maskService.maskExpression;
-        for (const symbol of maskExpression) {
-            const pattern = patterns[symbol]?.pattern;
-            if (!pattern) {
-                continue;
-            }
-            // Re-create without sticky/global flags: test() on those is stateful.
-            const probe = new RegExp(pattern.source, pattern.flags.replace(/[gy]/g, ''));
-            if (probe.test('a') || probe.test('A')) {
+        for (const symbol of this._maskService.maskExpression) {
+            if (
+                this._maskService._checkSymbolMask('a', symbol) ||
+                this._maskService._checkSymbolMask('A', symbol)
+            ) {
                 return true;
             }
         }
@@ -2053,7 +2048,10 @@ export class NgxMaskDirective
             const valueSymbol = value[valueIndex] as string;
             const pattern = patterns[maskSymbol];
             if (pattern) {
-                if (pattern.pattern.test(valueSymbol) && match(maskIndex + 1, valueIndex + 1)) {
+                if (
+                    this._maskService._checkSymbolMask(valueSymbol, maskSymbol) &&
+                    match(maskIndex + 1, valueIndex + 1)
+                ) {
                     return true;
                 }
                 return !!pattern.optional && match(maskIndex + 1, valueIndex);
