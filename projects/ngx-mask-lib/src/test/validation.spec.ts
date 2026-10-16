@@ -492,6 +492,20 @@ describe('Directive: Mask (Validation re-runs when the mask configuration change
         expect(component.form.hasError('mask')).equal(true);
     });
 
+    it('revalidates against the state the new mask derives (IP verdict), not the previous one', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('1234', '1234', fixture);
+        expect(component.form.errors).toBeNull();
+
+        component.mask.set('IP');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toEqual({
+            mask: { requiredMask: 'IP', actualValue: '1234' },
+        });
+    });
+
     it('revalidates when [validation] is switched off', () => {
         component.mask.set('0000');
         fixture.detectChanges();

@@ -448,6 +448,11 @@ export class NgxMaskDirective
         // re-binding the value we last propagated (an echo, possibly applied in a later task)
         // changes the binding but not the signal, which already holds it — that pass renders.
         const valueChange = changes['value'];
+        const valueEffectWillRender =
+            !!valueChange &&
+            String(valueChange.currentValue) !== this._lastPropagatedValue &&
+            this._valueEffectWillWrite(valueChange.currentValue);
+        this._applyMask(!valueEffectWillRender);
         // `validate` reads these fields: Angular must re-run the validator, otherwise the
         // control keeps the verdict computed for the previous configuration until the next edit.
         // The first binding is skipped — the control validates itself when it is set up.
@@ -461,14 +466,11 @@ export class NgxMaskDirective
             specialCharacters,
             clearIfNotMatch,
         ];
+        // Runs after `_applyMask`: the verdict also reads state the mask pass derives
+        // (`ipError`, `cpfCnpjError`), which must already describe the new configuration.
         if (validationInputChanges.some((change) => change && !change.firstChange)) {
             this._onValidatorChange();
         }
-        const valueEffectWillRender =
-            !!valueChange &&
-            String(valueChange.currentValue) !== this._lastPropagatedValue &&
-            this._valueEffectWillWrite(valueChange.currentValue);
-        this._applyMask(!valueEffectWillRender);
         if (!this._configApplied) {
             this._configApplied = true;
             if (this._hasPendingInitialValue) {
