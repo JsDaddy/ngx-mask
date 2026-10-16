@@ -49,7 +49,7 @@ export class ScrollService {
 
     private handleScroll(): void {
         const scrollIdCard = this.cards().find((e) => this.isInViewport(e.nativeElement))
-            ?.nativeElement.id;
+            ?.nativeElement.dataset['section'];
         if (this.activeCard() !== Number(scrollIdCard) && scrollIdCard) {
             this.activeCard.set(Number(scrollIdCard));
             void this.router.navigate(['/'], {

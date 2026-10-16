@@ -4,7 +4,8 @@
         [class]="
             activeCardId() === tile.id ? 'border border-solid border-accent bg-accent/[.05]' : ''
         "
-        [id]="tile.id"
+        [id]="'card-' + i"
+        [attr.data-section]="tile.id"
         #cards>
         <div class="ml-4 flex items-center text-title text-ink uppercase tracking-[.25em]">
             {{ tile.header }}

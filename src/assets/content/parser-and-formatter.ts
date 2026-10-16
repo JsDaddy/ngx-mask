@@ -5,20 +5,15 @@ export const ParserAndFormatterDocs: ComDoc[] = [
         header: 'toUpperCase',
         text: 'You can hide symbols in input field and get the actual value in formcontrol',
         code: ` <input
-                    [inputTransformFn]="inputTransformFn" 
+                    [inputTransformFn]="inputTransformFn"
                     [outputTransformFn]="outputTransformFn"
                     mask="S*"
-                 /> 
-        
-        
-       
-        public inputTransformFn = (value: unknown): string =>
-             typeof value === 'string' ? value.toUpperCase() : String(value);
-     
-         public outputTransformFn = (value: string | number | null | undefined): string => {
-            return value ? String(value).toUpperCase() : ''
-         };
-    };
+                 />
+
+        public inputTransformFn = (value: unknown): string => String(value).toUpperCase();
+
+        public outputTransformFn = (value: string | number | undefined | null): string =>
+            String(value).toUpperCase();
 `,
         id: 1,
         anchor: 'toUpperCase',
@@ -32,20 +27,18 @@ export const ParserAndFormatterDocs: ComDoc[] = [
                     [inputTransformFn]="_format"
                     [outputTransformFn]="_parser"
                  />
-                 
-        public date = new Date();
 
-         public _format = (value: unknown): string => {
-        if (typeof value !== 'object') {
-            return String(value);
-        } 
-            return  $ {String(this.date.getHours()).padStart(2, '0')}$ {String(
-                this.date.getMinutes()
-            ).padStart(2, '0')};
+        public _format = (value: unknown): string => {
+            if (typeof value !== 'object') {
+                return String(value);
+            }
+            return \`\${String((value as Date).getHours()).padStart(2, '0')}\${String(
+                (value as Date).getMinutes()
+            ).padStart(2, '0')}\`;
         };
-        
+
         public _parser = (value: string | number | undefined | null) => {
-             if (value) {
+            if (value) {
                 const fetch = new Date();
                 const values = String(value).split(':');
                 if (values.length >= 2) {
@@ -56,9 +49,9 @@ export const ParserAndFormatterDocs: ComDoc[] = [
                 }
                 fetch.setSeconds(0);
                 return fetch.toString();
-             }
+            }
             return;
-         };
+        };
 `,
         id: 2,
         anchor: 'to_date',
@@ -67,13 +60,15 @@ export const ParserAndFormatterDocs: ComDoc[] = [
         header: 'replace dot',
         text: '',
 
-        code: ` <input type='text' mask="separator.2" [outputTransformFn]="replaceDot"
+        code: ` <input type='text' mask="separator.2" [outputTransformFn]="replaceDot" />
+
         public replaceDot = (value: string | number | undefined | null): string => {
             if (String(value).includes('.')) {
-                return String(value).replace('.', ',');
+                return String(value).split(' ').join('').replace('.', ',');
             }
-            return String(value);
-        }; />`,
+            return String(value).split(' ').join('');
+        };
+`,
         id: 3,
         anchor: 'replace_dot',
     },
