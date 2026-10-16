@@ -434,7 +434,7 @@ For separate input with dots.
 <input type="text" mask="separator" thousandSeparator="." />
 ```
 
-> `thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but it must not contain digits.
+> `thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but a value containing a digit is ignored (no grouping, nothing stripped from the number).
 
 For using decimals enter `.` and how many decimals to the end of your input to `separator` mask.
 

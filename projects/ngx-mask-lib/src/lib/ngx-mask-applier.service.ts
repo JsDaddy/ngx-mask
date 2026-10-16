@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { digitsOf, escapeRegExp } from './ngx-mask.utils';
+import { digitsOf, escapeRegExp, ignoreDigitSeparator } from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -25,7 +25,20 @@ export class NgxMaskApplierService {
 
     public suffix: NgxMaskConfig['suffix'] = this._config.suffix;
 
-    public thousandSeparator: NgxMaskConfig['thousandSeparator'] = this._config.thousandSeparator;
+    private _thousandSeparator = ignoreDigitSeparator(this._config.thousandSeparator);
+
+    /**
+     * The separator between thousand groups. One containing a digit is ignored entirely (no
+     * grouping, nothing stripped): it could not be told from the number's own digits, and grouping
+     * with it would re-match its own output forever.
+     */
+    public get thousandSeparator(): NgxMaskConfig['thousandSeparator'] {
+        return this._thousandSeparator;
+    }
+
+    public set thousandSeparator(value: NgxMaskConfig['thousandSeparator']) {
+        this._thousandSeparator = ignoreDigitSeparator(value);
+    }
 
     public decimalMarker: NgxMaskConfig['decimalMarker'] = this._config.decimalMarker;
 
@@ -354,15 +367,11 @@ export class NgxMaskApplierService {
         return `${negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING}${integerPart}${decimalMarker}${decimalPart}`;
     }
 
-    /**
-     * Inserts `separator` between every 3-digit group of an integer-digit string. A separator that
-     * contains a digit is unsupported: its own output would match the pattern again and grow forever,
-     * so such a value is left ungrouped.
-     */
+    /** Inserts `separator` between every 3-digit group of an integer-digit string. */
     private _applyThousandGrouping(digits: string, separator: string): string {
         const rgx = /(\d+)(\d{3})/;
         let grouped = digits;
-        while (separator && !/\d/.test(separator) && rgx.test(grouped)) {
+        while (separator && rgx.test(grouped)) {
             // A function replacer: the separator is inserted verbatim, never parsed as a
             // replacement pattern ($, $&, $', ...).
             grouped = grouped.replace(
