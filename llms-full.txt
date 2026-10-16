@@ -205,6 +205,14 @@ Controls whether the prefix shows on an empty model.
 <input type="text" prefix="+7" instantPrefix="true" mask="(000) 000 00 00" />
 ```
 
+### triggerOnMaskChange (boolean)
+
+Default `false`. When a bound `[mask]` changes at runtime the input is always re-formatted with the new mask; the form model is only updated (and `valueChanges` / `ngModelChange` fire) when this is `true`. Example: `[ngModel]="'56789'"` and mask `00000` -> `000`: the field shows `567`, the model stays `56789` (`false`) or becomes `'567'` (`true`).
+
+```html
+<input type="text" [mask]="mask" [triggerOnMaskChange]="true" [(ngModel)]="value" />
+```
+
 ### suffix (string)
 
 ```html
@@ -325,6 +333,8 @@ customMask: [string, typeof pattern] = ['PPP-PPP', pattern];
 <input type="text" mask="separator.2" />
 <!-- .N = decimal precision; 2 is common for currency, 0 disables decimals -->
 ```
+
+`thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but it must not contain digits.
 
 ```text
 Input: 1234.56 -> Masked: 1 234.56           (default space separator)
