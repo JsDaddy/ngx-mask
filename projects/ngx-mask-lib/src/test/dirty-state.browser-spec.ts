@@ -1,6 +1,6 @@
 import { mount } from './utils/browser-harness';
 import { MaskHarnessComponent } from './utils/mask-harness.component';
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
@@ -44,6 +44,36 @@ class TestSeparatorInitialComponent {
     public leadZero = true;
     public thousandSeparator = ',';
     public form = new FormControl('1234.56');
+}
+
+// Prefilled separator control whose text already carries the full precision: a blur has nothing to
+// pad, so it must not touch the value, the control state or the emission count.
+@Component({
+    selector: 'ngxd-test-prefilled-lead-zero',
+    standalone: true,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+    providers: [provideNgxMask()],
+    template: `
+        <input
+            id="masked"
+            [formControl]="form"
+            mask="separator.2"
+            [leadZero]="true"
+            [suffix]="suffix()"
+            thousandSeparator=","
+            decimalMarker="." />
+        <pre id="pristine">{{ form.pristine }}</pre>
+        <pre id="count">{{ count }}</pre>
+    `,
+})
+class TestPrefilledLeadZeroComponent {
+    public suffix = input('');
+    public count = 0;
+    public form = new FormControl('1234.56');
+
+    public constructor() {
+        this.form.valueChanges.subscribe(() => (this.count += 1));
+    }
 }
 
 // Test component with phone mask initial value
@@ -408,6 +438,34 @@ describe('Directive: Mask (dirty state)', () => {
 
         await m.settle();
         await expect.poll(() => m.text('#pristine')).toBe('true');
+    });
+
+    describe('blur with leadZero on a prefilled control', () => {
+        it('keeps the control pristine and emits nothing when blur pads nothing', async () => {
+            const m = await mount(TestPrefilledLeadZeroComponent);
+            const emitted = m.component.count;
+            expect(m.get('#masked').value).toBe('1,234.56');
+
+            m.focus('#masked');
+            await m.blur('#masked');
+
+            expect(m.get('#masked').value).toBe('1,234.56');
+            expect(m.text('#pristine')).toBe('true');
+            expect(m.component.count).toBe(emitted);
+        });
+
+        it('keeps the control pristine and emits nothing when blur pads nothing (suffix)', async () => {
+            const m = await mount(TestPrefilledLeadZeroComponent, { suffix: ' $' });
+            const emitted = m.component.count;
+            expect(m.get('#masked').value).toBe('1,234.56 $');
+
+            m.focus('#masked');
+            await m.blur('#masked');
+
+            expect(m.get('#masked').value).toBe('1,234.56 $');
+            expect(m.text('#pristine')).toBe('true');
+            expect(m.component.count).toBe(emitted);
+        });
     });
 
     // Tests for all mask types on initial load with values

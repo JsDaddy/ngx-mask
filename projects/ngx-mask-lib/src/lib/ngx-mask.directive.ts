@@ -1260,25 +1260,31 @@ export class NgxMaskDirective
                 );
 
                 if (precision > 0) {
-                    el.value = suffix ? el.value.split(suffix).join('') : el.value;
-                    const decimalPart = el.value.split(decimalMarker)[1] as string;
+                    const unsuffixedValue = suffix ? el.value.split(suffix).join('') : el.value;
+                    const decimalPart = unsuffixedValue.split(decimalMarker)[1] as string;
 
-                    el.value = el.value.includes(decimalMarker)
-                        ? el.value +
+                    const paddedValue = unsuffixedValue.includes(decimalMarker)
+                        ? unsuffixedValue +
                           MaskExpression.NUMBER_ZERO.repeat(
                               precision - (decimalPart?.length || 0)
                           ) +
                           suffix
-                        : el.value +
+                        : unsuffixedValue +
                           decimalMarker +
                           MaskExpression.NUMBER_ZERO.repeat(precision) +
                           suffix;
-                    this._maskService.actualValue = el.value;
-                    // #1634: propagate through the regular formControlResult pipeline (not a
-                    // raw onChange) so outputTransformFn runs on this blur-time reformat, same
-                    // as every typing-time emission. A raw onChange here sent the masked display
-                    // string straight to the model, bypassing outputTransformFn entirely.
-                    this._maskService.formControlResult(this._maskService.actualValue);
+                    // Only a blur that really pads the text is an edit: re-emitting the same
+                    // text would dirty the control and fire a duplicate valueChanges for a plain
+                    // focus + blur of a prefilled field.
+                    if (paddedValue !== el.value) {
+                        el.value = paddedValue;
+                        this._maskService.actualValue = el.value;
+                        // #1634: propagate through the regular formControlResult pipeline (not a
+                        // raw onChange) so outputTransformFn runs on this blur-time reformat, same
+                        // as every typing-time emission. A raw onChange here sent the masked
+                        // display string straight to the model, bypassing outputTransformFn.
+                        this._maskService.formControlResult(this._maskService.actualValue);
+                    }
                 }
             }
             this._maskService.clearIfNotMatchFn();
