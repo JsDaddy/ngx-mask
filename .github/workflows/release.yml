@@ -35,6 +35,8 @@ jobs:
             - uses: ./.github/actions/setup-playwright
             - name: Build library
               run: bun run build:lib
+            - name: Check bundle size
+              run: bun run size
             - name: Test library
               run: bun run test:lib
             - name: Test library in a real browser

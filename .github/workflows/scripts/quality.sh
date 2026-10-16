@@ -18,3 +18,5 @@ bun run test:browser
 bun run build
 
 bun run build:lib
+
+bun run size
