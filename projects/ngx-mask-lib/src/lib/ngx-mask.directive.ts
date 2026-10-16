@@ -2114,7 +2114,21 @@ export class NgxMaskDirective
      */
     private _matchesMaskWithOptionalSkip(value: string, mask: string): boolean {
         const patterns = this._maskService.patterns;
+        // Optional tokens branch twice (consume or skip), so the same (maskIndex, valueIndex)
+        // state is reached through many paths: remember the ones that already failed.
+        const failed = new Set<number>();
         const match = (maskIndex: number, valueIndex: number): boolean => {
+            const state = maskIndex * (value.length + 1) + valueIndex;
+            if (failed.has(state)) {
+                return false;
+            }
+            const matched = matchFrom(maskIndex, valueIndex);
+            if (!matched) {
+                failed.add(state);
+            }
+            return matched;
+        };
+        const matchFrom = (maskIndex: number, valueIndex: number): boolean => {
             if (valueIndex === value.length) {
                 return mask
                     .slice(maskIndex)

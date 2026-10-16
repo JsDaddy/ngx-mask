@@ -4,6 +4,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
+import { By } from '@angular/platform-browser';
 import { expect, vi } from 'vitest';
 describe('Directive: Mask (Validation)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -378,6 +379,48 @@ describe('Directive: Mask (Validation)', () => {
             component.mask.set('999SSS');
             equal('123abc', '123abc', fixture);
             expect(component.form.valid).equal(true);
+        });
+
+        describe('optional-skip matcher stays polynomial', () => {
+            type OptionalSkipMatcher = {
+                _matchesMaskWithOptionalSkip(value: string, mask: string): boolean;
+            };
+            const matcher = (): OptionalSkipMatcher =>
+                fixture.debugElement
+                    .query(By.directive(NgxMaskDirective))
+                    .injector.get(NgxMaskDirective) as unknown as OptionalSkipMatcher;
+
+            it('rejects a non-matching tail behind 30 optional tokens quickly', () => {
+                const mask = `${'9'.repeat(30)}A`;
+                const started = performance.now();
+                const verdict = matcher()._matchesMaskWithOptionalSkip(`${'1'.repeat(30)}!`, mask);
+                const elapsed = performance.now() - started;
+
+                expect(verdict).toBe(false);
+                expect(elapsed).toBeLessThan(50);
+            });
+
+            it('accepts a matching value behind 30 optional tokens quickly', () => {
+                const mask = `${'9'.repeat(30)}A`;
+                const started = performance.now();
+                const verdict = matcher()._matchesMaskWithOptionalSkip(`${'1'.repeat(29)}a`, mask);
+                const elapsed = performance.now() - started;
+
+                expect(verdict).toBe(true);
+                expect(elapsed).toBeLessThan(50);
+            });
+
+            it.each([
+                ['999SSS', 'abc', true],
+                ['999SSS', 'a', false],
+                ['999SSS', '12a', false],
+                ['999SSS', '12ab', false],
+                ['999SSS', '12abc', true],
+                ['999SSS', '123abc', true],
+                ['999SSS', '1234abc', false],
+            ])('keeps the %s verdict for %s -> %s', (mask, value, expected) => {
+                expect(matcher()._matchesMaskWithOptionalSkip(value, mask)).toBe(expected);
+            });
         });
     });
 });
