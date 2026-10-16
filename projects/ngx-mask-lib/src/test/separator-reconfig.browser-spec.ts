@@ -177,6 +177,24 @@ describe('Separator: changing the separators after typing (real browser)', () =>
     });
 });
 
+describe('Separator: changing the separators right after a leadZero write (real browser)', () => {
+    it('keeps the written number in the display and in the model', async () => {
+        const m = await mount(ReconfigGroupComponent);
+        m.component.leadZero.set(true);
+        await m.settle();
+        const { amount } = m.component.group.controls;
+
+        amount.setValue(1234.5);
+        m.component.thousandSeparator.set('.');
+        m.component.decimalMarker.set(',');
+        await m.settle();
+
+        expect(m.get('#amount').value).toBe('1.234,50');
+        expect(amount.value).toBe('1234.50');
+        expect(amount.pristine).toBe(true);
+    });
+});
+
 describe('Separator: a leadZero write keeps the form state (real browser)', () => {
     const mountWithLeadZero = async () => {
         const m = await mount(ReconfigGroupComponent);

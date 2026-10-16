@@ -467,6 +467,9 @@ export class NgxMaskDirective
             );
             this._maskService.actualValue = this._inputValue();
             this._maskService.writingValue = true;
+            // The re-render below carries the number over to the new markers: what an earlier
+            // write still has deferred (the leadZero pass) holds it in the old ones.
+            this._writeSequence++;
         }
         // #1671: a standalone `[(value)]` change reaches ngOnChanges BEFORE the value effect
         // writes it, so `_inputValue` still holds the PREVIOUS value here. Re-rendering it would

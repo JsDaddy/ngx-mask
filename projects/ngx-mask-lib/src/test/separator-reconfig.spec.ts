@@ -170,4 +170,23 @@ describe('Separator: changing the separators of a mask', () => {
             }
         );
     });
+
+    describe('with a leadZero write still deferred', () => {
+        it('keeps the written number when the separators change in the same tick', async () => {
+            component.leadZero.set(true);
+            component.thousandSeparator.set(' ');
+            component.decimalMarker.set('.');
+            fixture.detectChanges();
+            input = fixture.nativeElement.querySelector('input');
+
+            component.form.setValue('1234.5');
+            component.thousandSeparator.set('.');
+            component.decimalMarker.set(',');
+            await settle();
+
+            expect(input.value).toBe('1.234,50');
+            expect(component.form.value).toBe('1234.50');
+            expect(component.form.pristine).toBe(true);
+        });
+    });
 });
