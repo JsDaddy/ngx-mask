@@ -122,5 +122,25 @@ describe('Directive: setValue called inside a valueChanges subscriber (#1691)', 
             expect(component.form.value).toBe('9999');
             expect(input.value).toBe('9999');
         });
+
+        it('ends on the innermost of two nested writes with showMaskTyped', async () => {
+            component.mask.set('00-00');
+            component.showMaskTyped.set(true);
+            fixture.detectChanges();
+            component.form.valueChanges.subscribe((value) => {
+                if (value === '8888') {
+                    component.form.setValue('9999', { emitEvent: false });
+                } else if (value !== '9999') {
+                    component.form.setValue('8888');
+                }
+            });
+
+            typeInto('4321');
+
+            expect(component.form.value).toBe('9999');
+            expect(input.value).toBe('99-99');
+            await fixture.whenStable();
+            expect(input.value).toBe('99-99');
+        });
     });
 });
