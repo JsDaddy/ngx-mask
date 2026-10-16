@@ -903,6 +903,18 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
 
+        // A separator mask groups with the configured thousandSeparator, which need not be one of
+        // the specialCharacters (`$`, `*`, `^`, `|`...). It is never part of the number, so strip it
+        // like the default ' ' and ',' unless the caller listed what to drop explicitly.
+        if (
+            !Array.isArray(this.dropSpecialCharacters) &&
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            this.thousandSeparator &&
+            !specialCharacters.includes(this.thousandSeparator)
+        ) {
+            specialCharacters = [...specialCharacters, this.thousandSeparator];
+        }
+
         return this._removeMask(result, specialCharacters as string[]);
     }
 
