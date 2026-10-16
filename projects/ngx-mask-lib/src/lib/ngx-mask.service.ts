@@ -5,6 +5,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { digitsOf, escapeRegExp } from './ngx-mask.utils';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -657,17 +658,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         if (inputVal === MaskExpression.HASH) {
             return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
-            if (!value) {
-                continue;
-            }
-            if (value.match('\\d')) {
-                arr.push(value);
-            }
-        }
+        const arr = digitsOf(inputVal);
         if (arr.length <= 3) {
             return `${this.placeHolderCharacter}.${this.placeHolderCharacter}.${this.placeHolderCharacter}`;
         }
@@ -753,18 +744,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     /** Collects the characters counted as "typed" for CPF/CNPJ progress tracking: digits only
      *  for the numeric mask, alphanumerics for CPF_CNPJ_ALPHA. */
     private _countCpfCnpjTypedChars(inputVal: string, isCpfCnpjAlpha: boolean): string[] {
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < inputVal.length; i++) {
-            const value = inputVal[i] ?? MaskExpression.EMPTY_STRING;
-            if (!value) {
-                continue;
-            }
-            if (isCpfCnpjAlpha ? value.match('[a-zA-Z0-9]') : value.match('\\d')) {
-                arr.push(value);
-            }
-        }
-        return arr;
+        return isCpfCnpjAlpha ? (inputVal.match(/[a-zA-Z0-9]/g) ?? []) : digitsOf(inputVal);
     }
 
     /**
@@ -928,15 +908,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(
-            specialCharactersForRemove
-                .map((item: string) => {
-                    // Only escape characters that have special meaning in regex
-                    if (/[.*+?^${}()|[\]\\/-]/.test(item)) {
-                        return `\\${item}`;
-                    }
-                    return item;
-                })
-                .join('|'),
+            specialCharactersForRemove.map((item: string) => escapeRegExp(item)).join('|'),
             'gi'
         );
     }

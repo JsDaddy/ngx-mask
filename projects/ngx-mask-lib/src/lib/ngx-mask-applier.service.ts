@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { digitsOf, escapeRegExp } from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -134,14 +135,7 @@ export class NgxMaskApplierService {
         ) {
             result += processedValue.slice(cursor, cursor + 1);
         }
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < processedValue.length; i++) {
-            const char = processedValue[i] ?? MaskExpression.EMPTY_STRING;
-            if (/\d/.test(char)) {
-                arr.push(char);
-            }
-        }
+        const arr = digitsOf(processedValue);
 
         // Per-mask-type dispatch (IP/CPF_CNPJ pre-processors → generic loop; PERCENT and
         // SEPARATOR terminal handlers; generic pattern loop as fallback). See
@@ -298,9 +292,7 @@ export class NgxMaskApplierService {
         let decimalChar: string;
 
         if (Array.isArray(decimalChars)) {
-            const regExp = new RegExp(
-                decimalChars.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|')
-            );
+            const regExp = new RegExp(decimalChars.map((v) => escapeRegExp(v)).join('|'));
             x = str.split(regExp);
             decimalChar = str.match(regExp)?.[0] ?? MaskExpression.EMPTY_STRING;
         } else {
@@ -480,14 +472,10 @@ export class NgxMaskApplierService {
     }
 
     protected _charToRegExpExpression(char: string): string {
-        // if (Array.isArray(char)) {
-        // 	return char.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|');
-        // }
-        if (char) {
-            const charsToEscape = '[\\^$.|?*+()';
-            return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? `\\${char}` : char;
+        if (!char) {
+            return char;
         }
-        return char;
+        return char === ' ' ? '\\s' : escapeRegExp(char);
     }
 
     protected _shiftStep(cursor: number) {

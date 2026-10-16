@@ -1,4 +1,5 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
+import { escapeRegExp } from '../ngx-mask.utils';
 import type { MaskHandlerFn } from './mask-handler.types';
 
 /** Characters rejected while typing a separator mask (' ' stands for any whitespace). */
@@ -262,7 +263,7 @@ export const separatorHandler: MaskHandlerFn = function (state, params) {
     );
     const allowedChars = [this.thousandSeparator, ...[this.decimalMarker].flat()];
     const invalidChars = INVALID_SEPARATOR_CHARS.filter((char) => !allowedChars.includes(char))
-        .map((char) => (char === ' ' ? '\\s' : `\\${char}`))
+        .map((char) => (char === ' ' ? '\\s' : escapeRegExp(char)))
         .join('');
 
     const invalidCharRegexp = new RegExp('[' + invalidChars + ']');
