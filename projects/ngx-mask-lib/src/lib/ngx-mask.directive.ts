@@ -184,6 +184,12 @@ export class NgxMaskDirective
      */
     private _writtenValue: { value: unknown } | null = null;
     /**
+     * Counts the `writeValue` calls that reached the rendering step. A write whose masked echo makes
+     * a `valueChanges` subscriber call `setValue` again is superseded by that nested write; the outer
+     * one compares this counter and leaves the DOM to the latest write (#1691).
+     */
+    private _writeSequence = 0;
+    /**
      * The value the edit currently handled by `onInput` pushed through `onChange`, `null` while it
      * pushed nothing. Read right after the edit to decide `maskFilled`.
      */
@@ -1653,6 +1659,7 @@ export class NgxMaskDirective
         ) {
             return;
         }
+        const writeSequence = ++this._writeSequence;
         const ngControl = this._resolveNgControl();
         const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
         const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
@@ -1787,8 +1794,12 @@ export class NgxMaskDirective
                 } finally {
                     this._writtenValue = null;
                 }
-                this._maskService.formElementProperty = ['value', displayValue];
-                this._writeElementValueSync(displayValue);
+                // A nested write (setValue inside a valueChanges subscriber) already rendered its own,
+                // newer value: do not overwrite it with this stale one.
+                if (writeSequence === this._writeSequence) {
+                    this._maskService.formElementProperty = ['value', displayValue];
+                    this._writeElementValueSync(displayValue);
+                }
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
                 this._maskService.isInitialized = true;
