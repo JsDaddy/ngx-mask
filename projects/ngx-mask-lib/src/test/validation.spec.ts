@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
-import { expect } from 'vitest';
+import { expect, vi } from 'vitest';
 describe('Directive: Mask (Validation)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
@@ -442,5 +442,65 @@ describe('Directive: Mask (Validation of numeric control values)', () => {
 
         expect(() => validator(numeric)).not.toThrow();
         expect(validator(numeric)).toEqual(validator(text));
+    });
+});
+
+describe('Directive: Mask (Validation re-runs when the mask configuration changes)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ validation: true })],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('does not emit status changes while the inputs are bound for the first time', () => {
+        component.mask.set('0000');
+        const statusChanges = vi.fn();
+        component.form.statusChanges.subscribe(statusChanges);
+
+        fixture.detectChanges();
+
+        expect(statusChanges).not.toHaveBeenCalled();
+    });
+
+    it('revalidates a filled control when [mask] becomes shorter, without typing', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.mask.set('00');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
+    });
+
+    it('revalidates a filled control when [mask] becomes longer, without typing', () => {
+        component.mask.set('00');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.errors).toBeNull();
+
+        component.mask.set('0000');
+        fixture.detectChanges();
+
+        expect(component.form.hasError('mask')).equal(true);
+    });
+
+    it('revalidates when [validation] is switched off', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.validation.set(false);
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
     });
 });

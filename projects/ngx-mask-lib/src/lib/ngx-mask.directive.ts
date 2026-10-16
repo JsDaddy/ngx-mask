@@ -206,6 +206,9 @@ export class NgxMaskDirective
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onTouch = () => {};
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    private _onValidatorChange = () => {};
+
     public constructor() {
         // Default onChange used in Signal Forms mode, where Angular never calls registerOnChange.
         // It pushes the unmasked value into the `value` model so the `valueChange` output fires.
@@ -438,6 +441,22 @@ export class NgxMaskDirective
         // re-binding the value we last propagated (an echo, possibly applied in a later task)
         // changes the binding but not the signal, which already holds it — that pass renders.
         const valueChange = changes['value'];
+        // `validate` reads these fields: Angular must re-run the validator, otherwise the
+        // control keeps the verdict computed for the previous configuration until the next edit.
+        // The first binding is skipped — the control validates itself when it is set up.
+        const validationInputChanges = [
+            mask,
+            validation,
+            patterns,
+            prefix,
+            suffix,
+            dropSpecialCharacters,
+            specialCharacters,
+            clearIfNotMatch,
+        ];
+        if (validationInputChanges.some((change) => change && !change.firstChange)) {
+            this._onValidatorChange();
+        }
         const valueEffectWillRender =
             !!valueChange &&
             String(valueChange.currentValue) !== this._lastPropagatedValue &&
@@ -1789,6 +1808,10 @@ export class NgxMaskDirective
             originalFn(value);
             this._propagateToValueModel(value);
         };
+    }
+
+    public registerOnValidatorChange(fn: () => void): void {
+        this._onValidatorChange = fn;
     }
 
     public registerOnTouched(fn: typeof this.onTouch): void {
