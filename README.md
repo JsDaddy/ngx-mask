@@ -38,7 +38,7 @@ A powerful Angular directive for input masking with customizable patterns
   </a>
 </p>
 
-`ngx-mask` is the input-masking library built for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover all three form models — **Reactive Forms, template-driven, and the new Signal Forms** — through a first-class `ControlValueAccessor`, and run cleanly in **zoneless** and SSR applications. You get production-ready masks out of the box: dates and times with validity checking, numbers with thousand separators and decimal precision, IP, CPF/CNPJ, secure/hidden input, plus fully custom patterns with prefixes, suffixes and multi-mask expressions. No runtime dependencies beyond Angular, ~15 KB gzipped — provide it once, bind `mask`, done.
+`ngx-mask` is the input-masking library built for modern Angular. One standalone directive (`NgxMaskDirective`) and pipe (`NgxMaskPipe`) cover all three form models — **Reactive Forms, template-driven, and the new Signal Forms** — through a first-class `ControlValueAccessor`, and run cleanly in **zoneless** and SSR applications. You get production-ready masks out of the box: dates and times with validity checking, numbers with thousand separators and decimal precision, IP, CPF/CNPJ, secure/hidden input, plus fully custom patterns with prefixes, suffixes and multi-mask expressions. No runtime dependencies beyond Angular, ~25 KB gzipped — provide it once, bind `mask`, done.
 
 ## Table of Contents
 
@@ -148,7 +148,7 @@ Check out our [live documentation and examples](https://nepipenkoigor.github.io/
 ## Installation
 
 ```bash
-# For Angular 17 and above
+# For Angular 22 and above
 $ npm install ngx-mask    # Using npm
 $ bun add ngx-mask       # Using bun
 
@@ -176,10 +176,11 @@ $ bun add ngx-mask@13.2.2       # Using bun
 
 NGX-MASK follows Angular's official support policy, supporting Active and LTS versions. Currently supported:
 
-- Angular 17 and newer (latest features and updates)
+- Angular 22 and newer (latest features and updates)
+- Angular 17-21: install an earlier ngx-mask major (see the npm version history)
 - For older Angular versions, use the corresponding NGX-MASK version as specified above
 
-> **Note**: Versions for Angular older than v17 will not receive new features or updates.
+> **Note**: Versions for Angular older than v22 will not receive new features or updates.
 
 ## Quick Start
 
