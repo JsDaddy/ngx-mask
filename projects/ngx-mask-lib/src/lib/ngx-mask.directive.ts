@@ -1717,6 +1717,8 @@ export class NgxMaskDirective
                             : inputValue;
                 }
 
+                // Read before the precision pass rewrites the decimals with a dot.
+                const commaDecimal = this._maskService.usesCommaDecimal(inputValue);
                 if (
                     this._maskService.leadZero &&
                     inputValue &&
@@ -1729,11 +1731,7 @@ export class NgxMaskDirective
                     );
                 }
 
-                if (
-                    this._maskService.decimalMarker === MaskExpression.COMMA ||
-                    (Array.isArray(this._maskService.decimalMarker) &&
-                        this._maskService.thousandSeparator === MaskExpression.DOT)
-                ) {
+                if (commaDecimal) {
                     inputValue = inputValue
                         .toString()
                         .replace(MaskExpression.DOT, MaskExpression.COMMA);
