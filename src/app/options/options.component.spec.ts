@@ -542,8 +542,8 @@ describe('Demo App - Options', () => {
     // mode (reactive, template-driven, or signal) - confirmed by reproducing identical
     // corruption in Reactive mode with a hand-rolled native-event probe, so this is not a
     // signal-forms-specific bug. Full E2E coverage (19 cases, incl. delete/backspace/select
-    // scenarios) already exists in Cypress:
-    // See: projects/ngx-mask-lib/src/test/keep-character-position.cy-spec.ts
+    // scenarios) already exists in Vitest browser mode:
+    // See: projects/ngx-mask-lib/src/test/keep-character-position.browser-spec.ts
 
     describe('Reactive Forms', () => {
         runMaskCasesForMode('reactive', optionsTests, true);

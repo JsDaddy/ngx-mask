@@ -13,7 +13,7 @@ else
 fi
 
 bun run test
-bun run cypress:bash
+bun run test:browser
 
 bun run build
 

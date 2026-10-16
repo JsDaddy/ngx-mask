@@ -29,9 +29,6 @@
 npm-debug.log
 testem.log
 /typings
-/cypress/*
-!/cypress/support/
-!/cypress/fixture/
 .nx
 # e2e
 /e2e/*.js
@@ -49,12 +46,10 @@ yarn.lock
 
 test-reports/
 
-/projects/ngx-mask-lib/cypress/videos
 
 # claude code
 /.claude
 /.playwright-mcp
-/projects/ngx-mask-lib/cypress/screenshots
 /projects/ngx-mask-lib/coverage
 
 .angular
@@ -65,3 +60,6 @@ test-reports/
 /*test_output*.txt
 /*test_report*.txt
 /*test_results*.txt
+
+# vitest browser mode failure screenshots
+/.vitest

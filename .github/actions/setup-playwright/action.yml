@@ -1,0 +1,22 @@
+name: setup playwright chromium
+description: Install Chromium (and its OS dependencies) for Vitest browser mode, cached per Playwright version.
+runs:
+    using: composite
+    steps:
+        - name: Playwright version
+          id: version
+          shell: bash
+          run: echo "value=$(bun -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+        - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+          id: cache
+          with:
+              path: ~/.cache/ms-playwright
+              key: playwright-${{ runner.os }}-${{ steps.version.outputs.value }}
+        - name: Install Chromium
+          if: steps.cache.outputs.cache-hit != 'true'
+          shell: bash
+          run: bunx playwright install --with-deps chromium
+        - name: Install Chromium OS dependencies
+          if: steps.cache.outputs.cache-hit == 'true'
+          shell: bash
+          run: bunx playwright install-deps chromium

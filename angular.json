@@ -120,6 +120,14 @@
                     "options": {
                         "tsConfig": "projects/ngx-mask-lib/tsconfig.spec.json",
                         "setupFiles": ["src/test-setup.ts"]
+                    },
+                    "configurations": {
+                        "browser": {
+                            "tsConfig": "projects/ngx-mask-lib/tsconfig.browser-spec.json",
+                            "include": ["**/*.browser-spec.ts"],
+                            "browsers": ["chromium"],
+                            "headless": true
+                        }
                     }
                 }
             }
