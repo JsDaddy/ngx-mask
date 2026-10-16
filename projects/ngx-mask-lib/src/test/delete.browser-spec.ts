@@ -54,6 +54,20 @@ describe('Directive: Mask (Delete)', () => {
         await m.type('#masked', '{Backspace}');
         await expect.poll(() => m.get('#masked').value).toBe('');
     });
+    it('should empty the field when backspacing the last digit after a prefix with dropSpecialCharacters=false', async () => {
+        const m = await mount(MaskHarnessComponent, {
+            mask: '000',
+            prefix: '$',
+            dropSpecialCharacters: false,
+        });
+
+        await m.type('#masked', '12');
+        await expect.poll(() => m.get('#masked').value).toBe('$12');
+        await m.type('#masked', '{Backspace}');
+        await expect.poll(() => m.get('#masked').value).toBe('$1');
+        await m.type('#masked', '{Backspace}');
+        await expect.poll(() => m.get('#masked').value).toBe('');
+    });
     it('should delete suffix', async () => {
         const m = await mount(MaskHarnessComponent, { mask: '000 000 000', suffix: '$' });
 
