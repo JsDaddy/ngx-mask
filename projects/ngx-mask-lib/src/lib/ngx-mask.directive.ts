@@ -1712,7 +1712,7 @@ export class NgxMaskDirective
                 typeof inputValue === 'number' ||
                 this._maskValue().startsWith(MaskExpression.SEPARATOR)
             ) {
-                inputValue = String(inputValue);
+                inputValue = this._maskService._displayToPlainDecimal(String(inputValue));
                 const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
                 if (!Array.isArray(this._maskService.decimalMarker)) {
                     inputValue =

@@ -1000,6 +1000,28 @@ export class NgxMaskService extends NgxMaskApplierService {
         return this._activeDecimalMarker(value) === MaskExpression.COMMA;
     }
 
+    /**
+     * Turns a string already in the display format (`1.234,5` under thousandSeparator '.' and
+     * decimalMarker ',') into the plain `1234.5`. Only a string holding BOTH the active
+     * thousandSeparator and the active decimal marker is read that way; anything else (`1234567.5`,
+     * `1.5`) keeps its dot-decimal reading.
+     */
+    public _displayToPlainDecimal(value: string): string {
+        const marker = this._activeDecimalMarker(value);
+        if (
+            !this.thousandSeparator ||
+            marker === this.thousandSeparator ||
+            !value.includes(this.thousandSeparator) ||
+            !value.includes(marker)
+        ) {
+            return value;
+        }
+        return value
+            .split(this.thousandSeparator)
+            .join(MaskExpression.EMPTY_STRING)
+            .replace(marker, MaskExpression.DOT);
+    }
+
     public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
         const separatorPrecision = this.getPrecision(separatorExpression);
         let value = separatorValue;
@@ -1013,6 +1035,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         ) {
             if (this.leadZero && this._usesCommaDecimal(value)) {
                 value = value.replace(MaskExpression.COMMA, MaskExpression.DOT);
+            }
+            if (Number.isNaN(Number(value))) {
+                // Not a number the padding can read: show it unpadded rather than as 'NaN'.
+                return separatorValue;
             }
             const precision = this.leadZero ? Number(separatorPrecision) : 2;
             // #1567: Number(value).toFixed() corrupts values with more significant digits
