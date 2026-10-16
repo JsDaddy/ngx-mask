@@ -149,7 +149,7 @@ export class NgxMaskDirective
      */
     private _lastPropagatedValue: string | null = null;
     /**
-     * The model value `writeValue` is currently applying, `null` outside a write. The mask's own
+     * The raw control value `writeValue` is currently applying, `null` outside a write. The mask's own
      * `onChange` echo is skipped when it carries exactly this value (the mask left it unchanged);
      * an echo that differs (a normalised or re-typed value) still reaches the form.
      */
@@ -1711,7 +1711,6 @@ export class NgxMaskDirective
 
             value = value.value;
         }
-        const modelValue = value;
         if (value !== null) {
             value = inputTransformFn ? inputTransformFn(value) : value;
         }
@@ -1825,7 +1824,9 @@ export class NgxMaskDirective
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
                 this._maskService.writingValue = true;
 
-                this._writtenValue = { value: modelValue };
+                // The raw control value: a boxed `{value, disable}` write never equals the plain value
+                // the mask emits, so its echo still replaces the box in the control.
+                this._writtenValue = { value: controlValue };
                 let displayValue: string;
                 try {
                     displayValue = this._maskedOrVerbatim(inputValue);
