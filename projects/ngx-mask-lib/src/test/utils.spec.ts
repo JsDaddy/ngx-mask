@@ -1,6 +1,6 @@
 import { expect } from 'vitest';
 
-import { escapeRegExp } from '../lib/ngx-mask.utils';
+import { digitsOf, escapeRegExp } from '../lib/ngx-mask.utils';
 
 describe('ngx-mask.utils', () => {
     describe('escapeRegExp', () => {
@@ -24,6 +24,21 @@ describe('ngx-mask.utils', () => {
             expect(escapeRegExp('$&')).toBe('\\$&');
             expect(new RegExp(escapeRegExp('(.)'), 'g').test('(.)')).toBe(true);
             expect(escapeRegExp('')).toBe('');
+        });
+    });
+
+    describe('digitsOf', () => {
+        it('returns the digits in order and skips everything else', () => {
+            expect(digitsOf('a1b2-3 (4)')).toEqual(['1', '2', '3', '4']);
+        });
+
+        it('returns an empty array when there are no digits', () => {
+            expect(digitsOf('')).toEqual([]);
+            expect(digitsOf('abc.-')).toEqual([]);
+        });
+
+        it('returns a fresh array on every call', () => {
+            expect(digitsOf('12')).not.toBe(digitsOf('12'));
         });
     });
 });

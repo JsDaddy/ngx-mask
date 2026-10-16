@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { escapeRegExp } from './ngx-mask.utils';
+import { digitsOf, escapeRegExp } from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -135,14 +135,7 @@ export class NgxMaskApplierService {
         ) {
             result += processedValue.slice(cursor, cursor + 1);
         }
-        const arr: string[] = [];
-        // eslint-disable-next-line @typescript-eslint/prefer-for-of
-        for (let i = 0; i < processedValue.length; i++) {
-            const char = processedValue[i] ?? MaskExpression.EMPTY_STRING;
-            if (/\d/.test(char)) {
-                arr.push(char);
-            }
-        }
+        const arr = digitsOf(processedValue);
 
         // Per-mask-type dispatch (IP/CPF_CNPJ pre-processors → generic loop; PERCENT and
         // SEPARATOR terminal handlers; generic pattern loop as fallback). See
