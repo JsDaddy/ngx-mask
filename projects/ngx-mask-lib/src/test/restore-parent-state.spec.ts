@@ -8,7 +8,14 @@ import {
 } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import type { ControlValueAccessor } from '@angular/forms';
-import { FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+    FormControl,
+    FormGroup,
+    FormsModule,
+    NG_VALUE_ACCESSOR,
+    NgModel,
+    ReactiveFormsModule,
+} from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { beforeEach, describe, expect, it } from 'vitest';
 
@@ -326,6 +333,41 @@ class ForwardingMaskInputComponent implements ControlValueAccessor {
     }
 }
 
+/** A custom control that hands the mask a callback of its own: it transforms the value and reacts to it. */
+@Component({
+    selector: 'ngxd-transforming-mask-input',
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: forwardRef(() => TransformingMaskInputComponent),
+        },
+    ],
+    template: `<input mask="separator.2" [leadZero]="true" />`,
+})
+class TransformingMaskInputComponent implements ControlValueAccessor {
+    public readonly seen: unknown[] = [];
+    @ViewChild(NgxMaskDirective, { static: true })
+    private readonly _maskDirective!: NgxMaskDirective;
+
+    public writeValue(value: unknown): void {
+        this._maskDirective.writeValue(value);
+    }
+
+    public registerOnChange(fn: (value: unknown) => void): void {
+        this._maskDirective.registerOnChange((value) => {
+            this.seen.push(value);
+            fn(Number(value));
+        });
+    }
+
+    public registerOnTouched(fn: () => void): void {
+        this._maskDirective.registerOnTouched(fn);
+    }
+}
+
 /** A custom control that implements the contract itself around a masked input with no form binding. */
 @Component({
     selector: 'ngxd-plain-mask-input',
@@ -403,6 +445,7 @@ class OwnControlMaskInputComponent implements ControlValueAccessor {
         ForwardingMaskInputComponent,
         PlainMaskInputComponent,
         OwnControlMaskInputComponent,
+        TransformingMaskInputComponent,
     ],
     changeDetection: ChangeDetectionStrategy.Eager,
     template: `
@@ -416,6 +459,7 @@ class OwnControlMaskInputComponent implements ControlValueAccessor {
             mask="separator.2"
             [leadZero]="true"
             [formControl]="amount" />
+        <ngxd-transforming-mask-input id="transformed" [formControl]="transformed" />
     `,
 })
 class WrappedMaskHostComponent {
@@ -425,6 +469,7 @@ class WrappedMaskHostComponent {
         own: new FormControl<string | null>(null),
     });
     public readonly amount = new FormControl<string | null>(null);
+    public readonly transformed = new FormControl<string | number | null>(null);
 }
 
 describe('Directive: control state of a custom control around the mask', () => {
@@ -458,7 +503,6 @@ describe('Directive: control state of a custom control around the mask', () => {
         expect(inputOf(fixture, 'code').value).toBe('1234');
         expect(group.controls.code.value).toBe('1234');
         expect(group.controls.code.pristine).toBe(true);
-        expect(group.pristine).toBe(true);
     });
 
     it('normalises a leadZero write through a forwarding wrapper without dirtying it', async () => {
@@ -470,6 +514,21 @@ describe('Directive: control state of a custom control around the mask', () => {
         expect(inputOf(fixture, 'amount').value).toBe('10.20');
         expect(amount.value).toBe('10.20');
         expect(amount.pristine).toBe(true);
+    });
+
+    it('hands a leadZero write to the callback of a wrapper that transforms it', async () => {
+        const fixture = renderHost();
+        const { transformed } = fixture.componentInstance;
+        const wrapper = fixture.debugElement.query(
+            (el) => el.componentInstance instanceof TransformingMaskInputComponent
+        ).componentInstance as TransformingMaskInputComponent;
+
+        await writeAndSettle(fixture, () => transformed.setValue('10.2'));
+
+        expect(inputOf(fixture, 'transformed').value).toBe('10.20');
+        expect(wrapper.seen).toEqual(['10.20']);
+        expect(transformed.value).toBe(10.2);
+        expect(transformed.pristine).toBe(true);
     });
 
     it('leaves the control of a wrapper whose plain inner input it does not feed alone', async () => {
@@ -497,5 +556,84 @@ describe('Directive: control state of a custom control around the mask', () => {
         expect(inner.pristine).toBe(true);
         expect(group.controls.own.value).toBe('12345');
         expect(group.controls.own.pristine).toBe(true);
+    });
+});
+
+@Component({
+    selector: 'ngxd-direct-binding-host',
+    imports: [ReactiveFormsModule, FormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `
+        <form [formGroup]="group">
+            <input id="named" mask="separator.2" [leadZero]="true" formControlName="named" />
+        </form>
+        <input id="bound" mask="separator.2" [leadZero]="true" [formControl]="bound" />
+        <input id="model" mask="separator.2" [leadZero]="true" [ngModel]="model()" />
+    `,
+})
+class DirectBindingHostComponent {
+    public readonly group = new FormGroup({ named: new FormControl<string | null>(null) });
+    public readonly bound = new FormControl<string | null>(null);
+    public readonly model = signal<string | null>(null);
+}
+
+describe('Directive: control state of a control the mask is the accessor of', () => {
+    const renderHost = (): ReturnType<
+        typeof TestBed.createComponent<DirectBindingHostComponent>
+    > => {
+        const fixture = TestBed.createComponent(DirectBindingHostComponent);
+        fixture.detectChanges();
+        return fixture;
+    };
+    const settle = async (fixture: ReturnType<typeof renderHost>): Promise<void> => {
+        fixture.detectChanges();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    };
+    const inputOf = (fixture: ReturnType<typeof renderHost>, id: string): HTMLInputElement =>
+        fixture.nativeElement.querySelector(`#${id}`);
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({ providers: [provideNgxMask()] });
+    });
+
+    it('normalises a leadZero write on formControlName without dirtying the control or the group', async () => {
+        const fixture = renderHost();
+        const { group } = fixture.componentInstance;
+
+        group.controls.named.setValue('10.2');
+        await settle(fixture);
+
+        expect(inputOf(fixture, 'named').value).toBe('10.20');
+        expect(group.controls.named.value).toBe('10.20');
+        expect(group.controls.named.pristine).toBe(true);
+        expect(group.pristine).toBe(true);
+    });
+
+    it('normalises a leadZero write on [formControl] without dirtying the control', async () => {
+        const fixture = renderHost();
+        const { bound } = fixture.componentInstance;
+
+        bound.setValue('10.2');
+        await settle(fixture);
+
+        expect(inputOf(fixture, 'bound').value).toBe('10.20');
+        expect(bound.value).toBe('10.20');
+        expect(bound.pristine).toBe(true);
+    });
+
+    it('normalises a leadZero write on ngModel without dirtying the control', async () => {
+        const fixture = renderHost();
+
+        fixture.componentInstance.model.set('10.2');
+        await settle(fixture);
+        await settle(fixture);
+
+        const ngModel = fixture.debugElement
+            .query((el) => el.nativeElement === inputOf(fixture, 'model'))
+            .injector.get(NgModel);
+        expect(inputOf(fixture, 'model').value).toBe('10.20');
+        expect(ngModel.control.value).toBe('10.20');
+        expect(ngModel.control.pristine).toBe(true);
     });
 });

@@ -201,7 +201,7 @@ export class NgxMaskDirective
      * True while the directive renders a value the user did not type: a `writeValue`, its deferred
      * leadZero pass, a separator change re-rendering the number, a default applied on blur. A model
      * update the mask derives from such a write goes straight to the control without dirtying it
-     * (see `_updateControlWithoutDirtying`).
+     * (see `_emitProgrammaticValue`).
      */
     private _programmaticWrite = false;
     /**
@@ -1671,22 +1671,38 @@ export class NgxMaskDirective
     }
 
     /**
-     * Pushes a model value the mask derived from a programmatic write into the bound control the
-     * way Angular's view-change pipeline does (`setValue` without a view echo, then
-     * `viewToModelUpdate`, which emits `ngModelChange`), minus `markAsDirty()`: the control and its
-     * ancestors keep the dirty and touched state they had. Returns `false` when there is no
-     * reactive control to update (Signal Forms, whose interop control has no `setValue`, or a
-     * control not bound yet), so the caller falls back to Angular's `onChange` callback.
+     * Passes a model value the mask derived from a programmatic write on to the control, without
+     * dirtying it.
+     *
+     * When the directive is the bound control's own accessor, `fn` is Angular's `updateControl`
+     * callback: the value goes the way its view-change pipeline takes it (`setValue` without a
+     * view echo, then `viewToModelUpdate`, which emits `ngModelChange`), minus `markAsDirty()`,
+     * so the control and its ancestors keep the dirty and touched state they had. In every other
+     * case (a wrapper forwarding the accessor, which transforms the value or reacts to it
+     * itself; Signal Forms; no control) `fn` is the contract the caller registered and is called;
+     * the nearest control then gets back the pristine and untouched state it had before the call.
      */
-    private _updateControlWithoutDirtying(value: unknown): boolean {
+    private _emitProgrammaticValue(fn: (value: unknown) => void, value: unknown): void {
         const ngControl = this._resolveNgControl();
         const control = ngControl?.control;
-        if (!control || typeof control.setValue !== 'function') {
-            return false;
+        if (
+            ngControl?.valueAccessor === this &&
+            control &&
+            typeof control.setValue === 'function'
+        ) {
+            control.setValue(value, { emitModelToViewChange: false });
+            ngControl.viewToModelUpdate(value);
+            return;
         }
-        control.setValue(value, { emitModelToViewChange: false });
-        ngControl.viewToModelUpdate(value);
-        return true;
+        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        fn(value);
+        if (wasPristine && ngControl?.dirty && typeof control?.markAsPristine === 'function') {
+            control.markAsPristine({ onlySelf: true });
+        }
+        if (wasUntouched && ngControl?.touched && typeof control?.markAsUntouched === 'function') {
+            control.markAsUntouched({ onlySelf: true });
+        }
     }
 
     /** It writes the value in the input */
@@ -1916,13 +1932,13 @@ export class NgxMaskDirective
         this._isCvaMode.set(true);
         const originalFn = fn;
         this._maskService.onChange = this.onChange = (value: unknown) => {
-            // Angular's callback marks the control dirty: it only receives user edits, and the
-            // model updates of a programmatic write the directive cannot apply itself.
-            if (
-                (!this._writtenValue || !Object.is(this._writtenValue.value, value)) &&
-                !(this._programmaticWrite && this._updateControlWithoutDirtying(value))
-            ) {
-                originalFn(value);
+            if (!this._writtenValue || !Object.is(this._writtenValue.value, value)) {
+                if (this._programmaticWrite) {
+                    this._emitProgrammaticValue(originalFn, value);
+                } else {
+                    // Angular's callback marks the control dirty: it receives the user edits.
+                    originalFn(value);
+                }
             }
             this._propagateToValueModel(value);
         };
