@@ -75,3 +75,32 @@ describe('apm input is mirrored into the service (falsy values included)', () =>
         equal('1323', '13:23', fixture);
     });
 });
+
+@Component({
+    selector: 'ngxd-bare-separator',
+    standalone: true,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="separator.2" [formControl]="form" />`,
+})
+class BareSeparatorComponent {
+    public form = new FormControl<string | number | null>(null);
+}
+
+describe('provideNgxMask - dropSpecialCharacters: false skips the precision pass of writeValue', () => {
+    // Same outcome as an explicit [dropSpecialCharacters]="false" binding: no leadZero padding.
+    for (const written of ['10.2', 10.2]) {
+        it(`leaves a written ${typeof written} ${written} unpadded despite global leadZero`, async () => {
+            configure({ leadZero: true, dropSpecialCharacters: false, decimalMarker: '.' });
+            const fixture = TestBed.createComponent(BareSeparatorComponent);
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            fixture.componentInstance.form.setValue(written);
+            await fixture.whenStable();
+            await new Promise((resolve) => requestAnimationFrame(resolve));
+            const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+            expect(`${input.value} | ${fixture.componentInstance.form.value}`).toBe('10.2 | 10.2');
+        });
+    }
+});

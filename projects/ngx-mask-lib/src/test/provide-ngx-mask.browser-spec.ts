@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import type { NgxMaskOptions } from 'ngx-mask';
@@ -15,6 +15,18 @@ import { mount } from './utils/browser-harness';
 })
 class BareMaskComponent {
     public form = new FormControl('123');
+}
+
+// Bare input with a bound MASK only: every other setting must come from `provideNgxMask`.
+@Component({
+    selector: 'ngxd-bare-dynamic-mask',
+    standalone: true,
+    imports: [NgxMaskDirective, ReactiveFormsModule],
+    template: `<input id="masked" [mask]="mask()" [formControl]="form" />`,
+})
+class BareDynamicMaskComponent {
+    public mask = input('');
+    public form = new FormControl('');
 }
 
 function configure(config: NgxMaskOptions): void {
@@ -54,5 +66,58 @@ describe('provideNgxMask - global config reaches the directive (bare input)', ()
         );
 
         expect(input.selectionStart).toBe(3);
+    });
+
+    it('global keepCharacterPositions + showMaskTyped: Backspace blanks a slot instead of shifting', async () => {
+        configure({ keepCharacterPositions: true, showMaskTyped: true });
+        const m = await mount(BareDynamicMaskComponent, { mask: '000-000.00' });
+
+        await m.type('#masked', '12345678');
+        await expect.poll(() => m.get('#masked').value).toBe('123-456.78');
+        await m.type('#masked', '{ArrowLeft}'.repeat(3));
+        await m.type('#masked', '{Backspace}'.repeat(3));
+        await expect.poll(() => m.get('#masked').value).toBe('123-___.78');
+    });
+
+    it('default config, multi-mask: Backspace after special characters keeps the caret right (7 ArrowLeft)', async () => {
+        configure({});
+        const m = await mount(BareDynamicMaskComponent, {
+            mask: '(000) 000-0000||+000000000000000',
+        });
+
+        await m.type('#masked', '1234567890');
+        await expect.poll(() => m.get('#masked').value).toBe('(123) 456-7890');
+        await m.type('#masked', '{ArrowLeft}'.repeat(7));
+        await m.type('#masked', '{Backspace}');
+        await expect.poll(() => m.get('#masked').selectionStart).toBe(5);
+    });
+
+    it('default config, multi-mask: Backspace after a shorter mask switch lands on the right caret', async () => {
+        configure({});
+        const m = await mount(BareDynamicMaskComponent, {
+            mask: '(00) 00000000||+00 (00) 00000000',
+        });
+
+        await m.type('#masked', '111');
+        await expect.poll(() => m.get('#masked').value).toBe('(11) 1');
+        await m.type('#masked', '{Backspace}');
+        await expect.poll(() => m.get('#masked').selectionStart).toBe(4);
+    });
+
+    it('global leadZeroDateTime: a day over 31 is padded and the caret skips the separator', async () => {
+        configure({ leadZeroDateTime: true });
+        const m = await mount(BareDynamicMaskComponent, { mask: 'd0/M0/0000' });
+
+        await m.type('#masked', '33');
+        await expect.poll(() => m.get('#masked').value).toBe('03/03');
+        await expect.poll(() => m.get('#masked').selectionStart).toBe(5);
+    });
+
+    it('global apm: typing 00 into Hh:m0:s0 collapses to a single 0 like [apm]="true"', async () => {
+        configure({ apm: true });
+        const m = await mount(BareDynamicMaskComponent, { mask: 'Hh:m0:s0' });
+
+        await m.type('#masked', '00');
+        await expect.poll(() => m.get('#masked').value).toBe('0');
     });
 });
