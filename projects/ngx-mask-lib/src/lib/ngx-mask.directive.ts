@@ -1130,7 +1130,9 @@ export class NgxMaskDirective
                 if (positionToApply < 0) {
                     positionToApply = 0;
                 }
-                el.setSelectionRange(positionToApply, positionToApply);
+                if (el.selectionStart !== positionToApply || el.selectionEnd !== positionToApply) {
+                    el.setSelectionRange(positionToApply, positionToApply);
+                }
                 this._position.set(null);
             } else {
                 // eslint-disable-next-line no-console

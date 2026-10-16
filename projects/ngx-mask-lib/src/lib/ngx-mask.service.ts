@@ -434,7 +434,7 @@ export class NgxMaskService extends NgxMaskApplierService {
             return;
         }
 
-        formElement.value = this.applyMask(
+        const maskedValue = this.applyMask(
             formElement.value,
             this.maskExpression,
             position,
@@ -442,6 +442,10 @@ export class NgxMaskService extends NgxMaskApplierService {
             backspaced,
             cb
         );
+        // Assigning an identical value still resets the native caret/undo state in some browsers.
+        if (formElement.value !== maskedValue) {
+            formElement.value = maskedValue;
+        }
         if (formElement === this._getActiveElement()) {
             return;
         }
@@ -620,7 +624,10 @@ export class NgxMaskService extends NgxMaskApplierService {
         // This prevents ExpressionChangedAfterItHasBeenCheckedError
         // and ensures proper timing with Angular's change detection.
         queueMicrotask(() => {
-            this._renderer?.setProperty(this._elementRef?.nativeElement, name, value);
+            const element = this._elementRef?.nativeElement;
+            if (element && Reflect.get(element, name) !== value) {
+                this._renderer?.setProperty(element, name, value);
+            }
         });
     }
 
