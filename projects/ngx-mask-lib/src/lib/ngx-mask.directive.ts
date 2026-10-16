@@ -1640,7 +1640,8 @@ export class NgxMaskDirective
      * the model adopts it — but that emission runs through Angular's view-change pipeline, which
      * calls markAsDirty()/markAsTouched(). A programmatic setValue/patchValue must leave the
      * control pristine, so we undo that side effect here when the control was pristine before
-     * the write. `onlySelf: true` keeps parent group state untouched.
+     * the write. The parents recompute their own state from their children, so a group is
+     * left dirty only by a sibling that really is.
      */
     private _restoreControlStateAfterWrite(wasPristine: boolean, wasUntouched: boolean): void {
         const ngControl = this._resolveNgControl();
@@ -1649,10 +1650,10 @@ export class NgxMaskDirective
             return;
         }
         if (wasPristine && ngControl.dirty && typeof control.markAsPristine === 'function') {
-            control.markAsPristine({ onlySelf: true });
+            control.markAsPristine();
         }
         if (wasUntouched && ngControl.touched && typeof control.markAsUntouched === 'function') {
-            control.markAsUntouched({ onlySelf: true });
+            control.markAsUntouched();
         }
     }
 
