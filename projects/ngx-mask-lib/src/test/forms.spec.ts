@@ -687,9 +687,9 @@ describe('Directive: Signal Forms (separator.2 decimal reflow)', () => {
         await Promise.resolve();
         testFixture.detectChanges();
         // separator + leadZero writes defer the leadZero-normalized applyMask() call to a
-        // requestAnimationFrame callback (see ngx-mask.directive.ts writeValue()), matching the
+        // afterNextRender callback (see ngx-mask.directive.ts writeValue()), matching the
         // wait pattern used by separator-3.spec.ts's Reactive Forms equivalent tests.
-        await new Promise((resolve) => requestAnimationFrame(resolve));
+        await testFixture.whenStable();
         testFixture.detectChanges();
 
         const inputElement: HTMLInputElement = testFixture.nativeElement.querySelector('input');
@@ -715,8 +715,8 @@ describe('Directive: Signal Forms (separator.2 decimal reflow)', () => {
         await Promise.resolve();
         testFixture.detectChanges();
         // separator + leadZero writes defer the leadZero-normalized applyMask() call to a
-        // requestAnimationFrame callback (see ngx-mask.directive.ts writeValue()).
-        await new Promise((resolve) => requestAnimationFrame(resolve));
+        // afterNextRender callback (see ngx-mask.directive.ts writeValue()).
+        await testFixture.whenStable();
         testFixture.detectChanges();
 
         const inputElement: HTMLInputElement = testFixture.nativeElement.querySelector('input');

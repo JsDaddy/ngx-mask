@@ -98,7 +98,6 @@ describe('provideNgxMask - dropSpecialCharacters: false skips the precision pass
 
             fixture.componentInstance.form.setValue(written);
             await fixture.whenStable();
-            await new Promise((resolve) => requestAnimationFrame(resolve));
             const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
             expect(`${input.value} | ${fixture.componentInstance.form.value}`).toBe('10.2 | 10.2');
         });

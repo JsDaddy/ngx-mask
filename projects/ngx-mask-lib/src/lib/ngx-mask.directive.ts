@@ -1,7 +1,9 @@
 import { DOCUMENT } from '@angular/common';
 import type { OnChanges, SimpleChanges } from '@angular/core';
 import {
+    afterNextRender,
     Injector,
+    NgZone,
     signal,
     input,
     output,
@@ -183,7 +185,7 @@ export class NgxMaskDirective
     /**
      * Under zoneless change detection, writing to the underlying FormControl programmatically
      * (e.g. `setValue`/`patchValue` from outside a signal/effect context, or from a callback
-     * zone.js used to auto-flush like `requestAnimationFrame`/`queueMicrotask`) does not itself
+     * zone.js used to auto-flush like a deferred render callback or `queueMicrotask`) does not itself
      * trigger a CD run. Bindings that read `form.pristine`/`form.dirty`/`form.value` on the host
      * template need an explicit `markForCheck()` once the directive finishes reacting to a
      * programmatic value write, otherwise the view stays stale until something else schedules CD.
@@ -197,6 +199,9 @@ export class NgxMaskDirective
     // inject(NgControl) would form a circular dependency. Resolving it lazily on first use
     // (after the control graph is wired) sidesteps the cycle.
     private readonly _injector = inject(Injector);
+    // Render hooks run outside the Angular zone; the deferred work below re-enters it so zone.js
+    // apps still get change detection for the emissions it triggers.
+    private readonly _ngZone = inject(NgZone);
 
     private _ngControl: NgControl | null | undefined;
 
@@ -384,9 +389,18 @@ export class NgxMaskDirective
                 showMaskTyped.currentValue === true &&
                 this._isFocused()
             ) {
-                requestAnimationFrame(() => {
-                    this._maskService._elementRef?.nativeElement.click();
-                });
+                afterNextRender(
+                    () => {
+                        // The render hook fires before the microtask that writes the mask
+                        // skeleton (formElementProperty); click after it so onClick sees it.
+                        queueMicrotask(() =>
+                            this._ngZone.run(() => {
+                                this._maskService._elementRef?.nativeElement.click();
+                            })
+                        );
+                    },
+                    { injector: this._injector }
+                );
             }
         }
         if (placeHolderCharacter) {
@@ -1126,7 +1140,9 @@ export class NgxMaskDirective
                 if (positionToApply < 0) {
                     positionToApply = 0;
                 }
-                el.setSelectionRange(positionToApply, positionToApply);
+                if (el.selectionStart !== positionToApply || el.selectionEnd !== positionToApply) {
+                    el.setSelectionRange(positionToApply, positionToApply);
+                }
                 this._position.set(null);
             } else {
                 // eslint-disable-next-line no-console
@@ -1742,33 +1758,38 @@ export class NgxMaskDirective
                     this._maskService.leadZero
                 ) {
                     const isFirstWrite = !this._maskService.isInitialized;
-                    requestAnimationFrame(() => {
-                        // On initial load, temporarily set isInitialized to false
-                        // so formControlResult returns early and doesn't mark form as dirty.
-                        // On later writeValue-driven writes, leave isInitialized as-is: this pass
-                        // may legitimately need to push a leadZero-normalized value (e.g.
-                        // '10.2' -> '10.20') back to the FormControl, which Angular's forms
-                        // pipeline can only do via the same onChange callback used for real user
-                        // edits — see the `should change formValue` unit tests, which assert the
-                        // normalized value lands in `form.value` after a programmatic setValue.
-                        if (isFirstWrite) {
-                            this._maskService.isInitialized = false;
-                        }
-                        this._maskService.applyMask(
-                            inputValue?.toString() ?? '',
-                            this._maskService.maskExpression
-                        );
-                        if (isFirstWrite) {
-                            this._maskService.isInitialized = true;
-                        }
-                        // The leadZero normalization above emits the corrected value through the
-                        // view-change pipeline, which dirties/touches the control. Undo that so a
-                        // programmatic write stays pristine.
-                        this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
-                        // Zoneless CD does not auto-flush after requestAnimationFrame; request
-                        // a check so form.pristine/form.value bindings reflect the new state.
-                        this._changeDetectorRef.markForCheck();
-                    });
+                    afterNextRender(
+                        () => {
+                            this._ngZone.run(() => {
+                                // On initial load, temporarily set isInitialized to false
+                                // so formControlResult returns early and doesn't mark form as dirty.
+                                // On later writeValue-driven writes, leave isInitialized as-is: this pass
+                                // may legitimately need to push a leadZero-normalized value (e.g.
+                                // '10.2' -> '10.20') back to the FormControl, which Angular's forms
+                                // pipeline can only do via the same onChange callback used for real user
+                                // edits — see the `should change formValue` unit tests, which assert the
+                                // normalized value lands in `form.value` after a programmatic setValue.
+                                if (isFirstWrite) {
+                                    this._maskService.isInitialized = false;
+                                }
+                                this._maskService.applyMask(
+                                    inputValue?.toString() ?? '',
+                                    this._maskService.maskExpression
+                                );
+                                if (isFirstWrite) {
+                                    this._maskService.isInitialized = true;
+                                }
+                                // The leadZero normalization above emits the corrected value through the
+                                // view-change pipeline, which dirties/touches the control. Undo that so a
+                                // programmatic write stays pristine.
+                                this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+                                // Zoneless CD does not auto-flush after a deferred callback; request
+                                // a check so form.pristine/form.value bindings reflect the new state.
+                                this._changeDetectorRef.markForCheck();
+                            });
+                        },
+                        { injector: this._injector }
+                    );
                 }
                 this._maskService.isNumberValue = true;
             } else if (typeof inputValue === 'string' && inputValue !== '') {
@@ -2107,7 +2128,21 @@ export class NgxMaskDirective
      */
     private _matchesMaskWithOptionalSkip(value: string, mask: string): boolean {
         const patterns = this._maskService.patterns;
+        // Optional tokens branch twice (consume or skip), so the same (maskIndex, valueIndex)
+        // state is reached through many paths: remember the ones that already failed.
+        const failed = new Set<number>();
         const match = (maskIndex: number, valueIndex: number): boolean => {
+            const state = maskIndex * (value.length + 1) + valueIndex;
+            if (failed.has(state)) {
+                return false;
+            }
+            const matched = matchFrom(maskIndex, valueIndex);
+            if (!matched) {
+                failed.add(state);
+            }
+            return matched;
+        };
+        const matchFrom = (maskIndex: number, valueIndex: number): boolean => {
             if (valueIndex === value.length) {
                 return mask
                     .slice(maskIndex)

@@ -174,14 +174,14 @@ class MaskSwitchValueBindingHostComponent {
     public readonly value = signal('123456');
 }
 
-/** Runs change detection until the deferred (microtask / rAF) mask writes have settled. */
+/** Runs change detection until the deferred (microtask / after-next-render) mask writes have settled. */
 async function flush(fixture: ComponentFixture<unknown>): Promise<void> {
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
     await Promise.resolve();
     fixture.detectChanges();
-    await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+    await fixture.whenStable();
     fixture.detectChanges();
 }
 
