@@ -3,6 +3,7 @@ import type { OnChanges, SimpleChanges } from '@angular/core';
 import {
     afterNextRender,
     Injector,
+    NgZone,
     signal,
     input,
     output,
@@ -198,6 +199,9 @@ export class NgxMaskDirective
     // inject(NgControl) would form a circular dependency. Resolving it lazily on first use
     // (after the control graph is wired) sidesteps the cycle.
     private readonly _injector = inject(Injector);
+    // Render hooks run outside the Angular zone; the deferred work below re-enters it so zone.js
+    // apps still get change detection for the emissions it triggers.
+    private readonly _ngZone = inject(NgZone);
 
     private _ngControl: NgControl | null | undefined;
 
@@ -389,9 +393,11 @@ export class NgxMaskDirective
                     () => {
                         // The render hook fires before the microtask that writes the mask
                         // skeleton (formElementProperty); click after it so onClick sees it.
-                        queueMicrotask(() => {
-                            this._maskService._elementRef?.nativeElement.click();
-                        });
+                        queueMicrotask(() =>
+                            this._ngZone.run(() => {
+                                this._maskService._elementRef?.nativeElement.click();
+                            })
+                        );
                     },
                     { injector: this._injector }
                 );
@@ -1754,31 +1760,33 @@ export class NgxMaskDirective
                     const isFirstWrite = !this._maskService.isInitialized;
                     afterNextRender(
                         () => {
-                            // On initial load, temporarily set isInitialized to false
-                            // so formControlResult returns early and doesn't mark form as dirty.
-                            // On later writeValue-driven writes, leave isInitialized as-is: this pass
-                            // may legitimately need to push a leadZero-normalized value (e.g.
-                            // '10.2' -> '10.20') back to the FormControl, which Angular's forms
-                            // pipeline can only do via the same onChange callback used for real user
-                            // edits — see the `should change formValue` unit tests, which assert the
-                            // normalized value lands in `form.value` after a programmatic setValue.
-                            if (isFirstWrite) {
-                                this._maskService.isInitialized = false;
-                            }
-                            this._maskService.applyMask(
-                                inputValue?.toString() ?? '',
-                                this._maskService.maskExpression
-                            );
-                            if (isFirstWrite) {
-                                this._maskService.isInitialized = true;
-                            }
-                            // The leadZero normalization above emits the corrected value through the
-                            // view-change pipeline, which dirties/touches the control. Undo that so a
-                            // programmatic write stays pristine.
-                            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
-                            // Zoneless CD does not auto-flush after a deferred callback; request
-                            // a check so form.pristine/form.value bindings reflect the new state.
-                            this._changeDetectorRef.markForCheck();
+                            this._ngZone.run(() => {
+                                // On initial load, temporarily set isInitialized to false
+                                // so formControlResult returns early and doesn't mark form as dirty.
+                                // On later writeValue-driven writes, leave isInitialized as-is: this pass
+                                // may legitimately need to push a leadZero-normalized value (e.g.
+                                // '10.2' -> '10.20') back to the FormControl, which Angular's forms
+                                // pipeline can only do via the same onChange callback used for real user
+                                // edits — see the `should change formValue` unit tests, which assert the
+                                // normalized value lands in `form.value` after a programmatic setValue.
+                                if (isFirstWrite) {
+                                    this._maskService.isInitialized = false;
+                                }
+                                this._maskService.applyMask(
+                                    inputValue?.toString() ?? '',
+                                    this._maskService.maskExpression
+                                );
+                                if (isFirstWrite) {
+                                    this._maskService.isInitialized = true;
+                                }
+                                // The leadZero normalization above emits the corrected value through the
+                                // view-change pipeline, which dirties/touches the control. Undo that so a
+                                // programmatic write stays pristine.
+                                this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+                                // Zoneless CD does not auto-flush after a deferred callback; request
+                                // a check so form.pristine/form.value bindings reflect the new state.
+                                this._changeDetectorRef.markForCheck();
+                            });
                         },
                         { injector: this._injector }
                     );

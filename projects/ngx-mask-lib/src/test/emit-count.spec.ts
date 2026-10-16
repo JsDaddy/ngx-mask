@@ -116,3 +116,28 @@ describe('Directive: emit count per programmatic write', () => {
         });
     });
 });
+
+describe('Directive: initial [ngModel] value with separator.2 + leadZero', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [FormsModule, NgxMaskDirective, NgModelEmitCountComponent],
+            providers: [provideNgxMask()],
+        });
+    });
+
+    // Used to echo the normalised value twice (once per render pass); the duplicate is gone.
+    it.each([['5.1'], [5.1], [7.1], [7]])(
+        'emits ngModelChange once for the initial value %s',
+        async (initial) => {
+            const fixture = TestBed.createComponent(NgModelEmitCountComponent);
+            const component = fixture.componentInstance;
+            component.mask.set('separator.2');
+            component.leadZero.set(true);
+            component.value.set(initial as unknown as string);
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(component.emitted.length).toBe(1);
+        }
+    );
+});

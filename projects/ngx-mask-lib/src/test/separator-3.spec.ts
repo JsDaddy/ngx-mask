@@ -75,7 +75,6 @@ describe('Separator: Mask', () => {
 
         component.form.setValue(1255.78);
         await fixture.whenStable();
-        await fixture.whenStable();
         expect(inputTarget.value).equal('1.255,78');
     });
 
@@ -147,7 +146,6 @@ describe('Separator: Mask', () => {
 
         component.form.setValue(1255.78);
         await fixture.whenStable();
-        await fixture.whenStable();
         expect(inputTarget.value).equal('1.255,78');
     });
 
@@ -163,7 +161,6 @@ describe('Separator: Mask', () => {
 
         component.form.setValue(1255.78);
         await fixture.whenStable();
-        await fixture.whenStable();
         expect(inputTarget.value).equal('1.255,780');
     });
 
@@ -178,7 +175,6 @@ describe('Separator: Mask', () => {
         fixture.detectChanges();
 
         component.form.setValue(1255.7);
-        await fixture.whenStable();
         await fixture.whenStable();
         expect(inputTarget.value).equal('1.255,7');
     });

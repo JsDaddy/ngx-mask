@@ -1,6 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { SimpleChange } from '@angular/core';
+import { NgZone, SimpleChange } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NgxMaskDirective, NgxMaskService, provideNgxMask } from 'ngx-mask';
@@ -102,6 +102,52 @@ describe('Directive: deferred work runs through afterNextRender and dies with th
         fixture.detectChanges();
         await fixture.whenStable();
 
+        expect(click).toHaveBeenCalledTimes(1);
+    });
+
+    it('re-enters the NgZone for the deferred leadZero normalisation', async () => {
+        component.mask.set('separator.2');
+        component.leadZero.set(true);
+        fixture.detectChanges();
+        const zone = TestBed.inject(NgZone);
+        let insideRun = false;
+        const insideRunAtApplyMask: boolean[] = [];
+        vi.spyOn(zone, 'run').mockImplementation(((callback: () => unknown) => {
+            insideRun = true;
+            try {
+                return callback();
+            } finally {
+                insideRun = false;
+            }
+        }) as NgZone['run']);
+        const originalApplyMask = NgxMaskService.prototype.applyMask;
+        vi.spyOn(NgxMaskService.prototype, 'applyMask').mockImplementation(function (
+            this: NgxMaskService,
+            ...args: Parameters<NgxMaskService['applyMask']>
+        ) {
+            insideRunAtApplyMask.push(insideRun);
+            return originalApplyMask.apply(this, args);
+        });
+
+        component.form.setValue('10.2');
+        await fixture.whenStable();
+
+        expect(insideRunAtApplyMask).toContain(true);
+    });
+
+    it('re-enters the NgZone for the deferred showMaskTyped click', async () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        input.dispatchEvent(new Event('focus'));
+        const run = vi.spyOn(TestBed.inject(NgZone), 'run');
+        const click = vi.spyOn(input, 'click');
+
+        component.showMaskTyped.set(true);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        await Promise.resolve();
+
+        expect(run).toHaveBeenCalled();
         expect(click).toHaveBeenCalledTimes(1);
     });
 });
