@@ -387,7 +387,11 @@ export class NgxMaskDirective
             ) {
                 afterNextRender(
                     () => {
-                        this._maskService._elementRef?.nativeElement.click();
+                        // The render hook fires before the microtask that writes the mask
+                        // skeleton (formElementProperty); click after it so onClick sees it.
+                        queueMicrotask(() => {
+                            this._maskService._elementRef?.nativeElement.click();
+                        });
                     },
                     { injector: this._injector }
                 );
