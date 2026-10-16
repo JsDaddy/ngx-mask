@@ -149,6 +149,12 @@ export class NgxMaskDirective
      */
     private _lastPropagatedValue: string | null = null;
     /**
+     * The model value `writeValue` is currently applying, `null` outside a write. The mask's own
+     * `onChange` echo is skipped when it carries exactly this value (the mask left it unchanged);
+     * an echo that differs (a normalised or re-typed value) still reaches the form.
+     */
+    private _writtenValue: { value: unknown } | null = null;
+    /**
      * The value the edit currently handled by `onInput` pushed through `onChange`, `null` while it
      * pushed nothing. Read right after the edit to decide `maskFilled`.
      */
@@ -1705,6 +1711,7 @@ export class NgxMaskDirective
 
             value = value.value;
         }
+        const modelValue = value;
         if (value !== null) {
             value = inputTransformFn ? inputTransformFn(value) : value;
         }
@@ -1818,7 +1825,13 @@ export class NgxMaskDirective
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
                 this._maskService.writingValue = true;
 
-                const displayValue = this._maskedOrVerbatim(inputValue);
+                this._writtenValue = { value: modelValue };
+                let displayValue: string;
+                try {
+                    displayValue = this._maskedOrVerbatim(inputValue);
+                } finally {
+                    this._writtenValue = null;
+                }
                 this._maskService.formElementProperty = ['value', displayValue];
                 this._writeElementValueSync(displayValue);
                 // Let the service know we've finished writing value
@@ -1879,7 +1892,9 @@ export class NgxMaskDirective
         this._isCvaMode.set(true);
         const originalFn = fn;
         this._maskService.onChange = this.onChange = (value: unknown) => {
-            originalFn(value);
+            if (!this._writtenValue || !Object.is(this._writtenValue.value, value)) {
+                originalFn(value);
+            }
             this._propagateToValueModel(value);
         };
     }
