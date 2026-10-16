@@ -1767,6 +1767,11 @@ export class NgxMaskDirective
                     });
                 }
                 this._maskService.isNumberValue = true;
+            } else if (typeof inputValue === 'string' && inputValue !== '') {
+                // A concrete string write on a non-separator mask ends the numeric emission a
+                // previous numeric write switched on. Empty writes (reset, null, '') carry no
+                // type information and keep the current state.
+                this._maskService.isNumberValue = false;
             }
 
             if (typeof inputValue !== 'string' || value === null || typeof value === 'undefined') {
