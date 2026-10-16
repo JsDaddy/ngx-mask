@@ -161,8 +161,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         // Handle hidden input or input with asterisk symbol
         if (
-            (this.hiddenInput ||
-                (inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0)) &&
+            (this.hiddenInput || (inputValue && this._containsStarSymbol(inputValue))) &&
             !this.writingValue
         ) {
             // Seed from the raw input only when the user typed the FIRST character (the
@@ -1023,6 +1022,20 @@ export class NgxMaskService extends NgxMaskApplierService {
             .split(this.thousandSeparator)
             .join(MaskExpression.EMPTY_STRING)
             .replace(marker, MaskExpression.DOT);
+    }
+
+    /**
+     * Whether `value` holds a `*`, the symbol that stands for a hidden character. A `*` thousandSeparator
+     * of a separator mask is plain grouping text there, not a hidden character.
+     */
+    public _containsStarSymbol(value: string): boolean {
+        return (
+            value.includes(MaskExpression.SYMBOL_STAR) &&
+            !(
+                this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+                this.thousandSeparator?.includes(MaskExpression.SYMBOL_STAR)
+            )
+        );
     }
 
     public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {

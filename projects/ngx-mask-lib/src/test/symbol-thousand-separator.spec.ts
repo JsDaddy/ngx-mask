@@ -4,6 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { TestMaskComponent } from './utils/test-component.component';
+import { typeTest } from './utils/test-functions.component';
 
 describe('Separator: symbol thousand separators stay out of the model', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -59,6 +60,31 @@ describe('Separator: symbol thousand separators stay out of the model', () => {
         await fixture.whenStable();
 
         expect(input.value).toBe('1*234*567.5');
+        expect(component.form.value).toBe(1234567.5);
+    });
+
+    it.each(separators)('typing one character at a time groups with %s', (separator) => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(separator);
+        fixture.detectChanges();
+
+        expect(typeTest('1234567.5', fixture)).toBe(`1${separator}234${separator}567.5`);
+        expect(component.form.value).toBe(1234567.5);
+    });
+
+    it.each(separators)('typing with the caret at the end groups with %s', (separator) => {
+        component.mask.set('separator.2');
+        component.thousandSeparator.set(separator);
+        fixture.detectChanges();
+        input = fixture.nativeElement.querySelector('input');
+        for (const character of '1234567.5') {
+            input.value += character;
+            input.setSelectionRange(input.value.length, input.value.length);
+            input.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+        }
+
+        expect(input.value).toBe(`1${separator}234${separator}567.5`);
         expect(component.form.value).toBe(1234567.5);
     });
 });

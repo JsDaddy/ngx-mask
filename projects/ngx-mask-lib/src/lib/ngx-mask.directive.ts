@@ -999,7 +999,7 @@ export class NgxMaskDirective
                     !this._maskService.showMaskTyped &&
                     !this._maskService.keepCharacterPositions &&
                     this._maskService.selStart !== this._maskService.selEnd &&
-                    el.value.includes(MaskExpression.SYMBOL_STAR)
+                    this._maskService._containsStarSymbol(el.value)
                 ) {
                     this._maskService.actualValue = MaskExpression.EMPTY_STRING;
                 }
