@@ -372,7 +372,7 @@ describe('Directive: Mask (dirty state)', () => {
     it('should not mark form as dirty on initial load with separator mask and leadZero', async () => {
         const m = await mount(MaskHarnessComponent, { mask: 'separator.2', leadZero: true });
 
-        // Wait for any async operations (requestAnimationFrame)
+        // Wait for any async operations (afterNextRender)
         await m.settle();
         await expect.poll(() => m.text('#pristine')).toBe('true');
     });

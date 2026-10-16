@@ -176,7 +176,7 @@ describe('Directive: Mask (tri-mode parity — mode-level integration)', () => {
         it(`should normalize a programmatic separator.2 write with leadZero in ${mode} mode`, async () => {
             // Post-init programmatic write: the directive intentionally pushes the
             // leadZero-normalized value ('10.2' → '10.20') back through onChange (see the
-            // rAF block in ngx-mask.directive.ts writeValue() and the forms.spec.ts
+            // afterNextRender block in ngx-mask.directive.ts writeValue() and the forms.spec.ts
             // '1234.5' → '1234.50' Signal Forms equivalent). NOTE: an INITIAL value is
             // handled differently — first-write normalization updates the display only —
             // and its timing differs per mode (NgModel double-writes), so the post-init

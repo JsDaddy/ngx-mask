@@ -50,7 +50,7 @@ export async function mount<T>(
     const settle = async (): Promise<void> => {
         fixture.detectChanges();
         await fixture.whenStable();
-        // two frames: the directive re-schedules a requestAnimationFrame from inside another one
+        // two frames: the directive's afterNextRender callbacks may chain another render
         await nextFrame();
         await nextFrame();
         fixture.detectChanges();

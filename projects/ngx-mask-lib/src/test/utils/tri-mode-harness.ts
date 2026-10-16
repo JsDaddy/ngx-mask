@@ -49,7 +49,7 @@ export type TriModeHarness = {
      */
     isUserInteracted: () => boolean;
     blur: () => Promise<void>;
-    /** Settles NgModel async sync, deferred microtask DOM writes and rAF-deferred leadZero writes. */
+    /** Settles NgModel async sync, deferred microtask DOM writes and afterNextRender-deferred leadZero writes. */
     flush: () => Promise<void>;
 };
 
@@ -249,17 +249,15 @@ function buildHarness(
     // - whenStable: NgModel syncs model→view via a resolved-promise microtask;
     // - microtask + detectChanges: formElementProperty DOM writes are deferred via queueMicrotask,
     //   and the directive replays a pre-config writeValue after the first ngOnChanges;
-    // - requestAnimationFrame: separator + leadZero writes defer the leadZero-normalized
-    //   applyMask() call to a rAF callback (see ngx-mask.directive.ts writeValue()).
+    // - whenStable (again): separator + leadZero writes defer the leadZero-normalized
+    //   applyMask() call to an afterNextRender callback (see ngx-mask.directive.ts writeValue()).
     const flush = async (): Promise<void> => {
         fixture.detectChanges();
         await fixture.whenStable();
         fixture.detectChanges();
         await Promise.resolve();
         fixture.detectChanges();
-        await new Promise<void>((resolve) => {
-            requestAnimationFrame(() => resolve());
-        });
+        await fixture.whenStable();
         fixture.detectChanges();
     };
 
