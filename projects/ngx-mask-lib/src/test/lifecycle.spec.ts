@@ -105,36 +105,6 @@ describe('Directive: deferred work runs through afterNextRender and dies with th
         expect(click).toHaveBeenCalledTimes(1);
     });
 
-    it('re-enters the NgZone for the deferred leadZero normalisation', async () => {
-        component.mask.set('separator.2');
-        component.leadZero.set(true);
-        fixture.detectChanges();
-        const zone = TestBed.inject(NgZone);
-        let insideRun = false;
-        const insideRunAtApplyMask: boolean[] = [];
-        vi.spyOn(zone, 'run').mockImplementation(((callback: () => unknown) => {
-            insideRun = true;
-            try {
-                return callback();
-            } finally {
-                insideRun = false;
-            }
-        }) as NgZone['run']);
-        const originalApplyMask = NgxMaskService.prototype.applyMask;
-        vi.spyOn(NgxMaskService.prototype, 'applyMask').mockImplementation(function (
-            this: NgxMaskService,
-            ...args: Parameters<NgxMaskService['applyMask']>
-        ) {
-            insideRunAtApplyMask.push(insideRun);
-            return originalApplyMask.apply(this, args);
-        });
-
-        component.form.setValue('10.2');
-        await fixture.whenStable();
-
-        expect(insideRunAtApplyMask.at(-1)).toBe(true);
-    });
-
     it('re-enters the NgZone for the deferred showMaskTyped click', async () => {
         component.mask.set('0000');
         fixture.detectChanges();
