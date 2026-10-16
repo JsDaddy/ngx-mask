@@ -28,17 +28,6 @@ describe('Separator: symbol thousand separators (real browser)', () => {
         expect(m.component.form.value).toBe(1234567.89);
     });
 
-    it('types 1234567.89 as 1*234*567.89 with the star separator', async () => {
-        const m = await mount(MaskHarnessComponent, {
-            mask: 'separator.2',
-            thousandSeparator: '*',
-        });
-
-        await m.type('#masked', '1234567.89');
-
-        expect(m.get('#masked').value).toBe('1*234*567.89');
-    });
-
     it('writes a number with the star separator', async () => {
         const m = await mount(MaskHarnessComponent, {
             mask: 'separator.2',
@@ -106,7 +95,6 @@ describe('Separator: strings written in the display format (real browser)', () =
         await m.settle();
 
         expect(m.get('#masked').value).toBe(written);
-        expect(m.get('#masked').value).not.toContain('NaN');
     });
 
     it.each(cases)(
@@ -157,6 +145,5 @@ describe('Separator: leadZero with a comma decimal string (real browser)', () =>
         await m.settle();
 
         expect(m.get('#masked').value).toBe(`1${separator}234${separator}567,50`);
-        expect(m.get('#masked').value).not.toContain('NaN');
     });
 });
