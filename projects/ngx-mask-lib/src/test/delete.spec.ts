@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { TestMaskComponent } from './utils/test-component.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
+import { typeTest } from './utils/test-functions.component';
 import { expect, vi } from 'vitest';
 
 describe('Directive: Mask (Delete)', () => {
@@ -672,6 +673,59 @@ describe('Directive: Mask (Delete)', () => {
             debugElement.triggerEventHandler('input', { target: inputTarget });
 
             expect(inputTarget.value).equal('3.23');
+        });
+    });
+
+    describe('Backspace on the last digit with a prefix and dropSpecialCharacters=false', () => {
+        // A real Backspace at the end of the field: keydown, the browser removes one character,
+        // then input.
+        const backspaceAtEnd = (): void => {
+            const debugElement: DebugElement = fixture.debugElement.query(By.css('input'));
+            const inputTarget: HTMLInputElement = debugElement.nativeElement as HTMLInputElement;
+            const caret = inputTarget.value.length - 1;
+            debugElement.triggerEventHandler('keydown', {
+                code: 'Backspace',
+                key: 'Backspace',
+                keyCode: 8,
+                target: inputTarget,
+            });
+            inputTarget.value = inputTarget.value.slice(0, caret);
+            inputTarget.selectionStart = caret;
+            inputTarget.selectionEnd = caret;
+            debugElement.triggerEventHandler('input', { target: inputTarget });
+        };
+
+        beforeEach(() => {
+            component.mask.set('000');
+            component.prefix.set('$');
+            component.dropSpecialCharacters.set(false);
+            const inputTarget: HTMLInputElement = fixture.debugElement.query(By.css('input'))
+                .nativeElement as HTMLInputElement;
+            vi.spyOn(document, 'activeElement', 'get').mockReturnValue(inputTarget);
+        });
+
+        it('empties the field when instantPrefix is off (the default)', () => {
+            fixture.detectChanges();
+            expect(typeTest('12', fixture)).equal('$12');
+
+            backspaceAtEnd();
+            expect(fixture.nativeElement.querySelector('input').value).equal('$1');
+            backspaceAtEnd();
+
+            expect(fixture.nativeElement.querySelector('input').value).equal('');
+            expect(component.form.value).equal('');
+        });
+
+        it('keeps only the prefix when instantPrefix is on', () => {
+            component.instantPrefix.set(true);
+            fixture.detectChanges();
+            expect(typeTest('12', fixture)).equal('$12');
+
+            backspaceAtEnd();
+            backspaceAtEnd();
+
+            expect(fixture.nativeElement.querySelector('input').value).equal('$');
+            expect(component.form.value).equal('');
         });
     });
 });

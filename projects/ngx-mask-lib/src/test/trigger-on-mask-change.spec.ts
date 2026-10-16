@@ -2,11 +2,36 @@ import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TestMaskComponent } from './utils/test-component.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import type { DebugElement } from '@angular/core';
 import { equal } from './utils/test-functions.component';
 import { vi, expect } from 'vitest';
+
+@Component({
+    selector: 'ngxd-trigger-on-mask-change-ng-model',
+    imports: [FormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `
+        <input
+            [mask]="mask()"
+            [triggerOnMaskChange]="triggerOnMaskChange()"
+            [ngModel]="value()"
+            (ngModelChange)="onModelChange($event)" />
+    `,
+})
+class NgModelTriggerComponent {
+    public readonly mask = signal('00000');
+    public readonly triggerOnMaskChange = signal(false);
+    public readonly value = signal<string | null>('56789');
+    public readonly emitted: unknown[] = [];
+
+    public onModelChange(value: string): void {
+        this.emitted.push(value);
+        this.value.set(value);
+    }
+}
 
 describe('Directive: Mask (Trigger on mask change)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -172,5 +197,39 @@ describe('Directive: Mask (Trigger on mask change)', () => {
         // Should remain pristine when triggerOnMaskChange is false
         expect(component.form.pristine).equal(true);
         expect(component.form.dirty).equal(false);
+    });
+
+    describe('[ngModel] when the mask shrinks', () => {
+        let ngModelFixture: ComponentFixture<NgModelTriggerComponent>;
+        let ngModelComponent: NgModelTriggerComponent;
+
+        const shrinkMask = async (triggerOnMaskChange: boolean): Promise<void> => {
+            ngModelFixture = TestBed.createComponent(NgModelTriggerComponent);
+            ngModelComponent = ngModelFixture.componentInstance;
+            ngModelComponent.triggerOnMaskChange.set(triggerOnMaskChange);
+            ngModelFixture.detectChanges();
+            await ngModelFixture.whenStable();
+            ngModelComponent.emitted.length = 0;
+
+            ngModelComponent.mask.set('000');
+            ngModelFixture.detectChanges();
+            await ngModelFixture.whenStable();
+        };
+
+        it('shows the shrunk value but keeps the model when triggerOnMaskChange is false', async () => {
+            await shrinkMask(false);
+
+            expect(ngModelFixture.nativeElement.querySelector('input').value).equal('567');
+            expect(ngModelComponent.emitted).toEqual([]);
+            expect(ngModelComponent.value()).equal('56789');
+        });
+
+        it('writes the shrunk value back to the model when triggerOnMaskChange is true', async () => {
+            await shrinkMask(true);
+
+            expect(ngModelFixture.nativeElement.querySelector('input').value).equal('567');
+            expect(ngModelComponent.emitted).toEqual(['567']);
+            expect(ngModelComponent.value()).equal('567');
+        });
     });
 });

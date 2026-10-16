@@ -571,6 +571,31 @@ describe('Directive: Mask', () => {
         });
     });
 
+    it('should replace a boxed {value, disable} write with the plain value in the control', async () => {
+        component.mask.set('000');
+        fixture.detectChanges();
+        const emitted: unknown[] = [];
+        component.form.valueChanges.subscribe((value) => emitted.push(value));
+
+        component.form.setValue({ value: 123, disable: true });
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(component.form.value).equal(123);
+        expect(emitted).toEqual([123, 123]);
+    });
+
+    it('should replace a boxed {value, disable: false} string write with the plain value', async () => {
+        component.mask.set('000');
+        fixture.detectChanges();
+
+        component.form.setValue({ value: '123', disable: false });
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(component.form.value).equal('123');
+    });
+
     it('should return empty string if input consist only special symbols', () => {
         component.mask.set('(000) 000-00-00');
         fixture.detectChanges();

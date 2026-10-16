@@ -149,6 +149,12 @@ export class NgxMaskDirective
      */
     private _lastPropagatedValue: string | null = null;
     /**
+     * The raw control value `writeValue` is currently applying, `null` outside a write. The mask's own
+     * `onChange` echo is skipped when it carries exactly this value (the mask left it unchanged);
+     * an echo that differs (a normalised or re-typed value) still reaches the form.
+     */
+    private _writtenValue: { value: unknown } | null = null;
+    /**
      * The value the edit currently handled by `onInput` pushed through `onChange`, `null` while it
      * pushed nothing. Read right after the edit to decide `maskFilled`.
      */
@@ -519,10 +525,14 @@ export class NgxMaskDirective
         if (!this._maskService.validation || !maskValue) {
             return notFilled(null);
         }
-        if (this._maskService.ipError) {
+        // The IP / CPF verdicts are only written by their own handlers, so after a runtime mask
+        // switch the last one is stale: honour it only while its mask is the active one.
+        const isCpfCnpj =
+            maskValue === MaskExpression.CPF_CNPJ || maskValue === MaskExpression.CPF_CNPJ_ALPHA;
+        if (maskValue === MaskExpression.IP && this._maskService.ipError) {
             return notFilled(this._createValidationError(processedValue));
         }
-        if (this._maskService.cpfCnpjError) {
+        if (isCpfCnpj && this._maskService.cpfCnpjError) {
             return notFilled(this._createValidationError(processedValue));
         }
         if (maskValue.startsWith(MaskExpression.SEPARATOR)) {
@@ -1814,7 +1824,15 @@ export class NgxMaskDirective
                 // Let the service we know we are writing value so that triggering onChange function won't happen during applyMask
                 this._maskService.writingValue = true;
 
-                const displayValue = this._maskedOrVerbatim(inputValue);
+                // The raw control value: a boxed `{value, disable}` write never equals the plain value
+                // the mask emits, so its echo still replaces the box in the control.
+                this._writtenValue = { value: controlValue };
+                let displayValue: string;
+                try {
+                    displayValue = this._maskedOrVerbatim(inputValue);
+                } finally {
+                    this._writtenValue = null;
+                }
                 this._maskService.formElementProperty = ['value', displayValue];
                 this._writeElementValueSync(displayValue);
                 // Let the service know we've finished writing value
@@ -1875,7 +1893,9 @@ export class NgxMaskDirective
         this._isCvaMode.set(true);
         const originalFn = fn;
         this._maskService.onChange = this.onChange = (value: unknown) => {
-            originalFn(value);
+            if (!this._writtenValue || !Object.is(this._writtenValue.value, value)) {
+                originalFn(value);
+            }
             this._propagateToValueModel(value);
         };
     }

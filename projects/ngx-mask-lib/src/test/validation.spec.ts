@@ -1,7 +1,7 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { equal, Paste } from './utils/test-functions.component';
+import { equal, Paste, typeTest } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
 import { By } from '@angular/platform-browser';
@@ -547,6 +547,30 @@ describe('Directive: Mask (Validation re-runs when the mask configuration change
         expect(component.form.errors).toEqual({
             mask: { requiredMask: 'IP', actualValue: '1234' },
         });
+    });
+
+    it('drops the sticky IP verdict when [mask] is switched to a mask the value satisfies', () => {
+        component.mask.set('IP');
+        fixture.detectChanges();
+        typeTest('1234', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.mask.set('0000');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
+    });
+
+    it('drops the sticky CPF/CNPJ verdict when [mask] is switched to a mask the value satisfies', () => {
+        component.mask.set('CPF_CNPJ');
+        fixture.detectChanges();
+        equal('123', '123', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.mask.set('000');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
     });
 
     it('revalidates when [validation] is switched off', () => {

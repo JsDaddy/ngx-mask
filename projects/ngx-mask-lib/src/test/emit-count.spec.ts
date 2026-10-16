@@ -30,8 +30,9 @@ class NgModelEmitCountComponent {
 }
 
 /**
- * Probe for how many times a programmatic write is echoed back to the form (D2.4). The
- * counts asserted here document today's behaviour; they are not a statement of intent.
+ * How many times a programmatic write is echoed back to the form. The directive pushes a value
+ * back only when the mask changed it (normalised or re-typed it); a write the mask leaves
+ * unchanged is not echoed, so the form emits exactly once for it (or not at all for `ngModel`).
  */
 describe('Directive: emit count per programmatic write', () => {
     beforeEach(() => {
@@ -53,7 +54,7 @@ describe('Directive: emit count per programmatic write', () => {
             fixture.detectChanges();
         });
 
-        it('0000: setValue(1234) emits valueChanges twice', async () => {
+        it('0000: setValue(1234) emits valueChanges once', async () => {
             component.mask.set('0000');
             fixture.detectChanges();
             component.form.valueChanges.subscribe((value) => emitted.push(value));
@@ -62,11 +63,64 @@ describe('Directive: emit count per programmatic write', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            // One emission is setValue's own, the other is the directive echoing the masked value.
+            // Only setValue's own emission: the mask leaves the written value unchanged.
+            expect(emitted).toEqual(['1234']);
+            expect(component.form.pristine).equal(true);
+        });
+
+        it('0000: setValue(1234) as a number emits valueChanges once', async () => {
+            component.mask.set('0000');
+            fixture.detectChanges();
+            component.form.valueChanges.subscribe((value) => emitted.push(value));
+
+            component.form.setValue(1234);
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(emitted).toEqual([1234]);
+        });
+
+        it('0000: setValue(12345) still pushes the normalised value back', async () => {
+            component.mask.set('0000');
+            fixture.detectChanges();
+            component.form.valueChanges.subscribe((value) => emitted.push(value));
+
+            component.form.setValue('12345');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            // The echo writes the normalised value into the control, so both emissions carry it.
+            expect(emitted).toEqual(['1234', '1234']);
+            expect(component.form.pristine).equal(true);
+        });
+
+        it('00-00: setValue(12-34) still pushes the normalised value back', async () => {
+            component.mask.set('00-00');
+            component.dropSpecialCharacters.set(true);
+            fixture.detectChanges();
+            component.form.valueChanges.subscribe((value) => emitted.push(value));
+
+            component.form.setValue('12-34');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
             expect(emitted).toEqual(['1234', '1234']);
         });
 
-        it('separator.2 + leadZero: setValue(10.2) emits valueChanges twice', async () => {
+        it('00-00: setValue(1234) emits valueChanges once', async () => {
+            component.mask.set('00-00');
+            component.dropSpecialCharacters.set(true);
+            fixture.detectChanges();
+            component.form.valueChanges.subscribe((value) => emitted.push(value));
+
+            component.form.setValue('1234');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(emitted).toEqual(['1234']);
+        });
+
+        it('separator.2 + leadZero: setValue(10.2) emits the normalised value, then setValue', async () => {
             component.mask.set('separator.2');
             component.leadZero.set(true);
             fixture.detectChanges();
@@ -92,12 +146,20 @@ describe('Directive: emit count per programmatic write', () => {
             await fixture.whenStable();
         });
 
-        it('0000: writing 1234 emits ngModelChange once', async () => {
+        it('0000: writing 1234 does not emit ngModelChange', async () => {
             component.value.set('1234');
             fixture.detectChanges();
             await fixture.whenStable();
 
-            // Angular never emits ngModelChange for a model write: this one is the directive's echo.
+            // Angular never emits ngModelChange for a model write, and the mask leaves it unchanged.
+            expect(component.emitted).toEqual([]);
+        });
+
+        it('0000: writing 12345 emits the normalised value once', async () => {
+            component.value.set('12345');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
             expect(component.emitted).toEqual(['1234']);
         });
 

@@ -1,6 +1,9 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
 import type { MaskHandlerFn } from './mask-handler.types';
 
+/** Characters rejected while typing a separator mask (' ' stands for any whitespace). */
+const INVALID_SEPARATOR_CHARS = [...'@#!$%^&*()_+|~=`{}[]: ,.";<>?/'];
+
 /**
  * SEPARATOR handler (moved verbatim from applyMask, original lines 219-580).
  * Discriminator: `maskExpression.startsWith(MaskExpression.SEPARATOR)`. Produces the
@@ -257,21 +260,10 @@ export const separatorHandler: MaskHandlerFn = function (state, params) {
     const thousandSeparatorCharEscaped: string = this._charToRegExpExpression(
         this.thousandSeparator
     );
-    let invalidChars: string = '@#!$%^&*()_+|~=`{}\\[\\]:\\s,\\.";<>?\\/'.replace(
-        thousandSeparatorCharEscaped,
-        ''
-    );
-    //.replace(decimalMarkerEscaped, '');
-    if (Array.isArray(this.decimalMarker)) {
-        for (const marker of this.decimalMarker) {
-            invalidChars = invalidChars.replace(
-                this._charToRegExpExpression(marker),
-                MaskExpression.EMPTY_STRING
-            );
-        }
-    } else {
-        invalidChars = invalidChars.replace(this._charToRegExpExpression(this.decimalMarker), '');
-    }
+    const allowedChars = [this.thousandSeparator, ...[this.decimalMarker].flat()];
+    const invalidChars = INVALID_SEPARATOR_CHARS.filter((char) => !allowedChars.includes(char))
+        .map((char) => (char === ' ' ? '\\s' : `\\${char}`))
+        .join('');
 
     const invalidCharRegexp = new RegExp('[' + invalidChars + ']');
     if (processedValue.match(invalidCharRegexp)) {

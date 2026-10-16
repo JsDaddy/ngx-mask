@@ -242,6 +242,21 @@ When set to false, the prefix only becomes visible when a value is present in th
 <input type="text" prefix="+7" instantPrefix="true" mask="(000) 000 00 00" />
 ```
 
+### triggerOnMaskChange (boolean)
+
+The input property triggerOnMaskChange controls whether switching `[mask]` at runtime also updates the form model. Default value is `false`.
+
+When set to false, the input is re-formatted with the new mask, but the form control / `ngModel` keeps its previous value and no change event fires.
+When set to true, the re-masked value is written back to the model and emitted.
+
+For example, with `[ngModel]="'56789'"` and a mask that shrinks from `00000` to `000`, the field shows `567`. The model stays `56789` when false and becomes `'567'` when true.
+
+#### Usage
+
+```html
+<input type="text" [mask]="mask" [triggerOnMaskChange]="true" [(ngModel)]="value" />
+```
+
 ### suffix (string)
 
 You can add suffix to you masked value
@@ -418,6 +433,8 @@ For separate input with dots.
 ```html
 <input type="text" mask="separator" thousandSeparator="." />
 ```
+
+> `thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but it must not contain digits.
 
 For using decimals enter `.` and how many decimals to the end of your input to `separator` mask.
 
