@@ -1,4 +1,4 @@
-@for (tile of cardDocs(); track $index; let i = $index) {
+@for (tile of cardDocs(); track tile.anchor; let i = $index) {
     <div
         class="flex flex-col p-2.5 gap-2.5 bg-ink/[.06] rounded-15px"
         [class]="
