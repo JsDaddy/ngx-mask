@@ -141,8 +141,9 @@ export class NgxMaskApplierService {
         const arr: string[] = [];
         // eslint-disable-next-line @typescript-eslint/prefer-for-of
         for (let i = 0; i < processedValue.length; i++) {
-            if (processedValue[i]?.match('\\d')) {
-                arr.push(processedValue[i] ?? MaskExpression.EMPTY_STRING);
+            const char = processedValue[i] ?? MaskExpression.EMPTY_STRING;
+            if (/\d/.test(char)) {
+                arr.push(char);
             }
         }
 
