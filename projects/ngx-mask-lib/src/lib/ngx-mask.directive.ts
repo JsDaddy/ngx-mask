@@ -537,7 +537,11 @@ export class NgxMaskDirective
                         if (!hasMandatoryAfterOptional) {
                             return null;
                         }
-                        if (!this.prefix() && !this.suffix() && this._isPlainTokenMask(maskValue)) {
+                        if (
+                            !this._maskService.prefix &&
+                            !this._maskService.suffix &&
+                            this._isPlainTokenMask(maskValue)
+                        ) {
                             // Position-aware check: match the value against the mask allowing
                             // optional tokens to be skipped; every mandatory token must be
                             // consumed (catches `12a` for `999SSS`, which a pure length
@@ -571,8 +575,8 @@ export class NgxMaskDirective
                     ? maskValue.length -
                       this._maskService.checkDropSpecialCharAmount(maskValue) -
                       counterOfOpt
-                    : this.prefix()
-                      ? maskValue.length + this.prefix().length - counterOfOpt
+                    : this._maskService.prefix
+                      ? maskValue.length + this._maskService.prefix.length - counterOfOpt
                       : maskValue.length - counterOfOpt;
 
                 if (array.length === 1) {
@@ -593,7 +597,7 @@ export class NgxMaskDirective
                         lastIndexArray &&
                         this._maskService.specialCharacters.includes(lastIndexArray[0] as string) &&
                         String(processedValue).includes(lastIndexArray[0] ?? '') &&
-                        !this.dropSpecialCharacters()
+                        !this._maskService.dropSpecialCharacters
                     ) {
                         const special = value.split(lastIndexArray[0]);
                         return special[special.length - 1].length === lastIndexArray.length - 1
@@ -725,15 +729,15 @@ export class NgxMaskDirective
                         : (el.selectionStart as number);
 
                 if (
-                    this.keepCharacterPositions() &&
+                    this._maskService.keepCharacterPositions &&
                     this._maskService.placeHolderCharacter.length === 1 &&
                     !this._justPasted()
                 ) {
-                    const suffix = this.suffix();
-                    const prefix = this.prefix();
+                    const suffix = this._maskService.suffix;
+                    const prefix = this._maskService.prefix;
                     const inputSymbol = el.value.slice(position - 1, position);
                     const prefixLength = prefix.length;
-                    const showMaskTyped = this.showMaskTyped();
+                    const showMaskTyped = this._maskService.showMaskTyped;
                     const maskExpression = this._maskService.maskExpression;
                     // Placeholder skeleton of the mask (special chars kept, fillable slots
                     // replaced by the placeholder character). With showMaskTyped the service
@@ -914,7 +918,7 @@ export class NgxMaskDirective
                 if (
                     !this._maskService.hiddenInput &&
                     !this._maskService.showMaskTyped &&
-                    !this.keepCharacterPositions() &&
+                    !this._maskService.keepCharacterPositions &&
                     this._maskService.selStart !== this._maskService.selEnd &&
                     el.value.includes(MaskExpression.SYMBOL_STAR)
                 ) {
@@ -945,7 +949,7 @@ export class NgxMaskDirective
                 // same per-field thresholds generic-pattern.handler.ts already establishes
                 // (day 31, month 12, hour 23/12 w/ apm, minute/second 59). Read-only against
                 // generic-pattern.handler.ts — mirrors its thresholds, does not import from it.
-                if (this.leadZeroDateTime()) {
+                if (this._maskService.leadZeroDateTime) {
                     const field = this._findDateTimeFieldAt(
                         this._maskService.maskExpression,
                         position
@@ -957,7 +961,7 @@ export class NgxMaskDirective
                             position,
                             el.value,
                             this._inputValue(),
-                            !!this.apm()
+                            !!this._maskService.apm
                         )
                     ) {
                         position = position + 2;
@@ -965,7 +969,7 @@ export class NgxMaskDirective
                 }
                 if (
                     this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
-                    this.apm()
+                    this._maskService.apm
                 ) {
                     if (this._justPasted() && el.value.slice(0, 2) === MaskExpression.DOUBLE_ZERO) {
                         el.value = el.value.slice(1, 2) + el.value.slice(2, el.value.length);
@@ -999,14 +1003,14 @@ export class NgxMaskDirective
                 // update position after applyValueChanges to prevent cursor on wrong position when it has an array of maskExpression
                 if (this._maskExpressionArray().length) {
                     if (this._code() === MaskExpression.BACKSPACE) {
-                        const specialChartMinusOne = this.specialCharacters().includes(
+                        const specialChartMinusOne = this._maskService.specialCharacters.includes(
                             this._maskService.actualValue.slice(position - 1, position)
                         );
                         const allowFewMaskChangeMask =
                             this._maskService.removeMask(this._inputValue())?.length ===
                             this._maskService.removeMask(this._maskService.maskExpression)?.length;
 
-                        const specialChartPlusOne = this.specialCharacters().includes(
+                        const specialChartPlusOne = this._maskService.specialCharacters.includes(
                             this._maskService.actualValue.slice(position, position + 1)
                         );
                         if (allowFewMaskChangeMask && !specialChartPlusOne) {
@@ -1321,7 +1325,7 @@ export class NgxMaskDirective
             el.selectionStart > this._maskService.prefix.length &&
             (e as unknown as { keyCode?: number }).keyCode !== 38
         ) {
-            if (this._maskService.showMaskTyped && !this.keepCharacterPositions()) {
+            if (this._maskService.showMaskTyped && !this._maskService.keepCharacterPositions) {
                 // We are showing the mask in the input
                 this._maskService.maskIsShown = this._maskService.showMaskInInput();
                 if (
@@ -1422,7 +1426,7 @@ export class NgxMaskDirective
                     el.selectionStart = el.selectionEnd;
                 }
                 if (e.key === MaskExpression.BACKSPACE && (el.selectionStart as number) !== 0) {
-                    const prefixLength = this.prefix().length;
+                    const prefixLength = this._maskService.prefix.length;
                     // Use the service value: it holds the config defaults when the input is not
                     // bound and the bound value otherwise, so an explicitly bound empty array is
                     // respected instead of silently falling back to the defaults (#1512).
@@ -1499,12 +1503,13 @@ export class NgxMaskDirective
                 }
             }
             if (
-                !!this.suffix() &&
-                this.suffix().length > 1 &&
-                this._inputValue().length - this.suffix().length < (el.selectionStart as number)
+                !!this._maskService.suffix &&
+                this._maskService.suffix.length > 1 &&
+                this._inputValue().length - this._maskService.suffix.length <
+                    (el.selectionStart as number)
             ) {
                 el.setSelectionRange(
-                    this._inputValue().length - this.suffix().length,
+                    this._inputValue().length - this._maskService.suffix.length,
                     this._inputValue().length
                 );
             } else if (
@@ -1657,7 +1662,7 @@ export class NgxMaskDirective
                     this._maskService.leadZero &&
                     inputValue &&
                     this.mask() &&
-                    this.dropSpecialCharacters() !== false
+                    this._maskService.dropSpecialCharacters !== false
                 ) {
                     inputValue = this._maskService._checkPrecision(
                         this._maskService.maskExpression,
@@ -1676,7 +1681,7 @@ export class NgxMaskDirective
                 }
                 if (
                     this._resolvedMaskInput().startsWith(MaskExpression.SEPARATOR) &&
-                    this.leadZero()
+                    this._maskService.leadZero
                 ) {
                     const isFirstWrite = !this._maskService.isInitialized;
                     requestAnimationFrame(() => {
@@ -1850,8 +1855,8 @@ export class NgxMaskDirective
     }
 
     public checkSelectionOnDeletion(el: HTMLInputElement): void {
-        const prefixLength = this.prefix().length;
-        const suffixLength = this.suffix().length;
+        const prefixLength = this._maskService.prefix.length;
+        const suffixLength = this._maskService.suffix.length;
         const inputValueLength = this._inputValue().length;
 
         el.selectionStart = Math.min(
@@ -2002,8 +2007,8 @@ export class NgxMaskDirective
         return alternatives.some((alternative) => {
             const requiredLength = this._maskService.dropSpecialCharacters
                 ? alternative.length - this._maskService.checkDropSpecialCharAmount(alternative)
-                : this.prefix()
-                  ? alternative.length + this.prefix().length
+                : this._maskService.prefix
+                  ? alternative.length + this._maskService.prefix.length
                   : alternative.length;
             // Exact match, not `>=`: a longer value must not pass on the strength of a
             // shorter alternative it has already outgrown (#1645, 7 digits vs `00000 9`).
