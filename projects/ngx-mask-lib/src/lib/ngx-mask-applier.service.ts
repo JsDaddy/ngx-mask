@@ -354,11 +354,15 @@ export class NgxMaskApplierService {
         return `${negative ? MaskExpression.MINUS : MaskExpression.EMPTY_STRING}${integerPart}${decimalMarker}${decimalPart}`;
     }
 
-    /** Inserts `separator` between every 3-digit group of an integer-digit string. */
+    /**
+     * Inserts `separator` between every 3-digit group of an integer-digit string. A separator that
+     * contains a digit is unsupported: its own output would match the pattern again and grow forever,
+     * so such a value is left ungrouped.
+     */
     private _applyThousandGrouping(digits: string, separator: string): string {
         const rgx = /(\d+)(\d{3})/;
         let grouped = digits;
-        while (separator && rgx.test(grouped)) {
+        while (separator && !/\d/.test(separator) && rgx.test(grouped)) {
             // A function replacer: the separator is inserted verbatim, never parsed as a
             // replacement pattern ($, $&, $', ...).
             grouped = grouped.replace(
