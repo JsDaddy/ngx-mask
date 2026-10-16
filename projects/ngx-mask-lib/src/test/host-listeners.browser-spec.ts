@@ -1,3 +1,4 @@
+import { userEvent } from 'vitest/browser';
 import { mount } from './utils/browser-harness';
 import { MaskHarnessComponent } from './utils/mask-harness.component';
 
@@ -115,7 +116,7 @@ describe('Directive: host listeners (real browser events)', () => {
 
             await m.click('#masked');
 
-            expect(m.get('#masked').selectionStart).toBeGreaterThanOrEqual(3);
+            expect(m.get('#masked').selectionStart).toBe(3);
         });
     });
 
@@ -180,14 +181,26 @@ describe('Directive: host listeners (real browser events)', () => {
     });
 
     describe('paste', () => {
+        // A real paste: the text goes through the browser clipboard (copy from a scratch input, then
+        // paste into the masked one), so the directive's `(paste)` host listener really fires.
         const paste = async (
             m: Awaited<ReturnType<typeof mount<MaskHarnessComponent>>>,
             text: string
         ): Promise<void> => {
+            const scratch = document.createElement('input');
+            document.body.appendChild(scratch);
+            try {
+                scratch.value = text;
+                scratch.focus();
+                scratch.select();
+                await userEvent.copy();
+            } finally {
+                scratch.remove();
+            }
             const input = m.get('#masked');
             input.focus();
-            input.dispatchEvent(new ClipboardEvent('paste', { bubbles: true }));
-            await m.setValue('#masked', text);
+            await userEvent.paste();
+            await m.settle();
         };
 
         it('formats a pasted raw value with the mask', async () => {
@@ -205,6 +218,15 @@ describe('Directive: host listeners (real browser events)', () => {
             await paste(m, '12 a 34-56x');
 
             expect(m.get('#masked').value).toBe('123-456');
+        });
+
+        it('lands the caret after a pasted raw value that does not carry the prefix', async () => {
+            const m = await mount(MaskHarnessComponent, { mask: '000000', prefix: '+7 ' });
+
+            await paste(m, '123456');
+
+            expect(m.get('#masked').value).toBe('+7 123456');
+            expect(m.get('#masked').selectionStart).toBe(9);
         });
 
         it('truncates a pasted value longer than the mask', async () => {

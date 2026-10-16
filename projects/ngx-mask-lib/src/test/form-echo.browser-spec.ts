@@ -69,7 +69,7 @@ describe('Directive: programmatic writes in a real browser (form echo)', () => {
 
             expect(m.get('#masked').value).toBe('12-34');
             expect(m.component.form.value).toBe('1234');
-            expect(emitted.at(-1)).toBe('1234');
+            expect(emitted).toEqual(['1', '12', '123', '1234']);
         });
 
         it('replaces a boxed {value, disable} write with the plain value and does not leak the box', async () => {

@@ -69,8 +69,8 @@ describe('Directive: special characters, nullish separators and runtime inputs (
     });
 
     describe('click caret past letter special characters', () => {
-        // "w" and "s" must be matched literally by the click handler: unescaped (`\w`, `\s`) they became a
-        // character class that also swallowed the digit placeholders.
+        // "w" and "s" must be matched literally by the click handler. Unescaped, `\s` matched nothing (the
+        // caret went to 0) and `\w` swallowed the digit placeholders (the caret went to 5).
         it.each(['w', 's'])(
             'places the caret after the leading "%s-" on click at 0',
             async (letter) => {
@@ -177,19 +177,22 @@ describe('Directive: special characters, nullish separators and runtime inputs (
         it('switches the decimalMarker used by a separator mask', async () => {
             const m = await mount(MaskHarnessComponent, {
                 mask: 'separator.2',
-                thousandSeparator: '.',
+                thousandSeparator: ' ',
                 decimalMarker: ',',
             });
             await m.type('#masked', '1234,5');
-            expect(m.get('#masked').value).toBe('1.234,5');
+            expect(m.get('#masked').value).toBe('1 234,5');
 
             m.fixture.componentRef.setInput('decimalMarker', '.');
-            m.fixture.componentRef.setInput('thousandSeparator', ',');
             await m.settle();
             await m.clear('#masked');
             await m.type('#masked', '1234.5');
+            expect(m.get('#masked').value).toBe('1 234.5');
 
-            expect(m.get('#masked').value).toBe('1,234.5');
+            // The old marker is no longer a decimal marker.
+            await m.clear('#masked');
+            await m.type('#masked', '1234,5');
+            expect(m.get('#masked').value).toBe('12 345');
         });
 
         it('turns leadZero on at runtime and pads on blur', async () => {
