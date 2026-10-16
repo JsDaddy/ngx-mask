@@ -474,8 +474,10 @@ export class NgxMaskDirective
             !!valueChange &&
             String(valueChange.currentValue) !== this._lastPropagatedValue &&
             this._valueEffectWillWrite(valueChange.currentValue);
-        if (retargetSeparators) {
-            // Re-rendering the same number in the new markers is no user edit.
+        if (retargetSeparators && !this._maskService.maskChanged) {
+            // Re-rendering the same number in the new markers is no user edit. A mask changed in
+            // the same pass makes this render the triggerOnMaskChange emission instead, which
+            // dirties the control like any other.
             this._writeProgrammatically(() => this._applyMask(!valueEffectWillRender));
         } else {
             this._applyMask(!valueEffectWillRender);

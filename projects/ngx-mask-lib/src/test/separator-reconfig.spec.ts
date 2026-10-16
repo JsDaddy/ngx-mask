@@ -84,6 +84,20 @@ describe('Separator: changing the separators of a mask', () => {
             expect(component.form.pristine).toBe(true);
             expect(component.form.untouched).toBe(true);
         });
+
+        it('dirties the control like any triggerOnMaskChange emission when the mask changes too', async () => {
+            component.triggerOnMaskChange.set(true);
+            await populate(' ', '.');
+
+            component.mask.set('separator.3');
+            component.thousandSeparator.set('.');
+            component.decimalMarker.set(',');
+            await settle();
+
+            expect(input.value).toBe('1.234,5');
+            expect(component.form.value).toBe(1234.5);
+            expect(component.form.dirty).toBe(true);
+        });
     });
 
     describe('with a prefix or suffix', () => {
