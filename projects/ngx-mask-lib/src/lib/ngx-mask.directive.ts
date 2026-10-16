@@ -238,6 +238,17 @@ export class NgxMaskDirective
     public _maskService = inject(NgxMaskService, { self: true });
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     /**
+     * `specialCharacters` and `decimalMarker` as bound (the config values when unbound). The
+     * service derives working values from them for the current configuration (the minus
+     * `allowNegativeNumbers` keeps, the markers a separator mask drops, the comma a dot
+     * thousandSeparator forces), so a runtime reconfiguration starts again from these instead of
+     * piling the previous configuration's reductions up.
+     */
+    private readonly _boundConfig: Pick<NgxMaskConfig, 'specialCharacters' | 'decimalMarker'> = {
+        specialCharacters: this._config.specialCharacters,
+        decimalMarker: this._config.decimalMarker,
+    };
+    /**
      * Under zoneless change detection, writing to the underlying FormControl programmatically
      * (e.g. `setValue`/`patchValue` from outside a signal/effect context, or from a callback
      * zone.js used to auto-flush like a deferred render callback or `queueMicrotask`) does not itself
@@ -329,6 +340,7 @@ export class NgxMaskDirective
             prefix,
             suffix,
             thousandSeparator,
+            decimalMarker,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
@@ -345,6 +357,9 @@ export class NgxMaskDirective
             suffix: this._maskService.suffix,
         };
         if (mask) {
+            const wasSeparatorMask = this._maskService.maskExpression.startsWith(
+                MaskExpression.SEPARATOR
+            );
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
             }
@@ -362,9 +377,17 @@ export class NgxMaskDirective
                 this._maskValue.set(resolvedMask);
                 this._maskService.maskExpression = this._maskValue();
             }
+            // Numeric emission follows a separator mask (writeValue switches it on for one), so a
+            // runtime switch into or out of one must flip it, otherwise the model keeps the type
+            // and the number parsing of the previous mask.
+            const isSeparatorMask = this._maskValue().startsWith(MaskExpression.SEPARATOR);
+            if (!mask.firstChange && wasSeparatorMask !== isSeparatorMask) {
+                this._maskService.isNumberValue = isSeparatorMask;
+            }
         }
         if (specialCharacters) {
             if (Array.isArray(specialCharacters.currentValue)) {
+                this._boundConfig.specialCharacters = specialCharacters.currentValue;
                 this._maskService.specialCharacters = specialCharacters.currentValue;
             }
             // A non-array value (e.g. null from an unset dynamic config) keeps the current
@@ -385,18 +408,20 @@ export class NgxMaskDirective
             this._maskService.apm = apm.currentValue ?? this._config.apm;
         }
 
+        if (decimalMarker) {
+            this._boundConfig.decimalMarker = decimalMarker.currentValue;
+        }
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
             if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
+                // The marker the previous separator forced (a dot thousandSeparator turns '.'
+                // into ',') is not the bound one: start from the bound marker again.
+                this._maskService.decimalMarker = this._boundConfig.decimalMarker;
                 if (thousandSeparator.currentValue === this._maskService.decimalMarker) {
                     this._maskService.decimalMarker =
                         thousandSeparator.currentValue === MaskExpression.COMMA
                             ? MaskExpression.DOT
                             : MaskExpression.COMMA;
-                }
-                if (this._maskService.dropSpecialCharacters === true) {
-                    this._maskService.specialCharacters = this._config.specialCharacters;
-                    this._keepMinusOutOfSpecialCharacters();
                 }
                 this._maskService.writingValue = true;
             }
@@ -446,8 +471,20 @@ export class NgxMaskDirective
                 );
             }
         }
-        // Pure mirrors: runs after every explicit block above (the thousandSeparator block reads
-        // the PREVIOUS decimalMarker/dropSpecialCharacters from the service) and before `_applyMask`.
+        const specialCharactersSources = [
+            mask,
+            specialCharacters,
+            allowNegativeNumbers,
+            thousandSeparator,
+            decimalMarker,
+            dropSpecialCharacters,
+        ];
+        if (specialCharactersSources.some((change) => change && !change.firstChange)) {
+            this._maskService.specialCharacters = this._boundConfig.specialCharacters;
+            this._keepMinusOutOfSpecialCharacters();
+        }
+        // Pure mirrors: runs after every explicit block above (a bound decimalMarker wins over the
+        // one the thousandSeparator block derives) and before `_applyMask`.
         for (const key of MIRRORED_INPUTS) {
             const change = changes[key];
             if (change) {
@@ -455,7 +492,7 @@ export class NgxMaskDirective
             }
         }
         const retargetSeparators =
-            (thousandSeparator || changes['decimalMarker']) &&
+            (thousandSeparator || decimalMarker) &&
             this._configApplied &&
             this._maskValue().startsWith(MaskExpression.SEPARATOR) &&
             this._inputValue();
@@ -2076,6 +2113,10 @@ export class NgxMaskDirective
             'value',
             this._maskedOrVerbatim(this._inputValue()),
         ];
+        // The skeleton render of an empty value returns before the service consumes them, and a
+        // one-shot flag left set swallows the first edit that follows.
+        this._maskService.writingValue = false;
+        this._maskService._clearMaskChangedUnlessTriggered();
     }
 
     /**

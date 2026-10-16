@@ -1,5 +1,8 @@
-import { Component, input } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import type { OnInit } from '@angular/core';
+import { Component, inject, Injector, input, runInInjectionContext, signal } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import type { FieldTree } from '@angular/forms/signals';
+import { form, FormField } from '@angular/forms/signals';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
@@ -30,49 +33,125 @@ export type DemoExample = Partial<{
 }>;
 
 /**
- * Mirrors the "Reactive Forms" input of the demo (src/app/options/options.component.html): the same
- * bindings with the same fallbacks (`ex._x || default`), so a bug that only shows up when the demo
- * binds every option at once can be reproduced with a real keyboard.
+ * Mirrors the three inputs of the demo's example card (src/app/options/options.component.html):
+ * Reactive Forms, Template-driven and Signal Forms, with the same bindings and the same fallbacks
+ * (`ex._x || default`), so a bug that only shows up with the demo's exact wiring can be reproduced
+ * with a real keyboard. The controls are created from `initialValue` when the component
+ * initialises, as the demo does for every example.
  */
 @Component({
     selector: 'ngxd-demo-bindings-harness',
     standalone: true,
-    imports: [NgxMaskDirective, ReactiveFormsModule],
+    imports: [NgxMaskDirective, ReactiveFormsModule, FormsModule, FormField],
     providers: [provideNgxMask()],
     template: `
-        <input
-            id="masked"
-            [placeholder]="''"
-            [placeHolderCharacter]="ex()._placholderCharacter || '_'"
-            [prefix]="ex()._prefix || ''"
-            [suffix]="ex()._suffix || ''"
-            [dropSpecialCharacters]="ex()._dropSpecialCharacters ?? true"
-            [mask]="ex()._mask || ''"
-            [thousandSeparator]="ex()._thousandSeparator || ' '"
-            [allowNegativeNumbers]="ex()._allowNegativeNumbers || null"
-            [specialCharacters]="ex()._specialCharacters || specialCharacters"
-            [shownMaskExpression]="$any(ex()._shownMaskExpression)"
-            [formControl]="form"
-            [apm]="ex()._apm || false"
-            [decimalMarker]="$any(ex()._decimalMarker || '.')"
-            [typeFromDecimals]="ex()._typeFromDecimals || false"
-            [defaultValueOnBlur]="ex()._defaultValueOnBlur ?? null"
-            [leadZero]="ex()._leadZero || false"
-            [leadZeroDateTime]="ex()._leadZeroDateTime || false"
-            [keepCharacterPositions]="ex()._keepCharacterPositions || false"
-            [validation]="ex()._validation || false"
-            [showMaskTyped]="ex()._showMaskTyped || false"
-            [clearIfNotMatch]="$any(ex()._clearIfNotMatch)"
-            [hiddenInput]="ex()._hiddenInput || null"
-            [outputTransformFn]="ex()._outputTransformFn || outputTransformFn"
-            [inputTransformFn]="ex()._inputTransformFn || inputTransformFn" />
-        <pre id="value">{{ form.value }}</pre>
+        @if (reactive(); as control) {
+            <input
+                id="masked"
+                [formControl]="control"
+                [placeholder]="''"
+                [placeHolderCharacter]="ex()._placholderCharacter || '_'"
+                [prefix]="ex()._prefix || ''"
+                [suffix]="ex()._suffix || ''"
+                [dropSpecialCharacters]="ex()._dropSpecialCharacters ?? true"
+                [mask]="ex()._mask || ''"
+                [thousandSeparator]="ex()._thousandSeparator || ' '"
+                [allowNegativeNumbers]="ex()._allowNegativeNumbers || null"
+                [specialCharacters]="ex()._specialCharacters || specialCharacters"
+                [shownMaskExpression]="$any(ex()._shownMaskExpression)"
+                [apm]="ex()._apm || false"
+                [decimalMarker]="$any(ex()._decimalMarker || '.')"
+                [typeFromDecimals]="ex()._typeFromDecimals || false"
+                [defaultValueOnBlur]="ex()._defaultValueOnBlur ?? null"
+                [leadZero]="ex()._leadZero || false"
+                [leadZeroDateTime]="ex()._leadZeroDateTime || false"
+                [keepCharacterPositions]="ex()._keepCharacterPositions || false"
+                [validation]="ex()._validation || false"
+                [showMaskTyped]="ex()._showMaskTyped || false"
+                [clearIfNotMatch]="$any(ex()._clearIfNotMatch)"
+                [hiddenInput]="ex()._hiddenInput || null"
+                [outputTransformFn]="ex()._outputTransformFn || outputTransformFn"
+                [inputTransformFn]="ex()._inputTransformFn || inputTransformFn" />
+            <input
+                id="ngmodel"
+                [(ngModel)]="model"
+                [placeholder]="''"
+                [placeHolderCharacter]="ex()._placholderCharacter || '_'"
+                [prefix]="ex()._prefix || ''"
+                [suffix]="ex()._suffix || ''"
+                [dropSpecialCharacters]="ex()._dropSpecialCharacters ?? true"
+                [mask]="ex()._mask || ''"
+                [thousandSeparator]="ex()._thousandSeparator || ' '"
+                [allowNegativeNumbers]="ex()._allowNegativeNumbers || null"
+                [specialCharacters]="ex()._specialCharacters || specialCharacters"
+                [shownMaskExpression]="$any(ex()._shownMaskExpression)"
+                [apm]="ex()._apm || false"
+                [decimalMarker]="$any(ex()._decimalMarker || '.')"
+                [typeFromDecimals]="ex()._typeFromDecimals || false"
+                [defaultValueOnBlur]="ex()._defaultValueOnBlur ?? null"
+                [leadZero]="ex()._leadZero || false"
+                [leadZeroDateTime]="ex()._leadZeroDateTime || false"
+                [keepCharacterPositions]="ex()._keepCharacterPositions || false"
+                [validation]="ex()._validation || false"
+                [showMaskTyped]="ex()._showMaskTyped || false"
+                [clearIfNotMatch]="$any(ex()._clearIfNotMatch)"
+                [hiddenInput]="ex()._hiddenInput || null"
+                [outputTransformFn]="ex()._outputTransformFn || outputTransformFn"
+                [inputTransformFn]="ex()._inputTransformFn || inputTransformFn" />
+            <input
+                id="signal"
+                [formField]="signalField()!.value"
+                [placeholder]="''"
+                [placeHolderCharacter]="ex()._placholderCharacter || '_'"
+                [prefix]="ex()._prefix || ''"
+                [suffix]="ex()._suffix || ''"
+                [dropSpecialCharacters]="ex()._dropSpecialCharacters ?? true"
+                [mask]="ex()._mask || ''"
+                [thousandSeparator]="ex()._thousandSeparator || ' '"
+                [allowNegativeNumbers]="ex()._allowNegativeNumbers || null"
+                [specialCharacters]="ex()._specialCharacters || specialCharacters"
+                [shownMaskExpression]="$any(ex()._shownMaskExpression)"
+                [apm]="ex()._apm || false"
+                [decimalMarker]="$any(ex()._decimalMarker || '.')"
+                [typeFromDecimals]="ex()._typeFromDecimals || false"
+                [defaultValueOnBlur]="ex()._defaultValueOnBlur ?? null"
+                [leadZero]="ex()._leadZero || false"
+                [leadZeroDateTime]="ex()._leadZeroDateTime || false"
+                [keepCharacterPositions]="ex()._keepCharacterPositions || false"
+                [validation]="ex()._validation || false"
+                [showMaskTyped]="ex()._showMaskTyped || false"
+                [clearIfNotMatch]="$any(ex()._clearIfNotMatch)"
+                [hiddenInput]="ex()._hiddenInput || null"
+                [outputTransformFn]="ex()._outputTransformFn || outputTransformFn"
+                [inputTransformFn]="ex()._inputTransformFn || inputTransformFn" />
+        }
+        <pre id="value">{{ reactive()?.value }}</pre>
     `,
 })
-export class DemoBindingsHarnessComponent {
+export class DemoBindingsHarnessComponent implements OnInit {
     public readonly ex = input<DemoExample>({});
-    public readonly form = new FormControl<string | null>('');
+    public readonly initialValue = input<string | null>('');
+    protected readonly reactive = signal<FormControl<string | null> | null>(null);
+    protected readonly signalField = signal<FieldTree<{ value: string | null }> | null>(null);
+    public model: string | null = '';
     protected readonly specialCharacters = initialConfig.specialCharacters;
     protected readonly outputTransformFn = initialConfig.outputTransformFn;
     protected readonly inputTransformFn = initialConfig.inputTransformFn;
+    private readonly injector = inject(Injector);
+
+    public get form(): FormControl<string | null> {
+        return this.reactive() as FormControl<string | null>;
+    }
+
+    public get signalValue(): string | null {
+        return (this.signalField() as FieldTree<{ value: string | null }>).value().value();
+    }
+
+    public ngOnInit(): void {
+        const initial = this.initialValue();
+        this.model = initial;
+        const signalModel = signal<{ value: string | null }>({ value: initial });
+        this.signalField.set(runInInjectionContext(this.injector, () => form(signalModel)));
+        this.reactive.set(new FormControl<string | null>(initial));
+    }
 }
