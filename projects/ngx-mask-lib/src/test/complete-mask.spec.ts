@@ -121,3 +121,45 @@ describe('Directive: Mask (Function maskFilled)', () => {
         expect(maskFilledSpy).toHaveBeenCalledTimes(1);
     });
 });
+
+@Component({
+    selector: 'ngxd-open-source-no-forms-test',
+    standalone: true,
+    imports: [NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="0000" (maskFilled)="filled = filled + 1" />`,
+})
+class NoFormsMaskFilledComponent {
+    public filled = 0;
+}
+
+describe('Directive: Mask (maskFilled without forms)', () => {
+    let fixture: ComponentFixture<NoFormsMaskFilledComponent>;
+    let inputElement: HTMLInputElement;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [NgxMaskDirective, NoFormsMaskFilledComponent],
+            providers: [provideNgxMask()],
+        });
+        fixture = TestBed.createComponent(NoFormsMaskFilledComponent);
+        fixture.detectChanges();
+        inputElement = fixture.nativeElement.querySelector('input');
+    });
+
+    it('emits exactly once when typing completes the mask and there is no NgControl', () => {
+        inputElement.value = '1234';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(fixture.componentInstance.filled).equal(1);
+    });
+
+    it('does not emit for an incomplete value and there is no NgControl', () => {
+        inputElement.value = '123';
+        inputElement.dispatchEvent(new Event('input'));
+        fixture.detectChanges();
+
+        expect(fixture.componentInstance.filled).equal(0);
+    });
+});
