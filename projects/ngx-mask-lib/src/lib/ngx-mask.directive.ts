@@ -357,9 +357,8 @@ export class NgxMaskDirective
             suffix: this._maskService.suffix,
         };
         if (mask) {
-            const wasSeparatorMask = this._maskService.maskExpression.startsWith(
-                MaskExpression.SEPARATOR
-            );
+            const previousMask = this._maskService.maskExpression;
+            const wasSeparatorMask = previousMask.startsWith(MaskExpression.SEPARATOR);
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
             }
@@ -379,9 +378,14 @@ export class NgxMaskDirective
             }
             // Numeric emission follows a separator mask (writeValue switches it on for one), so a
             // runtime switch into or out of one must flip it, otherwise the model keeps the type
-            // and the number parsing of the previous mask.
+            // and the number parsing of the previous mask. A first mask after none is no switch:
+            // the model keeps the type its writes gave it.
             const isSeparatorMask = this._maskValue().startsWith(MaskExpression.SEPARATOR);
-            if (!mask.firstChange && wasSeparatorMask !== isSeparatorMask) {
+            if (
+                !mask.firstChange &&
+                previousMask !== MaskExpression.EMPTY_STRING &&
+                wasSeparatorMask !== isSeparatorMask
+            ) {
                 this._maskService.isNumberValue = isSeparatorMask;
             }
         }

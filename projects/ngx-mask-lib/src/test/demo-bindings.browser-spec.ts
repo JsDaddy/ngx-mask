@@ -73,6 +73,15 @@ describe('Demo bindings: every option the demo binds, in a real browser', () => 
             await expect.poll(() => m.component.signalValue).toBe(1234);
         });
 
+        // A first mask after none is no switch between mask families: the model keeps the type
+        // its writes gave it (an empty write gives none, so a string).
+        it('no mask -> separator.0: the form keeps a string model', async () => {
+            const m = await reconfigure({}, { _mask: 'separator.0' });
+            await m.type('#masked', '1234');
+            await expect.poll(() => m.get('#masked').value).toBe('1 234');
+            expect(m.component.form.value).toBe('1234');
+        });
+
         it('separator.2 -> typed mask with dashes: first key shows the skeleton', async () => {
             const m = await reconfigure(
                 { _mask: 'separator.2', _thousandSeparator: '.' },
