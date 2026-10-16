@@ -4,6 +4,8 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import type { NgxMaskOptions } from 'ngx-mask';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { expect } from 'vitest';
+import { TestMaskComponent } from './utils/test-component.component';
+import { equal } from './utils/test-functions.component';
 
 // Bare inputs: nothing is bound, so the effective settings can only come from `provideNgxMask`.
 // (`TestMaskComponent` / `MaskHarnessComponent` bind every input, which hides this class of bug.)
@@ -36,5 +38,40 @@ describe('provideNgxMask - global config is the effective config of a bare input
         fixture.componentInstance.form.setValue('$1');
         await fixture.whenStable();
         expect(fixture.componentInstance.form.errors).not.toBeNull();
+    });
+});
+
+describe('apm input is mirrored into the service (falsy values included)', () => {
+    it('[apm]="false" overrides a global apm: true', () => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ apm: true })],
+        });
+        const fixture = TestBed.createComponent(TestMaskComponent);
+        const component = fixture.componentInstance;
+        component.mask.set('Hh:m0');
+        component.apm.set(false);
+        fixture.detectChanges();
+
+        // 24-hour clock: 13 is a valid hour (with apm it would be split into '1:3')
+        equal('1323', '13:23', fixture);
+    });
+
+    it('switching [apm] from true to false at runtime takes effect', () => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask()],
+        });
+        const fixture = TestBed.createComponent(TestMaskComponent);
+        const component = fixture.componentInstance;
+        component.mask.set('Hh:m0');
+        component.apm.set(true);
+        fixture.detectChanges();
+        equal('1323', '1:32', fixture);
+
+        component.apm.set(false);
+        fixture.detectChanges();
+
+        equal('1323', '13:23', fixture);
     });
 });

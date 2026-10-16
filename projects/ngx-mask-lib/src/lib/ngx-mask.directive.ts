@@ -321,8 +321,10 @@ export class NgxMaskDirective
         if (patterns && patterns.currentValue) {
             this._maskService.patterns = patterns.currentValue;
         }
-        if (apm && apm.currentValue) {
-            this._maskService.apm = apm.currentValue;
+        if (apm) {
+            // A falsy value (`false`) must be mirrored too, otherwise it cannot override a global
+            // `apm: true` or switch the option off at runtime; `null` means "unset" -> config.
+            this._maskService.apm = apm.currentValue ?? this._config.apm;
         }
 
         if (instantPrefix) {
