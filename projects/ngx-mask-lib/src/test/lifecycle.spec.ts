@@ -132,7 +132,7 @@ describe('Directive: deferred work runs through afterNextRender and dies with th
         component.form.setValue('10.2');
         await fixture.whenStable();
 
-        expect(insideRunAtApplyMask).toContain(true);
+        expect(insideRunAtApplyMask.at(-1)).toBe(true);
     });
 
     it('re-enters the NgZone for the deferred showMaskTyped click', async () => {
