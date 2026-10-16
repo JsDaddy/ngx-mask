@@ -316,8 +316,12 @@ export class NgxMaskDirective
             allowNegativeNumbers,
             apm,
         } = changes;
-        const previousThousandSeparator = this._maskService.thousandSeparator;
-        const previousDecimalMarker = this._maskService.decimalMarker;
+        const previousSeparators = {
+            thousandSeparator: this._maskService.thousandSeparator,
+            decimalMarker: this._maskService.decimalMarker,
+            prefix: this._maskService.prefix,
+            suffix: this._maskService.suffix,
+        };
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
@@ -443,11 +447,7 @@ export class NgxMaskDirective
             // The rendered number still uses the previous markers: carry it over to the new ones
             // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
             this._inputValue.set(
-                this._maskService._retargetSeparatorValue(
-                    this._inputValue(),
-                    previousThousandSeparator,
-                    previousDecimalMarker
-                )
+                this._maskService._retargetSeparatorValue(this._inputValue(), previousSeparators)
             );
             this._maskService.actualValue = this._inputValue();
             this._maskService.writingValue = true;

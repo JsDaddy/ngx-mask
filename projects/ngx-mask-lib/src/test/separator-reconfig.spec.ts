@@ -86,6 +86,34 @@ describe('Separator: changing the separators of a mask', () => {
         });
     });
 
+    describe('with a prefix or suffix', () => {
+        it.each([
+            ['prefix', 'Rs. ', '', 'Rs. 1 234.5', 'Rs. 1.234,5'],
+            ['suffix', '', ' kg', '1 234.5 kg', '1.234,5 kg'],
+            ['prefix and suffix', 'Rs. ', ' kg', 'Rs. 1 234.5 kg', 'Rs. 1.234,5 kg'],
+        ])(
+            'keeps the typed number with a %s when the separators change',
+            async (_name, prefix, suffix, before, after) => {
+                component.prefix.set(prefix);
+                component.suffix.set(suffix);
+                fixture.detectChanges();
+                input = fixture.nativeElement.querySelector('input');
+                input.value = `${prefix}1234.5${suffix}`;
+                input.dispatchEvent(new Event('input'));
+                fixture.detectChanges();
+                expect(input.value).toBe(before);
+                expect(component.form.value).toBe(1234.5);
+
+                component.thousandSeparator.set('.');
+                component.decimalMarker.set(',');
+                await settle();
+
+                expect(input.value).toBe(after);
+                expect(component.form.value).toBe(1234.5);
+            }
+        );
+    });
+
     describe('with a write right after the change, before change detection', () => {
         it.each([' ', '.'] as const)(
             'formats the number with the new thousandSeparator %s and decimalMarker',

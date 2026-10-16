@@ -524,22 +524,31 @@ export class NgxMaskApplierService {
     /**
      * Re-expresses a separator value written with the previous thousandSeparator/decimalMarker in
      * the current ones, so reconfiguring a populated control keeps its number (`1 234.5` stays
-     * 1234.5 as `1.234,5`) instead of reading the old markers with the new rules.
+     * 1234.5 as `1.234,5`) instead of reading the old markers with the new rules. The previous
+     * prefix and suffix are set aside first: they may contain the very characters being swapped.
      */
     public _retargetSeparatorValue(
         value: string,
-        previousThousandSeparator: string | null | undefined,
-        previousDecimalMarker: NgxMaskConfig['decimalMarker']
+        previous: Pick<NgxMaskConfig, 'thousandSeparator' | 'decimalMarker' | 'prefix' | 'suffix'>
     ): string {
+        const prefix = previous.prefix && value.startsWith(previous.prefix) ? previous.prefix : '';
+        const suffix =
+            previous.suffix && value.length >= prefix.length + previous.suffix.length
+                ? value.endsWith(previous.suffix)
+                    ? previous.suffix
+                    : ''
+                : '';
+        const number = value.slice(prefix.length, value.length - suffix.length);
         const previousMarker = this._activeDecimalMarker(
-            value,
-            previousDecimalMarker,
-            previousThousandSeparator ?? MaskExpression.EMPTY_STRING
+            number,
+            previous.decimalMarker,
+            previous.thousandSeparator ?? MaskExpression.EMPTY_STRING
         );
-        const ungrouped = previousThousandSeparator
-            ? value.split(previousThousandSeparator).join(MaskExpression.EMPTY_STRING)
-            : value;
-        return ungrouped.replace(previousMarker, this._activeDecimalMarker(ungrouped));
+        const ungrouped = previous.thousandSeparator
+            ? number.split(previous.thousandSeparator).join(MaskExpression.EMPTY_STRING)
+            : number;
+        const retargeted = ungrouped.replace(previousMarker, this._activeDecimalMarker(ungrouped));
+        return `${prefix ? this.prefix : ''}${retargeted}${suffix ? this.suffix : ''}`;
     }
 
     protected _splitPercentZero(value: string): string {
