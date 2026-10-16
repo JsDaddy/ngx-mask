@@ -44,7 +44,6 @@ type DateTimeField = {
 
 @Directive({
     selector: 'input[mask], textarea[mask]',
-    standalone: true,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

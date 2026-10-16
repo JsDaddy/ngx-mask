@@ -9,7 +9,6 @@ import { MaskExpression } from './ngx-mask-expression.enum';
 @Pipe({
     name: 'mask',
     pure: true,
-    standalone: true,
 })
 export class NgxMaskPipe implements PipeTransform {
     private readonly defaultOptions = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
