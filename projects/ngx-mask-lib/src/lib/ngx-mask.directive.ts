@@ -30,7 +30,13 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { escapeRegExp } from './ngx-mask.utils';
+import {
+    containsStarSymbol,
+    displayToPlainDecimal,
+    escapeRegExp,
+    retargetSeparatorValue,
+    usesCommaDecimal,
+} from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
 
@@ -457,7 +463,7 @@ export class NgxMaskDirective
             // The rendered number still uses the previous markers: carry it over to the new ones
             // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
             this._inputValue.set(
-                this._maskService._retargetSeparatorValue(this._inputValue(), previousSeparators)
+                retargetSeparatorValue(this._inputValue(), previousSeparators, this._maskService)
             );
             this._maskService.actualValue = this._inputValue();
             this._maskService.writingValue = true;
@@ -1016,7 +1022,11 @@ export class NgxMaskDirective
                     !this._maskService.showMaskTyped &&
                     !this._maskService.keepCharacterPositions &&
                     this._maskService.selStart !== this._maskService.selEnd &&
-                    this._maskService._containsStarSymbol(el.value)
+                    containsStarSymbol(
+                        el.value,
+                        this._maskService.maskExpression,
+                        this._maskService.thousandSeparator
+                    )
                 ) {
                     this._maskService.actualValue = MaskExpression.EMPTY_STRING;
                 }
@@ -1731,7 +1741,11 @@ export class NgxMaskDirective
                 typeof inputValue === 'number' ||
                 this._maskValue().startsWith(MaskExpression.SEPARATOR)
             ) {
-                inputValue = this._maskService._displayToPlainDecimal(String(inputValue));
+                inputValue = displayToPlainDecimal(
+                    String(inputValue),
+                    this._maskService.decimalMarker,
+                    this._maskService.thousandSeparator
+                );
                 const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
                 if (!Array.isArray(this._maskService.decimalMarker)) {
                     inputValue =
@@ -1744,7 +1758,11 @@ export class NgxMaskDirective
                 }
 
                 // Read before the precision pass rewrites the decimals with a dot.
-                const commaDecimal = this._maskService._usesCommaDecimal(inputValue);
+                const commaDecimal = usesCommaDecimal(
+                    inputValue,
+                    this._maskService.decimalMarker,
+                    this._maskService.thousandSeparator
+                );
                 if (
                     this._maskService.leadZero &&
                     inputValue &&

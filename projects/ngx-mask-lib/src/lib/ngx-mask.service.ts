@@ -5,7 +5,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { digitsOf, escapeRegExp } from './ngx-mask.utils';
+import { containsStarSymbol, digitsOf, escapeRegExp, usesCommaDecimal } from './ngx-mask.utils';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -161,7 +161,9 @@ export class NgxMaskService extends NgxMaskApplierService {
 
         // Handle hidden input or input with asterisk symbol
         if (
-            (this.hiddenInput || (inputValue && this._containsStarSymbol(inputValue))) &&
+            (this.hiddenInput ||
+                (inputValue &&
+                    containsStarSymbol(inputValue, this.maskExpression, this.thousandSeparator))) &&
             !this.writingValue
         ) {
             // Seed from the raw input only when the user typed the FIRST character (the
@@ -997,47 +999,6 @@ export class NgxMaskService extends NgxMaskApplierService {
         return matcher ? Number(matcher[1]) : null;
     }
 
-    /** Whether `value` writes its decimals after a comma, under the configured decimalMarker. */
-    public _usesCommaDecimal(value: string): boolean {
-        return this._activeDecimalMarker(value) === MaskExpression.COMMA;
-    }
-
-    /**
-     * Turns a string already in the display format (`1.234,5` under thousandSeparator '.' and
-     * decimalMarker ',') into the plain `1234.5`. Only a string holding BOTH the active
-     * thousandSeparator and the active decimal marker is read that way; anything else (`1234567.5`,
-     * `1.5`) keeps its dot-decimal reading.
-     */
-    public _displayToPlainDecimal(value: string): string {
-        const marker = this._activeDecimalMarker(value);
-        if (
-            !this.thousandSeparator ||
-            marker === this.thousandSeparator ||
-            !value.includes(this.thousandSeparator) ||
-            !value.includes(marker)
-        ) {
-            return value;
-        }
-        return value
-            .split(this.thousandSeparator)
-            .join(MaskExpression.EMPTY_STRING)
-            .replace(marker, MaskExpression.DOT);
-    }
-
-    /**
-     * Whether `value` holds a `*`, the symbol that stands for a hidden character. A `*` thousandSeparator
-     * of a separator mask is plain grouping text there, not a hidden character.
-     */
-    public _containsStarSymbol(value: string): boolean {
-        return (
-            value.includes(MaskExpression.SYMBOL_STAR) &&
-            !(
-                this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
-                this.thousandSeparator?.includes(MaskExpression.SYMBOL_STAR)
-            )
-        );
-    }
-
     public _checkPrecision(separatorExpression: string, separatorValue: string): number | string {
         const separatorPrecision = this.getPrecision(separatorExpression);
         let value = separatorValue;
@@ -1049,7 +1010,10 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Number(separatorPrecision) > 0 &&
                 Number.isFinite(separatorPrecision))
         ) {
-            if (this.leadZero && this._usesCommaDecimal(value)) {
+            if (
+                this.leadZero &&
+                usesCommaDecimal(value, this.decimalMarker, this.thousandSeparator)
+            ) {
                 value = value.replace(MaskExpression.COMMA, MaskExpression.DOT);
             }
             if (Number.isNaN(Number(value))) {

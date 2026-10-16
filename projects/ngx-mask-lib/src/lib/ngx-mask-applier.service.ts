@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { digitsOf, escapeRegExp, ignoreDigitSeparator } from './ngx-mask.utils';
+import {
+    activeDecimalMarker,
+    digitsOf,
+    escapeRegExp,
+    ignoreDigitSeparator,
+} from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -518,46 +523,8 @@ export class NgxMaskApplierService {
      * array — the first configured marker present in `value` that is not the thousandSeparator,
      * else the first configured marker that is not the thousandSeparator (#1653).
      */
-    protected _activeDecimalMarker(
-        value: string,
-        decimalMarker: NgxMaskConfig['decimalMarker'] = this.decimalMarker,
-        thousandSeparator: string = this.thousandSeparator
-    ): DecimalMarkerChar {
-        if (!Array.isArray(decimalMarker)) {
-            return decimalMarker;
-        }
-        const candidates = decimalMarker.filter((dm) => dm !== thousandSeparator);
-        return candidates.find((dm) => value.includes(dm)) ?? candidates[0] ?? decimalMarker[0];
-    }
-
-    /**
-     * Re-expresses a separator value written with the previous thousandSeparator/decimalMarker in
-     * the current ones, so reconfiguring a populated control keeps its number (`1 234.5` stays
-     * 1234.5 as `1.234,5`) instead of reading the old markers with the new rules. The previous
-     * prefix and suffix are set aside first: they may contain the very characters being swapped.
-     */
-    public _retargetSeparatorValue(
-        value: string,
-        previous: Pick<NgxMaskConfig, 'thousandSeparator' | 'decimalMarker' | 'prefix' | 'suffix'>
-    ): string {
-        const prefix = previous.prefix && value.startsWith(previous.prefix) ? previous.prefix : '';
-        const suffix =
-            previous.suffix && value.length >= prefix.length + previous.suffix.length
-                ? value.endsWith(previous.suffix)
-                    ? previous.suffix
-                    : ''
-                : '';
-        const number = value.slice(prefix.length, value.length - suffix.length);
-        const previousMarker = this._activeDecimalMarker(
-            number,
-            previous.decimalMarker,
-            previous.thousandSeparator ?? MaskExpression.EMPTY_STRING
-        );
-        const ungrouped = previous.thousandSeparator
-            ? number.split(previous.thousandSeparator).join(MaskExpression.EMPTY_STRING)
-            : number;
-        const retargeted = ungrouped.replace(previousMarker, this._activeDecimalMarker(ungrouped));
-        return `${prefix ? this.prefix : ''}${retargeted}${suffix ? this.suffix : ''}`;
+    protected _activeDecimalMarker(value: string): DecimalMarkerChar {
+        return activeDecimalMarker(value, this.decimalMarker, this.thousandSeparator);
     }
 
     protected _splitPercentZero(value: string): string {
