@@ -259,6 +259,40 @@ describe('Directive: parent state kept on a programmatic write', () => {
     });
 });
 
+@Component({
+    selector: 'ngxd-update-on-state',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="separator.2" [leadZero]="true" [formControl]="amount" />`,
+})
+class UpdateOnStateComponent {
+    public amount = new FormControl<string | null>(null);
+}
+
+describe('Directive: programmatic write to a control that updates on blur or submit', () => {
+    beforeEach(() => {
+        TestBed.configureTestingModule({ providers: [provideNgxMask()] });
+    });
+
+    it.each(['blur', 'submit'] as const)(
+        'puts the leadZero value in the model at once and keeps an updateOn %s control pristine',
+        async (updateOn) => {
+            const fixture = TestBed.createComponent(UpdateOnStateComponent);
+            const amount = new FormControl<string | null>(null, { updateOn });
+            fixture.componentInstance.amount = amount;
+            fixture.detectChanges();
+
+            amount.setValue('10.2');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(fixture.nativeElement.querySelector('input').value).toBe('10.20');
+            expect(amount.value).toBe('10.20');
+            expect(amount.pristine).toBe(true);
+        }
+    );
+});
+
 /** A custom control that hands its whole ControlValueAccessor contract to the inner mask. */
 @Component({
     selector: 'ngxd-forwarding-mask-input',
