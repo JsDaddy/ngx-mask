@@ -1,4 +1,3 @@
-import { DOCUMENT } from '@angular/common';
 import type { OnChanges, SimpleChanges } from '@angular/core';
 import {
     afterNextRender,
@@ -127,11 +126,9 @@ export class NgxMaskDirective
 
     private _maskValue = signal<string>('');
     private _inputValue = signal<string>('');
-    private _position = signal<number | null>(null);
     private _code = signal<string>('');
     private _maskExpressionArray = signal<string[]>([]);
     private _justPasted = signal<boolean>(false);
-    private _isFocused = signal<boolean>(false);
     /** For IME composition event */
     private _isComposing = signal<boolean>(false);
     /**
@@ -195,7 +192,6 @@ export class NgxMaskDirective
     private _warnedAboutMultiCharPlaceholder = false;
 
     public _maskService = inject(NgxMaskService, { self: true });
-    private readonly document = inject(DOCUMENT);
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     /**
      * Under zoneless change detection, writing to the underlying FormControl programmatically
@@ -402,7 +398,7 @@ export class NgxMaskDirective
             if (
                 showMaskTyped.previousValue === false &&
                 showMaskTyped.currentValue === true &&
-                this._isFocused()
+                this._maskService._isFocused()
             ) {
                 afterNextRender(
                     () => {
@@ -714,7 +710,6 @@ export class NgxMaskDirective
     }
 
     public onFocus(): void {
-        this._isFocused.set(true);
         this._maskService._isFocused.set(true);
     }
 
@@ -1013,7 +1008,7 @@ export class NgxMaskDirective
 
                 let caretShift = 0;
                 let backspaceShift = false;
-                if (this._code() === MaskExpression.DELETE && MaskExpression.SEPARATOR) {
+                if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
                 if (
@@ -1078,7 +1073,7 @@ export class NgxMaskDirective
                     }
                 );
                 // only set the selection if the element is active
-                if (this._getActiveElement() !== el) {
+                if (this._maskService._getActiveElement() !== el) {
                     return;
                 }
 
@@ -1111,17 +1106,9 @@ export class NgxMaskDirective
                                 : (el.selectionStart as number);
                     }
                 }
-                this._position.set(
-                    this._position() === 1 && this._inputValue().length === 1
-                        ? null
-                        : this._position()
-                );
-                let positionToApply: number = this._position()
-                    ? this._inputValue().length + position + caretShift
-                    : position +
-                      (this._code() === MaskExpression.BACKSPACE && !backspaceShift
-                          ? 0
-                          : caretShift);
+                let positionToApply: number =
+                    position +
+                    (this._code() === MaskExpression.BACKSPACE && !backspaceShift ? 0 : caretShift);
                 // For separator masks the applier's caret shift is computed on the raw
                 // (prefix-less) value, so account for the prefix the mask just added (#1571).
                 if (
@@ -1158,7 +1145,6 @@ export class NgxMaskDirective
                 if (el.selectionStart !== positionToApply || el.selectionEnd !== positionToApply) {
                     el.setSelectionRange(positionToApply, positionToApply);
                 }
-                this._position.set(null);
             } else {
                 // eslint-disable-next-line no-console
                 console.warn(
@@ -1364,7 +1350,6 @@ export class NgxMaskDirective
                 this._changeDetectorRef.markForCheck();
             }
         }
-        this._isFocused.set(false);
         this._maskService._isFocused.set(false);
         this.onTouch();
     }
@@ -1400,15 +1385,12 @@ export class NgxMaskDirective
         }
 
         const el: HTMLInputElement = (e as MouseEvent).target as HTMLInputElement;
-        const posStart = 0;
-        const posEnd = 0;
 
         if (
             el !== null &&
             el.selectionStart !== null &&
             el.selectionStart === el.selectionEnd &&
-            el.selectionStart > this._maskService.prefix.length &&
-            (e as unknown as { keyCode?: number }).keyCode !== 38
+            el.selectionStart > this._maskService.prefix.length
         ) {
             if (this._maskService.showMaskTyped && !this._maskService.keepCharacterPositions) {
                 // We are showing the mask in the input
@@ -1419,7 +1401,7 @@ export class NgxMaskDirective
                 ) {
                     // the input ONLY contains the mask, so position the cursor at the start
                     el.focus();
-                    el.setSelectionRange(posStart, posEnd);
+                    el.setSelectionRange(0, 0);
                 } else {
                     // the input contains some characters already
                     if (el.selectionStart > this._maskService.actualValue.length) {
@@ -1952,15 +1934,6 @@ export class NgxMaskDirective
      */
     public focus(): void {
         this._maskService._elementRef?.nativeElement?.focus();
-    }
-
-    private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
-        const shadowRootEl = document?.activeElement?.shadowRoot;
-        if (!shadowRootEl?.activeElement) {
-            return document.activeElement;
-        } else {
-            return this._getActiveElement(shadowRootEl);
-        }
     }
 
     public checkSelectionOnDeletion(el: HTMLInputElement): void {

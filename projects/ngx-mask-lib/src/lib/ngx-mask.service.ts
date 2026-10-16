@@ -235,7 +235,7 @@ export class NgxMaskService extends NgxMaskApplierService {
         }
 
         // Handle just pasted input
-        if (justPasted && (this.hiddenInput || !this.hiddenInput)) {
+        if (justPasted) {
             newInputValue = inputValue;
         }
 
@@ -773,7 +773,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     /**
      * Recursively determine the current active element by navigating the Shadow DOM until the Active Element is found.
      */
-    private _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
+    public _getActiveElement(document: DocumentOrShadowRoot = this.document): Element | null {
         const shadowRootEl = document?.activeElement?.shadowRoot;
         if (!shadowRootEl?.activeElement) {
             return document.activeElement;

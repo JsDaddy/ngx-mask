@@ -60,17 +60,11 @@ export class NgxMaskPipe implements PipeTransform {
         });
 
         if (resolvedMask.includes('||')) {
-            const maskParts = resolvedMask.split('||');
-            if (maskParts.length > 1) {
-                this._maskExpressionArray = maskParts.sort(
-                    (a: string, b: string) => a.length - b.length
-                );
-                this._setMask(`${processedValue}`);
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
-            } else {
-                this._maskExpressionArray = [];
-                return this._maskService.applyMask(`${processedValue}`, this.mask);
-            }
+            this._maskExpressionArray = resolvedMask
+                .split('||')
+                .sort((a: string, b: string) => a.length - b.length);
+            this._setMask(`${processedValue}`);
+            return this._maskService.applyMask(`${processedValue}`, this.mask);
         }
 
         if (resolvedMask.includes(MaskExpression.CURLY_BRACKETS_LEFT)) {
