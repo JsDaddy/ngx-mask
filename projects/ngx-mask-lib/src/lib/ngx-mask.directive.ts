@@ -764,6 +764,18 @@ export class NgxMaskDirective
         }
     }
 
+    /** `insertText`-style input event carrying more than one character (composition excluded). */
+    private _isBulkInsertion(e: Event): boolean {
+        const { inputType, data } = e as InputEvent;
+        return (
+            typeof inputType === 'string' &&
+            inputType.startsWith('insert') &&
+            inputType !== 'insertCompositionText' &&
+            typeof data === 'string' &&
+            data.length > 1
+        );
+    }
+
     private _processInput(e: Event): void {
         this._maskService.isInitialized = true;
         // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
@@ -817,6 +829,14 @@ export class NgxMaskDirective
                 if (!this._maskValue()) {
                     this.onChange(el.value);
                     return;
+                }
+
+                // A whole string inserted by ONE edit (autofill, a drop, a speech or
+                // clipboard-style IME insertion, the Browser pane's insertText) is a paste: it
+                // arrives as a bare run of characters, not as a keystroke on top of the already
+                // masked value, and fires no `paste` event.
+                if (this._isBulkInsertion(e)) {
+                    this._justPasted.set(true);
                 }
 
                 // On paste of a raw value that does not yet carry the prefix, the caret

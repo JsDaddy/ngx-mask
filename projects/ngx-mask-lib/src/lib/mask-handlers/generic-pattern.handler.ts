@@ -270,10 +270,19 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     this.specialCharacters.includes(inputValueCursorMinusOne) &&
                     (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
                         this.specialCharacters.includes(inputValueCursorPlusOne));
-                // cursor === 5 && without days
+                // cursor === 5 && without days. Same cursor-vs-input anchor as the day window
+                // (#1611): a pasted/written bare digit string runs behind the mask cursor by
+                // every emitted separator, so '20231215' in '0000.M0.d0' read the day digits
+                // '21' as the month window and skipped the month.
+                const monthWindowStart = params.justPasted || this.writingValue ? i : cursor;
+                const monthWindowSlice = processedValue.slice(
+                    monthWindowStart,
+                    monthWindowStart + 2
+                );
+                const monthWindowNext = processedValue[monthWindowStart + 1] as string;
                 const day2monthInputDot: boolean =
-                    (Number(inputValueSliceCursorPlusTwo) > monthsCount && cursor === 5) ||
-                    (this.specialCharacters.includes(inputValueCursorPlusOne) && cursor === 5);
+                    (Number(monthWindowSlice) > monthsCount && cursor === 5) ||
+                    (this.specialCharacters.includes(monthWindowNext) && cursor === 5);
                 // // day<10 && month<12 for paste whole data
                 const day1monthPaste: boolean =
                     !tokenAbutsDigitField &&
