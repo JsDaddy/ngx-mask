@@ -114,6 +114,31 @@ describe('Separator: changing the separators of a mask', () => {
         );
     });
 
+    describe('with negative numbers', () => {
+        it('keeps the sign of the model when the separators are swapped back and forth', async () => {
+            component.allowNegativeNumbers.set(true);
+            component.thousandSeparator.set(',');
+            component.decimalMarker.set('.');
+            fixture.detectChanges();
+            input = fixture.nativeElement.querySelector('input');
+            component.form.setValue(-1234.5);
+            await settle();
+            expect(input.value).toBe('-1,234.5');
+
+            component.thousandSeparator.set('.');
+            component.decimalMarker.set(',');
+            await settle();
+            expect(input.value).toBe('-1.234,5');
+            expect(component.form.value).toBe(-1234.5);
+
+            component.thousandSeparator.set(',');
+            component.decimalMarker.set('.');
+            await settle();
+            expect(input.value).toBe('-1,234.5');
+            expect(component.form.value).toBe(-1234.5);
+        });
+    });
+
     describe('with a write right after the change, before change detection', () => {
         it.each([' ', '.'] as const)(
             'formats the number with the new thousandSeparator %s and decimalMarker',

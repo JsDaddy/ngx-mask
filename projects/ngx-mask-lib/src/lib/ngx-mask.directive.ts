@@ -351,11 +351,7 @@ export class NgxMaskDirective
         }
         if (allowNegativeNumbers) {
             this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
-            if (this._maskService.allowNegativeNumbers) {
-                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
-                    (c: string) => c !== MaskExpression.MINUS
-                );
-            }
+            this._keepMinusOutOfSpecialCharacters();
         }
         // Only overwrite the mask available patterns if a pattern has actually been passed in
         if (patterns && patterns.currentValue) {
@@ -378,6 +374,7 @@ export class NgxMaskDirective
                 }
                 if (this._maskService.dropSpecialCharacters === true) {
                     this._maskService.specialCharacters = this._config.specialCharacters;
+                    this._keepMinusOutOfSpecialCharacters();
                 }
                 this._maskService.writingValue = true;
             }
@@ -500,6 +497,15 @@ export class NgxMaskDirective
                 this._pendingInitialValue = null;
                 this.writeValue(pendingValue);
             }
+        }
+    }
+
+    /** With `allowNegativeNumbers` the minus is part of the number, never a character to drop. */
+    private _keepMinusOutOfSpecialCharacters(): void {
+        if (this._maskService.allowNegativeNumbers) {
+            this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
+                (c: string) => c !== MaskExpression.MINUS
+            );
         }
     }
 
