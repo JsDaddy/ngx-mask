@@ -17,6 +17,7 @@ import {
     Renderer2,
 } from '@angular/core';
 import type {
+    AbstractControl,
     ControlValueAccessor,
     FormControl,
     ValidationErrors,
@@ -40,6 +41,15 @@ type DateTimeField = {
     token: 'd' | 'M' | 'H' | 'h' | 'm' | 's';
     start: number; // index of the field's first char in maskExpression
     end: number; // index one past the field's digit run (start of separator/next field)
+};
+
+// The control's pristine/untouched state before a programmatic write, and the ancestors that
+// shared it (see `_captureControlState`).
+type ControlStateSnapshot = {
+    pristine: boolean;
+    untouched: boolean;
+    pristineParents: AbstractControl[];
+    untouchedParents: AbstractControl[];
 };
 
 // Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
@@ -437,9 +447,7 @@ export class NgxMaskDirective
             this._configApplied &&
             this._maskValue().startsWith(MaskExpression.SEPARATOR) &&
             this._inputValue();
-        const ngControl = this._resolveNgControl();
-        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
-        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        const controlState = this._captureControlState();
         if (retargetSeparators) {
             // The rendered number still uses the previous markers: carry it over to the new ones
             // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
@@ -467,7 +475,7 @@ export class NgxMaskDirective
         if (retargetSeparators) {
             // Re-rendering the same number in the new markers is no user edit: undo the dirtying
             // its model emission causes, as for a programmatic write.
-            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+            this._restoreControlStateAfterWrite(controlState);
         }
         // `validate` reads these fields: Angular must re-run the validator, otherwise the
         // control keeps the verdict computed for the previous configuration until the next edit.
@@ -1293,7 +1301,7 @@ export class NgxMaskDirective
     public onBlur(e: Event): void {
         if (this._maskValue()) {
             const el: HTMLInputElement = (e as FocusEvent).target as HTMLInputElement;
-            const pristineBeforeDefault = this._applyDefaultValueOnBlur(el);
+            const stateBeforeDefault = this._applyDefaultValueOnBlur(el);
             if (
                 this._maskService.leadZero &&
                 el.value.length > 0 &&
@@ -1338,13 +1346,13 @@ export class NgxMaskDirective
                 }
             }
             this._maskService.clearIfNotMatchFn();
-            if (pristineBeforeDefault !== null) {
+            if (stateBeforeDefault !== null) {
                 // The default-value emission (and a possible leadZero padding pass above)
                 // ran through the view-change pipeline, which dirties the control. A
                 // blur-time programmatic write must not change dirtiness, so restore the
                 // pre-write pristine state. Touched is NOT restored — blur legitimately
                 // touches the control (onTouch below).
-                this._restoreControlStateAfterWrite(pristineBeforeDefault, false);
+                this._restoreControlStateAfterWrite(stateBeforeDefault, false);
                 this._changeDetectorRef.markForCheck();
             }
         }
@@ -1358,23 +1366,22 @@ export class NgxMaskDirective
      * prefix/suffix and the showMaskTyped skeleton), writes the default through the
      * regular mask pipeline: applyMask renders the masked display and emits the usual
      * model output (dropSpecialCharacters/outputTransformFn applied) via formControlResult.
-     * Returns the control's pre-write pristine state for the caller to restore once the
+     * Returns the control's pre-write state for the caller to restore once the
      * whole blur pass is done, or `null` when no default was applied.
      */
-    private _applyDefaultValueOnBlur(el: HTMLInputElement): boolean | null {
+    private _applyDefaultValueOnBlur(el: HTMLInputElement): ControlStateSnapshot | null {
         const defaultValue = this.defaultValueOnBlur() ?? this._config.defaultValueOnBlur;
         if (!defaultValue || this._maskService.removeMask(el.value)) {
             return null;
         }
-        const ngControl = this._resolveNgControl();
-        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const state = this._captureControlState();
         const displayValue = this._maskService.applyMask(
             defaultValue,
             this._maskService.maskExpression
         );
         el.value = displayValue;
         this._inputValue.set(displayValue);
-        return wasPristine;
+        return state;
     }
 
     public onClick(e: Event): void {
@@ -1640,21 +1647,52 @@ export class NgxMaskDirective
      * the model adopts it — but that emission runs through Angular's view-change pipeline, which
      * calls markAsDirty()/markAsTouched(). A programmatic setValue/patchValue must leave the
      * control pristine, so we undo that side effect here when the control was pristine before
-     * the write. The parents recompute their own state from their children, so a group is
-     * left dirty only by a sibling that really is.
+     * the write. Only the ancestors that were pristine/untouched BEFORE the write are restored,
+     * each on its own: a parent the application marked dirty/touched itself keeps that state, and
+     * a group stays dirty when a sibling control really is.
      */
-    private _restoreControlStateAfterWrite(wasPristine: boolean, wasUntouched: boolean): void {
+    private _restoreControlStateAfterWrite(
+        state: ControlStateSnapshot,
+        restoreTouched = true
+    ): void {
         const ngControl = this._resolveNgControl();
         const control = ngControl?.control;
         if (!control) {
             return;
         }
-        if (wasPristine && ngControl.dirty && typeof control.markAsPristine === 'function') {
-            control.markAsPristine();
+        if (state.pristine && ngControl.dirty && typeof control.markAsPristine === 'function') {
+            control.markAsPristine({ onlySelf: true });
+            state.pristineParents.forEach((parent) => parent.markAsPristine({ onlySelf: true }));
         }
-        if (wasUntouched && ngControl.touched && typeof control.markAsUntouched === 'function') {
-            control.markAsUntouched();
+        if (
+            restoreTouched &&
+            state.untouched &&
+            ngControl.touched &&
+            typeof control.markAsUntouched === 'function'
+        ) {
+            control.markAsUntouched({ onlySelf: true });
+            state.untouchedParents.forEach((parent) => parent.markAsUntouched({ onlySelf: true }));
         }
+    }
+
+    /** The control's pristine/untouched state, and which of its ancestors share it. */
+    private _captureControlState(): ControlStateSnapshot {
+        const ngControl = this._resolveNgControl();
+        const state: ControlStateSnapshot = {
+            pristine: ngControl ? Boolean(ngControl.pristine) : true,
+            untouched: ngControl ? Boolean(ngControl.untouched) : true,
+            pristineParents: [],
+            untouchedParents: [],
+        };
+        for (let parent = ngControl?.control?.parent; parent; parent = parent.parent) {
+            if (parent.pristine) {
+                state.pristineParents.push(parent);
+            }
+            if (parent.untouched) {
+                state.untouchedParents.push(parent);
+            }
+        }
+        return state;
     }
 
     /** It writes the value in the input */
@@ -1681,9 +1719,7 @@ export class NgxMaskDirective
             return;
         }
         const writeSequence = ++this._writeSequence;
-        const ngControl = this._resolveNgControl();
-        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
-        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        const controlState = this._captureControlState();
         let value = controlValue;
         const inputTransformFn = this._maskService.inputTransformFn;
         if (typeof value === 'object' && value !== null && 'value' in value) {
@@ -1777,7 +1813,7 @@ export class NgxMaskDirective
                                 // The leadZero normalization above emits the corrected value through the
                                 // view-change pipeline, which dirties/touches the control. Undo that so a
                                 // programmatic write stays pristine.
-                                this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+                                this._restoreControlStateAfterWrite(controlState);
                                 // Zoneless CD does not auto-flush after a deferred callback; request
                                 // a check so form.pristine/form.value bindings reflect the new state.
                                 this._changeDetectorRef.markForCheck();
@@ -1834,7 +1870,7 @@ export class NgxMaskDirective
             }
             // A writeValue-driven emission may have dirtied/touched the control via the
             // view-change pipeline; undo that so programmatic writes stay pristine.
-            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+            this._restoreControlStateAfterWrite(controlState);
             // Programmatic writes (setValue/patchValue called outside a signal/effect context)
             // don't schedule CD under zoneless change detection. Request a check so bindings
             // reading form.pristine/form.dirty/form.value on the host template stay in sync.
