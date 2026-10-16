@@ -509,14 +509,37 @@ export class NgxMaskApplierService {
      * array — the first configured marker present in `value` that is not the thousandSeparator,
      * else the first configured marker that is not the thousandSeparator (#1653).
      */
-    protected _activeDecimalMarker(value: string): DecimalMarkerChar {
-        if (!Array.isArray(this.decimalMarker)) {
-            return this.decimalMarker;
+    protected _activeDecimalMarker(
+        value: string,
+        decimalMarker: NgxMaskConfig['decimalMarker'] = this.decimalMarker,
+        thousandSeparator: string = this.thousandSeparator
+    ): DecimalMarkerChar {
+        if (!Array.isArray(decimalMarker)) {
+            return decimalMarker;
         }
-        const candidates = this.decimalMarker.filter((dm) => dm !== this.thousandSeparator);
-        return (
-            candidates.find((dm) => value.includes(dm)) ?? candidates[0] ?? this.decimalMarker[0]
+        const candidates = decimalMarker.filter((dm) => dm !== thousandSeparator);
+        return candidates.find((dm) => value.includes(dm)) ?? candidates[0] ?? decimalMarker[0];
+    }
+
+    /**
+     * Re-expresses a separator value written with the previous thousandSeparator/decimalMarker in
+     * the current ones, so reconfiguring a populated control keeps its number (`1 234.5` stays
+     * 1234.5 as `1.234,5`) instead of reading the old markers with the new rules.
+     */
+    public retargetSeparatorValue(
+        value: string,
+        previousThousandSeparator: string | null | undefined,
+        previousDecimalMarker: NgxMaskConfig['decimalMarker']
+    ): string {
+        const previousMarker = this._activeDecimalMarker(
+            value,
+            previousDecimalMarker,
+            previousThousandSeparator ?? MaskExpression.EMPTY_STRING
         );
+        const ungrouped = previousThousandSeparator
+            ? value.split(previousThousandSeparator).join(MaskExpression.EMPTY_STRING)
+            : value;
+        return ungrouped.replace(previousMarker, this._activeDecimalMarker(ungrouped));
     }
 
     protected _splitPercentZero(value: string): string {

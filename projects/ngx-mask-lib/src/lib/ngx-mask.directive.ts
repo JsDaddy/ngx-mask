@@ -316,6 +316,8 @@ export class NgxMaskDirective
             allowNegativeNumbers,
             apm,
         } = changes;
+        const previousThousandSeparator = this._maskService.thousandSeparator;
+        const previousDecimalMarker = this._maskService.decimalMarker;
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
@@ -364,8 +366,6 @@ export class NgxMaskDirective
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
             if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
-                const previousDecimalMarker = this._maskService.decimalMarker;
-
                 if (thousandSeparator.currentValue === this._maskService.decimalMarker) {
                     this._maskService.decimalMarker =
                         thousandSeparator.currentValue === MaskExpression.COMMA
@@ -374,18 +374,6 @@ export class NgxMaskDirective
                 }
                 if (this._maskService.dropSpecialCharacters === true) {
                     this._maskService.specialCharacters = this._config.specialCharacters;
-                }
-                if (
-                    typeof previousDecimalMarker === 'string' &&
-                    typeof this._maskService.decimalMarker === 'string'
-                ) {
-                    this._inputValue.set(
-                        this._inputValue()
-                            .split(thousandSeparator.previousValue)
-                            .join('')
-                            .replace(previousDecimalMarker, this._maskService.decimalMarker)
-                    );
-                    this._maskService.actualValue = this._inputValue();
                 }
                 this._maskService.writingValue = true;
             }
@@ -443,6 +431,27 @@ export class NgxMaskDirective
                 this._mirrorInput(key, change.currentValue);
             }
         }
+        const retargetSeparators =
+            (thousandSeparator || changes['decimalMarker']) &&
+            this._configApplied &&
+            this._maskValue().startsWith(MaskExpression.SEPARATOR) &&
+            this._inputValue();
+        const ngControl = this._resolveNgControl();
+        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        if (retargetSeparators) {
+            // The rendered number still uses the previous markers: carry it over to the new ones
+            // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
+            this._inputValue.set(
+                this._maskService.retargetSeparatorValue(
+                    this._inputValue(),
+                    previousThousandSeparator,
+                    previousDecimalMarker
+                )
+            );
+            this._maskService.actualValue = this._inputValue();
+            this._maskService.writingValue = true;
+        }
         // #1671: a standalone `[(value)]` change reaches ngOnChanges BEFORE the value effect
         // writes it, so `_inputValue` still holds the PREVIOUS value here. Re-rendering it would
         // run applyMask on stale input, and whatever that emits (the showMaskTyped skeleton's
@@ -458,6 +467,11 @@ export class NgxMaskDirective
             String(valueChange.currentValue) !== this._lastPropagatedValue &&
             this._valueEffectWillWrite(valueChange.currentValue);
         this._applyMask(!valueEffectWillRender);
+        if (retargetSeparators) {
+            // Re-rendering the same number in the new markers is no user edit: undo the dirtying
+            // its model emission causes, as for a programmatic write.
+            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
+        }
         // `validate` reads these fields: Angular must re-run the validator, otherwise the
         // control keeps the verdict computed for the previous configuration until the next edit.
         // The first binding is skipped — the control validates itself when it is set up.
