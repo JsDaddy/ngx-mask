@@ -40,9 +40,9 @@ export const ComDocs: ComDoc[] = [
         header: 'Mask with specialCharacters',
         text: '',
         code: `<input
-        showMaskTyped="true"
+        [showMaskTyped]="true"
         [specialCharacters]="['e', 'x', 't', ' ', '(', ')', '-', '.']"
-        shownMaskExpression="'(___) ___-____ ext. ______'"
+        shownMaskExpression="(___) ___-____ ext. ______"
         mask="(000) 000-0000 ext. 000000"
         >`,
         id: 6,
@@ -67,7 +67,7 @@ export const ComDocs: ComDoc[] = [
         text: '',
         code: `<input mask="A*@A*.A*" [validation]="true" [dropSpecialCharacters]="false" >`,
         id: 8,
-        anchor: 'email-mask',
+        anchor: 'email-mask-any',
     },
     {
         header: 'Allow negative numbers to mask',
@@ -102,7 +102,7 @@ export const ComDocs: ComDoc[] = [
         text: '',
         code: `<input type='text' mask="00||SS" >`,
         id: 10,
-        anchor: 'allow-few-mask',
+        anchor: 'allow-few-mask-letters',
     },
     {
         header: 'IP address',
