@@ -5,7 +5,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { digitsOf, escapeRegExp } from './ngx-mask.utils';
+import { containsStarSymbol, digitsOf, escapeRegExp, usesCommaDecimal } from './ngx-mask.utils';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -162,7 +162,8 @@ export class NgxMaskService extends NgxMaskApplierService {
         // Handle hidden input or input with asterisk symbol
         if (
             (this.hiddenInput ||
-                (inputValue && inputValue.indexOf(MaskExpression.SYMBOL_STAR) >= 0)) &&
+                (inputValue &&
+                    containsStarSymbol(inputValue, this.maskExpression, this.thousandSeparator))) &&
             !this.writingValue
         ) {
             // Seed from the raw input only when the user typed the FIRST character (the
@@ -432,8 +433,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             return;
         }
 
+        const typedValue = formElement.value;
         const maskedValue = this.applyMask(
-            formElement.value,
+            typedValue,
             this.maskExpression,
             position,
             justPasted,
@@ -441,7 +443,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             cb
         );
         // Assigning an identical value still resets the native caret/undo state in some browsers.
-        if (formElement.value !== maskedValue) {
+        // An element that no longer holds what was typed was rewritten while the mask ran (a
+        // `setValue` inside a `valueChanges` subscriber): that newer write wins (#1691).
+        if (formElement.value === typedValue && formElement.value !== maskedValue) {
             formElement.value = maskedValue;
         }
         if (formElement === this._getActiveElement()) {
@@ -903,6 +907,18 @@ export class NgxMaskService extends NgxMaskApplierService {
             );
         }
 
+        // A separator mask groups with the configured thousandSeparator, which need not be one of
+        // the specialCharacters (`$`, `*`, `^`, `|`...). It is never part of the number, so strip it
+        // like the default ' ' and ',' unless the caller listed what to drop explicitly.
+        if (
+            !Array.isArray(this.dropSpecialCharacters) &&
+            this.maskExpression.startsWith(MaskExpression.SEPARATOR) &&
+            this.thousandSeparator &&
+            !specialCharacters.includes(this.thousandSeparator)
+        ) {
+            specialCharacters = [...specialCharacters, this.thousandSeparator];
+        }
+
         return this._removeMask(result, specialCharacters as string[]);
     }
 
@@ -994,8 +1010,15 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Number(separatorPrecision) > 0 &&
                 Number.isFinite(separatorPrecision))
         ) {
-            if (this.decimalMarker === MaskExpression.COMMA && this.leadZero) {
-                value = value.replace(',', '.');
+            if (
+                this.leadZero &&
+                usesCommaDecimal(value, this.decimalMarker, this.thousandSeparator)
+            ) {
+                value = value.replace(MaskExpression.COMMA, MaskExpression.DOT);
+            }
+            if (Number.isNaN(Number(value))) {
+                // Not a number the padding can read: show it unpadded rather than as 'NaN'.
+                return separatorValue;
             }
             const precision = this.leadZero ? Number(separatorPrecision) : 2;
             // #1567: Number(value).toFixed() corrupts values with more significant digits

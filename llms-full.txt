@@ -334,7 +334,7 @@ customMask: [string, typeof pattern] = ['PPP-PPP', pattern];
 <!-- .N = decimal precision; 2 is common for currency, 0 disables decimals -->
 ```
 
-`thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but it must not contain digits.
+`thousandSeparator` is inserted verbatim, so it may be any text (including `$`, `^`, `*`, `|` or `+`), but a value containing a digit is ignored (no grouping, nothing stripped from the number).
 
 ```text
 Input: 1234.56 -> Masked: 1 234.56           (default space separator)

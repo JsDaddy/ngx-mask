@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { digitsOf, escapeRegExp } from './ngx-mask.utils';
+import {
+    activeDecimalMarker,
+    digitsOf,
+    escapeRegExp,
+    ignoreDigitSeparator,
+} from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -25,7 +30,20 @@ export class NgxMaskApplierService {
 
     public suffix: NgxMaskConfig['suffix'] = this._config.suffix;
 
-    public thousandSeparator: NgxMaskConfig['thousandSeparator'] = this._config.thousandSeparator;
+    private _thousandSeparator = ignoreDigitSeparator(this._config.thousandSeparator);
+
+    /**
+     * The separator between thousand groups. One containing a digit is ignored entirely (no
+     * grouping, nothing stripped): it could not be told from the number's own digits, and grouping
+     * with it would re-match its own output forever.
+     */
+    public get thousandSeparator(): NgxMaskConfig['thousandSeparator'] {
+        return this._thousandSeparator;
+    }
+
+    public set thousandSeparator(value: NgxMaskConfig['thousandSeparator']) {
+        this._thousandSeparator = ignoreDigitSeparator(value);
+    }
 
     public decimalMarker: NgxMaskConfig['decimalMarker'] = this._config.decimalMarker;
 
@@ -506,13 +524,7 @@ export class NgxMaskApplierService {
      * else the first configured marker that is not the thousandSeparator (#1653).
      */
     protected _activeDecimalMarker(value: string): DecimalMarkerChar {
-        if (!Array.isArray(this.decimalMarker)) {
-            return this.decimalMarker;
-        }
-        const candidates = this.decimalMarker.filter((dm) => dm !== this.thousandSeparator);
-        return (
-            candidates.find((dm) => value.includes(dm)) ?? candidates[0] ?? this.decimalMarker[0]
-        );
+        return activeDecimalMarker(value, this.decimalMarker, this.thousandSeparator);
     }
 
     protected _splitPercentZero(value: string): string {

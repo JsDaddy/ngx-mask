@@ -30,7 +30,13 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
-import { escapeRegExp } from './ngx-mask.utils';
+import {
+    containsStarSymbol,
+    displayToPlainDecimal,
+    escapeRegExp,
+    retargetSeparatorValue,
+    usesCommaDecimal,
+} from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
 
@@ -184,6 +190,21 @@ export class NgxMaskDirective
      */
     private _writtenValue: { value: unknown } | null = null;
     /**
+     * Counts the values put into the input: each `writeValue` that reached the rendering step and
+     * each user edit. A write whose masked echo makes a `valueChanges` subscriber call `setValue`
+     * again is superseded by that nested write; the outer one compares this counter and leaves the
+     * DOM to the latest write (#1691). The deferred leadZero pass of a write compares it as well, so
+     * it never re-applies the written value over a newer write or a user edit.
+     */
+    private _writeSequence = 0;
+    /**
+     * True while the directive renders a value the user did not type: a `writeValue`, its deferred
+     * leadZero pass, a separator change re-rendering the number, a default applied on blur. A model
+     * update the mask derives from such a write goes straight to the control without dirtying it
+     * (see `_emitProgrammaticValue`).
+     */
+    private _programmaticWrite = false;
+    /**
      * The value the edit currently handled by `onInput` pushed through `onChange`, `null` while it
      * pushed nothing. Read right after the edit to decide `maskFilled`.
      */
@@ -239,6 +260,13 @@ export class NgxMaskDirective
 
     private _ngControl: NgControl | null | undefined;
 
+    /**
+     * The nearest NgControl: the element's own, else the one bound to an enclosing custom control.
+     * Only read from the `registerOnChange` callback, i.e. once a control was handed this
+     * directive's accessor contract — directly, or forwarded by a wrapper whose control is then
+     * the nearest one. A wrapper that implements the contract itself never registers with the
+     * mask, so the mask never writes to that wrapper's control.
+     */
     private _resolveNgControl(): NgControl | null {
         if (typeof this._ngControl === 'undefined') {
             this._ngControl = this._injector.get(NgControl, null);
@@ -310,6 +338,12 @@ export class NgxMaskDirective
             allowNegativeNumbers,
             apm,
         } = changes;
+        const previousSeparators = {
+            thousandSeparator: this._maskService.thousandSeparator,
+            decimalMarker: this._maskService.decimalMarker,
+            prefix: this._maskService.prefix,
+            suffix: this._maskService.suffix,
+        };
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
@@ -339,11 +373,7 @@ export class NgxMaskDirective
         }
         if (allowNegativeNumbers) {
             this._maskService.allowNegativeNumbers = allowNegativeNumbers.currentValue;
-            if (this._maskService.allowNegativeNumbers) {
-                this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
-                    (c: string) => c !== MaskExpression.MINUS
-                );
-            }
+            this._keepMinusOutOfSpecialCharacters();
         }
         // Only overwrite the mask available patterns if a pattern has actually been passed in
         if (patterns && patterns.currentValue) {
@@ -358,8 +388,6 @@ export class NgxMaskDirective
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
             if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
-                const previousDecimalMarker = this._maskService.decimalMarker;
-
                 if (thousandSeparator.currentValue === this._maskService.decimalMarker) {
                     this._maskService.decimalMarker =
                         thousandSeparator.currentValue === MaskExpression.COMMA
@@ -368,18 +396,7 @@ export class NgxMaskDirective
                 }
                 if (this._maskService.dropSpecialCharacters === true) {
                     this._maskService.specialCharacters = this._config.specialCharacters;
-                }
-                if (
-                    typeof previousDecimalMarker === 'string' &&
-                    typeof this._maskService.decimalMarker === 'string'
-                ) {
-                    this._inputValue.set(
-                        this._inputValue()
-                            .split(thousandSeparator.previousValue)
-                            .join('')
-                            .replace(previousDecimalMarker, this._maskService.decimalMarker)
-                    );
-                    this._maskService.actualValue = this._inputValue();
+                    this._keepMinusOutOfSpecialCharacters();
                 }
                 this._maskService.writingValue = true;
             }
@@ -437,6 +454,23 @@ export class NgxMaskDirective
                 this._mirrorInput(key, change.currentValue);
             }
         }
+        const retargetSeparators =
+            (thousandSeparator || changes['decimalMarker']) &&
+            this._configApplied &&
+            this._maskValue().startsWith(MaskExpression.SEPARATOR) &&
+            this._inputValue();
+        if (retargetSeparators) {
+            // The rendered number still uses the previous markers: carry it over to the new ones
+            // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
+            this._inputValue.set(
+                retargetSeparatorValue(this._inputValue(), previousSeparators, this._maskService)
+            );
+            this._maskService.actualValue = this._inputValue();
+            this._maskService.writingValue = true;
+            // The re-render below carries the number over to the new markers: what an earlier
+            // write still has deferred (the leadZero pass) holds it in the old ones.
+            this._writeSequence++;
+        }
         // #1671: a standalone `[(value)]` change reaches ngOnChanges BEFORE the value effect
         // writes it, so `_inputValue` still holds the PREVIOUS value here. Re-rendering it would
         // run applyMask on stale input, and whatever that emits (the showMaskTyped skeleton's
@@ -451,7 +485,14 @@ export class NgxMaskDirective
             !!valueChange &&
             String(valueChange.currentValue) !== this._lastPropagatedValue &&
             this._valueEffectWillWrite(valueChange.currentValue);
-        this._applyMask(!valueEffectWillRender);
+        if (retargetSeparators && !this._maskService.maskChanged) {
+            // Re-rendering the same number in the new markers is no user edit. A mask changed in
+            // the same pass makes this render the triggerOnMaskChange emission instead, which
+            // dirties the control like any other.
+            this._writeProgrammatically(() => this._applyMask(!valueEffectWillRender));
+        } else {
+            this._applyMask(!valueEffectWillRender);
+        }
         // `validate` reads these fields: Angular must re-run the validator, otherwise the
         // control keeps the verdict computed for the previous configuration until the next edit.
         // The first binding is skipped — the control validates itself when it is set up.
@@ -480,6 +521,15 @@ export class NgxMaskDirective
                 this._pendingInitialValue = null;
                 this.writeValue(pendingValue);
             }
+        }
+    }
+
+    /** With `allowNegativeNumbers` the minus is part of the number, never a character to drop. */
+    private _keepMinusOutOfSpecialCharacters(): void {
+        if (this._maskService.allowNegativeNumbers) {
+            this._maskService.specialCharacters = this._maskService.specialCharacters.filter(
+                (c: string) => c !== MaskExpression.MINUS
+            );
         }
     }
 
@@ -700,6 +750,8 @@ export class NgxMaskDirective
     }
 
     public onInput(e: Event): void {
+        // A user edit supersedes what an earlier write still has deferred (see _writeSequence).
+        this._writeSequence++;
         this._valuePropagatedByEdit = null;
         this._processInput(e);
         // `maskFilled` reports a mask completed by the user, so it is decided here, once per
@@ -973,7 +1025,11 @@ export class NgxMaskDirective
                     !this._maskService.showMaskTyped &&
                     !this._maskService.keepCharacterPositions &&
                     this._maskService.selStart !== this._maskService.selEnd &&
-                    el.value.includes(MaskExpression.SYMBOL_STAR)
+                    containsStarSymbol(
+                        el.value,
+                        this._maskService.maskExpression,
+                        this._maskService.thousandSeparator
+                    )
                 ) {
                     this._maskService.actualValue = MaskExpression.EMPTY_STRING;
                 }
@@ -1267,63 +1323,63 @@ export class NgxMaskDirective
     public onBlur(e: Event): void {
         if (this._maskValue()) {
             const el: HTMLInputElement = (e as FocusEvent).target as HTMLInputElement;
-            const pristineBeforeDefault = this._applyDefaultValueOnBlur(el);
-            if (
-                this._maskService.leadZero &&
-                el.value.length > 0 &&
-                typeof this._maskService.decimalMarker === 'string'
-            ) {
-                const maskExpression = this._maskService.maskExpression;
-                const decimalMarker = this._maskService.decimalMarker as string;
-                const suffix = this._maskService.suffix;
-                const precision = Number(
-                    this._maskService.maskExpression.slice(
-                        maskExpression.length - 1,
-                        maskExpression.length
-                    )
-                );
-
-                if (precision > 0) {
-                    const unsuffixedValue = suffix ? el.value.split(suffix).join('') : el.value;
-                    const decimalPart = unsuffixedValue.split(decimalMarker)[1] as string;
-
-                    const paddedValue = unsuffixedValue.includes(decimalMarker)
-                        ? unsuffixedValue +
-                          MaskExpression.NUMBER_ZERO.repeat(
-                              precision - (decimalPart?.length || 0)
-                          ) +
-                          suffix
-                        : unsuffixedValue +
-                          decimalMarker +
-                          MaskExpression.NUMBER_ZERO.repeat(precision) +
-                          suffix;
-                    // Only a blur that really pads the text is an edit: re-emitting the same
-                    // text would dirty the control and fire a duplicate valueChanges for a plain
-                    // focus + blur of a prefilled field.
-                    if (paddedValue !== el.value) {
-                        el.value = paddedValue;
-                        this._maskService.actualValue = el.value;
-                        // #1634: propagate through the regular formControlResult pipeline (not a
-                        // raw onChange) so outputTransformFn runs on this blur-time reformat, same
-                        // as every typing-time emission. A raw onChange here sent the masked
-                        // display string straight to the model, bypassing outputTransformFn.
-                        this._maskService.formControlResult(this._maskService.actualValue);
-                    }
-                }
-            }
-            this._maskService.clearIfNotMatchFn();
-            if (pristineBeforeDefault !== null) {
-                // The default-value emission (and a possible leadZero padding pass above)
-                // ran through the view-change pipeline, which dirties the control. A
-                // blur-time programmatic write must not change dirtiness, so restore the
-                // pre-write pristine state. Touched is NOT restored — blur legitimately
-                // touches the control (onTouch below).
-                this._restoreControlStateAfterWrite(pristineBeforeDefault, false);
+            if (this._applyDefaultValueOnBlur(el)) {
+                // Padding or clearing the default is part of that programmatic write: it must not
+                // dirty the control either. Blur still touches it (onTouch below).
+                this._writeProgrammatically(() => this._formatOnBlur(el));
                 this._changeDetectorRef.markForCheck();
+            } else {
+                this._formatOnBlur(el);
             }
         }
         this._maskService._isFocused.set(false);
         this.onTouch();
+    }
+
+    /** The blur-time leadZero padding and clearIfNotMatch pass. */
+    private _formatOnBlur(el: HTMLInputElement): void {
+        if (
+            this._maskService.leadZero &&
+            el.value.length > 0 &&
+            typeof this._maskService.decimalMarker === 'string'
+        ) {
+            const maskExpression = this._maskService.maskExpression;
+            const decimalMarker = this._maskService.decimalMarker as string;
+            const suffix = this._maskService.suffix;
+            const precision = Number(
+                this._maskService.maskExpression.slice(
+                    maskExpression.length - 1,
+                    maskExpression.length
+                )
+            );
+
+            if (precision > 0) {
+                const unsuffixedValue = suffix ? el.value.split(suffix).join('') : el.value;
+                const decimalPart = unsuffixedValue.split(decimalMarker)[1] as string;
+
+                const paddedValue = unsuffixedValue.includes(decimalMarker)
+                    ? unsuffixedValue +
+                      MaskExpression.NUMBER_ZERO.repeat(precision - (decimalPart?.length || 0)) +
+                      suffix
+                    : unsuffixedValue +
+                      decimalMarker +
+                      MaskExpression.NUMBER_ZERO.repeat(precision) +
+                      suffix;
+                // Only a blur that really pads the text is an edit: re-emitting the same
+                // text would dirty the control and fire a duplicate valueChanges for a plain
+                // focus + blur of a prefilled field.
+                if (paddedValue !== el.value) {
+                    el.value = paddedValue;
+                    this._maskService.actualValue = el.value;
+                    // #1634: propagate through the regular formControlResult pipeline (not a
+                    // raw onChange) so outputTransformFn runs on this blur-time reformat, same
+                    // as every typing-time emission. A raw onChange here sent the masked
+                    // display string straight to the model, bypassing outputTransformFn.
+                    this._maskService.formControlResult(this._maskService.actualValue);
+                }
+            }
+        }
+        this._maskService.clearIfNotMatchFn();
     }
 
     /**
@@ -1332,23 +1388,20 @@ export class NgxMaskDirective
      * prefix/suffix and the showMaskTyped skeleton), writes the default through the
      * regular mask pipeline: applyMask renders the masked display and emits the usual
      * model output (dropSpecialCharacters/outputTransformFn applied) via formControlResult.
-     * Returns the control's pre-write pristine state for the caller to restore once the
-     * whole blur pass is done, or `null` when no default was applied.
+     * The default is no user edit, so it does not dirty the control. Returns whether a default
+     * was applied.
      */
-    private _applyDefaultValueOnBlur(el: HTMLInputElement): boolean | null {
+    private _applyDefaultValueOnBlur(el: HTMLInputElement): boolean {
         const defaultValue = this.defaultValueOnBlur() ?? this._config.defaultValueOnBlur;
         if (!defaultValue || this._maskService.removeMask(el.value)) {
-            return null;
+            return false;
         }
-        const ngControl = this._resolveNgControl();
-        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
-        const displayValue = this._maskService.applyMask(
-            defaultValue,
-            this._maskService.maskExpression
+        const displayValue = this._writeProgrammatically(() =>
+            this._maskService.applyMask(defaultValue, this._maskService.maskExpression)
         );
         el.value = displayValue;
         this._inputValue.set(displayValue);
-        return wasPristine;
+        return true;
     }
 
     public onClick(e: Event): void {
@@ -1607,25 +1660,50 @@ export class NgxMaskDirective
     }
 
     /**
-     * Restores the control's pristine/untouched state after a writeValue-driven emission.
-     *
-     * writeValue is a one-way model->view sync. When the mask normalizes the written value
-     * (e.g. leadZero '10.2' -> '10.20'), the directive must still emit the corrected value so
-     * the model adopts it — but that emission runs through Angular's view-change pipeline, which
-     * calls markAsDirty()/markAsTouched(). A programmatic setValue/patchValue must leave the
-     * control pristine, so we undo that side effect here when the control was pristine before
-     * the write. `onlySelf: true` keeps parent group state untouched.
+     * Runs `write` as a programmatic write: the model updates it causes do not dirty the control
+     * (see `_programmaticWrite`). Nested writes keep the flag of the enclosing one.
      */
-    private _restoreControlStateAfterWrite(wasPristine: boolean, wasUntouched: boolean): void {
+    private _writeProgrammatically<T>(write: () => T): T {
+        const enclosingWrite = this._programmaticWrite;
+        this._programmaticWrite = true;
+        try {
+            return write();
+        } finally {
+            this._programmaticWrite = enclosingWrite;
+        }
+    }
+
+    /**
+     * Passes a model value the mask derived from a programmatic write on to the control, without
+     * dirtying it.
+     *
+     * When the directive is the bound control's own accessor, `fn` is Angular's `updateControl`
+     * callback: the value goes the way its view-change pipeline takes it (`setValue` without a
+     * view echo, then `viewToModelUpdate`, which emits `ngModelChange`), minus `markAsDirty()`,
+     * so the control and its ancestors keep the dirty and touched state they had. In every other
+     * case (a wrapper forwarding the accessor, which transforms the value or reacts to it
+     * itself; Signal Forms; no control) `fn` is the contract the caller registered and is called;
+     * the nearest control then gets back the pristine and untouched state it had before the call.
+     */
+    private _emitProgrammaticValue(fn: (value: unknown) => void, value: unknown): void {
         const ngControl = this._resolveNgControl();
         const control = ngControl?.control;
-        if (!control) {
+        if (
+            ngControl?.valueAccessor === this &&
+            control &&
+            typeof control.setValue === 'function'
+        ) {
+            control.setValue(value, { emitModelToViewChange: false });
+            ngControl.viewToModelUpdate(value);
             return;
         }
-        if (wasPristine && ngControl.dirty && typeof control.markAsPristine === 'function') {
+        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
+        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        fn(value);
+        if (wasPristine && ngControl?.dirty && typeof control?.markAsPristine === 'function') {
             control.markAsPristine({ onlySelf: true });
         }
-        if (wasUntouched && ngControl.touched && typeof control.markAsUntouched === 'function') {
+        if (wasUntouched && ngControl?.touched && typeof control?.markAsUntouched === 'function') {
             control.markAsUntouched({ onlySelf: true });
         }
     }
@@ -1653,9 +1731,7 @@ export class NgxMaskDirective
         ) {
             return;
         }
-        const ngControl = this._resolveNgControl();
-        const wasPristine = ngControl ? Boolean(ngControl.pristine) : true;
-        const wasUntouched = ngControl ? Boolean(ngControl.untouched) : true;
+        const writeSequence = ++this._writeSequence;
         let value = controlValue;
         const inputTransformFn = this._maskService.inputTransformFn;
         if (typeof value === 'object' && value !== null && 'value' in value) {
@@ -1684,7 +1760,11 @@ export class NgxMaskDirective
                 typeof inputValue === 'number' ||
                 this._maskValue().startsWith(MaskExpression.SEPARATOR)
             ) {
-                inputValue = String(inputValue);
+                inputValue = displayToPlainDecimal(
+                    String(inputValue),
+                    this._maskService.decimalMarker,
+                    this._maskService.thousandSeparator
+                );
                 const localeDecimalMarker = this._maskService.currentLocaleDecimalMarker();
                 if (!Array.isArray(this._maskService.decimalMarker)) {
                     inputValue =
@@ -1696,6 +1776,12 @@ export class NgxMaskDirective
                             : inputValue;
                 }
 
+                // Read before the precision pass rewrites the decimals with a dot.
+                const commaDecimal = usesCommaDecimal(
+                    inputValue,
+                    this._maskService.decimalMarker,
+                    this._maskService.thousandSeparator
+                );
                 if (
                     this._maskService.leadZero &&
                     inputValue &&
@@ -1708,11 +1794,7 @@ export class NgxMaskDirective
                     );
                 }
 
-                if (
-                    this._maskService.decimalMarker === MaskExpression.COMMA ||
-                    (Array.isArray(this._maskService.decimalMarker) &&
-                        this._maskService.thousandSeparator === MaskExpression.DOT)
-                ) {
+                if (commaDecimal) {
                     inputValue = inputValue
                         .toString()
                         .replace(MaskExpression.DOT, MaskExpression.COMMA);
@@ -1724,29 +1806,32 @@ export class NgxMaskDirective
                     const isFirstWrite = !this._maskService.isInitialized;
                     afterNextRender(
                         () => {
+                            if (writeSequence !== this._writeSequence) {
+                                // A later write or a user edit superseded this one: this stale
+                                // value must not be re-applied over it (#1691).
+                                return;
+                            }
                             this._ngZone.run(() => {
                                 // On initial load, temporarily set isInitialized to false
                                 // so formControlResult returns early and doesn't mark form as dirty.
                                 // On later writeValue-driven writes, leave isInitialized as-is: this pass
                                 // may legitimately need to push a leadZero-normalized value (e.g.
-                                // '10.2' -> '10.20') back to the FormControl, which Angular's forms
-                                // pipeline can only do via the same onChange callback used for real user
-                                // edits — see the `should change formValue` unit tests, which assert the
-                                // normalized value lands in `form.value` after a programmatic setValue.
+                                // '10.2' -> '10.20') back to the FormControl, as a programmatic write that
+                                // does not dirty it — see the `should change formValue` unit tests, which
+                                // assert the normalized value lands in `form.value` after a programmatic
+                                // setValue.
                                 if (isFirstWrite) {
                                     this._maskService.isInitialized = false;
                                 }
-                                this._maskService.applyMask(
-                                    inputValue?.toString() ?? '',
-                                    this._maskService.maskExpression
+                                this._writeProgrammatically(() =>
+                                    this._maskService.applyMask(
+                                        inputValue?.toString() ?? '',
+                                        this._maskService.maskExpression
+                                    )
                                 );
                                 if (isFirstWrite) {
                                     this._maskService.isInitialized = true;
                                 }
-                                // The leadZero normalization above emits the corrected value through the
-                                // view-change pipeline, which dirties/touches the control. Undo that so a
-                                // programmatic write stays pristine.
-                                this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
                                 // Zoneless CD does not auto-flush after a deferred callback; request
                                 // a check so form.pristine/form.value bindings reflect the new state.
                                 this._changeDetectorRef.markForCheck();
@@ -1783,12 +1868,18 @@ export class NgxMaskDirective
                 this._writtenValue = { value: controlValue };
                 let displayValue: string;
                 try {
-                    displayValue = this._maskedOrVerbatim(inputValue);
+                    displayValue = this._writeProgrammatically(() =>
+                        this._maskedOrVerbatim(inputValue)
+                    );
                 } finally {
                     this._writtenValue = null;
                 }
-                this._maskService.formElementProperty = ['value', displayValue];
-                this._writeElementValueSync(displayValue);
+                // A nested write (setValue inside a valueChanges subscriber) already rendered its own,
+                // newer value: do not overwrite it with this stale one.
+                if (writeSequence === this._writeSequence) {
+                    this._maskService.formElementProperty = ['value', displayValue];
+                    this._writeElementValueSync(displayValue);
+                }
                 // Let the service know we've finished writing value
                 this._maskService.writingValue = false;
                 this._maskService.isInitialized = true;
@@ -1797,9 +1888,6 @@ export class NgxMaskDirective
                 this._writeElementValueSync(inputValue);
                 this._maskService.isInitialized = true;
             }
-            // A writeValue-driven emission may have dirtied/touched the control via the
-            // view-change pipeline; undo that so programmatic writes stay pristine.
-            this._restoreControlStateAfterWrite(wasPristine, wasUntouched);
             // Programmatic writes (setValue/patchValue called outside a signal/effect context)
             // don't schedule CD under zoneless change detection. Request a check so bindings
             // reading form.pristine/form.dirty/form.value on the host template stay in sync.
@@ -1848,7 +1936,12 @@ export class NgxMaskDirective
         const originalFn = fn;
         this._maskService.onChange = this.onChange = (value: unknown) => {
             if (!this._writtenValue || !Object.is(this._writtenValue.value, value)) {
-                originalFn(value);
+                if (this._programmaticWrite) {
+                    this._emitProgrammaticValue(originalFn, value);
+                } else {
+                    // Angular's callback marks the control dirty: it receives the user edits.
+                    originalFn(value);
+                }
             }
             this._propagateToValueModel(value);
         };
