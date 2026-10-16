@@ -30,6 +30,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { escapeRegExp } from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
 
@@ -1434,7 +1435,7 @@ export class NgxMaskDirective
             const specialCharactersAtTheStart =
                 this._maskService.maskExpression.match(
                     new RegExp(
-                        `^[${this._maskService.specialCharacters.map((c) => `\\${c}`).join('')}]+`
+                        `^[${this._maskService.specialCharacters.map((c) => escapeRegExp(c)).join('')}]+`
                     )
                 )?.[0].length || 0;
 
@@ -2231,7 +2232,10 @@ export class NgxMaskDirective
         const specialCharacters = this._maskService.specialCharacters;
 
         function removeSpecialCharacters(str: string): string {
-            const regex = new RegExp(`[${specialCharacters.map((ch) => `\\${ch}`).join('')}]`, 'g');
+            const regex = new RegExp(
+                `[${specialCharacters.map((ch) => escapeRegExp(ch)).join('')}]`,
+                'g'
+            );
             return str.replace(regex, '');
         }
 

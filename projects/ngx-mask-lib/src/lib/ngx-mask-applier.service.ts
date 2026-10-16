@@ -2,6 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import type { DecimalMarkerChar, NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { escapeRegExp } from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
 
@@ -298,9 +299,7 @@ export class NgxMaskApplierService {
         let decimalChar: string;
 
         if (Array.isArray(decimalChars)) {
-            const regExp = new RegExp(
-                decimalChars.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|')
-            );
+            const regExp = new RegExp(decimalChars.map((v) => escapeRegExp(v)).join('|'));
             x = str.split(regExp);
             decimalChar = str.match(regExp)?.[0] ?? MaskExpression.EMPTY_STRING;
         } else {
@@ -480,14 +479,7 @@ export class NgxMaskApplierService {
     }
 
     protected _charToRegExpExpression(char: string): string {
-        // if (Array.isArray(char)) {
-        // 	return char.map((v) => ('[\\^$.|?*+()'.indexOf(v) >= 0 ? `\\${v}` : v)).join('|');
-        // }
-        if (char) {
-            const charsToEscape = '[\\^$.|?*+()';
-            return char === ' ' ? '\\s' : charsToEscape.indexOf(char) >= 0 ? `\\${char}` : char;
-        }
-        return char;
+        return char === ' ' ? '\\s' : escapeRegExp(char);
     }
 
     protected _shiftStep(cursor: number) {

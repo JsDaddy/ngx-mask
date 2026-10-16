@@ -5,6 +5,7 @@ import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG } from './ngx-mask.config';
 import { NgxMaskApplierService } from './ngx-mask-applier.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
+import { escapeRegExp } from './ngx-mask.utils';
 
 @Injectable()
 export class NgxMaskService extends NgxMaskApplierService {
@@ -928,15 +929,7 @@ export class NgxMaskService extends NgxMaskApplierService {
 
     private _regExpForRemove(specialCharactersForRemove: string[]): RegExp {
         return new RegExp(
-            specialCharactersForRemove
-                .map((item: string) => {
-                    // Only escape characters that have special meaning in regex
-                    if (/[.*+?^${}()|[\]\\/-]/.test(item)) {
-                        return `\\${item}`;
-                    }
-                    return item;
-                })
-                .join('|'),
+            specialCharactersForRemove.map((item: string) => escapeRegExp(item)).join('|'),
             'gi'
         );
     }
