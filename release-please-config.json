@@ -8,6 +8,7 @@
         { "type": "feat", "section": "Feature" },
         { "type": "fix", "section": "Fix" },
         { "type": "perf", "section": "Performance" },
+        { "type": "refactor", "section": "Refactor" },
         { "type": "revert", "section": "Revert" }
     ],
     "packages": {

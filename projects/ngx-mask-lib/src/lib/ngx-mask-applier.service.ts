@@ -28,8 +28,6 @@ export class NgxMaskApplierService {
 
     public decimalMarker: NgxMaskConfig['decimalMarker'] = this._config.decimalMarker;
 
-    public customPattern!: NgxMaskConfig['patterns'];
-
     public showMaskTyped: NgxMaskConfig['showMaskTyped'] = this._config.showMaskTyped;
 
     public placeHolderCharacter: NgxMaskConfig['placeHolderCharacter'] =
@@ -71,8 +69,6 @@ export class NgxMaskApplierService {
     public maskExpression = '';
 
     public actualValue = '';
-
-    public showKeepCharacterExp = '';
 
     public shownMaskExpression: NgxMaskConfig['shownMaskExpression'] =
         this._config.shownMaskExpression;
@@ -278,7 +274,6 @@ export class NgxMaskApplierService {
     }
 
     public _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
-        this.patterns = this.customPattern ? this.customPattern : this.patterns;
         const pattern = this.patterns[maskSymbol]?.pattern;
         return pattern ? this._testPattern(pattern, inputSymbol) : false;
     }
