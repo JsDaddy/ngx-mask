@@ -526,7 +526,7 @@ export class NgxMaskApplierService {
      * the current ones, so reconfiguring a populated control keeps its number (`1 234.5` stays
      * 1234.5 as `1.234,5`) instead of reading the old markers with the new rules.
      */
-    public retargetSeparatorValue(
+    public _retargetSeparatorValue(
         value: string,
         previousThousandSeparator: string | null | undefined,
         previousDecimalMarker: NgxMaskConfig['decimalMarker']

@@ -996,7 +996,7 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     /** Whether `value` writes its decimals after a comma, under the configured decimalMarker. */
-    public usesCommaDecimal(value: string): boolean {
+    public _usesCommaDecimal(value: string): boolean {
         return this._activeDecimalMarker(value) === MaskExpression.COMMA;
     }
 
@@ -1011,7 +1011,7 @@ export class NgxMaskService extends NgxMaskApplierService {
                 Number(separatorPrecision) > 0 &&
                 Number.isFinite(separatorPrecision))
         ) {
-            if (this.leadZero && this.usesCommaDecimal(value)) {
+            if (this.leadZero && this._usesCommaDecimal(value)) {
                 value = value.replace(MaskExpression.COMMA, MaskExpression.DOT);
             }
             const precision = this.leadZero ? Number(separatorPrecision) : 2;

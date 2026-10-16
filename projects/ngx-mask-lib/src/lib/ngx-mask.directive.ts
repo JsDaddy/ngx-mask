@@ -443,7 +443,7 @@ export class NgxMaskDirective
             // The rendered number still uses the previous markers: carry it over to the new ones
             // before the mask re-reads it, or its old decimal marker becomes a thousand separator.
             this._inputValue.set(
-                this._maskService.retargetSeparatorValue(
+                this._maskService._retargetSeparatorValue(
                     this._inputValue(),
                     previousThousandSeparator,
                     previousDecimalMarker
@@ -1718,7 +1718,7 @@ export class NgxMaskDirective
                 }
 
                 // Read before the precision pass rewrites the decimals with a dot.
-                const commaDecimal = this._maskService.usesCommaDecimal(inputValue);
+                const commaDecimal = this._maskService._usesCommaDecimal(inputValue);
                 if (
                     this._maskService.leadZero &&
                     inputValue &&
