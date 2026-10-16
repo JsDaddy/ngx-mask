@@ -432,8 +432,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             return;
         }
 
+        const typedValue = formElement.value;
         const maskedValue = this.applyMask(
-            formElement.value,
+            typedValue,
             this.maskExpression,
             position,
             justPasted,
@@ -441,7 +442,9 @@ export class NgxMaskService extends NgxMaskApplierService {
             cb
         );
         // Assigning an identical value still resets the native caret/undo state in some browsers.
-        if (formElement.value !== maskedValue) {
+        // An element that no longer holds what was typed was rewritten while the mask ran (a
+        // `setValue` inside a `valueChanges` subscriber): that newer write wins (#1691).
+        if (formElement.value === typedValue && formElement.value !== maskedValue) {
             formElement.value = maskedValue;
         }
         if (formElement === this._getActiveElement()) {

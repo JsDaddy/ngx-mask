@@ -83,4 +83,44 @@ describe('Directive: setValue called inside a valueChanges subscriber (#1691)', 
             expect(component.form.value).toBe('100.00');
         });
     });
+
+    describe('while typing', () => {
+        const typeInto = (value: string): void => {
+            input.value = value;
+            input.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+        };
+        const writeFromSubscriber = (value: string | number): void => {
+            let writing = false;
+            component.form.valueChanges.subscribe(() => {
+                if (!writing) {
+                    writing = true;
+                    component.form.setValue(value);
+                    writing = false;
+                }
+            });
+        };
+
+        it('shows the value a subscriber writes on a separator mask', async () => {
+            component.mask.set('separator.2');
+            fixture.detectChanges();
+            writeFromSubscriber(123456);
+
+            typeInto('4321');
+
+            expect(component.form.value).toBe(123456);
+            expect(input.value).toBe('123 456');
+            await fixture.whenStable();
+            expect(input.value).toBe('123 456');
+        });
+
+        it('shows the value a subscriber writes on a fixed mask', async () => {
+            writeFromSubscriber('9999');
+
+            typeInto('4321');
+
+            expect(component.form.value).toBe('9999');
+            expect(input.value).toBe('9999');
+        });
+    });
 });
