@@ -10,7 +10,6 @@ import {
     model,
     effect,
     Directive,
-    HostListener,
     inject,
     untracked,
     booleanAttribute,
@@ -60,6 +59,17 @@ type DateTimeField = {
         NgxMaskService,
     ],
     exportAs: 'mask,ngxMask',
+    host: {
+        '(paste)': 'onPaste()',
+        '(focus)': 'onFocus()',
+        '(ngModelChange)': 'onModelChange($event)',
+        '(input)': 'onInput($event)',
+        '(compositionstart)': 'onCompositionStart()',
+        '(compositionend)': 'onCompositionEnd($event)',
+        '(blur)': 'onBlur($event)',
+        '(click)': 'onClick($event)',
+        '(keydown)': 'onKeyDown($event)',
+    },
 })
 export class NgxMaskDirective
     implements
@@ -700,18 +710,15 @@ export class NgxMaskDirective
         return { errors: null, filled: !!value };
     }
 
-    @HostListener('paste')
     public onPaste() {
         this._justPasted.set(true);
     }
 
-    @HostListener('focus')
     public onFocus(): void {
         this._isFocused.set(true);
         this._maskService._isFocused.set(true);
     }
 
-    @HostListener('ngModelChange', ['$event'])
     public onModelChange(value: unknown): void {
         // on form reset we need to update the actualValue
         if (
@@ -726,7 +733,6 @@ export class NgxMaskDirective
         }
     }
 
-    @HostListener('input', ['$event'])
     public onInput(e: Event): void {
         this._valuePropagatedByEdit = null;
         this._processInput(e);
@@ -1284,13 +1290,11 @@ export class NgxMaskDirective
     }
 
     // IME starts
-    @HostListener('compositionstart')
     public onCompositionStart(): void {
         this._isComposing.set(true);
     }
 
     // IME completes
-    @HostListener('compositionend', ['$event'])
     public onCompositionEnd(e: Event): void {
         this._isComposing.set(false);
         if (!this._maskAcceptsLetterInput()) {
@@ -1303,7 +1307,6 @@ export class NgxMaskDirective
         this.onInput(e);
     }
 
-    @HostListener('blur', ['$event'])
     public onBlur(e: Event): void {
         if (this._maskValue()) {
             const el: HTMLInputElement = (e as FocusEvent).target as HTMLInputElement;
@@ -1392,7 +1395,6 @@ export class NgxMaskDirective
         return wasPristine;
     }
 
-    @HostListener('click', ['$event'])
     public onClick(e: Event): void {
         if (!this._maskValue()) {
             return;
@@ -1464,7 +1466,6 @@ export class NgxMaskDirective
         }
     }
 
-    @HostListener('keydown', ['$event'])
     public onKeyDown(event: Event): void {
         const e = event as KeyboardEvent;
         if (!this._maskValue()) {
