@@ -1,6 +1,6 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
@@ -416,5 +416,31 @@ describe('Issue #1645: multi mask with different lengths validates by length', (
         ['123456789', true],
     ])('#1645: %s -> valid=%s', (value, expected) => {
         expect(valid(value)).toBe(expected);
+    });
+});
+
+describe('Directive: Mask (Validation of numeric control values)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ validation: true })],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        component.mask.set('0*.00');
+        component.dropSpecialCharacters.set(false);
+        fixture.detectChanges();
+    });
+
+    it('does not throw for a numeric control value and agrees with the string value', () => {
+        const validator = component.form.validator as (c: FormControl) => unknown;
+        const numeric = new FormControl(12.5);
+        const text = new FormControl('12.5');
+
+        expect(() => validator(numeric)).not.toThrow();
+        expect(validator(numeric)).toEqual(validator(text));
     });
 });

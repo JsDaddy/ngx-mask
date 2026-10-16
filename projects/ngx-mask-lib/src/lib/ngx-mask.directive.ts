@@ -599,8 +599,8 @@ export class NgxMaskDirective
                         String(processedValue).includes(lastIndexArray[0] ?? '') &&
                         !this._maskService.dropSpecialCharacters
                     ) {
-                        const special = value.split(lastIndexArray[0]);
-                        return special[special.length - 1].length === lastIndexArray.length - 1
+                        const special = processedValue.split(lastIndexArray[0] as string);
+                        return special[special.length - 1]?.length === lastIndexArray.length - 1
                             ? null
                             : this._createValidationError(processedValue);
                     } else if (
