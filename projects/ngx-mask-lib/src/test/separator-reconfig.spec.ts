@@ -85,4 +85,22 @@ describe('Separator: changing the separators of a mask', () => {
             expect(component.form.untouched).toBe(true);
         });
     });
+
+    describe('with a write right after the change, before change detection', () => {
+        it.each([' ', '.'] as const)(
+            'formats the number with the new thousandSeparator %s and decimalMarker',
+            async (thousandSeparator) => {
+                fixture.detectChanges();
+                input = fixture.nativeElement.querySelector('input');
+
+                component.thousandSeparator.set(thousandSeparator);
+                component.decimalMarker.set(',');
+                component.form.setValue(1234567.5);
+                await settle();
+
+                expect(input.value).toBe(`1${thousandSeparator}234${thousandSeparator}567,5`);
+                expect(component.form.value).toBe(1234567.5);
+            }
+        );
+    });
 });
