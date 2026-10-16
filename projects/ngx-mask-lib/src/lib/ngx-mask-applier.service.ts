@@ -372,7 +372,12 @@ export class NgxMaskApplierService {
         const rgx = /(\d+)(\d{3})/;
         let grouped = digits;
         while (separator && rgx.test(grouped)) {
-            grouped = grouped.replace(rgx, '$1' + separator + '$2');
+            // A function replacer: the separator is inserted verbatim, never parsed as a
+            // replacement pattern ($, $&, $', ...).
+            grouped = grouped.replace(
+                rgx,
+                (_match, head: string, tail: string) => head + separator + tail
+            );
         }
         return grouped;
     }

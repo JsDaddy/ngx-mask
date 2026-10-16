@@ -628,4 +628,30 @@ describe('Separator: Mask', () => {
             expect(inputTarget.value).equal('1.500,0');
         });
     });
+
+    describe('thousandSeparator made of replacement-pattern or regex-special characters', () => {
+        // `$`, `$&` and `$'` are String.replace replacement patterns, the others are RegExp atoms.
+        // A separator must never contain digits.
+        const separators = ['$', '$&', "$'", '^', '*', '(', '|', '+'];
+
+        separators.forEach((separator) => {
+            it(`types 1234567 with thousandSeparator ${separator}`, () => {
+                component.mask.set('separator');
+                component.thousandSeparator.set(separator);
+                equal('1234567', `1${separator}234${separator}567`, fixture);
+            });
+
+            it(`writes 1234567 with thousandSeparator ${separator}`, async () => {
+                component.mask.set('separator');
+                component.thousandSeparator.set(separator);
+                component.form.setValue(1234567);
+                fixture.detectChanges();
+                await fixture.whenStable();
+
+                expect(fixture.nativeElement.querySelector('input').value).equal(
+                    `1${separator}234${separator}567`
+                );
+            });
+        });
+    });
 });
