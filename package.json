@@ -19,11 +19,20 @@
         "ng2mask"
     ],
     "private": true,
+    "size-limit": [
+        {
+            "name": "ngx-mask fesm",
+            "path": "dist/ngx-mask-lib/fesm2022/ngx-mask.mjs",
+            "gzip": true,
+            "limit": "26 kB"
+        }
+    ],
     "scripts": {
         "ng": "ng",
         "build": "ng build --base-href /ngx-mask/  --configuration production",
         "build:lib": "ng build --configuration production ngx-mask-lib && bun scripts/postbuild-lib.mjs",
-        "ci": "bun run lint && bun run build:lib && bun run test:all && bun run build",
+        "size": "size-limit",
+        "ci": "bun run lint && bun run build:lib && bun run size && bun run test:all && bun run build",
         "lint:scss": "stylelint \"**/*.scss\"",
         "lint:scss:fix": "stylelint \"**/*.scss\" --fix",
         "lint": "ng lint && bun run lint:scss",
@@ -63,6 +72,7 @@
         "@commitlint/config-conventional": "21.2.3",
         "@eslint/js": "10.0.1",
         "@eslint/json": "2.1.1",
+        "@size-limit/file": "14.2.0",
         "@tailwindcss/postcss": "4.3.3",
         "@types/node": "26.6.5",
         "@vitest/browser-playwright": "5.0.5",
@@ -80,6 +90,7 @@
         "postcss-scss": "4.0.9",
         "prettier": "3.9.10",
         "simple-git-hooks": "2.14.0",
+        "size-limit": "14.2.0",
         "stylelint": "17.16.0",
         "stylelint-config-recommended-scss": "17.0.1",
         "stylelint-prettier": "5.0.3",
