@@ -24,6 +24,9 @@ describe('ngx-mask.utils', () => {
             expect(escapeRegExp('$&')).toBe('\\$&');
             expect(new RegExp(escapeRegExp('(.)'), 'g').test('(.)')).toBe(true);
             expect(escapeRegExp('')).toBe('');
+            expect(escapeRegExp(null)).toBe('');
+            // eslint-disable-next-line no-undefined
+            expect(escapeRegExp(undefined)).toBe('');
         });
     });
 

@@ -472,6 +472,9 @@ export class NgxMaskApplierService {
     }
 
     protected _charToRegExpExpression(char: string): string {
+        if (!char) {
+            return char;
+        }
         return char === ' ' ? '\\s' : escapeRegExp(char);
     }
 
