@@ -14,6 +14,7 @@ import { MaskHarnessComponent } from './utils/mask-harness.component';
             <input
                 id="amount"
                 mask="separator.2"
+                [leadZero]="leadZero()"
                 [thousandSeparator]="thousandSeparator()"
                 [decimalMarker]="decimalMarker()"
                 formControlName="amount" />
@@ -22,6 +23,7 @@ import { MaskHarnessComponent } from './utils/mask-harness.component';
     `,
 })
 class ReconfigGroupComponent {
+    public readonly leadZero = signal(false);
     public readonly thousandSeparator = signal<' ' | '.'>(' ');
     public readonly decimalMarker = signal<'.' | ','>('.');
     public readonly group = new FormGroup({
@@ -131,16 +133,20 @@ describe('Separator: changing the separators after typing (real browser)', () =>
             expect(group.dirty).toBe(true);
         });
 
-        it('keeps a group the application marked touched', async () => {
+        it('keeps a control the user blurred touched', async () => {
             const m = await mount(ReconfigGroupComponent);
             const { group } = m.component;
             group.controls.amount.setValue(1234.5);
             await m.settle();
-            group.markAsTouched();
+            m.focus('#amount');
+            await m.blur('#amount');
+            expect(group.controls.amount.touched).toBe(true);
 
             await reconfigure(m);
 
-            expect(group.controls.amount.untouched).toBe(true);
+            expect(m.get('#amount').value).toBe('1.234,5');
+            expect(group.controls.amount.touched).toBe(true);
+            expect(group.controls.amount.pristine).toBe(true);
             expect(group.touched).toBe(true);
         });
 
@@ -168,5 +174,71 @@ describe('Separator: changing the separators after typing (real browser)', () =>
             expect(m.component.group.controls.amount.dirty).toBe(true);
             expect(m.component.group.dirty).toBe(true);
         });
+    });
+});
+
+describe('Separator: a leadZero write keeps the form state (real browser)', () => {
+    const mountWithLeadZero = async () => {
+        const m = await mount(ReconfigGroupComponent);
+        m.component.leadZero.set(true);
+        await m.settle();
+        return m;
+    };
+
+    it('keeps the touched state the application sets right after the write', async () => {
+        const m = await mountWithLeadZero();
+        const { group } = m.component;
+
+        group.patchValue({ amount: 5 });
+        group.markAllAsTouched();
+        await m.settle();
+
+        expect(m.get('#amount').value).toBe('5.00');
+        expect(group.controls.amount.touched).toBe(true);
+        expect(group.controls.note.touched).toBe(true);
+        expect(group.touched).toBe(true);
+    });
+
+    it('keeps the dirty state the application sets right after the write', async () => {
+        const m = await mountWithLeadZero();
+        const { group } = m.component;
+
+        group.controls.amount.setValue(5);
+        group.markAllAsDirty();
+        await m.settle();
+
+        expect(group.controls.amount.dirty).toBe(true);
+        expect(group.controls.note.dirty).toBe(true);
+        expect(group.dirty).toBe(true);
+    });
+
+    it('keeps a sibling the application marked dirty on its own', async () => {
+        const m = await mountWithLeadZero();
+        const { group } = m.component;
+        group.controls.note.markAsDirty({ onlySelf: true });
+
+        group.controls.amount.setValue(5);
+        await m.settle();
+
+        expect(m.get('#amount').value).toBe('5.00');
+        expect(group.controls.note.dirty).toBe(true);
+        expect(group.controls.amount.pristine).toBe(true);
+        expect(group.pristine).toBe(true);
+    });
+
+    it('keeps a control the user blurred touched', async () => {
+        const m = await mountWithLeadZero();
+        const { group } = m.component;
+        m.focus('#amount');
+        await m.blur('#amount');
+        expect(group.controls.amount.touched).toBe(true);
+
+        group.controls.amount.setValue(5);
+        await m.settle();
+
+        expect(m.get('#amount').value).toBe('5.00');
+        expect(group.controls.amount.touched).toBe(true);
+        expect(group.controls.amount.pristine).toBe(true);
+        expect(group.touched).toBe(true);
     });
 });

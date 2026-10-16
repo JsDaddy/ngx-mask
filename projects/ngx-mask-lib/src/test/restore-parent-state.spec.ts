@@ -49,10 +49,16 @@ class NestedParentStateComponent {
     });
 }
 
-describe('Directive: pristine state restored after a separator reconfiguration', () => {
-    const reconfigure = async (
-        fixture: ReturnType<typeof TestBed.createComponent<ParentStateComponent>>
-    ): Promise<void> => {
+type ParentStateFixture = ReturnType<typeof TestBed.createComponent<ParentStateComponent>>;
+
+/** Focus loss on the amount input: the only way the directive touches its control. */
+const blurAmount = (fixture: ParentStateFixture): void => {
+    fixture.nativeElement.querySelector('#amount').dispatchEvent(new Event('blur'));
+    fixture.detectChanges();
+};
+
+describe('Directive: control state kept on a separator reconfiguration', () => {
+    const reconfigure = async (fixture: ParentStateFixture): Promise<void> => {
         fixture.componentInstance.thousandSeparator.set('.');
         fixture.componentInstance.decimalMarker.set(',');
         fixture.detectChanges();
@@ -106,17 +112,19 @@ describe('Directive: pristine state restored after a separator reconfiguration',
         expect(group.dirty).toBe(true);
     });
 
-    it('keeps a group the application marked touched after a reconfiguration', async () => {
+    it('keeps a control the user blurred touched after a reconfiguration', async () => {
         const fixture = TestBed.createComponent(ParentStateComponent);
         fixture.detectChanges();
         const { group } = fixture.componentInstance;
         group.controls.amount.setValue(1234.5);
         fixture.detectChanges();
-        group.markAsTouched();
+        blurAmount(fixture);
+        expect(group.controls.amount.touched).toBe(true);
 
         await reconfigure(fixture);
 
-        expect(group.controls.amount.untouched).toBe(true);
+        expect(group.controls.amount.touched).toBe(true);
+        expect(group.controls.amount.pristine).toBe(true);
         expect(group.touched).toBe(true);
     });
 });
@@ -141,19 +149,70 @@ describe('Directive: parent state kept on a programmatic write', () => {
         expect(group.dirty).toBe(true);
     });
 
-    it('keeps a group the application marked touched', async () => {
+    it('keeps a control the user blurred touched', async () => {
         const fixture = TestBed.createComponent(ParentStateComponent);
         fixture.componentInstance.leadZero.set(true);
         fixture.detectChanges();
         const { group } = fixture.componentInstance;
-        group.markAsTouched();
+        blurAmount(fixture);
+        expect(group.controls.amount.touched).toBe(true);
 
         group.controls.amount.setValue(5);
         fixture.detectChanges();
         await fixture.whenStable();
 
-        expect(group.controls.amount.untouched).toBe(true);
+        expect(group.controls.amount.touched).toBe(true);
+        expect(group.controls.amount.pristine).toBe(true);
         expect(group.touched).toBe(true);
+    });
+
+    it('keeps the touched state the application sets right after the write', async () => {
+        const fixture = TestBed.createComponent(ParentStateComponent);
+        fixture.componentInstance.leadZero.set(true);
+        fixture.detectChanges();
+        const { group } = fixture.componentInstance;
+
+        group.patchValue({ amount: 5 });
+        group.markAllAsTouched();
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(fixture.nativeElement.querySelector('#amount').value).toBe('5.00');
+        expect(group.controls.amount.touched).toBe(true);
+        expect(group.controls.note.touched).toBe(true);
+        expect(group.touched).toBe(true);
+    });
+
+    it('keeps the dirty state the application sets right after the write', async () => {
+        const fixture = TestBed.createComponent(ParentStateComponent);
+        fixture.componentInstance.leadZero.set(true);
+        fixture.detectChanges();
+        const { group } = fixture.componentInstance;
+
+        group.controls.amount.setValue(5);
+        group.markAllAsDirty();
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(group.controls.amount.dirty).toBe(true);
+        expect(group.controls.note.dirty).toBe(true);
+        expect(group.dirty).toBe(true);
+    });
+
+    it('keeps a sibling the application marked dirty on its own', async () => {
+        const fixture = TestBed.createComponent(ParentStateComponent);
+        fixture.componentInstance.leadZero.set(true);
+        fixture.detectChanges();
+        const { group } = fixture.componentInstance;
+        group.controls.note.markAsDirty({ onlySelf: true });
+
+        group.controls.amount.setValue(5);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(group.controls.note.dirty).toBe(true);
+        expect(group.controls.amount.pristine).toBe(true);
+        expect(group.pristine).toBe(true);
     });
 
     it('leaves a pristine nested group pristine and untouched', async () => {
@@ -172,7 +231,7 @@ describe('Directive: parent state kept on a programmatic write', () => {
         expect(outer.untouched).toBe(true);
     });
 
-    it('keeps an explicitly dirty and touched grandparent while the inner group is restored', async () => {
+    it('keeps an explicitly dirty and touched grandparent while the inner group stays pristine', async () => {
         const fixture = TestBed.createComponent(NestedParentStateComponent);
         fixture.detectChanges();
         const { outer } = fixture.componentInstance;
