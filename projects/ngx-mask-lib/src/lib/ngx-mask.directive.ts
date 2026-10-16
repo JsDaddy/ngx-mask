@@ -42,6 +42,28 @@ type DateTimeField = {
     end: number; // index one past the field's digit run (start of separator/next field)
 };
 
+// Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
+const MIRRORED_INPUTS = [
+    'instantPrefix',
+    'prefix',
+    'suffix',
+    'decimalMarker',
+    'dropSpecialCharacters',
+    'shownMaskExpression',
+    'clearIfNotMatch',
+    'validation',
+    'separatorLimit',
+    'typeFromDecimals',
+    'leadZeroDateTime',
+    'leadZero',
+    'triggerOnMaskChange',
+    'inputTransformFn',
+    'outputTransformFn',
+    'keepCharacterPositions',
+] as const satisfies readonly (keyof NgxMaskService & keyof NgxMaskDirective)[];
+
+type MirroredInput = (typeof MIRRORED_INPUTS)[number];
+
 @Directive({
     selector: 'input[mask], textarea[mask]',
     providers: [
@@ -279,25 +301,14 @@ export class NgxMaskDirective
             prefix,
             suffix,
             thousandSeparator,
-            decimalMarker,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
             placeHolderCharacter,
-            shownMaskExpression,
             clearIfNotMatch,
             validation,
-            separatorLimit,
-            typeFromDecimals,
             allowNegativeNumbers,
-            leadZeroDateTime,
-            leadZero,
-            triggerOnMaskChange,
             apm,
-            inputTransformFn,
-            outputTransformFn,
-            keepCharacterPositions,
-            instantPrefix,
         } = changes;
         if (mask) {
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
@@ -344,15 +355,6 @@ export class NgxMaskDirective
             this._maskService.apm = apm.currentValue ?? this._config.apm;
         }
 
-        if (instantPrefix) {
-            this._maskService.instantPrefix = instantPrefix.currentValue;
-        }
-        if (prefix) {
-            this._maskService.prefix = prefix.currentValue;
-        }
-        if (suffix) {
-            this._maskService.suffix = suffix.currentValue;
-        }
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
             if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
@@ -381,12 +383,6 @@ export class NgxMaskDirective
                 }
                 this._maskService.writingValue = true;
             }
-        }
-        if (decimalMarker) {
-            this._maskService.decimalMarker = decimalMarker.currentValue;
-        }
-        if (dropSpecialCharacters) {
-            this._maskService.dropSpecialCharacters = dropSpecialCharacters.currentValue;
         }
         if (hiddenInput) {
             this._maskService.hiddenInput = hiddenInput.currentValue;
@@ -433,38 +429,13 @@ export class NgxMaskDirective
                 );
             }
         }
-        if (shownMaskExpression) {
-            this._maskService.shownMaskExpression = shownMaskExpression.currentValue;
-        }
-        if (clearIfNotMatch) {
-            this._maskService.clearIfNotMatch = clearIfNotMatch.currentValue;
-        }
-        if (validation) {
-            this._maskService.validation = validation.currentValue;
-        }
-        if (separatorLimit) {
-            this._maskService.separatorLimit = separatorLimit.currentValue;
-        }
-        if (typeFromDecimals) {
-            this._maskService.typeFromDecimals = typeFromDecimals.currentValue;
-        }
-        if (leadZeroDateTime) {
-            this._maskService.leadZeroDateTime = leadZeroDateTime.currentValue;
-        }
-        if (leadZero) {
-            this._maskService.leadZero = leadZero.currentValue;
-        }
-        if (triggerOnMaskChange) {
-            this._maskService.triggerOnMaskChange = triggerOnMaskChange.currentValue;
-        }
-        if (inputTransformFn) {
-            this._maskService.inputTransformFn = inputTransformFn.currentValue;
-        }
-        if (outputTransformFn) {
-            this._maskService.outputTransformFn = outputTransformFn.currentValue;
-        }
-        if (keepCharacterPositions) {
-            this._maskService.keepCharacterPositions = keepCharacterPositions.currentValue;
+        // Pure mirrors: runs after every explicit block above (the thousandSeparator block reads
+        // the PREVIOUS decimalMarker/dropSpecialCharacters from the service) and before `_applyMask`.
+        for (const key of MIRRORED_INPUTS) {
+            const change = changes[key];
+            if (change) {
+                this._mirrorInput(key, change.currentValue);
+            }
         }
         // #1671: a standalone `[(value)]` change reaches ngOnChanges BEFORE the value effect
         // writes it, so `_inputValue` still holds the PREVIOUS value here. Re-rendering it would
@@ -1970,6 +1941,10 @@ export class NgxMaskDirective
     public setDisabledState(isDisabled: boolean): void {
         this._renderer.setProperty(this._elementRef.nativeElement, 'disabled', isDisabled);
         this._maskService.formElementProperty = ['disabled', isDisabled];
+    }
+
+    private _mirrorInput<K extends MirroredInput>(key: K, value: NgxMaskService[K]): void {
+        this._maskService[key] = value;
     }
 
     private _applyMask(renderInputValue: boolean): void {
