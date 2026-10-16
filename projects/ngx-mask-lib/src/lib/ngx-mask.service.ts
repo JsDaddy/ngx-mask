@@ -13,7 +13,6 @@ export class NgxMaskService extends NgxMaskApplierService {
     public selStart: number | null = null;
     public selEnd: number | null = null;
     public maskChanged = false;
-    public maskExpressionArray: string[] = [];
     public previousValue = '';
     public currentValue = '';
     // `writingValue` is declared on NgxMaskApplierService: applyMask needs it to
@@ -33,8 +32,6 @@ export class NgxMaskService extends NgxMaskApplierService {
     public _isFocused = signal<boolean>(false);
 
     private _emitValue = false;
-    private _start!: number;
-    private _end!: number;
 
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     public onChange = (_: unknown) => {};
@@ -1077,26 +1074,25 @@ export class NgxMaskService extends NgxMaskApplierService {
     }
 
     public _repeatPatternSymbols(maskExp: string): string {
+        let start = 0;
         return (
             (maskExp.match(/{[0-9]+}/) &&
                 maskExp
                     .split(MaskExpression.EMPTY_STRING)
                     .reduce((accum: string, currVal: string, index: number): string => {
-                        this._start =
-                            currVal === MaskExpression.CURLY_BRACKETS_LEFT ? index : this._start;
+                        start = currVal === MaskExpression.CURLY_BRACKETS_LEFT ? index : start;
                         if (currVal !== MaskExpression.CURLY_BRACKETS_RIGHT) {
                             return this._findSpecialChar(currVal) ? accum + currVal : accum;
                         }
-                        this._end = index;
-                        const repeatNumber = Number(maskExp.slice(this._start + 1, this._end));
+                        const repeatNumber = Number(maskExp.slice(start + 1, index));
                         const replaceWith: string = new Array(repeatNumber + 1).join(
-                            maskExp[this._start - 1]
+                            maskExp[start - 1]
                         );
                         if (
-                            maskExp.slice(0, this._start).length > 1 &&
+                            maskExp.slice(0, start).length > 1 &&
                             maskExp.includes(MaskExpression.LETTER_S)
                         ) {
-                            const symbols = maskExp.slice(0, this._start - 1);
+                            const symbols = maskExp.slice(0, start - 1);
                             return symbols.includes(MaskExpression.CURLY_BRACKETS_LEFT)
                                 ? accum + replaceWith
                                 : symbols + accum + replaceWith;
