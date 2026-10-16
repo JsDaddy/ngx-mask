@@ -59,4 +59,28 @@ describe('Directive: setValue called inside a valueChanges subscriber (#1691)', 
         expect(input.value).toBe('5678');
         expect(component.form.value).toBe('5678');
     });
+
+    describe('with leadZero on a separator mask', () => {
+        it('lets only the latest write run its deferred normalisation', async () => {
+            component.mask.set('separator.2');
+            component.leadZero.set(true);
+            fixture.detectChanges();
+            const emitted: unknown[] = [];
+            component.form.valueChanges.subscribe((value) => {
+                emitted.push(value);
+                if (Number(value) > 100) {
+                    component.form.setValue(100);
+                }
+            });
+
+            component.form.setValue(500);
+            fixture.detectChanges();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(input.value).toBe('100.00');
+            expect(emitted).toEqual(['500.00', '100.00', '100.00', '100.00']);
+            expect(component.form.value).toBe('100.00');
+        });
+    });
 });

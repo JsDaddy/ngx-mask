@@ -1743,6 +1743,11 @@ export class NgxMaskDirective
                     const isFirstWrite = !this._maskService.isInitialized;
                     afterNextRender(
                         () => {
+                            if (writeSequence !== this._writeSequence) {
+                                // A later write superseded this one: its own normalisation runs
+                                // instead, this stale value must not be re-applied (#1691).
+                                return;
+                            }
                             this._ngZone.run(() => {
                                 // On initial load, temporarily set isInitialized to false
                                 // so formControlResult returns early and doesn't mark form as dirty.
