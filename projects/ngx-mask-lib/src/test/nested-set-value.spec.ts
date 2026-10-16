@@ -82,6 +82,24 @@ describe('Directive: setValue called inside a valueChanges subscriber (#1691)', 
             expect(emitted).toEqual(['500.00', '100.00', '100.00', '100.00']);
             expect(component.form.value).toBe('100.00');
         });
+
+        it('keeps a user edit made before the deferred normalisation runs', async () => {
+            component.mask.set('separator.2');
+            component.leadZero.set(true);
+            fixture.detectChanges();
+
+            component.form.setValue('10.2');
+            // The write's own DOM update lands in a microtask, before any user event can.
+            await Promise.resolve();
+            input.value = '7';
+            input.dispatchEvent(new Event('input'));
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(input.value).toBe('7');
+            // What typing 7 alone emits with leadZero.
+            expect(component.form.value).toBe('7.00');
+        });
     });
 
     describe('while typing', () => {

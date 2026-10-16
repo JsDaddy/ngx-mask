@@ -140,5 +140,19 @@ describe('Directive: setValue called inside a valueChanges subscriber, #1691 (re
             expect(m.component.form.value).toBe('100.00');
             expect(emitted).toEqual(['500.00', '100.00', '100.00', '100.00']);
         });
+
+        it('keeps a user edit made before the deferred normalisation runs', async () => {
+            const m = await mount(MaskHarnessComponent, { mask: 'separator.2', leadZero: true });
+
+            m.component.form.setValue('10.2');
+            // Let the write's own microtask land, as it always does before a user event; the
+            // render that runs the deferred normalisation is still pending.
+            await Promise.resolve();
+            await m.setValue('#masked', '7');
+
+            expect(m.get('#masked').value).toBe('7');
+            // What typing 7 alone emits with leadZero.
+            expect(m.component.form.value).toBe('7.00');
+        });
     });
 });

@@ -184,9 +184,11 @@ export class NgxMaskDirective
      */
     private _writtenValue: { value: unknown } | null = null;
     /**
-     * Counts the `writeValue` calls that reached the rendering step. A write whose masked echo makes
-     * a `valueChanges` subscriber call `setValue` again is superseded by that nested write; the outer
-     * one compares this counter and leaves the DOM to the latest write (#1691).
+     * Counts the values put into the input: each `writeValue` that reached the rendering step and
+     * each user edit. A write whose masked echo makes a `valueChanges` subscriber call `setValue`
+     * again is superseded by that nested write; the outer one compares this counter and leaves the
+     * DOM to the latest write (#1691). The deferred leadZero pass of a write compares it as well, so
+     * it never re-applies the written value over a newer write or a user edit.
      */
     private _writeSequence = 0;
     /**
@@ -739,6 +741,8 @@ export class NgxMaskDirective
     }
 
     public onInput(e: Event): void {
+        // A user edit supersedes what an earlier write still has deferred (see _writeSequence).
+        this._writeSequence++;
         this._valuePropagatedByEdit = null;
         this._processInput(e);
         // `maskFilled` reports a mask completed by the user, so it is decided here, once per
@@ -1766,8 +1770,8 @@ export class NgxMaskDirective
                     afterNextRender(
                         () => {
                             if (writeSequence !== this._writeSequence) {
-                                // A later write superseded this one: its own normalisation runs
-                                // instead, this stale value must not be re-applied (#1691).
+                                // A later write or a user edit superseded this one: this stale
+                                // value must not be re-applied over it (#1691).
                                 return;
                             }
                             this._ngZone.run(() => {
