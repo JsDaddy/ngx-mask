@@ -994,3 +994,67 @@ describe('Directive: Signal Forms (percent, prefix/suffix)', () => {
         expect(component.signalForm.value().value()).equal('1234');
     });
 });
+
+@Component({
+    selector: 'ngxd-open-source-emitted-type-test',
+    imports: [ReactiveFormsModule, NgxMaskDirective],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    template: `<input mask="0000" [formControl]="control" />`,
+})
+class EmittedTypeComponent {
+    public control = new FormControl<string | number | null>(null);
+}
+
+describe('Directive: Forms (emitted type follows the last concrete write)', () => {
+    let fixture: ComponentFixture<EmittedTypeComponent>;
+    let control: FormControl<string | number | null>;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [NgxMaskDirective],
+            providers: [provideNgxMask()],
+        });
+        fixture = TestBed.createComponent(EmittedTypeComponent);
+        control = fixture.componentInstance.control;
+        fixture.detectChanges();
+    });
+
+    it('emits numbers after a numeric write', () => {
+        control.setValue(5);
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+
+        expect(control.value).toBe(123);
+    });
+
+    it('emits strings again once a string is written after a number', () => {
+        control.setValue(5);
+        control.setValue('007');
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+
+        expect(control.value).toBe('123');
+    });
+
+    it('keeps emitting numbers after reset() to an empty value', () => {
+        control.setValue(5);
+        control.reset();
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+
+        expect(control.value).toBe(123);
+    });
+
+    it('keeps emitting numbers after an empty string is written', () => {
+        control.setValue(5);
+        control.setValue('');
+        fixture.detectChanges();
+
+        typeTest('123', fixture);
+
+        expect(control.value).toBe(123);
+    });
+});

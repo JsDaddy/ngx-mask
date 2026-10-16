@@ -991,7 +991,8 @@ export class NgxMaskService extends NgxMaskApplierService {
                 const pattern = this.patterns[key]?.pattern;
                 if (
                     (patternString?.includes(MaskExpression.WHITE_SPACE) as boolean) &&
-                    pattern?.test(this.maskExpression)
+                    pattern &&
+                    this._testPattern(pattern, this.maskExpression)
                 ) {
                     return true;
                 }

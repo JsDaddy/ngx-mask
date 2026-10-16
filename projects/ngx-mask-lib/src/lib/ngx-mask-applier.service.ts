@@ -278,11 +278,18 @@ export class NgxMaskApplierService {
 
     public _checkSymbolMask(inputSymbol: string, maskSymbol: string): boolean {
         this.patterns = this.customPattern ? this.customPattern : this.patterns;
-        return (
-            (this.patterns[maskSymbol]?.pattern &&
-                this.patterns[maskSymbol]?.pattern.test(inputSymbol)) ??
-            false
-        );
+        const pattern = this.patterns[maskSymbol]?.pattern;
+        return pattern ? this._testPattern(pattern, inputSymbol) : false;
+    }
+
+    /**
+     * `RegExp.prototype.test` is stateful for patterns carrying the `g` or `y` flag (it starts
+     * at `lastIndex`), so a user pattern such as `/[0-9]/g` would alternate between accepting
+     * and rejecting identical input. Every pattern test goes through here to start from 0.
+     */
+    protected _testPattern(pattern: RegExp, value: string): boolean {
+        pattern.lastIndex = 0;
+        return pattern.test(value);
     }
 
     protected _formatWithSeparators = (

@@ -281,3 +281,40 @@ describe('Directive: Mask (Provide custom patterns with symbol C with specialCha
         expect(component.form.value).equal(',./');
     });
 });
+
+describe('Directive: Mask (stateful /g and /y custom patterns)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ validation: true })],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('a /g pattern accepts every typed digit instead of alternating', () => {
+        component.mask.set('0000');
+        component.patterns.set({ '0': { pattern: /[0-9]/g } });
+        equal('1234', '1234', fixture);
+    });
+
+    it('a /y pattern accepts every typed digit instead of alternating', () => {
+        component.mask.set('0000');
+        component.patterns.set({ '0': { pattern: /[0-9]/y } });
+        equal('1234', '1234', fixture);
+    });
+
+    it('a /g pattern validates a fully typed value through the optional-skip matcher', () => {
+        component.mask.set('99DD');
+        component.patterns.set({
+            '9': { pattern: /\d/, optional: true },
+            D: { pattern: /[0-9]/g },
+        });
+        equal('1234', '1234', fixture);
+        expect(component.form.errors).toBeNull();
+    });
+});

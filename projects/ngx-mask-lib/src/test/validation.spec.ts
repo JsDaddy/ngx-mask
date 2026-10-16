@@ -1,10 +1,10 @@
 import type { ComponentFixture } from '@angular/core/testing';
 import { TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { TestMaskComponent } from './utils/test-component.component';
-import { expect } from 'vitest';
+import { expect, vi } from 'vitest';
 describe('Directive: Mask (Validation)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
     let component: TestMaskComponent;
@@ -416,5 +416,105 @@ describe('Issue #1645: multi mask with different lengths validates by length', (
         ['123456789', true],
     ])('#1645: %s -> valid=%s', (value, expected) => {
         expect(valid(value)).toBe(expected);
+    });
+});
+
+describe('Directive: Mask (Validation of numeric control values)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ validation: true })],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+        component.mask.set('0*.00');
+        component.dropSpecialCharacters.set(false);
+        fixture.detectChanges();
+    });
+
+    it('does not throw for a numeric control value and agrees with the string value', () => {
+        const validator = component.form.validator as (c: FormControl) => unknown;
+        const numeric = new FormControl(12.5);
+        const text = new FormControl('12.5');
+
+        expect(() => validator(numeric)).not.toThrow();
+        expect(validator(numeric)).toEqual(validator(text));
+    });
+});
+
+describe('Directive: Mask (Validation re-runs when the mask configuration changes)', () => {
+    let fixture: ComponentFixture<TestMaskComponent>;
+    let component: TestMaskComponent;
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            imports: [ReactiveFormsModule, NgxMaskDirective, TestMaskComponent],
+            providers: [provideNgxMask({ validation: true })],
+        });
+        fixture = TestBed.createComponent(TestMaskComponent);
+        component = fixture.componentInstance;
+    });
+
+    it('does not emit status changes while the inputs are bound for the first time', () => {
+        component.mask.set('0000');
+        const statusChanges = vi.fn();
+        component.form.statusChanges.subscribe(statusChanges);
+
+        fixture.detectChanges();
+
+        expect(statusChanges).not.toHaveBeenCalled();
+    });
+
+    it('revalidates a filled control when [mask] becomes shorter, without typing', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.mask.set('00');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
+    });
+
+    it('revalidates a filled control when [mask] becomes longer, without typing', () => {
+        component.mask.set('00');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.errors).toBeNull();
+
+        component.mask.set('0000');
+        fixture.detectChanges();
+
+        expect(component.form.hasError('mask')).equal(true);
+    });
+
+    it('revalidates against the state the new mask derives (IP verdict), not the previous one', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('1234', '1234', fixture);
+        expect(component.form.errors).toBeNull();
+
+        component.mask.set('IP');
+        fixture.detectChanges();
+
+        expect(component.form.errors).toEqual({
+            mask: { requiredMask: 'IP', actualValue: '1234' },
+        });
+    });
+
+    it('revalidates when [validation] is switched off', () => {
+        component.mask.set('0000');
+        fixture.detectChanges();
+        equal('12', '12', fixture);
+        expect(component.form.hasError('mask')).equal(true);
+
+        component.validation.set(false);
+        fixture.detectChanges();
+
+        expect(component.form.errors).toBeNull();
     });
 });
