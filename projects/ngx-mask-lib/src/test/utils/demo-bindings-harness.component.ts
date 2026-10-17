@@ -6,6 +6,9 @@ import { form, FormField } from '@angular/forms/signals';
 import type { NgxMaskConfig } from 'ngx-mask';
 import { initialConfig, NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 
+/** What the demo's controls hold: a string, or a number once a numeric model was written. */
+export type DemoModel = string | number | null;
+
 /** Subset of the demo's `MaskOptions` (src/app/shared/accordion/content.types.ts). */
 export type DemoExample = Partial<{
     _prefix: string;
@@ -130,28 +133,29 @@ export type DemoExample = Partial<{
 })
 export class DemoBindingsHarnessComponent implements OnInit {
     public readonly ex = input<DemoExample>({});
-    public readonly initialValue = input<string | null>('');
-    protected readonly reactive = signal<FormControl<string | null> | null>(null);
-    protected readonly signalField = signal<FieldTree<{ value: string | null }> | null>(null);
-    public model: string | null = '';
+    /** The model every control starts from; a number models a numeric model. */
+    public readonly initialValue = input<DemoModel>('');
+    protected readonly reactive = signal<FormControl<DemoModel> | null>(null);
+    protected readonly signalField = signal<FieldTree<{ value: DemoModel }> | null>(null);
+    public model: DemoModel = '';
     protected readonly specialCharacters = initialConfig.specialCharacters;
     protected readonly outputTransformFn = initialConfig.outputTransformFn;
     protected readonly inputTransformFn = initialConfig.inputTransformFn;
     private readonly injector = inject(Injector);
 
-    public get form(): FormControl<string | null> {
-        return this.reactive() as FormControl<string | null>;
+    public get form(): FormControl<DemoModel> {
+        return this.reactive() as FormControl<DemoModel>;
     }
 
-    public get signalValue(): string | null {
-        return (this.signalField() as FieldTree<{ value: string | null }>).value().value();
+    public get signalValue(): DemoModel {
+        return (this.signalField() as FieldTree<{ value: DemoModel }>).value().value();
     }
 
     public ngOnInit(): void {
         const initial = this.initialValue();
         this.model = initial;
-        const signalModel = signal<{ value: string | null }>({ value: initial });
+        const signalModel = signal<{ value: DemoModel }>({ value: initial });
         this.signalField.set(runInInjectionContext(this.injector, () => form(signalModel)));
-        this.reactive.set(new FormControl<string | null>(initial));
+        this.reactive.set(new FormControl<DemoModel>(initial));
     }
 }

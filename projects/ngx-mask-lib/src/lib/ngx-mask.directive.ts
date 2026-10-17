@@ -357,8 +357,6 @@ export class NgxMaskDirective
             suffix: this._maskService.suffix,
         };
         if (mask) {
-            const previousMask = this._maskService.maskExpression;
-            const wasSeparatorMask = previousMask.startsWith(MaskExpression.SEPARATOR);
             if (mask.currentValue !== mask.previousValue && !mask.firstChange) {
                 this._maskService.maskChanged = true;
             }
@@ -375,18 +373,6 @@ export class NgxMaskDirective
                 this._maskExpressionArray.set([]);
                 this._maskValue.set(resolvedMask);
                 this._maskService.maskExpression = this._maskValue();
-            }
-            // Numeric emission follows a separator mask (writeValue switches it on for one), so a
-            // runtime switch into or out of one must flip it, otherwise the model keeps the type
-            // and the number parsing of the previous mask. A first mask after none is no switch:
-            // the model keeps the type its writes gave it.
-            const isSeparatorMask = this._maskValue().startsWith(MaskExpression.SEPARATOR);
-            if (
-                !mask.firstChange &&
-                previousMask !== MaskExpression.EMPTY_STRING &&
-                wasSeparatorMask !== isSeparatorMask
-            ) {
-                this._maskService.isNumberValue = isSeparatorMask;
             }
         }
         if (specialCharacters) {
@@ -483,7 +469,14 @@ export class NgxMaskDirective
             decimalMarker,
             dropSpecialCharacters,
         ];
-        if (specialCharactersSources.some((change) => change && !change.firstChange)) {
+        // A switch to no mask is neutral: the raw-value revert of the empty mask (applyMask's
+        // maskChanged branch) strips with the working set of the mask the value was produced by
+        // (a separator mask keeps its markers out of it), so the rebuild from the bound values
+        // waits for the next mask.
+        if (
+            this._maskValue() &&
+            specialCharactersSources.some((change) => change && !change.firstChange)
+        ) {
             this._maskService.specialCharacters = this._boundConfig.specialCharacters;
             this._keepMinusOutOfSpecialCharacters();
         }
@@ -817,6 +810,15 @@ export class NgxMaskDirective
         );
     }
 
+    /**
+     * Whether nothing the user entered follows the caret, i.e. the edit ended the value. Only
+     * the suffix and the untouched skeleton of a showMaskTyped / keepCharacterPositions field
+     * (special and placeholder characters) may still follow it.
+     */
+    private _editEndsValue(el: HTMLInputElement): boolean {
+        return !this._maskService.removeMask(el.value.slice(el.selectionEnd ?? el.value.length));
+    }
+
     private _processInput(e: Event): void {
         this._maskService.isInitialized = true;
         // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
@@ -875,8 +877,11 @@ export class NgxMaskDirective
                 // A whole string inserted by ONE edit (autofill, a drop, a speech or
                 // clipboard-style IME insertion, the Browser pane's insertText) is a paste: it
                 // arrives as a bare run of characters, not as a keystroke on top of the already
-                // masked value, and fires no `paste` event.
-                if (this._isBulkInsertion(e)) {
+                // masked value, and fires no `paste` event. Only when the run ends the value,
+                // though: the paste path puts the caret at the end of the value, which is wrong
+                // for a run inserted (dictation, a spellcheck or predictive replacement) in the
+                // middle of it — that edit keeps the keystroke path and its caret.
+                if (this._isBulkInsertion(e) && this._editEndsValue(el)) {
                     this._justPasted.set(true);
                 }
 
