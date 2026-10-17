@@ -59,28 +59,28 @@ export const OptDocs: ComDoc[] = [
         text: 'You can validate your formControl, default value is true',
         code: ` <input type='text' mask="00/00/0000" [showMaskTyped]="true" [keepCharacterPositions]="true">`,
         id: 7,
-        anchor: 'keep000',
+        anchor: 'keep-date',
     },
     {
         header: 'Keep Character Positions',
         text: 'You can validate your formControl, default value is true',
         code: ` <input type='text' mask="0000 0000 0000 0000" [showMaskTyped]="true" [keepCharacterPositions]="true">`,
         id: 7,
-        anchor: 'keep000',
+        anchor: 'keep-card',
     },
     {
         header: 'Keep Character Positions',
         text: 'You can validate your formControl, default value is true',
         code: ` <input type='text' mask="0 000" [suffix]="'$'" [showMaskTyped]="true" [keepCharacterPositions]="true">`,
         id: 7,
-        anchor: 'keep000',
+        anchor: 'keep-suffix',
     },
     {
         header: 'Keep Character Positions',
         text: 'You can validate your formControl, default value is true',
         code: ` <input type='text' mask="0000.00" [prefix]="'$'" [showMaskTyped]="true" [keepCharacterPositions]="true">`,
         id: 7,
-        anchor: 'keep000',
+        anchor: 'keep-prefix',
     },
     {
         header: 'defaultValueOnBlur (string)',
@@ -95,13 +95,13 @@ export const OptExamples: TExampleConfig<OptMaskOptions>[] = [
     {
         _placeholder: 'prefix',
         _prefix: '+7 ',
-        _mask: '(00) 000 000',
+        _mask: '(000) 000 00 00',
         control: { initialValue: '', model: '' },
     },
     {
         _placeholder: 'suffix',
         _suffix: ' $',
-        _mask: '0 000',
+        _mask: '0000',
         control: { initialValue: '', model: '' },
     },
     {

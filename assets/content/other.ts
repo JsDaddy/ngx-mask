@@ -18,8 +18,7 @@ export const OthDocs: ComDoc[] = [
     {
         header: 'specialCharacters',
         text: '',
-        // eslint-disable-next-line no-useless-escape
-        code: ` <input type='text' [specialCharacters]="[ '[' ,']' , '\\' ]" mask="[00]\[000]" >`,
+        code: ` <input type='text' [specialCharacters]="['[', ']', '\\\\']" mask="[00][000]" >`,
         id: 3,
         anchor: 'special',
     },
@@ -67,7 +66,7 @@ export const OthExamples: (TExampleConfig<MaskOptions> | { _pipe: string })[] = 
     },
     {
         _placeholder: 'specialCharacters',
-        _specialCharacters: `[ '[' ,']' , '\\' ]`,
+        _specialCharacters: ['[', ']', '\\'],
         _mask: '[00][000]',
         control: { initialValue: '', model: '' },
     },
