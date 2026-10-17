@@ -3,19 +3,21 @@ import type { NgxMaskService } from '../ngx-mask.service';
 import { nextFillableIndex } from '../ngx-mask.utils';
 
 /** The mask service state the resolution reads; plain property reads, nothing is written back. */
-export type KeepCharacterPositionsState = Pick<
-    NgxMaskService,
-    | 'prefix'
-    | 'suffix'
-    | 'showMaskTyped'
-    | 'maskExpression'
-    | 'maskIsShown'
-    | 'placeHolderCharacter'
-    | 'specialCharacters'
-    | 'selStart'
-    | 'selEnd'
-    | 'actualValue'
-    | '_checkSymbolMask'
+export type KeepCharacterPositionsState = Readonly<
+    Pick<
+        NgxMaskService,
+        | 'prefix'
+        | 'suffix'
+        | 'showMaskTyped'
+        | 'maskExpression'
+        | 'maskIsShown'
+        | 'placeHolderCharacter'
+        | 'specialCharacters'
+        | 'selStart'
+        | 'selEnd'
+        | 'actualValue'
+        | '_checkSymbolMask'
+    >
 >;
 
 /** The edit being resolved. */
