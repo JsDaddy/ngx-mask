@@ -29,6 +29,8 @@ export type TriModeMaskConfig = {
     specialCharacters?: string[];
     patterns?: NgxMaskConfig['patterns'];
     showMaskTyped?: boolean;
+    leadZeroDateTime?: boolean;
+    apm?: boolean;
     /** Options forwarded to provideNgxMask() (DI-level config, e.g. maskAliases). */
     providerOptions?: NgxMaskOptions;
 };
@@ -81,6 +83,10 @@ export class TriModeConfigBase {
     public readonly showMaskTyped = signal<NgxMaskConfig['showMaskTyped']>(
         this._config.showMaskTyped
     );
+    public readonly leadZeroDateTime = signal<NgxMaskConfig['leadZeroDateTime']>(
+        this._config.leadZeroDateTime
+    );
+    public readonly apm = signal<NgxMaskConfig['apm']>(this._config.apm);
 }
 
 @Component({
@@ -100,6 +106,8 @@ export class TriModeConfigBase {
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
             [showMaskTyped]="showMaskTyped()"
+            [leadZeroDateTime]="leadZeroDateTime()"
+            [apm]="apm()"
             [formControl]="form" />
     `,
 })
@@ -124,6 +132,8 @@ export class TriModeReactiveComponent extends TriModeConfigBase {
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
             [showMaskTyped]="showMaskTyped()"
+            [leadZeroDateTime]="leadZeroDateTime()"
+            [apm]="apm()"
             [disabled]="disabledField()"
             [(ngModel)]="value" />
     `,
@@ -152,6 +162,8 @@ export class TriModeTemplateComponent extends TriModeConfigBase {
             [leadZero]="leadZero()"
             [allowNegativeNumbers]="allowNegativeNumbers()"
             [showMaskTyped]="showMaskTyped()"
+            [leadZeroDateTime]="leadZeroDateTime()"
+            [apm]="apm()"
             [formField]="signalForm.value" />
     `,
 })
@@ -198,6 +210,12 @@ function applyConfig(host: TriModeConfigBase, config: TriModeMaskConfig): void {
     }
     if (typeof config.showMaskTyped === 'boolean') {
         host.showMaskTyped.set(config.showMaskTyped);
+    }
+    if (typeof config.leadZeroDateTime === 'boolean') {
+        host.leadZeroDateTime.set(config.leadZeroDateTime);
+    }
+    if (typeof config.apm === 'boolean') {
+        host.apm.set(config.apm);
     }
 }
 
