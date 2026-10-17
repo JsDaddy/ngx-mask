@@ -122,6 +122,54 @@ describe('Bulk insertion: one edit that inserts several characters (real browser
         expect(m.get('#masked').value).toBe('2023-12-15');
         expect(m.component.form.value).toBe('20231215');
     });
+
+    // dictation or a predictive replacement in the middle of the value: not a paste, so the
+    // caret stays right after the inserted run instead of jumping to the end
+    it('keeps the caret after a run inserted in the middle of the value', async () => {
+        const m = await mount(MaskHarnessComponent, { mask: '0000-0000' });
+        await m.type('#masked', '12345');
+        const el = m.get('#masked');
+        expect(el.value).toBe('1234-5');
+
+        m.select('#masked', 1, 1);
+        insert(el, '99', 'insertText');
+        await m.settle();
+
+        expect(el.value).toBe('1992-345');
+        expect(m.component.form.value).toBe('1992345');
+        expect(el.selectionStart).toBe(3);
+    });
+
+    it('takes a whole value inserted over the selected value of a hiddenInput field', async () => {
+        const m = await mount(MaskHarnessComponent, { mask: 'XXXX', hiddenInput: true });
+        await m.type('#masked', '12');
+        const el = m.get('#masked');
+        expect(el.value).toBe('**');
+
+        m.selectAll('#masked');
+        insert(el, '1234', 'insertText');
+        await m.settle();
+
+        expect(el.value).toBe('****');
+        expect(m.component.form.value).toBe('1234');
+    });
+
+    it('formats a run inserted in front of the untouched keepCharacterPositions skeleton', async () => {
+        const m = await mount(MaskHarnessComponent, {
+            mask: '000-000',
+            showMaskTyped: true,
+            keepCharacterPositions: true,
+        });
+        const el = focus(m);
+        m.select('#masked', 0, 0);
+        expect(el.value).toBe('___-___');
+
+        insert(el, '123', 'insertText');
+        await m.settle();
+
+        expect(el.value).toBe('123-___');
+        expect(m.component.form.value).toBe('123');
+    });
 });
 
 @Component({
