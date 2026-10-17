@@ -21,8 +21,18 @@ export class ScrollService {
     public constructor() {
         // afterNextRender must be called in an injection context (constructor)
         afterNextRender(() => {
+            this.scrollToFragment();
             this.initScrollListener();
         });
+    }
+
+    /** Native fragment scroll misses the cards: their DOM id is not the section number. */
+    private scrollToFragment(): void {
+        const section = this.document.location.hash.slice(1);
+        this.cards()
+            .find((card) => card.nativeElement.dataset['section'] === section)
+            ?.nativeElement.querySelector('[id]')
+            ?.scrollIntoView({ block: 'start' });
     }
 
     private initScrollListener(): void {
