@@ -161,6 +161,16 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
             const inputValueSliceMinusOnePlusOne = processedValue.slice(cursor - 1, cursor + 1);
             const inputValueSliceCursorPlusTwo = processedValue.slice(cursor, cursor + 2);
             const inputValueSliceMinusTwoCursor = processedValue.slice(cursor - 2, cursor);
+            // Issue #1611: `cursor` indexes the mask, `i` indexes the input. On paste/writeValue
+            // of a bare digit string the cursor runs ahead of the input by every emitted
+            // separator, so cursor-based slices read the previous field's digits instead of the
+            // day or month ('20231215' in '0000.M0.d0' read the day digits '21' as the month
+            // window) — anchor the day/month window on the input index in those flows.
+            // Keystroke flows keep the historical cursor anchor (with showMaskTyped the value
+            // also carries placeholder chars, where the input anchor misreads).
+            const windowStart = params.justPasted || this.writingValue ? i : cursor;
+            const windowSlice = processedValue.slice(windowStart, windowStart + 2);
+            const windowNext = processedValue[windowStart + 1] as string;
             // Issue #1523: when the date token directly abuts a plain digit
             // token (year-first masks without separators like 00M0d0 or
             // 0000M0d0), the backward-looking windows below read the previous
@@ -172,16 +182,6 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                 const startWithMonthInput: boolean =
                     maskExpression.slice(0, 2) === MaskExpression.MONTHS &&
                     this.specialCharacters.includes(inputValueCursorMinusTwo);
-                // Issue #1611: `cursor` indexes the mask, `i` indexes the input.
-                // On paste/writeValue of a bare digit string the cursor runs
-                // ahead of the input by every emitted separator, so cursor-based
-                // slices read year digits instead of the day — anchor the day
-                // window on the input index in those flows. Keystroke flows keep
-                // the historical cursor anchor (with showMaskTyped the value also
-                // carries placeholder chars, where the input anchor misreads).
-                const dayWindowStart = params.justPasted || this.writingValue ? i : cursor;
-                const dayWindowSlice = processedValue.slice(dayWindowStart, dayWindowStart + 2);
-                const dayWindowNext = processedValue[dayWindowStart + 1] as string;
                 if (
                     (Number(inputSymbol) > 3 && this.leadZeroDateTime) ||
                     (!maskStartWithMonth &&
@@ -194,8 +194,8 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                           (!this.specialCharacters.includes(inputValueCursor) &&
                               this.specialCharacters.includes(inputValueCursorPlusTwo)) ||
                           this.specialCharacters.includes(inputValueCursor)
-                        : Number(dayWindowSlice) > daysCount ||
-                          (this.specialCharacters.includes(dayWindowNext) && !params.backspaced))
+                        : Number(windowSlice) > daysCount ||
+                          (this.specialCharacters.includes(windowNext) && !params.backspaced))
                 ) {
                     processedPosition = !this.leadZeroDateTime
                         ? processedPosition + 1
@@ -270,19 +270,10 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     this.specialCharacters.includes(inputValueCursorMinusOne) &&
                     (Number(inputValueSliceCursorPlusTwo) > monthsCount ||
                         this.specialCharacters.includes(inputValueCursorPlusOne));
-                // cursor === 5 && without days. Same cursor-vs-input anchor as the day window
-                // (#1611): a pasted/written bare digit string runs behind the mask cursor by
-                // every emitted separator, so '20231215' in '0000.M0.d0' read the day digits
-                // '21' as the month window and skipped the month.
-                const monthWindowStart = params.justPasted || this.writingValue ? i : cursor;
-                const monthWindowSlice = processedValue.slice(
-                    monthWindowStart,
-                    monthWindowStart + 2
-                );
-                const monthWindowNext = processedValue[monthWindowStart + 1] as string;
+                // cursor === 5 && without days
                 const day2monthInputDot: boolean =
-                    (Number(monthWindowSlice) > monthsCount && cursor === 5) ||
-                    (this.specialCharacters.includes(monthWindowNext) && cursor === 5);
+                    (Number(windowSlice) > monthsCount && cursor === 5) ||
+                    (this.specialCharacters.includes(windowNext) && cursor === 5);
                 // // day<10 && month<12 for paste whole data
                 const day1monthPaste: boolean =
                     !tokenAbutsDigitField &&
