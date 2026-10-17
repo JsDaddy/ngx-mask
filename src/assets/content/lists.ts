@@ -235,6 +235,11 @@ export const lists: ListItem[] = [
                 scrollTo: '12hour',
             },
             {
+                content: '12 hour format with leadZeroDateTime',
+                id: 8,
+                scrollTo: '12hour-lead-zero-date-time',
+            },
+            {
                 content: 'Percent with comma',
                 id: 5,
                 scrollTo: 'percentDecimalMarker',
