@@ -25,6 +25,7 @@ import { NGX_MASK_CONFIG } from 'ngx-mask';
             [thousandSeparator]="thousandSeparator()"
             [shownMaskExpression]="shownMaskExpression()"
             [leadZeroDateTime]="leadZeroDateTime()"
+            [apm]="apm()"
             [dropSpecialCharacters]="dropSpecialCharacters()"
             [specialCharacters]="specialCharacters()"
             [patterns]="patterns()"
@@ -83,6 +84,8 @@ export class MaskHarnessComponent implements OnInit, OnDestroy {
     public leadZeroDateTime = input<NgxMaskConfig['leadZeroDateTime']>(
         this._config.leadZeroDateTime
     );
+
+    public apm = input<NgxMaskConfig['apm']>(this._config.apm);
 
     public separatorLimit = input<NgxMaskConfig['separatorLimit']>(this._config.separatorLimit);
 

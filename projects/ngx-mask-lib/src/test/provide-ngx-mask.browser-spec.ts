@@ -113,11 +113,19 @@ describe('provideNgxMask - global config reaches the directive (bare input)', ()
         await expect.poll(() => m.get('#masked').selectionStart).toBe(5);
     });
 
-    it('global apm: typing 00 into Hh:m0:s0 collapses to a single 0 like [apm]="true"', async () => {
+    it('global apm: typing 00 into Hh:m0:s0 is kept without leadZeroDateTime', async () => {
         configure({ apm: true });
         const m = await mount(BareDynamicMaskComponent, { mask: 'Hh:m0:s0' });
 
         await m.type('#masked', '00');
-        await expect.poll(() => m.get('#masked').value).toBe('0');
+        await expect.poll(() => m.get('#masked').value).toBe('00');
+    });
+
+    it('global apm with leadZeroDateTime: typing 00 into Hh:m0:s0 gives the hour 01', async () => {
+        configure({ apm: true, leadZeroDateTime: true });
+        const m = await mount(BareDynamicMaskComponent, { mask: 'Hh:m0:s0' });
+
+        await m.type('#masked', '00');
+        await expect.poll(() => m.get('#masked').value).toBe('01');
     });
 });
