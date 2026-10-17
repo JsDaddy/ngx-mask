@@ -28,6 +28,11 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
+import {
+    leadZeroDateTimeCaret,
+    normalizeApmHoursValue,
+    overwriteFullDateValue,
+} from './caret/date-overflow';
 import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -40,14 +45,6 @@ import {
 } from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
-
-// #1488: a date/time field located within `maskExpression` for the generalized
-// caret-shift-past-separator fix (see `_findDateTimeFieldAt`/`_isFieldOverflowing`).
-type DateTimeField = {
-    token: 'd' | 'M' | 'H' | 'h' | 'm' | 's';
-    start: number; // index of the field's first char in maskExpression
-    end: number; // index one past the field's digit run (start of separator/next field)
-};
 
 // Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
 const MIRRORED_INPUTS = [
@@ -956,54 +953,29 @@ export class NgxMaskDirective
                 if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
-                if (
-                    this._inputValue().length >= this._maskService.maskExpression.length - 1 &&
-                    this._code() !== MaskExpression.BACKSPACE &&
-                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
-                    position < 10
-                ) {
-                    const inputSymbol = this._inputValue().slice(position - 1, position);
-                    el.value =
-                        this._inputValue().slice(0, position - 1) +
-                        inputSymbol +
-                        this._inputValue().slice(position + 1);
+                const overwrittenDate = overwriteFullDateValue(
+                    this._maskService.maskExpression,
+                    this._inputValue(),
+                    position,
+                    this._code()
+                );
+                if (overwrittenDate !== null) {
+                    el.value = overwrittenDate;
                 }
-                // #1488: generalizes the single-mask (d0/M0/0000) caret-shift-past-separator
-                // fix to any date/time field. Locates the date/time field containing
-                // `position` by scanning maskExpression for a DAY/MONTH/HOURS/HOUR/MINUTE/
-                // SECOND token followed by its digit run, then checks overflow against the
-                // same per-field thresholds generic-pattern.handler.ts already establishes
-                // (day 31, month 12, hour 23/12 w/ apm, minute/second 59). Read-only against
-                // generic-pattern.handler.ts — mirrors its thresholds, does not import from it.
                 if (this._maskService.leadZeroDateTime) {
-                    const field = this._findDateTimeFieldAt(
+                    position = leadZeroDateTimeCaret(
                         this._maskService.maskExpression,
-                        position
+                        position,
+                        el.value,
+                        this._inputValue(),
+                        !!this._maskService.apm
                     );
-                    if (
-                        field &&
-                        this._isFieldOverflowing(
-                            field,
-                            position,
-                            el.value,
-                            this._inputValue(),
-                            !!this._maskService.apm
-                        )
-                    ) {
-                        position = position + 2;
-                    }
                 }
                 if (
                     this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
                     this._maskService.apm
                 ) {
-                    if (this._justPasted() && el.value.slice(0, 2) === MaskExpression.DOUBLE_ZERO) {
-                        el.value = el.value.slice(1, 2) + el.value.slice(2, el.value.length);
-                    }
-                    el.value =
-                        el.value === MaskExpression.DOUBLE_ZERO
-                            ? MaskExpression.NUMBER_ZERO
-                            : el.value;
+                    el.value = normalizeApmHoursValue(el.value, this._justPasted());
                 }
 
                 this._maskService.applyValueChanges(
@@ -1107,96 +1079,6 @@ export class NgxMaskDirective
                 this._justPasted(),
                 this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE
             );
-        }
-    }
-
-    /**
-     * #1488: locates the date/time field (DAY/MONTH/HOURS/HOUR/MINUTE/SECOND) that
-     * `position` falls within, scanning `maskExpression` left-to-right. A field spans
-     * its token plus its digit-pair companion — `0` for DAY/MONTH/MINUTE/SECOND (e.g.
-     * `d0`, `M0`, `m0`, `s0`), or `HOUR` for the combined `Hh` hour field. Matches any
-     * position from the field's first char up to and including its end (separator index),
-     * so both a still-mid-typing caret and the just-completed field are covered — the
-     * precise overflow decision (single first digit vs. completed 2-digit value) happens
-     * in `_isFieldOverflowing`. Returns null for non-date/time masks, a no-op for the caller.
-     */
-    private _findDateTimeFieldAt(maskExpression: string, position: number): DateTimeField | null {
-        const dateTimeTokens: readonly string[] = [
-            MaskExpression.DAY,
-            MaskExpression.MONTH,
-            MaskExpression.HOURS,
-            MaskExpression.HOUR,
-            MaskExpression.MINUTE,
-            MaskExpression.SECOND,
-        ];
-        let index = 0;
-        while (index < maskExpression.length) {
-            const token = maskExpression[index] ?? MaskExpression.EMPTY_STRING;
-            if (dateTimeTokens.includes(token)) {
-                const next = maskExpression[index + 1];
-                const isCombinedHour =
-                    token === MaskExpression.HOURS && next === MaskExpression.HOUR;
-                const end =
-                    next === MaskExpression.NUMBER_ZERO || isCombinedHour ? index + 2 : index + 1;
-                if (position >= index && position <= end) {
-                    return {
-                        token: token as DateTimeField['token'],
-                        start: index,
-                        end,
-                    };
-                }
-                index = end;
-                continue;
-            }
-            index++;
-        }
-        return null;
-    }
-
-    /**
-     * Per-token overflow thresholds, mirroring the ones `generic-pattern.handler.ts`
-     * already establishes (day 31, month 12, hour 23/12 w/ apm, minute/second 59) — kept
-     * as a small local table rather than importing from the handler (see design's
-     * Rejected Alternatives: the directive and the handler stay on separate sides of the
-     * display/parse boundary).
-     *
-     * Two overflow shapes are checked, mirroring how the handler itself decides mid-type:
-     * - `firstDigitValue`: when `position` is exactly one char past the field's start (the
-     *   just-typed char is the field's first digit), an out-of-range first digit alone
-     *   (e.g. month digit `3`, day digit `4`) already triggers the handler's own leadZero
-     *   pad within this same keystroke — `el.value` hasn't caught up yet at this point in
-     *   the pipeline, so the raw typed digit (`inputValue`) must be read instead.
-     * - `fieldValue`: once both digits of the field are present in `el.value`, an
-     *   out-of-range 2-digit value (e.g. day `33`, month `13`) triggers the shift directly.
-     */
-    private _isFieldOverflowing(
-        field: DateTimeField,
-        position: number,
-        elValue: string,
-        inputValue: string,
-        apm: boolean
-    ): boolean {
-        const fieldValue = Number(elValue.slice(field.start, field.end));
-        const isFirstDigitOfField = position === field.start + 1;
-        const firstDigitValue = isFirstDigitOfField
-            ? Number(inputValue.slice(position - 1, position))
-            : NaN;
-        switch (field.token) {
-            case MaskExpression.DAY:
-                return (fieldValue > 31 && fieldValue < 40) || firstDigitValue > 3;
-            case MaskExpression.MONTH:
-                return fieldValue > 12 || firstDigitValue > 1;
-            case MaskExpression.HOURS:
-                return apm
-                    ? fieldValue > 9 || firstDigitValue > 9
-                    : fieldValue > 23 || firstDigitValue > 2;
-            case MaskExpression.HOUR:
-                return apm ? fieldValue > 12 : fieldValue > 23;
-            case MaskExpression.MINUTE:
-            case MaskExpression.SECOND:
-                return fieldValue > 59 || firstDigitValue > 5;
-            default:
-                return false;
         }
     }
 
