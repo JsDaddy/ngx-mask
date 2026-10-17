@@ -28,11 +28,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
-import {
-    leadZeroDateTimeCaret,
-    normalizeApmHoursValue,
-    overwriteFullDateValue,
-} from './caret/date-overflow';
+import { leadZeroDateTimeCaret, overwriteFullDateValue } from './caret/date-overflow';
 import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -957,12 +953,6 @@ export class NgxMaskDirective
                         this._inputValue(),
                         !!this._maskService.apm
                     );
-                }
-                if (
-                    this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
-                    this._maskService.apm
-                ) {
-                    el.value = normalizeApmHoursValue(el.value, this._justPasted());
                 }
 
                 this._maskService.applyValueChanges(

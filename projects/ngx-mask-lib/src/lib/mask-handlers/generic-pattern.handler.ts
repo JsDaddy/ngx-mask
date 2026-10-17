@@ -97,19 +97,30 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                 maskExpression[cursor] ?? MaskExpression.EMPTY_STRING
             )
         ) {
-            if (maskExpression[cursor] === MaskExpression.HOURS) {
-                if (this.apm ? Number(inputSymbol) > 9 : Number(inputSymbol) > 2) {
-                    processedPosition = !this.leadZeroDateTime
-                        ? processedPosition + 1
-                        : processedPosition;
-                    cursor += 1;
-                    this._shiftStep(cursor);
-                    i--;
-                    if (this.leadZeroDateTime) {
-                        result += '0';
-                    }
-                    continue;
+            // The two-digit hour pair read ahead: `24` (or `13` with apm) is padded to `02` / `01`
+            // at its first digit, as a month `13` is, so the second digit starts the minutes.
+            const hourOverflow =
+                this.leadZeroDateTime &&
+                (maskExpression[cursor] === MaskExpression.HOURS ||
+                    (maskExpression[cursor] === MaskExpression.HOUR &&
+                        maskExpression[cursor + 1] === MaskExpression.HOUR)) &&
+                Number(inputSymbol + (inputArray[i + 1] ?? MaskExpression.EMPTY_STRING)) >
+                    (this.apm ? 12 : 23);
+            if (
+                hourOverflow ||
+                (maskExpression[cursor] === MaskExpression.HOURS &&
+                    (this.apm ? Number(inputSymbol) > 9 : Number(inputSymbol) > 2))
+            ) {
+                processedPosition = !this.leadZeroDateTime
+                    ? processedPosition + 1
+                    : processedPosition;
+                cursor += 1;
+                this._shiftStep(cursor);
+                i--;
+                if (this.leadZeroDateTime) {
+                    result += '0';
                 }
+                continue;
             }
             if (maskExpression[cursor] === MaskExpression.HOUR) {
                 if (
@@ -150,6 +161,21 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     }
                     continue;
                 }
+            }
+            // A typed, pasted or Backspaced `00` for a day, a month or a 12-hour hour becomes `01`
+            // (leadZeroDateTime only; programmatic writes keep their `00`).
+            if (
+                this.leadZeroDateTime &&
+                !this.writingValue &&
+                inputSymbol === MaskExpression.NUMBER_ZERO &&
+                result.slice(-1) === MaskExpression.NUMBER_ZERO &&
+                (maskExpression[cursor - 1] === MaskExpression.DAY ||
+                    maskExpression[cursor - 1] === MaskExpression.MONTH ||
+                    (this.apm &&
+                        maskExpression[cursor] === MaskExpression.HOUR &&
+                        maskExpression[cursor - 1] === MaskExpression.HOURS))
+            ) {
+                inputSymbol = '1';
             }
             const daysCount = 31;
             const inputValueCursor = processedValue[cursor] as string;
@@ -250,8 +276,15 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     cursor === 0 &&
                     (Number(inputSymbol) > 2 ||
                         Number(inputValueSliceCursorPlusTwo) > monthsCount ||
+                        // after Backspace only a digit that follows the separator needs the pad
+                        // (`1/31` -> `01/31`); a lone `1` before placeholders stays as it is
                         (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                            !params.backspaced));
+                            (!params.backspaced || /\d/.test(inputValueCursorPlusTwo))));
+                // year-first masks (0000.M0.d0) switch the backward heuristics off: read the month's own pair
+                const yearFirstMonthOverflow =
+                    this.leadZeroDateTime &&
+                    yearFieldPrecedesMonth &&
+                    Number(windowSlice) > monthsCount;
                 // day<10 && month<12 for input
                 const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                 const day1monthInput: boolean =
@@ -298,7 +331,8 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     day2monthPaste ||
                     day1monthPaste ||
                     day2monthInput ||
-                    (day2monthInputDot && !this.leadZeroDateTime)
+                    (day2monthInputDot && !this.leadZeroDateTime) ||
+                    yearFirstMonthOverflow
                 ) {
                     processedPosition = !this.leadZeroDateTime
                         ? processedPosition + 1
