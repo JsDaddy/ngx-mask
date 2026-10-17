@@ -1,29 +1,30 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
+import type { NgxMaskService } from '../ngx-mask.service';
 
-/** What the keepCharacterPositions resolution reads; plain values and one callback, no service. */
-export type KeepCharacterPositionsInput = {
+/** The mask service state the resolution reads; plain property reads, nothing is written back. */
+export type KeepCharacterPositionsState = Pick<
+    NgxMaskService,
+    | 'prefix'
+    | 'suffix'
+    | 'showMaskTyped'
+    | 'maskExpression'
+    | 'maskIsShown'
+    | 'placeHolderCharacter'
+    | 'specialCharacters'
+    | 'selStart'
+    | 'selEnd'
+    | 'actualValue'
+    | '_checkSymbolMask'
+>;
+
+/** The edit being resolved. */
+export type KeepCharacterPositionsEdit = {
     /** The value of the element after the edit. */
     elValue: string;
-    /** The raw value captured for the edit (`_inputValue`). */
-    inputValue: string;
     /** The caret of the element after the edit, already shifted by the prefix for a first character. */
     position: number;
     /** The key code of the edit. */
     code: string;
-    prefix: string;
-    suffix: string;
-    showMaskTyped: boolean;
-    maskExpression: string;
-    /** The rendered placeholder mask of the service (empty when none is shown). */
-    maskIsShown: string;
-    placeHolderCharacter: string;
-    specialCharacters: readonly string[];
-    /** The selection captured before the edit. */
-    selStart: number | null;
-    selEnd: number | null;
-    /** The value the service renders for the control before this edit. */
-    actualValue: string;
-    checkSymbolMask: (inputSymbol: string, maskSymbol: string) => boolean;
 };
 
 export type KeepCharacterPositionsResult = {
@@ -58,20 +59,21 @@ function nextFillableIndex(
  * deleted character leaves a placeholder behind and a typed one overwrites the next fillable slot.
  */
 export function resolveKeepCharacterPositions(
-    input: KeepCharacterPositionsInput
+    svc: KeepCharacterPositionsState,
+    edit: KeepCharacterPositionsEdit
 ): KeepCharacterPositionsResult {
     const {
-        elValue,
-        inputValue,
         prefix,
         suffix,
         showMaskTyped,
         maskExpression,
         placeHolderCharacter,
         specialCharacters,
-        checkSymbolMask,
-    } = input;
-    let position = input.position;
+        selStart: selStartRaw,
+        selEnd: selEndRaw,
+    } = svc;
+    const { elValue } = edit;
+    let position = edit.position;
     let actualValue: string | null = null;
     const inputSymbol = elValue.slice(position - 1, position);
     const prefixLength = prefix.length;
@@ -79,18 +81,18 @@ export function resolveKeepCharacterPositions(
     // replaced by the placeholder character). With showMaskTyped the service
     // renders it as maskIsShown; without showMaskTyped it is derived locally so
     // keepCharacterPositions works on its own (#1545, #1543).
-    const maskSkeleton: string = input.maskIsShown.length
-        ? input.maskIsShown
+    const maskSkeleton: string = svc.maskIsShown.length
+        ? svc.maskIsShown
         : maskExpression.replace(/\w/g, placeHolderCharacter);
 
-    const hasSelection: boolean = input.selStart !== input.selEnd;
-    const selStartAbs = Number(input.selStart);
-    const selEndAbs = Number(input.selEnd);
+    const hasSelection: boolean = selStartRaw !== selEndRaw;
+    const selStartAbs = Number(selStartRaw);
+    const selEndAbs = Number(selEndRaw);
     const selStart = selStartAbs - prefixLength;
     const selEnd = selEndAbs - prefixLength;
 
     const backspaceOrDelete =
-        input.code === MaskExpression.BACKSPACE || input.code === MaskExpression.DELETE;
+        edit.code === MaskExpression.BACKSPACE || edit.code === MaskExpression.DELETE;
 
     let handled = true;
 
@@ -101,18 +103,18 @@ export function resolveKeepCharacterPositions(
                 // The whole value was selected and deleted: clear through the
                 // regular path instead of showing a placeholder skeleton.
                 handled = false;
-            } else if (input.selStart === prefixLength) {
-                actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${inputValue.split(prefix).join('')}`;
-            } else if (input.selStart === maskSkeleton.length + prefixLength) {
-                actualValue = `${inputValue}${maskSkeleton.slice(selStart, selEnd)}`;
+            } else if (selStartRaw === prefixLength) {
+                actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${elValue.split(prefix).join('')}`;
+            } else if (selStartRaw === maskSkeleton.length + prefixLength) {
+                actualValue = `${elValue}${maskSkeleton.slice(selStart, selEnd)}`;
             } else {
-                actualValue = `${prefix}${inputValue
+                actualValue = `${prefix}${elValue
                     .split(prefix)
                     .join('')
                     .slice(
                         0,
                         selStart
-                    )}${maskSkeleton.slice(selStart, selEnd)}${input.actualValue.slice(
+                    )}${maskSkeleton.slice(selStart, selEnd)}${svc.actualValue.slice(
                     selEnd + prefixLength,
                     maskSkeleton.length + prefixLength
                 )}${suffix}`;
@@ -139,7 +141,7 @@ export function resolveKeepCharacterPositions(
                 actualValue = `${part1}${placeHolderCharacter}${part2}`;
             }
         }
-        position = input.code === MaskExpression.DELETE ? position + 1 : position;
+        position = edit.code === MaskExpression.DELETE ? position + 1 : position;
     } else if (hasSelection) {
         // A selected range was replaced by the typed symbol. Keep the layout:
         // blank the selection to the mask skeleton and put the typed symbol
@@ -161,7 +163,10 @@ export function resolveKeepCharacterPositions(
             const targetAbs = maskIdx + prefixLength;
             if (
                 targetAbs < blanked.length - suffix.length &&
-                checkSymbolMask(inputSymbol, maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)
+                svc._checkSymbolMask(
+                    inputSymbol,
+                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
+                )
             ) {
                 actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
                 position = targetAbs + 1;
@@ -197,7 +202,10 @@ export function resolveKeepCharacterPositions(
                     position = position - 1;
                 }
             } else if (
-                checkSymbolMask(inputSymbol, maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)
+                svc._checkSymbolMask(
+                    inputSymbol,
+                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
+                )
             ) {
                 actualValue = `${oldDisplayNoSuffix.slice(0, targetAbs)}${inputSymbol}${oldDisplayNoSuffix.slice(targetAbs + 1)}${suffix}`;
                 position = targetAbs + 1;

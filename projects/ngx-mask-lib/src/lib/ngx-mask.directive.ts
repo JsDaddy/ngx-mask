@@ -902,23 +902,10 @@ export class NgxMaskDirective
                     this._maskService.placeHolderCharacter.length === 1 &&
                     !this._justPasted()
                 ) {
-                    const kcp = resolveKeepCharacterPositions({
+                    const kcp = resolveKeepCharacterPositions(this._maskService, {
                         elValue: el.value,
-                        inputValue: this._inputValue(),
                         position,
                         code: this._code(),
-                        prefix: this._maskService.prefix,
-                        suffix: this._maskService.suffix,
-                        showMaskTyped: this._maskService.showMaskTyped,
-                        maskExpression: this._maskService.maskExpression,
-                        maskIsShown: this._maskService.maskIsShown,
-                        placeHolderCharacter: this._maskService.placeHolderCharacter,
-                        specialCharacters: this._maskService.specialCharacters,
-                        selStart: this._maskService.selStart,
-                        selEnd: this._maskService.selEnd,
-                        actualValue: this._maskService.actualValue,
-                        checkSymbolMask: (inputSymbol, maskSymbol) =>
-                            this._maskService._checkSymbolMask(inputSymbol, maskSymbol),
                     });
                     if (kcp.actualValue !== null) {
                         this._maskService.actualValue = kcp.actualValue;

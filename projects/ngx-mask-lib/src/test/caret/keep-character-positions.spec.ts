@@ -1,16 +1,21 @@
 import { describe, expect, it } from 'vitest';
 
-import type { KeepCharacterPositionsInput } from '../../lib/caret/keep-character-positions';
+import type {
+    KeepCharacterPositionsEdit,
+    KeepCharacterPositionsResult,
+    KeepCharacterPositionsState,
+} from '../../lib/caret/keep-character-positions';
 import { resolveKeepCharacterPositions } from '../../lib/caret/keep-character-positions';
 import { MaskExpression } from '../../lib/ngx-mask-expression.enum';
 
 const digitOnly = (symbol: string, maskSymbol: string): boolean =>
     maskSymbol === '0' && /\d/.test(symbol);
 
-function input(overrides: Partial<KeepCharacterPositionsInput>): KeepCharacterPositionsInput {
+type Case = Partial<KeepCharacterPositionsState> & Partial<KeepCharacterPositionsEdit>;
+
+function input(overrides: Case): Required<Case> {
     return {
         elValue: '',
-        inputValue: '',
         position: 0,
         code: 'Digit5',
         prefix: '',
@@ -23,31 +28,32 @@ function input(overrides: Partial<KeepCharacterPositionsInput>): KeepCharacterPo
         selStart: 0,
         selEnd: 0,
         actualValue: '',
-        checkSymbolMask: digitOnly,
+        _checkSymbolMask: digitOnly,
         ...overrides,
     };
+}
+
+function resolve(c: Required<Case>): KeepCharacterPositionsResult {
+    const { elValue, position, code, ...state } = c;
+    return resolveKeepCharacterPositions(state, { elValue, position, code });
 }
 
 describe('resolveKeepCharacterPositions', () => {
     it('leaves a placeholder behind a backspaced character', () => {
         expect(
-            resolveKeepCharacterPositions(
-                input({ elValue: '12-4', position: 3, code: MaskExpression.BACKSPACE })
-            )
+            resolve(input({ elValue: '12-4', position: 3, code: MaskExpression.BACKSPACE }))
         ).toEqual({ actualValue: '12-_4', position: 3, handled: true });
     });
 
     it('leaves a placeholder at a deleted character and steps past it', () => {
         expect(
-            resolveKeepCharacterPositions(
-                input({ elValue: '2-34', position: 0, code: MaskExpression.DELETE })
-            )
+            resolve(input({ elValue: '2-34', position: 0, code: MaskExpression.DELETE }))
         ).toEqual({ actualValue: '_2-34', position: 1, handled: true });
     });
 
     it('hands the deletion of the last character to regular masking without showMaskTyped', () => {
         expect(
-            resolveKeepCharacterPositions(
+            resolve(
                 input({
                     elValue: '12-3',
                     position: 4,
@@ -61,10 +67,9 @@ describe('resolveKeepCharacterPositions', () => {
 
     it('blanks a deleted selection to the mask skeleton', () => {
         expect(
-            resolveKeepCharacterPositions(
+            resolve(
                 input({
                     elValue: '-34',
-                    inputValue: '-34',
                     position: 0,
                     code: MaskExpression.BACKSPACE,
                     selStart: 0,
@@ -75,7 +80,7 @@ describe('resolveKeepCharacterPositions', () => {
     });
 
     it('overwrites the first fillable slot with a typed symbol', () => {
-        expect(resolveKeepCharacterPositions(input({ elValue: '5__-__', position: 1 }))).toEqual({
+        expect(resolve(input({ elValue: '5__-__', position: 1 }))).toEqual({
             actualValue: '5_-__',
             position: 1,
             handled: true,
@@ -83,7 +88,7 @@ describe('resolveKeepCharacterPositions', () => {
     });
 
     it('skips a special character to land the typed symbol', () => {
-        expect(resolveKeepCharacterPositions(input({ elValue: '125-__', position: 3 }))).toEqual({
+        expect(resolve(input({ elValue: '125-__', position: 3 }))).toEqual({
             actualValue: '12-5_',
             position: 4,
             handled: true,
@@ -91,7 +96,7 @@ describe('resolveKeepCharacterPositions', () => {
     });
 
     it('rejects a symbol the slot does not accept and keeps the display', () => {
-        expect(resolveKeepCharacterPositions(input({ elValue: 'a__-__', position: 1 }))).toEqual({
+        expect(resolve(input({ elValue: 'a__-__', position: 1 }))).toEqual({
             actualValue: null,
             position: 0,
             handled: true,
@@ -99,22 +104,24 @@ describe('resolveKeepCharacterPositions', () => {
     });
 
     it('rejects a symbol typed inside the prefix', () => {
-        expect(
-            resolveKeepCharacterPositions(input({ elValue: '5+1__', position: 1, prefix: '+1' }))
-        ).toEqual({ actualValue: null, position: 0, handled: true });
+        expect(resolve(input({ elValue: '5+1__', position: 1, prefix: '+1' }))).toEqual({
+            actualValue: null,
+            position: 0,
+            handled: true,
+        });
     });
 
     it('puts a symbol that replaced a selection into the first fillable slot of it', () => {
-        expect(
-            resolveKeepCharacterPositions(
-                input({ elValue: '9-34', position: 1, selStart: 0, selEnd: 2 })
-            )
-        ).toEqual({ actualValue: '9_-34', position: 1, handled: true });
+        expect(resolve(input({ elValue: '9-34', position: 1, selStart: 0, selEnd: 2 }))).toEqual({
+            actualValue: '9_-34',
+            position: 1,
+            handled: true,
+        });
     });
 
     it('hands a replaced whole value to regular masking without showMaskTyped', () => {
         expect(
-            resolveKeepCharacterPositions(
+            resolve(
                 input({
                     elValue: '9',
                     position: 1,
@@ -129,9 +136,7 @@ describe('resolveKeepCharacterPositions', () => {
 
     it('hands an append at the end to regular masking without showMaskTyped', () => {
         expect(
-            resolveKeepCharacterPositions(
-                input({ elValue: '12-3', position: 4, showMaskTyped: false, maskIsShown: '' })
-            )
+            resolve(input({ elValue: '12-3', position: 4, showMaskTyped: false, maskIsShown: '' }))
         ).toEqual({ actualValue: null, position: 4, handled: false });
     });
 });
