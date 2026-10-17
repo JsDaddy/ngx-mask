@@ -7,6 +7,7 @@ import {
     digitsOf,
     escapeRegExp,
     ignoreDigitSeparator,
+    nextFillableIndex,
 } from './ngx-mask.utils';
 import { dispatchMaskHandler } from './mask-handlers/mask-handlers.registry';
 import type { MaskHandlerState } from './mask-handlers/mask-handler.types';
@@ -246,13 +247,7 @@ export class NgxMaskApplierService {
             // against the first PATTERN position of the mask, not literally against
             // index 1 — otherwise a valid digit is rejected and the leading literals
             // are never auto-filled (#1498).
-            let firstPatternIndex = 1;
-            while (
-                firstPatternIndex < maskExpression.length &&
-                this.specialCharacters.includes(maskExpression[firstPatternIndex] as string)
-            ) {
-                firstPatternIndex++;
-            }
+            const firstPatternIndex = nextFillableIndex(maskExpression, this.specialCharacters, 1);
             if (
                 !this._checkSymbolMask(
                     processedValue,

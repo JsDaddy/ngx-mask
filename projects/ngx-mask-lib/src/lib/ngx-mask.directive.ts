@@ -28,6 +28,12 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
+import {
+    leadZeroDateTimeCaret,
+    normalizeApmHoursValue,
+    overwriteFullDateValue,
+} from './caret/date-overflow';
+import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 import {
@@ -39,14 +45,6 @@ import {
 } from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
-
-// #1488: a date/time field located within `maskExpression` for the generalized
-// caret-shift-past-separator fix (see `_findDateTimeFieldAt`/`_isFieldOverflowing`).
-type DateTimeField = {
-    token: 'd' | 'M' | 'H' | 'h' | 'm' | 's';
-    start: number; // index of the field's first char in maskExpression
-    end: number; // index one past the field's digit run (start of separator/next field)
-};
 
 // Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
 const MIRRORED_INPUTS = [
@@ -904,181 +902,18 @@ export class NgxMaskDirective
                     this._maskService.placeHolderCharacter.length === 1 &&
                     !this._justPasted()
                 ) {
-                    const suffix = this._maskService.suffix;
-                    const prefix = this._maskService.prefix;
-                    const inputSymbol = el.value.slice(position - 1, position);
-                    const prefixLength = prefix.length;
-                    const showMaskTyped = this._maskService.showMaskTyped;
-                    const maskExpression = this._maskService.maskExpression;
-                    // Placeholder skeleton of the mask (special chars kept, fillable slots
-                    // replaced by the placeholder character). With showMaskTyped the service
-                    // renders it as maskIsShown; without showMaskTyped it is derived locally so
-                    // keepCharacterPositions works on its own (#1545, #1543).
-                    const maskSkeleton: string = this._maskService.maskIsShown.length
-                        ? this._maskService.maskIsShown
-                        : maskExpression.replace(/\w/g, this._maskService.placeHolderCharacter);
-
-                    const hasSelection: boolean =
-                        this._maskService.selStart !== this._maskService.selEnd;
-                    const selStartAbs = Number(this._maskService.selStart);
-                    const selEndAbs = Number(this._maskService.selEnd);
-                    const selStart = selStartAbs - prefixLength;
-                    const selEnd = selEndAbs - prefixLength;
-
-                    const backspaceOrDelete =
-                        this._code() === MaskExpression.BACKSPACE ||
-                        this._code() === MaskExpression.DELETE;
-
-                    // Whether this block fully resolved the resulting display value into
-                    // this._maskService.actualValue. When true, applyMask short-circuits and
-                    // renders actualValue as-is; when false the edit flows through regular
-                    // masking (e.g. appending at the end, or clearing the whole value).
-                    let kcpHandled = true;
-
-                    if (backspaceOrDelete) {
-                        if (hasSelection) {
-                            const preEditLength = el.value.length + (selEndAbs - selStartAbs);
-                            if (
-                                !showMaskTyped &&
-                                selStartAbs <= prefixLength &&
-                                selEndAbs >= preEditLength
-                            ) {
-                                // The whole value was selected and deleted: clear through the
-                                // regular path instead of showing a placeholder skeleton.
-                                kcpHandled = false;
-                            } else if (this._maskService.selStart === prefixLength) {
-                                this._maskService.actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${this._inputValue().split(prefix).join('')}`;
-                            } else if (
-                                this._maskService.selStart ===
-                                maskSkeleton.length + prefixLength
-                            ) {
-                                this._maskService.actualValue = `${this._inputValue()}${maskSkeleton.slice(selStart, selEnd)}`;
-                            } else {
-                                this._maskService.actualValue = `${prefix}${this._inputValue()
-                                    .split(prefix)
-                                    .join('')
-                                    .slice(
-                                        0,
-                                        selStart
-                                    )}${maskSkeleton.slice(selStart, selEnd)}${this._maskService.actualValue.slice(
-                                    selEnd + prefixLength,
-                                    maskSkeleton.length + prefixLength
-                                )}${suffix}`;
-                            }
-                        } else if (
-                            !this._maskService.specialCharacters.includes(
-                                maskExpression.slice(
-                                    position - prefixLength,
-                                    position + 1 - prefixLength
-                                )
-                            )
-                        ) {
-                            if (!showMaskTyped && position >= el.value.length) {
-                                // Deleting the last character: no gap needs to be kept.
-                                kcpHandled = false;
-                            } else if (selStart === 1 && prefix) {
-                                this._maskService.actualValue = `${prefix}${this._maskService.placeHolderCharacter}${el.value
-                                    .split(prefix)
-                                    .join('')
-                                    .split(suffix)
-                                    .join('')}${suffix}`;
-
-                                position = position - 1;
-                            } else {
-                                const part1 = el.value.substring(0, position);
-                                const part2 = el.value.substring(position);
-                                this._maskService.actualValue = `${part1}${this._maskService.placeHolderCharacter}${part2}`;
-                            }
-                        }
-                        position = this._code() === MaskExpression.DELETE ? position + 1 : position;
-                    } else if (hasSelection) {
-                        // A selected range was replaced by the typed symbol. Keep the layout:
-                        // blank the selection to the mask skeleton and put the typed symbol
-                        // into the first fillable slot of the selection (#1527, #1489).
-                        const preEditLength = el.value.length - 1 + (selEndAbs - selStartAbs);
-                        if (
-                            !showMaskTyped &&
-                            selStartAbs <= prefixLength &&
-                            selEndAbs >= preEditLength
-                        ) {
-                            // The whole value was replaced: mask it through the regular path.
-                            kcpHandled = false;
-                        } else {
-                            let maskIdx = Math.max(selStart, 0);
-                            while (
-                                maskIdx < maskExpression.length &&
-                                this._maskService.specialCharacters.includes(
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                maskIdx += 1;
-                            }
-                            const blanked = `${el.value.slice(0, selStartAbs)}${maskSkeleton.slice(
-                                Math.max(selStart, 0),
-                                selEnd
-                            )}${el.value.slice(selStartAbs + 1)}`;
-                            const targetAbs = maskIdx + prefixLength;
-                            if (
-                                targetAbs < blanked.length - suffix.length &&
-                                this._maskService._checkSymbolMask(
-                                    inputSymbol,
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                this._maskService.actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
-                                position = targetAbs + 1;
-                            } else {
-                                this._maskService.actualValue = blanked;
-                                position = selStartAbs;
-                            }
-                        }
-                    } else {
-                        // Single-caret insert (overwrite mode): the typed symbol lands in the
-                        // first fillable mask slot at or after the caret, skipping any number
-                        // of special characters (#1544, #1489).
-                        const oldDisplay = `${el.value.slice(0, position - 1)}${el.value.slice(position)}`;
-                        const oldDisplayNoSuffix = suffix
-                            ? oldDisplay.split(suffix).join('')
-                            : oldDisplay;
-                        let maskIdx = position - 1 - prefixLength;
-                        if (maskIdx < 0) {
-                            // Typed inside the prefix: reject the symbol.
-                            position = position - 1;
-                        } else {
-                            while (
-                                maskIdx < maskExpression.length &&
-                                this._maskService.specialCharacters.includes(
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                maskIdx += 1;
-                            }
-                            const targetAbs = maskIdx + prefixLength;
-                            if (targetAbs >= oldDisplayNoSuffix.length) {
-                                if (oldDisplayNoSuffix.length <= prefixLength || !showMaskTyped) {
-                                    // First symbol, or appending at the end without
-                                    // showMaskTyped: regular masking handles it (including
-                                    // leadZeroDateTime insertions).
-                                    kcpHandled = false;
-                                } else {
-                                    // All slots of the rendered mask are already consumed.
-                                    position = position - 1;
-                                }
-                            } else if (
-                                this._maskService._checkSymbolMask(
-                                    inputSymbol,
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                this._maskService.actualValue = `${oldDisplayNoSuffix.slice(0, targetAbs)}${inputSymbol}${oldDisplayNoSuffix.slice(targetAbs + 1)}${suffix}`;
-                                position = targetAbs + 1;
-                            } else {
-                                // Rejected symbol: keep the current display.
-                                position = position - 1;
-                            }
-                        }
+                    const kcp = resolveKeepCharacterPositions(this._maskService, {
+                        elValue: el.value,
+                        position,
+                        code: this._code(),
+                    });
+                    if (kcp.actualValue !== null) {
+                        this._maskService.actualValue = kcp.actualValue;
                     }
-                    this._maskService.keepCharacterPositionsHandled = kcpHandled;
+                    position = kcp.position;
+                    // Whether the resolution fully rendered the display value into actualValue
+                    // (applyMask then short-circuits), or the edit flows through regular masking.
+                    this._maskService.keepCharacterPositionsHandled = kcp.handled;
                 }
 
                 // A literal '*' typed into the VALUE (custom pattern allowing asterisks) makes
@@ -1105,54 +940,29 @@ export class NgxMaskDirective
                 if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
-                if (
-                    this._inputValue().length >= this._maskService.maskExpression.length - 1 &&
-                    this._code() !== MaskExpression.BACKSPACE &&
-                    this._maskService.maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
-                    position < 10
-                ) {
-                    const inputSymbol = this._inputValue().slice(position - 1, position);
-                    el.value =
-                        this._inputValue().slice(0, position - 1) +
-                        inputSymbol +
-                        this._inputValue().slice(position + 1);
+                const overwrittenDate = overwriteFullDateValue(
+                    this._maskService.maskExpression,
+                    this._inputValue(),
+                    position,
+                    this._code()
+                );
+                if (overwrittenDate !== null) {
+                    el.value = overwrittenDate;
                 }
-                // #1488: generalizes the single-mask (d0/M0/0000) caret-shift-past-separator
-                // fix to any date/time field. Locates the date/time field containing
-                // `position` by scanning maskExpression for a DAY/MONTH/HOURS/HOUR/MINUTE/
-                // SECOND token followed by its digit run, then checks overflow against the
-                // same per-field thresholds generic-pattern.handler.ts already establishes
-                // (day 31, month 12, hour 23/12 w/ apm, minute/second 59). Read-only against
-                // generic-pattern.handler.ts — mirrors its thresholds, does not import from it.
                 if (this._maskService.leadZeroDateTime) {
-                    const field = this._findDateTimeFieldAt(
+                    position = leadZeroDateTimeCaret(
                         this._maskService.maskExpression,
-                        position
+                        position,
+                        el.value,
+                        this._inputValue(),
+                        !!this._maskService.apm
                     );
-                    if (
-                        field &&
-                        this._isFieldOverflowing(
-                            field,
-                            position,
-                            el.value,
-                            this._inputValue(),
-                            !!this._maskService.apm
-                        )
-                    ) {
-                        position = position + 2;
-                    }
                 }
                 if (
                     this._maskService.maskExpression === MaskExpression.HOURS_MINUTES_SECONDS &&
                     this._maskService.apm
                 ) {
-                    if (this._justPasted() && el.value.slice(0, 2) === MaskExpression.DOUBLE_ZERO) {
-                        el.value = el.value.slice(1, 2) + el.value.slice(2, el.value.length);
-                    }
-                    el.value =
-                        el.value === MaskExpression.DOUBLE_ZERO
-                            ? MaskExpression.NUMBER_ZERO
-                            : el.value;
+                    el.value = normalizeApmHoursValue(el.value, this._justPasted());
                 }
 
                 this._maskService.applyValueChanges(
@@ -1256,96 +1066,6 @@ export class NgxMaskDirective
                 this._justPasted(),
                 this._code() === MaskExpression.BACKSPACE || this._code() === MaskExpression.DELETE
             );
-        }
-    }
-
-    /**
-     * #1488: locates the date/time field (DAY/MONTH/HOURS/HOUR/MINUTE/SECOND) that
-     * `position` falls within, scanning `maskExpression` left-to-right. A field spans
-     * its token plus its digit-pair companion — `0` for DAY/MONTH/MINUTE/SECOND (e.g.
-     * `d0`, `M0`, `m0`, `s0`), or `HOUR` for the combined `Hh` hour field. Matches any
-     * position from the field's first char up to and including its end (separator index),
-     * so both a still-mid-typing caret and the just-completed field are covered — the
-     * precise overflow decision (single first digit vs. completed 2-digit value) happens
-     * in `_isFieldOverflowing`. Returns null for non-date/time masks, a no-op for the caller.
-     */
-    private _findDateTimeFieldAt(maskExpression: string, position: number): DateTimeField | null {
-        const dateTimeTokens: readonly string[] = [
-            MaskExpression.DAY,
-            MaskExpression.MONTH,
-            MaskExpression.HOURS,
-            MaskExpression.HOUR,
-            MaskExpression.MINUTE,
-            MaskExpression.SECOND,
-        ];
-        let index = 0;
-        while (index < maskExpression.length) {
-            const token = maskExpression[index] ?? MaskExpression.EMPTY_STRING;
-            if (dateTimeTokens.includes(token)) {
-                const next = maskExpression[index + 1];
-                const isCombinedHour =
-                    token === MaskExpression.HOURS && next === MaskExpression.HOUR;
-                const end =
-                    next === MaskExpression.NUMBER_ZERO || isCombinedHour ? index + 2 : index + 1;
-                if (position >= index && position <= end) {
-                    return {
-                        token: token as DateTimeField['token'],
-                        start: index,
-                        end,
-                    };
-                }
-                index = end;
-                continue;
-            }
-            index++;
-        }
-        return null;
-    }
-
-    /**
-     * Per-token overflow thresholds, mirroring the ones `generic-pattern.handler.ts`
-     * already establishes (day 31, month 12, hour 23/12 w/ apm, minute/second 59) — kept
-     * as a small local table rather than importing from the handler (see design's
-     * Rejected Alternatives: the directive and the handler stay on separate sides of the
-     * display/parse boundary).
-     *
-     * Two overflow shapes are checked, mirroring how the handler itself decides mid-type:
-     * - `firstDigitValue`: when `position` is exactly one char past the field's start (the
-     *   just-typed char is the field's first digit), an out-of-range first digit alone
-     *   (e.g. month digit `3`, day digit `4`) already triggers the handler's own leadZero
-     *   pad within this same keystroke — `el.value` hasn't caught up yet at this point in
-     *   the pipeline, so the raw typed digit (`inputValue`) must be read instead.
-     * - `fieldValue`: once both digits of the field are present in `el.value`, an
-     *   out-of-range 2-digit value (e.g. day `33`, month `13`) triggers the shift directly.
-     */
-    private _isFieldOverflowing(
-        field: DateTimeField,
-        position: number,
-        elValue: string,
-        inputValue: string,
-        apm: boolean
-    ): boolean {
-        const fieldValue = Number(elValue.slice(field.start, field.end));
-        const isFirstDigitOfField = position === field.start + 1;
-        const firstDigitValue = isFirstDigitOfField
-            ? Number(inputValue.slice(position - 1, position))
-            : NaN;
-        switch (field.token) {
-            case MaskExpression.DAY:
-                return (fieldValue > 31 && fieldValue < 40) || firstDigitValue > 3;
-            case MaskExpression.MONTH:
-                return fieldValue > 12 || firstDigitValue > 1;
-            case MaskExpression.HOURS:
-                return apm
-                    ? fieldValue > 9 || firstDigitValue > 9
-                    : fieldValue > 23 || firstDigitValue > 2;
-            case MaskExpression.HOUR:
-                return apm ? fieldValue > 12 : fieldValue > 23;
-            case MaskExpression.MINUTE:
-            case MaskExpression.SECOND:
-                return fieldValue > 59 || firstDigitValue > 5;
-            default:
-                return false;
         }
     }
 

@@ -6,6 +6,7 @@ import {
     digitsOf,
     displayToPlainDecimal,
     escapeRegExp,
+    nextFillableIndex,
     retargetSeparatorValue,
     usesCommaDecimal,
 } from '../lib/ngx-mask.utils';
@@ -50,6 +51,24 @@ describe('ngx-mask.utils', () => {
 
         it('returns a fresh array on every call', () => {
             expect(digitsOf('12')).not.toBe(digitsOf('12'));
+        });
+    });
+
+    describe('nextFillableIndex', () => {
+        const specials = ['+', '(', ')', '-', ' '];
+
+        it('returns the start index when it is already fillable', () => {
+            expect(nextFillableIndex('00-00', specials, 0)).toBe(0);
+        });
+
+        it('skips a run of special characters', () => {
+            expect(nextFillableIndex('+(000) 000', specials, 0)).toBe(2);
+            expect(nextFillableIndex('+(000) 000', specials, 5)).toBe(7);
+        });
+
+        it('stops at the mask length when only special characters remain', () => {
+            expect(nextFillableIndex('00-', specials, 2)).toBe(3);
+            expect(nextFillableIndex('00', specials, 5)).toBe(5);
         });
     });
 });
