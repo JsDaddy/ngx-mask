@@ -40,6 +40,10 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
     const maskExpression = state.maskExpression;
     const processedValue = state.processedValue;
     let { cursor, result, multi, processedPosition, stepBack } = state;
+    // The span of `inputValue` the user's last edit changed; a render of any other value changes none.
+    const userEdit = this.userEdit?.value === params.inputValue ? this.userEdit : null;
+    const prefixOffset =
+        params.startsWithPrefix && !params.prefixAlreadyRemovedByCaller ? this.prefix.length : 0;
 
     for (
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -123,14 +127,17 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                 continue;
             }
             if (maskExpression[cursor] === MaskExpression.HOUR) {
+                // The hour digit before this one. `processedValue` is the raw input, so once a
+                // leadZeroDateTime pad has put a `0` in front only `result` still lines up with the mask.
+                const previousHourDigit = this.leadZeroDateTime
+                    ? result.slice(-1)
+                    : processedValue.slice(cursor - 1, cursor);
                 if (
                     this.apm
                         ? (result.length === 1 && Number(result) > 1) ||
                           (result === '1' && Number(inputSymbol) > 2) ||
-                          (processedValue.slice(cursor - 1, cursor).length === 1 &&
-                              Number(processedValue.slice(cursor - 1, cursor)) > 2) ||
-                          (processedValue.slice(cursor - 1, cursor) === '1' &&
-                              Number(inputSymbol) > 2)
+                          (previousHourDigit.length === 1 && Number(previousHourDigit) > 2) ||
+                          (previousHourDigit === '1' && Number(inputSymbol) > 2)
                         : (result === '2' && Number(inputSymbol) > 3) ||
                           ((result.slice(cursor - 2, cursor) === '2' ||
                               result.slice(cursor - 3, cursor) === '2' ||
@@ -162,18 +169,24 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                     continue;
                 }
             }
-            // A typed, pasted or Backspaced `00` for a day, a month or a 12-hour hour becomes `01`
-            // (leadZeroDateTime only; programmatic writes keep their `00`).
+            // A `00` day, month or 12-hour hour that the user's edit just typed, pasted or
+            // Backspaced into becomes `01` (leadZeroDateTime only). Programmatic writes and fields
+            // the edit did not touch keep their `00`.
             if (
+                userEdit &&
                 this.leadZeroDateTime &&
+                !this.keepCharacterPositions &&
                 !this.writingValue &&
                 inputSymbol === MaskExpression.NUMBER_ZERO &&
                 result.slice(-1) === MaskExpression.NUMBER_ZERO &&
+                i + prefixOffset >= userEdit.start &&
+                i + prefixOffset <= userEdit.end &&
                 (maskExpression[cursor - 1] === MaskExpression.DAY ||
                     maskExpression[cursor - 1] === MaskExpression.MONTH ||
                     (this.apm &&
                         maskExpression[cursor] === MaskExpression.HOUR &&
-                        maskExpression[cursor - 1] === MaskExpression.HOURS))
+                        (maskExpression[cursor - 1] === MaskExpression.HOURS ||
+                            maskExpression[cursor - 1] === MaskExpression.HOUR)))
             ) {
                 inputSymbol = '1';
             }
@@ -279,12 +292,19 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
                         // after Backspace only a digit that follows the separator needs the pad
                         // (`1/31` -> `01/31`); a lone `1` before placeholders stays as it is
                         (this.specialCharacters.includes(inputValueCursorPlusOne) &&
-                            (!params.backspaced || /\d/.test(inputValueCursorPlusTwo))));
-                // year-first masks (0000.M0.d0) switch the backward heuristics off: read the month's own pair
+                            (!params.backspaced ||
+                                (this.leadZeroDateTime && /\d/.test(inputValueCursorPlusTwo)))));
+                // year-first masks (0000.M0.d0) switch the backward heuristics off: read the month's own
+                // pair at the input index (the cursor anchor of `windowSlice` misreads a value that lacks
+                // the separator before the month). A month digit that starts right after a separator and
+                // is followed by one (`2020.1.31`, a replaced selection) is a lone digit, padded as well.
+                const monthPair = processedValue.slice(i, i + 2);
                 const yearFirstMonthOverflow =
                     this.leadZeroDateTime &&
                     yearFieldPrecedesMonth &&
-                    Number(windowSlice) > monthsCount;
+                    (Number(monthPair) > monthsCount ||
+                        (this.specialCharacters.includes(monthPair.charAt(1)) &&
+                            this.specialCharacters.includes(processedValue.charAt(i - 1))));
                 // day<10 && month<12 for input
                 const specialChart = maskExpression.slice(cursor + 2, cursor + 3);
                 const day1monthInput: boolean =

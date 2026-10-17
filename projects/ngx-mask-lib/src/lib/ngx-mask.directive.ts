@@ -888,6 +888,7 @@ export class NgxMaskDirective
                     !!this._maskService.prefix &&
                     !el.value.startsWith(this._maskService.prefix);
 
+                const caret = el.selectionStart as number;
                 let position: number =
                     el.selectionStart === 1
                         ? (el.selectionStart as number) + this._maskService.prefix.length
@@ -946,6 +947,12 @@ export class NgxMaskDirective
                     el.value = overwrittenDate;
                 }
                 if (this._maskService.leadZeroDateTime) {
+                    // The edit touches the characters next to the caret; a paste touches them all.
+                    this._maskService.userEdit = {
+                        value: el.value,
+                        start: this._justPasted() ? 0 : caret - 1,
+                        end: this._justPasted() ? el.value.length : caret,
+                    };
                     position = leadZeroDateTimeCaret(
                         this._maskService.maskExpression,
                         position,
