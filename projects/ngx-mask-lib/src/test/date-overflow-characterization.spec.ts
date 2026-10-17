@@ -1245,6 +1245,27 @@ describe('date overflow characterization', () => {
                     edit: { start: 9, end: 9, key: '7' },
                     expected: { value: '15/00/2027', caret: 10, model: '15002027' },
                 },
+                // a deletion starting on the separator after a written 00 leaves the 00 alone
+                {
+                    initial: '00062020',
+                    edit: { start: 3, end: 3, key: 'Backspace' },
+                    expected: { value: '00/06/2020', caret: 2, model: '00062020' },
+                },
+                {
+                    initial: '00062020',
+                    edit: { start: 2, end: 2, key: 'Delete' },
+                    expected: { value: '00/06/2020', caret: 4, model: '00062020' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 6, end: 6, key: 'Backspace' },
+                    expected: { value: '15/00/2020', caret: 5, model: '15002020' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 5, end: 5, key: 'Delete' },
+                    expected: { value: '15/00/020', caret: 6, model: '1500020' },
+                },
             ]
         );
 

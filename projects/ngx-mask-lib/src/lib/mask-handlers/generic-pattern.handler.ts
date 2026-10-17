@@ -1,3 +1,4 @@
+import { userEditFor } from '../caret/date-overflow';
 import { MaskExpression } from '../ngx-mask-expression.enum';
 import type { MaskHandlerFn } from './mask-handler.types';
 
@@ -41,7 +42,7 @@ export const genericPatternHandler: MaskHandlerFn = function (state, params) {
     const processedValue = state.processedValue;
     let { cursor, result, multi, processedPosition, stepBack } = state;
     // The span of `inputValue` the user's last edit changed; a render of any other value changes none.
-    const userEdit = this.userEdit?.value === params.inputValue ? this.userEdit : null;
+    const userEdit = userEditFor(this, params.inputValue);
     const prefixOffset =
         params.startsWithPrefix && !params.prefixAlreadyRemovedByCaller ? this.prefix.length : 0;
 

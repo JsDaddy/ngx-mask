@@ -258,6 +258,19 @@ describe('00 day, month and hour in a real browser', () => {
         });
     });
 
+    it('keeps a written 00 when Backspace removes only the separator after it', async () => {
+        expect(await writtenThenBackspace(date, '00062020', 3)).toEqual({
+            value: '00/06/2020',
+            caret: 2,
+            model: '00062020',
+        });
+        expect(await writtenThenBackspace(date, '15002020', 6)).toEqual({
+            value: '15/00/2020',
+            caret: 5,
+            model: '15002020',
+        });
+    });
+
     it('keeps a written 00 and a 12-hour 00 without leadZeroDateTime', async () => {
         expect(await written(twelveHour, '000000')).toEqual({
             value: '00:00:00',

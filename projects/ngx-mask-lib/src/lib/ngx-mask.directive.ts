@@ -28,7 +28,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
-import { leadZeroDateTimeCaret, overwriteFullDateValue } from './caret/date-overflow';
+import { leadZeroDateTimeCaret, overwriteFullDateValue, setUserEdit } from './caret/date-overflow';
 import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -815,6 +815,8 @@ export class NgxMaskDirective
 
     private _processInput(e: Event): void {
         this._maskService.isInitialized = true;
+        // The value the keydown of this edit saw; `_inputValue` is overwritten with the edited one below.
+        const preEditValue = this._inputValue();
         // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
         // backspace is undetectable from keydown alone and all _code()-based deletion
         // branches misfire (cursor jumps, "stuck" backspace — #1497). The input event's
@@ -934,6 +936,9 @@ export class NgxMaskDirective
 
                 let caretShift = 0;
                 let backspaceShift = false;
+                const isDeletion =
+                    this._code() === MaskExpression.BACKSPACE ||
+                    this._code() === MaskExpression.DELETE;
                 if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
@@ -948,11 +953,21 @@ export class NgxMaskDirective
                 }
                 if (this._maskService.leadZeroDateTime) {
                     // The edit touches the characters next to the caret; a paste touches them all.
-                    this._maskService.userEdit = {
-                        value: el.value,
-                        start: this._justPasted() ? 0 : caret - 1,
-                        end: this._justPasted() ? el.value.length : caret,
-                    };
+                    // A deletion that starts on a separator changes no field next to the caret, so
+                    // it leaves nothing to clamp.
+                    const removedChar = isDeletion
+                        ? (preEditValue[caret] ?? MaskExpression.EMPTY_STRING)
+                        : MaskExpression.EMPTY_STRING;
+                    setUserEdit(
+                        this._maskService,
+                        this._maskService.specialCharacters.includes(removedChar)
+                            ? null
+                            : {
+                                  value: el.value,
+                                  start: this._justPasted() ? 0 : caret - 1,
+                                  end: this._justPasted() ? el.value.length : caret,
+                              }
+                    );
                     position = leadZeroDateTimeCaret(
                         this._maskService.maskExpression,
                         position,
@@ -965,14 +980,15 @@ export class NgxMaskDirective
                 this._maskService.applyValueChanges(
                     position,
                     this._justPasted(),
-                    this._code() === MaskExpression.BACKSPACE ||
-                        this._code() === MaskExpression.DELETE,
+                    isDeletion,
                     (shift: number, _backspaceShift: boolean) => {
                         this._justPasted.set(false);
                         caretShift = shift;
                         backspaceShift = _backspaceShift;
                     }
                 );
+                // The edit is masked; no later render of the same value is an edit.
+                setUserEdit(this._maskService, null);
                 // only set the selection if the element is active
                 if (this._maskService._getActiveElement() !== el) {
                     return;

@@ -101,13 +101,6 @@ export class NgxMaskApplierService {
      */
     public writingValue = false;
 
-    /**
-     * The span of `value` that the user's last edit (keystroke, deletion, paste) changed, set by the
-     * directive before it masks that edit. Only an edit may turn a typed `00` day or month into
-     * `01` (leadZeroDateTime): a render of any other value, e.g. a write or a re-render, has none.
-     */
-    public userEdit: { value: string; start: number; end: number } | null = null;
-
     public ipError?: boolean;
 
     public cpfCnpjError?: boolean;

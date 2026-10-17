@@ -1,3 +1,4 @@
+import type { NgxMaskApplierService } from '../ngx-mask-applier.service';
 import { MaskExpression } from '../ngx-mask-expression.enum';
 
 // #1488: a date/time field located within `maskExpression` for the generalized
@@ -140,4 +141,29 @@ export function overwriteFullDateValue(
         return inputValue.slice(0, position - 1) + inputSymbol + inputValue.slice(position + 1);
     }
     return null;
+}
+
+/** The span of `value` that the user's last edit (keystroke, deletion, paste) changed. */
+export type UserEdit = { value: string; start: number; end: number };
+
+// Kept outside the service so the published API carries no field for it.
+const userEdits = new WeakMap<NgxMaskApplierService, UserEdit>();
+
+/**
+ * Records the edit the directive is about to mask, `null` for an edit that changed no field. Only an
+ * edit may turn a typed `00` day, month or 12-hour hour into `01` (leadZeroDateTime): a render of any
+ * other value, e.g. a write or a re-render, has none.
+ */
+export function setUserEdit(service: NgxMaskApplierService, edit: UserEdit | null): void {
+    if (edit) {
+        userEdits.set(service, edit);
+    } else {
+        userEdits.delete(service);
+    }
+}
+
+/** The recorded edit when `inputValue` is the value it produced, else null. */
+export function userEditFor(service: NgxMaskApplierService, inputValue: string): UserEdit | null {
+    const edit = userEdits.get(service);
+    return edit?.value === inputValue ? edit : null;
 }
