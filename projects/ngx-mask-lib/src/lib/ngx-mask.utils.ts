@@ -9,6 +9,22 @@ export function escapeRegExp(value: string | null | undefined): string {
     return (value ?? '').replace(/[.*+?^${}()|[\]\\/-]/g, '\\$&');
 }
 
+/** The first index at or after `index` whose mask character is not a special character. */
+export function nextFillableIndex(
+    maskExpression: string,
+    specialCharacters: readonly string[],
+    index: number
+): number {
+    let maskIdx = index;
+    while (
+        maskIdx < maskExpression.length &&
+        specialCharacters.includes(maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)
+    ) {
+        maskIdx += 1;
+    }
+    return maskIdx;
+}
+
 /** Returns the decimal digits of `value`, in order. */
 export function digitsOf(value: string): string[] {
     return value.match(/\d/g) ?? [];

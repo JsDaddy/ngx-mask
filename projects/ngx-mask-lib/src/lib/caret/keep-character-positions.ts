@@ -1,5 +1,6 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
 import type { NgxMaskService } from '../ngx-mask.service';
+import { nextFillableIndex } from '../ngx-mask.utils';
 
 /** The mask service state the resolution reads; plain property reads, nothing is written back. */
 export type KeepCharacterPositionsState = Pick<
@@ -37,22 +38,6 @@ export type KeepCharacterPositionsResult = {
      */
     handled: boolean;
 };
-
-/** The first index at or after `index` whose mask character is not a special character. */
-function nextFillableIndex(
-    maskExpression: string,
-    specialCharacters: readonly string[],
-    index: number
-): number {
-    let maskIdx = index;
-    while (
-        maskIdx < maskExpression.length &&
-        specialCharacters.includes(maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING)
-    ) {
-        maskIdx += 1;
-    }
-    return maskIdx;
-}
 
 /**
  * Resolves one edit of a `keepCharacterPositions` mask: the layout of the mask is kept, so a
