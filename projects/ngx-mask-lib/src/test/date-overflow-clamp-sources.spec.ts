@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { createHarness } from './utils/characterization-harness';
+import { pasteTest } from './utils/test-functions.component';
 import { createTriModeFixture, TRI_MODES } from './utils/tri-mode-harness';
 
 /**
@@ -56,6 +57,75 @@ describe('00 clamp applies to user edits only', () => {
 
             expect(harness.el.value).toBe('01/06/2020');
             expect(harness.component.form.value).toBe('01062020');
+        });
+    });
+
+    describe('the clamp follows the edit through a prefix and a suffix', () => {
+        it('clamps a typed 00 day behind a prefix', async () => {
+            const harness = createHarness();
+            harness.component.mask.set('d0/M0/0000');
+            harness.component.leadZeroDateTime.set(true);
+            harness.component.prefix.set('D ');
+            harness.fixture.detectChanges();
+            await harness.settle();
+            await harness.type('00062020');
+
+            expect(harness.el.value).toBe('D 01/06/2020');
+            expect(harness.component.form.value).toBe('01062020');
+        });
+
+        it('clamps a typed 00 month before a suffix', async () => {
+            const harness = createHarness();
+            harness.component.mask.set('d0/M0');
+            harness.component.leadZeroDateTime.set(true);
+            harness.component.suffix.set(' x');
+            harness.fixture.detectChanges();
+            await harness.settle();
+            await harness.type('1500');
+
+            expect(harness.el.value).toBe('15/01 x');
+            expect(harness.component.form.value).toBe('1501');
+        });
+    });
+
+    describe('a pasted 00 does not leak into later renders of the same control', () => {
+        const mount = async () => {
+            const harness = createHarness();
+            harness.component.mask.set('d0/M0/0000');
+            harness.component.leadZeroDateTime.set(true);
+            harness.fixture.detectChanges();
+            await harness.settle();
+            return harness;
+        };
+
+        it('keeps a written 00 after the same value was pasted, also across a showMaskTyped toggle', async () => {
+            const harness = await mount();
+            pasteTest('00062020', harness.fixture);
+            await harness.settle();
+            expect(harness.el.value).toBe('01/06/2020');
+
+            await harness.write('00062020');
+            expect(harness.el.value).toBe('00/06/2020');
+            expect(harness.component.form.value).toBe('00062020');
+
+            harness.component.showMaskTyped.set(true);
+            await harness.settle();
+            harness.component.showMaskTyped.set(false);
+            await harness.settle();
+            expect(harness.el.value).toMatch(/^00\/06\/2020/);
+            expect(harness.component.form.value).toBe('00062020');
+        });
+
+        it('keeps a typed 00 clamped while a later write of another value renders', async () => {
+            const harness = await mount();
+            await harness.type('00');
+            expect(harness.el.value).toBe('01');
+
+            await harness.write('15062020');
+            expect(harness.el.value).toBe('15/06/2020');
+            await harness.write('00062020');
+            expect(harness.el.value).toBe('00/06/2020');
+            expect(harness.component.form.value).toBe('00062020');
         });
     });
 
