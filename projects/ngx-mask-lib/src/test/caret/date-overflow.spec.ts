@@ -5,9 +5,9 @@ import {
     isFieldOverflowing,
     leadZeroDateTimeCaret,
     overwriteDateSlot,
+    overwriteFullDateValue,
 } from '../../lib/caret/date-overflow';
 import { MaskExpression } from '../../lib/ngx-mask-expression.enum';
-import type { NgxMaskService } from '../../lib/ngx-mask.service';
 
 describe('findDateTimeFieldAt', () => {
     it('locates the field a caret sits in, up to the separator after it', () => {
@@ -81,29 +81,35 @@ describe('leadZeroDateTimeCaret', () => {
     });
 });
 
+describe('overwriteFullDateValue', () => {
+    it('drops the character after the caret of a full d0/M0/0000 value', () => {
+        expect(overwriteFullDateValue('d0/M0/0000', '121/23456', 3, 'Digit1')).toBe('12123456');
+    });
+
+    it('leaves the value on backspace, on another mask, or at the end of the date', () => {
+        expect(overwriteFullDateValue('d0/M0/0000', '121/23456', 3, MaskExpression.BACKSPACE)).toBe(
+            null
+        );
+        expect(overwriteFullDateValue('Hh:m0:s0', '121/23456', 3, 'Digit1')).toBeNull();
+        expect(overwriteFullDateValue('d0/M0/0000', '121/23456', 10, 'Digit1')).toBeNull();
+        expect(overwriteFullDateValue('d0/M0/0000', '12', 2, 'Digit1')).toBeNull();
+    });
+});
+
 describe('overwriteDateSlot', () => {
     type Svc = Parameters<typeof overwriteDateSlot>[0];
     const service = (mask: string, options: Partial<Svc> = {}): Svc => ({
         maskExpression: mask,
         specialCharacters: ['/', '.', ':', ' ', '-'],
-        _checkSymbolMask: ((symbol: string, maskChar: string) =>
-            /\d/.test(symbol) && /[0dMHhms]/.test(maskChar)) as NgxMaskService['_checkSymbolMask'],
-        prefix: '',
-        suffix: '',
-        keepCharacterPositions: false,
+        _checkSymbolMask: (symbol: string, maskChar: string) =>
+            /\d/.test(symbol) && /[0dMHhms]/.test(maskChar),
         leadZeroDateTime: true,
         apm: false,
         ...options,
     });
     /** Types `key` at `caret` of the full display `before`; `to` makes it a selection `caret`-`to`. */
     const type = (svc: Svc, before: string, caret: number, key: string, to = caret) =>
-        overwriteDateSlot(
-            svc,
-            before,
-            before.slice(0, caret) + key + before.slice(to),
-            caret + 1,
-            `Digit${key}`
-        );
+        overwriteDateSlot(svc, before, before.slice(0, caret) + key + before.slice(to), caret + 1);
 
     it('overwrites the next digit slot, skipping separators', () => {
         const svc = service('d0/M0/0000');
@@ -153,22 +159,36 @@ describe('overwriteDateSlot', () => {
         });
     });
 
-    it('makes a digit typed over a whole selected field the whole field', () => {
+    it('repairs a digit typed over a whole selected field the same way', () => {
         const svc = service('d0/M0/0000');
+        expect(type(svc, '15/06/2020', 0, '3', 2)).toMatchObject({
+            value: '30/06/2020',
+            position: 1,
+        });
         expect(type(svc, '15/06/2020', 3, '1', 5)).toMatchObject({
-            value: '15/01/2020',
+            value: '15/10/2020',
+            position: 4,
+        });
+        expect(type(svc, '15/06/2020', 0, '4', 2)).toMatchObject({
+            value: '04/06/2020',
+            position: 2,
+        });
+        expect(type(svc, '15/06/2020', 3, '4', 5)).toMatchObject({
+            value: '15/04/2020',
             position: 5,
         });
-        expect(type(svc, '15/06/2020', 0, '3', 2)).toMatchObject({
-            value: '03/06/2020',
-            position: 2,
+        // the handler turns the 00 into 01 (leadZeroDateTime)
+        expect(type(svc, '15/06/2020', 3, '0', 5)).toMatchObject({
+            value: '15/00/2020',
+            position: 4,
         });
     });
 
     it('reports the last index the edit touches, none for a rejected key', () => {
         const svc = service('d0/M0/0000');
         expect(type(svc, '15/06/2020', 1, '9')?.end).toBe(2);
-        expect(type(svc, '15/06/2020', 3, '1', 5)?.end).toBe(5);
+        expect(type(svc, '15/06/2020', 3, '1', 5)?.end).toBe(4);
+        expect(type(svc, '15/06/2020', 3, '4', 5)?.end).toBe(5);
         expect(type(svc, '15/06/2020', 1, 'a')?.end).toBe(-1);
     });
 
@@ -194,8 +214,17 @@ describe('overwriteDateSlot', () => {
         expect(type(svc, '20201231', 4, '4')).toMatchObject({ value: '20200431', position: 6 });
     });
 
-    it('leaves a year digit as it is, with no range', () => {
+    it('leaves a year digit, a one-digit field and a field still holding a placeholder as they are', () => {
         expect(type(service('0000.M0.d0'), '2020.12.31', 3, '9')?.value).toBe('2029.12.31');
+        expect(type(service('d/M/0000'), '5/6/2020', 0, '4')).toMatchObject({
+            value: '4/6/2020',
+            position: 1,
+        });
+        // showMaskTyped: the handler pads the lone 4 itself and moves the caret past the separator
+        expect(type(service('d0/M0/0000'), '1_/__/____', 0, '4')).toMatchObject({
+            value: '4_/__/____',
+            position: 1,
+        });
     });
 
     it('does not repair a field without leadZeroDateTime', () => {
@@ -217,27 +246,15 @@ describe('overwriteDateSlot', () => {
         });
     });
 
-    it('stays out of an edit that is not a typed digit into a full date', () => {
+    it('stays out of an edit that is not one character typed into a full date', () => {
         const svc = service('d0/M0/0000');
-        const edited = '151/06/2020';
-        expect(
-            overwriteDateSlot(svc, '15/06/2020', edited, 3, MaskExpression.BACKSPACE)
-        ).toBeNull();
-        expect(overwriteDateSlot(svc, '15/06/2020', edited, 3, MaskExpression.DELETE)).toBeNull();
         expect(type(svc, '15/06/20', 1, '9')).toBeNull();
         expect(type(service('Hh:m0:s0'), '12:30:45', 1, '9')).toBeNull();
-        expect(overwriteDateSlot(svc, '15/06/2020', '9', 1, 'Digit9')).toBeNull();
+        expect(overwriteDateSlot(svc, '15/06/2020', '9', 1)).toBeNull();
         expect(type(svc, '15/06/2020', 1, '9', 4)).toBeNull();
         expect(type(svc, '15/06/2020', 6, '9', 8)).toBeNull();
-        expect(overwriteDateSlot(svc, '15/06/2020', '25/06/2020', 2, 'Digit2')).toBeNull();
-    });
-
-    it('stays out of prefix, suffix and keepCharacterPositions masks', () => {
-        const before = '15/06/2020';
-        expect(type(service('d0/M0/0000', { prefix: '+ ' }), before, 1, '9')).toBeNull();
-        expect(type(service('d0/M0/0000', { suffix: ' x' }), before, 1, '9')).toBeNull();
-        expect(
-            type(service('d0/M0/0000', { keepCharacterPositions: true }), before, 1, '9')
-        ).toBeNull();
+        expect(overwriteDateSlot(svc, '15/06/2020', '25/06/2020', 2)).toBeNull();
+        // a paste of more than one character
+        expect(overwriteDateSlot(svc, '15/06/2020', '1256/06/2020', 4)).toBeNull();
     });
 });

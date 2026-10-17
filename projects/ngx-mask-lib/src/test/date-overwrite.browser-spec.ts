@@ -98,14 +98,25 @@ describe('typing into a complete date in a real browser', () => {
         });
     });
 
-    it('replaces a selected field by the digit, padded', async () => {
-        expect(await typedAt(date, '15062020', 3, '1', 5)).toMatchObject({
-            value: '15/01/2020',
-            model: '15012020',
+    it('zero-fills a digit typed over a whole selected field the same way', async () => {
+        expect(await typedAt(date, '15062020', 0, '3', 2)).toEqual({
+            value: '30/06/2020',
+            caret: 1,
+            model: '30062020',
         });
-        expect(await typedAt(date, '15062020', 0, '3', 2)).toMatchObject({
-            value: '03/06/2020',
-            model: '03062020',
+        expect(await typedAt(date, '15062020', 0, '31', 2)).toMatchObject({
+            value: '31/06/2020',
+            model: '31062020',
+        });
+        expect(await typedAt(date, '15062020', 3, '1', 5)).toEqual({
+            value: '15/10/2020',
+            caret: 4,
+            model: '15102020',
+        });
+        expect(await typedAt(date, '15062020', 3, '4', 5)).toEqual({
+            value: '15/04/2020',
+            caret: 5,
+            model: '15042020',
         });
     });
 
@@ -183,8 +194,8 @@ describe('typing into a complete date with showMaskTyped in a real browser', () 
             model: '04062020',
         });
         expect(await typedAt(typedDate, '15062020', 3, '1', 5)).toMatchObject({
-            value: '15/01/2020',
-            model: '15012020',
+            value: '15/10/2020',
+            model: '15102020',
         });
     });
 });
@@ -254,11 +265,11 @@ describe('masks the overwrite leaves alone, in a real browser', () => {
         });
     });
 
-    it('keeps a prefix mask on regular masking, which inserts and shifts', async () => {
+    it('keeps a prefix mask on the parent overwrite, which drops one character and shifts', async () => {
         const prefixed = { mask: 'd0/M0/0000', leadZeroDateTime: true, prefix: '+ ' };
         expect(await typedAt(prefixed, '15062020', 5, '3')).toMatchObject({
-            value: '+ 15/03/0620',
-            model: '15030620',
+            value: '+ 15/03/6202',
+            model: '15036202',
         });
     });
 });

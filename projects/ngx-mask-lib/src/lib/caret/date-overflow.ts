@@ -1,5 +1,4 @@
 import { MaskExpression } from '../ngx-mask-expression.enum';
-import type { NgxMaskService } from '../ngx-mask.service';
 import { nextFillableIndex } from '../ngx-mask.utils';
 
 // #1488: a date/time field located within `maskExpression` for the generalized
@@ -121,8 +120,44 @@ export function leadZeroDateTimeCaret(
         : position;
 }
 
+/**
+ * The element value of a `d0/M0/0000` mask whose raw value already has its full length: the
+ * character after the caret is dropped, so the typed one overwrites it. Returns null when the
+ * edit does not meet that shape and the value stays. Kept for the edits `overwriteDateSlot` does
+ * not take: a paste, and prefix, suffix and keepCharacterPositions masks.
+ */
+export function overwriteFullDateValue(
+    maskExpression: string,
+    inputValue: string,
+    position: number,
+    code: string
+): string | null {
+    if (
+        inputValue.length >= maskExpression.length - 1 &&
+        code !== MaskExpression.BACKSPACE &&
+        maskExpression === MaskExpression.DAYS_MONTHS_YEARS &&
+        position < 10
+    ) {
+        const inputSymbol = inputValue.slice(position - 1, position);
+        return inputValue.slice(0, position - 1) + inputSymbol + inputValue.slice(position + 1);
+    }
+    return null;
+}
+
 /** The edit `overwriteDateSlot` made: the value, the caret after it and the last index it touches. */
 export type DateOverwrite = { value: string; position: number; end: number };
+
+/**
+ * What `overwriteDateSlot` reads from the mask service. Structural, not a `Pick` of the service:
+ * importing the service type here reorders unions in the emitted d.ts (see `userEdits`).
+ */
+export type DateSlotMask = {
+    maskExpression: string;
+    specialCharacters: string[] | readonly string[];
+    leadZeroDateTime: boolean;
+    apm: boolean;
+    _checkSymbolMask: (inputSymbol: string, maskSymbol: string) => boolean;
+};
 
 const FIELD_MAX: Readonly<Record<DateTimeField['token'], number>> = {
     d: 31,
@@ -134,85 +169,69 @@ const FIELD_MAX: Readonly<Record<DateTimeField['token'], number>> = {
 };
 
 /**
- * A digit typed into a date mask whose display (`before`) is already full length overwrites the next
- * digit slot, skipping separators, so the digits that follow never shift. With leadZeroDateTime a
- * field the digit would push out of range is repaired: the digit keeps its slot and zero-fills (`3`
- * over `15` is `30`) or, when it cannot be a tens digit, is the whole field (`4` over `15` is `04`);
- * a digit typed over a whole selected field is the whole field too. A key the slot rejects leaves the
- * display as it was. Null keeps regular masking: not a typed key in a full date, a selection beyond
- * one field, a prefix/suffix/keepCharacterPositions mask, or an out-of-range field without
- * leadZeroDateTime.
+ * A character typed into a date mask whose display (`before`) is already full length overwrites the
+ * next digit slot, skipping separators, so the digits that follow never shift. With leadZeroDateTime
+ * a field the digit would push out of range, or a whole selected field the digit replaces, is
+ * repaired: the digit keeps its slot and zero-fills (`3` over `15` is `30`) or, when it cannot be a
+ * tens digit, is the whole field (`4` over `15` is `04`). A key the slot rejects leaves the display
+ * as it was. Null keeps regular masking: not one character typed into a full date, a selection
+ * beyond one field, or an out-of-range field without leadZeroDateTime. The caller keeps deletions,
+ * pastes and prefix, suffix and keepCharacterPositions masks away from it.
  */
 export function overwriteDateSlot(
-    svc: Pick<
-        NgxMaskService,
-        | 'maskExpression'
-        | 'specialCharacters'
-        | '_checkSymbolMask'
-        | 'prefix'
-        | 'suffix'
-        | 'keepCharacterPositions'
-        | 'leadZeroDateTime'
-        | 'apm'
-    >,
+    svc: DateSlotMask,
     before: string,
     elValue: string,
-    position: number,
-    code: string
+    position: number
 ): DateOverwrite | null {
     const mask = svc.maskExpression;
     const start = position - 1;
-    // The end of the span the typed digit replaced in `before` (a caret replaces nothing).
-    const selEnd = before.length - (elValue.length - position);
-    const typed = elValue[start] ?? MaskExpression.EMPTY_STRING;
+    // The end of the span the typed character replaced in `before` (a caret replaces nothing).
+    const selEnd = before.length - elValue.length + position;
+    const typed = elValue.charAt(start);
     const target = nextFillableIndex(mask, svc.specialCharacters, start);
+    const slot = findDateTimeFieldAt(mask, target);
     // At a field boundary of a separator-less mask (`0000M0d0`) the slot belongs to the next field.
-    let field = findDateTimeFieldAt(mask, target);
-    if (field?.end === target) {
-        field = findDateTimeFieldAt(mask, target + 1);
-    }
+    const field = slot?.end === target ? findDateTimeFieldAt(mask, target + 1) : slot;
     if (
-        code === MaskExpression.BACKSPACE ||
-        code === MaskExpression.DELETE ||
-        svc.prefix ||
-        svc.suffix ||
-        svc.keepCharacterPositions ||
         !/[dM]/.test(mask) ||
         before.length !== mask.length ||
         // under showMaskTyped a placeholder slot takes the digit in sequence, not in place
-        !/\d/.test(before[target] ?? MaskExpression.EMPTY_STRING) ||
+        !/\d/.test(before.charAt(target)) ||
+        // not one character typed over `before`
         selEnd < start ||
+        elValue !== before.slice(0, start) + typed + before.slice(selEnd) ||
         // a selection stays within one field, and only leadZeroDateTime pads what it replaces
         selEnd > (field?.end ?? target + 1) ||
-        (selEnd - start > 1 && !svc.leadZeroDateTime) ||
-        !before.startsWith(elValue.slice(0, start)) ||
-        !before.endsWith(elValue.slice(position))
+        (selEnd - start > 1 && !svc.leadZeroDateTime)
     ) {
         return null;
     }
-    if (!svc._checkSymbolMask(typed, mask[target] ?? MaskExpression.EMPTY_STRING)) {
+    if (!svc._checkSymbolMask(typed, mask.charAt(target))) {
         // A key the slot rejects changes nothing, a selection included: `end` -1 touches no index.
         return { value: before, position: start, end: -1 };
     }
     let value = before.slice(0, target) + typed + before.slice(target + 1);
     let caret = target + 1;
-    const fieldText = field ? value.slice(field.start, field.end) : MaskExpression.EMPTY_STRING;
-    const max = svc.apm && /[Hh]/.test(field?.token ?? '') ? 12 : FIELD_MAX[field?.token ?? 'd'];
-    const outOfRange = Number(fieldText) > max;
-    const replacesField = !!field && start <= field.start && selEnd >= field.end;
-    if (field && svc.leadZeroDateTime && fieldText.length === 2 && (outOfRange || replacesField)) {
-        // A digit that leaves the field out of range keeps its tens slot (`3` over `15` is `30`) when
-        // it can be a tens digit; otherwise, and over a whole selected field, it is the whole field.
-        const isTens = !replacesField && target === field.start && Number(typed) * 10 <= max;
-        value =
-            value.slice(0, field.start) +
-            (isTens ? typed + '0' : '0' + typed) +
-            value.slice(field.end);
-        caret = isTens ? caret : field.end;
-    } else if (outOfRange) {
-        return null;
+    if (field) {
+        const max = svc.apm && /[Hh]/.test(field.token) ? 12 : FIELD_MAX[field.token];
+        // A one-digit field, or one still holding a placeholder (`4_` is NaN), is never out of range.
+        const over = Number(value.slice(field.start, field.end)) > max;
+        // A selection past the slot is a whole field.
+        if (svc.leadZeroDateTime && (over || selEnd > caret)) {
+            // The digit keeps its tens slot and zero-fills (`3` over `15` is `30`) when it can be
+            // a tens digit; otherwise it is the whole field (`4` over `15` is `04`).
+            const tens = target === field.start && Number(typed) * 10 <= max;
+            value =
+                before.slice(0, field.start) +
+                (tens ? typed + '0' : '0' + typed) +
+                before.slice(field.end);
+            caret = tens ? caret : field.end;
+        } else if (over) {
+            return null;
+        }
     }
-    return { value, position: caret, end: Math.max(target + 1, selEnd) };
+    return { value, position: caret, end: caret };
 }
 
 /** The span of `value` that the user's last edit (keystroke, deletion, paste) changed. */
