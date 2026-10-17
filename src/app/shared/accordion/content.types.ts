@@ -8,6 +8,11 @@ export type ComDoc = {
     code: string;
     /** Optional separate TypeScript code for better syntax highlighting */
     tsCode?: string;
+    /**
+     * Menu section of the card (matches `TextContent.id` and the `#N` URL fragment). Cards that
+     * belong to one menu entry share it; the DOM `id` of a card is its index, the `anchor` is the
+     * unique in-card scroll target.
+     */
     id: number;
     anchor?: string;
 };

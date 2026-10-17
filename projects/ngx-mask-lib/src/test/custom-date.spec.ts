@@ -69,6 +69,56 @@ describe('Directive: Mask (Custom date)', () => {
         expect(fixture.nativeElement.querySelector('input').value).equal('01/07/1941');
     });
 
+    // A pasted bare digit string runs behind the mask cursor by every separator the mask emits,
+    // so the month window of year-first masks read the day digits ('20231215' -> '2023.1.21').
+    // Typing was unaffected.
+    it('should parse pasted date with year-first masks 0000.M0.d0 / 0000-M0-d0', () => {
+        component.mask.set('0000.M0.d0');
+        equal('20231215', '2023.12.15', fixture, false, Paste);
+        equal('20240131', '2024.01.31', fixture, false, Paste);
+        equal('20250712', '2025.07.12', fixture, false, Paste);
+
+        component.mask.set('0000-M0-d0');
+        equal('20231215', '2023-12-15', fixture, false, Paste);
+        equal('20231115', '2023-11-15', fixture, false, Paste);
+    });
+
+    it('should parse typed date with year-first masks 0000.M0.d0 / 0000-M0-d0', () => {
+        component.mask.set('0000.M0.d0');
+        equal('20231215', '2023.12.15', fixture);
+
+        component.mask.set('0000-M0-d0');
+        equal('20231215', '2023-12-15', fixture);
+    });
+
+    it('should parse a pasted year-first date that already carries its separators', () => {
+        component.mask.set('0000.M0.d0');
+        equal('2023.12.15', '2023.12.15', fixture, false, Paste);
+    });
+
+    it('should treat one multi-character insertText edit as a paste', () => {
+        component.mask.set('0000.M0.d0');
+        fixture.detectChanges();
+        const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+        input.value = '20231215';
+        input.setSelectionRange(8, 8);
+        input.dispatchEvent(new InputEvent('input', { inputType: 'insertText', data: '20231215' }));
+        fixture.detectChanges();
+
+        expect(input.value).equal('2023.12.15');
+    });
+
+    it('should parse pre-populated (writeValue) date with a year-first mask', async () => {
+        component.mask.set('0000.M0.d0');
+        fixture.detectChanges();
+
+        component.form.setValue('20231215');
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(fixture.nativeElement.querySelector('input').value).equal('2023.12.15');
+    });
+
     it('should keep the cursor position after deleting a character', () => {
         // Set the initial input value and trigger an input event
         const inputElement = fixture.nativeElement.querySelector('input');

@@ -238,6 +238,17 @@ export class NgxMaskDirective
     public _maskService = inject(NgxMaskService, { self: true });
     protected _config = inject<NgxMaskConfig>(NGX_MASK_CONFIG);
     /**
+     * `specialCharacters` and `decimalMarker` as bound (the config values when unbound). The
+     * service derives working values from them for the current configuration (the minus
+     * `allowNegativeNumbers` keeps, the markers a separator mask drops, the comma a dot
+     * thousandSeparator forces), so a runtime reconfiguration starts again from these instead of
+     * piling the previous configuration's reductions up.
+     */
+    private readonly _boundConfig: Pick<NgxMaskConfig, 'specialCharacters' | 'decimalMarker'> = {
+        specialCharacters: this._config.specialCharacters,
+        decimalMarker: this._config.decimalMarker,
+    };
+    /**
      * Under zoneless change detection, writing to the underlying FormControl programmatically
      * (e.g. `setValue`/`patchValue` from outside a signal/effect context, or from a callback
      * zone.js used to auto-flush like a deferred render callback or `queueMicrotask`) does not itself
@@ -329,6 +340,7 @@ export class NgxMaskDirective
             prefix,
             suffix,
             thousandSeparator,
+            decimalMarker,
             dropSpecialCharacters,
             hiddenInput,
             showMaskTyped,
@@ -365,6 +377,7 @@ export class NgxMaskDirective
         }
         if (specialCharacters) {
             if (Array.isArray(specialCharacters.currentValue)) {
+                this._boundConfig.specialCharacters = specialCharacters.currentValue;
                 this._maskService.specialCharacters = specialCharacters.currentValue;
             }
             // A non-array value (e.g. null from an unset dynamic config) keeps the current
@@ -385,18 +398,20 @@ export class NgxMaskDirective
             this._maskService.apm = apm.currentValue ?? this._config.apm;
         }
 
+        if (decimalMarker) {
+            this._boundConfig.decimalMarker = decimalMarker.currentValue;
+        }
         if (thousandSeparator) {
             this._maskService.thousandSeparator = thousandSeparator.currentValue;
             if (thousandSeparator.previousValue && thousandSeparator.currentValue) {
+                // The marker the previous separator forced (a dot thousandSeparator turns '.'
+                // into ',') is not the bound one: start from the bound marker again.
+                this._maskService.decimalMarker = this._boundConfig.decimalMarker;
                 if (thousandSeparator.currentValue === this._maskService.decimalMarker) {
                     this._maskService.decimalMarker =
                         thousandSeparator.currentValue === MaskExpression.COMMA
                             ? MaskExpression.DOT
                             : MaskExpression.COMMA;
-                }
-                if (this._maskService.dropSpecialCharacters === true) {
-                    this._maskService.specialCharacters = this._config.specialCharacters;
-                    this._keepMinusOutOfSpecialCharacters();
                 }
                 this._maskService.writingValue = true;
             }
@@ -446,8 +461,27 @@ export class NgxMaskDirective
                 );
             }
         }
-        // Pure mirrors: runs after every explicit block above (the thousandSeparator block reads
-        // the PREVIOUS decimalMarker/dropSpecialCharacters from the service) and before `_applyMask`.
+        const specialCharactersSources = [
+            mask,
+            specialCharacters,
+            allowNegativeNumbers,
+            thousandSeparator,
+            decimalMarker,
+            dropSpecialCharacters,
+        ];
+        // A switch to no mask is neutral: the raw-value revert of the empty mask (applyMask's
+        // maskChanged branch) strips with the working set of the mask the value was produced by
+        // (a separator mask keeps its markers out of it), so the rebuild from the bound values
+        // waits for the next mask.
+        if (
+            this._maskValue() &&
+            specialCharactersSources.some((change) => change && !change.firstChange)
+        ) {
+            this._maskService.specialCharacters = this._boundConfig.specialCharacters;
+            this._keepMinusOutOfSpecialCharacters();
+        }
+        // Pure mirrors: runs after every explicit block above (a bound decimalMarker wins over the
+        // one the thousandSeparator block derives) and before `_applyMask`.
         for (const key of MIRRORED_INPUTS) {
             const change = changes[key];
             if (change) {
@@ -455,7 +489,7 @@ export class NgxMaskDirective
             }
         }
         const retargetSeparators =
-            (thousandSeparator || changes['decimalMarker']) &&
+            (thousandSeparator || decimalMarker) &&
             this._configApplied &&
             this._maskValue().startsWith(MaskExpression.SEPARATOR) &&
             this._inputValue();
@@ -764,6 +798,27 @@ export class NgxMaskDirective
         }
     }
 
+    /** `insertText`-style input event carrying more than one character (composition excluded). */
+    private _isBulkInsertion(e: Event): boolean {
+        const { inputType, data } = e as InputEvent;
+        return (
+            typeof inputType === 'string' &&
+            inputType.startsWith('insert') &&
+            inputType !== 'insertCompositionText' &&
+            typeof data === 'string' &&
+            data.length > 1
+        );
+    }
+
+    /**
+     * Whether nothing the user entered follows the caret, i.e. the edit ended the value. Only
+     * the suffix and the untouched skeleton of a showMaskTyped / keepCharacterPositions field
+     * (special and placeholder characters) may still follow it.
+     */
+    private _editEndsValue(el: HTMLInputElement): boolean {
+        return !this._maskService.removeMask(el.value.slice(el.selectionEnd ?? el.value.length));
+    }
+
     private _processInput(e: Event): void {
         this._maskService.isInitialized = true;
         // Android IMEs report every keydown as key 'Unidentified' / keyCode 229, so a
@@ -817,6 +872,17 @@ export class NgxMaskDirective
                 if (!this._maskValue()) {
                     this.onChange(el.value);
                     return;
+                }
+
+                // A whole string inserted by ONE edit (autofill, a drop, a speech or
+                // clipboard-style IME insertion, the Browser pane's insertText) is a paste: it
+                // arrives as a bare run of characters, not as a keystroke on top of the already
+                // masked value, and fires no `paste` event. Only when the run ends the value,
+                // though: the paste path puts the caret at the end of the value, which is wrong
+                // for a run inserted (dictation, a spellcheck or predictive replacement) in the
+                // middle of it — that edit keeps the keystroke path and its caret.
+                if (this._isBulkInsertion(e) && this._editEndsValue(el)) {
+                    this._justPasted.set(true);
                 }
 
                 // On paste of a raw value that does not yet carry the prefix, the caret
@@ -2056,6 +2122,10 @@ export class NgxMaskDirective
             'value',
             this._maskedOrVerbatim(this._inputValue()),
         ];
+        // The skeleton render of an empty value returns before the service consumes them, and a
+        // one-shot flag left set swallows the first edit that follows.
+        this._maskService.writingValue = false;
+        this._maskService._clearMaskChangedUnlessTriggered();
     }
 
     /**

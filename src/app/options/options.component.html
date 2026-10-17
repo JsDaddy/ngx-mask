@@ -1,10 +1,11 @@
-@for (tile of cardDocs(); track $index; let i = $index) {
+@for (tile of cardDocs(); track tile.anchor; let i = $index) {
     <div
         class="flex flex-col p-2.5 gap-2.5 bg-ink/[.06] rounded-15px"
         [class]="
             activeCardId() === tile.id ? 'border border-solid border-accent bg-accent/[.05]' : ''
         "
-        [id]="tile.id"
+        [id]="'card-' + i"
+        [attr.data-section]="tile.id"
         #cards>
         <div class="ml-4 flex items-center text-title text-ink uppercase tracking-[.25em]">
             {{ tile.header }}
