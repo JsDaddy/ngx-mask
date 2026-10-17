@@ -31,7 +31,7 @@ type Row = {
     expected: Pick<EditSnapshot, 'value' | 'caret' | 'model'>;
 };
 
-function run(config: Config, row: Row): EditSnapshot {
+async function run(config: Config, row: Row): Promise<EditSnapshot> {
     const harness = createHarness();
     for (const [key, value] of Object.entries(config)) {
         (harness.component as unknown as Record<string, { set: (v: unknown) => void }>)[key]?.set(
@@ -39,14 +39,17 @@ function run(config: Config, row: Row): EditSnapshot {
         );
     }
     harness.fixture.detectChanges();
+    // Land the configuration's deferred writes before the user acts, as a real page would.
+    await harness.settle();
     if (typeof row.initial === 'string') {
-        harness.write(row.initial);
+        await harness.write(row.initial);
     }
     if (typeof row.paste === 'string') {
         pasteTest(row.paste, harness.fixture);
+        await harness.settle();
     }
     if (typeof row.keys === 'string') {
-        harness.type(row.keys);
+        await harness.type(row.keys);
     }
     return row.edit ? harness.edit(row.edit) : harness.snapshot();
 }
@@ -64,8 +67,8 @@ function describeRow(row: Row): string {
 
 function check(config: Config, rows: Row[]): void {
     for (const row of rows) {
-        it(describeRow(row), () => {
-            const snap = run(config, row);
+        it(describeRow(row), async () => {
+            const snap = await run(config, row);
             expect({ value: snap.value, caret: snap.caret, model: snap.model }).toEqual(
                 row.expected
             );
