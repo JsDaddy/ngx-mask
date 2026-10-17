@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { By } from '@angular/platform-browser';
 
-import type { EditAction, EditSnapshot } from './utils/characterization-harness';
+import type {
+    CharacterizationHarness,
+    EditAction,
+    EditSnapshot,
+} from './utils/characterization-harness';
 import { createHarness } from './utils/characterization-harness';
 import { pasteTest } from './utils/test-functions.component';
 import type { TestMaskComponent } from './utils/test-component.component';
@@ -369,7 +374,7 @@ describe('date overflow characterization', () => {
                 edit: { start: 5, end: 5, key: '3' },
                 expected: { value: '2020.03.31', caret: 7, model: '20200331' },
             },
-            // the month 14 is padded to 01 and the 4 becomes the day (PR2 turns this into an overwrite)
+            // 4 over the month's tens digit cannot be a tens digit: the month is 04, the day stays
             {
                 initial: '20201231',
                 edit: { start: 6, end: 6, key: '4' },
@@ -1257,6 +1262,12 @@ describe('date overflow characterization', () => {
                 },
                 {
                     initial: '15002020',
+                    edit: { start: 5, end: 5, key: 'Delete' },
+                    expected: { value: '15/00/2020', caret: 6, model: '15002020' },
+                },
+                // a deletion of the year digit after a written 00 leaves the 00 alone too
+                {
+                    initial: '15002020',
                     edit: { start: 6, end: 6, key: 'Delete' },
                     expected: { value: '15/00/020', caret: 6, model: '1500020' },
                 },
@@ -1513,6 +1524,18 @@ describe('date overflow characterization', () => {
                     edit: { start: 2, end: 2, key: '0' },
                     expected: { value: '31/02/2020', caret: 4, model: '31022020' },
                 },
+                // the 0 lands past the separator, next to the 0 that follows: the edit spans both
+                {
+                    initial: '15102020',
+                    edit: { start: 2, end: 2, key: '0' },
+                    expected: { value: '15/01/2020', caret: 4, model: '15012020' },
+                },
+                // a written 00 stays when a rejected key touches it
+                {
+                    initial: '00062020',
+                    edit: { start: 1, end: 1, key: 'a' },
+                    expected: { value: '00/06/2020', caret: 1, model: '00062020' },
+                },
             ]
         );
 
@@ -1701,17 +1724,150 @@ describe('date overflow characterization', () => {
             ]
         );
 
+        // Without leadZeroDateTime nothing is repaired: an edit overwriteDateSlot declines (an
+        // out-of-range field, a selection longer than one character) keeps the parent's d0/M0/0000
+        // overwrite, which drops the character after the typed one, as before PR2.
         section(
             'd0/M0/0000 without leadZeroDateTime overwrites a field that stays in range',
             { mask: 'd0/M0/0000' },
             [
-                // current behaviour: without leadZeroDateTime an out-of-range overwrite is not repaired, the digits shift
+                {
+                    initial: '15062020',
+                    edit: { start: 1, end: 1, key: '9' },
+                    expected: { value: '19/06/2020', caret: 2, model: '19062020' },
+                },
+                // current behaviour: 4 over the 1 of 15 is the day 45, so the parent overwrite runs and the digits shift
                 {
                     initial: '15062020',
                     edit: { start: 0, end: 0, key: '4' },
-                    expected: { value: '4/1/5062', caret: 3, model: '415062' },
+                    expected: { value: '4/50/6202', caret: 1, model: '4506202' },
+                },
+                // current behaviour: the parent overwrite drops the separator after the lone 0, a year digit flows into the month
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '0' },
+                    expected: { value: '15/02/020', caret: 4, model: '1502020' },
                 },
             ]
         );
+
+        // A hiddenInput display conceals the day and the month (`**/**/2020`): it keeps the parent
+        // overwrite, and the hidden value is not shifted.
+        section(
+            'd0/M0/0000 hiddenInput keeps the parent overwrite',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true, hiddenInput: true },
+            [
+                // current behaviour: the digit typed over the concealed day is dropped
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '4' },
+                    expected: { value: '**/**/2020', caret: 4, model: '15062020' },
+                },
+                // current behaviour: the digit typed over the visible year is dropped too
+                {
+                    initial: '15062020',
+                    edit: { start: 6, end: 6, key: '7' },
+                    expected: { value: '**/**/2020', caret: 7, model: '15062020' },
+                },
+            ]
+        );
+
+        describe('edits without a keydown, pastes and re-renders', () => {
+            /**
+             * Splices `text` over `start`-`end` and fires `input` with no keydown before it, as
+             * dictation or an insertText does; `paste` fires the paste event first.
+             */
+            async function input(
+                harness: CharacterizationHarness,
+                start: number,
+                end: number,
+                text: string,
+                paste = false
+            ): Promise<EditSnapshot> {
+                const { el } = harness;
+                const debugElement = harness.fixture.debugElement.query(By.css('input'));
+                if (paste) {
+                    debugElement.triggerEventHandler('paste', {});
+                }
+                el.value = el.value.slice(0, start) + text + el.value.slice(end);
+                el.setSelectionRange(start + text.length, start + text.length);
+                debugElement.triggerEventHandler('input', { target: el });
+                await harness.settle();
+                return harness.snapshot();
+            }
+
+            async function dateHarness(initial: string): Promise<CharacterizationHarness> {
+                const harness = createHarness();
+                harness.component.mask.set('d0/M0/0000');
+                harness.component.leadZeroDateTime.set(true);
+                await harness.settle();
+                await harness.write(initial);
+                return harness;
+            }
+
+            const pick = ({ value, caret, model }: EditSnapshot) => ({ value, caret, model });
+
+            // the keydown that would record the display never fired: the written raw value is all there is
+            it('overwrites a digit typed without a keydown', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 1, 1, '9'))).toEqual({
+                    value: '19/06/2020',
+                    caret: 2,
+                    model: '19062020',
+                });
+                expect(pick(await input(harness, 0, 0, '3'))).toEqual({
+                    value: '30/06/2020',
+                    caret: 1,
+                    model: '30062020',
+                });
+                expect(pick(await input(harness, 3, 3, '4'))).toEqual({
+                    value: '30/04/2020',
+                    caret: 5,
+                    model: '30042020',
+                });
+            });
+
+            // current behaviour: a selection needs the keydown's display, so without one it keeps the parent overwrite
+            it('keeps the parent overwrite for a selection replaced without a keydown', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 3, 5, '1'))).toEqual({
+                    value: '15/12/020',
+                    caret: 4,
+                    model: '1512020',
+                });
+            });
+
+            it('replaces a selection without a keydown after an overwrite', async () => {
+                const harness = await dateHarness('15062020');
+                await harness.edit({ start: 2, end: 2, key: '1' });
+                expect(pick(await input(harness, 0, 2, '3'))).toEqual({
+                    value: '30/10/2020',
+                    caret: 1,
+                    model: '30102020',
+                });
+            });
+
+            // current behaviour: a paste keeps the parent overwrite, which shifts an out-of-range day
+            it('keeps the parent overwrite for a paste', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 0, 0, '4', true))).toEqual({
+                    value: '04/05/0620',
+                    caret: 10,
+                    model: '04050620',
+                });
+            });
+
+            it('re-renders the overwritten date when an input changes', async () => {
+                const harness = await dateHarness('15062020');
+                await harness.edit({ start: 0, end: 0, key: '4' });
+                harness.component.validation.set(false);
+                await harness.settle();
+                expect(pick(harness.snapshot())).toEqual({
+                    value: '04/06/2020',
+                    caret: 2,
+                    model: '04062020',
+                });
+            });
+        });
     });
 });

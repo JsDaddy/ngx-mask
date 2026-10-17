@@ -947,12 +947,14 @@ export class NgxMaskDirective
                 if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
-                // A paste and a prefix, suffix or keepCharacterPositions mask keep the older overwrite.
+                // A paste, a prefix, suffix, keepCharacterPositions or hiddenInput mask and any
+                // typed edit overwriteDateSlot declines keep the older d0/M0/0000 overwrite.
                 const keepsFullDateOverwrite =
                     this._justPasted() ||
                     this._maskService.prefix ||
                     this._maskService.suffix ||
-                    this._maskService.keepCharacterPositions;
+                    this._maskService.keepCharacterPositions ||
+                    this._maskService.hiddenInput;
                 const overwrite =
                     keepsFullDateOverwrite || isDeletion
                         ? null
@@ -961,7 +963,7 @@ export class NgxMaskDirective
                     el.value = overwrite.value;
                     this._inputValue.set(overwrite.value);
                     position = overwrite.position;
-                } else if (keepsFullDateOverwrite) {
+                } else if (keepsFullDateOverwrite || !isDeletion) {
                     const overwrittenDate = overwriteFullDateValue(
                         this._maskService.maskExpression,
                         this._inputValue(),

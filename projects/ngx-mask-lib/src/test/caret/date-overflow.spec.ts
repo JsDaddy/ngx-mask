@@ -254,7 +254,24 @@ describe('overwriteDateSlot', () => {
         expect(type(svc, '15/06/2020', 1, '9', 4)).toBeNull();
         expect(type(svc, '15/06/2020', 6, '9', 8)).toBeNull();
         expect(overwriteDateSlot(svc, '15/06/2020', '25/06/2020', 2)).toBeNull();
-        // a paste of more than one character
+        // a paste of more than one character, at the end of the value and in the middle of it
         expect(overwriteDateSlot(svc, '15/06/2020', '1256/06/2020', 4)).toBeNull();
+        expect(overwriteDateSlot(svc, '15/06/2020', '15/5506/2020', 5)).toBeNull();
+    });
+
+    it('reads the display from the value when no keydown recorded it', () => {
+        const svc = service('d0/M0/0000');
+        // `before` still holds the written raw value, or nothing at all
+        expect(overwriteDateSlot(svc, '15062020', '195/06/2020', 2)).toMatchObject({
+            value: '19/06/2020',
+            position: 2,
+        });
+        expect(overwriteDateSlot(svc, '', '415/06/2020', 1)).toMatchObject({
+            value: '04/06/2020',
+            position: 2,
+        });
+        // a selection cannot be read from the value: a stale `before` leaves it to the caller
+        expect(overwriteDateSlot(svc, '15062020', '15/1/2020', 4)).toBeNull();
+        expect(overwriteDateSlot(svc, '15/06/2021', '15/1/2020', 4)).toBeNull();
     });
 });

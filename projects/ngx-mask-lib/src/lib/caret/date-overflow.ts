@@ -169,14 +169,15 @@ const FIELD_MAX: Readonly<Record<DateTimeField['token'], number>> = {
 };
 
 /**
- * A character typed into a date mask whose display (`before`) is already full length overwrites the
- * next digit slot, skipping separators, so the digits that follow never shift. With leadZeroDateTime
+ * A character typed into a date mask whose display is already full length overwrites the next
+ * digit slot, skipping separators, so the digits that follow never shift. With leadZeroDateTime
  * a field the digit would push out of range, or a whole selected field the digit replaces, is
  * repaired: the digit keeps its slot and zero-fills (`3` over `15` is `30`) or, when it cannot be a
  * tens digit, is the whole field (`4` over `15` is `04`). A key the slot rejects leaves the display
- * as it was. Null keeps regular masking: not one character typed into a full date, a selection
- * beyond one field, or an out-of-range field without leadZeroDateTime. The caller keeps deletions,
- * pastes and prefix, suffix and keepCharacterPositions masks away from it.
+ * as it was. Null leaves the edit to the caller: not one character typed into a full date, a
+ * selection beyond one field, or an out-of-range field without leadZeroDateTime. `before` is the
+ * display the keydown saw; only a selection needs it, as one character typed at a caret is
+ * `elValue` without it, an edit without a keydown (dictation, insertText) included.
  */
 export function overwriteDateSlot(
     svc: DateSlotMask,
@@ -186,8 +187,11 @@ export function overwriteDateSlot(
 ): DateOverwrite | null {
     const mask = svc.maskExpression;
     const start = position - 1;
-    // The end of the span the typed character replaced in `before` (a caret replaces nothing).
-    const selEnd = before.length - elValue.length + position;
+    // Only one character typed at the caret of a full display makes the value longer than the mask.
+    const display =
+        elValue.length > mask.length ? elValue.slice(0, start) + elValue.slice(position) : before;
+    // The end of the span the typed character replaced in `display` (a caret replaces nothing).
+    const selEnd = display.length - elValue.length + position;
     const typed = elValue.charAt(start);
     const target = nextFillableIndex(mask, svc.specialCharacters, start);
     const slot = findDateTimeFieldAt(mask, target);
@@ -195,12 +199,11 @@ export function overwriteDateSlot(
     const field = slot?.end === target ? findDateTimeFieldAt(mask, target + 1) : slot;
     if (
         !/[dM]/.test(mask) ||
-        before.length !== mask.length ||
+        display.length !== mask.length ||
         // under showMaskTyped a placeholder slot takes the digit in sequence, not in place
-        !/\d/.test(before.charAt(target)) ||
-        // not one character typed over `before`
-        selEnd < start ||
-        elValue !== before.slice(0, start) + typed + before.slice(selEnd) ||
+        !/\d/.test(display.charAt(target)) ||
+        // a stale `before` (the keydown of the edit never fired): not the display of the selection
+        elValue !== display.slice(0, start) + typed + display.slice(selEnd) ||
         // a selection stays within one field, and only leadZeroDateTime pads what it replaces
         selEnd > (field?.end ?? target + 1) ||
         (selEnd - start > 1 && !svc.leadZeroDateTime)
@@ -209,9 +212,9 @@ export function overwriteDateSlot(
     }
     if (!svc._checkSymbolMask(typed, mask.charAt(target))) {
         // A key the slot rejects changes nothing, a selection included: `end` -1 touches no index.
-        return { value: before, position: start, end: -1 };
+        return { value: display, position: start, end: -1 };
     }
-    let value = before.slice(0, target) + typed + before.slice(target + 1);
+    let value = display.slice(0, target) + typed + display.slice(target + 1);
     let caret = target + 1;
     if (field) {
         const max = svc.apm && /[Hh]/.test(field.token) ? 12 : FIELD_MAX[field.token];
@@ -223,9 +226,9 @@ export function overwriteDateSlot(
             // a tens digit; otherwise it is the whole field (`4` over `15` is `04`).
             const tens = target === field.start && Number(typed) * 10 <= max;
             value =
-                before.slice(0, field.start) +
+                display.slice(0, field.start) +
                 (tens ? typed + '0' : '0' + typed) +
-                before.slice(field.end);
+                display.slice(field.end);
             caret = tens ? caret : field.end;
         } else if (over) {
             return null;
