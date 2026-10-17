@@ -28,6 +28,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
+import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
 import {
@@ -904,181 +905,31 @@ export class NgxMaskDirective
                     this._maskService.placeHolderCharacter.length === 1 &&
                     !this._justPasted()
                 ) {
-                    const suffix = this._maskService.suffix;
-                    const prefix = this._maskService.prefix;
-                    const inputSymbol = el.value.slice(position - 1, position);
-                    const prefixLength = prefix.length;
-                    const showMaskTyped = this._maskService.showMaskTyped;
-                    const maskExpression = this._maskService.maskExpression;
-                    // Placeholder skeleton of the mask (special chars kept, fillable slots
-                    // replaced by the placeholder character). With showMaskTyped the service
-                    // renders it as maskIsShown; without showMaskTyped it is derived locally so
-                    // keepCharacterPositions works on its own (#1545, #1543).
-                    const maskSkeleton: string = this._maskService.maskIsShown.length
-                        ? this._maskService.maskIsShown
-                        : maskExpression.replace(/\w/g, this._maskService.placeHolderCharacter);
-
-                    const hasSelection: boolean =
-                        this._maskService.selStart !== this._maskService.selEnd;
-                    const selStartAbs = Number(this._maskService.selStart);
-                    const selEndAbs = Number(this._maskService.selEnd);
-                    const selStart = selStartAbs - prefixLength;
-                    const selEnd = selEndAbs - prefixLength;
-
-                    const backspaceOrDelete =
-                        this._code() === MaskExpression.BACKSPACE ||
-                        this._code() === MaskExpression.DELETE;
-
-                    // Whether this block fully resolved the resulting display value into
-                    // this._maskService.actualValue. When true, applyMask short-circuits and
-                    // renders actualValue as-is; when false the edit flows through regular
-                    // masking (e.g. appending at the end, or clearing the whole value).
-                    let kcpHandled = true;
-
-                    if (backspaceOrDelete) {
-                        if (hasSelection) {
-                            const preEditLength = el.value.length + (selEndAbs - selStartAbs);
-                            if (
-                                !showMaskTyped &&
-                                selStartAbs <= prefixLength &&
-                                selEndAbs >= preEditLength
-                            ) {
-                                // The whole value was selected and deleted: clear through the
-                                // regular path instead of showing a placeholder skeleton.
-                                kcpHandled = false;
-                            } else if (this._maskService.selStart === prefixLength) {
-                                this._maskService.actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${this._inputValue().split(prefix).join('')}`;
-                            } else if (
-                                this._maskService.selStart ===
-                                maskSkeleton.length + prefixLength
-                            ) {
-                                this._maskService.actualValue = `${this._inputValue()}${maskSkeleton.slice(selStart, selEnd)}`;
-                            } else {
-                                this._maskService.actualValue = `${prefix}${this._inputValue()
-                                    .split(prefix)
-                                    .join('')
-                                    .slice(
-                                        0,
-                                        selStart
-                                    )}${maskSkeleton.slice(selStart, selEnd)}${this._maskService.actualValue.slice(
-                                    selEnd + prefixLength,
-                                    maskSkeleton.length + prefixLength
-                                )}${suffix}`;
-                            }
-                        } else if (
-                            !this._maskService.specialCharacters.includes(
-                                maskExpression.slice(
-                                    position - prefixLength,
-                                    position + 1 - prefixLength
-                                )
-                            )
-                        ) {
-                            if (!showMaskTyped && position >= el.value.length) {
-                                // Deleting the last character: no gap needs to be kept.
-                                kcpHandled = false;
-                            } else if (selStart === 1 && prefix) {
-                                this._maskService.actualValue = `${prefix}${this._maskService.placeHolderCharacter}${el.value
-                                    .split(prefix)
-                                    .join('')
-                                    .split(suffix)
-                                    .join('')}${suffix}`;
-
-                                position = position - 1;
-                            } else {
-                                const part1 = el.value.substring(0, position);
-                                const part2 = el.value.substring(position);
-                                this._maskService.actualValue = `${part1}${this._maskService.placeHolderCharacter}${part2}`;
-                            }
-                        }
-                        position = this._code() === MaskExpression.DELETE ? position + 1 : position;
-                    } else if (hasSelection) {
-                        // A selected range was replaced by the typed symbol. Keep the layout:
-                        // blank the selection to the mask skeleton and put the typed symbol
-                        // into the first fillable slot of the selection (#1527, #1489).
-                        const preEditLength = el.value.length - 1 + (selEndAbs - selStartAbs);
-                        if (
-                            !showMaskTyped &&
-                            selStartAbs <= prefixLength &&
-                            selEndAbs >= preEditLength
-                        ) {
-                            // The whole value was replaced: mask it through the regular path.
-                            kcpHandled = false;
-                        } else {
-                            let maskIdx = Math.max(selStart, 0);
-                            while (
-                                maskIdx < maskExpression.length &&
-                                this._maskService.specialCharacters.includes(
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                maskIdx += 1;
-                            }
-                            const blanked = `${el.value.slice(0, selStartAbs)}${maskSkeleton.slice(
-                                Math.max(selStart, 0),
-                                selEnd
-                            )}${el.value.slice(selStartAbs + 1)}`;
-                            const targetAbs = maskIdx + prefixLength;
-                            if (
-                                targetAbs < blanked.length - suffix.length &&
-                                this._maskService._checkSymbolMask(
-                                    inputSymbol,
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                this._maskService.actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
-                                position = targetAbs + 1;
-                            } else {
-                                this._maskService.actualValue = blanked;
-                                position = selStartAbs;
-                            }
-                        }
-                    } else {
-                        // Single-caret insert (overwrite mode): the typed symbol lands in the
-                        // first fillable mask slot at or after the caret, skipping any number
-                        // of special characters (#1544, #1489).
-                        const oldDisplay = `${el.value.slice(0, position - 1)}${el.value.slice(position)}`;
-                        const oldDisplayNoSuffix = suffix
-                            ? oldDisplay.split(suffix).join('')
-                            : oldDisplay;
-                        let maskIdx = position - 1 - prefixLength;
-                        if (maskIdx < 0) {
-                            // Typed inside the prefix: reject the symbol.
-                            position = position - 1;
-                        } else {
-                            while (
-                                maskIdx < maskExpression.length &&
-                                this._maskService.specialCharacters.includes(
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                maskIdx += 1;
-                            }
-                            const targetAbs = maskIdx + prefixLength;
-                            if (targetAbs >= oldDisplayNoSuffix.length) {
-                                if (oldDisplayNoSuffix.length <= prefixLength || !showMaskTyped) {
-                                    // First symbol, or appending at the end without
-                                    // showMaskTyped: regular masking handles it (including
-                                    // leadZeroDateTime insertions).
-                                    kcpHandled = false;
-                                } else {
-                                    // All slots of the rendered mask are already consumed.
-                                    position = position - 1;
-                                }
-                            } else if (
-                                this._maskService._checkSymbolMask(
-                                    inputSymbol,
-                                    maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
-                                )
-                            ) {
-                                this._maskService.actualValue = `${oldDisplayNoSuffix.slice(0, targetAbs)}${inputSymbol}${oldDisplayNoSuffix.slice(targetAbs + 1)}${suffix}`;
-                                position = targetAbs + 1;
-                            } else {
-                                // Rejected symbol: keep the current display.
-                                position = position - 1;
-                            }
-                        }
+                    const kcp = resolveKeepCharacterPositions({
+                        elValue: el.value,
+                        inputValue: this._inputValue(),
+                        position,
+                        code: this._code(),
+                        prefix: this._maskService.prefix,
+                        suffix: this._maskService.suffix,
+                        showMaskTyped: this._maskService.showMaskTyped,
+                        maskExpression: this._maskService.maskExpression,
+                        maskIsShown: this._maskService.maskIsShown,
+                        placeHolderCharacter: this._maskService.placeHolderCharacter,
+                        specialCharacters: this._maskService.specialCharacters,
+                        selStart: this._maskService.selStart,
+                        selEnd: this._maskService.selEnd,
+                        actualValue: this._maskService.actualValue,
+                        checkSymbolMask: (inputSymbol, maskSymbol) =>
+                            this._maskService._checkSymbolMask(inputSymbol, maskSymbol),
+                    });
+                    if (kcp.actualValue !== null) {
+                        this._maskService.actualValue = kcp.actualValue;
                     }
-                    this._maskService.keepCharacterPositionsHandled = kcpHandled;
+                    position = kcp.position;
+                    // Whether the resolution fully rendered the display value into actualValue
+                    // (applyMask then short-circuits), or the edit flows through regular masking.
+                    this._maskService.keepCharacterPositionsHandled = kcp.handled;
                 }
 
                 // A literal '*' typed into the VALUE (custom pattern allowing asterisks) makes
