@@ -31,6 +31,13 @@ export const OthDocs: ComDoc[] = [
         anchor: '12hour',
     },
     {
+        header: '12 hour format with leadZeroDateTime',
+        text: 'With leadZeroDateTime an hour above 12 is padded with a zero (13 gives 01:3) and a typed 00 hour becomes 01',
+        code: ` <input type='text' [apm]="true" [leadZeroDateTime]="true" mask="Hh:m0:s0" >`,
+        id: 8,
+        anchor: '12hour-lead-zero-date-time',
+    },
+    {
         header: 'Percent with decimalMarker ,',
         text: '',
 
@@ -74,6 +81,13 @@ export const OthExamples: (TExampleConfig<MaskOptions> | { _pipe: string })[] = 
         _placeholder: '12 hour format',
         _mask: 'Hh:m0:s0',
         _apm: true,
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _placeholder: '12 hour format with leadZeroDateTime',
+        _mask: 'Hh:m0:s0',
+        _apm: true,
+        _leadZeroDateTime: true,
         control: { initialValue: '', model: '' },
     },
     {

@@ -35,7 +35,9 @@ export function findDateTimeFieldAt(
         const token = maskExpression[index] ?? MaskExpression.EMPTY_STRING;
         if (dateTimeTokens.includes(token)) {
             const next = maskExpression[index + 1];
-            const isCombinedHour = token === MaskExpression.HOURS && next === MaskExpression.HOUR;
+            const isCombinedHour =
+                (token === MaskExpression.HOURS || token === MaskExpression.HOUR) &&
+                next === MaskExpression.HOUR;
             const end =
                 next === MaskExpression.NUMBER_ZERO || isCombinedHour ? index + 2 : index + 1;
             if (position >= index && position <= end) {
@@ -88,7 +90,7 @@ export function isFieldOverflowing(
             return fieldValue > 12 || firstDigitValue > 1;
         case MaskExpression.HOURS:
             return apm
-                ? fieldValue > 9 || firstDigitValue > 9
+                ? fieldValue > 12 || firstDigitValue > 9
                 : fieldValue > 23 || firstDigitValue > 2;
         case MaskExpression.HOUR:
             return apm ? fieldValue > 12 : fieldValue > 23;
@@ -140,11 +142,28 @@ export function overwriteFullDateValue(
     return null;
 }
 
-/** The element value of an `Hh:m0:s0` apm mask: a lone leading `00` of a paste or the whole `00` collapses. */
-export function normalizeApmHoursValue(elValue: string, justPasted: boolean): string {
-    const value =
-        justPasted && elValue.slice(0, 2) === MaskExpression.DOUBLE_ZERO
-            ? elValue.slice(1, 2) + elValue.slice(2, elValue.length)
-            : elValue;
-    return value === MaskExpression.DOUBLE_ZERO ? MaskExpression.NUMBER_ZERO : value;
+/** The span of `value` that the user's last edit (keystroke, deletion, paste) changed. */
+export type UserEdit = { value: string; start: number; end: number };
+
+// Keyed by the mask service, kept outside it so the published API carries no field for it. The key
+// is typed `object`: importing the service type here reorders unions in the emitted d.ts.
+const userEdits = new WeakMap<object, UserEdit>();
+
+/**
+ * Records the edit the directive is about to mask, `null` for an edit that changed no field. Only an
+ * edit may turn a typed `00` day, month or 12-hour hour into `01` (leadZeroDateTime): a render of any
+ * other value, e.g. a write or a re-render, has none.
+ */
+export function setUserEdit(service: object, edit: UserEdit | null): void {
+    if (edit) {
+        userEdits.set(service, edit);
+    } else {
+        userEdits.delete(service);
+    }
+}
+
+/** The recorded edit when `inputValue` is the value it produced, else null. */
+export function userEditFor(service: object, inputValue: string): UserEdit | null {
+    const edit = userEdits.get(service);
+    return edit?.value === inputValue ? edit : null;
 }

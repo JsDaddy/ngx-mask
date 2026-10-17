@@ -61,7 +61,10 @@ function describeRow(row: Row): string {
     if (typeof row.paste === 'string') {
         return `pasting "${row.paste}"`;
     }
-    const { start, end, key } = row.edit as EditAction;
+    if (!row.edit) {
+        return `writing "${row.initial}"`;
+    }
+    const { start, end, key } = row.edit;
     return `${row.initial} then ${key} at ${start}${end === start ? '' : `-${end}`}`;
 }
 
@@ -74,6 +77,13 @@ function check(config: Config, rows: Row[]): void {
             );
         });
     }
+}
+
+/** One `describe` per configuration, so rows of different masks never share a test title. */
+function section(title: string, config: Config, rows: Row[]): void {
+    describe(title, () => {
+        check(config, rows);
+    });
 }
 
 describe('date overflow characterization', () => {
@@ -93,7 +103,8 @@ describe('date overflow characterization', () => {
             { keys: '35', expected: { value: '03/05', caret: 5, model: '0305' } },
             { keys: '39', expected: { value: '03/09', caret: 5, model: '0309' } },
             { keys: '40', expected: { value: '04/0', caret: 4, model: '040' } },
-            { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+            // a typed 00 day is clamped to 01 (leadZeroDateTime, user input only)
+            { keys: '00', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '0', expected: { value: '0', caret: 1, model: '0' } },
             { keys: '01', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '3112', expected: { value: '31/12', caret: 5, model: '3112' } },
@@ -115,8 +126,8 @@ describe('date overflow characterization', () => {
             { keys: '1512', expected: { value: '15/12', caret: 5, model: '1512' } },
             { keys: '15013', expected: { value: '15/01/3', caret: 7, model: '15013' } },
             { keys: '150', expected: { value: '15/0', caret: 4, model: '150' } },
-            // current behaviour: month 00 is accepted
-            { keys: '1500', expected: { value: '15/00', caret: 5, model: '1500' } },
+            // a typed 00 month is clamped to 01
+            { keys: '1500', expected: { value: '15/01', caret: 5, model: '1501' } },
         ]);
     });
 
@@ -333,8 +344,8 @@ describe('date overflow characterization', () => {
             { keys: '20201', expected: { value: '2020.1', caret: 6, model: '20201' } },
             { keys: '20203', expected: { value: '2020.03', caret: 7, model: '202003' } },
             { keys: '20204', expected: { value: '2020.04', caret: 7, model: '202004' } },
-            // current behaviour: month 13 is accepted in a year-first mask (no month overflow correction)
-            { keys: '202013', expected: { value: '2020.13', caret: 7, model: '202013' } },
+            // an overflowing month is padded to 01 and the next digit becomes the day, as in d0/M0/0000
+            { keys: '202013', expected: { value: '2020.01.3', caret: 9, model: '2020013' } },
             { keys: '202012', expected: { value: '2020.12', caret: 7, model: '202012' } },
             { keys: '2020123', expected: { value: '2020.12.3', caret: 9, model: '2020123' } },
             { keys: '2020124', expected: { value: '2020.12.04', caret: 10, model: '20201204' } },
@@ -343,9 +354,9 @@ describe('date overflow characterization', () => {
             { keys: '20201235', expected: { value: '2020.12.03', caret: 10, model: '20201203' } },
             { keys: '20201240', expected: { value: '2020.12.04', caret: 10, model: '20201204' } },
             { keys: '20200', expected: { value: '2020.0', caret: 6, model: '20200' } },
-            { keys: '202000', expected: { value: '2020.00', caret: 7, model: '202000' } },
+            { keys: '202000', expected: { value: '2020.01', caret: 7, model: '202001' } },
             { keys: '2020120', expected: { value: '2020.12.0', caret: 9, model: '2020120' } },
-            { keys: '20201200', expected: { value: '2020.12.00', caret: 10, model: '20201200' } },
+            { keys: '20201200', expected: { value: '2020.12.01', caret: 10, model: '20201201' } },
             { keys: '202002', expected: { value: '2020.02', caret: 7, model: '202002' } },
             { keys: '2020021', expected: { value: '2020.02.1', caret: 9, model: '2020021' } },
         ]);
@@ -364,11 +375,11 @@ describe('date overflow characterization', () => {
                 edit: { start: 5, end: 5, key: '3' },
                 expected: { value: '2020.03.12', caret: 9, model: '20200312' },
             },
-            // current behaviour: month 14 is accepted in a year-first mask
+            // the month 14 is padded to 01 and the 4 becomes the day (PR2 turns this into an overwrite)
             {
                 initial: '20201231',
                 edit: { start: 6, end: 6, key: '4' },
-                expected: { value: '2020.14.23', caret: 9, model: '20201423' },
+                expected: { value: '2020.01.04', caret: 10, model: '20200104' },
             },
             {
                 initial: '20201231',
@@ -410,11 +421,11 @@ describe('date overflow characterization', () => {
                 edit: { start: 3, end: 3, key: '9' },
                 expected: { value: '2029.01.23', caret: 4, model: '20290123' },
             },
-            // current behaviour: month 13 is accepted in a year-first mask
+            // the month's lone digit before the stale separator is padded: the day is not read as its second digit
             {
                 initial: '20201231',
                 edit: { start: 5, end: 7, key: '1' },
-                expected: { value: '2020.13.1', caret: 6, model: '2020131' },
+                expected: { value: '2020.01.31', caret: 7, model: '20200131' },
             },
             {
                 initial: '20201231',
@@ -459,12 +470,10 @@ describe('date overflow characterization', () => {
             { keys: '3', expected: { value: '03', caret: 2, model: '03' } },
             { keys: '9', expected: { value: '09', caret: 2, model: '09' } },
             { keys: '23', expected: { value: '23', caret: 2, model: '23' } },
-            // current behaviour: hour 24+ is not corrected: the digit leaks into the minutes field
-            { keys: '24', expected: { value: '2:4', caret: 3, model: '24' } },
-            // current behaviour: hour 24+ is not corrected: the digit leaks into the minutes field
-            { keys: '25', expected: { value: '2:5', caret: 3, model: '25' } },
-            // current behaviour: hour 24+ is not corrected: the digit leaks into the minutes field
-            { keys: '29', expected: { value: '2:09', caret: 4, model: '209' } },
+            // an hour above 23 is padded to 02 and the digit starts the minutes
+            { keys: '24', expected: { value: '02:4', caret: 4, model: '024' } },
+            { keys: '25', expected: { value: '02:5', caret: 4, model: '025' } },
+            { keys: '29', expected: { value: '02:09', caret: 5, model: '0209' } },
             { keys: '30', expected: { value: '03:0', caret: 4, model: '030' } },
             { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
             { keys: '0', expected: { value: '0', caret: 1, model: '0' } },
@@ -473,7 +482,7 @@ describe('date overflow characterization', () => {
             { keys: '126', expected: { value: '12:06', caret: 5, model: '1206' } },
             { keys: '1259', expected: { value: '12:59', caret: 5, model: '1259' } },
             { keys: '125', expected: { value: '12:5', caret: 4, model: '125' } },
-            // current behaviour: minutes 60 overflow into seconds
+            // by design: the 6 can only be a tens-of-minutes digit, so it is padded (like 3113 in dates)
             { keys: '1260', expected: { value: '12:06:0', caret: 7, model: '12060' } },
             { keys: '1261', expected: { value: '12:06:1', caret: 7, model: '12061' } },
             { keys: '12345', expected: { value: '12:34:5', caret: 7, model: '12345' } },
@@ -484,8 +493,7 @@ describe('date overflow characterization', () => {
             { keys: '123460', expected: { value: '12:34:06', caret: 8, model: '123406' } },
             { keys: '235959', expected: { value: '23:59:59', caret: 8, model: '235959' } },
             { keys: '236000', expected: { value: '23:06:00', caret: 8, model: '230600' } },
-            // current behaviour: hour 24 is not corrected
-            { keys: '246060', expected: { value: '2:46:06', caret: 7, model: '24606' } },
+            { keys: '246060', expected: { value: '02:46:06', caret: 8, model: '024606' } },
             { keys: '2359599', expected: { value: '23:59:59', caret: 8, model: '235959' } },
             { keys: '1200', expected: { value: '12:00', caret: 5, model: '1200' } },
             { keys: '12000', expected: { value: '12:00:0', caret: 7, model: '12000' } },
@@ -628,36 +636,35 @@ describe('date overflow characterization', () => {
             { keys: '3', expected: { value: '3', caret: 1, model: '3' } },
             { keys: '9', expected: { value: '9', caret: 1, model: '9' } },
             { keys: '12', expected: { value: '12', caret: 2, model: '12' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
-            { keys: '13', expected: { value: '1:3', caret: 3, model: '13' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
-            { keys: '19', expected: { value: '1:09', caret: 4, model: '109' } },
+            // an hour above 12 is padded to 01 and the digit starts the minutes
+            { keys: '13', expected: { value: '01:3', caret: 4, model: '013' } },
+            { keys: '19', expected: { value: '01:09', caret: 5, model: '0109' } },
             { keys: '10', expected: { value: '10', caret: 2, model: '10' } },
             { keys: '11', expected: { value: '11', caret: 2, model: '11' } },
-            { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+            // a 12-hour clock has no hour 00: a typed 00 becomes 01 (leadZeroDateTime)
+            { keys: '00', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '0', expected: { value: '0', caret: 1, model: '0' } },
             { keys: '01', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '123', expected: { value: '12:3', caret: 4, model: '123' } },
             { keys: '126', expected: { value: '12:06', caret: 5, model: '1206' } },
             { keys: '1259', expected: { value: '12:59', caret: 5, model: '1259' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
+            // by design: the 6 can only be a tens-of-minutes digit, so it is padded (like 3113 in dates)
             { keys: '1260', expected: { value: '12:06 ', caret: 6, model: '1206' } },
             { keys: '125', expected: { value: '12:5', caret: 4, model: '125' } },
-            // current behaviour: the "aa" meridiem letters are never accepted: the value keeps a trailing space
+            // current behaviour: unsupported token: there is no meridiem pattern, so the letters are never accepted and the value keeps a trailing space
             { keys: '1259a', expected: { value: '12:59 ', caret: 6, model: '1259' } },
-            // current behaviour: the "aa" meridiem letters are never accepted: the value keeps a trailing space
+            // unsupported token: there is no meridiem pattern, so the letters are never accepted and the value keeps a trailing space
             { keys: '1259am', expected: { value: '12:59 ', caret: 6, model: '1259' } },
-            // current behaviour: the "aa" meridiem letters are never accepted: the value keeps a trailing space
+            // unsupported token: there is no meridiem pattern, so the letters are never accepted and the value keeps a trailing space
             { keys: '1259pm', expected: { value: '12:59 ', caret: 6, model: '1259' } },
-            // current behaviour: the "aa" meridiem letters are never accepted: the value keeps a trailing space
+            // unsupported token: there is no meridiem pattern, so the letters are never accepted and the value keeps a trailing space
             { keys: '1259AM', expected: { value: '12:59 ', caret: 6, model: '1259' } },
-            // current behaviour: the "aa" meridiem letters are never accepted: the value keeps a trailing space
+            // unsupported token: there is no meridiem pattern, so the letters are never accepted and the value keeps a trailing space
             { keys: '1259xx', expected: { value: '12:59 ', caret: 6, model: '1259' } },
             { keys: '0100', expected: { value: '01:00', caret: 5, model: '0100' } },
-            { keys: '0030', expected: { value: '00:30', caret: 5, model: '0030' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
-            { keys: '1300', expected: { value: '1:30 ', caret: 5, model: '130' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
+            { keys: '0030', expected: { value: '01:30', caret: 5, model: '0130' } },
+            { keys: '1300', expected: { value: '01:30 ', caret: 6, model: '0130' } },
+            // by design: the 9 can only be a tens-of-minutes digit, so it is padded
             { keys: '1299', expected: { value: '12:09 ', caret: 6, model: '1209' } },
             { keys: '1230pm', expected: { value: '12:30 ', caret: 6, model: '1230' } },
             { keys: '1230amx', expected: { value: '12:30 ', caret: 6, model: '1230' } },
@@ -675,17 +682,17 @@ describe('date overflow characterization', () => {
             {
                 initial: '1230am',
                 edit: { start: 0, end: 0, key: '2' },
-                expected: { value: '2:12 ', caret: 3, model: '212' },
+                expected: { value: '02:12 ', caret: 4, model: '0212' },
             },
             {
                 initial: '1230am',
                 edit: { start: 1, end: 1, key: '3' },
-                expected: { value: '1:32 ', caret: 4, model: '132' },
+                expected: { value: '01:32 ', caret: 4, model: '0132' },
             },
             {
                 initial: '1230am',
                 edit: { start: 1, end: 1, key: '1' },
-                expected: { value: '11:23 ', caret: 4, model: '1123' },
+                expected: { value: '11:23 ', caret: 2, model: '1123' },
             },
             {
                 initial: '1230am',
@@ -751,7 +758,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '1230am',
                 edit: { start: 3, end: 3, key: 'Backspace' },
-                expected: { value: '12:30 ', caret: 4, model: '1230' },
+                expected: { value: '12:30 ', caret: 2, model: '1230' },
             },
             {
                 initial: '1230am',
@@ -776,28 +783,27 @@ describe('date overflow characterization', () => {
         const config: Config = { mask: 'Hh:m0:s0', apm: true, leadZeroDateTime: true };
         check(config, [
             { keys: '0', expected: { value: '0', caret: 1, model: '0' } },
-            // current behaviour: the apm tweak collapses a double zero into a single 0
-            { keys: '00', expected: { value: '0', caret: 1, model: '0' } },
+            // a 12-hour clock has no hour 00: a typed 00 becomes 01 (leadZeroDateTime)
+            { keys: '00', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '1', expected: { value: '1', caret: 1, model: '1' } },
             { keys: '10', expected: { value: '10', caret: 2, model: '10' } },
             { keys: '12', expected: { value: '12', caret: 2, model: '12' } },
-            { keys: '13', expected: { value: '1:3', caret: 3, model: '13' } },
+            { keys: '13', expected: { value: '01:3', caret: 4, model: '013' } },
             { keys: '09', expected: { value: '09', caret: 2, model: '09' } },
             { keys: '123', expected: { value: '12:3', caret: 4, model: '123' } },
             { keys: '1234', expected: { value: '12:34', caret: 5, model: '1234' } },
             { keys: '123456', expected: { value: '12:34:56', caret: 8, model: '123456' } },
-            { keys: '236060', expected: { value: '2:36:06', caret: 7, model: '23606' } },
-            { paste: '00', expected: { value: '0', caret: 1, model: '0' } },
-            // current behaviour: a pasted 00:00:00 loses its last digit
-            { paste: '00:00:00', expected: { value: '00:00:0', caret: 7, model: '00000' } },
-            // current behaviour: a pasted 000000 loses its last digit
-            { paste: '000000', expected: { value: '00:00:0', caret: 7, model: '00000' } },
+            { keys: '236060', expected: { value: '02:36:06', caret: 8, model: '023606' } },
+            { paste: '00', expected: { value: '01', caret: 2, model: '01' } },
+            // a pasted 00 hour becomes 01 and no digit is lost
+            { paste: '00:00:00', expected: { value: '01:00:00', caret: 8, model: '010000' } },
+            { paste: '000000', expected: { value: '01:00:00', caret: 8, model: '010000' } },
             { paste: '123456', expected: { value: '12:34:56', caret: 8, model: '123456' } },
-            { paste: '13', expected: { value: '1:3', caret: 3, model: '13' } },
+            { paste: '13', expected: { value: '01:3', caret: 4, model: '013' } },
             {
                 initial: '123456',
                 edit: { start: 1, end: 1, key: '9' },
-                expected: { value: '1:09:23', caret: 4, model: '10923' },
+                expected: { value: '01:09:23', caret: 5, model: '010923' },
             },
             {
                 initial: '123456',
@@ -818,7 +824,7 @@ describe('date overflow characterization', () => {
             { keys: '12', expected: { value: '12', caret: 2, model: '12' } },
             { keys: '13', expected: { value: '01/3', caret: 4, model: '013' } },
             { keys: '19', expected: { value: '01/09', caret: 5, model: '0109' } },
-            { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+            { keys: '00', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '01', expected: { value: '01', caret: 2, model: '01' } },
             { keys: '123', expected: { value: '12/3', caret: 4, model: '123' } },
             { keys: '124', expected: { value: '12/04', caret: 5, model: '1204' } },
@@ -826,7 +832,7 @@ describe('date overflow characterization', () => {
             { keys: '1232', expected: { value: '12/03', caret: 5, model: '1203' } },
             { keys: '1235', expected: { value: '12/03', caret: 5, model: '1203' } },
             { keys: '1240', expected: { value: '12/04', caret: 5, model: '1204' } },
-            { keys: '1200', expected: { value: '12/00', caret: 5, model: '1200' } },
+            { keys: '1200', expected: { value: '12/01', caret: 5, model: '1201' } },
             { keys: '0230', expected: { value: '02/30', caret: 5, model: '0230' } },
             { keys: '31', expected: { value: '03/1', caret: 4, model: '031' } },
             { keys: '1331', expected: { value: '01/03', caret: 5, model: '0103' } },
@@ -913,8 +919,8 @@ describe('date overflow characterization', () => {
             { keys: '3', expected: { value: '3', caret: 1, model: '3' } },
             { keys: '13', expected: { value: '13', caret: 2, model: '13' } },
             { keys: '23', expected: { value: '23', caret: 2, model: '23' } },
-            { keys: '24', expected: { value: '2:4', caret: 3, model: '24' } },
-            { keys: '25', expected: { value: '2:5', caret: 3, model: '25' } },
+            { keys: '24', expected: { value: '02:4', caret: 4, model: '024' } },
+            { keys: '25', expected: { value: '02:5', caret: 4, model: '025' } },
             { keys: '2359', expected: { value: '23:59', caret: 5, model: '2359' } },
             {
                 initial: '1234',
@@ -929,15 +935,13 @@ describe('date overflow characterization', () => {
         check(config, [
             { keys: '1', expected: { value: '1', caret: 1, model: '1' } },
             { keys: '12', expected: { value: '12', caret: 2, model: '12' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
-            { keys: '13', expected: { value: '1:3', caret: 3, model: '13' } },
-            // current behaviour: an hour above 12 is not corrected: the digit leaks into the minutes field
-            { keys: '19', expected: { value: '1:09', caret: 4, model: '109' } },
+            { keys: '13', expected: { value: '01:3', caret: 4, model: '013' } },
+            { keys: '19', expected: { value: '01:09', caret: 5, model: '0109' } },
             { keys: '1259', expected: { value: '12:59', caret: 5, model: '1259' } },
             {
                 initial: '1234',
                 edit: { start: 1, end: 1, key: '5' },
-                expected: { value: '1:52', caret: 3, model: '152' },
+                expected: { value: '01:52', caret: 4, model: '0152' },
             },
         ]);
     });
@@ -945,11 +949,11 @@ describe('date overflow characterization', () => {
     describe('M0/d0 Backspace and Delete', () => {
         const config: Config = { mask: 'M0/d0', leadZeroDateTime: true };
         check(config, [
-            // current behaviour: deleting the second month digit leaves month 13
+            // deleting the second month digit pads the month instead of leaving month 13
             {
                 initial: '1231',
                 edit: { start: 2, end: 2, key: 'Backspace' },
-                expected: { value: '13/1', caret: 1, model: '131' },
+                expected: { value: '01/31', caret: 1, model: '0131' },
             },
             {
                 initial: '1231',
@@ -977,6 +981,481 @@ describe('date overflow characterization', () => {
                 expected: { value: '02/31', caret: 0, model: '0231' },
             },
             { keys: '1231\b\b', expected: { value: '12/', caret: 3, model: '12' } },
+        ]);
+    });
+
+    describe('out-of-range months, hours and 00 fields (PR1 fixes)', () => {
+        section('0000-M0-d0 month above 12', { mask: '0000-M0-d0', leadZeroDateTime: true }, [
+            { keys: '202013', expected: { value: '2020-01-3', caret: 9, model: '2020013' } },
+            { keys: '202014', expected: { value: '2020-01-04', caret: 10, model: '20200104' } },
+            { keys: '202012', expected: { value: '2020-12', caret: 7, model: '202012' } },
+            // a replaced month selection leaves a lone digit before the separator: it is padded, the day is kept
+            {
+                initial: '20201231',
+                edit: { start: 5, end: 7, key: '1' },
+                expected: { value: '2020-01-31', caret: 7, model: '20200131' },
+            },
+            {
+                initial: '20201231',
+                edit: { start: 7, end: 7, key: 'Backspace' },
+                expected: { value: '2020-01-31', caret: 6, model: '20200131' },
+            },
+        ]);
+
+        section('0000M0d0 month above 12', { mask: '0000M0d0', leadZeroDateTime: true }, [
+            { keys: '202013', expected: { value: '2020013', caret: 7, model: '2020013' } },
+            {
+                initial: '20201231',
+                edit: { start: 4, end: 6, key: '1' },
+                expected: { value: '20200131', caret: 7, model: '20200131' },
+            },
+            {
+                initial: '20201231',
+                edit: { start: 6, end: 6, key: 'Backspace' },
+                expected: { value: '20200131', caret: 7, model: '20200131' },
+            },
+        ]);
+
+        section('0000.M0.d0 month above 12', { mask: '0000.M0.d0', leadZeroDateTime: true }, [
+            { paste: '20201315', expected: { value: '2020.01.31', caret: 10, model: '20200131' } },
+            {
+                initial: '20201315',
+                expected: { value: '2020.01.31', caret: 10, model: '20200131' },
+            },
+            { paste: '20201215', expected: { value: '2020.12.15', caret: 10, model: '20201215' } },
+            {
+                initial: '20201231',
+                edit: { start: 7, end: 7, key: 'Backspace' },
+                expected: { value: '2020.01.31', caret: 6, model: '20200131' },
+            },
+            // a digit shifted left by a year Backspace stays unpadded and is re-split (same as the parent)
+            {
+                initial: '20201231',
+                edit: { start: 4, end: 4, key: 'Backspace' },
+                expected: { value: '2021.02.31', caret: 3, model: '20210231' },
+            },
+            // a separator typed after a lone month digit pads it, as in d0/M0/0000
+            { keys: '20201.', expected: { value: '2020.01.', caret: 7, model: '202001' } },
+        ]);
+
+        section('Hh:m0:s0 hours above 23', { mask: 'Hh:m0:s0', leadZeroDateTime: true }, [
+            { paste: '246060', expected: { value: '02:46:06', caret: 8, model: '024606' } },
+            { initial: '246060', expected: { value: '02:46:06', caret: 8, model: '024606' } },
+            { keys: '2359', expected: { value: '23:59', caret: 5, model: '2359' } },
+        ]);
+
+        section('Hh:m0:s0 hour 24 without leadZeroDateTime', { mask: 'Hh:m0:s0' }, [
+            { keys: '24', expected: { value: '2:4', caret: 3, model: '24' } },
+        ]);
+
+        section(
+            'Hh:m0:s0 apm hours above 12',
+            { mask: 'Hh:m0:s0', apm: true, leadZeroDateTime: true },
+            [
+                { keys: '19', expected: { value: '01:09', caret: 5, model: '0109' } },
+                { keys: '1300', expected: { value: '01:30:0', caret: 7, model: '01300' } },
+                { keys: '1259', expected: { value: '12:59', caret: 5, model: '1259' } },
+                // a first hour digit of 3 to 9 is padded and kept as the hour's second digit
+                { keys: '930', expected: { value: '09:30', caret: 5, model: '0930' } },
+                { keys: '815', expected: { value: '08:15', caret: 5, model: '0815' } },
+                { keys: '45', expected: { value: '04:5', caret: 4, model: '045' } },
+                { keys: '31', expected: { value: '03:1', caret: 4, model: '031' } },
+                { keys: '99', expected: { value: '09:09', caret: 5, model: '0909' } },
+                { keys: '930415', expected: { value: '09:30:41', caret: 8, model: '093041' } },
+            ]
+        );
+
+        // every first hour digit 0-9, typed key by key, pasted and written: [digit, value] for `<digit>15`
+        const firstHourDigits: [string, string][] = [
+            ['0', '01:5'],
+            ['1', '11:5'],
+            ['2', '02:15'],
+            ['3', '03:15'],
+            ['4', '04:15'],
+            ['5', '05:15'],
+            ['6', '06:15'],
+            ['7', '07:15'],
+            ['8', '08:15'],
+            ['9', '09:15'],
+        ];
+        for (const [title, mask] of [
+            ['Hh:m0:s0', 'Hh:m0:s0'],
+            ['Hh:m0', 'Hh:m0'],
+            ['hh:m0', 'hh:m0'],
+        ]) {
+            section(
+                `${title} apm first hour digits 0-9`,
+                { mask: mask as string, apm: true, leadZeroDateTime: true },
+                firstHourDigits.flatMap(([digit, value]) => {
+                    const expected = {
+                        value,
+                        caret: value.length,
+                        model: value.replace(':', ''),
+                    };
+                    return [
+                        { keys: `${digit}15`, expected },
+                        { paste: `${digit}15`, expected },
+                        { initial: `${digit}15`, expected },
+                    ];
+                })
+            );
+        }
+
+        section('Hh:m0 apm 930 and 815', { mask: 'Hh:m0', apm: true, leadZeroDateTime: true }, [
+            { keys: '930', expected: { value: '09:30', caret: 5, model: '0930' } },
+            { keys: '815', expected: { value: '08:15', caret: 5, model: '0815' } },
+        ]);
+
+        section('hh:m0 apm 930', { mask: 'hh:m0', apm: true, leadZeroDateTime: true }, [
+            { keys: '930', expected: { value: '09:30', caret: 5, model: '0930' } },
+        ]);
+
+        section('Hh:m0:s0 apm without leadZeroDateTime', { mask: 'Hh:m0:s0', apm: true }, [
+            { keys: '13', expected: { value: '1:3', caret: 3, model: '13' } },
+            { keys: '93', expected: { value: '9:3', caret: 3, model: '93' } },
+        ]);
+
+        // a digit inserted at the hour's tens or units of a complete 12-hour value
+        section(
+            'Hh:m0 apm a digit typed into 12:30',
+            { mask: 'Hh:m0', apm: true, leadZeroDateTime: true },
+            [
+                ...(
+                    [
+                        ['0', '01:23', 1],
+                        ['1', '11:23', 1],
+                        ['2', '02:12', 4],
+                        ['3', '03:12', 4],
+                        ['4', '04:12', 4],
+                        ['5', '05:12', 4],
+                        ['6', '06:12', 4],
+                        ['7', '07:12', 4],
+                        ['8', '08:12', 4],
+                        ['9', '09:12', 4],
+                    ] as const
+                ).map(([key, value, caret]) => ({
+                    initial: '1230',
+                    edit: { start: 0, end: 0, key },
+                    expected: { value, caret, model: value.replace(':', '') },
+                })),
+                ...(
+                    [
+                        ['0', '10:23', 2],
+                        ['1', '11:23', 2],
+                        ['2', '12:23', 2],
+                        ['3', '01:32', 4],
+                        ['6', '01:06', 5],
+                        ['9', '01:09', 5],
+                    ] as const
+                ).map(([key, value, caret]) => ({
+                    initial: '1230',
+                    edit: { start: 1, end: 1, key },
+                    expected: { value, caret, model: value.replace(':', '') },
+                })),
+            ]
+        );
+
+        section(
+            'd0/M0/0000 Hh:m0:s0 hours',
+            { mask: 'd0/M0/0000 Hh:m0:s0', leadZeroDateTime: true },
+            [
+                {
+                    keys: '1112202324',
+                    expected: { value: '11/12/2023 02:4', caret: 15, model: '11122023024' },
+                },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 Hh:m0:s0 apm hours',
+            { mask: 'd0/M0/0000 Hh:m0:s0', apm: true, leadZeroDateTime: true },
+            [
+                {
+                    keys: '15062020930',
+                    expected: { value: '15/06/2020 09:30', caret: 16, model: '150620200930' },
+                },
+                {
+                    keys: '15062020815',
+                    expected: { value: '15/06/2020 08:15', caret: 16, model: '150620200815' },
+                },
+                {
+                    keys: '150620201230',
+                    expected: { value: '15/06/2020 12:30', caret: 16, model: '150620201230' },
+                },
+            ]
+        );
+
+        section('d0/M0/0000 typed and pasted 00', { mask: 'd0/M0/0000', leadZeroDateTime: true }, [
+            { paste: '00062020', expected: { value: '01/06/2020', caret: 10, model: '01062020' } },
+            { paste: '15002020', expected: { value: '15/01/2020', caret: 10, model: '15012020' } },
+            { paste: '00002020', expected: { value: '01/01/2020', caret: 10, model: '01012020' } },
+            // programmatic writes round-trip unchanged: 00 is a stored "unknown" convention
+            {
+                initial: '00062020',
+                expected: { value: '00/06/2020', caret: 10, model: '00062020' },
+            },
+            {
+                initial: '15002020',
+                expected: { value: '15/00/2020', caret: 10, model: '15002020' },
+            },
+            {
+                initial: '15062020',
+                edit: { start: 5, end: 5, key: 'Backspace' },
+                expected: { value: '15/01/2020', caret: 4, model: '15012020' },
+            },
+            {
+                initial: '15062020',
+                edit: { start: 2, end: 2, key: 'Backspace' },
+                expected: { value: '01/06/2020', caret: 1, model: '01062020' },
+            },
+            // an edit that touches a written 00 field clamps it, as typing 00 does
+            {
+                initial: '00062020',
+                edit: { start: 2, end: 2, key: 'Backspace' },
+                expected: { value: '01/06/2020', caret: 1, model: '01062020' },
+            },
+        ]);
+
+        section(
+            'd0/M0/0000 an edit in another field leaves a written 00 alone',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true },
+            [
+                {
+                    initial: '00062020',
+                    edit: { start: 10, end: 10, key: 'Backspace' },
+                    expected: { value: '00/06/202', caret: 9, model: '0006202' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 10, end: 10, key: 'Backspace' },
+                    expected: { value: '15/00/202', caret: 9, model: '1500202' },
+                },
+                {
+                    initial: '00062020',
+                    edit: { start: 9, end: 9, key: '7' },
+                    expected: { value: '00/06/2027', caret: 10, model: '00062027' },
+                },
+                {
+                    initial: '00062020',
+                    edit: { start: 10, end: 10, key: '7' },
+                    expected: { value: '00/06/2020', caret: 10, model: '00062020' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 9, end: 9, key: '7' },
+                    expected: { value: '15/00/2027', caret: 10, model: '15002027' },
+                },
+                // a deletion starting on the separator after a written 00 leaves the 00 alone
+                {
+                    initial: '00062020',
+                    edit: { start: 3, end: 3, key: 'Backspace' },
+                    expected: { value: '00/06/2020', caret: 2, model: '00062020' },
+                },
+                {
+                    initial: '00062020',
+                    edit: { start: 2, end: 2, key: 'Delete' },
+                    expected: { value: '00/06/2020', caret: 4, model: '00062020' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 6, end: 6, key: 'Backspace' },
+                    expected: { value: '15/00/2020', caret: 5, model: '15002020' },
+                },
+                {
+                    initial: '15002020',
+                    edit: { start: 5, end: 5, key: 'Delete' },
+                    expected: { value: '15/00/020', caret: 6, model: '1500020' },
+                },
+            ]
+        );
+
+        section('d0/M0/0000 without leadZeroDateTime', { mask: 'd0/M0/0000' }, [
+            { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+            { keys: '1500', expected: { value: '15/00', caret: 5, model: '1500' } },
+            {
+                initial: '15002020',
+                expected: { value: '15/00/2020', caret: 10, model: '15002020' },
+            },
+        ]);
+
+        section('M0/d0 typed and pasted 00', { mask: 'M0/d0', leadZeroDateTime: true }, [
+            { paste: '0100', expected: { value: '01/01', caret: 5, model: '0101' } },
+            { initial: '0100', expected: { value: '01/00', caret: 5, model: '0100' } },
+            // Feb 30 needs the year: the mask does not validate it (use the validation input)
+            { keys: '0230', expected: { value: '02/30', caret: 5, model: '0230' } },
+        ]);
+
+        section('M0/d0/0000 Backspace', { mask: 'M0/d0/0000', leadZeroDateTime: true }, [
+            {
+                initial: '12312020',
+                edit: { start: 2, end: 2, key: 'Backspace' },
+                expected: { value: '01/31/2020', caret: 1, model: '01312020' },
+            },
+        ]);
+
+        // without leadZeroDateTime the month keeps its non-padded behaviour (the parent's `13/1`)
+        section('M0/d0 Backspace without leadZeroDateTime', { mask: 'M0/d0' }, [
+            {
+                initial: '1231',
+                edit: { start: 2, end: 2, key: 'Backspace' },
+                expected: { value: '13/1', caret: 1, model: '131' },
+            },
+        ]);
+
+        section(
+            'M0/d0/0000 showMaskTyped Backspace and Delete without leadZeroDateTime',
+            {
+                mask: 'M0/d0/0000',
+                showMaskTyped: true,
+            },
+            [
+                {
+                    initial: '1231',
+                    edit: { start: 2, end: 2, key: 'Backspace' },
+                    expected: { value: '13/1_/____', caret: 1, model: '131' },
+                },
+                {
+                    initial: '1231',
+                    edit: { start: 1, end: 1, key: 'Delete' },
+                    expected: { value: '13/1_/____', caret: 1, model: '131' },
+                },
+                {
+                    initial: '1231',
+                    edit: { start: 0, end: 0, key: 'Delete' },
+                    expected: { value: '23/1_/____', caret: 0, model: '231' },
+                },
+                {
+                    initial: '12312020',
+                    edit: { start: 2, end: 2, key: 'Backspace' },
+                    expected: { value: '13/12/020_', caret: 1, model: '1312020' },
+                },
+            ]
+        );
+
+        section(
+            'M0/d0/0000 showMaskTyped Backspace with leadZeroDateTime',
+            {
+                mask: 'M0/d0/0000',
+                showMaskTyped: true,
+                leadZeroDateTime: true,
+            },
+            [
+                {
+                    initial: '1231',
+                    edit: { start: 2, end: 2, key: 'Backspace' },
+                    expected: { value: '01/31/____', caret: 1, model: '0131' },
+                },
+                {
+                    initial: '12312020',
+                    edit: { start: 2, end: 2, key: 'Backspace' },
+                    expected: { value: '01/31/2020', caret: 1, model: '01312020' },
+                },
+            ]
+        );
+
+        // keepCharacterPositions never guards 00 (Item 15), pasted or typed
+        section(
+            'd0/M0/0000 keepCharacterPositions',
+            {
+                mask: 'd0/M0/0000',
+                leadZeroDateTime: true,
+                keepCharacterPositions: true,
+            },
+            [
+                {
+                    paste: '00062020',
+                    expected: { value: '00/06/2020', caret: 10, model: '00062020' },
+                },
+                {
+                    paste: '15002020',
+                    expected: { value: '15/00/2020', caret: 10, model: '15002020' },
+                },
+                { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+                { keys: '0006', expected: { value: '00/06', caret: 5, model: '0006' } },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 keepCharacterPositions showMaskTyped',
+            {
+                mask: 'd0/M0/0000',
+                leadZeroDateTime: true,
+                keepCharacterPositions: true,
+                showMaskTyped: true,
+            },
+            [
+                {
+                    paste: '00062020',
+                    expected: { value: '00/06/2020', caret: 10, model: '00062020' },
+                },
+                { keys: '00', expected: { value: '00/__/____', caret: 2, model: '00' } },
+            ]
+        );
+
+        section(
+            'Backspace through a showMaskTyped date',
+            {
+                mask: 'M0-d0-0000',
+                leadZeroDateTime: true,
+                showMaskTyped: true,
+            },
+            [
+                // a lone month digit before placeholders is not padded: the date empties out
+                {
+                    keys: '12310000' + '\b'.repeat(10),
+                    expected: { value: '__-__-____', caret: 0, model: '' },
+                },
+            ]
+        );
+
+        section('M0/d0 Backspace after typing', { mask: 'M0/d0', leadZeroDateTime: true }, [
+            { keys: '12\b', expected: { value: '1', caret: 1, model: '1' } },
+            { keys: '12/\b\b', expected: { value: '1', caret: 1, model: '1' } },
+        ]);
+
+        section('Hh:m0:s0 apm hour 00', { mask: 'Hh:m0:s0', apm: true, leadZeroDateTime: true }, [
+            { keys: '000000', expected: { value: '01:00:00', caret: 8, model: '010000' } },
+            // a programmatic write keeps its 00
+            { initial: '000000', expected: { value: '00:00:00', caret: 8, model: '000000' } },
+            { keys: '0130', expected: { value: '01:30', caret: 5, model: '0130' } },
+            // an edit elsewhere leaves a written 00 hour alone
+            {
+                initial: '000000',
+                edit: { start: 8, end: 8, key: 'Backspace' },
+                expected: { value: '00:00:0', caret: 7, model: '00000' },
+            },
+            {
+                initial: '000000',
+                edit: { start: 8, end: 8, key: '5' },
+                expected: { value: '00:00:00', caret: 8, model: '000000' },
+            },
+        ]);
+
+        section('Hh:m0:s0 apm hour 00 without leadZeroDateTime', { mask: 'Hh:m0:s0', apm: true }, [
+            { keys: '00', expected: { value: '00', caret: 2, model: '00' } },
+            { keys: '000000', expected: { value: '00:00:00', caret: 8, model: '000000' } },
+        ]);
+
+        section('Hh:m0 aa apm hour 00', { mask: 'Hh:m0 aa', apm: true, leadZeroDateTime: true }, [
+            { paste: '0030', expected: { value: '01:30', caret: 5, model: '0130' } },
+        ]);
+
+        section('hh:m0 apm hour 00', { mask: 'hh:m0', apm: true, leadZeroDateTime: true }, [
+            { keys: '00', expected: { value: '01', caret: 2, model: '01' } },
+            { keys: '0030', expected: { value: '01:30', caret: 5, model: '0130' } },
+            { paste: '0030', expected: { value: '01:30', caret: 5, model: '0130' } },
+            { paste: '00:30', expected: { value: '01:30', caret: 5, model: '0130' } },
+            // a programmatic write keeps its 00, and an edit elsewhere leaves it alone
+            { initial: '0030', expected: { value: '00:30', caret: 5, model: '0030' } },
+            {
+                initial: '0030',
+                edit: { start: 5, end: 5, key: 'Backspace' },
+                expected: { value: '00:3', caret: 4, model: '003' },
+            },
+        ]);
+
+        section('hh:m0 hour 00 without apm', { mask: 'hh:m0', leadZeroDateTime: true }, [
+            { keys: '0030', expected: { value: '00:30', caret: 5, model: '0030' } },
         ]);
     });
 });
