@@ -29,6 +29,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import {
+    isDateTimeMask,
     leadZeroDateTimeCaret,
     overwriteDateSlot,
     overwriteFullDateValue,
@@ -46,6 +47,10 @@ import {
 } from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
+
+/** Index where the suffix starts in the display, or Infinity when the display carries none (hiddenInput). */
+const suffixStart = (display: string, suffix: string): number =>
+    suffix && display.endsWith(suffix) ? display.length - suffix.length : Infinity;
 
 // Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
 const MIRRORED_INPUTS = [
@@ -1355,6 +1360,8 @@ export class NgxMaskDirective
                             this._inputValue().length !== (el.selectionStart as number) &&
                             (el.selectionStart as number) !== 1
                         ) {
+                            const collapsedCaret = el.selectionStart === el.selectionEnd;
+                            const hopFrom = el.selectionStart;
                             while (
                                 specialCharacters.includes(
                                     (
@@ -1371,14 +1378,64 @@ export class NgxMaskDirective
                                     el.selectionEnd
                                 );
                             }
+                            // keepCharacterPositions: take the digit in front of the separators
+                            // along, so the default delete blanks it instead of only moving the caret
+                            if (
+                                this._maskService.keepCharacterPositions &&
+                                collapsedCaret &&
+                                el.selectionStart !== hopFrom &&
+                                (el.selectionStart as number) > prefixLength &&
+                                // a caret inside the suffix hops over its leading space only
+                                (hopFrom as number) <=
+                                    suffixStart(this._inputValue(), this._maskService.suffix)
+                            ) {
+                                el.setSelectionRange(
+                                    (el.selectionStart as number) - 1,
+                                    el.selectionEnd
+                                );
+                            }
                         }
                     }
                 }
+                const { prefix, suffix, maskExpression, specialCharacters } = this._maskService;
+                // Number masks keep their own caret handling around a prefix or suffix.
+                const numberMask =
+                    maskExpression.startsWith(MaskExpression.SEPARATOR) ||
+                    maskExpression.startsWith(MaskExpression.PERCENT);
+                // The clamp below pulls a caret inside the prefix up to its end, so remember the
+                // one sitting exactly in front of the first digit: Delete may act there. Only for
+                // a mask that starts with a digit slot after a prefix of two or more characters:
+                // a caret at 1 is the first-character case of onInput, which shifts it by the
+                // prefix length and so lands the edit one slot off.
+                const deleteAtFirstSlot =
+                    e.key === MaskExpression.DELETE &&
+                    el.selectionStart === el.selectionEnd &&
+                    el.selectionStart === prefix.length &&
+                    prefix.length > 1 &&
+                    el.value.startsWith(prefix) &&
+                    !numberMask &&
+                    // a date field cannot lose its first digit without scrambling the others
+                    !isDateTimeMask(maskExpression) &&
+                    !specialCharacters.includes(maskExpression.charAt(0));
                 this.checkSelectionOnDeletion(el);
                 if (
-                    this._maskService.prefix.length &&
-                    (el.selectionStart as number) <= this._maskService.prefix.length &&
-                    (el.selectionEnd as number) <= this._maskService.prefix.length
+                    prefix.length &&
+                    !deleteAtFirstSlot &&
+                    (el.selectionStart as number) <= prefix.length &&
+                    (el.selectionEnd as number) <= prefix.length
+                ) {
+                    e.preventDefault();
+                }
+                // Nothing editable follows the caret at the end of the digits, and the clamp
+                // above put it right in front of the suffix: Delete would eat its first char.
+                // Skipped when the display carries no suffix (hiddenInput) and for number masks.
+                if (
+                    e.key === MaskExpression.DELETE &&
+                    suffix &&
+                    !numberMask &&
+                    el.selectionStart === el.selectionEnd &&
+                    (el.selectionStart as number) >=
+                        suffixStart(this._inputValue(), this._maskService.suffix)
                 ) {
                     e.preventDefault();
                 }

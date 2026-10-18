@@ -8,6 +8,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { typeTest } from './utils/test-functions.component';
 import { expect, vi } from 'vitest';
+import { createHarness } from './utils/characterization-harness';
 
 describe('Directive: Mask (Delete)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -728,4 +729,173 @@ describe('Directive: Mask (Delete)', () => {
             expect(component.form.value).equal('');
         });
     });
+});
+
+describe('Directive: Mask (Delete inside the prefix)', () => {
+    const setUp = async (keepCharacterPositions: boolean) => {
+        const harness = createHarness();
+        harness.component.mask.set('000-000');
+        harness.component.prefix.set('+7 ');
+        harness.component.keepCharacterPositions.set(keepCharacterPositions);
+        harness.component.showMaskTyped.set(keepCharacterPositions);
+        await harness.settle();
+        await harness.write('123456');
+        return harness;
+    };
+
+    for (const keepCharacterPositions of [false, true]) {
+        for (const caret of [0, 1, 2]) {
+            it(`should prevent Delete with the caret at ${caret} (keepCharacterPositions ${keepCharacterPositions})`, async () => {
+                const harness = await setUp(keepCharacterPositions);
+                const snap = await harness.edit({ start: caret, end: caret, key: 'Delete' });
+                expect(snap).toEqual({
+                    value: '+7 123-456',
+                    caret: 3,
+                    model: '123456',
+                    prevented: true,
+                });
+            });
+        }
+    }
+});
+
+describe('Directive: Mask (Delete where the prefix and suffix guards stay as they were)', () => {
+    type Row = {
+        name: string;
+        config: Record<string, unknown>;
+        initial: string;
+        typed?: string;
+        action: { start: number; key: string };
+        expected: { value: string; caret: number; model: unknown; prevented: boolean };
+    };
+
+    const kcp = { keepCharacterPositions: true, showMaskTyped: true };
+    const rows: Row[] = [
+        {
+            // a caret at 1 is onInput's first-character case, which lands the edit one slot off
+            name: 'a one-character prefix on a keepCharacterPositions decimal mask',
+            config: { ...kcp, mask: '0000.00', prefix: '$' },
+            initial: '123456',
+            action: { start: 1, key: 'Delete' },
+            expected: { value: '$1234.56', caret: 1, model: '123456', prevented: true },
+        },
+        {
+            name: 'a one-character prefix on a keepCharacterPositions phone mask',
+            config: { ...kcp, mask: '(000) 000-0000', prefix: '$' },
+            initial: '0123456789',
+            action: { start: 1, key: 'Delete' },
+            expected: { value: '$(012) 345-6789', caret: 1, model: '0123456789', prevented: true },
+        },
+        {
+            name: 'a one-character prefix on a plain mask',
+            config: { mask: '0000', prefix: '$' },
+            initial: '1234',
+            action: { start: 1, key: 'Delete' },
+            expected: { value: '$1234', caret: 1, model: '1234', prevented: true },
+        },
+        {
+            name: 'a mask that opens with a separator, keepCharacterPositions',
+            config: { ...kcp, mask: '(000) 000 00 00', prefix: '+7 ' },
+            initial: '1234567890',
+            action: { start: 3, key: 'Delete' },
+            expected: {
+                value: '+7 (123) 456 78 90',
+                caret: 3,
+                model: '1234567890',
+                prevented: true,
+            },
+        },
+        {
+            name: 'a mask that opens with a separator, plain',
+            config: { mask: '(000) 000 00 00', prefix: '+7 ' },
+            initial: '1234567890',
+            action: { start: 3, key: 'Delete' },
+            expected: {
+                value: '+7 (123) 456 78 90',
+                caret: 3,
+                model: '1234567890',
+                prevented: true,
+            },
+        },
+        {
+            name: 'a number mask with a multi-character prefix',
+            config: { mask: 'separator.2', prefix: '+7 ' },
+            initial: '1234.56',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 1 234.56', caret: 3, model: 1234.56, prevented: true },
+        },
+        {
+            name: 'a number mask with a one-character prefix',
+            config: { mask: 'separator.2', prefix: '$' },
+            initial: '1234.56',
+            action: { start: 1, key: 'Delete' },
+            expected: { value: '$1 234.56', caret: 1, model: 1234.56, prevented: true },
+        },
+        {
+            // the sign sits in front of the prefix, so the caret at prefix.length is not the first slot
+            name: 'a negative number behind a prefix',
+            config: { mask: 'separator.2', prefix: '$', allowNegativeNumbers: true },
+            initial: '-1234.56',
+            action: { start: 1, key: 'Delete' },
+            expected: { value: '-$1 234.56', caret: 1, model: -1234.56, prevented: true },
+        },
+        {
+            // deleting the first digit of a prefixed date scrambles the remaining fields
+            name: 'a date mask behind a prefix',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ' },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020', caret: 3, model: '15062020', prevented: true },
+        },
+        {
+            name: 'a date mask behind a prefix, showMaskTyped',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ', showMaskTyped: true },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020', caret: 3, model: '15062020', prevented: true },
+        },
+        {
+            name: 'a date mask behind a prefix with a suffix',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ', suffix: ' y' },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020 y', caret: 3, model: '15062020', prevented: true },
+        },
+        {
+            // the display of a hiddenInput mask carries no suffix: the digit after the caret is real
+            name: 'a hiddenInput display without the suffix',
+            config: { mask: '000-000', suffix: ' kg', hiddenInput: true, showMaskTyped: true },
+            initial: '',
+            typed: '1234',
+            action: { start: 4, key: 'Delete' },
+            expected: { value: '123-___', caret: 3, model: '123', prevented: false },
+        },
+        {
+            // a number mask keeps its own handling in front of the suffix
+            name: 'a number mask with a suffix',
+            config: { mask: 'separator.2', prefix: '$', suffix: ' USD', showMaskTyped: true },
+            initial: '1234.56',
+            action: { start: 12, key: 'Delete' },
+            expected: { value: '$1 234.56_._ USD', caret: 9, model: 1234.56, prevented: false },
+        },
+    ];
+
+    for (const row of rows) {
+        it(`should leave Delete as it was: ${row.name}`, async () => {
+            const harness = createHarness();
+            for (const [key, value] of Object.entries(row.config)) {
+                (harness.component as unknown as Record<string, { set: (v: unknown) => void }>)[
+                    key
+                ]?.set(value);
+            }
+            await harness.settle();
+            await harness.write(row.initial);
+            if (row.typed) {
+                harness.el.setSelectionRange(0, 0);
+                await harness.type(row.typed);
+            }
+            const { start, key } = row.action;
+            expect(await harness.edit({ start, end: start, key })).toEqual(row.expected);
+        });
+    }
 });

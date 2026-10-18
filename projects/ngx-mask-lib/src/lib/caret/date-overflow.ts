@@ -56,6 +56,16 @@ export function findDateTimeFieldAt(
     return null;
 }
 
+/** Whether the mask has a day, month, hour, minute or second field. */
+export function isDateTimeMask(maskExpression: string): boolean {
+    for (let position = 0; position < maskExpression.length; position++) {
+        if (findDateTimeFieldAt(maskExpression, position)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 /**
  * Per-token overflow thresholds, mirroring the ones `generic-pattern.handler.ts`
  * already establishes (day 31, month 12, hour 23/12 w/ apm, minute/second 59) — kept

@@ -35,6 +35,8 @@ const bareSuffixed = {
 const phoneKg = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions: true };
 const bareKg = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
+const plainSuffixed = { mask: '000', suffix: ' kg' };
+const plainPrefixed = { mask: '000-000', prefix: '+7 ' };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
 
@@ -129,12 +131,235 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
-    it('Backspace right after a separator only moves the caret back', async () => {
-        expect(await press(phone, { written: '0123456789' }, 6, 6, '{Backspace}')).toEqual({
+    it('Backspace right after a separator blanks the digit before it', async () => {
+        for (const initial of [{ typed: '0123456789' }, { written: '0123456789' }]) {
+            expect(await press(phone, initial, 6, 6, '{Backspace}')).toEqual({
+                value: '(01_) 345-6789',
+                caret: 3,
+                model: '013456789',
+            });
+            expect(await press(phone, initial, 5, 5, '{Backspace}')).toEqual({
+                value: '(01_) 345-6789',
+                caret: 3,
+                model: '013456789',
+            });
+            expect(await press(phone, initial, 10, 10, '{Backspace}')).toEqual({
+                value: '(012) 34_-6789',
+                caret: 8,
+                model: '012346789',
+            });
+        }
+    });
+
+    it('the digit typed after Backspace past a separator lands in the blanked slot', async () => {
+        expect(await press(phone, { written: '0123456789' }, 6, 6, '{Backspace}9')).toEqual({
+            value: '(019) 345-6789',
+            caret: 4,
+            model: '0193456789',
+        });
+    });
+
+    it('Backspace after a separator blanks the digit before it without showMaskTyped', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(bare, initial, 4, 4, '{Backspace}')).toEqual({
+                value: '12_-456',
+                caret: 2,
+                model: '12456',
+            });
+            expect(await press(bare, initial, 4, 4, '{Backspace}9')).toEqual({
+                value: '129-456',
+                caret: 3,
+                model: '129456',
+            });
+        }
+    });
+
+    it('Backspace after a separator blanks the digit before it behind a prefix', async () => {
+        expect(await press(prefixed, { written: '123456' }, 7, 7, '{Backspace}')).toEqual({
+            value: '+7 12_-456',
+            caret: 5,
+            model: '12456',
+        });
+    });
+
+    it('a selection of only the separators is deleted without touching the digits', async () => {
+        expect(await press(phone, { written: '0123456789' }, 4, 6, '{Backspace}')).toEqual({
             value: '(012) 345-6789',
             caret: 4,
             model: '0123456789',
         });
+    });
+
+    it('Delete in front of the first digit after a prefix blanks it', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(prefixed, initial, 3, 3, '{Delete}')).toEqual({
+                value: '+7 _23-456',
+                caret: 4,
+                model: '23456',
+            });
+            // the caret advanced to the next slot: the digit typed next overwrites it
+            expect(await press(prefixed, initial, 3, 3, '{Delete}9')).toEqual({
+                value: '+7 _93-456',
+                caret: 5,
+                model: '93456',
+            });
+        }
+    });
+
+    it('Delete inside the prefix is still prevented', async () => {
+        for (const caret of [0, 1, 2]) {
+            expect(await press(prefixed, { written: '123456' }, caret, caret, '{Delete}')).toEqual({
+                value: '+7 123-456',
+                caret: 3,
+                model: '123456',
+            });
+            expect(
+                await press(prefixed, { written: '123456' }, caret, caret, '{Delete}{Delete}')
+            ).toEqual({ value: '+7 _23-456', caret: 4, model: '23456' });
+        }
+    });
+
+    it('Backspace with the caret inside the suffix keeps the model in step with the display', async () => {
+        // the leading space of the suffix is not a separator to hop over
+        expect(await press(phoneKg, { written: '0123456789' }, 15, 15, '{Backspace}')).toEqual({
+            value: '(012) 345-678_ kg',
+            caret: 13,
+            model: '012345678',
+        });
+        expect(await press(phoneKg, { written: '0123456789' }, 15, 15, '{Backspace}9')).toEqual({
+            value: '(012) 345-6789 kg',
+            caret: 14,
+            model: '0123456789',
+        });
+        expect(
+            await press(bareSuffixed, { written: '0123456789' }, 18, 18, '{Backspace}9')
+        ).toEqual({ value: '+7 (012) 345-6789 kg', caret: 17, model: '0123456789' });
+    });
+
+    it('Delete in front of the first digit of a prefixed date is prevented', async () => {
+        const date = { mask: 'd0/M0/0000', prefix: '+7 ' };
+        for (const config of [date, { ...date, showMaskTyped: true }, { ...date, suffix: ' y' }]) {
+            const outcome = await press(config, { written: '15062020' }, 3, 3, '{Delete}');
+            expect(outcome.value.startsWith('+7 15/06/2020')).toBe(true);
+            expect(outcome.model).toBe('15062020');
+        }
+    });
+
+    it('Delete in front of the first digit of a plain prefix mask removes it', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(plainPrefixed, initial, 3, 3, '{Delete}')).toEqual({
+                value: '+7 234-56',
+                caret: 3,
+                model: '23456',
+            });
+            // the caret stayed in front of the first digit: the next Delete removes that one too
+            expect(await press(plainPrefixed, initial, 3, 3, '{Delete}{Delete}')).toEqual({
+                value: '+7 345-6',
+                caret: 3,
+                model: '3456',
+            });
+        }
+    });
+
+    it('Delete inside the prefix of a plain prefix mask is still prevented', async () => {
+        for (const caret of [0, 1, 2]) {
+            expect(
+                await press(plainPrefixed, { written: '123456' }, caret, caret, '{Delete}')
+            ).toEqual({ value: '+7 123-456', caret: 3, model: '123456' });
+        }
+    });
+
+    it('Delete stays prevented where the first-slot guard does not apply', async () => {
+        const decimal = {
+            mask: '0000.00',
+            prefix: '$',
+            keepCharacterPositions: true,
+            showMaskTyped: true,
+        };
+        const leadingSeparator = {
+            mask: '(000) 000 00 00',
+            prefix: '+7 ',
+            keepCharacterPositions: true,
+            showMaskTyped: true,
+        };
+        const negative = { mask: 'separator.2', prefix: '$', allowNegativeNumbers: true };
+        const cases: [Record<string, unknown>, string, number, Outcome][] = [
+            [decimal, '123456', 1, { value: '$1234.56', caret: 1, model: '123456' }],
+            [
+                leadingSeparator,
+                '1234567890',
+                3,
+                { value: '+7 (123) 456 78 90', caret: 3, model: '1234567890' },
+            ],
+            [
+                { mask: '(000) 000 00 00', prefix: '+7 ' },
+                '1234567890',
+                3,
+                { value: '+7 (123) 456 78 90', caret: 3, model: '1234567890' },
+            ],
+            [{ mask: '0000', prefix: '$' }, '1234', 1, { value: '$1234', caret: 1, model: '1234' }],
+            [
+                { mask: 'separator.2', prefix: '+7 ' },
+                '1234.56',
+                3,
+                { value: '+7 1,234.56', caret: 3, model: 1234.56 },
+            ],
+            [
+                { mask: 'separator.2', prefix: '$' },
+                '1234.56',
+                1,
+                { value: '$1,234.56', caret: 1, model: 1234.56 },
+            ],
+            [negative, '-1234.56', 1, { value: '-$1,234.56', caret: 1, model: -1234.56 }],
+        ];
+        for (const [config, written, caret, expected] of cases) {
+            expect(await press(config, { written }, caret, caret, '{Delete}')).toEqual(expected);
+        }
+    });
+
+    it('Delete in front of the digits of a hiddenInput mask deletes the digit, there is no suffix', async () => {
+        const hidden = { mask: '000-000', suffix: ' kg', hiddenInput: true, showMaskTyped: true };
+        expect(await press(hidden, { typed: '1234' }, 4, 4, '{Delete}')).toEqual({
+            value: '123-___',
+            caret: 3,
+            model: '123',
+        });
+    });
+
+    it('a number mask with a suffix keeps its own Delete handling', async () => {
+        const money = { mask: 'separator.2', prefix: '$', suffix: ' USD', showMaskTyped: true };
+        expect(await press(money, { written: '1234.56' }, 12, 12, '{Delete}')).toEqual({
+            value: '$1,234.56_._ USD',
+            caret: 9,
+            model: 1234.56,
+        });
+    });
+
+    it('Delete at the end of the digits is prevented and leaves the suffix and the caret alone', async () => {
+        for (const config of [suffixed, plainSuffixed]) {
+            for (const initial of [{ typed: '123' }, { written: '123' }]) {
+                expect(await press(config, initial, 3, 3, '{Delete}')).toEqual({
+                    value: '123 kg',
+                    caret: 3,
+                    model: '123',
+                });
+                // the caret really stayed in front of the suffix: Backspace removes the last digit
+                expect((await press(config, initial, 3, 3, '{Delete}{Backspace}')).caret).toBe(2);
+                expect((await press(config, initial, 3, 3, '{Delete}{Backspace}')).model).toBe(
+                    '12'
+                );
+            }
+        }
+    });
+
+    it('Delete over only the suffix is prevented too', async () => {
+        for (const initial of [{ typed: '123' }, { written: '123' }]) {
+            expect(await press(suffixed, initial, 3, 6, '{Delete}')).toEqual({
+                value: '123 kg',
+                caret: 3,
+                model: '123',
+            });
+        }
     });
 
     it('a rejected key keeps the suffix when the value was written programmatically', async () => {

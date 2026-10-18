@@ -144,28 +144,49 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '(012) _45-6789', caret: 6, model: '012456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after a ") " separator pair only moves the caret back over it',
+                name: 'after a ") " separator pair blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 6, end: 6, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
+                expected: { value: '(01_) 345-6789', caret: 3, model: '013456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after a single ")" only moves the caret back over it',
+                name: 'after a single ")" blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 5, end: 5, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
+                expected: { value: '(01_) 345-6789', caret: 3, model: '013456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after the "-" separator only moves the caret back over it',
+                name: 'after the "-" separator blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 10, end: 10, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 9, model: '0123456789' },
+                expected: { value: '(012) 34_-6789', caret: 8, model: '012346789' },
+            },
+            {
+                name: 'after a ") " separator pair the next digit lands in the blanked slot',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 6, end: 6, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(019) 345-6789', caret: 4, model: '0193456789' },
+            },
+            {
+                name: 'after the "-" separator the next digit lands in the blanked slot',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 10, end: 10, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(012) 349-6789', caret: 9, model: '0123496789' },
+            },
+            {
+                // a manual selection of only the separators is not widened
+                name: 'a selection of only the ") " separators changes nothing',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 4, end: 6, key: 'Backspace' },
+                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
             },
             {
                 name: 'blanks the last digit when the caret is at the end',
@@ -412,12 +433,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: 'A_C-123', caret: 1, model: 'AC123' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace after the "-" only moves the caret back',
+                name: 'Backspace after the "-" blanks the letter before it',
                 config: letters,
                 initial: 'ABC123',
                 action: { start: 4, end: 4, key: 'Backspace' },
-                expected: { value: 'ABC-123', caret: 3, model: 'ABC123' },
+                expected: { value: 'AB_-123', caret: 2, model: 'AB123' },
             },
             {
                 name: 'Backspace blanks a digit',
@@ -623,12 +643,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '1', caret: 1, model: '1' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace right after the separator only moves the caret back',
+                name: 'Backspace right after the separator blanks the digit before it',
                 config: bare,
                 initial: '123456',
                 action: { start: 4, end: 4, key: 'Backspace' },
-                expected: { value: '123-456', caret: 3, model: '123456' },
+                expected: { value: '12_-456', caret: 2, model: '12456' },
             },
             {
                 name: 'Delete in the middle',
@@ -765,12 +784,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace right after the separator only moves the caret back',
+                name: 'Backspace right after the separator blanks the digit before it',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 7, end: 7, key: 'Backspace' },
-                expected: { value: '+7 123-456', caret: 6, model: '123456' },
+                expected: { value: '+7 12_-456', caret: 5, model: '12456' },
             },
             {
                 name: 'Backspace on the second digit',
@@ -787,13 +805,27 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 123-45_', caret: 9, model: '12345' },
             },
             {
-                // current behaviour: Delete at the start of the digits is swallowed by the prefix guard
-                name: 'Delete in front of the first digit is prevented',
+                name: 'Delete in front of the first digit blanks it',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 3, end: 3, key: 'Delete' },
-                expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
+                expected: { value: '+7 _23-456', caret: 4, model: '23456' },
             },
+            {
+                name: 'Delete in front of the first digit advances the caret to the next slot',
+                config: withPrefix,
+                initial: '123456',
+                action: { start: 3, end: 3, key: 'Delete' },
+                then: '9',
+                expected: { value: '+7 _93-456', caret: 5, model: '93456' },
+            },
+            ...[0, 1, 2].map((caret) => ({
+                name: `Delete with the caret inside the prefix (${caret}) is prevented`,
+                config: withPrefix,
+                initial: '123456',
+                action: { start: caret, end: caret, key: 'Delete' },
+                expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
+            })),
             {
                 name: 'selection starting right after the prefix',
                 config: withPrefix,
@@ -926,13 +958,38 @@ describe('keepCharacterPositions characterization', () => {
     describe('with a suffix (000 kg, showMaskTyped)', () => {
         check([
             {
-                // current behaviour: the suffix is treated as editable text; Delete eats its leading
-                // space, a placeholder lands in the suffix and the model picks up suffix characters
+                // nothing editable follows the end of the digits: Delete is prevented, so the
+                // suffix keeps its leading space and the model stays clean
                 name: 'Delete over only the suffix',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 3, end: 6, key: 'Delete' },
-                expected: { value: '123_kg', caret: 4, model: '123kg' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                name: 'Delete at the end of the digits of a written value',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                name: 'Delete at the end of the digits of a typed value',
+                config: withSuffix,
+                initial: '',
+                typed: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                // the prevented Delete leaves the caret in front of the suffix: Backspace removes
+                // the last digit, which a caret pushed into the suffix would not
+                name: 'Delete in front of the suffix keeps the caret there for the next key',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                then: '\b',
+                expected: { value: '12_ kg', caret: 2, model: '12' },
             },
             {
                 name: 'Backspace over only the suffix',
@@ -1183,6 +1240,35 @@ describe('keepCharacterPositions characterization', () => {
                 typed: '9',
                 action: { start: 4, end: 4, key: '8' },
                 expected: { value: '+7 98_-___', caret: 5, model: '98' },
+            },
+        ]);
+    });
+
+    describe('Backspace with the caret inside the suffix', () => {
+        check([
+            {
+                // the leading space of the suffix is not a separator to hop over: the browser's
+                // plain delete runs as it did before, and the model follows the display
+                name: 'a phone with a suffix: Backspace in the suffix keeps the model in step with the display',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 15, end: 15, key: 'Backspace' },
+                expected: { value: '(012) 345-678_ kg', caret: 13, model: '012345678' },
+            },
+            {
+                name: 'a phone with a suffix: the digit typed after Backspace in the suffix reaches the model',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 15, end: 15, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(012) 345-6789 kg', caret: 14, model: '0123456789' },
+            },
+            {
+                name: 'a prefixed phone with a suffix: Backspace in the suffix keeps the model in step with the display',
+                config: bareSuffixed,
+                initial: '0123456789',
+                action: { start: 18, end: 18, key: 'Backspace' },
+                expected: { value: '+7 (012) 345-678_ kg', caret: 16, model: '012345678' },
             },
         ]);
     });

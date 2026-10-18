@@ -16,8 +16,10 @@ describe('Directive: Mask (Delete)', () => {
         await m.type('#masked', '01234567890');
         await expect.poll(() => m.get('#masked').value).toBe('(012) 345-6789');
         await m.type('#masked', '{ArrowLeft}'.repeat(3));
+        // the second Backspace sits right after the "-": it blanks the digit before it
+        // instead of only moving the caret over the separator
         await m.type('#masked', '{Backspace}'.repeat(3));
-        await expect.poll(() => m.get('#masked').value).toBe('(012) 34_-_789');
+        await expect.poll(() => m.get('#masked').value).toBe('(012) 3__-_789');
     });
 
     it('should replace character to _ mask: S0S S0S', async () => {
@@ -78,7 +80,7 @@ describe('Directive: Mask (Delete)', () => {
         await expect.poll(() => m.get('#masked').value).toBe('12/34/5678');
         await m.type('#masked', '{ArrowLeft}'.repeat(5));
         await m.type('#masked', '{Backspace}'.repeat(4));
-        await expect.poll(() => m.get('#masked').value).toBe('1_/__/5678');
+        await expect.poll(() => m.get('#masked').value).toBe('__/__/5678');
     });
 
     it('should replace character to _ mask: (000)000-0000, prefix +38', async () => {
@@ -93,7 +95,7 @@ describe('Directive: Mask (Delete)', () => {
         await expect.poll(() => m.get('#masked').value).toBe('+38 (063)123-4567');
         await m.type('#masked', '{ArrowLeft}'.repeat(5));
         await m.type('#masked', '{Backspace}'.repeat(5));
-        await expect.poll(() => m.get('#masked').value).toBe('+38 (06_)___-4567');
+        await expect.poll(() => m.get('#masked').value).toBe('+38 (0__)___-4567');
     });
 
     it('should replace character to _ mask: 0 000, prefix $', async () => {
