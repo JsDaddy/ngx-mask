@@ -474,6 +474,40 @@ describe('keepCharacterPositions characterization', () => {
     describe('keepCharacterPositions without showMaskTyped (000-000)', () => {
         check([
             {
+                name: 'a digit typed after a Backspace over a selection to the end appends to the trimmed typed value',
+                config: bare,
+                initial: '',
+                typed: '123456',
+                action: { start: 3, end: 7, key: 'Backspace' },
+                then: '9',
+                expected: { value: '123-9', caret: 5, model: '1239' },
+            },
+            {
+                name: 'a digit typed after a Backspace over a selection to the end appends to the trimmed written value',
+                config: bare,
+                initial: '123456',
+                action: { start: 3, end: 7, key: 'Backspace' },
+                then: '9',
+                expected: { value: '123-9', caret: 5, model: '1239' },
+            },
+            {
+                name: 'a digit typed after a Delete over a selection to the end appends to the trimmed typed value',
+                config: bare,
+                initial: '',
+                typed: '123456',
+                action: { start: 1, end: 7, key: 'Delete' },
+                then: '8',
+                expected: { value: '18', caret: 2, model: '18' },
+            },
+            {
+                name: 'a digit typed after a Delete over a selection to the end appends to the trimmed written value',
+                config: bare,
+                initial: '123456',
+                action: { start: 1, end: 7, key: 'Delete' },
+                then: '8',
+                expected: { value: '18', caret: 2, model: '18' },
+            },
+            {
                 name: 'Delete over the whole value is not short-circuited by the keydown clear',
                 config: bare,
                 initial: '123456',
