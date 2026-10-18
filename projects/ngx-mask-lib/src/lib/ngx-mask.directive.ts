@@ -1355,6 +1355,8 @@ export class NgxMaskDirective
                             this._inputValue().length !== (el.selectionStart as number) &&
                             (el.selectionStart as number) !== 1
                         ) {
+                            const collapsedCaret = el.selectionStart === el.selectionEnd;
+                            const hopFrom = el.selectionStart;
                             while (
                                 specialCharacters.includes(
                                     (
@@ -1365,6 +1367,19 @@ export class NgxMaskDirective
                                 ((prefixLength >= 1 &&
                                     (el.selectionStart as number) > prefixLength) ||
                                     prefixLength === 0)
+                            ) {
+                                el.setSelectionRange(
+                                    (el.selectionStart as number) - 1,
+                                    el.selectionEnd
+                                );
+                            }
+                            // keepCharacterPositions: take the digit in front of the separators
+                            // along, so the default delete blanks it instead of only moving the caret
+                            if (
+                                this._maskService.keepCharacterPositions &&
+                                collapsedCaret &&
+                                el.selectionStart !== hopFrom &&
+                                (el.selectionStart as number) > prefixLength
                             ) {
                                 el.setSelectionRange(
                                     (el.selectionStart as number) - 1,

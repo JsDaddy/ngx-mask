@@ -130,8 +130,59 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
-    it('Backspace right after a separator only moves the caret back', async () => {
-        expect(await press(phone, { written: '0123456789' }, 6, 6, '{Backspace}')).toEqual({
+    it('Backspace right after a separator blanks the digit before it', async () => {
+        for (const initial of [{ typed: '0123456789' }, { written: '0123456789' }]) {
+            expect(await press(phone, initial, 6, 6, '{Backspace}')).toEqual({
+                value: '(01_) 345-6789',
+                caret: 3,
+                model: '013456789',
+            });
+            expect(await press(phone, initial, 5, 5, '{Backspace}')).toEqual({
+                value: '(01_) 345-6789',
+                caret: 3,
+                model: '013456789',
+            });
+            expect(await press(phone, initial, 10, 10, '{Backspace}')).toEqual({
+                value: '(012) 34_-6789',
+                caret: 8,
+                model: '012346789',
+            });
+        }
+    });
+
+    it('the digit typed after Backspace past a separator lands in the blanked slot', async () => {
+        expect(await press(phone, { written: '0123456789' }, 6, 6, '{Backspace}9')).toEqual({
+            value: '(019) 345-6789',
+            caret: 4,
+            model: '0193456789',
+        });
+    });
+
+    it('Backspace after a separator blanks the digit before it without showMaskTyped', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(bare, initial, 4, 4, '{Backspace}')).toEqual({
+                value: '12_-456',
+                caret: 2,
+                model: '12456',
+            });
+            expect(await press(bare, initial, 4, 4, '{Backspace}9')).toEqual({
+                value: '129-456',
+                caret: 3,
+                model: '129456',
+            });
+        }
+    });
+
+    it('Backspace after a separator blanks the digit before it behind a prefix', async () => {
+        expect(await press(prefixed, { written: '123456' }, 7, 7, '{Backspace}')).toEqual({
+            value: '+7 12_-456',
+            caret: 5,
+            model: '12456',
+        });
+    });
+
+    it('a selection of only the separators is deleted without touching the digits', async () => {
+        expect(await press(phone, { written: '0123456789' }, 4, 6, '{Backspace}')).toEqual({
             value: '(012) 345-6789',
             caret: 4,
             model: '0123456789',

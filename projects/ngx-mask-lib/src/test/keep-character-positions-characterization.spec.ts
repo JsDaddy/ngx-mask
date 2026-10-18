@@ -144,28 +144,49 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '(012) _45-6789', caret: 6, model: '012456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after a ") " separator pair only moves the caret back over it',
+                name: 'after a ") " separator pair blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 6, end: 6, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
+                expected: { value: '(01_) 345-6789', caret: 3, model: '013456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after a single ")" only moves the caret back over it',
+                name: 'after a single ")" blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 5, end: 5, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
+                expected: { value: '(01_) 345-6789', caret: 3, model: '013456789' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'after the "-" separator only moves the caret back over it',
+                name: 'after the "-" separator blanks the digit before it',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 10, end: 10, key: 'Backspace' },
-                expected: { value: '(012) 345-6789', caret: 9, model: '0123456789' },
+                expected: { value: '(012) 34_-6789', caret: 8, model: '012346789' },
+            },
+            {
+                name: 'after a ") " separator pair the next digit lands in the blanked slot',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 6, end: 6, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(019) 345-6789', caret: 4, model: '0193456789' },
+            },
+            {
+                name: 'after the "-" separator the next digit lands in the blanked slot',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 10, end: 10, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(012) 349-6789', caret: 9, model: '0123496789' },
+            },
+            {
+                // a manual selection of only the separators is not widened
+                name: 'a selection of only the ") " separators changes nothing',
+                config: phone,
+                initial: '0123456789',
+                action: { start: 4, end: 6, key: 'Backspace' },
+                expected: { value: '(012) 345-6789', caret: 4, model: '0123456789' },
             },
             {
                 name: 'blanks the last digit when the caret is at the end',
@@ -412,12 +433,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: 'A_C-123', caret: 1, model: 'AC123' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace after the "-" only moves the caret back',
+                name: 'Backspace after the "-" blanks the letter before it',
                 config: letters,
                 initial: 'ABC123',
                 action: { start: 4, end: 4, key: 'Backspace' },
-                expected: { value: 'ABC-123', caret: 3, model: 'ABC123' },
+                expected: { value: 'AB_-123', caret: 2, model: 'AB123' },
             },
             {
                 name: 'Backspace blanks a digit',
@@ -623,12 +643,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '1', caret: 1, model: '1' },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace right after the separator only moves the caret back',
+                name: 'Backspace right after the separator blanks the digit before it',
                 config: bare,
                 initial: '123456',
                 action: { start: 4, end: 4, key: 'Backspace' },
-                expected: { value: '123-456', caret: 3, model: '123456' },
+                expected: { value: '12_-456', caret: 2, model: '12456' },
             },
             {
                 name: 'Delete in the middle',
@@ -765,12 +784,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
             },
             {
-                // current behaviour: Backspace right after a separator does not blank anything
-                name: 'Backspace right after the separator only moves the caret back',
+                name: 'Backspace right after the separator blanks the digit before it',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 7, end: 7, key: 'Backspace' },
-                expected: { value: '+7 123-456', caret: 6, model: '123456' },
+                expected: { value: '+7 12_-456', caret: 5, model: '12456' },
             },
             {
                 name: 'Backspace on the second digit',
