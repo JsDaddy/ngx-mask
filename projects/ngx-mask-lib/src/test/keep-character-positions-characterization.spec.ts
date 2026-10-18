@@ -732,6 +732,20 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 923-456', caret: 4, model: '923456' },
             },
             {
+                name: 'a digit replacing a selection that ends inside the prefix lands in the first slot',
+                config: withPrefix,
+                initial: '123456',
+                action: { start: 0, end: 2, key: '9' },
+                expected: { value: '+7 923-456', caret: 4, model: '923456' },
+            },
+            {
+                name: 'a digit replacing a selection inside the prefix lands in the first slot',
+                config: withPrefix,
+                initial: '123456',
+                action: { start: 1, end: 2, key: '9' },
+                expected: { value: '+7 923-456', caret: 4, model: '923456' },
+            },
+            {
                 name: 'a rejected letter over a selection that starts inside the prefix keeps the display',
                 config: withPrefix,
                 initial: '123456',

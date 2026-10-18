@@ -307,6 +307,23 @@ describe('resolveKeepCharacterPositions', () => {
             ).toEqual({ actualValue: '19_ kg', position: 2, handled: true });
         });
 
+        it('types into the first slot when the selection ends inside the prefix', () => {
+            // the rest of the prefix behind the selection is skipped
+            expect(
+                resolve(
+                    input({
+                        elValue: '9 12-34',
+                        position: 1,
+                        prefix: '+7 ',
+                        selStart: 0,
+                        selEnd: 2,
+                        before: '+7 12-34',
+                        actualValue: '+7 12-34',
+                    })
+                )
+            ).toEqual({ actualValue: '+7 92-34', position: 4, handled: true });
+        });
+
         it('trims the gaps in front of the suffix when a deletion reaches the end of the number', () => {
             expect(
                 resolve(

@@ -198,6 +198,14 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
+    it('a digit over a selection that ends inside the prefix lands in the first slot', async () => {
+        expect(await press(prefixed, { written: '123456' }, 0, 2, '9')).toEqual({
+            value: '+7 923-456',
+            caret: 4,
+            model: '923456',
+        });
+    });
+
     it('a digit over only the suffix is rejected and the display kept', async () => {
         expect(await press(suffixed, { written: '123' }, 3, 6, '9')).toEqual({
             value: '123 kg',

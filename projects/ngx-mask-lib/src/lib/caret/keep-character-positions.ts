@@ -94,7 +94,7 @@ export function resolveKeepCharacterPositions(
     // the skeleton than the mask part of that display.
     const maskEndOf = (preEditLength: number): number => preEditLength - suffix.length;
     const blankEndOf = (preEditLength: number): number =>
-        Math.min(selEndAbs, maskEndOf(preEditLength)) - prefixLength;
+        Math.max(Math.min(selEndAbs, maskEndOf(preEditLength)) - prefixLength, 0);
 
     const backspaceOrDelete =
         edit.code === MaskExpression.BACKSPACE || edit.code === MaskExpression.DELETE;
@@ -188,7 +188,10 @@ export function resolveKeepCharacterPositions(
             // element: restore those from the service instead of reading the damaged fragments.
             const head = selStartAbs < prefixLength ? prefix : elValue.slice(0, selStartAbs);
             const maskEndAbs = maskEndOf(preEditLength);
-            const tail = selEndAbs > maskEndAbs ? suffix : elValue.slice(selStartAbs + 1);
+            // The rest of a prefix that the selection ended inside follows the symbol: skip it.
+            const prefixLeft = Math.max(prefixLength - selEndAbs, 0);
+            const tail =
+                selEndAbs > maskEndAbs ? suffix : elValue.slice(selStartAbs + 1 + prefixLeft);
             const blankEnd = blankEndOf(preEditLength);
             const blanked = `${head}${maskSkeleton.slice(Math.max(selStart, 0), blankEnd)}${tail}`;
             const targetAbs = maskIdx + prefixLength;
