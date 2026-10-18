@@ -1,6 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { By } from '@angular/platform-browser';
 
-import type { EditAction, EditSnapshot } from './utils/characterization-harness';
+import type {
+    CharacterizationHarness,
+    EditAction,
+    EditSnapshot,
+} from './utils/characterization-harness';
 import { createHarness } from './utils/characterization-harness';
 import { pasteTest } from './utils/test-functions.component';
 import type { TestMaskComponent } from './utils/test-component.component';
@@ -157,34 +162,30 @@ describe('date overflow characterization', () => {
                 edit: { start: 1, end: 1, key: '4' },
                 expected: { value: '14/06/2020', caret: 2, model: '14062020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 0, end: 0, key: '4' },
-                expected: { value: '04/05/0620', caret: 5, model: '04050620' },
+                expected: { value: '04/06/2020', caret: 2, model: '04062020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 0, end: 0, key: '3' },
-                expected: { value: '03/05/0620', caret: 5, model: '03050620' },
+                expected: { value: '30/06/2020', caret: 1, model: '30062020' },
             },
             {
                 initial: '15062020',
                 edit: { start: 2, end: 2, key: '3' },
-                expected: { value: '15/03/0620', caret: 5, model: '15030620' },
+                expected: { value: '15/03/2020', caret: 5, model: '15032020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 3, end: 3, key: '3' },
-                expected: { value: '15/03/6202', caret: 7, model: '15036202' },
+                expected: { value: '15/03/2020', caret: 5, model: '15032020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 3, end: 3, key: '1' },
-                expected: { value: '15/01/6202', caret: 7, model: '15016202' },
+                expected: { value: '15/10/2020', caret: 4, model: '15102020' },
             },
             {
                 initial: '15062020',
@@ -196,13 +197,11 @@ describe('date overflow characterization', () => {
                 edit: { start: 4, end: 4, key: '9' },
                 expected: { value: '15/09/2020', caret: 5, model: '15092020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 5, end: 5, key: '7' },
-                expected: { value: '15/06/7202', caret: 7, model: '15067202' },
+                expected: { value: '15/06/7020', caret: 7, model: '15067020' },
             },
-            // current behaviour: typing inside a full date inserts the digit and shifts the rest, rewriting the month and year
             {
                 initial: '15062020',
                 edit: { start: 6, end: 6, key: '1' },
@@ -221,7 +220,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '15062020',
                 edit: { start: 0, end: 2, key: '4' },
-                expected: { value: '04/06/2020', caret: 4, model: '04062020' },
+                expected: { value: '04/06/2020', caret: 2, model: '04062020' },
             },
             {
                 initial: '15062020',
@@ -231,12 +230,12 @@ describe('date overflow characterization', () => {
             {
                 initial: '15062020',
                 edit: { start: 3, end: 5, key: '1' },
-                expected: { value: '15/12/020', caret: 4, model: '1512020' },
+                expected: { value: '15/10/2020', caret: 4, model: '15102020' },
             },
             {
                 initial: '15062020',
                 edit: { start: 3, end: 5, key: '4' },
-                expected: { value: '15/04/2020', caret: 7, model: '15042020' },
+                expected: { value: '15/04/2020', caret: 5, model: '15042020' },
             },
             {
                 initial: '1506',
@@ -307,7 +306,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '15062020',
                 edit: { start: 2, end: 2, key: 'Delete' },
-                expected: { value: '15/06/2020', caret: 4, model: '15062020' },
+                expected: { value: '15/06/2020', caret: 3, model: '15062020' },
             },
             {
                 initial: '15062020',
@@ -368,23 +367,23 @@ describe('date overflow characterization', () => {
             {
                 initial: '20201231',
                 edit: { start: 5, end: 5, key: '0' },
-                expected: { value: '2020.01.23', caret: 6, model: '20200123' },
+                expected: { value: '2020.02.31', caret: 6, model: '20200231' },
             },
             {
                 initial: '20201231',
                 edit: { start: 5, end: 5, key: '3' },
-                expected: { value: '2020.03.12', caret: 9, model: '20200312' },
+                expected: { value: '2020.03.31', caret: 7, model: '20200331' },
             },
-            // the month 14 is padded to 01 and the 4 becomes the day (PR2 turns this into an overwrite)
+            // 4 over the month's tens digit cannot be a tens digit: the month is 04, the day stays
             {
                 initial: '20201231',
                 edit: { start: 6, end: 6, key: '4' },
-                expected: { value: '2020.01.04', caret: 10, model: '20200104' },
+                expected: { value: '2020.04.31', caret: 7, model: '20200431' },
             },
             {
                 initial: '20201231',
                 edit: { start: 6, end: 6, key: '1' },
-                expected: { value: '2020.11.23', caret: 7, model: '20201123' },
+                expected: { value: '2020.11.31', caret: 7, model: '20201131' },
             },
             {
                 initial: '20201231',
@@ -399,17 +398,17 @@ describe('date overflow characterization', () => {
             {
                 initial: '20201231',
                 edit: { start: 8, end: 8, key: '2' },
-                expected: { value: '2020.12.23', caret: 9, model: '20201223' },
+                expected: { value: '2020.12.21', caret: 9, model: '20201221' },
             },
             {
                 initial: '20201231',
                 edit: { start: 9, end: 9, key: '5' },
-                expected: { value: '2020.12.03', caret: 10, model: '20201203' },
+                expected: { value: '2020.12.05', caret: 10, model: '20201205' },
             },
             {
                 initial: '20201231',
                 edit: { start: 9, end: 9, key: '2' },
-                expected: { value: '2020.12.03', caret: 10, model: '20201203' },
+                expected: { value: '2020.12.02', caret: 10, model: '20201202' },
             },
             {
                 initial: '20201231',
@@ -419,13 +418,13 @@ describe('date overflow characterization', () => {
             {
                 initial: '20201231',
                 edit: { start: 3, end: 3, key: '9' },
-                expected: { value: '2029.01.23', caret: 4, model: '20290123' },
+                expected: { value: '2029.12.31', caret: 4, model: '20291231' },
             },
-            // the month's lone digit before the stale separator is padded: the day is not read as its second digit
+            // a digit over the whole selected month zero-fills like an overwrite: the day is never read as its second digit
             {
                 initial: '20201231',
                 edit: { start: 5, end: 7, key: '1' },
-                expected: { value: '2020.01.31', caret: 7, model: '20200131' },
+                expected: { value: '2020.10.31', caret: 6, model: '20201031' },
             },
             {
                 initial: '20201231',
@@ -846,27 +845,27 @@ describe('date overflow characterization', () => {
             {
                 initial: '1231',
                 edit: { start: 0, end: 0, key: '0' },
-                expected: { value: '01/23', caret: 1, model: '0123' },
+                expected: { value: '02/31', caret: 1, model: '0231' },
             },
             {
                 initial: '1231',
                 edit: { start: 0, end: 0, key: '2' },
-                expected: { value: '02/12', caret: 4, model: '0212' },
+                expected: { value: '02/31', caret: 2, model: '0231' },
             },
             {
                 initial: '1231',
                 edit: { start: 1, end: 1, key: '3' },
-                expected: { value: '01/32', caret: 4, model: '0132' },
+                expected: { value: '03/31', caret: 2, model: '0331' },
             },
             {
                 initial: '1231',
                 edit: { start: 1, end: 1, key: '1' },
-                expected: { value: '11/23', caret: 2, model: '1123' },
+                expected: { value: '11/31', caret: 2, model: '1131' },
             },
             {
                 initial: '1231',
                 edit: { start: 2, end: 2, key: '1' },
-                expected: { value: '12/13', caret: 4, model: '1213' },
+                expected: { value: '12/11', caret: 4, model: '1211' },
             },
             {
                 initial: '1231',
@@ -876,12 +875,12 @@ describe('date overflow characterization', () => {
             {
                 initial: '1231',
                 edit: { start: 3, end: 3, key: '2' },
-                expected: { value: '12/23', caret: 4, model: '1223' },
+                expected: { value: '12/21', caret: 4, model: '1221' },
             },
             {
                 initial: '1231',
                 edit: { start: 4, end: 4, key: '5' },
-                expected: { value: '12/03', caret: 5, model: '1203' },
+                expected: { value: '12/05', caret: 5, model: '1205' },
             },
             {
                 initial: '1231',
@@ -896,7 +895,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '1231',
                 edit: { start: 0, end: 2, key: '4' },
-                expected: { value: '04/31', caret: 4, model: '0431' },
+                expected: { value: '04/31', caret: 2, model: '0431' },
             },
             {
                 initial: '1231',
@@ -906,7 +905,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '1231',
                 edit: { start: 3, end: 5, key: '2' },
-                expected: { value: '12/2', caret: 4, model: '122' },
+                expected: { value: '12/20', caret: 4, model: '1220' },
             },
         ]);
     });
@@ -989,11 +988,11 @@ describe('date overflow characterization', () => {
             { keys: '202013', expected: { value: '2020-01-3', caret: 9, model: '2020013' } },
             { keys: '202014', expected: { value: '2020-01-04', caret: 10, model: '20200104' } },
             { keys: '202012', expected: { value: '2020-12', caret: 7, model: '202012' } },
-            // a replaced month selection leaves a lone digit before the separator: it is padded, the day is kept
+            // a digit over the whole selected month zero-fills (`1` -> `10`), the day is kept
             {
                 initial: '20201231',
                 edit: { start: 5, end: 7, key: '1' },
-                expected: { value: '2020-01-31', caret: 7, model: '20200131' },
+                expected: { value: '2020-10-31', caret: 6, model: '20201031' },
             },
             {
                 initial: '20201231',
@@ -1007,7 +1006,7 @@ describe('date overflow characterization', () => {
             {
                 initial: '20201231',
                 edit: { start: 4, end: 6, key: '1' },
-                expected: { value: '20200131', caret: 7, model: '20200131' },
+                expected: { value: '20201031', caret: 5, model: '20201031' },
             },
             {
                 initial: '20201231',
@@ -1254,7 +1253,7 @@ describe('date overflow characterization', () => {
                 {
                     initial: '00062020',
                     edit: { start: 2, end: 2, key: 'Delete' },
-                    expected: { value: '00/06/2020', caret: 4, model: '00062020' },
+                    expected: { value: '00/06/2020', caret: 3, model: '00062020' },
                 },
                 {
                     initial: '15002020',
@@ -1264,6 +1263,12 @@ describe('date overflow characterization', () => {
                 {
                     initial: '15002020',
                     edit: { start: 5, end: 5, key: 'Delete' },
+                    expected: { value: '15/00/2020', caret: 6, model: '15002020' },
+                },
+                // a deletion of the year digit after a written 00 leaves the 00 alone too
+                {
+                    initial: '15002020',
+                    edit: { start: 6, end: 6, key: 'Delete' },
                     expected: { value: '15/00/020', caret: 6, model: '1500020' },
                 },
             ]
@@ -1457,5 +1462,412 @@ describe('date overflow characterization', () => {
         section('hh:m0 hour 00 without apm', { mask: 'hh:m0', leadZeroDateTime: true }, [
             { keys: '0030', expected: { value: '00:30', caret: 5, model: '0030' } },
         ]);
+    });
+
+    // A digit typed into a complete date overwrites the next digit slot (the date never shifts); see overwriteDateSlot.
+    describe('overwrite instead of shifting in a complete date', () => {
+        section(
+            'd0/M0/0000 a digit typed into a complete date overwrites the next digit',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true },
+            [
+                {
+                    initial: '15062020',
+                    edit: { start: 2, end: 2, key: '1' },
+                    expected: { value: '15/10/2020', caret: 4, model: '15102020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 3, key: '9' },
+                    expected: { value: '15/09/2020', caret: 5, model: '15092020' },
+                },
+                // a rejected key leaves the date, the caret and the model as they were
+                {
+                    initial: '15062020',
+                    edit: { start: 1, end: 1, key: 'a' },
+                    expected: { value: '15/06/2020', caret: 1, model: '15062020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 2, end: 2, key: '/' },
+                    expected: { value: '15/06/2020', caret: 2, model: '15062020' },
+                },
+                // a digit typed over a whole selected field zero-fills the same way: a tens digit
+                // keeps its slot (caret after it), any other digit is the whole field
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 2, key: '3' },
+                    expected: { value: '30/06/2020', caret: 1, model: '30062020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 2, key: '4' },
+                    expected: { value: '04/06/2020', caret: 2, model: '04062020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '1' },
+                    expected: { value: '15/10/2020', caret: 4, model: '15102020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '4' },
+                    expected: { value: '15/04/2020', caret: 5, model: '15042020' },
+                },
+                // the 00 the zero-fill makes becomes 01
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '0' },
+                    expected: { value: '15/01/2020', caret: 4, model: '15012020' },
+                },
+                {
+                    initial: '31122020',
+                    edit: { start: 2, end: 2, key: '0' },
+                    expected: { value: '31/02/2020', caret: 4, model: '31022020' },
+                },
+                // the 0 lands past the separator, next to the 0 that follows: the edit spans both
+                {
+                    initial: '15102020',
+                    edit: { start: 2, end: 2, key: '0' },
+                    expected: { value: '15/01/2020', caret: 4, model: '15012020' },
+                },
+                // a written 00 stays when a rejected key touches it
+                {
+                    initial: '00062020',
+                    edit: { start: 1, end: 1, key: 'a' },
+                    expected: { value: '00/06/2020', caret: 1, model: '00062020' },
+                },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 showMaskTyped overwrites in a complete date',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true, showMaskTyped: true },
+            [
+                {
+                    initial: '1506',
+                    edit: { start: 3, end: 3, key: '9' },
+                    expected: { value: '15/09/____', caret: 5, model: '1509' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '4' },
+                    expected: { value: '04/06/2020', caret: 2, model: '04062020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '3' },
+                    expected: { value: '30/06/2020', caret: 1, model: '30062020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '1' },
+                    expected: { value: '15/10/2020', caret: 4, model: '15102020' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 1, end: 1, key: 'a' },
+                    expected: { value: '15/06/2020', caret: 1, model: '15062020' },
+                },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 Hh:m0:s0 overwrites the time half of a complete value',
+            { mask: 'd0/M0/0000 Hh:m0:s0', leadZeroDateTime: true },
+            [
+                {
+                    initial: '15062020123045',
+                    edit: { start: 0, end: 0, key: '4' },
+                    expected: { value: '04/06/2020 12:30:45', caret: 2, model: '04062020123045' },
+                },
+                {
+                    initial: '15062020123045',
+                    edit: { start: 11, end: 11, key: '9' },
+                    expected: { value: '15/06/2020 09:30:45', caret: 13, model: '15062020093045' },
+                },
+                {
+                    initial: '15062020123045',
+                    edit: { start: 11, end: 11, key: '2' },
+                    expected: { value: '15/06/2020 22:30:45', caret: 12, model: '15062020223045' },
+                },
+                {
+                    initial: '15062020123045',
+                    edit: { start: 14, end: 14, key: '7' },
+                    expected: { value: '15/06/2020 12:07:45', caret: 16, model: '15062020120745' },
+                },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 Hh:m0:s0 with apm overwrites the hour up to 12',
+            { mask: 'd0/M0/0000 Hh:m0:s0', leadZeroDateTime: true, apm: true },
+            [
+                {
+                    initial: '15062020123045',
+                    edit: { start: 11, end: 11, key: '2' },
+                    expected: { value: '15/06/2020 02:30:45', caret: 13, model: '15062020023045' },
+                },
+                {
+                    initial: '15062020123045',
+                    edit: { start: 11, end: 11, key: '1' },
+                    expected: { value: '15/06/2020 12:30:45', caret: 12, model: '15062020123045' },
+                },
+                {
+                    initial: '15062020123045',
+                    edit: { start: 12, end: 12, key: '3' },
+                    expected: { value: '15/06/2020 03:30:45', caret: 13, model: '15062020033045' },
+                },
+            ]
+        );
+
+        section(
+            '0000.M0.d0 overwrites in a complete date',
+            { mask: '0000.M0.d0', leadZeroDateTime: true },
+            [
+                // a month digit that would pass 12 is padded, the day and the year stay
+                {
+                    initial: '20201231',
+                    edit: { start: 6, end: 6, key: '3' },
+                    expected: { value: '2020.03.31', caret: 7, model: '20200331' },
+                },
+                {
+                    initial: '20201231',
+                    edit: { start: 6, end: 6, key: '4' },
+                    expected: { value: '2020.04.31', caret: 7, model: '20200431' },
+                },
+            ]
+        );
+
+        section(
+            '0000M0d0 overwrites across a field boundary',
+            { mask: '0000M0d0', leadZeroDateTime: true },
+            [
+                {
+                    initial: '20201231',
+                    edit: { start: 4, end: 4, key: '4' },
+                    expected: { value: '20200431', caret: 6, model: '20200431' },
+                },
+                {
+                    initial: '20201231',
+                    edit: { start: 5, end: 5, key: '3' },
+                    expected: { value: '20200331', caret: 6, model: '20200331' },
+                },
+            ]
+        );
+
+        section('M0/d0 overwrites in a complete value', { mask: 'M0/d0', leadZeroDateTime: true }, [
+            {
+                initial: '1231',
+                edit: { start: 0, end: 0, key: '2' },
+                expected: { value: '02/31', caret: 2, model: '0231' },
+            },
+            {
+                initial: '1231',
+                edit: { start: 1, end: 1, key: '3' },
+                expected: { value: '03/31', caret: 2, model: '0331' },
+            },
+            {
+                initial: '1231',
+                edit: { start: 2, end: 2, key: '1' },
+                expected: { value: '12/11', caret: 4, model: '1211' },
+            },
+        ]);
+
+        section(
+            'd0/M0/0000 keepCharacterPositions keeps its own slot rules',
+            {
+                mask: 'd0/M0/0000',
+                leadZeroDateTime: true,
+                keepCharacterPositions: true,
+                showMaskTyped: true,
+            },
+            [
+                // not overwritten here: kcp writes the digit into its slot and renders it as it is (no
+                // range check); the parent's d0/M0/0000 overwrite still drops the character after it
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '3' },
+                    expected: { value: '35/06/2020', caret: 3, model: '35062020' },
+                },
+            ]
+        );
+
+        // A prefix or suffix mask keeps the parent's d0/M0/0000 overwrite (overwriteFullDateValue): the
+        // character after the typed one is dropped and the rest goes through regular masking, so an
+        // out-of-range pair still shifts the digits.
+        section(
+            'd0/M0/0000 with a prefix keeps the parent overwrite',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true, prefix: '+ ' },
+            [
+                {
+                    initial: '15062020',
+                    edit: { start: 2, end: 2, key: '3' },
+                    expected: { value: '+ 03/05/0620', caret: 4, model: '03050620' },
+                },
+                {
+                    initial: '15062020',
+                    edit: { start: 5, end: 5, key: '3' },
+                    expected: { value: '+ 15/03/6202', caret: 7, model: '15036202' },
+                },
+            ]
+        );
+
+        section(
+            'd0/M0/0000 with a suffix keeps the parent overwrite',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true, suffix: ' x' },
+            [
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '3' },
+                    expected: { value: '03/05/0620 x', caret: 5, model: '03050620' },
+                },
+            ]
+        );
+
+        // Without leadZeroDateTime nothing is repaired: an edit overwriteDateSlot declines (an
+        // out-of-range field, a selection longer than one character) keeps the parent's d0/M0/0000
+        // overwrite, which drops the character after the typed one, as before PR2.
+        section(
+            'd0/M0/0000 without leadZeroDateTime overwrites a field that stays in range',
+            { mask: 'd0/M0/0000' },
+            [
+                {
+                    initial: '15062020',
+                    edit: { start: 1, end: 1, key: '9' },
+                    expected: { value: '19/06/2020', caret: 2, model: '19062020' },
+                },
+                // current behaviour: 4 over the 1 of 15 is the day 45, so the parent overwrite runs and the digits shift
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '4' },
+                    expected: { value: '4/50/6202', caret: 1, model: '4506202' },
+                },
+                // current behaviour: the parent overwrite drops the separator after the lone 0, a year digit flows into the month
+                {
+                    initial: '15062020',
+                    edit: { start: 3, end: 5, key: '0' },
+                    expected: { value: '15/02/020', caret: 4, model: '1502020' },
+                },
+            ]
+        );
+
+        // A hiddenInput display conceals the day and the month (`**/**/2020`), the year stays
+        // visible: the concealed day keeps the parent overwrite, a year edit applies to the model.
+        section(
+            'd0/M0/0000 hiddenInput keeps the parent overwrite',
+            { mask: 'd0/M0/0000', leadZeroDateTime: true, hiddenInput: true },
+            [
+                // current behaviour: the digit typed over the concealed day is dropped
+                {
+                    initial: '15062020',
+                    edit: { start: 0, end: 0, key: '4' },
+                    expected: { value: '**/**/2020', caret: 4, model: '15062020' },
+                },
+                // the visible year is edited for real: the last digit is overwritten
+                {
+                    initial: '15062020',
+                    edit: { start: 9, end: 9, key: '7' },
+                    expected: { value: '**/**/2027', caret: 10, model: '15062027' },
+                },
+            ]
+        );
+
+        describe('edits without a keydown, pastes and re-renders', () => {
+            /**
+             * Splices `text` over `start`-`end` and fires `input` with no keydown before it, as
+             * dictation or an insertText does; `paste` fires the paste event first.
+             */
+            async function input(
+                harness: CharacterizationHarness,
+                start: number,
+                end: number,
+                text: string,
+                paste = false
+            ): Promise<EditSnapshot> {
+                const { el } = harness;
+                const debugElement = harness.fixture.debugElement.query(By.css('input'));
+                if (paste) {
+                    debugElement.triggerEventHandler('paste', {});
+                }
+                el.value = el.value.slice(0, start) + text + el.value.slice(end);
+                el.setSelectionRange(start + text.length, start + text.length);
+                debugElement.triggerEventHandler('input', { target: el });
+                await harness.settle();
+                return harness.snapshot();
+            }
+
+            async function dateHarness(initial: string): Promise<CharacterizationHarness> {
+                const harness = createHarness();
+                harness.component.mask.set('d0/M0/0000');
+                harness.component.leadZeroDateTime.set(true);
+                await harness.settle();
+                await harness.write(initial);
+                return harness;
+            }
+
+            const pick = ({ value, caret, model }: EditSnapshot) => ({ value, caret, model });
+
+            // the keydown that would record the display never fired: the written raw value is all there is
+            it('overwrites a digit typed without a keydown', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 1, 1, '9'))).toEqual({
+                    value: '19/06/2020',
+                    caret: 2,
+                    model: '19062020',
+                });
+                expect(pick(await input(harness, 0, 0, '3'))).toEqual({
+                    value: '30/06/2020',
+                    caret: 1,
+                    model: '30062020',
+                });
+                expect(pick(await input(harness, 3, 3, '4'))).toEqual({
+                    value: '30/04/2020',
+                    caret: 5,
+                    model: '30042020',
+                });
+            });
+
+            // current behaviour: a selection needs the keydown's display, so without one it keeps the parent overwrite
+            it('keeps the parent overwrite for a selection replaced without a keydown', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 3, 5, '1'))).toEqual({
+                    value: '15/12/020',
+                    caret: 4,
+                    model: '1512020',
+                });
+            });
+
+            it('replaces a selection without a keydown after an overwrite', async () => {
+                const harness = await dateHarness('15062020');
+                await harness.edit({ start: 2, end: 2, key: '1' });
+                expect(pick(await input(harness, 0, 2, '3'))).toEqual({
+                    value: '30/10/2020',
+                    caret: 1,
+                    model: '30102020',
+                });
+            });
+
+            // current behaviour: a paste keeps the parent overwrite, which shifts an out-of-range day
+            it('keeps the parent overwrite for a paste', async () => {
+                const harness = await dateHarness('15062020');
+                expect(pick(await input(harness, 0, 0, '4', true))).toEqual({
+                    value: '04/05/0620',
+                    caret: 10,
+                    model: '04050620',
+                });
+            });
+
+            it('re-renders the overwritten date when an input changes', async () => {
+                const harness = await dateHarness('15062020');
+                await harness.edit({ start: 0, end: 0, key: '4' });
+                harness.component.validation.set(false);
+                await harness.settle();
+                expect(pick(harness.snapshot())).toEqual({
+                    value: '04/06/2020',
+                    caret: 2,
+                    model: '04062020',
+                });
+            });
+        });
     });
 });

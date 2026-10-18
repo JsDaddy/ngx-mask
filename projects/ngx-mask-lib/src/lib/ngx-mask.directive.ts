@@ -28,7 +28,12 @@ import type { FormValueControl } from '@angular/forms/signals';
 
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
-import { leadZeroDateTimeCaret, overwriteFullDateValue, setUserEdit } from './caret/date-overflow';
+import {
+    leadZeroDateTimeCaret,
+    overwriteDateSlot,
+    overwriteFullDateValue,
+    setUserEdit,
+} from './caret/date-overflow';
 import { resolveKeepCharacterPositions } from './caret/keep-character-positions';
 import { NgxMaskService } from './ngx-mask.service';
 import { MaskExpression } from './ngx-mask-expression.enum';
@@ -942,14 +947,32 @@ export class NgxMaskDirective
                 if (this._code() === MaskExpression.DELETE) {
                     this._maskService.deletedSpecialCharacter = true;
                 }
-                const overwrittenDate = overwriteFullDateValue(
-                    this._maskService.maskExpression,
-                    this._inputValue(),
-                    position,
-                    this._code()
-                );
-                if (overwrittenDate !== null) {
-                    el.value = overwrittenDate;
+                // A paste, a prefix, suffix, keepCharacterPositions or hiddenInput mask and any
+                // typed edit overwriteDateSlot declines keep the older d0/M0/0000 overwrite.
+                const keepsFullDateOverwrite =
+                    this._justPasted() ||
+                    this._maskService.prefix ||
+                    this._maskService.suffix ||
+                    this._maskService.keepCharacterPositions ||
+                    this._maskService.hiddenInput;
+                const overwrite =
+                    keepsFullDateOverwrite || isDeletion
+                        ? null
+                        : overwriteDateSlot(this._maskService, preEditValue, el.value, position);
+                if (overwrite) {
+                    el.value = overwrite.value;
+                    this._inputValue.set(overwrite.value);
+                    position = overwrite.position;
+                } else if (keepsFullDateOverwrite || !isDeletion) {
+                    const overwrittenDate = overwriteFullDateValue(
+                        this._maskService.maskExpression,
+                        this._inputValue(),
+                        position,
+                        this._code()
+                    );
+                    if (overwrittenDate !== null) {
+                        el.value = overwrittenDate;
+                    }
                 }
                 if (this._maskService.leadZeroDateTime) {
                     // The edit touches the characters next to the caret; a paste touches them all.
@@ -965,7 +988,9 @@ export class NgxMaskDirective
                             : {
                                   value: el.value,
                                   start: this._justPasted() ? 0 : caret - 1,
-                                  end: this._justPasted() ? el.value.length : caret,
+                                  end: this._justPasted()
+                                      ? el.value.length
+                                      : (overwrite?.end ?? caret),
                               }
                     );
                     position = leadZeroDateTimeCaret(
