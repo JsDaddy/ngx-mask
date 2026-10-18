@@ -187,7 +187,8 @@ export function overwriteDateSlot(
 ): DateOverwrite | null {
     const mask = svc.maskExpression;
     const start = position - 1;
-    // Only one character typed at the caret of a full display makes the value longer than the mask.
+    // A value longer than the mask is read as one character typed at the caret of a full display
+    // (a multi-character mid-value insertion into a shorter display is mis-read; base mangles it too).
     const display =
         elValue.length > mask.length ? elValue.slice(0, start) + elValue.slice(position) : before;
     // The end of the span the typed character replaced in `display` (a caret replaces nothing).
