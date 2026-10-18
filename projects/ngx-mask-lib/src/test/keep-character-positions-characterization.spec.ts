@@ -99,6 +99,8 @@ const bareSuffixed: Config = {
     suffix: ' kg',
     keepCharacterPositions: true,
 };
+const bareKg: Config = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
+const phoneKg: Config = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions: true };
 const withBoth: Config = {
     mask: '000',
     prefix: '$',
@@ -1040,6 +1042,62 @@ describe('keepCharacterPositions characterization', () => {
 
     describe('with a prefix and a suffix without showMaskTyped', () => {
         check([
+            {
+                name: 'a digit over a selection from the middle of the number into the suffix',
+                config: phoneKg,
+                initial: '123',
+                action: { start: 2, end: 6, key: '9' },
+                expected: { value: '(19_ kg', caret: 3, model: '19' },
+            },
+            {
+                name: 'a digit over a selection from the second digit into the suffix',
+                config: bareKg,
+                initial: '12',
+                action: { start: 1, end: 5, key: '7' },
+                expected: { value: '17 kg', caret: 2, model: '17' },
+            },
+            {
+                name: 'selection delete up to the end of the number trims the trailing separator',
+                config: bareKg,
+                initial: '123456',
+                action: { start: 4, end: 7, key: 'Backspace' },
+                expected: { value: '123 kg', caret: 3, model: '123' },
+            },
+            {
+                name: 'selection delete up to the end of the number trims the placeholders',
+                config: bareKg,
+                initial: '123456',
+                action: { start: 2, end: 7, key: 'Backspace' },
+                expected: { value: '12 kg', caret: 2, model: '12' },
+            },
+            {
+                name: 'selection delete up to the end of a short number keeps the suffix once',
+                config: bareKg,
+                initial: '123',
+                action: { start: 1, end: 3, key: 'Backspace' },
+                expected: { value: '1 kg', caret: 1, model: '1' },
+            },
+            {
+                name: 'selection delete from the number into the suffix keeps the suffix once',
+                config: bareKg,
+                initial: '123',
+                action: { start: 1, end: 5, key: 'Backspace' },
+                expected: { value: '1 kg', caret: 1, model: '1' },
+            },
+            {
+                name: 'selection delete up to the end of the number after a prefix trims down to the digit',
+                config: { ...bareKg, prefix: '+7 ' },
+                initial: '123456',
+                action: { start: 4, end: 10, key: 'Backspace' },
+                expected: { value: '+7 1 kg', caret: 4, model: '1' },
+            },
+            {
+                name: 'selection delete in the middle of the number still keeps the gaps',
+                config: { ...bareKg, prefix: '+7 ' },
+                initial: '123456',
+                action: { start: 5, end: 8, key: 'Backspace' },
+                expected: { value: '+7 12_-_56 kg', caret: 5, model: '1256' },
+            },
             {
                 name: 'a digit replacing a selection that reaches into the suffix keeps the suffix',
                 config: bareSuffixed,

@@ -32,6 +32,8 @@ const bareSuffixed = {
     suffix: ' kg',
     keepCharacterPositions: true,
 };
+const phoneKg = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions: true };
+const bareKg = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
@@ -164,6 +166,35 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             value: '+7 (9__) _ kg',
             caret: 5,
             model: '9',
+        });
+    });
+
+    it('a digit over a selection from the middle of the number into the suffix keeps it', async () => {
+        expect(await press(phoneKg, { written: '123' }, 2, 6, '5')).toEqual({
+            value: '(15_ kg',
+            caret: 3,
+            model: '15',
+        });
+    });
+
+    it('a digit over a selection from the second digit into the suffix keeps it', async () => {
+        expect(await press(bareKg, { written: '12' }, 1, 5, '7')).toEqual({
+            value: '17 kg',
+            caret: 2,
+            model: '17',
+        });
+    });
+
+    it('deleting a selection up to the end of the number keeps the suffix once and trims', async () => {
+        expect(await press(bareKg, { written: '123' }, 1, 3, '{Backspace}')).toEqual({
+            value: '1 kg',
+            caret: 1,
+            model: '1',
+        });
+        expect(await press(bareKg, { written: '123456' }, 4, 7, '{Backspace}')).toEqual({
+            value: '123 kg',
+            caret: 3,
+            model: '123',
         });
     });
 

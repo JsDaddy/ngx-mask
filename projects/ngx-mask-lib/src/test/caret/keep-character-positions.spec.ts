@@ -307,6 +307,27 @@ describe('resolveKeepCharacterPositions', () => {
             ).toEqual({ actualValue: '19_ kg', position: 2, handled: true });
         });
 
+        it('trims the gaps in front of the suffix when a deletion reaches the end of the number', () => {
+            expect(
+                resolve(
+                    input({
+                        elValue: '1 kg',
+                        position: 1,
+                        code: MaskExpression.BACKSPACE,
+                        suffix: ' kg',
+                        showMaskTyped: false,
+                        maskExpression: '000-000',
+                        maskIsShown: '',
+                        specialCharacters: ['-'],
+                        selStart: 1,
+                        selEnd: 3,
+                        before: '123 kg',
+                        actualValue: '123 kg',
+                    })
+                )
+            ).toEqual({ actualValue: '1 kg', position: 1, handled: true });
+        });
+
         it('keeps the suffix when the selection reaches into it without showMaskTyped', () => {
             // the suffix follows the last digit, the display is shorter than the skeleton
             expect(

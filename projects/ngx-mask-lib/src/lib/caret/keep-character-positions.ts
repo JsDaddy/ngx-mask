@@ -89,6 +89,13 @@ export function resolveKeepCharacterPositions(
             ? edit.before
             : null;
 
+    // Without showMaskTyped the suffix follows the last digit, so the end of the mask part is read
+    // from the display before the edit, not from the skeleton, and a selection blanks no more of
+    // the skeleton than the mask part of that display.
+    const maskEndOf = (preEditLength: number): number => preEditLength - suffix.length;
+    const blankEndOf = (preEditLength: number): number =>
+        Math.min(selEndAbs, maskEndOf(preEditLength)) - prefixLength;
+
     const backspaceOrDelete =
         edit.code === MaskExpression.BACKSPACE || edit.code === MaskExpression.DELETE;
 
@@ -97,12 +104,16 @@ export function resolveKeepCharacterPositions(
     if (backspaceOrDelete) {
         if (hasSelection) {
             const preEditLength = elValue.length + (selEndAbs - selStartAbs);
+            const maskEndAbs = maskEndOf(preEditLength);
+            const blankEnd = blankEndOf(preEditLength);
             if (!showMaskTyped && selStartAbs <= prefixLength && selEndAbs >= preEditLength) {
                 // The whole value was selected and deleted: clear through the
                 // regular path instead of showing a placeholder skeleton.
                 handled = false;
             } else if (selStartRaw === prefixLength) {
-                actualValue = `${prefix}${maskSkeleton.slice(0, selEnd)}${elValue.split(prefix).join('')}`;
+                // A selection that reaches into the suffix took part of it out of the element.
+                const rest = selEndAbs > maskEndAbs ? suffix : elValue.split(prefix).join('');
+                actualValue = `${prefix}${maskSkeleton.slice(0, blankEnd)}${rest}`;
             } else if (selStartRaw === maskSkeleton.length + prefixLength) {
                 actualValue = `${elValue}${maskSkeleton.slice(selStart, selEnd)}`;
             } else {
@@ -112,15 +123,18 @@ export function resolveKeepCharacterPositions(
                     .slice(
                         0,
                         selStart
-                    )}${maskSkeleton.slice(selStart, selEnd)}${svc.actualValue.slice(
-                    selEnd + prefixLength,
-                    maskSkeleton.length + prefixLength
+                    )}${maskSkeleton.slice(selStart, blankEnd)}${svc.actualValue.slice(
+                    selEndAbs,
+                    maskEndAbs
                 )}${suffix}`;
             }
-            if (!showMaskTyped && actualValue !== null && selEndAbs >= preEditLength) {
-                // The selection reached the end: nothing follows its placeholders and separators,
-                // drop them (leading and middle gaps stay).
-                let end = actualValue.length;
+            if (!showMaskTyped && actualValue !== null && selEndAbs >= maskEndAbs) {
+                // The selection reached the end of the mask part: nothing follows its placeholders
+                // and separators, drop them (leading and middle gaps stay).
+                const bodyEnd = actualValue.endsWith(suffix)
+                    ? actualValue.length - suffix.length
+                    : actualValue.length;
+                let end = bodyEnd;
                 while (
                     end > prefixLength &&
                     (actualValue.charAt(end - 1) === placeHolderCharacter ||
@@ -128,7 +142,7 @@ export function resolveKeepCharacterPositions(
                 ) {
                     end--;
                 }
-                actualValue = actualValue.slice(0, end);
+                actualValue = `${actualValue.slice(0, end)}${actualValue.slice(bodyEnd)}`;
             }
         } else if (
             !specialCharacters.includes(
@@ -173,11 +187,9 @@ export function resolveKeepCharacterPositions(
             // A selection that reaches into the prefix or the suffix took part of them out of the
             // element: restore those from the service instead of reading the damaged fragments.
             const head = selStartAbs < prefixLength ? prefix : elValue.slice(0, selStartAbs);
-            // Without showMaskTyped the suffix follows the last digit, so the end of the mask part
-            // is read from the display before the edit, not from the skeleton.
-            const maskEndAbs = preEditLength - suffix.length;
+            const maskEndAbs = maskEndOf(preEditLength);
             const tail = selEndAbs > maskEndAbs ? suffix : elValue.slice(selStartAbs + 1);
-            const blankEnd = Math.min(selEndAbs, maskEndAbs) - prefixLength;
+            const blankEnd = blankEndOf(preEditLength);
             const blanked = `${head}${maskSkeleton.slice(Math.max(selStart, 0), blankEnd)}${tail}`;
             const targetAbs = maskIdx + prefixLength;
             if (
