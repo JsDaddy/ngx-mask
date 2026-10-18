@@ -93,6 +93,7 @@ const phone: Config = {
 };
 const letters: Config = { mask: 'AAA-000', keepCharacterPositions: true, showMaskTyped: true };
 const bare: Config = { mask: '000-000', keepCharacterPositions: true };
+const maskedBare: Config = { ...bare, showMaskTyped: true };
 const withPrefix: Config = {
     mask: '000-000',
     prefix: '+7 ',
@@ -468,6 +469,51 @@ describe('keepCharacterPositions characterization', () => {
                 action: { start: 0, end: 2, key: '7' },
                 expected: { value: '7_C-123', caret: 1, model: '7C123' },
             },
+        ]);
+    });
+
+    describe('selection delete of a partial value with showMaskTyped (000-000)', () => {
+        const typedAndWritten = (
+            name: string,
+            action: EditAction,
+            expected: Case['expected'],
+            then?: string
+        ): Case[] => [
+            {
+                name: `${name} (typed)`,
+                config: maskedBare,
+                initial: '',
+                typed: '123',
+                action,
+                ...(then ? { then } : {}),
+                expected,
+            },
+            {
+                name: `${name} (written)`,
+                config: maskedBare,
+                initial: '123',
+                action,
+                ...(then ? { then } : {}),
+                expected,
+            },
+        ];
+        check([
+            ...typedAndWritten(
+                'Delete over the last digit keeps the mask tail',
+                { start: 2, end: 3, key: 'Delete' },
+                { value: '12_-___', caret: 3, model: '12' }
+            ),
+            ...typedAndWritten(
+                'Backspace over the separator keeps the mask tail',
+                { start: 3, end: 4, key: 'Backspace' },
+                { value: '123-___', caret: 3, model: '123' }
+            ),
+            ...typedAndWritten(
+                'a digit typed after Backspace over the separator lands in the first slot of the tail',
+                { start: 3, end: 4, key: 'Backspace' },
+                { value: '123-5__', caret: 5, model: '1235' },
+                '5'
+            ),
         ]);
     });
 

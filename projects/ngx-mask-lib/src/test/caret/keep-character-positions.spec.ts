@@ -367,6 +367,26 @@ describe('resolveKeepCharacterPositions', () => {
         });
     });
 
+    describe('deleting a selection of a value written through the control', () => {
+        it('keeps the mask tail that the bare actualValue lacks', () => {
+            expect(
+                resolve(
+                    input({
+                        code: MaskExpression.BACKSPACE,
+                        maskExpression: '000-000',
+                        maskIsShown: '___-___',
+                        elValue: '12-___',
+                        position: 2,
+                        selStart: 2,
+                        selEnd: 3,
+                        before: '123-___',
+                        actualValue: '123',
+                    })
+                )
+            ).toEqual({ actualValue: '12_-___', position: 2, handled: true });
+        });
+    });
+
     describe('deleting a selection that reaches the end without showMaskTyped', () => {
         const bare = {
             showMaskTyped: false,

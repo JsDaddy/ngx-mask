@@ -109,6 +109,9 @@ export function resolveKeepCharacterPositions(
             const preEditLength = elValue.length + (selEndAbs - selStartAbs);
             const maskEndAbs = maskEndOf(preEditLength);
             const blankEnd = blankEndOf(preEditLength);
+            // What follows the selection: the display before the edit, which still carries the
+            // skeleton tail of a value written through the control (its actualValue is bare).
+            const displayBefore = restoreBefore(preEditLength) ?? svc.actualValue;
             if (!showMaskTyped && selStartAbs <= prefixLength && selEndAbs >= preEditLength) {
                 // The whole value was selected and deleted: clear through the
                 // regular path instead of showing a placeholder skeleton.
@@ -126,7 +129,7 @@ export function resolveKeepCharacterPositions(
                     .slice(
                         0,
                         selStart
-                    )}${maskSkeleton.slice(selStart, blankEnd)}${svc.actualValue.slice(
+                    )}${maskSkeleton.slice(selStart, blankEnd)}${displayBefore.slice(
                     selEndAbs,
                     maskEndAbs
                 )}${suffix}`;

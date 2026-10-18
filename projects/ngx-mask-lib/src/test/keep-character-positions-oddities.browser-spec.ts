@@ -73,6 +73,22 @@ async function pressOnFocus(config: Record<string, unknown>, keys: string): Prom
 }
 
 describe('keepCharacterPositions oddities in a real browser', () => {
+    it('a selection delete in a partial showMaskTyped value keeps the mask tail', async () => {
+        const maskedBare = { ...bare, showMaskTyped: true };
+        for (const initial of [{ typed: '123' }, { written: '123' }]) {
+            expect(await press(maskedBare, initial, 2, 3, '{Delete}')).toEqual({
+                value: '12_-___',
+                caret: 3,
+                model: '12',
+            });
+            expect(await press(maskedBare, initial, 3, 4, '{Backspace}5')).toEqual({
+                value: '123-5__',
+                caret: 5,
+                model: '1235',
+            });
+        }
+    });
+
     it('a digit typed after a selection delete up to the end appends to the trimmed value', async () => {
         for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
             expect(await press(bare, initial, 3, 7, '{Backspace}9')).toEqual({
