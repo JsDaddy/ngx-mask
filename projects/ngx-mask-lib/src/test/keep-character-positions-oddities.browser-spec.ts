@@ -36,6 +36,7 @@ const phoneKg = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions:
 const bareKg = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
 const plainSuffixed = { mask: '000', suffix: ' kg' };
+const plainPrefixed = { mask: '000-000', prefix: '+7 ' };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
 
@@ -187,6 +188,59 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             caret: 4,
             model: '0123456789',
         });
+    });
+
+    it('Delete in front of the first digit after a prefix blanks it', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(prefixed, initial, 3, 3, '{Delete}')).toEqual({
+                value: '+7 _23-456',
+                caret: 4,
+                model: '23456',
+            });
+            // the caret advanced to the next slot: the digit typed next overwrites it
+            expect(await press(prefixed, initial, 3, 3, '{Delete}9')).toEqual({
+                value: '+7 _93-456',
+                caret: 5,
+                model: '93456',
+            });
+        }
+    });
+
+    it('Delete inside the prefix is still prevented', async () => {
+        for (const caret of [0, 1, 2]) {
+            expect(await press(prefixed, { written: '123456' }, caret, caret, '{Delete}')).toEqual({
+                value: '+7 123-456',
+                caret: 3,
+                model: '123456',
+            });
+            expect(
+                await press(prefixed, { written: '123456' }, caret, caret, '{Delete}{Delete}')
+            ).toEqual({ value: '+7 _23-456', caret: 4, model: '23456' });
+        }
+    });
+
+    it('Delete in front of the first digit of a plain prefix mask removes it', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(plainPrefixed, initial, 3, 3, '{Delete}')).toEqual({
+                value: '+7 234-56',
+                caret: 3,
+                model: '23456',
+            });
+            // the caret stayed in front of the first digit: the next Delete removes that one too
+            expect(await press(plainPrefixed, initial, 3, 3, '{Delete}{Delete}')).toEqual({
+                value: '+7 345-6',
+                caret: 3,
+                model: '3456',
+            });
+        }
+    });
+
+    it('Delete inside the prefix of a plain prefix mask is still prevented', async () => {
+        for (const caret of [0, 1, 2]) {
+            expect(
+                await press(plainPrefixed, { written: '123456' }, caret, caret, '{Delete}')
+            ).toEqual({ value: '+7 123-456', caret: 3, model: '123456' });
+        }
     });
 
     it('Delete at the end of the digits is prevented and leaves the suffix and the caret alone', async () => {

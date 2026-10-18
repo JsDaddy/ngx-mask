@@ -1389,9 +1389,16 @@ export class NgxMaskDirective
                         }
                     }
                 }
+                // The clamp below pulls a caret inside the prefix up to its end, so remember
+                // the one sitting exactly in front of the first digit: Delete may act there.
+                const deleteAtFirstSlot =
+                    e.key === MaskExpression.DELETE &&
+                    el.selectionStart === el.selectionEnd &&
+                    el.selectionStart === this._maskService.prefix.length;
                 this.checkSelectionOnDeletion(el);
                 if (
                     this._maskService.prefix.length &&
+                    !deleteAtFirstSlot &&
                     (el.selectionStart as number) <= this._maskService.prefix.length &&
                     (el.selectionEnd as number) <= this._maskService.prefix.length
                 ) {

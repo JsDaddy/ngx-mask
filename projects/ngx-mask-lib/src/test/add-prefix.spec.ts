@@ -5,6 +5,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { equal, Paste } from './utils/test-functions.component';
 import { NgxMaskDirective, provideNgxMask } from 'ngx-mask';
 import { expect } from 'vitest';
+import { createHarness } from './utils/characterization-harness';
 
 describe('Directive: Mask (Add prefix)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -246,5 +247,37 @@ describe('Directive: Mask (Add prefix)', () => {
         component.showMaskTyped.set(true);
 
         equal('$123', '$123_.__', fixture, false, Paste);
+    });
+});
+
+describe('Directive: Mask (Delete in front of the first digit)', () => {
+    const setUp = async (keepCharacterPositions: boolean) => {
+        const harness = createHarness();
+        harness.component.mask.set('000-000');
+        harness.component.prefix.set('+7 ');
+        harness.component.keepCharacterPositions.set(keepCharacterPositions);
+        harness.component.showMaskTyped.set(keepCharacterPositions);
+        await harness.settle();
+        await harness.write('123456');
+        return harness;
+    };
+
+    it('should delete the first digit of a plain prefix mask', async () => {
+        const harness = await setUp(false);
+        const snap = await harness.edit({ start: 3, end: 3, key: 'Delete' });
+        expect(snap).toEqual({ value: '+7 234-56', caret: 3, model: '23456', prevented: false });
+        // the caret stayed in front of the new first digit: the next Delete removes it too
+        expect(await harness.edit({ start: 3, end: 3, key: 'Delete' })).toEqual({
+            value: '+7 345-6',
+            caret: 3,
+            model: '3456',
+            prevented: false,
+        });
+    });
+
+    it('should blank the first digit of a keepCharacterPositions mask', async () => {
+        const harness = await setUp(true);
+        const snap = await harness.edit({ start: 3, end: 3, key: 'Delete' });
+        expect(snap).toEqual({ value: '+7 _23-456', caret: 4, model: '23456', prevented: false });
     });
 });

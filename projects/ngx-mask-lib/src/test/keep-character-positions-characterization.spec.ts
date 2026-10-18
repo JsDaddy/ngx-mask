@@ -805,13 +805,27 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 123-45_', caret: 9, model: '12345' },
             },
             {
-                // current behaviour: Delete at the start of the digits is swallowed by the prefix guard
-                name: 'Delete in front of the first digit is prevented',
+                name: 'Delete in front of the first digit blanks it',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 3, end: 3, key: 'Delete' },
-                expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
+                expected: { value: '+7 _23-456', caret: 4, model: '23456' },
             },
+            {
+                name: 'Delete in front of the first digit advances the caret to the next slot',
+                config: withPrefix,
+                initial: '123456',
+                action: { start: 3, end: 3, key: 'Delete' },
+                then: '9',
+                expected: { value: '+7 _93-456', caret: 5, model: '93456' },
+            },
+            ...[0, 1, 2].map((caret) => ({
+                name: `Delete with the caret inside the prefix (${caret}) is prevented`,
+                config: withPrefix,
+                initial: '123456',
+                action: { start: caret, end: caret, key: 'Delete' },
+                expected: { value: '+7 123-456', caret: 3, model: '123456', prevented: true },
+            })),
             {
                 name: 'selection starting right after the prefix',
                 config: withPrefix,

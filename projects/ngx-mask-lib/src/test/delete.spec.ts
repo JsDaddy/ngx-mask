@@ -8,6 +8,7 @@ import { TestMaskComponent } from './utils/test-component.component';
 import { provideNgxMask, NgxMaskDirective } from 'ngx-mask';
 import { typeTest } from './utils/test-functions.component';
 import { expect, vi } from 'vitest';
+import { createHarness } from './utils/characterization-harness';
 
 describe('Directive: Mask (Delete)', () => {
     let fixture: ComponentFixture<TestMaskComponent>;
@@ -728,4 +729,32 @@ describe('Directive: Mask (Delete)', () => {
             expect(component.form.value).equal('');
         });
     });
+});
+
+describe('Directive: Mask (Delete inside the prefix)', () => {
+    const setUp = async (keepCharacterPositions: boolean) => {
+        const harness = createHarness();
+        harness.component.mask.set('000-000');
+        harness.component.prefix.set('+7 ');
+        harness.component.keepCharacterPositions.set(keepCharacterPositions);
+        harness.component.showMaskTyped.set(keepCharacterPositions);
+        await harness.settle();
+        await harness.write('123456');
+        return harness;
+    };
+
+    for (const keepCharacterPositions of [false, true]) {
+        for (const caret of [0, 1, 2]) {
+            it(`should prevent Delete with the caret at ${caret} (keepCharacterPositions ${keepCharacterPositions})`, async () => {
+                const harness = await setUp(keepCharacterPositions);
+                const snap = await harness.edit({ start: caret, end: caret, key: 'Delete' });
+                expect(snap).toEqual({
+                    value: '+7 123-456',
+                    caret: 3,
+                    model: '123456',
+                    prevented: true,
+                });
+            });
+        }
+    }
 });
