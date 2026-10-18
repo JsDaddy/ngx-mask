@@ -5,10 +5,11 @@ import { mount } from './utils/browser-harness';
 import { MaskHarnessComponent } from './utils/mask-harness.component';
 
 /**
- * Real-chromium pins for the keepCharacterPositions oddities that the jsdom characterization
- * (`keep-character-positions-characterization.spec.ts`) marks `// current behaviour`. They are
- * confirmed to happen in a real browser, so they are candidate bugs: pinned, not endorsed. When
- * one is fixed, flip its expectation here and in the jsdom spec.
+ * Real-chromium counterparts of the keepCharacterPositions rows in the jsdom characterization
+ * (`keep-character-positions-characterization.spec.ts`): a rejected key keeps the display, a
+ * selection reaching into the prefix or the suffix keeps both, and a selection deleted up to the
+ * end drops the trailing placeholders. The first two rows still pin the browser's own Delete and
+ * Backspace behaviour next to separators.
  */
 
 const phone = { mask: '(000) 000-0000', keepCharacterPositions: true, showMaskTyped: true };
@@ -18,6 +19,21 @@ const prefixed = {
     keepCharacterPositions: true,
     showMaskTyped: true,
 };
+const dollar = {
+    mask: '0000.00',
+    prefix: '$',
+    keepCharacterPositions: true,
+    showMaskTyped: true,
+};
+const bare = { mask: '000-000', keepCharacterPositions: true };
+const bareSuffixed = {
+    mask: '(000) 000-0000',
+    prefix: '+7 ',
+    suffix: ' kg',
+    keepCharacterPositions: true,
+};
+const phoneKg = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions: true };
+const bareKg = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
@@ -45,7 +61,66 @@ async function press(
     return { value: el.value, caret: el.selectionStart, model: m.component.form.value };
 }
 
+/** Focuses the empty control without a click, as `el.focus()` leaves the caret, and presses `keys`. */
+async function pressOnFocus(config: Record<string, unknown>, keys: string): Promise<Outcome> {
+    const m = await mount(MaskHarnessComponent, config);
+    await m.settle();
+    const el = m.get('#masked');
+    el.focus();
+    await userEvent.keyboard(keys);
+    await m.settle();
+    return { value: el.value, caret: el.selectionStart, model: m.component.form.value };
+}
+
 describe('keepCharacterPositions oddities in a real browser', () => {
+    it('Delete over a selection leaves the caret on its first blank for the next digit', async () => {
+        for (const config of [bare, { ...bare, showMaskTyped: true }]) {
+            for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+                expect(await press(config, initial, 4, 5, '{Delete}')).toEqual({
+                    value: '123-_56',
+                    caret: 4,
+                    model: '12356',
+                });
+                expect(await press(config, initial, 4, 5, '{Delete}7')).toEqual({
+                    value: '123-756',
+                    caret: 5,
+                    model: '123756',
+                });
+            }
+        }
+    });
+
+    it('a selection delete in a partial showMaskTyped value keeps the mask tail', async () => {
+        const maskedBare = { ...bare, showMaskTyped: true };
+        for (const initial of [{ typed: '123' }, { written: '123' }]) {
+            expect(await press(maskedBare, initial, 2, 3, '{Delete}')).toEqual({
+                value: '12_-___',
+                caret: 2,
+                model: '12',
+            });
+            expect(await press(maskedBare, initial, 3, 4, '{Backspace}5')).toEqual({
+                value: '123-5__',
+                caret: 5,
+                model: '1235',
+            });
+        }
+    });
+
+    it('a digit typed after a selection delete up to the end appends to the trimmed value', async () => {
+        for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+            expect(await press(bare, initial, 3, 7, '{Backspace}9')).toEqual({
+                value: '123-9',
+                caret: 5,
+                model: '1239',
+            });
+            expect(await press(bare, initial, 1, 7, '{Delete}8')).toEqual({
+                value: '18',
+                caret: 2,
+                model: '18',
+            });
+        }
+    });
+
     it('Delete at the very end changes nothing: the browser fires no input event', async () => {
         expect(await press(phone, { written: '0123456789' }, 14, 14, '{Delete}')).toEqual({
             value: '(012) 345-6789',
@@ -62,16 +137,14 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
-    // current behaviour: the display loses the suffix after a programmatic write ...
-    it('a rejected key drops the suffix when the value was written programmatically', async () => {
+    it('a rejected key keeps the suffix when the value was written programmatically', async () => {
         expect(await press(suffixed, { written: '123' }, 3, 3, '9')).toEqual({
-            value: '123',
+            value: '123 kg',
             caret: 3,
             model: '123',
         });
     });
 
-    // ... but keeps it when the user typed the very same value
     it('a rejected key keeps the suffix when the user typed the value', async () => {
         expect(await press(suffixed, { typed: '123' }, 3, 3, '9')).toEqual({
             value: '123 kg',
@@ -80,30 +153,181 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
-    // current behaviour: the typed digit eats the prefix characters of the selection
-    it('a digit over a selection that starts inside the prefix eats the prefix', async () => {
-        expect(await press(prefixed, { written: '123456' }, 1, 5, '9')).toEqual({
-            value: '+__9-456',
-            caret: 4,
-            model: '9456',
-        });
-    });
-
-    // current behaviour: the prefix character leaks into the model
-    it('a digit over a selection spanning the end of the prefix leaks it into the model', async () => {
-        expect(await press(prefixed, { written: '123456' }, 2, 4, '9')).toEqual({
-            value: '+7_93-456',
-            caret: 4,
-            model: '793456',
-        });
-    });
-
-    // current behaviour: the typed digit leaves the suffix text
-    it('a digit over a selection reaching into the suffix mangles the suffix', async () => {
-        expect(await press(suffixed, { written: '123' }, 1, 5, '9')).toEqual({
-            value: '1__g',
+    it('a rejected letter keeps the suffix when the value was written programmatically', async () => {
+        expect(await press(suffixed, { written: '123' }, 1, 1, 'a')).toEqual({
+            value: '123 kg',
             caret: 1,
-            model: '1g',
+            model: '123',
+        });
+    });
+
+    it('a rejected letter over a selection keeps the display and the caret at its start', async () => {
+        expect(await press(phone, { written: '0123456789' }, 1, 3, 'a')).toEqual({
+            value: '(012) 345-6789',
+            caret: 1,
+            model: '0123456789',
+        });
+    });
+
+    it('a rejected letter over a selection that starts inside the prefix keeps the display', async () => {
+        expect(await press(prefixed, { written: '123456' }, 1, 5, 'a')).toEqual({
+            value: '+7 123-456',
+            caret: 3,
+            model: '123456',
+        });
+    });
+
+    it('a digit over a selection that starts inside the prefix keeps the prefix', async () => {
+        expect(await press(prefixed, { written: '123456' }, 1, 5, '9')).toEqual({
+            value: '+7 9_3-456',
+            caret: 4,
+            model: '93456',
+        });
+    });
+
+    it('a digit over a selection spanning the end of the prefix keeps it out of the model', async () => {
+        expect(await press(prefixed, { written: '123456' }, 2, 4, '9')).toEqual({
+            value: '+7 923-456',
+            caret: 4,
+            model: '923456',
+        });
+    });
+
+    it('the pressed digit is typed when a selection starts on a one-character prefix', async () => {
+        expect(await press(dollar, { written: '123456' }, 0, 3, '9')).toEqual({
+            value: '$9_34.56',
+            caret: 2,
+            model: '93456',
+        });
+    });
+
+    it('a digit over a selection reaching into the suffix keeps the suffix', async () => {
+        expect(await press(suffixed, { written: '123' }, 1, 5, '9')).toEqual({
+            value: '19_ kg',
+            caret: 2,
+            model: '19',
+        });
+    });
+
+    it('a digit over a selection reaching into the suffix keeps it without showMaskTyped', async () => {
+        expect(await press(bareSuffixed, { written: '0123' }, 0, 11, '9')).toEqual({
+            value: '+7 (9__) _ kg',
+            caret: 5,
+            model: '9',
+        });
+    });
+
+    it('a digit over a selection from the middle of the number into the suffix keeps it', async () => {
+        expect(await press(phoneKg, { written: '123' }, 2, 6, '5')).toEqual({
+            value: '(15_ kg',
+            caret: 3,
+            model: '15',
+        });
+    });
+
+    it('a digit over a selection from the second digit into the suffix keeps it', async () => {
+        expect(await press(bareKg, { written: '12' }, 1, 5, '7')).toEqual({
+            value: '17 kg',
+            caret: 2,
+            model: '17',
+        });
+    });
+
+    it('deleting a selection up to the end of the number keeps the suffix once and trims', async () => {
+        expect(await press(bareKg, { written: '123' }, 1, 3, '{Backspace}')).toEqual({
+            value: '1 kg',
+            caret: 1,
+            model: '1',
+        });
+        expect(await press(bareKg, { written: '123456' }, 4, 7, '{Backspace}')).toEqual({
+            value: '123 kg',
+            caret: 3,
+            model: '123',
+        });
+    });
+
+    it('Delete over a selection up to the end of the number keeps the caret in front of the suffix', async () => {
+        const prefixedKg = { ...bareKg, prefix: '+7 ' };
+        expect(await press(prefixedKg, { written: '123456' }, 4, 10, '{Delete}')).toEqual({
+            value: '+7 1 kg',
+            caret: 4,
+            model: '1',
+        });
+        expect(await press(prefixedKg, { written: '123456' }, 4, 10, '{Delete}5')).toEqual({
+            value: '+7 15 kg',
+            caret: 5,
+            model: '15',
+        });
+    });
+
+    it('a digit over a selection that ends inside the prefix lands in the first slot', async () => {
+        expect(await press(prefixed, { written: '123456' }, 0, 2, '9')).toEqual({
+            value: '+7 923-456',
+            caret: 4,
+            model: '923456',
+        });
+    });
+
+    it('a digit over only the suffix is rejected and the display kept', async () => {
+        expect(await press(suffixed, { written: '123' }, 3, 6, '9')).toEqual({
+            value: '123 kg',
+            caret: 3,
+            model: '123',
+        });
+    });
+
+    it('deleting a selection up to the end drops the trailing placeholders and separators', async () => {
+        expect(await press(bare, { written: '123456' }, 4, 7, '{Backspace}')).toEqual({
+            value: '123',
+            caret: 3,
+            model: '123',
+        });
+    });
+
+    it('deleting a selection up to the end keeps the gaps in front of the last digit', async () => {
+        const m = await mount(MaskHarnessComponent, bare);
+        m.component.form.setValue('123456');
+        await m.settle();
+        const el = m.get('#masked');
+        el.focus();
+        el.setSelectionRange(2, 2);
+        await userEvent.keyboard('{Backspace}');
+        await m.settle();
+        el.setSelectionRange(3, 7);
+        await userEvent.keyboard('{Backspace}');
+        await m.settle();
+        expect({
+            value: el.value,
+            caret: el.selectionStart,
+            model: m.component.form.value,
+        }).toEqual({
+            value: '1_3',
+            caret: 3,
+            model: '13',
+        });
+    });
+
+    it('typing into the focused empty phone skeleton fills the first slots', async () => {
+        expect(await pressOnFocus(phone, '98')).toEqual({
+            value: '(98_) ___-____',
+            caret: 3,
+            model: '98',
+        });
+    });
+
+    it('typing after the End key on the empty phone skeleton fills the first slots', async () => {
+        expect(await pressOnFocus(phone, '{End}98')).toEqual({
+            value: '(98_) ___-____',
+            caret: 3,
+            model: '98',
+        });
+    });
+
+    it('typing into the focused empty skeleton fills the first slots after the prefix', async () => {
+        expect(await pressOnFocus(prefixed, '98')).toEqual({
+            value: '+7 98_-___',
+            caret: 5,
+            model: '98',
         });
     });
 });

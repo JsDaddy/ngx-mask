@@ -83,6 +83,13 @@ export const OptDocs: ComDoc[] = [
         anchor: 'keep-prefix',
     },
     {
+        header: 'Keep Character Positions',
+        text: 'Without showMaskTyped, a gap left by a deletion stays, but placeholders after the last digit are dropped',
+        code: ` <input type='text' mask="000-000" [keepCharacterPositions]="true">`,
+        id: 7,
+        anchor: 'keep-no-mask-typed',
+    },
+    {
         header: 'defaultValueOnBlur (string)',
         text: 'When the input is left empty, the given default is written through the mask on blur',
         code: `<input type='text' mask="separator.2" defaultValueOnBlur="0" >`,
@@ -159,6 +166,11 @@ export const OptExamples: TExampleConfig<OptMaskOptions>[] = [
         _keepCharacterPositions: true,
         _prefix: '$',
         _mask: '0000.00',
+        control: { initialValue: '', model: '' },
+    },
+    {
+        _keepCharacterPositions: true,
+        _mask: '000-000',
         control: { initialValue: '', model: '' },
     },
     {

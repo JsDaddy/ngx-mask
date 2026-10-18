@@ -910,6 +910,7 @@ export class NgxMaskDirective
                         elValue: el.value,
                         position,
                         code: this._code(),
+                        before: preEditValue,
                     });
                     if (kcp.actualValue !== null) {
                         this._maskService.actualValue = kcp.actualValue;

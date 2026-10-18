@@ -1394,6 +1394,8 @@ describe('date overflow characterization', () => {
                     expected: { value: '00/06/2020', caret: 10, model: '00062020' },
                 },
                 { keys: '00', expected: { value: '00/__/____', caret: 2, model: '00' } },
+                // the caret stays at the end of the skeleton, as after focusing the empty field
+                { keys: '12', expected: { value: '12/__/____', caret: 2, model: '12' } },
             ]
         );
 
