@@ -29,6 +29,7 @@ import type { FormValueControl } from '@angular/forms/signals';
 import type { NgxMaskConfig } from './ngx-mask.config';
 import { NGX_MASK_CONFIG, resolveMaskAlias, timeMasks, withoutValidation } from './ngx-mask.config';
 import {
+    isDateTimeMask,
     leadZeroDateTimeCaret,
     overwriteDateSlot,
     overwriteFullDateValue,
@@ -46,6 +47,10 @@ import {
 } from './ngx-mask.utils';
 
 const notFilled = (errors: ValidationErrors | null) => ({ errors, filled: false });
+
+/** Index where the suffix starts in the display, or Infinity when the display carries none (hiddenInput). */
+const suffixStart = (display: string, suffix: string): number =>
+    suffix && display.endsWith(suffix) ? display.length - suffix.length : Infinity;
 
 // Inputs copied verbatim onto NgxMaskService by ngOnChanges (see `_mirrorInput`).
 const MIRRORED_INPUTS = [
@@ -1379,7 +1384,10 @@ export class NgxMaskDirective
                                 this._maskService.keepCharacterPositions &&
                                 collapsedCaret &&
                                 el.selectionStart !== hopFrom &&
-                                (el.selectionStart as number) > prefixLength
+                                (el.selectionStart as number) > prefixLength &&
+                                // a caret inside the suffix hops over its leading space only
+                                (hopFrom as number) <=
+                                    suffixStart(this._inputValue(), this._maskService.suffix)
                             ) {
                                 el.setSelectionRange(
                                     (el.selectionStart as number) - 1,
@@ -1406,6 +1414,8 @@ export class NgxMaskDirective
                     prefix.length > 1 &&
                     el.value.startsWith(prefix) &&
                     !numberMask &&
+                    // a date field cannot lose its first digit without scrambling the others
+                    !isDateTimeMask(maskExpression) &&
                     !specialCharacters.includes(maskExpression.charAt(0));
                 this.checkSelectionOnDeletion(el);
                 if (
@@ -1423,9 +1433,9 @@ export class NgxMaskDirective
                     e.key === MaskExpression.DELETE &&
                     suffix &&
                     !numberMask &&
-                    this._inputValue().endsWith(suffix) &&
                     el.selectionStart === el.selectionEnd &&
-                    (el.selectionStart as number) >= this._inputValue().length - suffix.length
+                    (el.selectionStart as number) >=
+                        suffixStart(this._inputValue(), this._maskService.suffix)
                 ) {
                     e.preventDefault();
                 }

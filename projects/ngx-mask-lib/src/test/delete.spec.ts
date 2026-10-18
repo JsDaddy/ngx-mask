@@ -840,6 +840,28 @@ describe('Directive: Mask (Delete where the prefix and suffix guards stay as the
             expected: { value: '-$1 234.56', caret: 1, model: -1234.56, prevented: true },
         },
         {
+            // deleting the first digit of a prefixed date scrambles the remaining fields
+            name: 'a date mask behind a prefix',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ' },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020', caret: 3, model: '15062020', prevented: true },
+        },
+        {
+            name: 'a date mask behind a prefix, showMaskTyped',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ', showMaskTyped: true },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020', caret: 3, model: '15062020', prevented: true },
+        },
+        {
+            name: 'a date mask behind a prefix with a suffix',
+            config: { mask: 'd0/M0/0000', prefix: '+7 ', suffix: ' y' },
+            initial: '15062020',
+            action: { start: 3, key: 'Delete' },
+            expected: { value: '+7 15/06/2020 y', caret: 3, model: '15062020', prevented: true },
+        },
+        {
             // the display of a hiddenInput mask carries no suffix: the digit after the caret is real
             name: 'a hiddenInput display without the suffix',
             config: { mask: '000-000', suffix: ' kg', hiddenInput: true, showMaskTyped: true },

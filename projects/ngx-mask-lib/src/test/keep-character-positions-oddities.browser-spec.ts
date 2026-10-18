@@ -219,6 +219,32 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         }
     });
 
+    it('Backspace with the caret inside the suffix keeps the model in step with the display', async () => {
+        // the leading space of the suffix is not a separator to hop over
+        expect(await press(phoneKg, { written: '0123456789' }, 15, 15, '{Backspace}')).toEqual({
+            value: '(012) 345-678_ kg',
+            caret: 13,
+            model: '012345678',
+        });
+        expect(await press(phoneKg, { written: '0123456789' }, 15, 15, '{Backspace}9')).toEqual({
+            value: '(012) 345-6789 kg',
+            caret: 14,
+            model: '0123456789',
+        });
+        expect(
+            await press(bareSuffixed, { written: '0123456789' }, 18, 18, '{Backspace}9')
+        ).toEqual({ value: '+7 (012) 345-6789 kg', caret: 17, model: '0123456789' });
+    });
+
+    it('Delete in front of the first digit of a prefixed date is prevented', async () => {
+        const date = { mask: 'd0/M0/0000', prefix: '+7 ' };
+        for (const config of [date, { ...date, showMaskTyped: true }, { ...date, suffix: ' y' }]) {
+            const outcome = await press(config, { written: '15062020' }, 3, 3, '{Delete}');
+            expect(outcome.value.startsWith('+7 15/06/2020')).toBe(true);
+            expect(outcome.model).toBe('15062020');
+        }
+    });
+
     it('Delete in front of the first digit of a plain prefix mask removes it', async () => {
         for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
             expect(await press(plainPrefixed, initial, 3, 3, '{Delete}')).toEqual({

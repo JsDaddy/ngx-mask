@@ -1244,6 +1244,35 @@ describe('keepCharacterPositions characterization', () => {
         ]);
     });
 
+    describe('Backspace with the caret inside the suffix', () => {
+        check([
+            {
+                // the leading space of the suffix is not a separator to hop over: the browser's
+                // plain delete runs as it did before, and the model follows the display
+                name: 'a phone with a suffix: Backspace in the suffix keeps the model in step with the display',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 15, end: 15, key: 'Backspace' },
+                expected: { value: '(012) 345-678_ kg', caret: 13, model: '012345678' },
+            },
+            {
+                name: 'a phone with a suffix: the digit typed after Backspace in the suffix reaches the model',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 15, end: 15, key: 'Backspace' },
+                then: '9',
+                expected: { value: '(012) 345-6789 kg', caret: 14, model: '0123456789' },
+            },
+            {
+                name: 'a prefixed phone with a suffix: Backspace in the suffix keeps the model in step with the display',
+                config: bareSuffixed,
+                initial: '0123456789',
+                action: { start: 18, end: 18, key: 'Backspace' },
+                expected: { value: '+7 (012) 345-678_ kg', caret: 16, model: '012345678' },
+            },
+        ]);
+    });
+
     describe('with a prefix and a suffix without showMaskTyped', () => {
         check([
             {

@@ -9,6 +9,15 @@ export type DateTimeField = {
     end: number; // index one past the field's digit run (start of separator/next field)
 };
 
+const DATE_TIME_TOKENS: readonly string[] = [
+    MaskExpression.DAY,
+    MaskExpression.MONTH,
+    MaskExpression.HOURS,
+    MaskExpression.HOUR,
+    MaskExpression.MINUTE,
+    MaskExpression.SECOND,
+];
+
 /**
  * #1488: locates the date/time field (DAY/MONTH/HOURS/HOUR/MINUTE/SECOND) that
  * `position` falls within, scanning `maskExpression` left-to-right. A field spans
@@ -23,18 +32,10 @@ export function findDateTimeFieldAt(
     maskExpression: string,
     position: number
 ): DateTimeField | null {
-    const dateTimeTokens: readonly string[] = [
-        MaskExpression.DAY,
-        MaskExpression.MONTH,
-        MaskExpression.HOURS,
-        MaskExpression.HOUR,
-        MaskExpression.MINUTE,
-        MaskExpression.SECOND,
-    ];
     let index = 0;
     while (index < maskExpression.length) {
         const token = maskExpression[index] ?? MaskExpression.EMPTY_STRING;
-        if (dateTimeTokens.includes(token)) {
+        if (DATE_TIME_TOKENS.includes(token)) {
             const next = maskExpression[index + 1];
             const isCombinedHour =
                 (token === MaskExpression.HOURS || token === MaskExpression.HOUR) &&
@@ -54,6 +55,11 @@ export function findDateTimeFieldAt(
         index++;
     }
     return null;
+}
+
+/** Whether the mask has a day, month, hour, minute or second field. */
+export function isDateTimeMask(maskExpression: string): boolean {
+    return [...maskExpression].some((char) => DATE_TIME_TOKENS.includes(char));
 }
 
 /**
