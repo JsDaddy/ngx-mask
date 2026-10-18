@@ -173,11 +173,12 @@ export function resolveKeepCharacterPositions(
             // A selection that reaches into the prefix or the suffix took part of them out of the
             // element: restore those from the service instead of reading the damaged fragments.
             const head = selStartAbs < prefixLength ? prefix : elValue.slice(0, selStartAbs);
-            const tail =
-                selEndAbs > maskSkeleton.length + prefixLength
-                    ? suffix
-                    : elValue.slice(selStartAbs + 1);
-            const blanked = `${head}${maskSkeleton.slice(Math.max(selStart, 0), selEnd)}${tail}`;
+            // Without showMaskTyped the suffix follows the last digit, so the end of the mask part
+            // is read from the display before the edit, not from the skeleton.
+            const maskEndAbs = preEditLength - suffix.length;
+            const tail = selEndAbs > maskEndAbs ? suffix : elValue.slice(selStartAbs + 1);
+            const blankEnd = Math.min(selEndAbs, maskEndAbs) - prefixLength;
+            const blanked = `${head}${maskSkeleton.slice(Math.max(selStart, 0), blankEnd)}${tail}`;
             const targetAbs = maskIdx + prefixLength;
             if (
                 targetAbs < blanked.length - suffix.length &&

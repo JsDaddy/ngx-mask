@@ -26,6 +26,12 @@ const dollar = {
     showMaskTyped: true,
 };
 const bare = { mask: '000-000', keepCharacterPositions: true };
+const bareSuffixed = {
+    mask: '(000) 000-0000',
+    prefix: '+7 ',
+    suffix: ' kg',
+    keepCharacterPositions: true,
+};
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
@@ -150,6 +156,14 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             value: '19_ kg',
             caret: 2,
             model: '19',
+        });
+    });
+
+    it('a digit over a selection reaching into the suffix keeps it without showMaskTyped', async () => {
+        expect(await press(bareSuffixed, { written: '0123' }, 0, 11, '9')).toEqual({
+            value: '+7 (9__) _ kg',
+            caret: 5,
+            model: '9',
         });
     });
 

@@ -306,6 +306,27 @@ describe('resolveKeepCharacterPositions', () => {
                 )
             ).toEqual({ actualValue: '19_ kg', position: 2, handled: true });
         });
+
+        it('keeps the suffix when the selection reaches into it without showMaskTyped', () => {
+            // the suffix follows the last digit, the display is shorter than the skeleton
+            expect(
+                resolve(
+                    input({
+                        elValue: '19g',
+                        position: 2,
+                        suffix: ' kg',
+                        showMaskTyped: false,
+                        maskExpression: '000-000',
+                        maskIsShown: '',
+                        specialCharacters: ['-'],
+                        selStart: 1,
+                        selEnd: 5,
+                        before: '123 kg',
+                        actualValue: '123 kg',
+                    })
+                )
+            ).toEqual({ actualValue: '19_ kg', position: 2, handled: true });
+        });
     });
 
     describe('deleting a selection that reaches the end without showMaskTyped', () => {

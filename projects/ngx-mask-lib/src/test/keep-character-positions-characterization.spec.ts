@@ -93,6 +93,12 @@ const withSuffix: Config = {
     keepCharacterPositions: true,
     showMaskTyped: true,
 };
+const bareSuffixed: Config = {
+    mask: '(000) 000-0000',
+    prefix: '+7 ',
+    suffix: ' kg',
+    keepCharacterPositions: true,
+};
 const withBoth: Config = {
     mask: '000',
     prefix: '$',
@@ -1028,6 +1034,32 @@ describe('keepCharacterPositions characterization', () => {
                 typed: '9',
                 action: { start: 4, end: 4, key: '8' },
                 expected: { value: '+7 98_-___', caret: 5, model: '98' },
+            },
+        ]);
+    });
+
+    describe('with a prefix and a suffix without showMaskTyped', () => {
+        check([
+            {
+                name: 'a digit replacing a selection that reaches into the suffix keeps the suffix',
+                config: bareSuffixed,
+                initial: '0123',
+                action: { start: 0, end: 11, key: '9' },
+                expected: { value: '+7 (9__) _ kg', caret: 5, model: '9' },
+            },
+            {
+                name: 'a digit replacing a selection that ends on the last suffix character keeps the suffix',
+                config: bareSuffixed,
+                initial: '0123',
+                action: { start: 4, end: 13, key: '9' },
+                expected: { value: '+7 (9__) _ kg', caret: 5, model: '9' },
+            },
+            {
+                name: 'a digit replacing a selection that stays in front of the suffix keeps the suffix',
+                config: bareSuffixed,
+                initial: '0123',
+                action: { start: 4, end: 7, key: '9' },
+                expected: { value: '+7 (9__) 3 kg', caret: 5, model: '93' },
             },
         ]);
     });
