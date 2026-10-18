@@ -1751,8 +1751,8 @@ describe('date overflow characterization', () => {
             ]
         );
 
-        // A hiddenInput display conceals the day and the month (`**/**/2020`): it keeps the parent
-        // overwrite, and the hidden value is not shifted.
+        // A hiddenInput display conceals the day and the month (`**/**/2020`), the year stays
+        // visible: the concealed day keeps the parent overwrite, a year edit applies to the model.
         section(
             'd0/M0/0000 hiddenInput keeps the parent overwrite',
             { mask: 'd0/M0/0000', leadZeroDateTime: true, hiddenInput: true },
@@ -1763,11 +1763,11 @@ describe('date overflow characterization', () => {
                     edit: { start: 0, end: 0, key: '4' },
                     expected: { value: '**/**/2020', caret: 4, model: '15062020' },
                 },
-                // current behaviour: the digit typed over the visible year is dropped too
+                // the visible year is edited for real: the last digit is overwritten
                 {
                     initial: '15062020',
-                    edit: { start: 6, end: 6, key: '7' },
-                    expected: { value: '**/**/2020', caret: 7, model: '15062020' },
+                    edit: { start: 9, end: 9, key: '7' },
+                    expected: { value: '**/**/2027', caret: 10, model: '15062027' },
                 },
             ]
         );

@@ -37,8 +37,79 @@ async function typedAt(
     return outcome(m);
 }
 
+/** Splices `data` over the selection and fires `input` with no keydown before it (insertText). */
+const insert = (el: HTMLInputElement, data: string): void => {
+    const start = el.selectionStart ?? el.value.length;
+    const end = el.selectionEnd ?? start;
+    el.value = el.value.slice(0, start) + data + el.value.slice(end);
+    el.setSelectionRange(start + data.length, start + data.length);
+    el.dispatchEvent(
+        new InputEvent('input', {
+            bubbles: true,
+            inputType: 'insertText',
+            data,
+            isComposing: false,
+        })
+    );
+};
+
 describe('typing into a complete date in a real browser', () => {
     const date = { mask: 'd0/M0/0000', leadZeroDateTime: true };
+
+    it('places the caret after the overwritten digit, a tens slot or a field end', async () => {
+        expect(await typedAt(date, '15062020', 3, '1')).toEqual({
+            value: '15/10/2020',
+            caret: 4,
+            model: '15102020',
+        });
+        expect(await typedAt(date, '15062020', 0, '3')).toMatchObject({ caret: 1 });
+        expect(await typedAt(date, '15062020', 3, '3')).toEqual({
+            value: '15/03/2020',
+            caret: 5,
+            model: '15032020',
+        });
+        expect(await typedAt(date, '15062020', 4, '9')).toEqual({
+            value: '15/09/2020',
+            caret: 5,
+            model: '15092020',
+        });
+    });
+
+    it('keeps the caret in place for a key the slot rejects', async () => {
+        expect(await typedAt(date, '15062020', 1, 'a')).toEqual({
+            value: '15/06/2020',
+            caret: 1,
+            model: '15062020',
+        });
+        expect(await typedAt(date, '15062020', 4, '/')).toEqual({
+            value: '15/06/2020',
+            caret: 4,
+            model: '15062020',
+        });
+    });
+
+    it('overwrites the same way when the edit arrives without a keydown', async () => {
+        const m = await mount(MaskHarnessComponent, date);
+        m.component.form.setValue('15062020');
+        await m.settle();
+        m.select('#masked', 1, 1);
+        insert(m.get('#masked'), '9');
+        await m.settle();
+        expect(outcome(m)).toEqual({ value: '19/06/2020', caret: 2, model: '19062020' });
+    });
+
+    it('overwrites after a bulk insertText of the whole date, without a keydown', async () => {
+        const m = await mount(MaskHarnessComponent, date);
+        const el = m.get('#masked');
+        el.focus();
+        insert(el, '15062020');
+        await m.settle();
+        expect(el.value).toBe('15/06/2020');
+        el.setSelectionRange(1, 1);
+        insert(el, '9');
+        await m.settle();
+        expect(outcome(m)).toEqual({ value: '19/06/2020', caret: 2, model: '19062020' });
+    });
 
     it('overwrites the digit at the caret and never shifts the year', async () => {
         expect(await typedAt(date, '15062020', 1, '9')).toMatchObject({
