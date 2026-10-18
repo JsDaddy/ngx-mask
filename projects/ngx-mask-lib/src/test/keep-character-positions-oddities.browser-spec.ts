@@ -198,6 +198,20 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         });
     });
 
+    it('Delete over a selection up to the end of the number keeps the caret in front of the suffix', async () => {
+        const prefixedKg = { ...bareKg, prefix: '+7 ' };
+        expect(await press(prefixedKg, { written: '123456' }, 4, 10, '{Delete}')).toEqual({
+            value: '+7 1 kg',
+            caret: 4,
+            model: '1',
+        });
+        expect(await press(prefixedKg, { written: '123456' }, 4, 10, '{Delete}5')).toEqual({
+            value: '+7 15 kg',
+            caret: 5,
+            model: '15',
+        });
+    });
+
     it('a digit over a selection that ends inside the prefix lands in the first slot', async () => {
         expect(await press(prefixed, { written: '123456' }, 0, 2, '9')).toEqual({
             value: '+7 923-456',

@@ -30,6 +30,8 @@ type Case = {
     /** An earlier edit applied after `initial` / `typed`, to set up gaps. */
     first?: EditAction;
     action: EditAction;
+    /** Keys typed one by one at the caret the action left behind. */
+    then?: string;
     expected: Omit<EditSnapshot, 'prevented'> & { prevented?: boolean };
 };
 
@@ -39,7 +41,8 @@ async function run(
     action: EditAction,
     typed?: string,
     first?: EditAction,
-    caretAtEnd?: boolean
+    caretAtEnd?: boolean,
+    then?: string
 ): Promise<EditSnapshot> {
     const harness = createHarness();
     for (const [key, value] of Object.entries(config)) {
@@ -62,13 +65,22 @@ async function run(
     if (first) {
         await harness.edit(first);
     }
-    return harness.edit(action);
+    const snap = await harness.edit(action);
+    return then ? harness.type(then) : snap;
 }
 
 function check(cases: Case[]): void {
     for (const c of cases) {
         it(c.name, async () => {
-            const snap = await run(c.config, c.initial, c.action, c.typed, c.first, c.caretAtEnd);
+            const snap = await run(
+                c.config,
+                c.initial,
+                c.action,
+                c.typed,
+                c.first,
+                c.caretAtEnd,
+                c.then
+            );
             expect(snap).toEqual({ prevented: false, ...c.expected });
         });
     }
@@ -1104,6 +1116,51 @@ describe('keepCharacterPositions characterization', () => {
                 initial: '123456',
                 action: { start: 4, end: 10, key: 'Backspace' },
                 expected: { value: '+7 1 kg', caret: 4, model: '1' },
+            },
+            {
+                name: 'Delete over a selection up to the end of the number after a prefix keeps the caret before the suffix',
+                config: { ...bareKg, prefix: '+7 ' },
+                initial: '123456',
+                action: { start: 4, end: 10, key: 'Delete' },
+                expected: { value: '+7 1 kg', caret: 4, model: '1' },
+            },
+            {
+                name: 'a digit typed after a Delete over a selection up to the end of the number lands in the number',
+                config: { ...bareKg, prefix: '+7 ' },
+                initial: '123456',
+                action: { start: 4, end: 10, key: 'Delete' },
+                then: '5',
+                expected: { value: '+7 15 kg', caret: 5, model: '15' },
+            },
+            {
+                name: 'Delete over a selection up to the end of a phone number keeps the caret before the suffix',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 2, end: 14, key: 'Delete' },
+                expected: { value: '(0 kg', caret: 2, model: '0' },
+            },
+            {
+                name: 'a digit typed after a Delete over a selection up to the end of a phone number lands in the number',
+                config: phoneKg,
+                initial: '0123456789',
+                action: { start: 2, end: 14, key: 'Delete' },
+                then: '5',
+                expected: { value: '(05 kg', caret: 3, model: '05' },
+            },
+            {
+                name: 'Delete over a selection up to the end of the number without a prefix keeps the caret before the suffix',
+                config: bareKg,
+                initial: '123456',
+                action: { start: 1, end: 7, key: 'Delete' },
+                expected: { value: '1 kg', caret: 1, model: '1' },
+            },
+            {
+                name: 'a digit typed after a Delete over a selection up to the end of the number without a prefix lands in the number',
+                config: bareKg,
+                initial: '123456',
+                action: { start: 1, end: 7, key: 'Delete' },
+                then: '5',
+                expected: { value: '15 kg', caret: 2, model: '15' },
             },
             {
                 name: 'selection delete in the middle of the number still keeps the gaps',

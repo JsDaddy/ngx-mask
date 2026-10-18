@@ -414,6 +414,26 @@ describe('resolveKeepCharacterPositions', () => {
             ).toEqual({ actualValue: '+7 ', position: 4, handled: true });
         });
 
+        it('keeps the caret in front of the suffix when Delete trims the end of the number', () => {
+            expect(
+                resolve(
+                    input({
+                        ...bare,
+                        code: MaskExpression.DELETE,
+                        specialCharacters: ['-', ' ', '+'],
+                        elValue: '+7 1 kg',
+                        position: 4,
+                        prefix: '+7 ',
+                        suffix: ' kg',
+                        selStart: 4,
+                        selEnd: 10,
+                        before: '+7 123-456 kg',
+                        actualValue: '+7 123-456 kg',
+                    })
+                )
+            ).toEqual({ actualValue: '+7 1 kg', position: 4, handled: true });
+        });
+
         it('keeps the placeholders with showMaskTyped', () => {
             expect(
                 resolve(

@@ -100,6 +100,9 @@ export function resolveKeepCharacterPositions(
         edit.code === MaskExpression.BACKSPACE || edit.code === MaskExpression.DELETE;
 
     let handled = true;
+    // Where the mask part ends once a selection delete trimmed its trailing gaps: with a suffix
+    // the caret must not land in it.
+    let trimmedBodyEnd: number | null = null;
 
     if (backspaceOrDelete) {
         if (hasSelection) {
@@ -143,6 +146,7 @@ export function resolveKeepCharacterPositions(
                     end--;
                 }
                 actualValue = `${actualValue.slice(0, end)}${actualValue.slice(bodyEnd)}`;
+                trimmedBodyEnd = end;
             }
         } else if (
             !specialCharacters.includes(
@@ -167,6 +171,9 @@ export function resolveKeepCharacterPositions(
             }
         }
         position = edit.code === MaskExpression.DELETE ? position + 1 : position;
+        if (trimmedBodyEnd !== null && suffix) {
+            position = Math.min(position, trimmedBodyEnd);
+        }
     } else if (hasSelection) {
         // A selected range was replaced by the typed symbol. Keep the layout:
         // blank the selection to the mask skeleton and put the typed symbol
