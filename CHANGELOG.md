@@ -1,5 +1,48 @@
 # Changelog
 
+## [22.2.5](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.4...v22.2.5) (2026-10-18)
+
+
+### Fix
+
+* **mask:** honour global config and fix validation side effects ([#1687](https://github.com/NepipenkoIgor/ngx-mask/issues/1687)) ([2030713](https://github.com/NepipenkoIgor/ngx-mask/commit/20307134c33f92d119fce3e83e558bcdfc381161))
+* **mask:** ignore a thousand separator that contains a digit ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** keep a comma decimal string valid when leadZero pads it ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** keep a user edit over a pending leadZero normalisation ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** keep prefix, suffix and the display intact on keepCharacterPositions selection edits ([0519667](https://github.com/NepipenkoIgor/ngx-mask/commit/05196673d347fc94dbffa0201042647b068fdf5b))
+* **mask:** keep programmatic writes and separator changes from dirtying the form ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** keep the decimal point when switching a separator mask to no mask ([03f2e39](https://github.com/NepipenkoIgor/ngx-mask/commit/03f2e393f74446349cd2584daa6ccf02dc73effc))
+* **mask:** keep the hidden-input model when a bulk insertion replaces the value ([03f2e39](https://github.com/NepipenkoIgor/ngx-mask/commit/03f2e393f74446349cd2584daa6ccf02dc73effc))
+* **mask:** keep the input in sync when setValue runs inside valueChanges ([#1691](https://github.com/NepipenkoIgor/ngx-mask/issues/1691)) ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** keep the number, sign, prefix and suffix when separators change ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** let Backspace and Delete reach the digits next to separators, prefixes and suffixes ([10438af](https://github.com/NepipenkoIgor/ngx-mask/commit/10438af74fb4ff3695830a65a87fc03d58c01c77))
+* **mask:** overwrite instead of shifting when typing into a complete date ([6dceada](https://github.com/NepipenkoIgor/ngx-mask/commit/6dceada99016c2af69bf51ecc945d65456baea84))
+* **mask:** pad out-of-range hours and months and never produce a 00 day or month ([eb863d0](https://github.com/NepipenkoIgor/ngx-mask/commit/eb863d0710491b35452f950980b1ec2044f258ed))
+* **mask:** parse a date inserted in one edit or pasted into a year-first mask ([03f2e39](https://github.com/NepipenkoIgor/ngx-mask/commit/03f2e393f74446349cd2584daa6ccf02dc73effc))
+* **mask:** phase f follow-ups — form echo, stale validators, separators, docs ([#1690](https://github.com/NepipenkoIgor/ngx-mask/issues/1690)) ([bc218d0](https://github.com/NepipenkoIgor/ngx-mask/commit/bc218d0fcf5d960c754dbfb7c2591dc5faed5ba4))
+* **mask:** place the caret at the end after a multi-character insertion at the end of the value ([03f2e39](https://github.com/NepipenkoIgor/ngx-mask/commit/03f2e393f74446349cd2584daa6ccf02dc73effc))
+* **mask:** place the caret correctly on click when special characters contain letters ([b217fad](https://github.com/NepipenkoIgor/ngx-mask/commit/b217fad0f14e68d856f194254f01da372485fadc))
+* **mask:** re-derive special characters and decimal marker when mask inputs change at runtime ([03f2e39](https://github.com/NepipenkoIgor/ngx-mask/commit/03f2e393f74446349cd2584daa6ccf02dc73effc))
+* **mask:** read strings written in the display format of the separators ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** show the value a subscriber writes while the user types ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** strip symbol thousand separators from the model value ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+* **mask:** type through a star thousand separator ([6cf10d4](https://github.com/NepipenkoIgor/ngx-mask/commit/6cf10d49a03511adf7e817119078611f65909524))
+
+
+### Performance
+
+* **mask:** defer render work safely and skip redundant work per keystroke ([#1689](https://github.com/NepipenkoIgor/ngx-mask/issues/1689)) ([c5053e0](https://github.com/NepipenkoIgor/ngx-mask/commit/c5053e093a660ec7499d158b7ff2baf6395e4156))
+
+
+### Refactor
+
+* **mask:** extract keep-character-positions and date overflow into pure functions ([6ad1a7c](https://github.com/NepipenkoIgor/ngx-mask/commit/6ad1a7cda346a258a7bea9c88b20369a79257124))
+* **mask:** remove dead code and move host listeners into host metadata ([62180b4](https://github.com/NepipenkoIgor/ngx-mask/commit/62180b4fd7a3e0058a3e82d6d14209c20d324037))
+* **mask:** remove public NgxMaskApplierService.customPattern (use the patterns input or provideNgxMask({ patterns })) ([62180b4](https://github.com/NepipenkoIgor/ngx-mask/commit/62180b4fd7a3e0058a3e82d6d14209c20d324037))
+* **mask:** remove unused public NgxMaskApplierService.showKeepCharacterExp ([62180b4](https://github.com/NepipenkoIgor/ngx-mask/commit/62180b4fd7a3e0058a3e82d6d14209c20d324037))
+* **mask:** remove unused public NgxMaskService.maskExpressionArray ([62180b4](https://github.com/NepipenkoIgor/ngx-mask/commit/62180b4fd7a3e0058a3e82d6d14209c20d324037))
+* **mask:** share regexp escaping and digit helpers, table-drive input mirrors ([b217fad](https://github.com/NepipenkoIgor/ngx-mask/commit/b217fad0f14e68d856f194254f01da372485fadc))
+
 ## [22.2.4](https://github.com/NepipenkoIgor/ngx-mask/compare/v22.2.3...v22.2.4) (2026-10-15)
 
 
