@@ -243,6 +243,72 @@ describe('keepCharacterPositions oddities in a real browser', () => {
         }
     });
 
+    it('Delete stays prevented where the first-slot guard does not apply', async () => {
+        const decimal = {
+            mask: '0000.00',
+            prefix: '$',
+            keepCharacterPositions: true,
+            showMaskTyped: true,
+        };
+        const leadingSeparator = {
+            mask: '(000) 000 00 00',
+            prefix: '+7 ',
+            keepCharacterPositions: true,
+            showMaskTyped: true,
+        };
+        const negative = { mask: 'separator.2', prefix: '$', allowNegativeNumbers: true };
+        const cases: [Record<string, unknown>, string, number, Outcome][] = [
+            [decimal, '123456', 1, { value: '$1234.56', caret: 1, model: '123456' }],
+            [
+                leadingSeparator,
+                '1234567890',
+                3,
+                { value: '+7 (123) 456 78 90', caret: 3, model: '1234567890' },
+            ],
+            [
+                { mask: '(000) 000 00 00', prefix: '+7 ' },
+                '1234567890',
+                3,
+                { value: '+7 (123) 456 78 90', caret: 3, model: '1234567890' },
+            ],
+            [{ mask: '0000', prefix: '$' }, '1234', 1, { value: '$1234', caret: 1, model: '1234' }],
+            [
+                { mask: 'separator.2', prefix: '+7 ' },
+                '1234.56',
+                3,
+                { value: '+7 1,234.56', caret: 3, model: 1234.56 },
+            ],
+            [
+                { mask: 'separator.2', prefix: '$' },
+                '1234.56',
+                1,
+                { value: '$1,234.56', caret: 1, model: 1234.56 },
+            ],
+            [negative, '-1234.56', 1, { value: '-$1,234.56', caret: 1, model: -1234.56 }],
+        ];
+        for (const [config, written, caret, expected] of cases) {
+            expect(await press(config, { written }, caret, caret, '{Delete}')).toEqual(expected);
+        }
+    });
+
+    it('Delete in front of the digits of a hiddenInput mask deletes the digit, there is no suffix', async () => {
+        const hidden = { mask: '000-000', suffix: ' kg', hiddenInput: true, showMaskTyped: true };
+        expect(await press(hidden, { typed: '1234' }, 4, 4, '{Delete}')).toEqual({
+            value: '123-___',
+            caret: 3,
+            model: '123',
+        });
+    });
+
+    it('a number mask with a suffix keeps its own Delete handling', async () => {
+        const money = { mask: 'separator.2', prefix: '$', suffix: ' USD', showMaskTyped: true };
+        expect(await press(money, { written: '1234.56' }, 12, 12, '{Delete}')).toEqual({
+            value: '$1,234.56_._ USD',
+            caret: 9,
+            model: 1234.56,
+        });
+    });
+
     it('Delete at the end of the digits is prevented and leaves the suffix and the caret alone', async () => {
         for (const config of [suffixed, plainSuffixed]) {
             for (const initial of [{ typed: '123' }, { written: '123' }]) {

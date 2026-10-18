@@ -1389,29 +1389,43 @@ export class NgxMaskDirective
                         }
                     }
                 }
-                // The clamp below pulls a caret inside the prefix up to its end, so remember
-                // the one sitting exactly in front of the first digit: Delete may act there.
+                const { prefix, suffix, maskExpression, specialCharacters } = this._maskService;
+                // Number masks keep their own caret handling around a prefix or suffix.
+                const numberMask =
+                    maskExpression.startsWith(MaskExpression.SEPARATOR) ||
+                    maskExpression.startsWith(MaskExpression.PERCENT);
+                // The clamp below pulls a caret inside the prefix up to its end, so remember the
+                // one sitting exactly in front of the first digit: Delete may act there. Only for
+                // a mask that starts with a digit slot after a prefix of two or more characters:
+                // a caret at 1 is the first-character case of onInput, which shifts it by the
+                // prefix length and so lands the edit one slot off.
                 const deleteAtFirstSlot =
                     e.key === MaskExpression.DELETE &&
                     el.selectionStart === el.selectionEnd &&
-                    el.selectionStart === this._maskService.prefix.length;
+                    el.selectionStart === prefix.length &&
+                    prefix.length > 1 &&
+                    el.value.startsWith(prefix) &&
+                    !numberMask &&
+                    !specialCharacters.includes(maskExpression.charAt(0));
                 this.checkSelectionOnDeletion(el);
                 if (
-                    this._maskService.prefix.length &&
+                    prefix.length &&
                     !deleteAtFirstSlot &&
-                    (el.selectionStart as number) <= this._maskService.prefix.length &&
-                    (el.selectionEnd as number) <= this._maskService.prefix.length
+                    (el.selectionStart as number) <= prefix.length &&
+                    (el.selectionEnd as number) <= prefix.length
                 ) {
                     e.preventDefault();
                 }
                 // Nothing editable follows the caret at the end of the digits, and the clamp
                 // above put it right in front of the suffix: Delete would eat its first char.
-                const suffixLength = this._maskService.suffix.length;
+                // Skipped when the display carries no suffix (hiddenInput) and for number masks.
                 if (
                     e.key === MaskExpression.DELETE &&
-                    suffixLength &&
+                    suffix &&
+                    !numberMask &&
+                    this._inputValue().endsWith(suffix) &&
                     el.selectionStart === el.selectionEnd &&
-                    (el.selectionStart as number) >= this._inputValue().length - suffixLength
+                    (el.selectionStart as number) >= this._inputValue().length - suffix.length
                 ) {
                     e.preventDefault();
                 }

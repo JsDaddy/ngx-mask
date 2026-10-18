@@ -280,4 +280,16 @@ describe('Directive: Mask (Delete in front of the first digit)', () => {
         const snap = await harness.edit({ start: 3, end: 3, key: 'Delete' });
         expect(snap).toEqual({ value: '+7 _23-456', caret: 4, model: '23456', prevented: false });
     });
+
+    it('should emit nothing for a Delete that changes nothing in front of a leading separator', async () => {
+        const harness = await setUp(true);
+        harness.component.mask.set('(000) 000 00 00');
+        await harness.settle();
+        await harness.write('1234567890');
+        let emitted = 0;
+        harness.component.form.valueChanges.subscribe(() => emitted++);
+        const snap = await harness.edit({ start: 3, end: 3, key: 'Delete' });
+        expect(snap.prevented).toBe(true);
+        expect(emitted).toBe(0);
+    });
 });

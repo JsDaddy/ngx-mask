@@ -982,12 +982,14 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
             },
             {
-                name: 'Delete in front of the suffix still lets the next key land',
+                // the prevented Delete leaves the caret in front of the suffix: Backspace removes
+                // the last digit, which a caret pushed into the suffix would not
+                name: 'Delete in front of the suffix keeps the caret there for the next key',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 3, end: 3, key: 'Delete' },
-                then: '4',
-                expected: { value: '123 kg', caret: 3, model: '123' },
+                then: '\b',
+                expected: { value: '12_ kg', caret: 2, model: '12' },
             },
             {
                 name: 'Backspace over only the suffix',
