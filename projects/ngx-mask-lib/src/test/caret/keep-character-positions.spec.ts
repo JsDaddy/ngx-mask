@@ -143,7 +143,11 @@ describe('resolveKeepCharacterPositions', () => {
 
     describe('restoring the display from before the edit', () => {
         it('keeps the display when a single symbol is rejected', () => {
-            expect(resolve(input({ elValue: '1a2-34', position: 2, before: '12-34' }))).toEqual({
+            expect(
+                resolve(
+                    input({ elValue: '1a2-34', position: 2, before: '12-34', actualValue: '12-34' })
+                )
+            ).toEqual({
                 actualValue: '12-34',
                 position: 1,
                 handled: true,
@@ -151,7 +155,11 @@ describe('resolveKeepCharacterPositions', () => {
         });
 
         it('keeps the display when every slot is consumed', () => {
-            expect(resolve(input({ elValue: '12-345', position: 6, before: '12-34' }))).toEqual({
+            expect(
+                resolve(
+                    input({ elValue: '12-345', position: 6, before: '12-34', actualValue: '12-34' })
+                )
+            ).toEqual({
                 actualValue: '12-34',
                 position: 5,
                 handled: true,
@@ -160,7 +168,15 @@ describe('resolveKeepCharacterPositions', () => {
 
         it('keeps the display when a symbol is typed inside the prefix', () => {
             expect(
-                resolve(input({ elValue: '5+1__', position: 1, prefix: '+1', before: '+1__' }))
+                resolve(
+                    input({
+                        elValue: '5+1__',
+                        position: 1,
+                        prefix: '+1',
+                        before: '+1__',
+                        actualValue: '+1__',
+                    })
+                )
             ).toEqual({ actualValue: '+1__', position: 0, handled: true });
         });
 
@@ -173,14 +189,26 @@ describe('resolveKeepCharacterPositions', () => {
                         selStart: 0,
                         selEnd: 2,
                         before: '12-34',
+                        actualValue: '12-34',
                     })
                 )
             ).toEqual({ actualValue: '12-34', position: 0, handled: true });
         });
 
+        it('leaves an empty field to regular masking', () => {
+            // the display before the key is a bare skeleton: nothing of it is worth restoring
+            expect(
+                resolve(input({ elValue: '__-__5', position: 6, before: '__-__', actualValue: '' }))
+            ).toEqual({ actualValue: null, position: 5, handled: true });
+        });
+
         it('falls back when the display from before is not the one the edit started from', () => {
             // wrong length: the element was re-rendered between the keydown and the edit
-            expect(resolve(input({ elValue: '1a2-34', position: 2, before: '1234' }))).toEqual({
+            expect(
+                resolve(
+                    input({ elValue: '1a2-34', position: 2, before: '1234', actualValue: '1234' })
+                )
+            ).toEqual({
                 actualValue: null,
                 position: 1,
                 handled: true,
@@ -193,6 +221,7 @@ describe('resolveKeepCharacterPositions', () => {
                         selStart: 0,
                         selEnd: 2,
                         before: '1234',
+                        actualValue: '1234',
                     })
                 )
             ).toEqual({ actualValue: '__-34', position: 0, handled: true });
@@ -205,6 +234,7 @@ describe('resolveKeepCharacterPositions', () => {
                         selStart: 1,
                         selEnd: 3,
                         before: '99-34',
+                        actualValue: '99-34',
                     })
                 )
             ).toEqual({ actualValue: '1_-34', position: 1, handled: true });
@@ -220,6 +250,7 @@ describe('resolveKeepCharacterPositions', () => {
                         selStart: 1,
                         selEnd: 5,
                         before: '+7 12-34',
+                        actualValue: '+7 12-34',
                     })
                 )
             ).toEqual({ actualValue: '+7 12-34', position: 3, handled: true });

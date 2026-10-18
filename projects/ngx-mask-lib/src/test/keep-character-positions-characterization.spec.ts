@@ -25,6 +25,8 @@ type Case = {
     initial: string;
     /** Keys typed one by one into the field after `initial`, as a user would. */
     typed?: string;
+    /** The caret stays where focusing the field left it (the end) instead of the first slot. */
+    caretAtEnd?: boolean;
     /** An earlier edit applied after `initial` / `typed`, to set up gaps. */
     first?: EditAction;
     action: EditAction;
@@ -36,7 +38,8 @@ async function run(
     initial: string,
     action: EditAction,
     typed?: string,
-    first?: EditAction
+    first?: EditAction,
+    caretAtEnd?: boolean
 ): Promise<EditSnapshot> {
     const harness = createHarness();
     for (const [key, value] of Object.entries(config)) {
@@ -49,9 +52,11 @@ async function run(
     await harness.settle();
     await harness.write(initial);
     if (typed) {
-        // A click on an empty masked field puts the caret in front of the first slot.
-        const slot = (config.prefix ?? '').length;
-        harness.el.setSelectionRange(slot, slot);
+        if (!caretAtEnd) {
+            // A click on an empty masked field puts the caret in front of the first slot.
+            const slot = (config.prefix ?? '').length;
+            harness.el.setSelectionRange(slot, slot);
+        }
         await harness.type(typed);
     }
     if (first) {
@@ -63,7 +68,7 @@ async function run(
 function check(cases: Case[]): void {
     for (const c of cases) {
         it(c.name, async () => {
-            const snap = await run(c.config, c.initial, c.action, c.typed, c.first);
+            const snap = await run(c.config, c.initial, c.action, c.typed, c.first, c.caretAtEnd);
             expect(snap).toEqual({ prevented: false, ...c.expected });
         });
     }
@@ -984,6 +989,45 @@ describe('keepCharacterPositions characterization', () => {
                 initial: '123',
                 action: { start: 1, end: 3, key: '9' },
                 expected: { value: '$9_3 USD', caret: 2, model: '93' },
+            },
+        ]);
+    });
+
+    describe('typing into an empty field with the caret at the end (showMaskTyped)', () => {
+        check([
+            {
+                name: 'the first digit lands in the first slot of the phone skeleton',
+                config: phone,
+                initial: '',
+                caretAtEnd: true,
+                action: { start: 14, end: 14, key: '9' },
+                expected: { value: '(9__) ___-____', caret: 2, model: '9' },
+            },
+            {
+                name: 'the second digit follows the first one',
+                config: phone,
+                initial: '',
+                caretAtEnd: true,
+                typed: '9',
+                action: { start: 2, end: 2, key: '8' },
+                expected: { value: '(98_) ___-____', caret: 3, model: '98' },
+            },
+            {
+                name: 'the first digit lands in the first slot after the prefix',
+                config: withPrefix,
+                initial: '',
+                caretAtEnd: true,
+                action: { start: 10, end: 10, key: '9' },
+                expected: { value: '+7 9__-___', caret: 4, model: '9' },
+            },
+            {
+                name: 'the second digit follows the first one after the prefix',
+                config: withPrefix,
+                initial: '',
+                caretAtEnd: true,
+                typed: '9',
+                action: { start: 4, end: 4, key: '8' },
+                expected: { value: '+7 98_-___', caret: 5, model: '98' },
             },
         ]);
     });

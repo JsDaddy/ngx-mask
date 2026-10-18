@@ -53,6 +53,17 @@ async function press(
     return { value: el.value, caret: el.selectionStart, model: m.component.form.value };
 }
 
+/** Focuses the empty control without a click, as `el.focus()` leaves the caret, and presses `keys`. */
+async function pressOnFocus(config: Record<string, unknown>, keys: string): Promise<Outcome> {
+    const m = await mount(MaskHarnessComponent, config);
+    await m.settle();
+    const el = m.get('#masked');
+    el.focus();
+    await userEvent.keyboard(keys);
+    await m.settle();
+    return { value: el.value, caret: el.selectionStart, model: m.component.form.value };
+}
+
 describe('keepCharacterPositions oddities in a real browser', () => {
     it('Delete at the very end changes nothing: the browser fires no input event', async () => {
         expect(await press(phone, { written: '0123456789' }, 14, 14, '{Delete}')).toEqual({
@@ -178,6 +189,30 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             value: '1_3',
             caret: 3,
             model: '13',
+        });
+    });
+
+    it('typing into the focused empty phone skeleton fills the first slots', async () => {
+        expect(await pressOnFocus(phone, '98')).toEqual({
+            value: '(98_) ___-____',
+            caret: 3,
+            model: '98',
+        });
+    });
+
+    it('typing after the End key on the empty phone skeleton fills the first slots', async () => {
+        expect(await pressOnFocus(phone, '{End}98')).toEqual({
+            value: '(98_) ___-____',
+            caret: 3,
+            model: '98',
+        });
+    });
+
+    it('typing into the focused empty skeleton fills the first slots after the prefix', async () => {
+        expect(await pressOnFocus(prefixed, '98')).toEqual({
+            value: '+7 98_-___',
+            caret: 5,
+            model: '98',
         });
     });
 });

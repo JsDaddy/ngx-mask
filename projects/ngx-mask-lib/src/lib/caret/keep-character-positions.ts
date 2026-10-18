@@ -80,8 +80,10 @@ export function resolveKeepCharacterPositions(
     const selStart = selStartAbs - prefixLength;
     const selEnd = selEndAbs - prefixLength;
     // The display before the edit, when the element still holds the part before the selection
-    // and has the length it had before the edit; null when `before` cannot be trusted.
+    // and has the length it had before the edit; null when `before` cannot be trusted, or when
+    // the field is still empty (its display is a bare skeleton that regular masking fills).
     const restoreBefore = (preEditLength: number): string | null =>
+        svc.actualValue &&
         edit.before.length === preEditLength &&
         edit.before.startsWith(elValue.slice(0, selStartAbs))
             ? edit.before
