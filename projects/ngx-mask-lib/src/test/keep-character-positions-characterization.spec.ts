@@ -25,6 +25,8 @@ type Case = {
     initial: string;
     /** Keys typed one by one into the field after `initial`, as a user would. */
     typed?: string;
+    /** An earlier edit applied after `initial` / `typed`, to set up gaps. */
+    first?: EditAction;
     action: EditAction;
     expected: Omit<EditSnapshot, 'prevented'> & { prevented?: boolean };
 };
@@ -33,7 +35,8 @@ async function run(
     config: Config,
     initial: string,
     action: EditAction,
-    typed?: string
+    typed?: string,
+    first?: EditAction
 ): Promise<EditSnapshot> {
     const harness = createHarness();
     for (const [key, value] of Object.entries(config)) {
@@ -51,13 +54,16 @@ async function run(
         harness.el.setSelectionRange(slot, slot);
         await harness.type(typed);
     }
+    if (first) {
+        await harness.edit(first);
+    }
     return harness.edit(action);
 }
 
 function check(cases: Case[]): void {
     for (const c of cases) {
         it(c.name, async () => {
-            const snap = await run(c.config, c.initial, c.action, c.typed);
+            const snap = await run(c.config, c.initial, c.action, c.typed, c.first);
             expect(snap).toEqual({ prevented: false, ...c.expected });
         });
     }
@@ -354,12 +360,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '(9__) ___-____', caret: 2, model: '9' },
             },
             {
-                // current behaviour: a rejected key still destroys the selected characters
-                name: 'a rejected letter leaves the selection blanked and the caret at its start',
+                name: 'a rejected letter keeps the display and puts the caret at the selection start',
                 config: phone,
                 initial: '0123456789',
                 action: { start: 1, end: 3, key: 'a' },
-                expected: { value: '(__2) 345-6789', caret: 1, model: '23456789' },
+                expected: { value: '(012) 345-6789', caret: 1, model: '0123456789' },
             },
             {
                 name: 'the replaced selection ends at the value end',
@@ -424,12 +429,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: 'ABC-723', caret: 5, model: 'ABC723' },
             },
             {
-                // current behaviour: a rejected key still destroys the selected characters
-                name: 'a letter replacing a digit selection is rejected and the selection blanked',
+                name: 'a letter replacing a digit selection is rejected and the display kept',
                 config: letters,
                 initial: 'ABC123',
                 action: { start: 4, end: 6, key: 'x' },
-                expected: { value: 'ABC-__3', caret: 4, model: 'ABC3' },
+                expected: { value: 'ABC-123', caret: 4, model: 'ABC123' },
             },
             {
                 // current behaviour: a rejected key still destroys the selected characters
@@ -510,12 +514,34 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '___-456', caret: 0, model: '456' },
             },
             {
-                // current behaviour: a partial selection leaves placeholders while a whole-value selection clears the field
-                name: 'selection delete up to the end blanks the selection to placeholders',
+                // the trailing placeholders and separators are dropped, nothing follows them
+                name: 'selection delete up to the end drops the trailing placeholders',
                 config: bare,
                 initial: '123456',
                 action: { start: 4, end: 7, key: 'Backspace' },
-                expected: { value: '123-___', caret: 3, model: '123' },
+                expected: { value: '123', caret: 3, model: '123' },
+            },
+            {
+                name: 'selection delete up to the end keeps the gaps of earlier edits',
+                config: bare,
+                initial: '123456',
+                first: { start: 2, end: 2, key: 'Backspace' },
+                action: { start: 3, end: 7, key: 'Backspace' },
+                expected: { value: '1_3', caret: 3, model: '13' },
+            },
+            {
+                name: 'selection delete up to the end trims the trailing separator and placeholders',
+                config: bare,
+                initial: '123456',
+                action: { start: 2, end: 7, key: 'Backspace' },
+                expected: { value: '12', caret: 2, model: '12' },
+            },
+            {
+                name: 'selection delete up to the end after the prefix trims down to the prefix text',
+                config: { ...bare, prefix: '+7 ' },
+                initial: '123456',
+                action: { start: 6, end: 10, key: 'Backspace' },
+                expected: { value: '+7 123', caret: 6, model: '123' },
             },
             {
                 name: 'replacing the whole value goes through regular masking',
@@ -679,29 +705,25 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '+7 9__-456', caret: 4, model: '9456' },
             },
             {
-                // current behaviour: a selection starting inside the multi-character prefix eats
-                // the prefix text; the clamp of the mask offset at 0 decides where the digit lands
-                name: 'a digit replacing a selection that starts inside the prefix',
+                name: 'a digit replacing a selection that starts inside the prefix keeps the prefix',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 1, end: 5, key: '9' },
-                expected: { value: '+__9-456', caret: 4, model: '9456' },
+                expected: { value: '+7 9_3-456', caret: 4, model: '93456' },
             },
             {
-                // current behaviour: the prefix character leaks into the model
                 name: 'a digit replacing a selection that spans the end of the prefix',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 2, end: 4, key: '9' },
-                expected: { value: '+7_93-456', caret: 4, model: '793456' },
+                expected: { value: '+7 923-456', caret: 4, model: '923456' },
             },
             {
-                // current behaviour: a rejected key still destroys the selected characters
-                name: 'a rejected letter over a selection that starts inside the prefix',
+                name: 'a rejected letter over a selection that starts inside the prefix keeps the display',
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 1, end: 5, key: 'a' },
-                expected: { value: '+__3-456', caret: 1, model: '3456' },
+                expected: { value: '+7 123-456', caret: 3, model: '123456' },
             },
             {
                 name: 'Backspace over a selection that starts inside the prefix keeps the prefix',
@@ -816,12 +838,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '19_ kg', caret: 2, model: '19' },
             },
             {
-                // current behaviour: after a programmatic write the rejected edit loses the suffix text
-                name: 'typing when every slot is consumed drops the suffix from the display',
+                name: 'typing when every slot is consumed keeps the suffix after a programmatic write',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 3, end: 3, key: '9' },
-                expected: { value: '123', caret: 3, model: '123' },
+                expected: { value: '123 kg', caret: 3, model: '123' },
             },
             {
                 name: 'typing when every slot is consumed keeps the suffix when the user typed the value',
@@ -839,12 +860,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '9_3 kg', caret: 1, model: '93' },
             },
             {
-                // current behaviour: after a programmatic write the rejected edit loses the suffix text
-                name: 'a rejected letter drops the suffix from the display',
+                name: 'a rejected letter keeps the suffix after a programmatic write',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 1, end: 1, key: 'a' },
-                expected: { value: '123', caret: 1, model: '123' },
+                expected: { value: '123 kg', caret: 1, model: '123' },
             },
             {
                 name: 'a rejected letter keeps the suffix when the user typed the value',
@@ -855,21 +875,32 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '123 kg', caret: 1, model: '123' },
             },
             {
-                // current behaviour: the typed digit leaves the suffix text: the display loses its
-                // leading space and the model picks up a suffix character
-                name: 'a digit replacing a selection that reaches into the suffix',
+                name: 'a digit replacing a selection that reaches into the suffix keeps the suffix',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 1, end: 5, key: '9' },
-                expected: { value: '1__g', caret: 1, model: '1g' },
+                expected: { value: '19_ kg', caret: 2, model: '19' },
             },
             {
-                // current behaviour: the typed digit swallows the whole suffix
-                name: 'a digit replacing a selection that ends on the last suffix character',
+                name: 'a digit replacing a selection that ends on the last suffix character keeps the suffix',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 2, end: 6, key: '9' },
-                expected: { value: '12_', caret: 2, model: '12' },
+                expected: { value: '129 kg', caret: 3, model: '129' },
+            },
+            {
+                name: 'a digit replacing only the suffix is rejected and the display kept',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 3, end: 6, key: '9' },
+                expected: { value: '123 kg', caret: 3, model: '123' },
+            },
+            {
+                name: 'a rejected letter over a selection that reaches into the suffix keeps the display',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 1, end: 5, key: 'a' },
+                expected: { value: '123 kg', caret: 1, model: '123' },
             },
         ]);
     });
@@ -912,12 +943,11 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '$193 USD', caret: 3, model: '193' },
             },
             {
-                // current behaviour: after a programmatic write the rejected edit loses the suffix text
-                name: 'typing before the prefix drops the suffix from the display',
+                name: 'typing before the prefix keeps the suffix after a programmatic write',
                 config: withBoth,
                 initial: '123',
                 action: { start: 0, end: 0, key: '9' },
-                expected: { value: '$123', caret: 1, model: '123' },
+                expected: { value: '$123 USD', caret: 1, model: '123' },
             },
             {
                 name: 'typing before the prefix keeps the suffix when the user typed the value',
@@ -928,12 +958,13 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '$123 USD', caret: 1, model: '123' },
             },
             {
-                // current behaviour: a selection starting on the prefix is blanked into the prefix
-                name: 'a digit replacing a selection that starts on the prefix',
+                // current behaviour: the prefix is kept, but the caret shift for a first character
+                // reads the digit after the typed one, so `3` fills the slot instead of `9`
+                name: 'a digit replacing a selection that starts on the prefix keeps the prefix',
                 config: withBoth,
                 initial: '123',
                 action: { start: 0, end: 3, key: '9' },
-                expected: { value: '_33 USD', caret: 2, model: '33' },
+                expected: { value: '$3_3 USD', caret: 2, model: '33' },
             },
             {
                 name: 'selection replaced by a digit',

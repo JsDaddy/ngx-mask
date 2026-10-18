@@ -28,6 +28,8 @@ export type KeepCharacterPositionsEdit = {
     position: number;
     /** The key code of the edit. */
     code: string;
+    /** The display value before the edit. */
+    before: string;
 };
 
 export type KeepCharacterPositionsResult = {
@@ -77,6 +79,13 @@ export function resolveKeepCharacterPositions(
     const selEndAbs = Number(selEndRaw);
     const selStart = selStartAbs - prefixLength;
     const selEnd = selEndAbs - prefixLength;
+    // The display before the edit, when the element still holds the part before the selection
+    // and has the length it had before the edit; null when `before` cannot be trusted.
+    const restoreBefore = (preEditLength: number): string | null =>
+        edit.before.length === preEditLength &&
+        edit.before.startsWith(elValue.slice(0, selStartAbs))
+            ? edit.before
+            : null;
 
     const backspaceOrDelete =
         edit.code === MaskExpression.BACKSPACE || edit.code === MaskExpression.DELETE;
@@ -105,6 +114,19 @@ export function resolveKeepCharacterPositions(
                     selEnd + prefixLength,
                     maskSkeleton.length + prefixLength
                 )}${suffix}`;
+            }
+            if (!showMaskTyped && actualValue !== null && selEndAbs >= preEditLength) {
+                // The selection reached the end: nothing follows its placeholders and separators,
+                // drop them (leading and middle gaps stay).
+                let end = actualValue.length;
+                while (
+                    end > prefixLength &&
+                    (actualValue.charAt(end - 1) === placeHolderCharacter ||
+                        specialCharacters.includes(actualValue.charAt(end - 1)))
+                ) {
+                    end--;
+                }
+                actualValue = actualValue.slice(0, end);
             }
         } else if (
             !specialCharacters.includes(
@@ -143,10 +165,14 @@ export function resolveKeepCharacterPositions(
                 specialCharacters,
                 Math.max(selStart, 0)
             );
-            const blanked = `${elValue.slice(0, selStartAbs)}${maskSkeleton.slice(
-                Math.max(selStart, 0),
-                selEnd
-            )}${elValue.slice(selStartAbs + 1)}`;
+            // A selection that reaches into the prefix or the suffix took part of them out of the
+            // element: restore those from the service instead of reading the damaged fragments.
+            const head = selStartAbs < prefixLength ? prefix : elValue.slice(0, selStartAbs);
+            const tail =
+                selEndAbs > maskSkeleton.length + prefixLength
+                    ? suffix
+                    : elValue.slice(selStartAbs + 1);
+            const blanked = `${head}${maskSkeleton.slice(Math.max(selStart, 0), selEnd)}${tail}`;
             const targetAbs = maskIdx + prefixLength;
             if (
                 targetAbs < blanked.length - suffix.length &&
@@ -158,8 +184,9 @@ export function resolveKeepCharacterPositions(
                 actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
                 position = targetAbs + 1;
             } else {
-                actualValue = blanked;
-                position = selStartAbs;
+                // Rejected symbol: keep the display from before the key, else the blanked one.
+                actualValue = restoreBefore(preEditLength) ?? blanked;
+                position = Math.max(selStartAbs, prefixLength);
             }
         }
     } else {
@@ -170,6 +197,7 @@ export function resolveKeepCharacterPositions(
         const oldDisplayNoSuffix = suffix ? oldDisplay.split(suffix).join('') : oldDisplay;
         if (position - 1 - prefixLength < 0) {
             // Typed inside the prefix: reject the symbol.
+            actualValue = restoreBefore(elValue.length - 1);
             position = position - 1;
         } else {
             const maskIdx = nextFillableIndex(
@@ -186,6 +214,7 @@ export function resolveKeepCharacterPositions(
                     handled = false;
                 } else {
                     // All slots of the rendered mask are already consumed.
+                    actualValue = restoreBefore(elValue.length - 1);
                     position = position - 1;
                 }
             } else if (
@@ -198,6 +227,7 @@ export function resolveKeepCharacterPositions(
                 position = targetAbs + 1;
             } else {
                 // Rejected symbol: keep the current display.
+                actualValue = restoreBefore(elValue.length - 1);
                 position = position - 1;
             }
         }

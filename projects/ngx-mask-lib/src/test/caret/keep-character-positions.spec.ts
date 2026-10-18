@@ -18,6 +18,7 @@ function input(overrides: Case): Required<Case> {
         elValue: '',
         position: 0,
         code: 'Digit5',
+        before: '',
         prefix: '',
         suffix: '',
         showMaskTyped: true,
@@ -34,8 +35,8 @@ function input(overrides: Case): Required<Case> {
 }
 
 function resolve(c: Required<Case>): KeepCharacterPositionsResult {
-    const { elValue, position, code, ...state } = c;
-    return resolveKeepCharacterPositions(state, { elValue, position, code });
+    const { elValue, position, code, before, ...state } = c;
+    return resolveKeepCharacterPositions(state, { elValue, position, code, before });
 }
 
 describe('resolveKeepCharacterPositions', () => {
@@ -138,5 +139,189 @@ describe('resolveKeepCharacterPositions', () => {
         expect(
             resolve(input({ elValue: '12-3', position: 4, showMaskTyped: false, maskIsShown: '' }))
         ).toEqual({ actualValue: null, position: 4, handled: false });
+    });
+
+    describe('restoring the display from before the edit', () => {
+        it('keeps the display when a single symbol is rejected', () => {
+            expect(resolve(input({ elValue: '1a2-34', position: 2, before: '12-34' }))).toEqual({
+                actualValue: '12-34',
+                position: 1,
+                handled: true,
+            });
+        });
+
+        it('keeps the display when every slot is consumed', () => {
+            expect(resolve(input({ elValue: '12-345', position: 6, before: '12-34' }))).toEqual({
+                actualValue: '12-34',
+                position: 5,
+                handled: true,
+            });
+        });
+
+        it('keeps the display when a symbol is typed inside the prefix', () => {
+            expect(
+                resolve(input({ elValue: '5+1__', position: 1, prefix: '+1', before: '+1__' }))
+            ).toEqual({ actualValue: '+1__', position: 0, handled: true });
+        });
+
+        it('keeps the display when a symbol replacing a selection is rejected', () => {
+            expect(
+                resolve(
+                    input({
+                        elValue: 'a-34',
+                        position: 1,
+                        selStart: 0,
+                        selEnd: 2,
+                        before: '12-34',
+                    })
+                )
+            ).toEqual({ actualValue: '12-34', position: 0, handled: true });
+        });
+
+        it('falls back when the display from before is not the one the edit started from', () => {
+            // wrong length: the element was re-rendered between the keydown and the edit
+            expect(resolve(input({ elValue: '1a2-34', position: 2, before: '1234' }))).toEqual({
+                actualValue: null,
+                position: 1,
+                handled: true,
+            });
+            expect(
+                resolve(
+                    input({
+                        elValue: 'a-34',
+                        position: 1,
+                        selStart: 0,
+                        selEnd: 2,
+                        before: '1234',
+                    })
+                )
+            ).toEqual({ actualValue: '__-34', position: 0, handled: true });
+            // wrong head: the text in front of the selection differs
+            expect(
+                resolve(
+                    input({
+                        elValue: '1a34',
+                        position: 2,
+                        selStart: 1,
+                        selEnd: 3,
+                        before: '99-34',
+                    })
+                )
+            ).toEqual({ actualValue: '1_-34', position: 1, handled: true });
+        });
+
+        it('does not move the caret in front of the prefix', () => {
+            expect(
+                resolve(
+                    input({
+                        elValue: '+a-34',
+                        position: 2,
+                        prefix: '+7 ',
+                        selStart: 1,
+                        selEnd: 5,
+                        before: '+7 12-34',
+                    })
+                )
+            ).toEqual({ actualValue: '+7 12-34', position: 3, handled: true });
+        });
+    });
+
+    describe('selections that reach into the prefix or the suffix', () => {
+        it('keeps the prefix when the selection starts inside it', () => {
+            expect(
+                resolve(
+                    input({
+                        elValue: '+9-34',
+                        position: 2,
+                        prefix: '+7 ',
+                        selStart: 1,
+                        selEnd: 5,
+                        before: '+7 12-34',
+                    })
+                )
+            ).toEqual({ actualValue: '+7 9_-34', position: 4, handled: true });
+        });
+
+        it('keeps the suffix when the selection reaches into it', () => {
+            expect(
+                resolve(
+                    input({
+                        elValue: '19g',
+                        position: 2,
+                        suffix: ' kg',
+                        maskExpression: '000',
+                        maskIsShown: '___',
+                        specialCharacters: [],
+                        selStart: 1,
+                        selEnd: 5,
+                        before: '123 kg',
+                    })
+                )
+            ).toEqual({ actualValue: '19_ kg', position: 2, handled: true });
+        });
+    });
+
+    describe('deleting a selection that reaches the end without showMaskTyped', () => {
+        const bare = {
+            showMaskTyped: false,
+            maskExpression: '000-000',
+            maskIsShown: '',
+            specialCharacters: ['-'],
+            code: MaskExpression.BACKSPACE,
+        };
+
+        it('drops the trailing placeholders and separators', () => {
+            expect(
+                resolve(input({ ...bare, elValue: '123-', position: 4, selStart: 4, selEnd: 7 }))
+            ).toEqual({ actualValue: '123', position: 4, handled: true });
+        });
+
+        it('keeps the gaps in front of the last digit', () => {
+            expect(
+                resolve(
+                    input({
+                        ...bare,
+                        elValue: '1_3-',
+                        position: 4,
+                        selStart: 4,
+                        selEnd: 7,
+                        actualValue: '1_3-456',
+                    })
+                )
+            ).toEqual({ actualValue: '1_3', position: 4, handled: true });
+        });
+
+        it('never trims into the prefix', () => {
+            expect(
+                resolve(
+                    input({
+                        ...bare,
+                        specialCharacters: ['-', ' ', '+'],
+                        elValue: '+7 _',
+                        position: 4,
+                        prefix: '+7 ',
+                        selStart: 4,
+                        selEnd: 10,
+                        actualValue: '+7 _23-456',
+                    })
+                )
+            ).toEqual({ actualValue: '+7 ', position: 4, handled: true });
+        });
+
+        it('keeps the placeholders with showMaskTyped', () => {
+            expect(
+                resolve(
+                    input({
+                        ...bare,
+                        showMaskTyped: true,
+                        maskIsShown: '___-___',
+                        elValue: '123-',
+                        position: 4,
+                        selStart: 4,
+                        selEnd: 7,
+                    })
+                )
+            ).toEqual({ actualValue: '123-___', position: 4, handled: true });
+        });
     });
 });

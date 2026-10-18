@@ -27,6 +27,8 @@ type Config = Partial<{
 type Row = {
     /** Value written through the form control before anything else. */
     initial?: string;
+    /** Where the caret sits before `keys` are typed; a click on an empty field puts it at 0. */
+    caret?: number;
     /** Characters typed key by key at the caret; \b is Backspace. */
     keys?: string;
     /** Value pasted into the input. */
@@ -54,6 +56,9 @@ async function run(config: Config, row: Row): Promise<EditSnapshot> {
         await harness.settle();
     }
     if (typeof row.keys === 'string') {
+        if (typeof row.caret === 'number') {
+            harness.el.setSelectionRange(row.caret, row.caret);
+        }
         await harness.type(row.keys);
     }
     return row.edit ? harness.edit(row.edit) : harness.snapshot();
@@ -1393,7 +1398,11 @@ describe('date overflow characterization', () => {
                     paste: '00062020',
                     expected: { value: '00/06/2020', caret: 10, model: '00062020' },
                 },
-                { keys: '00', expected: { value: '00/__/____', caret: 2, model: '00' } },
+                {
+                    caret: 0,
+                    keys: '00',
+                    expected: { value: '00/__/____', caret: 2, model: '00' },
+                },
             ]
         );
 
