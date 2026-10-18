@@ -958,13 +958,25 @@ describe('keepCharacterPositions characterization', () => {
                 expected: { value: '$123 USD', caret: 1, model: '123' },
             },
             {
-                // current behaviour: the prefix is kept, but the caret shift for a first character
-                // reads the digit after the typed one, so `3` fills the slot instead of `9`
                 name: 'a digit replacing a selection that starts on the prefix keeps the prefix',
                 config: withBoth,
                 initial: '123',
                 action: { start: 0, end: 3, key: '9' },
-                expected: { value: '$3_3 USD', caret: 2, model: '33' },
+                expected: { value: '$9_3 USD', caret: 2, model: '93' },
+            },
+            {
+                name: 'a digit replacing only the prefix lands in the first slot',
+                config: withBoth,
+                initial: '123',
+                action: { start: 0, end: 1, key: '9' },
+                expected: { value: '$923 USD', caret: 2, model: '923' },
+            },
+            {
+                name: 'a digit replacing a selection that starts after the prefix',
+                config: withBoth,
+                initial: '123',
+                action: { start: 1, end: 3, key: '9' },
+                expected: { value: '$9_3 USD', caret: 2, model: '93' },
             },
             {
                 name: 'selection replaced by a digit',

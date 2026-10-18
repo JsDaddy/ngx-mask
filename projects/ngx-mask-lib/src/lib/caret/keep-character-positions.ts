@@ -156,6 +156,9 @@ export function resolveKeepCharacterPositions(
         // blank the selection to the mask skeleton and put the typed symbol
         // into the first fillable slot of the selection (#1527, #1489).
         const preEditLength = elValue.length - 1 + (selEndAbs - selStartAbs);
+        // The symbol replaced the selection, so it sits at the selection start; `position` is
+        // shifted by the prefix for a first character and would point at the next one.
+        const typedSymbol = elValue.charAt(selStartAbs);
         if (!showMaskTyped && selStartAbs <= prefixLength && selEndAbs >= preEditLength) {
             // The whole value was replaced: mask it through the regular path.
             handled = false;
@@ -177,11 +180,11 @@ export function resolveKeepCharacterPositions(
             if (
                 targetAbs < blanked.length - suffix.length &&
                 svc._checkSymbolMask(
-                    inputSymbol,
+                    typedSymbol,
                     maskExpression[maskIdx] ?? MaskExpression.EMPTY_STRING
                 )
             ) {
-                actualValue = `${blanked.slice(0, targetAbs)}${inputSymbol}${blanked.slice(targetAbs + 1)}`;
+                actualValue = `${blanked.slice(0, targetAbs)}${typedSymbol}${blanked.slice(targetAbs + 1)}`;
                 position = targetAbs + 1;
             } else {
                 // Rejected symbol: keep the display from before the key, else the blanked one.

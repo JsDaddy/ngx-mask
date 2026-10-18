@@ -242,6 +242,22 @@ describe('resolveKeepCharacterPositions', () => {
             ).toEqual({ actualValue: '+7 9_-34', position: 4, handled: true });
         });
 
+        it('types the pressed digit when the selection starts on a one-character prefix', () => {
+            // `position` is shifted by the prefix for a first character: it must not pick the next one
+            expect(
+                resolve(
+                    input({
+                        elValue: '9-34',
+                        position: 2,
+                        prefix: '$',
+                        selStart: 0,
+                        selEnd: 3,
+                        before: '$12-34',
+                    })
+                )
+            ).toEqual({ actualValue: '$9_-34', position: 2, handled: true });
+        });
+
         it('keeps the suffix when the selection reaches into it', () => {
             expect(
                 resolve(

@@ -19,6 +19,12 @@ const prefixed = {
     keepCharacterPositions: true,
     showMaskTyped: true,
 };
+const dollar = {
+    mask: '0000.00',
+    prefix: '$',
+    keepCharacterPositions: true,
+    showMaskTyped: true,
+};
 const bare = { mask: '000-000', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
 
@@ -117,6 +123,14 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             value: '+7 923-456',
             caret: 4,
             model: '923456',
+        });
+    });
+
+    it('the pressed digit is typed when a selection starts on a one-character prefix', async () => {
+        expect(await press(dollar, { written: '123456' }, 0, 3, '9')).toEqual({
+            value: '$9_34.56',
+            caret: 2,
+            model: '93456',
         });
     });
 
