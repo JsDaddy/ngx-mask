@@ -926,13 +926,36 @@ describe('keepCharacterPositions characterization', () => {
     describe('with a suffix (000 kg, showMaskTyped)', () => {
         check([
             {
-                // current behaviour: the suffix is treated as editable text; Delete eats its leading
-                // space, a placeholder lands in the suffix and the model picks up suffix characters
+                // nothing editable follows the end of the digits: Delete is prevented, so the
+                // suffix keeps its leading space and the model stays clean
                 name: 'Delete over only the suffix',
                 config: withSuffix,
                 initial: '123',
                 action: { start: 3, end: 6, key: 'Delete' },
-                expected: { value: '123_kg', caret: 4, model: '123kg' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                name: 'Delete at the end of the digits of a written value',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                name: 'Delete at the end of the digits of a typed value',
+                config: withSuffix,
+                initial: '',
+                typed: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                expected: { value: '123 kg', caret: 3, model: '123', prevented: true },
+            },
+            {
+                name: 'Delete in front of the suffix still lets the next key land',
+                config: withSuffix,
+                initial: '123',
+                action: { start: 3, end: 3, key: 'Delete' },
+                then: '4',
+                expected: { value: '123 kg', caret: 3, model: '123' },
             },
             {
                 name: 'Backspace over only the suffix',

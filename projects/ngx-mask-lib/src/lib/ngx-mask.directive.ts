@@ -1382,6 +1382,17 @@ export class NgxMaskDirective
                 ) {
                     e.preventDefault();
                 }
+                // Nothing editable follows the caret at the end of the digits, and the clamp
+                // above put it right in front of the suffix: Delete would eat its first char.
+                const suffixLength = this._maskService.suffix.length;
+                if (
+                    e.key === MaskExpression.DELETE &&
+                    suffixLength &&
+                    el.selectionStart === el.selectionEnd &&
+                    (el.selectionStart as number) >= this._inputValue().length - suffixLength
+                ) {
+                    e.preventDefault();
+                }
                 const cursorStart: number | null = el.selectionStart;
                 if (
                     e.key === MaskExpression.BACKSPACE &&

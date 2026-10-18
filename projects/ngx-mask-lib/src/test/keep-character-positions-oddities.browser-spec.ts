@@ -35,6 +35,7 @@ const bareSuffixed = {
 const phoneKg = { mask: '(000) 000-0000', suffix: ' kg', keepCharacterPositions: true };
 const bareKg = { mask: '000-000', suffix: ' kg', keepCharacterPositions: true };
 const suffixed = { mask: '000', suffix: ' kg', keepCharacterPositions: true, showMaskTyped: true };
+const plainSuffixed = { mask: '000', suffix: ' kg' };
 
 type Outcome = { value: string; caret: number | null; model: unknown };
 
@@ -135,6 +136,33 @@ describe('keepCharacterPositions oddities in a real browser', () => {
             caret: 4,
             model: '0123456789',
         });
+    });
+
+    it('Delete at the end of the digits is prevented and leaves the suffix and the caret alone', async () => {
+        for (const config of [suffixed, plainSuffixed]) {
+            for (const initial of [{ typed: '123' }, { written: '123' }]) {
+                expect(await press(config, initial, 3, 3, '{Delete}')).toEqual({
+                    value: '123 kg',
+                    caret: 3,
+                    model: '123',
+                });
+                // the caret really stayed in front of the suffix: Backspace removes the last digit
+                expect((await press(config, initial, 3, 3, '{Delete}{Backspace}')).caret).toBe(2);
+                expect((await press(config, initial, 3, 3, '{Delete}{Backspace}')).model).toBe(
+                    '12'
+                );
+            }
+        }
+    });
+
+    it('Delete over only the suffix is prevented too', async () => {
+        for (const initial of [{ typed: '123' }, { written: '123' }]) {
+            expect(await press(suffixed, initial, 3, 6, '{Delete}')).toEqual({
+                value: '123 kg',
+                caret: 3,
+                model: '123',
+            });
+        }
     });
 
     it('a rejected key keeps the suffix when the value was written programmatically', async () => {
