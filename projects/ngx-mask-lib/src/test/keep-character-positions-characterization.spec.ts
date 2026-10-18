@@ -268,7 +268,7 @@ describe('keepCharacterPositions characterization', () => {
                 config: phone,
                 initial: '0123456789',
                 action: { start: 3, end: 7, key: 'Delete' },
-                expected: { value: '(01_) _45-6789', caret: 4, model: '01456789' },
+                expected: { value: '(01_) _45-6789', caret: 3, model: '01456789' },
             },
             {
                 name: 'selection reaching the end of the value',
@@ -472,6 +472,47 @@ describe('keepCharacterPositions characterization', () => {
         ]);
     });
 
+    describe('Delete over a selection leaves the caret on its first blank', () => {
+        const configs: [string, Config][] = [
+            ['without showMaskTyped', bare],
+            ['with showMaskTyped', maskedBare],
+        ];
+        check(
+            configs.flatMap(([label, config]) => [
+                {
+                    name: `a written value ${label}`,
+                    config,
+                    initial: '123456',
+                    action: { start: 4, end: 5, key: 'Delete' },
+                    expected: { value: '123-_56', caret: 4, model: '12356' },
+                },
+                {
+                    name: `a typed value ${label}`,
+                    config,
+                    initial: '',
+                    typed: '123456',
+                    action: { start: 4, end: 5, key: 'Delete' },
+                    expected: { value: '123-_56', caret: 4, model: '12356' },
+                },
+                {
+                    name: `a digit typed after it fills the blank (${label})`,
+                    config,
+                    initial: '123456',
+                    action: { start: 4, end: 5, key: 'Delete' },
+                    then: '7',
+                    expected: { value: '123-756', caret: 5, model: '123756' },
+                },
+                {
+                    name: `a collapsed Delete still steps past the blank (${label})`,
+                    config,
+                    initial: '123456',
+                    action: { start: 4, end: 4, key: 'Delete' },
+                    expected: { value: '123-_56', caret: 5, model: '12356' },
+                },
+            ])
+        );
+    });
+
     describe('selection delete of a partial value with showMaskTyped (000-000)', () => {
         const typedAndWritten = (
             name: string,
@@ -501,7 +542,7 @@ describe('keepCharacterPositions characterization', () => {
             ...typedAndWritten(
                 'Delete over the last digit keeps the mask tail',
                 { start: 2, end: 3, key: 'Delete' },
-                { value: '12_-___', caret: 3, model: '12' }
+                { value: '12_-___', caret: 2, model: '12' }
             ),
             ...typedAndWritten(
                 'Backspace over the separator keeps the mask tail',
@@ -856,7 +897,7 @@ describe('keepCharacterPositions characterization', () => {
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 1, end: 5, key: 'Delete' },
-                expected: { value: '+7 __3-456', caret: 4, model: '3456' },
+                expected: { value: '+7 __3-456', caret: 3, model: '3456' },
             },
             {
                 name: 'Backspace over a selection that spans the end of the prefix',
@@ -870,7 +911,7 @@ describe('keepCharacterPositions characterization', () => {
                 config: withPrefix,
                 initial: '123456',
                 action: { start: 2, end: 4, key: 'Delete' },
-                expected: { value: '+7 _23-456', caret: 4, model: '23456' },
+                expected: { value: '+7 _23-456', caret: 3, model: '23456' },
             },
             {
                 name: 'typing into an empty value',

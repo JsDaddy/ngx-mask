@@ -173,7 +173,9 @@ export function resolveKeepCharacterPositions(
                 actualValue = `${part1}${placeHolderCharacter}${part2}`;
             }
         }
-        position = edit.code === MaskExpression.DELETE ? position + 1 : position;
+        // A collapsed Delete steps past the blank it leaves; a deleted selection leaves the caret
+        // on its first blank, like Backspace, so the next digit fills it.
+        position = edit.code === MaskExpression.DELETE && !hasSelection ? position + 1 : position;
         if (trimmedBodyEnd !== null && suffix) {
             position = Math.min(position, trimmedBodyEnd);
         }

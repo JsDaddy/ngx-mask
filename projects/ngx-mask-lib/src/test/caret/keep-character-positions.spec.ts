@@ -66,6 +66,16 @@ describe('resolveKeepCharacterPositions', () => {
         ).toEqual({ actualValue: null, position: 4, handled: false });
     });
 
+    it('leaves the caret on the first blank of a deleted selection, unlike a collapsed Delete', () => {
+        const selection = { elValue: '12-4', position: 2, selStart: 2, selEnd: 3 };
+        expect(
+            resolve(input({ ...selection, code: MaskExpression.DELETE, before: '12-34' }))
+        ).toMatchObject({ position: 2 });
+        expect(
+            resolve(input({ elValue: '2-34', position: 0, code: MaskExpression.DELETE }))
+        ).toMatchObject({ position: 1 });
+    });
+
     it('blanks a deleted selection to the mask skeleton', () => {
         expect(
             resolve(

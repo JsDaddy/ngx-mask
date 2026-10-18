@@ -73,12 +73,29 @@ async function pressOnFocus(config: Record<string, unknown>, keys: string): Prom
 }
 
 describe('keepCharacterPositions oddities in a real browser', () => {
+    it('Delete over a selection leaves the caret on its first blank for the next digit', async () => {
+        for (const config of [bare, { ...bare, showMaskTyped: true }]) {
+            for (const initial of [{ typed: '123456' }, { written: '123456' }]) {
+                expect(await press(config, initial, 4, 5, '{Delete}')).toEqual({
+                    value: '123-_56',
+                    caret: 4,
+                    model: '12356',
+                });
+                expect(await press(config, initial, 4, 5, '{Delete}7')).toEqual({
+                    value: '123-756',
+                    caret: 5,
+                    model: '123756',
+                });
+            }
+        }
+    });
+
     it('a selection delete in a partial showMaskTyped value keeps the mask tail', async () => {
         const maskedBare = { ...bare, showMaskTyped: true };
         for (const initial of [{ typed: '123' }, { written: '123' }]) {
             expect(await press(maskedBare, initial, 2, 3, '{Delete}')).toEqual({
                 value: '12_-___',
-                caret: 3,
+                caret: 2,
                 model: '12',
             });
             expect(await press(maskedBare, initial, 3, 4, '{Backspace}5')).toEqual({
